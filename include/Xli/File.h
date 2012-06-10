@@ -12,8 +12,7 @@ namespace Xli
 		bool canRead, canWrite;
 		
 	public:
-        // TODO: Change to String
-		File(const CharString& fileName, FileMode mode);
+		File(const String& fileName, FileMode mode);
 		File(FILE* fp, bool canRead, bool canWrite);
 		virtual ~File();
 

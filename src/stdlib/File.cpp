@@ -4,7 +4,7 @@
 
 namespace Xli
 {
-	File::File(const CharString& fileName, FileMode mode)
+	File::File(const String& fileName, FileMode mode)
 	{
 		fp = 0;
 		const char* m = "rb";
@@ -20,7 +20,8 @@ namespace Xli
             default: XLI_THROW(String("Invalid file mode: ") + FileModeToString(mode));
 		}
         
-		fopen_s(&fp, fileName.Data(), m);
+		CharString utf8Filename = Unicode::Utf16To8(fileName);
+		fopen_s(&fp, utf8Filename.Data(), m);
 		if (!fp) XLI_THROW_CANT_OPEN_FILE(fileName);
         
 		this->canRead = mode & FileModeRead;
