@@ -24,4 +24,4 @@ set(Sources
 	3rdparty/ConvertUTF.c
 	)
 
-add_library(XliCore ${Sources})
+add_library(Xli ${Sources})

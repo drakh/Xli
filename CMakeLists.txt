@@ -73,9 +73,7 @@ elseif (UNIX)
 		link_directories(/usr/X11/lib)
 
 		set(CMAKE_C_FLAGS "-Wno-switch-enum")
-
 		set(CMAKE_CXX_FLAGS "-Wno-switch-enum")
-
 
 	else()
 
