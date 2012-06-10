@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release MT|Win32">
+      <Configuration>Release MT</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>Xli</ProjectName>
+    <ProjectGuid>{A805EC6C-B5BF-4961-8D34-97E99CB4EC1A}</ProjectGuid>
+    <RootNamespace>StdLib</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <CLRSupport>false</CLRSupport>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release MD|Win32'">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\..\..\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)..\..\..\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">$(ProjectDir)..\..\..\lib\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">$(Configuration)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">$(ProjectName)MT</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)MDD</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectName)MD</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release MD|Win32'">$(ProjectName)MT</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>..\..\..\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <MinimalRebuild>true</MinimalRebuild>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <OpenMPSupport>false</OpenMPSupport>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>..\..\..\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <MinimalRebuild>true</MinimalRebuild>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <OpenMPSupport>false</OpenMPSupport>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>..\..\..\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release MD|Win32'">
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\Xli\AStar.h" />
+    <ClInclude Include="..\..\..\include\Xli\BaseTypes.h" />
+    <ClInclude Include="..\..\..\include\Xli\Buffer.h" />
+    <ClInclude Include="..\..\..\include\Xli\Color.h" />
+    <ClInclude Include="..\..\..\include\Xli\Config.h" />
+    <ClInclude Include="..\..\..\include\Xli\DataType.h" />
+    <ClInclude Include="..\..\..\include\Xli\DateTime.h" />
+    <ClInclude Include="..\..\..\include\Xli\DCT.h" />
+    <ClInclude Include="..\..\..\include\Xli\Exception.h" />
+    <ClInclude Include="..\..\..\include\Xli\Float16.h" />
+    <ClInclude Include="..\..\..\include\Xli\FormattedTextWriter.h" />
+    <ClInclude Include="..\..\..\include\Xli\Hash.h" />
+    <ClInclude Include="..\..\..\include\Xli\Letterbox.h" />
+    <ClInclude Include="..\..\..\include\Xli\Object.h" />
+    <ClInclude Include="..\..\..\include\Xli\OrderedMap.h" />
+    <ClInclude Include="..\..\..\include\Xli\Path.h" />
+    <ClInclude Include="..\..\..\include\Xli\Pool.h" />
+    <ClInclude Include="..\..\..\include\Xli\Saturated.h" />
+    <ClInclude Include="..\..\..\include\Xli\Sort.h" />
+    <ClInclude Include="..\..\..\include\Xli\String.h" />
+    <ClInclude Include="..\..\..\include\Xli\StringBuilder.h" />
+    <ClInclude Include="..\..\..\include\Xli\StringDecl.h" />
+    <ClInclude Include="..\..\..\include\Xli\Text.h" />
+    <ClInclude Include="..\..\..\include\Xli\TextParser.h" />
+    <ClInclude Include="..\..\..\include\Xli\Trigger.h" />
+    <ClInclude Include="..\..\..\include\Xli\Unicode.h" />
+    <ClInclude Include="..\..\..\include\Xli\Utils.h" />
+    <ClInclude Include="..\..\..\include\Xli\AxisAngle.h" />
+    <ClInclude Include="..\..\..\include\Xli\Box.h" />
+    <ClInclude Include="..\..\..\include\Xli\LineSegment.h" />
+    <ClInclude Include="..\..\..\include\Xli\Math.h" />
+    <ClInclude Include="..\..\..\include\Xli\Matrix3.h" />
+    <ClInclude Include="..\..\..\include\Xli\Matrix4.h" />
+    <ClInclude Include="..\..\..\include\Xli\Quaternion.h" />
+    <ClInclude Include="..\..\..\include\Xli\Random.h" />
+    <ClInclude Include="..\..\..\include\Xli\Ray.h" />
+    <ClInclude Include="..\..\..\include\Xli\Rectangle.h" />
+    <ClInclude Include="..\..\..\include\Xli\Spline.h" />
+    <ClInclude Include="..\..\..\include\Xli\Value.h" />
+    <ClInclude Include="..\..\..\include\Xli\Vector2.h" />
+    <ClInclude Include="..\..\..\include\Xli\Vector3.h" />
+    <ClInclude Include="..\..\..\include\Xli\Vector4.h" />
+    <ClInclude Include="..\..\..\include\Xli\BinaryReader.h" />
+    <ClInclude Include="..\..\..\include\Xli\BinaryWriter.h" />
+    <ClInclude Include="..\..\..\include\Xli\Console.h" />
+    <ClInclude Include="..\..\..\include\Xli\Directory.h" />
+    <ClInclude Include="..\..\..\include\Xli\File.h" />
+    <ClInclude Include="..\..\..\include\Xli\FileSystem.h" />
+    <ClInclude Include="..\..\..\include\Xli\Stream.h" />
+    <ClInclude Include="..\..\..\include\Xli\TextReader.h" />
+    <ClInclude Include="..\..\..\include\Xli\TextWriter.h" />
+    <ClInclude Include="..\..\..\include\Xli\Array.h" />
+    <ClInclude Include="..\..\..\include\Xli\Dictionary.h" />
+    <ClInclude Include="..\..\..\include\Xli\HashMap.h" />
+    <ClInclude Include="..\..\..\include\Xli\HashSet.h" />
+    <ClInclude Include="..\..\..\include\Xli\Heap.h" />
+    <ClInclude Include="..\..\..\include\Xli\List.h" />
+    <ClInclude Include="..\..\..\include\Xli\Managed.h" />
+    <ClInclude Include="..\..\..\include\Xli\Map2D.h" />
+    <ClInclude Include="..\..\..\include\Xli\Map3D.h" />
+    <ClInclude Include="..\..\..\include\Xli\Queue.h" />
+    <ClInclude Include="..\..\..\include\Xli\Stack.h" />
+    <ClInclude Include="..\..\..\include\Xli.h" />
+    <ClInclude Include="..\..\..\src\stdlib\3rdparty\ConvertUTF.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\stdlib\3rdparty\ConvertUTF.c" />
+    <ClCompile Include="..\..\..\src\stdlib\Buffer.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\DataType.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\DateTime.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\FormattedTextWriter.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\Path.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\StringTools.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\Text.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\Random.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\BinaryReader.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\BinaryWriter.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\Console.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\Directory.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\File.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\FileSystem.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\Stream.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\TextParser.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\TextReader.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\TextWriter.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\Unicode.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\Value.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\CMakeLists.txt" />
+    <None Include="..\..\..\src\stdlib\CMakeLists.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

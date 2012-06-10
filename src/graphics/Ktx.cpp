@@ -1,0 +1,191 @@
+#include <XliGraphics/Ktx.h>
+#include <XliGraphics/CompressedImage.h>
+
+struct KTX_header
+{
+	unsigned char identifier[12];
+	unsigned int endianness;
+	unsigned int glType;
+	unsigned int glTypeSize;
+	unsigned int glFormat;
+	unsigned int glInternalFormat;
+	unsigned int glBaseInternalFormat;
+	unsigned int pixelWidth;
+	unsigned int pixelHeight;
+	unsigned int pixelDepth;
+	unsigned int numberOfArrayElements;
+	unsigned int numberOfFaces;
+	unsigned int numberOfMipmapLevels;
+	unsigned int bytesOfKeyValueData;
+};
+
+static const unsigned int GL_R = 0x1903, GL_RG = 0x8227, GL_RGB = 0x1907, GL_RGBA = 0x1908;
+static const unsigned int GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG = 0x8C00;
+static const unsigned int GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG = 0x8C01;
+static const unsigned int GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG = 0x8C02;
+static const unsigned int GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG = 0x8C03;
+static const unsigned int GL_ETC1_RGB8_OES = 0x8d64;
+
+static const unsigned char KTX_IDENTIFIER_REF[12] = { '«', 'K', 'T', 'X', ' ', '1', '1', '»', '\r', '\n', '\x1A', '\n' };
+static const unsigned int KTX_ENDIAN_REF = 0x04030201;
+static const unsigned int KTX_ENDIAN_REF_REV = 0x01020304;
+
+namespace Xli
+{
+	void Ktx::Save(Stream* output, Texture* tex)
+	{
+		// TODO: Make sure contents in tex is sane
+
+		KTX_header header;
+		memcpy(header.identifier, KTX_IDENTIFIER_REF, 12);
+		header.endianness = KTX_ENDIAN_REF;
+		header.glType = 0;
+		header.glTypeSize = 1;
+		header.glFormat = 0;
+
+		switch (tex->Faces[0].MipLevels[0]->GetFormat())
+		{
+		case FormatCompressedRGB_ETC1:
+			header.glInternalFormat = GL_ETC1_RGB8_OES;
+			header.glBaseInternalFormat = GL_RGB;
+			break;
+
+		case FormatCompressedRGB_PVRTC_2BPP:
+			header.glInternalFormat = GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG;
+			header.glBaseInternalFormat = GL_RGB;
+			break;
+
+		case FormatCompressedRGB_PVRTC_4BPP:
+			header.glInternalFormat = GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG;
+			header.glBaseInternalFormat = GL_RGB;
+			break;
+
+		case FormatCompressedRGBA_PVRTC_2BPP:
+			header.glInternalFormat = GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG;
+			header.glBaseInternalFormat = GL_RGBA;
+			break;
+
+		case FormatCompressedRGBA_PVRTC_4BPP:
+			header.glInternalFormat = GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG;
+			header.glBaseInternalFormat = GL_RGBA;
+			break;
+
+		default:
+			XLI_THROW((String)"Unsupported texture format: " + FormatInfo::ToString(tex->Faces[0].MipLevels[0]->GetFormat()));
+			break;
+		}
+
+		header.pixelWidth = tex->Faces[0].MipLevels[0]->GetWidth();
+		header.pixelHeight = tex->Faces[0].MipLevels[0]->GetHeight();
+		header.pixelDepth = 0;
+		header.numberOfArrayElements = 0;
+		header.numberOfFaces = tex->Faces.Length();
+		header.numberOfMipmapLevels = tex->Faces[0].MipLevels.Length();
+		header.bytesOfKeyValueData = 0;
+
+		output->WriteSafe(&header, sizeof(KTX_header), 1);
+
+		for (int i = 0; i < tex->Faces[0].MipLevels.Length(); i++)
+		{
+			int imageSize = tex->Faces[0].MipLevels[i]->GetSizeInBytes();
+			output->WriteSafe(&imageSize, sizeof(int), 1);
+
+			for (int j = 0; j < tex->Faces.Length(); j++)
+			{
+				output->WriteSafe(tex->Faces[j].MipLevels[i]->GetData(), sizeof(unsigned int), tex->Faces[j].MipLevels[i]->GetSizeInBytes() / 4);
+			}
+		}
+	}
+
+	void Ktx::Save(const String& fileName, Texture* tex)
+	{
+		File f(fileName, FileModeWrite);
+		Save(&f, tex);
+	}
+
+	static int ExpandToMultipleOf4(int x)
+	{
+		int xdiv4 = x / 4;
+		if (xdiv4 * 4 != x) x = (xdiv4 + 1) * 4;
+		return x;
+	}
+
+	Texture* Ktx::Load(Stream* input)
+	{
+		// TODO: Proper support for cube maps
+
+		KTX_header header;
+		input->ReadSafe(&header, sizeof(KTX_header), 1);
+		if (memcmp(header.identifier, KTX_IDENTIFIER_REF, 12) != 0) XLI_THROW("Unable to load KTX file: Invalid header");
+		if (header.endianness != KTX_ENDIAN_REF) XLI_THROW("Unable to load KTX file: Unhandled endianess");
+		if (header.pixelDepth > 1) XLI_THROW("Unable to load KTX file: Unsupported texture depth: " + (String)(int)header.pixelDepth);
+		if (header.numberOfArrayElements > 1) XLI_THROW("Unable to load KTX file: Unsupported array size: " + (String)(int)header.numberOfArrayElements);
+
+		if (header.bytesOfKeyValueData > 0)
+		{
+			UInt8* tmp = new UInt8[header.bytesOfKeyValueData];
+			input->ReadSafe(tmp, 1, header.bytesOfKeyValueData);
+			delete [] tmp;
+		}
+
+		Texture* tex = new Texture(Texture::TextureType2D);
+		if (header.numberOfFaces == 1) tex->Type = Texture::TextureType2D;
+		else if (header.numberOfFaces == 6) tex->Type = Texture::TextureTypeCubeMap;
+		else XLI_THROW("Unable to load KTX file: Unsupported texture type");
+
+		tex->Faces.Resize(header.numberOfFaces);
+
+		for (uint i = 0; i < header.numberOfMipmapLevels; i++)
+		{
+			int mw = header.pixelWidth >> i;
+			int mh = header.pixelHeight >> i;
+			if (mw == 0) mw = 1;
+			if (mh == 0) mh = 1;
+
+			UInt32 sizeInBytes; // = (ExpandToMultipleOf4(mw) * ExpandToMultipleOf4(mh)) / 2;
+			input->ReadSafe(&sizeInBytes, sizeof(UInt32), 1);
+
+			for (uint j = 0; j < header.numberOfFaces; j++)
+			{
+				tex->Faces[j].Type = Texture::Face::FaceTypeUnknown;
+				Managed<Buffer> buf = Buffer::Create(sizeInBytes);
+				input->ReadSafe(buf->Data(), 1, buf->Size());
+
+				switch (header.glInternalFormat)
+				{
+				case GL_ETC1_RGB8_OES:
+					tex->Faces[j].MipLevels.Add(new CompressedImage(mw, mh, FormatCompressedRGB_ETC1, buf));
+					break;
+
+				case GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG:
+					tex->Faces[j].MipLevels.Add(new CompressedImage(mw, mh, FormatCompressedRGB_PVRTC_2BPP, buf));
+					break;
+
+				case GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG:
+					tex->Faces[j].MipLevels.Add(new CompressedImage(mw, mh, FormatCompressedRGB_PVRTC_4BPP, buf));
+					break;
+
+				case GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG:
+					tex->Faces[j].MipLevels.Add(new CompressedImage(mw, mh, FormatCompressedRGBA_PVRTC_2BPP, buf));
+					break;
+
+				case GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG:
+					tex->Faces[j].MipLevels.Add(new CompressedImage(mw, mh, FormatCompressedRGBA_PVRTC_4BPP, buf));
+					break;
+
+				default:
+					XLI_THROW("Unable to load KTX file: Unsupported format (" + String::HexFromInt(header.glInternalFormat) + ")");
+					break;
+				}
+			}
+		}
+
+		return tex;
+	}
+
+	Texture* Ktx::Load(const String& fileName)
+	{
+		File f(fileName, FileModeRead);
+		return Load(&f);
+	}
+}

@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="XliGL">
+      <UniqueIdentifier>{397018bb-cf35-4a71-a30b-980c695f08c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty">
+      <UniqueIdentifier>{e0145c31-b31d-4306-9b6a-3c74808ade8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty\glew">
+      <UniqueIdentifier>{bdb4a3b6-cb97-4b03-8f0c-7531ac248f10}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\gl\GLFont.cpp">
+      <Filter>XliGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gl\GLFontRenderer.cpp">
+      <Filter>XliGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gl\GLHelpers.cpp">
+      <Filter>XliGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gl\GLProgram.cpp">
+      <Filter>XliGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gl\GLTexture2D.cpp">
+      <Filter>XliGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gl\GLXContext.cpp">
+      <Filter>XliGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gl\WGLContext.cpp">
+      <Filter>XliGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gl\3rdparty\glew\src\glew.c">
+      <Filter>3rdparty\glew</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gl\GLFramebuffer.cpp">
+      <Filter>XliGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gl\EGLContext.cpp">
+      <Filter>XliGL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gl\SDL2Context.cpp">
+      <Filter>XliGL</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\XliGL\GLCommon.h">
+      <Filter>XliGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliGL\GLContext.h">
+      <Filter>XliGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliGL\GLFont.h">
+      <Filter>XliGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliGL\GLFontRenderer.h">
+      <Filter>XliGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliGL\GLHelpers.h">
+      <Filter>XliGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliGL\GLProgram.h">
+      <Filter>XliGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliGL\GLTexture2D.h">
+      <Filter>XliGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliGL.h" />
+    <ClInclude Include="..\..\..\src\gl\3rdparty\glew\include\GL\glew.h">
+      <Filter>3rdparty\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\gl\3rdparty\glew\include\GL\glxew.h">
+      <Filter>3rdparty\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\gl\3rdparty\glew\include\GL\wglew.h">
+      <Filter>3rdparty\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliGL\GLFramebuffer.h">
+      <Filter>XliGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliGL\GLHeaders.h">
+      <Filter>XliGL</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\gl\CMakeLists.txt" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="XliPlatform">
+      <UniqueIdentifier>{9a5f1a90-cb6c-445f-9038-50ddb559d495}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XliPlatform\Win32">
+      <UniqueIdentifier>{1896a768-4820-4296-8cd5-e31b930cca0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XliPlatform\Posix">
+      <UniqueIdentifier>{e699b249-a18c-4b78-b610-dd7fef85d0a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XliPlatform\X11">
+      <UniqueIdentifier>{a4b0e90f-ef1b-4f5f-84b3-7d09d5a97436}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XliPlatform\Generic">
+      <UniqueIdentifier>{340e0b96-a21a-4ab3-b3bc-20b402e1cf09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XliPlatform\Android">
+      <UniqueIdentifier>{c15fa8b6-ce6f-438a-9436-5f514af98ca6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XliPlatform\SDL2">
+      <UniqueIdentifier>{89489744-946c-49ea-99e2-ef267e686bf0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\XliPlatform\NativeFileSystem.h">
+      <Filter>XliPlatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliPlatform\Profiling.h">
+      <Filter>XliPlatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliPlatform\Selector.h">
+      <Filter>XliPlatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliPlatform\Socket.h">
+      <Filter>XliPlatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliPlatform\Thread.h">
+      <Filter>XliPlatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliPlatform\Time.h">
+      <Filter>XliPlatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliPlatform\Timer.h">
+      <Filter>XliPlatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliPlatform\Window.h">
+      <Filter>XliPlatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliPlatform\Win32Window.h">
+      <Filter>XliPlatform\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliPlatform.h" />
+    <ClInclude Include="..\..\..\include\XliPlatform\X11Window.h">
+      <Filter>XliPlatform\X11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliPlatform\ConditionVariable.h">
+      <Filter>XliPlatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliPlatform\Mutex.h">
+      <Filter>XliPlatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliPlatform\Win32Helpers.h">
+      <Filter>XliPlatform\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliPlatform\MessageBox.h">
+      <Filter>XliPlatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliPlatform\TimedTrigger.h">
+      <Filter>XliPlatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliPlatform\EventQueue.h">
+      <Filter>XliPlatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliPlatform\Dialogs.h">
+      <Filter>XliPlatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliPlatform\Pipe.h">
+      <Filter>XliPlatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliPlatform\Environment.h">
+      <Filter>XliPlatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliPlatform\Display.h">
+      <Filter>XliPlatform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliPlatform\SDL2Window.h">
+      <Filter>XliPlatform\SDL2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\platform\posix\PosixFileSystemBase.h">
+      <Filter>XliPlatform\Posix</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\platform\Profiling.cpp">
+      <Filter>XliPlatform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\Selector.cpp">
+      <Filter>XliPlatform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\Window.cpp">
+      <Filter>XliPlatform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\win32\Win32Window.cpp">
+      <Filter>XliPlatform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\NativeFileSystem.cpp">
+      <Filter>XliPlatform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\win32\Win32Thread.cpp">
+      <Filter>XliPlatform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\win32\Win32Time.cpp">
+      <Filter>XliPlatform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\win32\Win32Mutex.cpp">
+      <Filter>XliPlatform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\win32\Win32FileSystem.cpp">
+      <Filter>XliPlatform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\Thread.cpp">
+      <Filter>XliPlatform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\posix\PosixFileSystem.cpp">
+      <Filter>XliPlatform\Posix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\posix\PosixMutex.cpp">
+      <Filter>XliPlatform\Posix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\posix\PosixThread.cpp">
+      <Filter>XliPlatform\Posix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\posix\PosixTime.cpp">
+      <Filter>XliPlatform\Posix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\x11\X11Window.cpp">
+      <Filter>XliPlatform\X11</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\win32\Win32Cond.cpp">
+      <Filter>XliPlatform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\posix\PosixCond.cpp">
+      <Filter>XliPlatform\Posix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\win32\Win32Socket.cpp">
+      <Filter>XliPlatform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\win32\Win32Helpers.cpp">
+      <Filter>XliPlatform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\win32\Win32MessageBox.cpp">
+      <Filter>XliPlatform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\generic\GenericMessageBox.cpp">
+      <Filter>XliPlatform\Generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\MessageBox.cpp">
+      <Filter>XliPlatform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\TimedTrigger.cpp">
+      <Filter>XliPlatform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\win32\Win32Dialogs.cpp">
+      <Filter>XliPlatform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\generic\GenericDialogs.cpp">
+      <Filter>XliPlatform\Generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\posix\PosixSocket.cpp">
+      <Filter>XliPlatform\Posix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\posix\PosixPipe.cpp">
+      <Filter>XliPlatform\Posix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\Pipe.cpp">
+      <Filter>XliPlatform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\posix\PosixEnvironment.cpp">
+      <Filter>XliPlatform\Posix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\android\AFileSystem.cpp">
+      <Filter>XliPlatform\Android</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\android\AWindow.cpp">
+      <Filter>XliPlatform\Android</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\generic\GenericAssetFileSystem.cpp">
+      <Filter>XliPlatform\Generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\win32\Win32Display.cpp">
+      <Filter>XliPlatform\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\x11\X11Display.cpp">
+      <Filter>XliPlatform\X11</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\sdl2\SDL2Cond.cpp">
+      <Filter>XliPlatform\SDL2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\sdl2\SDL2Display.cpp">
+      <Filter>XliPlatform\SDL2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\sdl2\SDL2Mutex.cpp">
+      <Filter>XliPlatform\SDL2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\sdl2\SDL2Thread.cpp">
+      <Filter>XliPlatform\SDL2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\sdl2\SDL2Time.cpp">
+      <Filter>XliPlatform\SDL2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\sdl2\SDL2Window.cpp">
+      <Filter>XliPlatform\SDL2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\platform\sdl2\SDL2FileSystem.cpp">
+      <Filter>XliPlatform\SDL2</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\platform\CMakeLists.txt" />
+    <None Include="..\..\..\Android.mk" />
+    <None Include="..\..\..\Application.mk" />
+  </ItemGroup>
+</Project>

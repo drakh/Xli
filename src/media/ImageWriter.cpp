@@ -1,0 +1,19 @@
+#include <XliMedia/ImageWriter.h>
+#include <Xli/File.h>
+
+namespace Xli
+{
+	void ImageWriter::WriteBitmap(Bitmap* bmp, ProgressCallback* callback)
+	{
+		if (bmp->GetWidth() != GetWidth()) XLI_THROW_INVALID_ARGUMENT("Bitmap must have same width");
+		if (bmp->GetHeight() != GetHeight()) XLI_THROW_INVALID_ARGUMENT("Bitmap must have same height");
+		if (bmp->GetFormat() != GetFormat()) XLI_THROW_INVALID_ARGUMENT("Bitmap must have same format");
+		Write(bmp->GetData(), bmp->GetPitch(), callback);
+	}
+
+	void ImageWriter::WriteImage(Image* img, ProgressCallback* callback)
+	{
+		Managed<Bitmap> bmp = img->ToBitmap();
+		WriteBitmap(bmp, callback);
+	}
+}

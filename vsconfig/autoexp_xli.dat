@@ -1,0 +1,147 @@
+; Append contents of this file to your Visual Studio autoexp.dat
+; Location: <Visual Studio Folder>\Common7\Packages\Debugger
+
+;------------------------------------------------------------------------------
+;  Xli Types
+;------------------------------------------------------------------------------
+
+Xli::Managed<*>=<object>
+
+Xli::Stringt<char,*>{
+	preview 		([$e.data,s])
+	stringview		([$e.data,sb])
+}
+Xli::Stringt<unsigned short,*>{
+	preview 		([$e.data,su])
+	stringview		([$e.data,su])
+}
+Xli::Selector{
+	preview 		([($e.selectorsReverse->data)[$e.handle].data,su])
+	stringview		([($e.selectorsReverse->data)[$e.handle].data,su])
+}
+
+Xli::List<*>{
+	children
+	(
+		#array
+		(
+			expr :		($e.data->data)[$i],
+			size :		$e.data->used
+		)
+	)
+	preview
+	(
+		#(
+			"[", $e.data->used , "](",
+			#array
+			(
+				expr :	($e.data->data)[$i],
+				size :	$e.data->used
+			),
+			")"
+		)
+	)
+}
+Xli::Array<*>{
+	children
+	(
+		#array
+		(
+			expr :		($e.data)[$i],
+			size :		$e.used
+		)
+	)
+	preview
+	(
+		#(
+			"[", $e.used , "](",
+			#array
+			(
+				expr :	($e.data)[$i],
+				size :	$e.used
+			),
+			")"
+		)
+	)
+}
+Xli::HashBucket<*>{
+	preview
+	(
+		#(
+			" ", [$e.Key,d], "=", [$e.Value,d]
+		)
+	)
+}
+
+Xli::HashMap<*>{
+	children
+	(
+		#array
+		(
+			expr :	$c.buckets[$i],
+			size :	$c.bucketCount
+		) : #(
+			#array 
+			(
+				expr: &$e,
+				size: $e.State == 1,
+			): $e 
+		)
+	)
+	preview
+	(
+		#(
+			"[", $c.count, "] (",
+			#(
+				#array
+				(
+					expr :	$c.buckets[$i],
+					size :	$c.bucketCount
+				) : #(
+					#array 
+					(
+						expr: &$e,
+						size: $e.State == 1,
+					): $e
+				)
+			),
+			" )"
+		)
+	)
+}
+Xli::Dictionary<*>{
+	children
+	(
+		#array
+		(
+			expr :	$c.map->buckets[$i],
+			size :	$c.map->bucketCount
+		) : #(
+			#array 
+			(
+				expr: &$e,
+				size: $e.State == 1,
+			): $e 
+		)
+	)
+	preview
+	(
+		#(
+			"[", $c.map->count, "] (",
+			#(
+				#array
+				(
+					expr :	$c.map->buckets[$i],
+					size :	$c.map->bucketCount
+				) : #(
+					#array 
+					(
+						expr: &$e,
+						size: $e.State == 1,
+					): $e
+				)
+			),
+			" )"
+		)
+	)
+}

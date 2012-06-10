@@ -1,0 +1,222 @@
+diff -r 601b0e251822 include/SDL_events.h
+--- a/include/SDL_events.h	Mon Apr 09 23:55:43 2012 -0400
++++ b/include/SDL_events.h	Fri May 18 14:42:58 2012 +0100
+@@ -108,6 +108,14 @@
+ 
+     /* Drag and drop events */
+     SDL_DROPFILE        = 0x1000, /**< The system requests a file open */
++	
++	/* iOS specific events */
++	SDL_IOS_WILLTERMINATE = 0x1100,
++	SDL_IOS_DIDRECEIVEMEMORYWARNING,
++	SDL_IOS_WILLRESIGNACTIVE,
++	SDL_IOS_DIDBECOMEACTIVE,
++	SDL_IOS_DIDENTERBACKGROUND,
++	SDL_IOS_WILLENTERFOREGROUND,
+ 
+     /** Events ::SDL_USEREVENT through ::SDL_LASTEVENT are for your use,
+      *  and should be allocated with SDL_RegisterEvents()
+@@ -382,6 +390,14 @@
+     Uint32 timestamp;
+ } SDL_QuitEvent;
+ 
++/**
++ *  \brief OS Specific event
++ */
++typedef struct SDL_OSEvent
++{
++    Uint32 type;        /**< ::SDL_QUIT */
++    Uint32 timestamp;
++} SDL_OSEvent;
+ 
+ /**
+  *  \brief A user-defined event type (event.user.*)
+@@ -438,6 +454,7 @@
+     SDL_MultiGestureEvent mgesture; /**< Multi Finger Gesture data */
+     SDL_DollarGestureEvent dgesture; /**< Multi Finger Gesture data */
+     SDL_DropEvent drop;             /**< Drag and drop event data */
++	SDL_OSEvent os;
+ } SDL_Event;
+ 
+ 
+@@ -535,6 +552,9 @@
+  */
+ extern DECLSPEC int SDLCALL SDL_PushEvent(SDL_Event * event);
+ 
++typedef int (SDLCALL * SDL_EventCallback) (SDL_Event *event, void *userdata);
++extern DECLSPEC void SDLCALL SDL_SetEventCallback(SDL_EventCallback callback, void *userdata);
++
+ typedef int (SDLCALL * SDL_EventFilter) (void *userdata, SDL_Event * event);
+ 
+ /**
+diff -r 601b0e251822 src/events/SDL_events.c
+--- a/src/events/SDL_events.c	Mon Apr 09 23:55:43 2012 -0400
++++ b/src/events/SDL_events.c	Fri May 18 14:42:58 2012 +0100
+@@ -37,6 +37,13 @@
+ SDL_EventFilter SDL_EventOK = NULL;
+ void *SDL_EventOKParam;
+ 
++typedef struct SDL_EventCallback_Data {
++	SDL_EventCallback	callback;
++	void				*userdata;
++} SDL_EventCallback_Block;
++
++static SDL_EventCallback_Block SDL_EventCallback_Data={NULL,0};
++
+ typedef struct SDL_EventWatcher {
+     SDL_EventFilter callback;
+     void *userdata;
+@@ -357,26 +364,44 @@
+ int
+ SDL_PushEvent(SDL_Event * event)
+ {
++	int skip_add;
+     SDL_EventWatcher *curr;
+     event->window.timestamp = SDL_GetTicks();
+     if (SDL_EventOK && !SDL_EventOK(SDL_EventOKParam, event)) {
+         return 0;
+     }
+ 
+-    for (curr = SDL_event_watchers; curr; curr = curr->next) {
+-        curr->callback(curr->userdata, event);
+-    }
++		// after filtering, before watches
+ 
+-    if (SDL_PeepEvents(event, 1, SDL_ADDEVENT, 0, 0) <= 0) {
+-        return -1;
+-    }
++	skip_add=0;
+ 
++	if (SDL_EventCallback_Data.callback!=NULL) {
++		skip_add=SDL_EventCallback_Data.callback(event,SDL_EventCallback_Data.userdata);
++	}
++
++	if (skip_add==0) {
++
++		for (curr = SDL_event_watchers; curr; curr = curr->next) {
++			curr->callback(curr->userdata, event);
++		}
++
++		if (SDL_PeepEvents(event, 1, SDL_ADDEVENT, 0, 0) <= 0) {
++			return -1;
++		}
++	}
++	
+     SDL_GestureProcessEvent(event);
+     
+ 
+     return 1;
+ }
+ 
++void SDL_SetEventCallback(SDL_EventCallback callback,void *userdata)
++{
++	SDL_EventCallback_Data.callback=callback;
++	SDL_EventCallback_Data.userdata=userdata;
++}
++
+ void
+ SDL_SetEventFilter(SDL_EventFilter filter, void *userdata)
+ {
+diff -r 601b0e251822 src/video/uikit/SDL_uikitappdelegate.m
+--- a/src/video/uikit/SDL_uikitappdelegate.m	Mon Apr 09 23:55:43 2012 -0400
++++ b/src/video/uikit/SDL_uikitappdelegate.m	Fri May 18 14:42:58 2012 +0100
+@@ -108,7 +108,7 @@
+     exit_status = SDL_main(forward_argc, forward_argv);
+ 
+     /* exit, passing the return status from the user's application */
+-    // exit(exit_status);
++    //exit(exit_status);
+ }
+ 
+ - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+@@ -123,16 +123,27 @@
+ 
+ - (void)applicationWillTerminate:(UIApplication *)application
+ {
+-    SDL_SendQuit();
+-     /* hack to prevent automatic termination.  See SDL_uikitevents.m for details */
+-    longjmp(*(jump_env()), 1);
++	SDL_Event event;
++
++	event.type = SDL_IOS_WILLTERMINATE;
++    SDL_PushEvent(&event);
++}
++
++- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
++{
++	SDL_Event event;
++
++	event.type = SDL_IOS_DIDRECEIVEMEMORYWARNING;
++    SDL_PushEvent(&event);
+ }
+ 
+ - (void) applicationWillResignActive:(UIApplication*)application
+ {
+-    //NSLog(@"%@", NSStringFromSelector(_cmd));
++	SDL_Event event;
++	
++	event.type = SDL_IOS_WILLRESIGNACTIVE;
++    SDL_PushEvent(&event);
+ 
+-    // Send every window on every screen a MINIMIZED event.
+     SDL_VideoDevice *_this = SDL_GetVideoDevice();
+     if (!_this) {
+         return;
+@@ -143,13 +154,16 @@
+         SDL_SendWindowEvent(window, SDL_WINDOWEVENT_FOCUS_LOST, 0, 0);
+         SDL_SendWindowEvent(window, SDL_WINDOWEVENT_MINIMIZED, 0, 0);
+     }
++
+ }
+ 
+ - (void) applicationDidBecomeActive:(UIApplication*)application
+ {
+-    //NSLog(@"%@", NSStringFromSelector(_cmd));
+-
+-    // Send every window on every screen a RESTORED event.
++	SDL_Event event;
++	
++	event.type = SDL_IOS_DIDBECOMEACTIVE;
++    SDL_PushEvent(&event);
++	
+     SDL_VideoDevice *_this = SDL_GetVideoDevice();
+     if (!_this) {
+         return;
+@@ -162,6 +176,25 @@
+     }
+ }
+ 
++- (void) applicationDidEnterBackground:(UIApplication*)application
++{
++	SDL_Event event;
++	
++	event.type = SDL_IOS_DIDENTERBACKGROUND;
++    SDL_PushEvent(&event);
++}
++
++- (void) applicationWillEnterForeground:(UIApplication*)application
++{
++	SDL_Event event;
++	
++	event.type = SDL_IOS_WILLENTERFOREGROUND;
++    SDL_PushEvent(&event);
++}
++
++
++
++
+ @end
+ 
+ #endif /* SDL_VIDEO_DRIVER_UIKIT */
+diff -r 601b0e251822 src/video/uikit/SDL_uikitopengles.m
+--- a/src/video/uikit/SDL_uikitopengles.m	Mon Apr 09 23:55:43 2012 -0400
++++ b/src/video/uikit/SDL_uikitopengles.m	Fri May 18 14:42:58 2012 +0100
+@@ -95,7 +95,7 @@
+     [data->uiwindow makeKeyAndVisible];
+ 
+     /* we need to let the event cycle run, or the OS won't update the OpenGL view! */
+-    SDL_PumpEvents();
++ //   SDL_PumpEvents();
+ 
+ }
+ 
