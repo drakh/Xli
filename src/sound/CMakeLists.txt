@@ -17,4 +17,4 @@ if (APPLE)
 endif()
 
 add_library(XliSound ${Sources})
-target_link_libraries(XliSound XliCore XliPlatform portaudio)
+target_link_libraries(XliSound Xli XliPlatform portaudio)

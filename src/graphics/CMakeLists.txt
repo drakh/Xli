@@ -16,4 +16,4 @@ set(Sources
 	)
 
 add_library(XliGraphics ${Sources})
-target_link_libraries(XliGraphics XliCore XliMedia)
+target_link_libraries(XliGraphics Xli XliMedia)

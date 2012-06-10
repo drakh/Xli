@@ -196,7 +196,7 @@ elseif (UNIX)
 endif()
 
 add_library(XliMedia ${Sources})
-target_link_libraries(XliMedia XliCore)
+target_link_libraries(XliMedia Xli)
 
 if (APPLE)
 	target_link_libraries(XliMedia freetype png z)

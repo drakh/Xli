@@ -86,7 +86,7 @@ elseif (UNIX)
 endif()
 
 add_library(XliPlatform ${Sources})
-target_link_libraries(XliPlatform XliCore)
+target_link_libraries(XliPlatform Xli)
 
 if (UNIX AND NOT APPLE)
 	target_link_libraries(XliPlatform SDL2)
