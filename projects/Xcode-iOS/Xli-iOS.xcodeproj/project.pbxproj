@@ -256,6 +256,8 @@
 		5AD3E7681521384100182413 /* Atlas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AD3E7651521384100182413 /* Atlas.cpp */; };
 		5AD3E7691521384100182413 /* AtlasBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AD3E7661521384100182413 /* AtlasBuilder.cpp */; };
 		5AD3E76A1521384100182413 /* CompressedImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AD3E7671521384100182413 /* CompressedImage.cpp */; };
+		CE0551BA158FE5F000669505 /* SDL_rotate.c in Sources */ = {isa = PBXBuildFile; fileRef = CE0551B8158FE5F000669505 /* SDL_rotate.c */; };
+		CE0551BB158FE5F000669505 /* SDL_rotate.h in Headers */ = {isa = PBXBuildFile; fileRef = CE0551B9158FE5F000669505 /* SDL_rotate.h */; };
 		CEE2EE641563F5D0001778C7 /* Init_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CEE2EE631563F5D0001778C7 /* Init_iOS.mm */; };
 /* End PBXBuildFile section */
 
@@ -514,6 +516,8 @@
 		5AD3E7651521384100182413 /* Atlas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Atlas.cpp; path = ../../../src/graphics/Atlas.cpp; sourceTree = "<group>"; };
 		5AD3E7661521384100182413 /* AtlasBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AtlasBuilder.cpp; path = ../../../src/graphics/AtlasBuilder.cpp; sourceTree = "<group>"; };
 		5AD3E7671521384100182413 /* CompressedImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CompressedImage.cpp; path = ../../../src/graphics/CompressedImage.cpp; sourceTree = "<group>"; };
+		CE0551B8158FE5F000669505 /* SDL_rotate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDL_rotate.c; sourceTree = "<group>"; };
+		CE0551B9158FE5F000669505 /* SDL_rotate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDL_rotate.h; sourceTree = "<group>"; };
 		CEE2EE631563F5D0001778C7 /* Init_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Init_iOS.mm; path = ../../../src/main/Init_iOS.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -768,6 +772,8 @@
 				5A493F04151A347F000ACE3F /* SDL_drawpoint.h */,
 				5A493F05151A347F000ACE3F /* SDL_render_sw.c */,
 				5A493F06151A347F000ACE3F /* SDL_render_sw_c.h */,
+				CE0551B8158FE5F000669505 /* SDL_rotate.c */,
+				CE0551B9158FE5F000669505 /* SDL_rotate.h */,
 			);
 			path = software;
 			sourceTree = "<group>";
@@ -1202,6 +1208,7 @@
 				5A4940D6151A47EB000ACE3F /* SDL_dummyaudio.h in Headers */,
 				5AD2356E153E28E800DF6448 /* SDL2FileSystem.h in Headers */,
 				5AD23570153E28F000DF6448 /* PosixFileSystemBase.h in Headers */,
+				CE0551BB158FE5F000669505 /* SDL_rotate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1433,6 +1440,7 @@
 				5AD23566153E1BBC00DF6448 /* zutil.c in Sources */,
 				5AD2356C153E27BD00DF6448 /* SDL2FileSystem_iOS.mm in Sources */,
 				CEE2EE641563F5D0001778C7 /* Init_iOS.mm in Sources */,
+				CE0551BA158FE5F000669505 /* SDL_rotate.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
