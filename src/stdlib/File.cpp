@@ -20,7 +20,15 @@ namespace Xli
             default: XLI_THROW(String("Invalid file mode: ") + FileModeToString(mode));
 		}
         
-		CharString utf8Filename = Unicode::Utf16To8(fileName);
+		// TODO: Do proper testing on unicode filenames later
+		CharString utf8Filename = 
+#ifdef WIN32
+		fileName
+#else 
+		Unicode::Utf16To8(fileName)
+#endif
+		;
+
 		fopen_s(&fp, utf8Filename.Data(), m);
 		if (!fp) XLI_THROW_CANT_OPEN_FILE(fileName);
         
