@@ -101,6 +101,7 @@
     <Lib>
       <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
       <AdditionalDependencies>XliMD.lib; XliPlatformMD.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutDir)\</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">
