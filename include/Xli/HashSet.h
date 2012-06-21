@@ -6,11 +6,8 @@
 #include <Xli/Hash.h>
 #include <Xli/Exception.h>
 
-#define XLI_HASHSET_FOREACH(type, value, hashSet, action) { for (int i = hashSet.Begin(); i != hashSet.End(); i = hashSet.Next(i)) { type value = hashSet.Get(i); { action; }}}
-
 namespace Xli
 {
-
 	template <typename T, int bufSize=4> class HashSet: public Object
 	{
 	private:
@@ -56,7 +53,6 @@ namespace Xli
 		}
 
 	public:
-
 		HashSet(int initialSizeLog2=0)
 		{
 			if (initialSizeLog2 == 0)
