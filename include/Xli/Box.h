@@ -38,8 +38,6 @@ namespace Xli
 
 				// One plus the highest Z-coordinate of the interior of the box
 				T Back;
-
-
 			};
 			T data[6];
 		};
