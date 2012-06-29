@@ -21,9 +21,10 @@ namespace Xli
 		RECT rect;
 		bool fullscreen;
 
-	public:
+		friend class Xli::Window;
 		static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
+	public:
 		Win32Window(int width, int height, const Xli::String& title, WindowEventHandler* eventHandler, int style);
 		Win32Window(HWND hWnd);
 		virtual ~Win32Window();

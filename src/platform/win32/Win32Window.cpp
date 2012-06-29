@@ -64,7 +64,7 @@ namespace Xli
 			mainWindow = this;
 		}
 
-		SetWindowLongPtr(hWnd, GWL_USERDATA, (LONG_PTR)this);
+		SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)this);
 
 		ShowWindow(hWnd, SW_NORMAL);
 		SetForegroundWindow(hWnd);
@@ -333,7 +333,7 @@ namespace Xli
 
 	LRESULT CALLBACK Win32Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
-		Win32Window* wnd = reinterpret_cast<Win32Window*>(::GetWindowLong(hWnd, GWL_USERDATA));
+		Win32Window* wnd = (Win32Window*)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
 
 		const unsigned int MOUSEEVENTF_FROMTOUCH = 0xff515700;
 
