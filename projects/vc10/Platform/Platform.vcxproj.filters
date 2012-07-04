@@ -91,6 +91,9 @@
     <ClInclude Include="..\..\..\src\platform\posix\PosixFileSystemBase.h">
       <Filter>XliPlatform\Posix</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\XliPlatform\Win32Windows.h">
+      <Filter>XliPlatform\Win32</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\platform\Profiling.cpp">

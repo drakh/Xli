@@ -1,10 +1,7 @@
 #include <XliPlatform/MessageBox.h>
 #include <XliPlatform/Window.h>
 #include <XliPlatform/Win32Helpers.h>
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#undef MessageBox
+#include <XliPlatform/Win32Windows.h>
 
 namespace Xli
 {

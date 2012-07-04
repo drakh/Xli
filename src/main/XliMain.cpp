@@ -60,7 +60,7 @@ int main(int argc, char** argv)
 }
 
 #ifdef XLI_PLATFORM_WINDOWS
-#include <windows.h>
+#include <XliPlatform/Win32Windows.h>
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {

@@ -1,18 +1,9 @@
 #include <XliPlatform/NativeFileSystem.h>
 #include <Xli/File.h>
 #include <Xli/Random.h>
-
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <ShlObj.h>
-
+#include <XliPlatform/Win32Windows.h>
 #include <XliPlatform/Win32Helpers.h>
-
-#undef CreateDirectory
-#undef GetCurrentDirectory
-#undef ChangeDirectory
-#undef DeleteFile
-#undef MoveFile
+#include <ShlObj.h>
 
 namespace Xli
 {

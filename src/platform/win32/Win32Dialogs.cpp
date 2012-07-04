@@ -2,12 +2,9 @@
 #include <XliPlatform/NativeFileSystem.h>
 #include <Xli/StringBuilder.h>
 #include <Xli/Path.h>
-
 #include <XliPlatform/MessageBox.h>
-
-#include <windows.h>
-#undef GetCurrentDirectory
-#undef MessageBox
+#include <XliPlatform/Win32Windows.h>
+#include <CommDlg.h>
 
 namespace Xli
 {

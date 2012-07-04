@@ -12,6 +12,10 @@
 	"publicKeyToken='6595b64144ccf1df' " \
 	"language='*'\"")
 
+// From windowsx.h
+#define GET_X_LPARAM(lp)                        ((int)(short)LOWORD(lp))
+#define GET_Y_LPARAM(lp)                        ((int)(short)HIWORD(lp))
+
 namespace Xli
 {
 	static int InitCount = 0;
@@ -64,7 +68,7 @@ namespace Xli
 			mainWindow = this;
 		}
 
-		SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)this);
+		SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 
 		ShowWindow(hWnd, SW_NORMAL);
 		SetForegroundWindow(hWnd);
@@ -295,7 +299,6 @@ namespace Xli
 		case VK_SPACE:		return KeySpace; break;
 		case VK_LMENU:		return KeyAlt; break;
 		case VK_RMENU:		return KeyAlt; break;
-		//case VK_MENU:		return KeyAlt; break;
 		case VK_SHIFT:		return KeyShift; break;
 		case VK_CONTROL:	return KeyCtrl; break;
 		case VK_CAPITAL:	return KeyCapsLock; break;
@@ -316,10 +319,6 @@ namespace Xli
 		case VK_F10:		return KeyF10; break;
 		case VK_F11:		return KeyF11; break;
 		case VK_F12:		return KeyF12; break;
-		/*case VK_F13:		return KeyF13; break;
-		case VK_F14:		return KeyF14; break;
-		case VK_F15:		return KeyF15; break;
-		case VK_F16:		return KeyF16; break;*/
 		case VK_PRIOR:		return KeyPageUp; break;
 		case VK_NEXT:		return KeyPageDown; break;
 		case VK_HOME:		return KeyHome; break;
@@ -331,11 +330,11 @@ namespace Xli
 		}
 	}
 
+	static const unsigned int MOUSEEVENTF_FROMTOUCH = 0xff515700;
+
 	LRESULT CALLBACK Win32Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
-		Win32Window* wnd = (Win32Window*)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
-
-		const unsigned int MOUSEEVENTF_FROMTOUCH = 0xff515700;
+		Win32Window* wnd = reinterpret_cast<Win32Window*>(::GetWindowLongPtr(hWnd, GWLP_USERDATA));
 
 		switch (message)
 		{
@@ -354,10 +353,11 @@ namespace Xli
 		case WM_MOUSEMOVE:
 			if (wnd->eventHandler)
 			{
-				wnd->eventHandler->OnMouseMove(LOWORD(lParam), HIWORD(lParam));
+				wnd->eventHandler->OnMouseMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+
 				if (wnd->emulateMouseAsTouchPoint && wnd->capturedMouseTouchPoint)
 				{
-					wnd->eventHandler->OnTouchMove((float)LOWORD(lParam), (float)HIWORD(lParam), 0);
+					wnd->eventHandler->OnTouchMove((float)GET_X_LPARAM(lParam), (float)GET_Y_LPARAM(lParam), 0);
 				}
 			}
 			break;
@@ -365,7 +365,8 @@ namespace Xli
 		case WM_MOUSELEAVE:
 			if (wnd->eventHandler)
 			{
-				wnd->eventHandler->OnMouseLeave(LOWORD(lParam), HIWORD(lParam));
+				wnd->eventHandler->OnMouseLeave(GET_X_LPARAM(lParam), HIWORD(lParam));
+
 				if (wnd->emulateMouseAsTouchPoint && wnd->capturedMouseTouchPoint)
 				{
 					wnd->capturedMouseTouchPoint = false;
@@ -375,17 +376,18 @@ namespace Xli
 			break;
 
 		case WM_MBUTTONDOWN:
-			if (wnd->eventHandler) wnd->eventHandler->OnMouseDown(LOWORD(lParam), HIWORD(lParam), MouseButtonsMiddle);		
+			if (wnd->eventHandler) wnd->eventHandler->OnMouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), MouseButtonsMiddle);		
 			break;
 
 		case WM_MBUTTONUP:
-			if (wnd->eventHandler) wnd->eventHandler->OnMouseUp(LOWORD(lParam), HIWORD(lParam), MouseButtonsMiddle);
+			if (wnd->eventHandler) wnd->eventHandler->OnMouseUp(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), MouseButtonsMiddle);
 			break;
 
 		case WM_LBUTTONDOWN:
 			if (wnd->eventHandler)
 			{
-				wnd->eventHandler->OnMouseDown(LOWORD(lParam), HIWORD(lParam), MouseButtonsLeft);
+				wnd->eventHandler->OnMouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), MouseButtonsLeft);
+
 				if (wnd->emulateMouseAsTouchPoint && (GetMessageExtraInfo() & MOUSEEVENTF_FROMTOUCH) != MOUSEEVENTF_FROMTOUCH)
 				{
 					wnd->capturedMouseTouchPoint = true;
@@ -397,7 +399,8 @@ namespace Xli
 		case WM_LBUTTONUP:
 			if (wnd->eventHandler)
 			{
-				wnd->eventHandler->OnMouseUp(LOWORD(lParam), HIWORD(lParam), MouseButtonsLeft);
+				wnd->eventHandler->OnMouseUp(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), MouseButtonsLeft);
+
 				if (wnd->emulateMouseAsTouchPoint && (GetMessageExtraInfo() & MOUSEEVENTF_FROMTOUCH) != MOUSEEVENTF_FROMTOUCH)
 				{
 					wnd->capturedMouseTouchPoint = false;
@@ -407,23 +410,27 @@ namespace Xli
 			break;
 
 		case WM_RBUTTONDOWN:
-			if (wnd->eventHandler) wnd->eventHandler->OnMouseDown(LOWORD(lParam), HIWORD(lParam), MouseButtonsRight);
+			if (wnd->eventHandler) wnd->eventHandler->OnMouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), MouseButtonsRight);
 			break;
 
 		case WM_RBUTTONUP:
-			if (wnd->eventHandler) wnd->eventHandler->OnMouseUp(LOWORD(lParam), HIWORD(lParam), MouseButtonsRight);
+			if (wnd->eventHandler) wnd->eventHandler->OnMouseUp(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), MouseButtonsRight);
 			break;
 
 		case WM_MOUSEWHEEL:
 			if (wnd->eventHandler) wnd->eventHandler->OnMouseWheel(0, GET_WHEEL_DELTA_WPARAM(wParam));
 			break;
 
+		case WM_MOUSEHWHEEL:
+			if (wnd->eventHandler) wnd->eventHandler->OnMouseWheel(GET_WHEEL_DELTA_WPARAM(wParam), 0);
+			break;
+
 		case WM_XBUTTONDOWN:
-			if (wnd->eventHandler) wnd->eventHandler->OnMouseDown(LOWORD(lParam), HIWORD(lParam), GET_XBUTTON_WPARAM(wParam) == XBUTTON1 ? MouseButtonsX1 : MouseButtonsX2);
+			if (wnd->eventHandler) wnd->eventHandler->OnMouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), GET_XBUTTON_WPARAM(wParam) == XBUTTON1 ? MouseButtonsX1 : MouseButtonsX2);
 			break;
 
 		case WM_XBUTTONUP:
-			if (wnd->eventHandler) wnd->eventHandler->OnMouseUp(LOWORD(lParam), HIWORD(lParam), GET_XBUTTON_WPARAM(wParam) == XBUTTON1 ? MouseButtonsX1 : MouseButtonsX2);
+			if (wnd->eventHandler) wnd->eventHandler->OnMouseUp(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), GET_XBUTTON_WPARAM(wParam) == XBUTTON1 ? MouseButtonsX1 : MouseButtonsX2);
 			break;
 
 		case WM_TOUCH:
@@ -457,7 +464,7 @@ namespace Xli
 			break;
 
 		case WM_SIZE:
-			if (wnd->eventHandler) wnd->eventHandler->OnResize(LOWORD(lParam), HIWORD(lParam));			
+			if (wnd->eventHandler) wnd->eventHandler->OnResize(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));			
 			break;
 
 		case WM_CLOSE:

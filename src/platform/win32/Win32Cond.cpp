@@ -1,7 +1,5 @@
 #include <XliPlatform/ConditionVariable.h>
-
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+#include <XliPlatform/Win32Windows.h>
 
 namespace Xli
 {

@@ -1,5 +1,5 @@
 #include <XliPlatform.h>
-#include <windows.h>
+#include <XliPlatform/Win32Windows.h>
 
 namespace Xli
 {

@@ -1,7 +1,5 @@
 #include <XliPlatform/Mutex.h>
-#include <windows.h>
-
-#undef CreateMutex
+#include <XliPlatform/Win32Windows.h>
 
 namespace Xli
 {

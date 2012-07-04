@@ -148,6 +148,7 @@
     <ClInclude Include="..\..\..\include\XliPlatform\TimedTrigger.h" />
     <ClInclude Include="..\..\..\include\XliPlatform\Timer.h" />
     <ClInclude Include="..\..\..\include\XliPlatform\Win32Helpers.h" />
+    <ClInclude Include="..\..\..\include\XliPlatform\Win32Windows.h" />
     <ClInclude Include="..\..\..\include\XliPlatform\Window.h" />
     <ClInclude Include="..\..\..\include\XliPlatform\Win32Window.h" />
     <ClInclude Include="..\..\..\include\XliPlatform.h" />
