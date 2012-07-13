@@ -62,6 +62,8 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release MD|Win32'">$(ProjectName)MT</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)MDD</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectName)MD</TargetName>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Anders\Documents\rs-svn\trunk\Frameworks\Xli\include;C:\Users\Anders\Documents\rs-svn\trunk\Frameworks\Crunch\include;$(IncludePath)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Anders\Documents\rs-svn\trunk\Frameworks\Xli\lib;C:\Users\Anders\Documents\rs-svn\trunk\Frameworks\Crunch\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
