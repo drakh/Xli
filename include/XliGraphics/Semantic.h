@@ -12,7 +12,7 @@ namespace Xli
 		static const char* Binormal;
 		static const char* Tangent;
 		static const char* Color;
-		static const char* NodeIndex;
+		static const char* TransformIndex;
 		static const char* BoneWeights;
 		static const char* BoneIndices;
 	};

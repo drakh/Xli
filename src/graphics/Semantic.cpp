@@ -8,7 +8,7 @@ namespace Xli
 	const char* Semantic::Binormal = "Binormal";
 	const char* Semantic::Tangent = "Tangent";
 	const char* Semantic::Color = "Color";
-	const char* Semantic::NodeIndex = "NodeIndex";
+	const char* Semantic::TransformIndex = "TransformIndex";
 	const char* Semantic::BoneWeights = "BoneWeights";
 	const char* Semantic::BoneIndices = "BoneIndices";
 }
