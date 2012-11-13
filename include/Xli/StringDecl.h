@@ -22,7 +22,6 @@ namespace Xli
 //	typedef char StringChar;
 //#endif
 
-
 	class StringTools
 	{
 	public:

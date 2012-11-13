@@ -9,19 +9,29 @@
 
 namespace Xli
 {
+	enum FontRenderMode
+	{
+		FontRenderModeNone,
+		FontRenderModeNormal,
+		FontRenderModeMonochrome,
+	};
+
 	class FontFace: public Object
 	{
 	public:
-		virtual int GetAscender() = 0;
-		virtual int GetDescender() = 0;
-		virtual Vector2i GetBearing(Utf32Char character) = 0;
-		virtual Vector2i GetAdvance(Utf32Char character) = 0;
-		virtual Vector2i GetKerning(Utf32Char previuousCharacter, Utf32Char character) = 0;
-		virtual Bitmap* RenderGlyph(Utf32Char character) = 0;
+		virtual Vector2 GetAdvance(Utf32Char c) = 0;
+		virtual Vector2 GetKerning(Utf32Char left, Utf32Char right) = 0;
+		virtual Vector2i GetBearing(Utf32Char c) = 0;
+		virtual Bitmap* RenderGlyph(Utf32Char c, FontRenderMode mode) = 0;
 
 		virtual String GetFamilyName() = 0;
 		virtual String GetStyleName() = 0;
-		virtual int GetSize() = 0;
+
+		virtual float GetAscender() = 0;
+		virtual float GetDescender() = 0;
+
+		virtual void SetPixelSize(int fontSize) = 0;		
+		virtual int GetPixelSize() = 0;
 	};
 
 	class FreeType

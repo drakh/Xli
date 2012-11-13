@@ -51,7 +51,6 @@ namespace Xli
 
 		Bitmap* DownSample2x2();
 		void GenerateMipMaps(Array<Bitmap*>& chain);
-		//Surface GetSurface();
 
 		void Clear();
 		void Blit(Bitmap* src, Recti srcRect, Vector2i dstPos);

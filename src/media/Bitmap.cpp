@@ -95,11 +95,6 @@ namespace Xli
 		return dataOwner;
 	}
 
-	/*Surface Bitmap::GetSurface()
-	{
-		return Surface(width, height, pitch, data);
-	}*/
-
 	Bitmap* Bitmap::Pack()
 	{
 		if (pitch == FormatInfo::SizeOf(format) * width)

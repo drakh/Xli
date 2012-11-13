@@ -27,7 +27,7 @@ namespace Xli
 			Utf32Char c = CharSet[i];
 			if (c < 0xff && isspace(c)) continue;
 
-			Managed<Bitmap> bmp = ff->RenderGlyph(c);
+			Managed<Bitmap> bmp = ff->RenderGlyph(c, FontRenderModeNormal);
 			cb.AddTile(bmp);
 		}
 
@@ -70,7 +70,7 @@ namespace Xli
 			{
 				if (j != i)
 				{
-					int k = ff->GetKerning(CharSet[j], c).X;
+					int k = (int)ff->GetKerning(CharSet[j], c).X;
 
 					if (k != 0 && !cd.Kerning.ContainsKey(CharSet[j]))
 					{
@@ -80,15 +80,15 @@ namespace Xli
 			}
 
 			cd.Bearing = ff->GetBearing(CharSet[i]);
-			cd.Advance = ff->GetAdvance(CharSet[i]).X;
+			cd.Advance = (int)ff->GetAdvance(CharSet[i]).X;
 
 			bf->Characters.Add(c, cd);
 		}
 
 		bf->Bitmap = Atlas->Bitmap;
-		bf->Ascender = ff->GetAscender();
-		bf->Descender = ff->GetDescender();
-		bf->SpaceWidth = ff->GetAdvance(' ').X;
+		bf->Ascender = (int)ff->GetAscender();
+		bf->Descender = (int)ff->GetDescender();
+		bf->SpaceWidth = (int)ff->GetAdvance(' ').X;
 
 		return Share(bf.Pointer());
 	}
