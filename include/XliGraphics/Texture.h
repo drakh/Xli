@@ -7,40 +7,46 @@
 
 namespace Xli
 {
+	enum TextureType
+	{
+		TextureType2D,
+		TextureType3D,
+		TextureTypeCube,
+	};
+
 	class Texture: public Object
 	{
 	public:
-		class Face
+		enum FaceIndex
 		{
-		public:
-			enum FaceType
-			{
-				FaceTypeUnknown,
-				FaceTypePositiveX,
-				FaceTypeNegativeX,
-				FaceTypePositiveY,
-				FaceTypeNegativeY,
-				FaceTypePositiveZ,
-				FaceTypeNegativeZ,
-			};
-
-			FaceType Type;
-			Array<Managed<Image> > MipLevels;
-
-			Face();
+			FaceIndexPositiveX = 0,
+			FaceIndexNegativeX = 1,
+			FaceIndexPositiveY = 2,
+			FaceIndexNegativeY = 3,
+			FaceIndexPositiveZ = 4,
+			FaceIndexNegativeZ = 5,
 		};
 
-		enum TextureType
+		struct Face
 		{
-			TextureType2D,
-			TextureTypeCubeMap,
+			Array<Managed<Image> > MipLevels;
+			
+			Face();
+			Face(Image* image);
+
+			Face& operator = (const Face& copy);
 		};
 
 		TextureType Type;
+		int Width, Height, Depth;
+
 		Array<Face> Faces;
 
-		Texture(TextureType type);
-		Texture(Image* img);
+		Texture(TextureType type, int width, int height, int depth);
+
+		static Texture* Create2D(Image* img);
+		static Texture* CreateCube(Image* posX, Image* negX, Image* posY, Image* negY, Image* posZ, Image* negZ);
+		static Texture* Create3D(Image** slices, int depth);
 	};
 }
 

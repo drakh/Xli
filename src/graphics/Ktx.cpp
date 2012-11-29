@@ -116,6 +116,7 @@ namespace Xli
 
 		KTX_header header;
 		input->ReadSafe(&header, sizeof(KTX_header), 1);
+
 		if (memcmp(header.identifier, KTX_IDENTIFIER_REF, 12) != 0) XLI_THROW("Unable to load KTX file: Invalid header");
 		if (header.endianness != KTX_ENDIAN_REF) XLI_THROW("Unable to load KTX file: Unhandled endianess");
 		if (header.pixelDepth > 1) XLI_THROW("Unable to load KTX file: Unsupported texture depth: " + (String)(int)header.pixelDepth);
@@ -128,9 +129,9 @@ namespace Xli
 			delete [] tmp;
 		}
 
-		Texture* tex = new Texture(Texture::TextureType2D);
-		if (header.numberOfFaces == 1) tex->Type = Texture::TextureType2D;
-		else if (header.numberOfFaces == 6) tex->Type = Texture::TextureTypeCubeMap;
+		Texture* tex = new Texture(TextureType2D, header.pixelWidth, header.pixelHeight, header.pixelDepth);
+		if (header.numberOfFaces == 1) tex->Type = TextureType2D;
+		else if (header.numberOfFaces == 6) tex->Type = TextureTypeCube;
 		else XLI_THROW("Unable to load KTX file: Unsupported texture type");
 
 		tex->Faces.Resize(header.numberOfFaces);
@@ -142,12 +143,11 @@ namespace Xli
 			if (mw == 0) mw = 1;
 			if (mh == 0) mh = 1;
 
-			UInt32 sizeInBytes; // = (ExpandToMultipleOf4(mw) * ExpandToMultipleOf4(mh)) / 2;
+			UInt32 sizeInBytes;
 			input->ReadSafe(&sizeInBytes, sizeof(UInt32), 1);
 
 			for (uint j = 0; j < header.numberOfFaces; j++)
 			{
-				tex->Faces[j].Type = Texture::Face::FaceTypeUnknown;
 				Managed<Buffer> buf = Buffer::Create(sizeInBytes);
 				input->ReadSafe(buf->Data(), 1, buf->Size());
 
