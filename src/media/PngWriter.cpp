@@ -18,10 +18,12 @@ namespace Xli
 		{
 			((Stream*)png_get_io_ptr(png_ptr))->Write(data, 1, (int)length);
 		}
+
 		static void flush(png_structp png_ptr)
 		{
 			((Stream*)png_get_io_ptr(png_ptr))->Flush();
 		}
+
 		static void error(png_structp png_ptr, png_const_charp)
 		{
 			XLI_THROW("Error while writing to PNG file");
@@ -42,18 +44,22 @@ namespace Xli
 				color_type = PNG_COLOR_TYPE_GRAY;
 				comps = 1;
 				break;
+
 			case FormatLA_8_8_UInt_Normalize:
 				color_type = PNG_COLOR_TYPE_GRAY_ALPHA;
 				comps = 2;
 				break;
+
 			case FormatRGB_8_8_8_UInt_Normalize:
 				color_type = PNG_COLOR_TYPE_RGB;
 				comps = 3;
 				break;
+
 			case FormatRGBA_8_8_8_8_UInt_Normalize:
 				color_type = PNG_COLOR_TYPE_RGB_ALPHA;
 				comps = 4;
 				break;
+
 			default:
 				XLI_THROW(String("Unsupported PNG Format: ") + FormatInfo::ToString(format));
 				break;
@@ -83,18 +89,22 @@ namespace Xli
 		{
 			return png_get_image_width(png_ptr, info_ptr);
 		}
+
 		virtual int GetHeight()
 		{
 			return png_get_image_height(png_ptr, info_ptr);
 		}
+
 		virtual int GetDepth()
 		{
-			return 1;
+			return 0;
 		}
+
 		virtual int GetBufferSize()
 		{
 			return comps * png_get_image_width(png_ptr, info_ptr) * png_get_image_height(png_ptr, info_ptr);
 		}
+
 		virtual Format GetFormat()
 		{
 			return format;

@@ -103,7 +103,7 @@ namespace Xli
 		}
 		virtual int GetDepth()
 		{
-			return 1;
+			return 0;
 		}
 		virtual Format GetFormat()
 		{
@@ -111,7 +111,7 @@ namespace Xli
 		}
 		virtual int GetBufferSize()
 		{
-			return comps *width * height;
+			return comps * width * height;
 		}
 		virtual void Read(void* targetBuffer, ProgressCallback* callback)
 		{

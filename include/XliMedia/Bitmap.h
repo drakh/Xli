@@ -31,6 +31,7 @@ namespace Xli
 		Format GetFormat() const;
 		int GetWidth() const;
 		int GetHeight() const;
+		int GetDepth() const;
 		int GetPitch() const;
 		int GetComponentCount() const;
 		int GetBytesPerPixel() const;

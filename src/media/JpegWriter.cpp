@@ -35,6 +35,7 @@ namespace Xli
 			jdest->next_output_byte = cd->Buf;
 			jdest->free_in_buffer = BufSize;
 		}
+
 		static boolean emptyOutputBuffer(j_compress_ptr cinfo)
 		{
 			ClientData* cd = reinterpret_cast<ClientData*>(cinfo->client_data);
@@ -47,6 +48,7 @@ namespace Xli
 
 			return TRUE;
 		}
+
 		static void termDestination(j_compress_ptr cinfo)
 		{
 			ClientData* cd = reinterpret_cast<ClientData*>(cinfo->client_data);
@@ -57,6 +59,7 @@ namespace Xli
 
 			cd->File->Flush();
 		}
+
 		static void errorExit(j_common_ptr cinfo)
 		{
 			char buf[JMSG_LENGTH_MAX];
@@ -103,6 +106,7 @@ namespace Xli
 			jpeg_set_defaults(&cinfo);
 			jpeg_set_quality(&cinfo, quality, TRUE);
 		}
+
 		virtual ~JpegWriter()
 		{
 			jpeg_destroy_compress(&cinfo);
@@ -112,18 +116,22 @@ namespace Xli
 		{
 			return cinfo.image_width;
 		}
+
 		virtual int GetHeight()
 		{
 			return cinfo.image_height;
 		}
+
 		virtual int GetDepth()
 		{
-			return 1;
+			return 0;
 		}
+
 		virtual int GetBufferSize()
 		{
 			return cinfo.image_width * cinfo.image_height * cinfo.input_components;
 		}
+
 		virtual Format GetFormat()
 		{
 			return format;
@@ -156,6 +164,7 @@ namespace Xli
 		Managed<ImageWriter> w = CreateWriter(output, bmp->GetWidth(), bmp->GetHeight(), bmp->GetFormat(), quality);
 		w->WriteBitmap(bmp);
 	}
+
 	void Jpeg::Save(const String& fileName, Bitmap* bmp, int quality)
 	{
 		File f(fileName, FileModeWrite);

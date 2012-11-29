@@ -9,15 +9,16 @@ namespace Xli
 {
 	class CompressedImage : public Image
 	{
-		int w, h;
+		int w, h, d;
 		Format format;
 		Shared<DataAccessor> data;
 
 	public:
-		CompressedImage(int w, int h, Format format, DataAccessor* data);
+		CompressedImage(int width, int height, int depth, Format format, DataAccessor* data);
 
 		virtual int GetWidth() const;
 		virtual int GetHeight() const;
+		virtual int GetDepth() const;
 		virtual Format GetFormat() const;
 		virtual Bitmap* ToBitmap();
 

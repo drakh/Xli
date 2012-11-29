@@ -1,37 +1,37 @@
 #include <XliGraphics/Ktx.h>
 #include <XliGraphics/CompressedImage.h>
 
-struct KTX_header
-{
-	unsigned char identifier[12];
-	unsigned int endianness;
-	unsigned int glType;
-	unsigned int glTypeSize;
-	unsigned int glFormat;
-	unsigned int glInternalFormat;
-	unsigned int glBaseInternalFormat;
-	unsigned int pixelWidth;
-	unsigned int pixelHeight;
-	unsigned int pixelDepth;
-	unsigned int numberOfArrayElements;
-	unsigned int numberOfFaces;
-	unsigned int numberOfMipmapLevels;
-	unsigned int bytesOfKeyValueData;
-};
-
-static const unsigned int GL_R = 0x1903, GL_RG = 0x8227, GL_RGB = 0x1907, GL_RGBA = 0x1908;
-static const unsigned int GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG = 0x8C00;
-static const unsigned int GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG = 0x8C01;
-static const unsigned int GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG = 0x8C02;
-static const unsigned int GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG = 0x8C03;
-static const unsigned int GL_ETC1_RGB8_OES = 0x8d64;
-
-static const unsigned char KTX_IDENTIFIER_REF[12] = { '«', 'K', 'T', 'X', ' ', '1', '1', '»', '\r', '\n', '\x1A', '\n' };
-static const unsigned int KTX_ENDIAN_REF = 0x04030201;
-static const unsigned int KTX_ENDIAN_REF_REV = 0x01020304;
-
 namespace Xli
 {
+	struct KTX_header
+	{
+		UInt8 identifier[12];
+		UInt32 endianness;
+		UInt32 glType;
+		UInt32 glTypeSize;
+		UInt32 glFormat;
+		UInt32 glInternalFormat;
+		UInt32 glBaseInternalFormat;
+		UInt32 pixelWidth;
+		UInt32 pixelHeight;
+		UInt32 pixelDepth;
+		UInt32 numberOfArrayElements;
+		UInt32 numberOfFaces;
+		UInt32 numberOfMipmapLevels;
+		UInt32 bytesOfKeyValueData;
+	};
+
+	static const UInt32 GL_R = 0x1903, GL_RG = 0x8227, GL_RGB = 0x1907, GL_RGBA = 0x1908;
+	static const UInt32 GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG = 0x8C00;
+	static const UInt32 GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG = 0x8C01;
+	static const UInt32 GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG = 0x8C02;
+	static const UInt32 GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG = 0x8C03;
+	static const UInt32 GL_ETC1_RGB8_OES = 0x8d64;
+
+	static const UInt8 KTX_IDENTIFIER_REF[12] = { '«', 'K', 'T', 'X', ' ', '1', '1', '»', '\r', '\n', '\x1A', '\n' };
+	static const UInt32 KTX_ENDIAN_REF = 0x04030201;
+	static const UInt32 KTX_ENDIAN_REF_REV = 0x01020304;
+
 	void Ktx::Save(Stream* output, Texture* tex)
 	{
 		// TODO: Make sure contents in tex is sane
@@ -103,13 +103,6 @@ namespace Xli
 		Save(&f, tex);
 	}
 
-	static int ExpandToMultipleOf4(int x)
-	{
-		int xdiv4 = x / 4;
-		if (xdiv4 * 4 != x) x = (xdiv4 + 1) * 4;
-		return x;
-	}
-
 	Texture* Ktx::Load(Stream* input)
 	{
 		// TODO: Proper support for cube maps
@@ -129,7 +122,7 @@ namespace Xli
 			delete [] tmp;
 		}
 
-		Texture* tex = new Texture(TextureType2D, header.pixelWidth, header.pixelHeight, header.pixelDepth);
+		Texture* tex = new Texture(TextureType2D);
 		if (header.numberOfFaces == 1) tex->Type = TextureType2D;
 		else if (header.numberOfFaces == 6) tex->Type = TextureTypeCube;
 		else XLI_THROW("Unable to load KTX file: Unsupported texture type");
@@ -154,23 +147,23 @@ namespace Xli
 				switch (header.glInternalFormat)
 				{
 				case GL_ETC1_RGB8_OES:
-					tex->Faces[j].MipLevels.Add(new CompressedImage(mw, mh, FormatCompressedRGB_ETC1, buf));
+					tex->Faces[j].MipLevels.Add(new CompressedImage(mw, mh, 0, FormatCompressedRGB_ETC1, buf));
 					break;
 
 				case GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG:
-					tex->Faces[j].MipLevels.Add(new CompressedImage(mw, mh, FormatCompressedRGB_PVRTC_2BPP, buf));
+					tex->Faces[j].MipLevels.Add(new CompressedImage(mw, mh, 0, FormatCompressedRGB_PVRTC_2BPP, buf));
 					break;
 
 				case GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG:
-					tex->Faces[j].MipLevels.Add(new CompressedImage(mw, mh, FormatCompressedRGB_PVRTC_4BPP, buf));
+					tex->Faces[j].MipLevels.Add(new CompressedImage(mw, mh, 0, FormatCompressedRGB_PVRTC_4BPP, buf));
 					break;
 
 				case GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG:
-					tex->Faces[j].MipLevels.Add(new CompressedImage(mw, mh, FormatCompressedRGBA_PVRTC_2BPP, buf));
+					tex->Faces[j].MipLevels.Add(new CompressedImage(mw, mh, 0, FormatCompressedRGBA_PVRTC_2BPP, buf));
 					break;
 
 				case GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG:
-					tex->Faces[j].MipLevels.Add(new CompressedImage(mw, mh, FormatCompressedRGBA_PVRTC_4BPP, buf));
+					tex->Faces[j].MipLevels.Add(new CompressedImage(mw, mh, 0, FormatCompressedRGBA_PVRTC_4BPP, buf));
 					break;
 
 				default:

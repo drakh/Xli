@@ -12,6 +12,7 @@ namespace Xli
 		this->dataOwner = Buffer::Create(pitch * height);
 		this->data = const_cast<UInt8*>(dataOwner->GetData());
 	}
+
 	Bitmap::Bitmap(int width, int height, Format format, DataAccessor* dataAccessor, int pitch, int offset)
 	{
 		if (!dataAccessor) XLI_THROW_NULL_POINTER;
@@ -24,6 +25,7 @@ namespace Xli
 		this->dataOwner->AddRef();
 		this->data = const_cast<UInt8*>(dataOwner->GetData()) + offset;
 	}
+
 	Bitmap::~Bitmap()
 	{
 		dataOwner->Release();
@@ -33,26 +35,37 @@ namespace Xli
 	{
 		return format;
 	}
+
 	int Bitmap::GetWidth() const
 	{
 		return width;
 	}
+
 	int Bitmap::GetHeight() const
 	{
 		return height;
 	}
+
+	int Bitmap::GetDepth() const
+	{
+		return 0;
+	}
+
 	int Bitmap::GetPitch() const
 	{
 		return pitch;
 	}
+
 	int Bitmap::GetComponentCount() const
 	{
 		return FormatInfo::ComponentCount(format);
 	}
+
 	int Bitmap::GetBytesPerPixel() const
 	{
 		return FormatInfo::SizeOf(format);
 	}
+
 	Recti Bitmap::GetRect() const
 	{
 		return Recti(0, 0, width, height);
@@ -67,6 +80,7 @@ namespace Xli
 	{
 		return data;
 	}
+
 	const UInt8* Bitmap::GetData() const
 	{
 		return data;
@@ -76,6 +90,7 @@ namespace Xli
 	{
 		return data + pitch*y;
 	}
+
 	const UInt8* Bitmap::GetScanlinePtr(int y) const
 	{
 		return data + pitch*y;
@@ -85,6 +100,7 @@ namespace Xli
 	{
 		return data + pitch*y + GetBytesPerPixel() * x;
 	}
+
 	const UInt8* Bitmap::GetPixelPtr(int x, int y) const
 	{
 		return data + pitch*y + GetBytesPerPixel() * x;
@@ -98,9 +114,7 @@ namespace Xli
 	Bitmap* Bitmap::Pack()
 	{
 		if (pitch == FormatInfo::SizeOf(format) * width)
-		{
 			return Share(this);
-		}
 
 		// TODO: Implement this
 		XLI_THROW_NOT_SUPPORTED(__FUNCTION__);

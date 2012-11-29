@@ -13,6 +13,7 @@ namespace Xli
 	public:
 		virtual int GetWidth() const = 0;
 		virtual int GetHeight() const = 0;
+		virtual int GetDepth() const = 0;
 		virtual Format GetFormat() const = 0;
 		virtual Bitmap* ToBitmap() = 0;
 

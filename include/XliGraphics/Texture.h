@@ -38,15 +38,29 @@ namespace Xli
 		};
 
 		TextureType Type;
-		int Width, Height, Depth;
-
 		Array<Face> Faces;
 
-		Texture(TextureType type, int width, int height, int depth);
+		int GetWidth() const;
+		int GetHeight() const;
+		int GetDepth() const;
+		int GetMipCount() const;
+		Format GetFormat() const;
 
-		static Texture* Create2D(Image* img);
+		Texture(TextureType type);
+
+		static Texture* Create(Image* img);
 		static Texture* CreateCube(Image* posX, Image* negX, Image* posY, Image* negY, Image* posZ, Image* negZ);
-		static Texture* Create3D(Image** slices, int depth);
+
+		enum Cube2DMode
+		{
+			Cube2DMode1x6,
+			Cube2DMode2x3,
+			Cube2DMode3x2,
+			Cube2DMode6x1,
+		};
+
+		Texture* Convert2DToCube();
+		Texture* ConvertCubeTo2D(Cube2DMode mode);
 	};
 }
 

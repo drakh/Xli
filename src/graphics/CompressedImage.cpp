@@ -2,10 +2,11 @@
 
 namespace Xli
 {
-	CompressedImage::CompressedImage(int w, int h, Format format, DataAccessor* data)
+	CompressedImage::CompressedImage(int width, int height, int depth, Format format, DataAccessor* data)
 	{
-		this->w = w;
-		this->h = h;
+		this->w = width;
+		this->h = height;
+		this->d = depth;
 		this->format = format;
 		this->data = data;
 	}
@@ -18,6 +19,11 @@ namespace Xli
 	int CompressedImage::GetHeight() const
 	{
 		return h;
+	}
+
+	int CompressedImage::GetDepth() const
+	{
+		return d;
 	}
 
 	Format CompressedImage::GetFormat() const

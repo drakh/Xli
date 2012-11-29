@@ -23,6 +23,7 @@ namespace Xli
 		static void initSource (j_decompress_ptr cinfo)
 		{
 		}
+
 		static boolean fillInputBuffer (j_decompress_ptr cinfo)
 		{
 			ClientData* cd = reinterpret_cast<ClientData*>(cinfo->client_data);
@@ -40,6 +41,7 @@ namespace Xli
 
 			return TRUE;
 		}
+
 		static void skipInputData(j_decompress_ptr cinfo, long num_bytes)
 		{
 			ClientData* cd = reinterpret_cast<ClientData*>(cinfo->client_data);
@@ -56,9 +58,11 @@ namespace Xli
 				jsrc->bytes_in_buffer -= num_bytes;
 			}
 		}
+
 		static void termSource (j_decompress_ptr cinfo)
 		{
 		}
+
 		static void errorExit(j_common_ptr cinfo)
 		{
 			char buf[JMSG_LENGTH_MAX];
@@ -105,14 +109,17 @@ namespace Xli
 			case 1:
 				format = FormatL_8_UInt_Normalize;
 				break;
+
 			case 3:
 				format = FormatRGB_8_8_8_UInt_Normalize;
 				break;
+
 			default:
 				XLI_THROW("Unsupported JPEG pixel format");
 				break;
 			}
 		}
+
 		virtual ~JpegReader()
 		{
 			jpeg_destroy_decompress (&cinfo);
@@ -122,18 +129,22 @@ namespace Xli
 		{
 			return width;
 		}
+
 		virtual int GetHeight()
 		{
 			return height;
 		}
+
 		virtual int GetDepth()
 		{
-			return 1;
+			return 0;
 		}
+
 		virtual int GetBufferSize()
 		{
-			return width*height*comps;
+			return width * height * comps;
 		}
+
 		virtual Format GetFormat()
 		{
 			return format;
@@ -168,6 +179,7 @@ namespace Xli
 		Managed<ImageReader> r = CreateReader(input);
 		return r->ReadBitmap();
 	}
+
 	Bitmap* Jpeg::Load(const String& fileName)
 	{
 		Managed<File> f = new File(fileName, FileModeRead);

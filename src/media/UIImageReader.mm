@@ -45,22 +45,27 @@ namespace Xli
 		{
 			return CGImageGetWidth(image.CGImage);
 		}
+
 		virtual int GetHeight()
 		{
 			return CGImageGetHeight(image.CGImage);
 		}
+
 		virtual int GetDepth()
 		{
-			return 1;
+			return 0;
 		}
+
         int GetComponentCount()
         {
             return CGImageGetBitsPerPixel(image.CGImage) / CGImageGetBitsPerComponent(image.CGImage);
         }
+
 		virtual int GetBufferSize()
 		{
             return GetWidth() * GetHeight() * FormatInfo::SizeOf(GetFormat());
 		}
+
 		virtual Format GetFormat()
 		{
             int cc = GetComponentCount();
@@ -124,6 +129,7 @@ namespace Xli
 		Managed<ImageReader> r = CreateReader(input);
 		return r->ReadBitmap();
 	}
+
 	Bitmap* Jpeg::Load(const String& fileName)
 	{
 		Managed<File> f = new File(fileName, FileModeRead);
@@ -140,6 +146,7 @@ namespace Xli
 		Managed<ImageReader> r = CreateReader(input);
 		return r->ReadBitmap();
 	}
+
 	Bitmap* Png::Load(const String& fileName)
 	{
 		Managed<File> f = new File(fileName, FileModeRead);
