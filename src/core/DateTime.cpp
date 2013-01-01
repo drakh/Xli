@@ -1,5 +1,6 @@
 #include <Xli/DateTime.h>
 #include <Xli/Exception.h>
+#include <Xli/Time.h>
 
 namespace Xli
 {
@@ -131,6 +132,11 @@ namespace Xli
 		CharString cs = str;
 		sscanf_s(cs.Data(), "%04d-%02d-%02d %02d:%02d:%02d:%03d", &dt.Year, &dt.Month, &dt.Day, &dt.Hour, &dt.Minute, &dt.Second, &dt.Millisecond);
 		return dt;
+	}
+
+	DateTime DateTime::Now()
+	{
+		return DateTime(GetTimestamp());
 	}
 
 	DateTime DateTime::operator - (const DateTime& dt) const

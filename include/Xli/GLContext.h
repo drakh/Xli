@@ -1,7 +1,6 @@
 #ifndef __XLI_GL_CONTEXT_H__
 #define __XLI_GL_CONTEXT_H__
 
-#include <Xli/GLCommon.h>
 #include <Xli/Window.h>
 
 namespace Xli

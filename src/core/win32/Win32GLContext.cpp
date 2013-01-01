@@ -1,3 +1,4 @@
+#include <Xli/GLHeaders.h>
 #include <Xli/GLContext.h>
 #include <Xli/Win32Window.h>
 #include <Xli/Win32Helpers.h>

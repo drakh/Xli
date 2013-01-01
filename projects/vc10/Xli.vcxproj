@@ -264,7 +264,7 @@
     <ClInclude Include="..\..\include\Xli\Dialogs.h" />
     <ClInclude Include="..\..\include\Xli\Display.h" />
     <ClInclude Include="..\..\include\Xli\Exception.h" />
-    <ClInclude Include="..\..\include\Xli\GLCommon.h" />
+    <ClInclude Include="..\..\include\Xli\GLCheckError.h" />
     <ClInclude Include="..\..\include\Xli\GLContext.h" />
     <ClInclude Include="..\..\include\Xli\GLHeaders.h" />
     <ClInclude Include="..\..\include\Xli\Hash.h" />
@@ -357,6 +357,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\GLCheckError.cpp" />
     <ClCompile Include="..\..\src\core\MessageBox.cpp" />
     <ClCompile Include="..\..\src\core\NativeFileSystem.cpp" />
     <ClCompile Include="..\..\src\core\Path.cpp" />

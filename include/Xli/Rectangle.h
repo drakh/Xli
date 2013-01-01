@@ -239,16 +239,6 @@ namespace Xli
 	typedef Rectanglet<float> Rect;
 	typedef Rectanglet<double> Rectd;
 	typedef Rectanglet<int> Recti;
-	typedef Rectanglet<unsigned int> Rectu;
-
-	typedef Rectanglet<Int64> Recti64;
-	typedef Rectanglet<Int32> Recti32;
-	typedef Rectanglet<Int16> Recti16;
-	typedef Rectanglet<Int8> Recti8;
-	typedef Rectanglet<UInt64> Rectu64;
-	typedef Rectanglet<UInt32> Rectu32;
-	typedef Rectanglet<UInt16> Rectu16;
-	typedef Rectanglet<UInt8> Rectu8;
 
 	/** @} */
 }

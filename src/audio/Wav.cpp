@@ -1,9 +1,9 @@
-#include <XliAudio/WavStream.h>
+#include <XliAudio/Wav.h>
 #include <Xli/BinaryReader.h>
 
 namespace Xli
 {
-	WavStream::WavStream(Stream* f)
+	AudioStream* Wav::Open(Stream* f)
 	{
 		BinaryReader r(f);
 
@@ -23,27 +23,23 @@ namespace Xli
 		int bytesPerSecond = r.ReadInt32();
 		int bytesPerSample = r.ReadInt16();
 		int bitsPerSample = r.ReadInt16();
-
-		this->f = f;
-		this->channels = channels;
-		this->sampleRate = (double)sampleRate;
 		
+		DataType dataType;
 		switch (bitsPerSample)
 		{
-		case 8: this->dataType = DataTypeUInt8; break;
-		case 16: this->dataType = DataTypeInt16; break;
-		case 24: this->dataType = DataTypeInt24; break;
-		case 32: this->dataType = DataTypeInt32; break;
+		case 8: dataType = DataTypeUInt8; break;
+		case 16: dataType = DataTypeInt16; break;
+		case 24: dataType = DataTypeInt24; break;
+		case 32: dataType = DataTypeInt32; break;
 		default: XLI_THROW("Unsupported bits per sample: " + (String)(int)bitsPerSample);
 		}
-
 
 		// wait for DATA chunk
 		while (f->GetPosition() < totalLength)
 		{
 			CharString tag = r.ReadCStr(4);
 			int length = r.ReadInt32();
-			if (tag == "data") return;
+			if (tag == "data") return AudioStream::Create(f, dataType, channels, sampleRate);
 			f->Seek(SeekOriginCurrent, length);
 		}
 

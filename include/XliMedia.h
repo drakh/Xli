@@ -1,6 +1,22 @@
 #ifndef __XLI_MEDIA_H__
 #define __XLI_MEDIA_H__
 
+/**
+	\defgroup Media Media Features & File Formats
+
+	\defgroup Fonts Fonts
+	\ingroup Media
+
+	\defgroup Textures Textures
+	\ingroup Media
+
+	\defgroup Compression Compression
+	\ingroup Media
+
+	\defgroup Markup Markup
+	\ingroup Media
+*/
+
 #include "XliMedia/Bitmap.h"
 #include "XliMedia/Color.h"
 #include "XliMedia/CompressedImage.h"
@@ -21,21 +37,5 @@
 #include "XliMedia/Value.h"
 #include "XliMedia/Xml.h"
 #include "XliMedia/Zip.h"
-
-/**
-	\defgroup Media Media Features & File Formats
-
-	\defgroup Fonts Fonts
-	\ingroup Media
-
-	\defgroup Textures Textures
-	\ingroup Media
-
-	\defgroup Compression Compression
-	\ingroup Media
-
-	\defgroup Markup Markup
-	\ingroup Media
-*/
 
 #endif

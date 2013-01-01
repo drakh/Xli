@@ -8,7 +8,7 @@
 namespace Xli
 {
 	/**
-		\addtogroup IO
+		\addtogroup Core
 		@{
 	*/
 

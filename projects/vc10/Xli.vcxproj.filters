@@ -175,9 +175,6 @@
     <ClInclude Include="..\..\include\Xli\Win32Header.h">
       <Filter>Xli\Platform\win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\GLCommon.h">
-      <Filter>Xli\GL</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Xli\GLHeaders.h">
       <Filter>Xli\GL</Filter>
     </ClInclude>
@@ -213,6 +210,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Xli\StringDecl.h">
       <Filter>Xli</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Xli\GLCheckError.h">
+      <Filter>Xli\GL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -368,6 +368,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\core\Unicode.cpp">
       <Filter>Xli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\GLCheckError.cpp">
+      <Filter>Xli\GL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

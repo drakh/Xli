@@ -10,16 +10,22 @@
 	\defgroup Containers Container Templates
 	\ingroup Core
 
+	\defgroup DateTime Date & Time
+	\ingroup Core
+
 	\defgroup IO I/O
 	\ingroup Core
 
 	\defgroup WM Window Management
 	\ingroup Core
 
-	\defgroup Threading Threading
+	\defgroup Threading Threading and Concurrency
 	\ingroup Core
 
 	\defgroup Math Math Library
+	\ingroup Core
+
+	\defgroup Utils Utilities
 	\ingroup Core
 */
 
@@ -39,7 +45,7 @@
 #include "Xli/File.h"
 #include "Xli/FileSystem.h"
 #include "Xli/Float16.h"
-#include "Xli/GLCommon.h"
+#include "Xli/GLCheckError.h"
 #include "Xli/GLContext.h"
 #include "Xli/GLHeaders.h"
 #include "Xli/Hash.h"

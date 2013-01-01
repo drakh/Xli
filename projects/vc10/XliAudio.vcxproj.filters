@@ -21,21 +21,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\XliAudio\Sound.h">
-      <Filter>XliAudio</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\XliAudio\WavStream.h">
-      <Filter>XliAudio</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\XliAudio.h" />
+    <ClInclude Include="..\..\include\XliAudio\AudioBuffer.h">
+      <Filter>XliAudio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\XliAudio\AudioStream.h">
+      <Filter>XliAudio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\XliAudio\Wav.h">
+      <Filter>XliAudio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\audio\SoundPortAudio.cpp">
-      <Filter>XliAudio</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\audio\WavStream.cpp">
-      <Filter>XliAudio</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\audio\3rdparty\portaudio\src\common\pa_allocation.c">
       <Filter>3rdparty\portaudio\common</Filter>
     </ClCompile>
@@ -98,6 +95,18 @@
     </ClCompile>
     <ClCompile Include="..\..\src\audio\3rdparty\portaudio\src\os\win\pa_win_wdmks_utils.c">
       <Filter>3rdparty\portaudio\os</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\audio\AudioBuffer.cpp">
+      <Filter>XliAudio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\audio\PAAudioBuffer.cpp">
+      <Filter>XliAudio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\audio\Wav.cpp">
+      <Filter>XliAudio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\audio\AudioStream.cpp">
+      <Filter>XliAudio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

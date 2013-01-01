@@ -54,7 +54,7 @@ namespace Xli
 		void Close()
 		{
 			if (!fp) XLI_THROW_STREAM_CLOSED;
-			if (SDL_RWclose(fp) != 0) ErrorPrintLine("WARNING: Failed to flush file stream");
+			if (SDL_RWclose(fp) != 0) ErrorPrintLine("WARNING: Failed to close file stream");
 			fp = 0;
 		}
 

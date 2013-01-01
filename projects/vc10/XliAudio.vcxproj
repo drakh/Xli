@@ -28,8 +28,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\XliAudio.h" />
-    <ClInclude Include="..\..\include\XliAudio\Sound.h" />
-    <ClInclude Include="..\..\include\XliAudio\WavStream.h" />
+    <ClInclude Include="..\..\include\XliAudio\AudioBuffer.h" />
+    <ClInclude Include="..\..\include\XliAudio\AudioStream.h" />
+    <ClInclude Include="..\..\include\XliAudio\Wav.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\audio\3rdparty\portaudio\src\common\pa_allocation.c" />
@@ -116,8 +117,10 @@
       <UndefinePreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UNICODE;_UNICODE</UndefinePreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="..\..\src\audio\3rdparty\portaudio\src\os\win\pa_x86_plain_converters.c" />
-    <ClCompile Include="..\..\src\audio\SoundPortAudio.cpp" />
-    <ClCompile Include="..\..\src\audio\WavStream.cpp" />
+    <ClCompile Include="..\..\src\audio\AudioBuffer.cpp" />
+    <ClCompile Include="..\..\src\audio\AudioStream.cpp" />
+    <ClCompile Include="..\..\src\audio\PAAudioBuffer.cpp" />
+    <ClCompile Include="..\..\src\audio\Wav.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\audio\CMakeLists.txt" />

@@ -1,7 +1,12 @@
 #ifndef __XLI_SOUND_H__
 #define __XLI_SOUND_H__
 
-#include <XliAudio/Sound.h>
-#include <XliAudio/WavStream.h>
+/**
+	\defgroup Audio Audio Decoding & Playback
+*/
+
+#include <XliAudio/AudioBuffer.h>
+#include <XliAudio/AudioStream.h>
+#include <XliAudio/Wav.h>
 
 #endif

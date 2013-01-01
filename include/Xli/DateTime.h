@@ -7,7 +7,7 @@
 namespace Xli
 {
 	/**
-		\ingroup Core
+		\ingroup DateTime
 	*/
 	class DateTime
 	{
@@ -33,6 +33,7 @@ namespace Xli
 		DateTime();
 		DateTime(Timestamp timestamp);
 
+		static DateTime Now();
 		static DateTime FromString(const String& str);
 
 		Timestamp ToTimestamp() const;

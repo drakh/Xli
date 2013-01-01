@@ -1,10 +1,10 @@
-#include <XliAudio/Sound.h>
+#include <XliAudio/AudioBuffer.h>
 #include <Xli/MessageBox.h>
 #include <portaudio.h>
 
 namespace Xli
 {
-	class PortAudioSound: public Sound
+	class PAAudioBuffer: public AudioBuffer
 	{
 		Shared<Stream> src;
 		DataType dataType;
@@ -14,7 +14,7 @@ namespace Xli
 
 		static int paCallback(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *outTime, PaStreamCallbackFlags statusFlags, void *userData)
 		{
-			PortAudioSound* s = (PortAudioSound*)userData;
+			PAAudioBuffer* s = (PAAudioBuffer*)userData;
 			
 			int elmSize = DataTypeInfo::SizeOf(s->dataType);
 			int elmCount = s->channels * framesPerBuffer;
@@ -67,7 +67,7 @@ namespace Xli
 		}
 
 	public:
-		PortAudioSound(Stream* source, DataType dataType, int channels, double sampleRate)
+		PAAudioBuffer(Stream* source, DataType dataType, int channels, double sampleRate)
 		{
 			this->src = source;
 			this->dataType = dataType;
@@ -82,7 +82,7 @@ namespace Xli
 			}
 		}
 
-		virtual ~PortAudioSound()
+		virtual ~PAAudioBuffer()
 		{
 			Pa_CloseStream(stream);
 		}
@@ -131,7 +131,7 @@ namespace Xli
 
 	static int SoundRefCount = 0;
 
-	void Sound::Init()
+	void AudioBuffer::Init()
 	{
 		if (SoundRefCount == 0)
 		{
@@ -146,7 +146,7 @@ namespace Xli
 		SoundRefCount++;
 	}
 
-	void Sound::Shutdown()
+	void AudioBuffer::Shutdown()
 	{
 		SoundRefCount--;
 
@@ -164,14 +164,14 @@ namespace Xli
 	{
 		if (!SoundRefCount)
 		{
-			Sound::Init();
-			atexit(Sound::Shutdown);
+			AudioBuffer::Init();
+			atexit(AudioBuffer::Shutdown);
 		}
 	}
 
-	Sound* Sound::Create(Stream* source, DataType dataType, int channels, double sampleRate)
+	AudioBuffer* AudioBuffer::Create(Stream* source, DataType dataType, int channels, double sampleRate)
 	{
 		AssertInit();
-		return new PortAudioSound(source, dataType, channels, sampleRate);
+		return new PAAudioBuffer(source, dataType, channels, sampleRate);
 	}
 }

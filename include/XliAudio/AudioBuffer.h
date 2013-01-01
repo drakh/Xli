@@ -1,12 +1,14 @@
 #ifndef __XLI_SOUND_SOUND_H__
 #define __XLI_SOUND_SOUND_H__
 
-#include <Xli/DataType.h>
-#include <Xli/Stream.h>
+#include <XliAudio/AudioStream.h>
 
 namespace Xli
 {
-	class Sound: public Object
+	/**
+		\ingroup Audio
+	*/
+	class AudioBuffer: public Object
 	{
 	public:
 		virtual DataType GetDataType() const = 0;
@@ -22,7 +24,8 @@ namespace Xli
 		static void Init();
 		static void Shutdown();
 
-		static Sound* Create(Stream* source, DataType dataType, int channels, double sampleRate);
+		static AudioBuffer* Create(Stream* source, DataType dataType, int channelCount, double sampleRate);
+		static AudioBuffer* Create(AudioStream* source);
 	};
 }
 
