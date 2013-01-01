@@ -8,6 +8,9 @@ namespace Xli
 {
 	class Bitmap;
 
+	/**
+		\ingroup Textures
+	*/
 	class Image: public DataAccessor
 	{
 	public:

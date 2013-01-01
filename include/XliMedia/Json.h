@@ -1,12 +1,15 @@
 #ifndef __XLI_MEDIA_JSON_H__
 #define __XLI_MEDIA_JSON_H__
 
-#include <Xli/Value.h>
 #include <Xli/File.h>
 #include <Xli/TextReader.h>
+#include <XliMedia/Value.h>
 
 namespace Xli
 {
+	/**
+		\ingroup Markup
+	*/
 	class Json
 	{
 	public:

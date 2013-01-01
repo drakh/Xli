@@ -6,14 +6,14 @@
 
 namespace Xli
 {
+	/**
+		\ingroup IO
+	*/
 	class BinaryReader: public StreamReader
 	{
 	public:
 		BinaryReader(Stream* stream);
 		virtual ~BinaryReader();
-
-		void Read(void* dst, int elmSize, int elmCount);
-		CharString ReadCStr(int len);
 
 		template <typename T> void Read(T& elm)
 		{
@@ -32,27 +32,6 @@ namespace Xli
 			return elm;
 		}
 
-		template <typename T, uint S> void ReadStringtData(Stringt<T, S>& str, int length)
-		{
-			str = Stringt<T, S>::Create(length);
-			if (length) stream->ReadSafe((void*)str.Data(), sizeof(T), length);
-		}
-
-		template <typename T, int S> void ReadArrayData(Array<T, S>& a, int length)
-		{
-			a.Resize(length);
-			if (length) stream->ReadSafe((void*)a.Data(), sizeof(T), length);
-		}
-
-		Buffer* ReadBuffer();
-		Buffer* ReadAll();
-
-    	int Read7BitEncodedInt();
-		Utf16String ReadUtf8String(int len);
-
-		/// .NET compatible string reader
-		Utf16String ReadEncodedUtf16String() { return ReadUtf8String(Read7BitEncodedInt()); }
-
 		inline float ReadFloat() { return Read<float>(); }
 		inline double ReadDouble() { return Read<double>(); }
 		inline Int64 ReadInt64() { return Read<Int64>(); }
@@ -69,9 +48,15 @@ namespace Xli
 		template <typename T> Vector3t<T> ReadVector3t() { Vector3t<T> vec; Read(vec); return vec; }
 		template <typename T> Vector4t<T> ReadVector4t() { Vector4t<T> vec; Read(vec); return vec; }
 
-		inline CharString ReadCharString(int length) { CharString str; ReadStringtData(str, length); return str; }
-		inline Utf16String ReadUtf16String(int length) { Utf16String str; ReadStringtData(str, length); return str; }
-		inline Utf32String ReadUtf32String(int length) { Utf32String str; ReadStringtData(str, length); return str; }
+		void Read(void* dst, int elmSize, int elmCount);
+		CharString ReadCStr(int len);
+
+		Buffer* ReadAll();
+
+    	int Read7BitEncodedInt();
+
+		/// .NET compatible string reader
+		Utf16String ReadString();
 	};
 }
 

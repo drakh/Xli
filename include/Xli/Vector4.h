@@ -2,10 +2,12 @@
 #define __XLI_VECTOR4_H__
 
 #include "Vector3.h"
-#include "Saturated.h"
 
 namespace Xli
 {
+	/**
+		\ingroup Math
+	*/
 	template <typename T> class Vector4t
 	{
 	public:
@@ -306,8 +308,12 @@ namespace Xli
 		{
 			return ArcCos((*this).Normalized().Dot(v.Normalized()));
 		}
-
 	};
+
+	/**
+		\addtogroup Math
+		@{
+	*/
 
 	typedef Vector4t<float> Vector4;
 	typedef Vector4t<double> Vector4d;
@@ -323,6 +329,8 @@ namespace Xli
 	typedef Vector4t<UInt32> Vector4u32;
 	typedef Vector4t<UInt16> Vector4u16;
 	typedef Vector4t<UInt8> Vector4u8;
+
+	/** @} */
 }
 
 #endif

@@ -510,12 +510,17 @@
     <ClCompile Include="..\..\..\src\media\3rdparty\unzip\iowin32.c" />
     <ClCompile Include="..\..\..\src\media\3rdparty\unzip\unzip.c" />
     <ClCompile Include="..\..\..\src\media\Bitmap.cpp" />
+    <ClCompile Include="..\..\..\src\media\CompressedImage.cpp" />
     <ClCompile Include="..\..\..\src\media\FontFace.cpp" />
     <ClCompile Include="..\..\..\src\media\Format.cpp" />
+    <ClCompile Include="..\..\..\src\media\FormattedTextWriter.cpp" />
     <ClCompile Include="..\..\..\src\media\Gzip.cpp" />
     <ClCompile Include="..\..\..\src\media\ImageReader.cpp" />
     <ClCompile Include="..\..\..\src\media\ImageWriter.cpp" />
     <ClCompile Include="..\..\..\src\media\Json.cpp" />
+    <ClCompile Include="..\..\..\src\media\Ktx.cpp" />
+    <ClCompile Include="..\..\..\src\media\Texture.cpp" />
+    <ClCompile Include="..\..\..\src\media\Value.cpp" />
     <ClCompile Include="..\..\..\src\media\Xml.cpp" />
     <ClCompile Include="..\..\..\src\media\JpegReader.cpp" />
     <ClCompile Include="..\..\..\src\media\JpegWriter.cpp" />
@@ -525,12 +530,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\XliMedia\Bitmap.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\Color.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\CompressedImage.h" />
     <ClInclude Include="..\..\..\include\XliMedia\FontFace.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\FormattedTextWriter.h" />
     <ClInclude Include="..\..\..\include\XliMedia\Gzip.h" />
     <ClInclude Include="..\..\..\include\XliMedia\Image.h" />
     <ClInclude Include="..\..\..\include\XliMedia\Jpeg.h" />
     <ClInclude Include="..\..\..\include\XliMedia\Json.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\Ktx.h" />
     <ClInclude Include="..\..\..\include\XliMedia\Png.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\Saturated.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\Texture.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\Value.h" />
     <ClInclude Include="..\..\..\include\XliMedia\Zip.h" />
     <ClInclude Include="..\..\..\src\media\3rdparty\json_parser\JSON_parser.h" />
     <ClInclude Include="..\..\..\src\media\3rdparty\tinyxml\tinystr.h" />

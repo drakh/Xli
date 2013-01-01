@@ -5,6 +5,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup Media
+	*/
 	class ProgressCallback: public Object
 	{
 	public:

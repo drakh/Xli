@@ -31,6 +31,12 @@
     <Filter Include="3rdparty\freetype">
       <UniqueIdentifier>{66b9519b-62d9-45f9-a5d9-59e35b46d2c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="XliMedia\Texture Formats">
+      <UniqueIdentifier>{d0f2e112-0fc3-42ba-8f92-96d2555a2df8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XliMedia\Other Formats">
+      <UniqueIdentifier>{525d76bd-4186-4b1b-96f5-d39feb7c9199}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\media\3rdparty\zlib\adler32.c">
@@ -282,9 +288,6 @@
     <ClCompile Include="..\..\..\src\media\ImageWriter.cpp">
       <Filter>XliMedia</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\media\Xml.cpp">
-      <Filter>XliMedia</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\media\JpegReader.cpp">
       <Filter>XliMedia\Image Formats</Filter>
     </ClCompile>
@@ -303,14 +306,8 @@
     <ClCompile Include="..\..\..\src\media\Bitmap.cpp">
       <Filter>XliMedia</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\media\Zip.cpp">
-      <Filter>XliMedia</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\media\3rdparty\json_parser\JSON_parser.c">
       <Filter>3rdparty\json_parser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\media\Json.cpp">
-      <Filter>XliMedia</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\media\FontFace.cpp">
       <Filter>XliMedia</Filter>
@@ -453,8 +450,32 @@
     <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\truetype\truetype.c">
       <Filter>3rdparty\freetype</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\media\Gzip.cpp">
+    <ClCompile Include="..\..\..\src\media\Value.cpp">
       <Filter>XliMedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\FormattedTextWriter.cpp">
+      <Filter>XliMedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\Texture.cpp">
+      <Filter>XliMedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\CompressedImage.cpp">
+      <Filter>XliMedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\Ktx.cpp">
+      <Filter>XliMedia\Texture Formats</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\Gzip.cpp">
+      <Filter>XliMedia\Other Formats</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\Xml.cpp">
+      <Filter>XliMedia\Other Formats</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\Zip.cpp">
+      <Filter>XliMedia\Other Formats</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\Json.cpp">
+      <Filter>XliMedia\Other Formats</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -491,9 +512,6 @@
     <ClInclude Include="..\..\..\include\XliMedia\ProgressCallback.h">
       <Filter>XliMedia</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\XliMedia\Xml.h">
-      <Filter>XliMedia</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\XliMedia.h" />
     <ClInclude Include="..\..\..\include\XliMedia\Jpeg.h">
       <Filter>XliMedia\Image Formats</Filter>
@@ -507,20 +525,44 @@
     <ClInclude Include="..\..\..\include\XliMedia\Image.h">
       <Filter>XliMedia</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\XliMedia\Zip.h">
-      <Filter>XliMedia</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\media\3rdparty\json_parser\JSON_parser.h">
       <Filter>3rdparty\json_parser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\XliMedia\Json.h">
-      <Filter>XliMedia</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\XliMedia\FontFace.h">
       <Filter>XliMedia</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\XliMedia\Gzip.h">
+    <ClInclude Include="..\..\..\include\XliMedia\Saturated.h">
       <Filter>XliMedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\Value.h">
+      <Filter>XliMedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\Color.h">
+      <Filter>XliMedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\FormattedTextWriter.h">
+      <Filter>XliMedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\CompressedImage.h">
+      <Filter>XliMedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\Texture.h">
+      <Filter>XliMedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\Ktx.h">
+      <Filter>XliMedia\Texture Formats</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\Gzip.h">
+      <Filter>XliMedia\Other Formats</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\Xml.h">
+      <Filter>XliMedia\Other Formats</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\Zip.h">
+      <Filter>XliMedia\Other Formats</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\Json.h">
+      <Filter>XliMedia\Other Formats</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

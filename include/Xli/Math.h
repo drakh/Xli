@@ -8,6 +8,11 @@
 
 namespace Xli
 {
+	/**
+		\addtogroup Math
+		@{
+	*/
+
 	static const double PI = 3.1415926535897932384626433832795;
 	static const double TwoPI = 2.0 * PI;
 	static const double HalfPI = 0.5 * PI;
@@ -199,6 +204,45 @@ namespace Xli
 	}
 
 
+	template <typename T> inline float Map(const T& a, const T& b, const T& t)
+	{
+		return float(t - a) / float(b - a);
+	}
+
+	template <typename T> inline T Lerp(const T& a, const T& b, float t)
+	{
+		return a + (b - a) * t;
+	}
+
+	template <typename T> inline T SCurve(const T& a, const T& b, float t)
+	{
+		return a + (b - a) * (0.5f - Cos(t * (float)PI) * 0.5f);
+	}
+
+	template <typename T> inline T Ramp(const T& a, const T& b, float t)
+	{
+		return a + (b - a) * (t*t);
+	}
+
+	template <typename T> inline T InterpolateCatmullRom(const T& a, const T& b, const T& c, const T& d, float t)
+	{
+		T p = b*3.0f - c*3.0f + d - a;
+		T q = a*2.0f - b*5.0f + c*4.0f - d;
+		T r = c - a;
+		T s = b;
+		return (p*(t*t*t) + q*(t*t) + r*t)*0.5f + s;
+	}
+
+	template <typename T> inline T InterpolateCubic(const T& a, const T& b, const T& c, const T& d, float t)
+	{
+		T p = (d - c) - (a - b);
+		T q = (a - b) - p;
+		T r = c - a;
+		T s = b;
+		return p*(t*t*t) + q*(t*t) + r*t + s;
+	}
+
+
 	inline int UpperPow2(int x)
 	{
 		int y = x - 1;
@@ -214,6 +258,8 @@ namespace Xli
 	{
 		return (x == (x & -x));
 	}
+
+	/** @} */
 }
 
 #endif

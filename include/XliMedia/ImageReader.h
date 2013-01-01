@@ -7,6 +7,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup Textures
+	*/
 	class ImageReader: public Object
 	{
 	public:

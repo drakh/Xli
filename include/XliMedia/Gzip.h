@@ -5,6 +5,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup Compression
+	*/
 	class Gzip
 	{
 		Gzip();

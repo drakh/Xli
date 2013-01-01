@@ -7,6 +7,8 @@
 namespace Xli
 {
 	/**
+		\ingroup Math
+
 		Represents the coordinates of a rectangle.
 		The rectangle is represented in a Left, Top, Right, Bottom-notation, where the X-axis increases
 		in the right direction, where the Y-axis increases in the down direction.
@@ -229,6 +231,11 @@ namespace Xli
 		}
 	};
 
+	/**
+		\addtogroup Math
+		@{
+	*/
+
 	typedef Rectanglet<float> Rect;
 	typedef Rectanglet<double> Rectd;
 	typedef Rectanglet<int> Recti;
@@ -242,6 +249,8 @@ namespace Xli
 	typedef Rectanglet<UInt32> Rectu32;
 	typedef Rectanglet<UInt16> Rectu16;
 	typedef Rectanglet<UInt8> Rectu8;
+
+	/** @} */
 }
 
 

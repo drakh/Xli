@@ -13,6 +13,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup IO
+	*/
 	enum SeekOrigin
 	{
 		SeekOriginBegin,
@@ -20,6 +23,9 @@ namespace Xli
 		SeekOriginEnd
 	};
 
+	/**
+		\ingroup IO
+	*/
 	class Stream: public Object
 	{
 	public:
@@ -63,6 +69,9 @@ namespace Xli
         }
 	};
 
+	/**
+		\ingroup IO
+	*/
 	class StreamWriter: public Object
 	{
 	protected:
@@ -76,6 +85,9 @@ namespace Xli
 		Stream* GetStream();
 	};
 
+	/**
+		\ingroup IO
+	*/
 	class StreamReader: public Object
 	{
 	protected:
@@ -89,6 +101,9 @@ namespace Xli
 		Stream* GetStream();
 	};
 
+	/**
+		\ingroup IO
+	*/
 	class StaticStream: public Stream
 	{
 		DataAccessor* buf;
@@ -110,6 +125,9 @@ namespace Xli
 		virtual int GetLength() const;
 	};
 
+	/**
+		\ingroup IO
+	*/
 	class DynamicStream: public Stream
 	{
 	protected:
@@ -129,6 +147,9 @@ namespace Xli
 		void Clear();
 	};
 
+	/**
+		\ingroup IO
+	*/
 	class TextStream: public DynamicStream
 	{
 	public:

@@ -34,14 +34,10 @@ namespace Xli
         WriteUInt8(v);
     }
 
-	void BinaryWriter::WriteUtf8StringData(const Utf16String& str)
+	void BinaryWriter::WriteString(const Utf16String& str)
 	{
-		WriteCharStringData(Unicode::Utf16To8(str));
-	}
-
-	void BinaryWriter::WriteEncodedUtf16String(const Utf16String& str)
-	{
-		Write7BitEncodedInt(str.Length());
-		WriteUtf8StringData(str);
+		CharString utf8 = Unicode::Utf16To8(str);
+		Write7BitEncodedInt(utf8.Length());
+		stream->WriteSafe(utf8.Data(), 1, utf8.Length());
 	}
 }

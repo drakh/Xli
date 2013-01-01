@@ -1,9 +1,7 @@
 #include <Xli/Unicode.h>
-#include <Xli/Stack.h>
-#include <XliMedia/Json.h>
-#include <Xli/FormattedTextWriter.h>
 #include <Xli/Console.h>
-#include <Xli/StringBuilder.h>
+#include <XliMedia/Json.h>
+#include <XliMedia/FormattedTextWriter.h>
 #include "3rdparty/json_parser/JSON_parser.h"
 
 namespace Xli
@@ -11,8 +9,8 @@ namespace Xli
 	class JsonContext
 	{
 	public:
-		Stack<Value> Values;
-		Stack<String> Keys;
+		Array<Value> Values;
+		Array<String> Keys;
 		Value Result;
 		bool PreserveOrder;
 
@@ -22,9 +20,9 @@ namespace Xli
 
 		void AddValue(Value v)
 		{
-			if (!Values.Count() && Result.IsUndefined()) Result = v;
-			else if (Values.Peek().IsArray()) Values.Peek()->Append(v);
-			else if (Values.Peek().IsObject()) Values.Peek()->Insert(Keys.Pop(), v);
+			if (!Values.Length() && Result.IsUndefined()) Result = v;
+			else if (Values.Last().IsArray()) Values.Last()->Append(v);
+			else if (Values.Last().IsObject()) Values.Last()->Insert(Keys.RemoveLast(), v);
 			else XLI_THROW("JSON parser failed");
 		}
 	};
@@ -35,16 +33,16 @@ namespace Xli
 
 		switch(type) {
 		case JSON_T_ARRAY_BEGIN:    
-			c->Values.Push(new ArrayValue());
+			c->Values.Add(new ArrayValue());
 			break;
 		case JSON_T_ARRAY_END:
-			c->AddValue(c->Values.Pop());
+			c->AddValue(c->Values.RemoveLast());
 			break;
 	    case JSON_T_OBJECT_BEGIN:
-			c->PreserveOrder ? c->Values.Push(new OrderedObjectValue()) : c->Values.Push(new ObjectValue());
+			c->PreserveOrder ? c->Values.Add(new OrderedObjectValue()) : c->Values.Add(new ObjectValue());
 			break;
 		case JSON_T_OBJECT_END:
-			c->AddValue(c->Values.Pop());
+			c->AddValue(c->Values.RemoveLast());
 			break;
 		case JSON_T_INTEGER:
 			c->AddValue(new IntegerValue(value->vu.integer_value));
@@ -62,7 +60,7 @@ namespace Xli
 			c->AddValue(new BoolValue(false));
 			break;
 		case JSON_T_KEY:
-			c->Keys.Push(Unicode::Utf8To16(CharString(value->vu.str.value, value->vu.str.length)));
+			c->Keys.Add(Unicode::Utf8To16(CharString(value->vu.str.value, value->vu.str.length)));
 			break;   
 		case JSON_T_STRING:
 			c->AddValue(new StringValue(Unicode::Utf8To16(CharString(value->vu.str.value, value->vu.str.length))));
@@ -123,30 +121,30 @@ namespace Xli
 
 	CharString Json::FormatString(const String& str)
 	{
-		CharStringBuilder w;
+		Array<char> w;
 
-		w.AppendChar('"');
+		w.Add('"');
 		CharString k = Unicode::Utf16To8(str);
 
 		for (int i = 0; i < k.Length(); i++)
 		{
-			if (k[i] == '"') w.Append("\\\"");
-			else if (k[i] == '\n') w.Append("\\n");
-			else if (k[i] == '\r') w.Append("\\r");
-			else if (k[i] == '\t') w.Append("\\t");
-			else if (k[i] == '\0') w.Append("\\0");
-			else if (k[i] == '\\') w.Append("\\\\");
-			else w.AppendChar(k[i]);
+			if (k[i] == '"') w.Add("\\\"", 2);
+			else if (k[i] == '\n') w.Add("\\n", 2);
+			else if (k[i] == '\r') w.Add("\\r", 2);
+			else if (k[i] == '\t') w.Add("\\t", 2);
+			else if (k[i] == '\0') w.Add("\\0", 2);
+			else if (k[i] == '\\') w.Add("\\\\", 2);
+			else w.Add(k[i]);
 		}
 
-		w.AppendChar('"');
-		return w.GetString();
+		w.Add('"');
+		return w.Data();
 	}
 
 	class JsonWriter: public FormattedTextWriter
 	{
 	public:
-		Stack<bool> Array;
+		Array<bool> Array;
 		bool ArrayEndSkipLine;
 
 		JsonWriter(Stream* stream): FormattedTextWriter(stream), ArrayEndSkipLine(false)
@@ -172,7 +170,7 @@ namespace Xli
 			case ValueTypeArray:
 				{
 					Write("[");
-					Array.Push(true);
+					Array.Add(true);
 					ArrayEndSkipLine = false;
 
 					if (value.Count() > 0)
@@ -184,7 +182,7 @@ namespace Xli
 						}
 					}
 
-					Array.Pop();
+					Array.RemoveLast();
 
 					if (ArrayEndSkipLine)
 					{
@@ -200,7 +198,7 @@ namespace Xli
 			case ValueTypeOrderedObject:
 			case ValueTypeObject:
 				{
-					if (Array.Peek())
+					if (Array.Last())
 					{
 						EndLine();
 						PushIndent();
@@ -208,7 +206,7 @@ namespace Xli
 					}
 
 					Write("{");
-					Array.Push(false);
+					Array.Add(false);
 
 					if (value.Count() > 0)
 					{
@@ -242,10 +240,10 @@ namespace Xli
 						BeginLine();
 					}
 
-					Array.Pop();
+					Array.Add();
 					Write("}");
 
-					if (Array.Peek())
+					if (Array.Last())
 					{
 						PopIndent();
 						ArrayEndSkipLine = true;
@@ -262,14 +260,12 @@ namespace Xli
 		void WriteJson(const Value& value)
 		{
 			BeginLine();
-			Array.Push(false);
+			Array.Add(false);
 			WriteRecursive(value);
-			Array.Pop();
+			Array.RemoveLast();
 			EndLine();
 		}
 	};
-
-
 
 	void Json::Save(Stream* stream, const Value& value)
 	{

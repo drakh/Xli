@@ -6,92 +6,9 @@
 
 namespace Xli
 {
-	template <class T> class Managed;
-
-	template <class T> class Local
-	{
-	protected:
-		T* object;
-
-	public:
-		Local(T* object)
-		{
-			if (!object) XLI_THROW_NULL_POINTER;
-			this->object = object;
-		}
-		Local(const Local& local)
-		{
-			this->object = local.object;
-			this->object->AddRef();
-		}
-
-		Local(const Managed<T>& managed);
-
-		~Local()
-		{
-			object->Release();
-		}
-		const T* Pointer() const
-		{
-			return object;
-		}
-		T* Pointer()
-		{
-			return object;
-		}
-		const T* Get() const
-		{
-			return object;
-		}
-		T* Get()
-		{
-			return object;
-		}
-		operator T*()
-		{
-			return object;
-		}
-		operator const T*() const
-		{
-			return object;
-		}
-		T* operator ->()
-		{
-			return object;
-		}
-		const T* operator ->() const
-		{
-			return object;
-		}
-	};
-
-	template <class T> class Valid: public Local<T>
-	{
-	public:
-		Valid(T* object): Local<T>(object)
-		{
-			this->object->AddRef();
-		}
-		Valid(const Valid& valid): Local<T>(valid)
-		{
-			this->object->AddRef();
-		}
-
-		Valid(const Managed<T>& managed);
-
-		~Valid()
-		{
-		}
-		operator T*()
-		{
-			return this->object;
-		}
-		operator const T*() const
-		{
-			return this->object;
-		}
-	};
-
+	/**
+		\ingroup Containers
+	*/
 	template <class T> class Managed
 	{
 	protected:
@@ -110,11 +27,6 @@ namespace Xli
 		{
 			this->object = managed.object;
 			if (object) object->AddRef();
-		}
-		Managed(const Local<T>& local)
-		{
-			this->object = const_cast<T*>(local.Get());
-			this->object->AddRef();
 		}
 		~Managed()
 		{
@@ -181,6 +93,9 @@ namespace Xli
 		}
 	};
 
+	/**
+		\ingroup Containers
+	*/
 	template <class T> class Shared: public Managed<T>
 	{
 	public:
@@ -196,9 +111,6 @@ namespace Xli
 			if (this->object) this->object->AddRef();
 		}
 		Shared(const Managed<T>& managed): Managed<T>(managed)
-		{
-		}
-		Shared(const Local<T>& local): Managed<T>(local)
 		{
 		}
 		~Shared()
@@ -236,31 +148,20 @@ namespace Xli
 		}
 	};
 
-	template <typename T> Local<T>::Local(const Managed<T>& managed)
-	{
-		if (managed.IsNull()) XLI_THROW_NULL_POINTER;
-		this->object = const_cast<T*>(managed.Pointer());
-		this->object->AddRef();
-	}
-
-	template <typename T> Valid<T>::Valid(const Managed<T>& managed): Local<T>(managed)
-	{
-	}
-
+	/**
+		\ingroup Containers
+	*/
 	template <class T> Managed<T> Manage(T* oject)
 	{
 		return oject;
 	}
 
+	/**
+		\ingroup Containers
+	*/
 	template <class T> T* Share(T* object)
 	{
 		if (object) object->AddRef();
-		return object;
-	}
-
-	template <typename T> T* Assert(T* object)
-	{
-		if (!object) XLI_THROW_NULL_POINTER;
 		return object;
 	}
 }

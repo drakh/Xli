@@ -7,6 +7,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup Compression
+	*/
 	class Zip
 	{
 	public:

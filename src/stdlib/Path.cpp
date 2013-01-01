@@ -61,22 +61,4 @@ namespace Xli
 		}
 		return ".";
 	}
-
-	String Path::Parse(const String& path)
-	{
-		// TODO
-		return path;
-	}
-
-	String Path::GetRelativePath(const String& a, const String& b)
-	{
-		// TODO
-		return a.StartsWith(b) ? a.SubString(b.Length() + 1, a.Length() - b.Length() - 1) : a;
-	}
-
-	String Path::GetAbsolutePath(const String& a, const String& b)
-	{
-		// TODO
-		return b + "/" + a;
-	}
 }

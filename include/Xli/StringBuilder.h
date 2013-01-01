@@ -6,31 +6,34 @@
 
 namespace Xli
 {
-	template <typename TChar> class StringBuildert //: public Object
+	/**
+		\ingroup Core
+	*/
+	class StringBuilder
 	{
-		Array<TChar> buffer;
+		Array<StringChar> buffer;
 
 	public:
-		StringBuildert(int cap = 1024) 
+		StringBuilder(int cap = 1024) 
 		{ 
 			buffer.Reserve(cap);
 		}
-		StringBuildert& operator << (const Stringt<TChar>& text)
+		StringBuilder& operator << (const String& text)
 		{
 			Append(text);
 			return *this;
 		}
-		StringBuildert& operator << (const char* str)
+		StringBuilder& operator << (const char* str)
 		{
 			Append(str);
 			return *this;
 		}
-		StringBuildert& operator += (const Stringt<TChar>& text)
+		StringBuilder& operator += (const String& text)
 		{
 			Append(text);
 			return *this;
 		}
-		StringBuildert& operator += (const char* str)
+		StringBuilder& operator += (const char* str)
 		{
 			Append(str);
 			return *this;
@@ -41,13 +44,13 @@ namespace Xli
 		}
 		void Append(const char* str)
 		{
-			while (*str) buffer.Add((TChar)*str++);
+			while (*str) buffer.Add((StringChar)*str++);
 		}
-		void Append(const Stringt<TChar>& text)
+		void Append(const String& text)
 		{
 			buffer.Add(text.Data(), text.Length());
 		}
-		void AppendChar(TChar c)
+		void AppendChar(StringChar c)
 		{
 			buffer.Add(c);
 		}
@@ -56,7 +59,7 @@ namespace Xli
 			Append(str);
 			buffer.Add('\n');
 		}
-		void AppendLine(const Stringt<TChar>& text)
+		void AppendLine(const String& text)
 		{
 			Append(text);
 			buffer.Add('\n');
@@ -69,11 +72,11 @@ namespace Xli
 		{
 			buffer.Clear();
 		}
-		Stringt<TChar> GetString() const
+		String GetString() const
 		{
-			return Stringt<TChar>(buffer.Data(), buffer.Length());
+			return String(buffer.Data(), buffer.Length());
 		}
-		operator Stringt<TChar>() const
+		operator String() const
 		{
 			return GetString();
 		}
@@ -85,20 +88,7 @@ namespace Xli
 			va_end(argList);
 			Append(s);
 		}
-		/*virtual String ToString()
-		{
-			return GetString();
-		}*/
 	};
-
-	typedef StringBuildert<Utf16Char> Utf16StringBuilder;
-	typedef StringBuildert<char> CharStringBuilder;
-
-//#ifdef XLI_UNICODE
-	typedef Utf16StringBuilder StringBuilder;
-//#else
-//	typedef CharStringBuilder StringBuilder;
-//#endif
 }
 
 #endif

@@ -12,6 +12,9 @@ namespace Xli
 	class XmlElement;
 	class XmlText;
 
+	/**
+		\ingroup Markup
+	*/
 	class XmlNode: public Object
 	{
 	public:
@@ -27,6 +30,9 @@ namespace Xli
 		virtual XmlText* ToText() { return 0; }
 	};
 
+	/**
+		\ingroup Markup
+	*/
 	class XmlText: public XmlNode
 	{
 	public:
@@ -36,6 +42,9 @@ namespace Xli
 		String Value;
 	};
 
+	/**
+		\ingroup Markup
+	*/
 	class XmlElement: public XmlNode
 	{
 	public:
@@ -64,6 +73,9 @@ namespace Xli
 		Array<Managed<XmlNode> > Children;
 	};
 
+	/**
+		\ingroup Markup
+	*/
 	class Xml
 	{
 	public:

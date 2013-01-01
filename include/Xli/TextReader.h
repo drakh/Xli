@@ -5,6 +5,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup IO
+	*/
 	class TextReader: public StreamReader
 	{
 	public:

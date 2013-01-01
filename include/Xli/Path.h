@@ -5,6 +5,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup IO
+	*/
 	class Path
 	{
 	public:
@@ -20,11 +23,6 @@ namespace Xli
 			Returns the directory part of the path, without the trailing slash. '.' is returned if the path has no directory part
 		*/
 		static String GetDirectoryName(const String& path);
-
-
-		static String Parse(const String& path);
-		static String GetRelativePath(const String& path, const String& dir);
-		static String GetAbsolutePath(const String& path, const String& dir);
 	};
 }
 

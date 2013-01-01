@@ -5,6 +5,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup Math
+	*/
 	template <typename T> class Vector3t
 	{
 	public:
@@ -315,6 +318,11 @@ namespace Xli
 		}
 	};
 
+	/**
+		\addtogroup Math
+		@{
+	*/
+
 	typedef Vector3t<float> Vector3;
 	typedef Vector3t<double> Vector3d;
 	typedef Vector3t<int> Vector3i;
@@ -328,6 +336,8 @@ namespace Xli
 	typedef Vector3t<UInt32> Vector3u32;
 	typedef Vector3t<UInt16> Vector3u16;
 	typedef Vector3t<UInt8> Vector3u8;
+
+	/** @} */
 }
 
 #endif

@@ -9,6 +9,8 @@
 namespace Xli
 {
 	/**
+		\ingroup Math
+
 		A simple 32-bit pseudo-random number generator
 	*/
 	class Random
@@ -55,6 +57,8 @@ namespace Xli
 	};
 
 	/**
+		\addtogroup Math
+
 		Global Random Object
 	*/
 	extern Random Rand;

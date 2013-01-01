@@ -6,6 +6,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup Core
+	*/
 	class Exception
 	{
 	public:
@@ -61,6 +64,11 @@ namespace Xli
 
 namespace Xli
 {
+	/**
+		\ingroup Core
+		@{
+	*/
+
 	XLI_DECLARE_EXCEPTION(IndexOutOfBoundsException, "Index out of bounds");
 	XLI_DECLARE_EXCEPTION(NullPointerException, "Null pointer access attempt");
 	XLI_DECLARE_EXCEPTION(BadDeleteException, "Attemt to delete object with refcount > 1");
@@ -78,6 +86,8 @@ namespace Xli
 	XLI_DECLARE_EXCEPTION_B(StreamException, EndOfStreamException, "End of Stream reached");
 	XLI_DECLARE_EXCEPTION_B(FileException, FileCantOpenException, "Couldn't open file");
 	XLI_DECLARE_EXCEPTION_B(FileException, FileNotFoundException, "File not found");
+
+	/** @} */
 }
 
 #define XLI_THROW_INDEX_OUT_OF_BOUNDS		XLI_BREAK_THROW_C(Xli::IndexOutOfBoundsException)

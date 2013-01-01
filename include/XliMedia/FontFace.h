@@ -9,6 +9,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup Fonts
+	*/
 	enum FontRenderMode
 	{
 		FontRenderModeNone,
@@ -16,6 +19,9 @@ namespace Xli
 		FontRenderModeMonochrome,
 	};
 
+	/**
+		\ingroup Fonts
+	*/
 	class FontFace: public Object
 	{
 	public:
@@ -34,6 +40,9 @@ namespace Xli
 		virtual int GetPixelSize() = 0;
 	};
 
+	/**
+		\ingroup Fonts
+	*/
 	class FreeType
 	{
 	public:

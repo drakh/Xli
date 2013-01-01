@@ -7,6 +7,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup Math
+	*/
 	template <typename T> class Quaterniont
 	{
 	public:
@@ -277,8 +280,15 @@ namespace Xli
 		}
 	};
 
+	/**
+		\addtogroup Math
+		@{
+	*/
+
 	typedef Quaterniont<float> Quaternion;
 	typedef Quaterniont<double> Quaterniond;
+
+	/** @} */
 }
 
 #endif

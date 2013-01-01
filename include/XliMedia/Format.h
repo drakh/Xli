@@ -6,6 +6,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup Textures
+	*/
 	enum Format
 	{
 		FormatUnspecified = 0,
@@ -110,6 +113,9 @@ namespace Xli
         FormatR_16_UNorm = 504
 	};
 
+	/**
+		\ingroup Textures
+	*/
 	class FormatInfo
 	{
 	public:

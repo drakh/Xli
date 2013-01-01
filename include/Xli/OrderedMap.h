@@ -2,11 +2,12 @@
 #define __XLI_ORDERED_MAP_H__
 
 #include <Xli/Array.h>
-#include <Xli/List.h>
 
 namespace Xli
 {
 	/**
+		\ingroup Containers
+
 		HashMap clone which preserves the order of the keys. This implementation has slower look up than HashMap and is not meant to be used in performance critical code.
 	*/
 	template <typename TKey, typename TValue, uint TBufSize = 4> class OrderedMap: public Object

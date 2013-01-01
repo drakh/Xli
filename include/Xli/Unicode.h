@@ -6,6 +6,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup Core
+	*/
 	class Unicode
 	{
 	public:

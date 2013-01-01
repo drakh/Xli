@@ -8,13 +8,11 @@ namespace Xli
 		return TextReader(&f).ReadAll();
 	}
 
-	List<CharString> Text::LoadLines(const CharString& fileName)
+	void Text::LoadLines(const CharString& fileName, Array<CharString>& result)
 	{
 		File f(fileName, FileModeRead);
 		TextReader tr(&f);
-		List<CharString> lines;
-		while (!tr.AtEndOfFile()) lines.Add(tr.ReadLine());
-		return lines;
+		while (!tr.AtEndOfFile()) result.Add(tr.ReadLine());
 	}
 
 	void Text::Save(const CharString& fileName, const CharString& content)

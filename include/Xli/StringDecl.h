@@ -10,6 +10,10 @@
 
 namespace Xli
 {
+	/**
+		\addtogroup Core
+		@{
+	*/
 	typedef Stringt<char> CharString;
 	typedef Stringt<Utf16Char> Utf16String;
 	typedef Stringt<Utf32Char> Utf32String;
@@ -22,6 +26,11 @@ namespace Xli
 //	typedef char StringChar;
 //#endif
 
+	/** @} */
+
+	/**
+		\ingroup Core
+	*/
 	class StringTools
 	{
 	public:
@@ -62,6 +71,9 @@ namespace Xli
 		static uint GetFloatLength(const char* str);
 	};
 
+	/**
+		\ingroup Core
+	*/
 	template <typename T, uint TBufSize> class Stringt
 	{
 		T* data;
@@ -596,6 +608,9 @@ namespace Xli
 	};
 }
 
+/**
+	\addtogroup Core
+*/
 template<typename TStr, uint TBuf> Xli::Stringt<TStr, TBuf> operator + (const char* a, const Xli::Stringt<TStr, TBuf>& b)
 {
 	uint len = Xli::StringTools::GetLength(a);

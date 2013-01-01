@@ -1,5 +1,5 @@
 #include <XliSound/Sound.h>
-#include <XliPlatform/MessageBox.h>
+#include <Xli/MessageBox.h>
 #include <portaudio.h>
 
 namespace Xli

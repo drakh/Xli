@@ -2,11 +2,13 @@
 #define __XLI_HASH_MAP_H__
 
 #include <Xli/Array.h>
-#include <Xli/List.h>
 #include <Xli/Hash.h>
 
 namespace Xli
 {
+	/**
+		\ingroup Containers
+	*/
 	enum HashBucketState
 	{
 		HashBucketStateEmpty = 0,
@@ -14,6 +16,9 @@ namespace Xli
 		HashBucketStateDummy = 2
 	};
 
+	/**
+		\ingroup Containers
+	*/
 	template <typename TKey, typename TValue> struct HashBucket
 	{
 		TKey Key;
@@ -21,6 +26,9 @@ namespace Xli
 		HashBucketState State;
 	};
 
+	/**
+		\ingroup Containers
+	*/
 	template <typename TKey, typename TValue> class HashMapDefaultTraits
 	{
 	public:
@@ -30,6 +38,9 @@ namespace Xli
 		inline static void DeleteBuckets(HashBucket<TKey, TValue>* ptr, void* memPool) { delete [] ptr; }
 	};
 
+	/**
+		\ingroup Containers
+	*/
 	template <typename TKey, typename TValue> class HashMapConstCastTraits
 	{
 	public:
@@ -40,6 +51,8 @@ namespace Xli
 	};
 
 	/**
+		\ingroup Containers
+
 		Dictionary template.
 		Maps keys to values using a very efficient hash map. For user-defined TKey types, methods
 		UInt32 Hash() and operator == must be defined. All built-in C++ types can be used directly
@@ -469,10 +482,6 @@ namespace Xli
 			return count;
 		}
 	};
-
-
-	template <typename TKey, typename TValue> class MultiHashMap: public HashMap<TKey, Xli::List<TValue> > {};
-
 }
 
 #endif

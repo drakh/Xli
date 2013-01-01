@@ -7,6 +7,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup Containers
+	*/
 	template <typename T, uint TBufSize> class Array: public Object
 	{
 		T* data;
@@ -427,19 +430,21 @@ namespace Xli
 		{
 			Sort<ComparatorLessThan<T> >();
 		}
+
 		void SortReversed()
 		{
 			Sort<ComparatorGreaterThan<T> >();
 		}
+
 		void SortPointers()
 		{
 			Sort<ComparatorPointerLessThan<T> >();
 		}
+
 		void SortPointersReversed()
 		{
 			Sort<ComparatorPointerGreaterThan<T> >();
 		}
-
 	};
 }
 

@@ -6,6 +6,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup Math
+	*/
 	template <typename T> class Matrix4t
 	{
 		T data[16];
@@ -433,7 +436,7 @@ namespace Xli
 			return Scaling(s, s, s);
 		}
 
-		static Matrix4t LookAtGL(Vector3t<T> eye, Vector3t<T> center, Vector3t<T> up)
+		static Matrix4t GLLookAt(Vector3t<T> eye, Vector3t<T> center, Vector3t<T> up)
 		{
 			Vector3t<T> forward = (center - eye).Normalized();
 
@@ -460,7 +463,7 @@ namespace Xli
 			return m * Translation(-eye);
 		}
 
-		static Matrix4t PerspectiveGL(T fovRadians, T aspect, T zNear, T zFar)
+		static Matrix4t GLPerspective(T fovRadians, T aspect, T zNear, T zFar)
 		{
 			fovRadians = (T)0.5 * fovRadians;
 
@@ -487,7 +490,7 @@ namespace Xli
 			return m;
 		}
 
-		static Matrix4t OrthoGL(T left, T right, T bottom, T top, T nearval = (T)-1, T farval = (T)1)
+		static Matrix4t GLOrtho(T left, T right, T bottom, T top, T nearval = (T)-1, T farval = (T)1)
 		{
 		    Matrix4t m;
 
@@ -517,8 +520,15 @@ namespace Xli
 		}
 	};
 
+	/**
+		\addtogroup Math
+		@{
+	*/
+
 	typedef Matrix4t<float> Matrix4;
 	typedef Matrix4t<double> Matrix4d;
+
+	/** @} */
 }
 
 #endif

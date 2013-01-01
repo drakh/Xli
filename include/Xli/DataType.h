@@ -5,6 +5,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup Core
+	*/
 	enum DataType
 	{
 		DataTypeHalf = 1,
@@ -22,6 +25,9 @@ namespace Xli
 		DataTypeInt8 = 13
 	};
 
+	/**
+		\ingroup Core
+	*/
 	class DataTypeInfo
 	{
 	public:
@@ -30,6 +36,9 @@ namespace Xli
 		static const char* ToString(DataType dt);
 	};
 
+	/**
+		\ingroup Core
+	*/
 	class Endian
 	{
 	public:

@@ -5,6 +5,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup Containers
+	*/
 	template <typename T> class Queue: public Object
 	{
 		struct Node

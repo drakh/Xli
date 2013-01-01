@@ -6,6 +6,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup IO
+	*/
 	class File: public Stream
 	{
 		FILE* fp;

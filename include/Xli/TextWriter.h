@@ -7,6 +7,11 @@
 
 namespace Xli
 {
+	/**
+		\addtogroup IO
+		@{
+	*/
+
 	CharString ToString(void* p);
 	CharString ToString(int i);
 	CharString ToString(unsigned int i);
@@ -32,6 +37,12 @@ namespace Xli
 		return str;
 	}
 
+	/** @} */
+
+
+	/**
+		\ingroup IO
+	*/
 	class TextWriter: public StreamWriter
 	{
 	public:

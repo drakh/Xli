@@ -6,6 +6,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup Math
+	*/
 	template <typename T> class Matrix3t
 	{
 		T data[9];
@@ -272,8 +275,15 @@ namespace Xli
 		}
 	};
 
+	/**
+		\addtogroup Math
+		@{
+	*/
+
 	typedef Matrix3t<float> Matrix3;
 	typedef Matrix3t<double> Matrix3d;
+
+	/** @} */
 }
 
 #endif

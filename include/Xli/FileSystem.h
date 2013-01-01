@@ -5,6 +5,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup IO
+	*/
 	enum FileMode
 	{
 		/** Open a file for reading. The file must exist. */
@@ -28,14 +31,23 @@ namespace Xli
 		FileModeReadRandom = FileModeRead | FileModeRandom,
 	};
 
+	/**
+		\ingroup IO
+	*/
 	const char* FileModeToString(FileMode mode);
-
+	
+	/**
+		\ingroup IO
+	*/
 	enum FileFlag
 	{
 		FileFlagReadOnly = 1 << 0,
 		FileFlagDirectory = 1 << 1
 	};
 
+	/**
+		\ingroup IO
+	*/
 	struct FileInfo
 	{
 		String Name;
@@ -46,6 +58,9 @@ namespace Xli
 		Timestamp LastWriteTime;
 	};
 
+	/**
+		\ingroup IO
+	*/
 	class FileSystem: public Object
 	{
 	public:

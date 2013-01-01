@@ -6,6 +6,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup Textures
+	*/
 	class Png
 	{
 	public:

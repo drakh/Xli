@@ -6,6 +6,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup IO
+	*/
 	class Console
 	{
 	public:
@@ -13,6 +16,9 @@ namespace Xli
 		static void Shutdown();
 	};
 
+	/**
+		\ingroup IO
+	*/
 	class OutAccessor
 	{
 	public:
@@ -20,6 +26,9 @@ namespace Xli
 		operator TextWriter*();
 	};
 
+	/**
+		\ingroup IO
+	*/
 	class ErrAccessor
 	{
 	public:
@@ -27,12 +36,20 @@ namespace Xli
 		operator TextWriter*();
 	};
 
+	/**
+		\ingroup IO
+	*/
 	class InAccessor
 	{
 	public:
 		TextReader* operator ->();
 		operator TextReader*();
 	};
+
+	/**
+		\addtogroup IO
+		@{
+	*/
 
 	extern OutAccessor Out;
 	extern ErrAccessor Err;
@@ -63,6 +80,8 @@ namespace Xli
 	{
 		Err->Write('\n');
 	}
+
+	/** @} */
 }
 
 

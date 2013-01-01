@@ -5,6 +5,11 @@
 
 namespace Xli
 {
+	/**
+		\addtogroup Core
+		@{
+	*/
+
 	typedef signed char Int8;
 	typedef signed short Int16;
 	typedef signed int Int32;
@@ -24,6 +29,8 @@ namespace Xli
 	typedef UInt32 Utf32Char;
 
 	typedef UInt64 Timestamp;
+
+	/** @} */
 }
 
 #ifndef XLI_HAS_UINT

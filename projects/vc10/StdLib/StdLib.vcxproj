@@ -130,6 +130,7 @@
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <AdditionalDependencies>opengl32.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -171,6 +172,7 @@
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <AdditionalDependencies>opengl32.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -217,6 +219,7 @@
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <AdditionalDependencies>opengl32.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">
@@ -252,97 +255,210 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\Xli\AStar.h" />
     <ClInclude Include="..\..\..\include\Xli\BaseTypes.h" />
     <ClInclude Include="..\..\..\include\Xli\Buffer.h" />
-    <ClInclude Include="..\..\..\include\Xli\Color.h" />
+    <ClInclude Include="..\..\..\include\Xli\ConditionVariable.h" />
     <ClInclude Include="..\..\..\include\Xli\Config.h" />
     <ClInclude Include="..\..\..\include\Xli\DataType.h" />
     <ClInclude Include="..\..\..\include\Xli\DateTime.h" />
-    <ClInclude Include="..\..\..\include\Xli\DCT.h" />
+    <ClInclude Include="..\..\..\include\Xli\Dialogs.h" />
+    <ClInclude Include="..\..\..\include\Xli\Display.h" />
     <ClInclude Include="..\..\..\include\Xli\Exception.h" />
-    <ClInclude Include="..\..\..\include\Xli\Float16.h" />
-    <ClInclude Include="..\..\..\include\Xli\FormattedTextWriter.h" />
+    <ClInclude Include="..\..\..\include\Xli\GLCommon.h" />
+    <ClInclude Include="..\..\..\include\Xli\GLContext.h" />
+    <ClInclude Include="..\..\..\include\Xli\GLHeaders.h" />
     <ClInclude Include="..\..\..\include\Xli\Hash.h" />
-    <ClInclude Include="..\..\..\include\Xli\Letterbox.h" />
+    <ClInclude Include="..\..\..\include\Xli\MessageBox.h" />
+    <ClInclude Include="..\..\..\include\Xli\Mutex.h" />
+    <ClInclude Include="..\..\..\include\Xli\NativeFileSystem.h" />
     <ClInclude Include="..\..\..\include\Xli\Object.h" />
     <ClInclude Include="..\..\..\include\Xli\OrderedMap.h" />
     <ClInclude Include="..\..\..\include\Xli\Path.h" />
-    <ClInclude Include="..\..\..\include\Xli\Pool.h" />
-    <ClInclude Include="..\..\..\include\Xli\Saturated.h" />
+    <ClInclude Include="..\..\..\include\Xli\SDL2Window.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\Xli\Sort.h" />
     <ClInclude Include="..\..\..\include\Xli\String.h" />
     <ClInclude Include="..\..\..\include\Xli\StringBuilder.h" />
     <ClInclude Include="..\..\..\include\Xli\StringDecl.h" />
     <ClInclude Include="..\..\..\include\Xli\Text.h" />
-    <ClInclude Include="..\..\..\include\Xli\TextParser.h" />
-    <ClInclude Include="..\..\..\include\Xli\Trigger.h" />
+    <ClInclude Include="..\..\..\include\Xli\Thread.h" />
+    <ClInclude Include="..\..\..\include\Xli\Time.h" />
     <ClInclude Include="..\..\..\include\Xli\Unicode.h" />
     <ClInclude Include="..\..\..\include\Xli\Utils.h" />
-    <ClInclude Include="..\..\..\include\Xli\AxisAngle.h" />
-    <ClInclude Include="..\..\..\include\Xli\Box.h" />
-    <ClInclude Include="..\..\..\include\Xli\LineSegment.h" />
     <ClInclude Include="..\..\..\include\Xli\Math.h" />
     <ClInclude Include="..\..\..\include\Xli\Matrix3.h" />
     <ClInclude Include="..\..\..\include\Xli\Matrix4.h" />
     <ClInclude Include="..\..\..\include\Xli\Quaternion.h" />
     <ClInclude Include="..\..\..\include\Xli\Random.h" />
-    <ClInclude Include="..\..\..\include\Xli\Ray.h" />
     <ClInclude Include="..\..\..\include\Xli\Rectangle.h" />
-    <ClInclude Include="..\..\..\include\Xli\Spline.h" />
-    <ClInclude Include="..\..\..\include\Xli\Value.h" />
     <ClInclude Include="..\..\..\include\Xli\Vector2.h" />
     <ClInclude Include="..\..\..\include\Xli\Vector3.h" />
     <ClInclude Include="..\..\..\include\Xli\Vector4.h" />
     <ClInclude Include="..\..\..\include\Xli\BinaryReader.h" />
     <ClInclude Include="..\..\..\include\Xli\BinaryWriter.h" />
     <ClInclude Include="..\..\..\include\Xli\Console.h" />
-    <ClInclude Include="..\..\..\include\Xli\Directory.h" />
     <ClInclude Include="..\..\..\include\Xli\File.h" />
     <ClInclude Include="..\..\..\include\Xli\FileSystem.h" />
     <ClInclude Include="..\..\..\include\Xli\Stream.h" />
     <ClInclude Include="..\..\..\include\Xli\TextReader.h" />
     <ClInclude Include="..\..\..\include\Xli\TextWriter.h" />
     <ClInclude Include="..\..\..\include\Xli\Array.h" />
-    <ClInclude Include="..\..\..\include\Xli\Dictionary.h" />
     <ClInclude Include="..\..\..\include\Xli\HashMap.h" />
-    <ClInclude Include="..\..\..\include\Xli\HashSet.h" />
-    <ClInclude Include="..\..\..\include\Xli\Heap.h" />
-    <ClInclude Include="..\..\..\include\Xli\List.h" />
     <ClInclude Include="..\..\..\include\Xli\Managed.h" />
-    <ClInclude Include="..\..\..\include\Xli\Map2D.h" />
-    <ClInclude Include="..\..\..\include\Xli\Map3D.h" />
     <ClInclude Include="..\..\..\include\Xli\Queue.h" />
-    <ClInclude Include="..\..\..\include\Xli\Stack.h" />
     <ClInclude Include="..\..\..\include\Xli.h" />
+    <ClInclude Include="..\..\..\include\Xli\Win32Helpers.h" />
+    <ClInclude Include="..\..\..\include\Xli\Win32Window.h" />
+    <ClInclude Include="..\..\..\include\Xli\Win32Header.h" />
+    <ClInclude Include="..\..\..\include\Xli\Window.h" />
     <ClInclude Include="..\..\..\src\stdlib\3rdparty\ConvertUTF.h" />
+    <ClInclude Include="..\..\..\src\stdlib\posix\PosixFileSystemBase.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\stdlib\sdl2\SDL2FileSystem.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\stdlib\3rdparty\ConvertUTF.c" />
+    <ClCompile Include="..\..\..\src\stdlib\android\AFileSystem.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\stdlib\android\AWindow.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\stdlib\Buffer.cpp" />
     <ClCompile Include="..\..\..\src\stdlib\DataType.cpp" />
     <ClCompile Include="..\..\..\src\stdlib\DateTime.cpp" />
-    <ClCompile Include="..\..\..\src\stdlib\FormattedTextWriter.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\egl\EGLContext.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\stdlib\generic\GenericAssetFileSystem.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\generic\GenericDialogs.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\stdlib\generic\GenericMessageBox.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\stdlib\MessageBox.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\NativeFileSystem.cpp" />
     <ClCompile Include="..\..\..\src\stdlib\Path.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\posix\PosixCond.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\stdlib\posix\PosixFileSystem.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\stdlib\posix\PosixMutex.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\stdlib\posix\PosixThread.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\stdlib\posix\PosixTime.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\stdlib\sdl2\SDL2Cond.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\stdlib\sdl2\SDL2Display.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\stdlib\sdl2\SDL2FileSystem.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\stdlib\sdl2\SDL2GLContext.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\stdlib\sdl2\SDL2Mutex.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\stdlib\sdl2\SDL2Thread.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\stdlib\sdl2\SDL2Time.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\stdlib\sdl2\SDL2Window.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\..\src\stdlib\StringTools.cpp" />
     <ClCompile Include="..\..\..\src\stdlib\Text.cpp" />
     <ClCompile Include="..\..\..\src\stdlib\Random.cpp" />
     <ClCompile Include="..\..\..\src\stdlib\BinaryReader.cpp" />
     <ClCompile Include="..\..\..\src\stdlib\BinaryWriter.cpp" />
     <ClCompile Include="..\..\..\src\stdlib\Console.cpp" />
-    <ClCompile Include="..\..\..\src\stdlib\Directory.cpp" />
     <ClCompile Include="..\..\..\src\stdlib\File.cpp" />
     <ClCompile Include="..\..\..\src\stdlib\FileSystem.cpp" />
     <ClCompile Include="..\..\..\src\stdlib\Stream.cpp" />
-    <ClCompile Include="..\..\..\src\stdlib\TextParser.cpp" />
     <ClCompile Include="..\..\..\src\stdlib\TextReader.cpp" />
     <ClCompile Include="..\..\..\src\stdlib\TextWriter.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\Thread.cpp" />
     <ClCompile Include="..\..\..\src\stdlib\Unicode.cpp" />
-    <ClCompile Include="..\..\..\src\stdlib\Value.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\win32\Win32Cond.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\win32\Win32Dialogs.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\win32\Win32Display.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\win32\Win32FileSystem.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\win32\Win32GLContext.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\win32\Win32Helpers.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\win32\Win32MessageBox.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\win32\Win32Mutex.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\win32\Win32Thread.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\win32\Win32Time.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\win32\Win32Window.cpp" />
+    <ClCompile Include="..\..\..\src\stdlib\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\CMakeLists.txt" />
     <None Include="..\..\..\src\stdlib\CMakeLists.txt" />
+    <None Include="..\..\..\src\stdlib\sdl2\SDL2FileSystem_iOS.mm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -5,10 +5,13 @@
 #include <Xli/Vector2.h>
 #include <Xli/Rectangle.h>
 #include <XliMedia/Image.h>
-#include <Xli/Color.h>
+#include <XliMedia/Color.h>
 
 namespace Xli
 {
+	/**
+		\ingroup Textures
+	*/
 	enum RotateAngle
 	{
 		RotateAngle90CW,
@@ -16,6 +19,9 @@ namespace Xli
 		RotateAngle180,
 	};
 
+	/**
+		\ingroup Textures
+	*/
 	class Bitmap: public Image
 	{
 		Format format;

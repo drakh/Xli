@@ -1,7 +1,6 @@
 #include <Xli/Console.h>
 #include <Xli/Unicode.h>
 #include <XliMedia/Xml.h>
-#include <Xli/StringBuilder.h>
 #include <tinyxml.h>
 
 namespace Xli
@@ -50,15 +49,24 @@ namespace Xli
 					TiXmlText* textNode = node->ToText();
 					XmlText* text = new XmlText();
 					const char* cstr = textNode->Value();
-					CharStringBuilder strb;
+					Array<char> strb;
 					while (*cstr)
 					{
-						if (*cstr == (char)0xA0) { strb.AppendChar((char)0xC2); strb.AppendChar((char)0xA0); } // UTF8 non-breaking space
-						else strb.AppendChar(*cstr);
+						// UTF8 non-breaking space
+						if (*cstr == (char)0xA0) 
+						{ 
+							strb.Add((char)0xC2); 
+							strb.Add((char)0xA0); 
+						}
+						else 
+						{
+							strb.Add(*cstr);
+						}
+
 						cstr++;
 					}
 
-					text->Value = Unicode::Utf8To16(strb.GetString());
+					text->Value = Unicode::Utf8To16(strb.Data());
 					elm->Children.Add(text);
 				}
 				break;

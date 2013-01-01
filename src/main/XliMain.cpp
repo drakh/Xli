@@ -1,12 +1,12 @@
 #include <Xli/Console.h>
-#include <XliPlatform/NativeFileSystem.h>
-#include <XliPlatform/MessageBox.h>
+#include <Xli/NativeFileSystem.h>
+#include <Xli/MessageBox.h>
 
 extern int Main(const Xli::Array<Xli::String>& args);
 
 #ifdef XLI_PLATFORM_IOS
 #include <Xli/DateTime.h>
-#include <XliPlatform/Time.h>
+#include <Xli/Time.h>
 namespace Xli { void Init_iOS(); }
 extern "C" void SDL_Quit();
 # undef main
@@ -60,7 +60,7 @@ int main(int argc, char** argv)
 }
 
 #ifdef XLI_PLATFORM_WINDOWS
-#include <XliPlatform/Win32Windows.h>
+#include <Xli/Win32Header.h>
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {

@@ -8,6 +8,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup Core
+	*/
 	class DataAccessor: public Object
 	{
 	public:
@@ -16,6 +19,8 @@ namespace Xli
 	};
 
 	/**
+		\ingroup Core
+
 		A buffer of bytes.
 		A buffer can not be resized or relocated, so other objects can depend on the pointer to the buffer data.
 		Buffer objects are meant to be constructed using an overloaded new operator which takes bufSize as an argument.
@@ -71,6 +76,9 @@ namespace Xli
 		}
 	};
 
+	/**
+		\ingroup Core
+	*/
 	template <unsigned int BufSize> class StaticBuffer: public DataAccessor
 	{
 		UInt8 data[BufSize];
@@ -100,6 +108,9 @@ namespace Xli
 		}
 	};
 
+	/**
+		\ingroup Core
+	*/
 	class BufferPointer: public DataAccessor
 	{
 		UInt8* data;
@@ -134,6 +145,9 @@ namespace Xli
 		}
 	};
 
+	/**
+		\ingroup Core
+	*/
 	class BufferReference: public DataAccessor
 	{
 		UInt8* data;

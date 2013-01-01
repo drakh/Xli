@@ -3,7 +3,6 @@
 
 #include "TextReader.h"
 #include "TextWriter.h"
-#include "List.h"
 
 namespace Xli
 {
@@ -11,7 +10,7 @@ namespace Xli
 	{
 	public:
 		static CharString Load(const CharString& fileName);
-		static List<CharString> LoadLines(const CharString& fileName);
+		static void LoadLines(const CharString& fileName, Array<CharString>& result);
 		static void Save(const CharString& fileName, const CharString& content);
 	};
 }

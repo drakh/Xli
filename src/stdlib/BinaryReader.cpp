@@ -23,17 +23,9 @@ namespace Xli
 		return str;
 	}
 
-	Utf16String BinaryReader::ReadUtf8String(int len)
+	Utf16String BinaryReader::ReadString()
 	{
-		return Xli::Unicode::Utf8To16(ReadCStr(len));
-	}
-
-	Buffer* BinaryReader::ReadBuffer()
-	{
-		UInt32 size = ReadUInt32();
-		Buffer* buf = Buffer::Create(size);
-		stream->ReadSafe(buf->Data(), 1, size);
-		return buf;
+		return Xli::Unicode::Utf8To16(ReadCStr(Read7BitEncodedInt()));
 	}
 
 	Buffer* BinaryReader::ReadAll()
