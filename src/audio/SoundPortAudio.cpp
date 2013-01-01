@@ -1,4 +1,4 @@
-#include <XliSound/Sound.h>
+#include <XliAudio/Sound.h>
 #include <Xli/MessageBox.h>
 #include <portaudio.h>
 

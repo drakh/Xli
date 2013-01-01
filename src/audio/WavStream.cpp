@@ -1,4 +1,4 @@
-#include <XliSound/WavStream.h>
+#include <XliAudio/WavStream.h>
 #include <Xli/BinaryReader.h>
 
 namespace Xli
