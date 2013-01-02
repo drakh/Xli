@@ -89,7 +89,7 @@ namespace Xli
 	{
 		va_list argList;
 		va_start(argList, format);
-		WriteString(StringTools::Format(format, argList));
+		Write(StringTools::Format(format, argList));
 		va_end(argList);
 	}
 
@@ -98,14 +98,14 @@ namespace Xli
 		Write(str, strlen(str));
 	}
 
-	void TextWriter::WriteString(const CharString& str)
+	void TextWriter::Write(const CharString& str)
 	{
 		Write(str.Data(), str.Length());
 	}
     
-	void TextWriter::WriteString(const Utf16String& str)
+	void TextWriter::Write(const Utf16String& str)
 	{
-		WriteString(Unicode::Utf16To8(str));
+		Write(Unicode::Utf16To8(str));
 	}
 
 	void TextWriter::WriteLine()

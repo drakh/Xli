@@ -1,10 +1,8 @@
 #ifndef __XLI_GL_CHECK_ERROR_H__
 #define __XLI_GL_CHECK_ERROR_H__
 
-#include "GLHeaders.h"
-
+#include <Xli/GLHeaders.h>
 #include <Xli/Exception.h>
-#include <Xli/Console.h>
 
 namespace Xli
 {

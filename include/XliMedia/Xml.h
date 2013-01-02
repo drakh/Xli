@@ -83,7 +83,7 @@ namespace Xli
 
 		inline static XmlElement* Load(Stream* stream)
 		{
-			return Parse(TextReader(stream).ReadAll());
+			return Parse(TextReader(stream).ReadAllRaw());
 		}
 
 		inline static XmlElement* Load(const String& fileName)

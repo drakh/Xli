@@ -23,7 +23,7 @@ namespace Xli
 
 		inline static Value Load(Stream* stream, bool preserveOrder = false)
 		{
-			return Parse(TextReader(stream).ReadAll(), preserveOrder);
+			return Parse(TextReader(stream).ReadAllRaw(), preserveOrder);
 		}
 
 		inline static Value Load(const String& fileName, bool preserveOrder = false)
@@ -40,7 +40,7 @@ namespace Xli
 			Save(&f, value);
 		}
 
-		static CharString ToString(const Value& value);
+		static CharString ToStringRaw(const Value& value);
 	};
 }
 

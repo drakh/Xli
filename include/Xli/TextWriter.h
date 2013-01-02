@@ -51,13 +51,13 @@ namespace Xli
 		void Write(const char* str, int len);
 		void Writef(const char* format, ...);
 		void Write(const char* str);
-		void WriteString(const CharString& str);
-        void WriteString(const Utf16String& str);
+		void Write(const CharString& str);
+        void Write(const Utf16String& str);
 		void WriteLine();
 
 		template <typename T> void Write(const T& t)
 		{
-			WriteString(Xli::ToString(t));
+			Write(Xli::ToString(t));
 		}
 		template <typename T> void WriteLine(const T& t)
 		{

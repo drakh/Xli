@@ -28,9 +28,7 @@ namespace Xli
 	DataAccessor* FileSystem::OpenFileAsBuffer(const String& fileName)
 	{
 		Managed<Stream> f = OpenFile(fileName, FileModeRead);
-		Buffer* buf = Buffer::Create(f->GetLength());
-		f->ReadSafe(buf->Data(), 1, buf->Size());
-		return buf;
+		return f->CreateDataAccessor();
 	}
 
 	void FileSystem::CreateDirectory(const String& name) 

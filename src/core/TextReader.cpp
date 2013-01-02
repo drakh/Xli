@@ -1,6 +1,6 @@
 #include <Xli/TextReader.h>
 #include <Xli/File.h>
-
+#include <Xli/Unicode.h>
 
 namespace Xli
 {
@@ -8,18 +8,18 @@ namespace Xli
 	{
 	}
 
-	CharString TextReader::Read(int len)
+	CharString TextReader::ReadRaw(int len)
 	{
 		CharString s = CharString::Create(len);
 		stream->ReadSafe(s.Data(), 1, len);
 		return s;
 	}
 
-	CharString TextReader::ReadAll()
+	CharString TextReader::ReadAllRaw()
 	{
 		if (stream->CanSeek())
 		{
-			return Read(stream->GetLength());
+			return ReadRaw(stream->GetLength());
 		}
 		
 		Array<char> str;
@@ -35,6 +35,11 @@ namespace Xli
 		return CharString(str.Data(), str.Length());
 	}
 
+	Utf16String TextReader::ReadAll()
+	{
+		return Unicode::Utf8To16(ReadAllRaw());
+	}
+
 	char TextReader::ReadChar()
 	{
 		char c;
@@ -42,7 +47,7 @@ namespace Xli
 		return c;
 	}
 
-	CharString TextReader::ReadTo(char terminal)
+	CharString TextReader::ReadToRaw(char terminal)
 	{
 		Array<char> s;
 		char c;
@@ -56,9 +61,14 @@ namespace Xli
 		return CharString(s.Data(), s.Length());
 	}
 
-	CharString TextReader::ReadLine()
+	CharString TextReader::ReadLineRaw()
 	{
-		return ReadTo('\n');
+		return ReadToRaw('\n');
+	}
+
+	Utf16String TextReader::ReadLine()
+	{
+		return Unicode::Utf8To16(ReadLineRaw());
 	}
 
 	bool TextReader::AtEndOfFile()

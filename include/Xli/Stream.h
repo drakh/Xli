@@ -44,8 +44,6 @@ namespace Xli
 		virtual int GetPosition() const;
 		virtual int GetLength() const;
 
-		virtual int BytesWaiting() { return 0; }
-
 		virtual int Read(void* dst, int elmSize, int elmCount);
 		virtual int Write(const void* src, int elmSize, int elmCount);
 		virtual void Seek(SeekOrigin origin, int offset);
@@ -154,7 +152,7 @@ namespace Xli
 	{
 	public:
 		TextStream(int initCapacity = 1024): DynamicStream(initCapacity) {}
-		CharString GetText() const { return CharString((char*)buf.Data(), GetLength()); }
+		CharString GetTextRaw() const { return CharString((char*)buf.Data(), GetLength()); }
 	};
 }
 

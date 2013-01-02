@@ -272,10 +272,10 @@ namespace Xli
 		JsonWriter(stream).WriteJson(value);
 	}
 
-	CharString Json::ToString(const Value& value)
+	CharString Json::ToStringRaw(const Value& value)
 	{
 		TextStream ts;
 		Save(&ts, value);
-		return ts.GetText();
+		return ts.GetTextRaw();
 	}
 }

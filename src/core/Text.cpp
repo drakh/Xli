@@ -1,23 +1,27 @@
 #include <Xli/Text.h>
+#include <Xli/Unicode.h>
 
 namespace Xli
 {
-	CharString Text::Load(const CharString& fileName)
+	CharString Text::LoadRaw(const String& fileName)
 	{
 		File f(fileName, FileModeRead);
-		return TextReader(&f).ReadAll();
+		return TextReader(&f).ReadAllRaw();
 	}
 
-	void Text::LoadLines(const CharString& fileName, Array<CharString>& result)
+	Utf16String Text::Load(const String& fileName)
 	{
-		File f(fileName, FileModeRead);
-		TextReader tr(&f);
-		while (!tr.AtEndOfFile()) result.Add(tr.ReadLine());
+		return Unicode::Utf8To16(LoadRaw(fileName));
 	}
 
-	void Text::Save(const CharString& fileName, const CharString& content)
+	void Text::Save(const String& fileName, const CharString& content)
 	{
 		File f(fileName, FileModeWrite);
-		TextWriter(&f).WriteString(content);
+		TextWriter(&f).Write(content);
+	}
+
+	void Text::Save(const String& fileName, const Utf16String& content)
+	{
+		Save(fileName, Unicode::Utf16To8(content));
 	}
 }

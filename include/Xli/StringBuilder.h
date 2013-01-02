@@ -3,6 +3,7 @@
 
 #include "String.h"
 #include "Array.h"
+#include "Unicode.h"
 
 namespace Xli
 {
@@ -44,7 +45,7 @@ namespace Xli
 		}
 		void Append(const char* str)
 		{
-			while (*str) buffer.Add((StringChar)*str++);
+			Append(Unicode::Utf8To16(CharString(str)));
 		}
 		void Append(const String& text)
 		{
@@ -86,7 +87,7 @@ namespace Xli
 			va_start(argList, format);
 			CharString s = StringTools::Format(format, argList);
 			va_end(argList);
-			Append(s);
+			Append(Unicode::Utf8To16(s));
 		}
 	};
 }

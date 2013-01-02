@@ -19,6 +19,9 @@
     <Filter Include="3rdparty\portaudio\os">
       <UniqueIdentifier>{95970115-fe1f-43e0-84bf-c297586e1c90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="XliAudio\portaudio">
+      <UniqueIdentifier>{e16ad626-d2c5-4306-bc77-64239c359850}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\XliAudio.h" />
@@ -99,14 +102,14 @@
     <ClCompile Include="..\..\src\audio\AudioBuffer.cpp">
       <Filter>XliAudio</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\audio\PAAudioBuffer.cpp">
-      <Filter>XliAudio</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\audio\Wav.cpp">
       <Filter>XliAudio</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\audio\AudioStream.cpp">
       <Filter>XliAudio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\audio\PAAudioBuffer.cpp">
+      <Filter>XliAudio\portaudio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

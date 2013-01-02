@@ -7,7 +7,9 @@ namespace Xli
 {
 	/**
 		\addtogroup Utils
+		@{
 	*/
+
 	template <typename T, typename TComparator> void ShellSort(T* data, int left, int right)
 	{
 		const float s = 2.8f;
@@ -41,9 +43,6 @@ namespace Xli
 		}
 	}
 
-	/**
-		\addtogroup Utils
-	*/
 	template <typename T, typename TComparator> void Sort(T* data, int left, int right)
 	{
 		if (right - left > 280)
@@ -73,6 +72,7 @@ namespace Xli
 		}
 	}
 
+	/** @} */
 }
 
 #endif
