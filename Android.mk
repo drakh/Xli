@@ -4,81 +4,49 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := XliAndroidStatic
 
 LOCAL_SRC_FILES := \
-	src/stdlib/3rdparty/ConvertUTF.c \
-	src/stdlib/BinaryReader.cpp \
-	src/stdlib/BinaryWriter.cpp \
-	src/stdlib/Buffer.cpp \
-	src/stdlib/Console.cpp \
-	src/stdlib/DataType.cpp \
-	src/stdlib/DateTime.cpp \
-	src/stdlib/Directory.cpp \
-	src/stdlib/File.cpp \
-	src/stdlib/FileSystem.cpp \
-	src/stdlib/FormattedTextWriter.cpp \
-	src/stdlib/Path.cpp \
-	src/stdlib/Random.cpp \
-	src/stdlib/Stream.cpp \
-	src/stdlib/StringTools.cpp \
-	src/stdlib/Text.cpp \
-	src/stdlib/TextParser.cpp \
-	src/stdlib/TextReader.cpp \
-	src/stdlib/TextWriter.cpp \
-	src/stdlib/Unicode.cpp \
-	src/stdlib/Value.cpp \
-	src/platform/android/3rdparty/native_app_glue/android_native_app_glue.c \
-	src/platform/android/AWindow.cpp \
-	src/platform/android/AFileSystem.cpp \
-	src/platform/MessageBox.cpp \
-	src/platform/NativeFileSystem.cpp \
-	src/platform/Pipe.cpp \
-	src/platform/Profiling.cpp \
-	src/platform/Selector.cpp \
-	src/platform/Thread.cpp \
-	src/platform/TimedTrigger.cpp \
-	src/platform/Window.cpp \
-	src/platform/posix/PosixCond.cpp \
-	src/platform/posix/PosixEnvironment.cpp \
-	src/platform/posix/PosixMutex.cpp \
-	src/platform/posix/PosixPipe.cpp \
-	src/platform/posix/PosixSocket.cpp \
-	src/platform/posix/PosixTime.cpp \
-	src/platform/posix/PosixThread.cpp \
-	src/platform/generic/GenericDialogs.cpp \
-	src/platform/generic/GenericMessageBox.cpp \
-	src/graphics/ArrayBuffer.cpp \
-	src/graphics/BitmapFont.cpp \
-	src/graphics/Atlas.cpp \
-	src/graphics/AtlasBuilder.cpp \
-	src/graphics/Mesh.cpp \
-	src/graphics/Semantic.cpp \
-	src/graphics/SpriteFont.cpp \
-	src/graphics/BitmapFontBuilder.cpp \
-	src/graphics/PsgReader.cpp \
-	src/graphics/PsgWriter.cpp \
-	src/graphics/CompressedImage.cpp \
-	src/graphics/Ktx.cpp \
-	src/graphics/Texture.cpp \
-	src/gl/EGLContext.cpp \
-	src/gl/GLFont.cpp \
-	src/gl/GLFontRenderer.cpp \
-	src/gl/GLFramebuffer.cpp \
-	src/gl/GLHelpers.cpp \
-	src/gl/GLProgram.cpp \
-	src/gl/GLTexture2D.cpp \
+	src/core/3rdparty/ConvertUTF.c \
+	src/core/android/3rdparty/native_app_glue/android_native_app_glue.c \
+	src/core/android/AWindow.cpp \
+	src/core/android/AFileSystem.cpp \
+	src/core/egl/EGLContext.cpp \
+	src/core/generic/GenericDialogs.cpp \
+	src/core/generic/GenericMessageBox.cpp \
+	src/core/posix/PosixCond.cpp \
+	src/core/posix/PosixEnvironment.cpp \
+	src/core/posix/PosixMutex.cpp \
+	src/core/posix/PosixPipe.cpp \
+	src/core/posix/PosixSocket.cpp \
+	src/core/posix/PosixTime.cpp \
+	src/core/posix/PosixThread.cpp \
+	src/core/BinaryReader.cpp \
+	src/core/BinaryWriter.cpp \
+	src/core/Buffer.cpp \
+	src/core/BufferStream.cpp \
+	src/core/Console.cpp \
+	src/core/DataType.cpp \
+	src/core/DateTime.cpp \
+	src/core/File.cpp \
+	src/core/FileSystem.cpp \
+	src/core/GLCheckError.cpp \
+	src/core/Matrix3.cpp \
+	src/core/Matrix4.cpp \
+	src/core/MessageBox.cpp \
+	src/core/NativeFileSystem.cpp \
+	src/core/Path.cpp \
+	src/core/Quaternion.cpp \
+	src/core/Random.cpp \
+	src/core/Stream.cpp \
+	src/core/String.cpp \
+	src/core/StringBuilder.cpp \
+	src/core/Text.cpp \
+	src/core/TextReader.cpp \
+	src/core/TextWriter.cpp \
+	src/core/Thread.cpp \
+	src/core/ToString.cpp \
+	src/core/Unicode.cpp \
+	src/core/Utf16String.cpp \
+	src/core/Window.cpp \
 	src/main/XliMain.cpp \
-	src/media/Bitmap.cpp \
-	src/media/FontFace.cpp \
-	src/media/Format.cpp \
-	src/media/ImageReader.cpp \
-	src/media/ImageWriter.cpp \
-	src/media/JpegReader.cpp \
-	src/media/JpegWriter.cpp \
-	src/media/Json.cpp \
-	src/media/Gzip.cpp \
-	src/media/PngReader.cpp \
-	src/media/PngWriter.cpp \
-	src/media/Xml.cpp \
-	src/media/Zip.cpp \
 	src/media/3rdparty/tinyxml/tinystr.cpp \
 	src/media/3rdparty/tinyxml/tinyxml.cpp \
 	src/media/3rdparty/tinyxml/tinyxmlerror.cpp \
@@ -164,10 +132,28 @@ LOCAL_SRC_FILES := \
 	src/media/3rdparty/freetype/src/truetype/truetype.c \
 	src/media/3rdparty/freetype/src/cff/cff.c \
 	src/media/3rdparty/freetype/src/psnames/psnames.c \
-	src/media/3rdparty/freetype/src/pshinter/pshinter.c
+	src/media/3rdparty/freetype/src/pshinter/pshinter.c \
+	src/media/Bitmap.cpp \
+	src/media/CompressedImage.cpp \
+	src/media/FontFace.cpp \
+	src/media/Format.cpp \
+	src/media/FormattedTextWriter.cpp \
+	src/media/Gzip.cpp \
+	src/media/ImageReader.cpp \
+	src/media/ImageWriter.cpp \
+	src/media/JpegReader.cpp \
+	src/media/JpegWriter.cpp \
+	src/media/Json.cpp \
+	src/media/Ktx.cpp \
+	src/media/PngReader.cpp \
+	src/media/PngWriter.cpp \
+	src/media/Texture.cpp \
+	src/media/Value.cpp \
+	src/media/Xml.cpp \
+	src/media/Zip.cpp \
 	
 LOCAL_C_INCLUDES := include \
-	src/platform/android/3rdparty/native_app_glue \
+	src/core/android/3rdparty/native_app_glue \
 	src/media/3rdparty/freetype/include \
 	src/media/3rdparty/jpeg \
 	src/media/3rdparty/png \
