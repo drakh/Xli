@@ -1,5 +1,4 @@
 #include <Xli/BinaryWriter.h>
-#include <Xli/Unicode.h>
 
 namespace Xli
 {
@@ -18,7 +17,7 @@ namespace Xli
 
 	void BinaryWriter::WriteCStr(const char* str)
 	{
-		stream->WriteSafe((const void*)str, 1, strlen(str));
+		stream->WriteSafe((const void*)str, 1, (int)strlen(str));
 	}
 
 	void BinaryWriter::Write7BitEncodedInt(int value) 
@@ -34,10 +33,9 @@ namespace Xli
         WriteUInt8(v);
     }
 
-	void BinaryWriter::WriteString(const Utf16String& str)
+	void BinaryWriter::WriteString(const String& str)
 	{
-		CharString utf8 = Unicode::Utf16To8(str);
-		Write7BitEncodedInt(utf8.Length());
-		stream->WriteSafe(utf8.Data(), 1, utf8.Length());
+		Write7BitEncodedInt(str.Length());
+		stream->WriteSafe(str.Data(), 1, str.Length());
 	}
 }

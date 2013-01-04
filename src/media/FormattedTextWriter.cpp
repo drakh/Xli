@@ -2,7 +2,7 @@
 
 namespace Xli
 {
-	FormattedTextWriter::FormattedTextWriter(Stream* stream, CharString indentValue): StreamWriter(stream)
+	FormattedTextWriter::FormattedTextWriter(Stream* stream, String indentValue): StreamWriter(stream)
 	{
 		this->indentValue = indentValue;
 		indent = 0;
@@ -37,7 +37,7 @@ namespace Xli
 			WriteRaw(indentValue.Data(), indentValue.Length());
 		}
 	}
-	void FormattedTextWriter::Write(const CharString& str)
+	void FormattedTextWriter::Write(const String& str)
 	{
 		int start = 0;
 
@@ -75,7 +75,7 @@ namespace Xli
 
 		WriteIndent();
 	}
-	void FormattedTextWriter::WriteLine(const CharString& str)
+	void FormattedTextWriter::WriteLine(const String& str)
 	{
 		BeginLine();
 		Write(str);

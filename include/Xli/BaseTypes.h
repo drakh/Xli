@@ -24,23 +24,12 @@ namespace Xli
 	typedef char __TestInt16[sizeof(Int16) == 2 ? 1 : -1];
 	typedef char __TestInt32[sizeof(Int32) == 4 ? 1 : -1];
 	
-	
-	typedef UInt16 Utf16Char;
-	typedef UInt32 Utf32Char;
-
 	typedef UInt64 Timestamp;
 
+	template <typename T, int TBufSize = 4> class Array;
+	template <typename T, int TBufSize = 8> class Stringt;
+
 	/** @} */
-}
-
-#ifndef XLI_HAS_UINT
-typedef unsigned int uint;
-#endif
-
-namespace Xli
-{
-	template <typename T, uint TBufSize = 4> class Array;
-	template <typename T, uint TBufSize = 8> class Stringt;
 }
 
 #endif

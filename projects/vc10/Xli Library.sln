@@ -1,19 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Xli", "Xli.vcxproj", "{A805EC6C-B5BF-4961-8D34-97E99CB4EC1A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Xli", "Xli\Xli.vcxproj", "{A805EC6C-B5BF-4961-8D34-97E99CB4EC1A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XliMain", "XliMain.vcxproj", "{3A5BB45A-C834-4C2A-B462-DD4234540694}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XliMain", "XliMain\XliMain.vcxproj", "{3A5BB45A-C834-4C2A-B462-DD4234540694}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A805EC6C-B5BF-4961-8D34-97E99CB4EC1A} = {A805EC6C-B5BF-4961-8D34-97E99CB4EC1A}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XliMedia", "XliMedia.vcxproj", "{6CC93668-D7E5-4C46-87E2-26BCB0717D17}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XliMedia", "XliMedia\XliMedia.vcxproj", "{6CC93668-D7E5-4C46-87E2-26BCB0717D17}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A805EC6C-B5BF-4961-8D34-97E99CB4EC1A} = {A805EC6C-B5BF-4961-8D34-97E99CB4EC1A}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XliAudio", "XliAudio.vcxproj", "{91165901-9291-4725-BD24-3592380ACFB8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XliAudio", "XliAudio\XliAudio.vcxproj", "{91165901-9291-4725-BD24-3592380ACFB8}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A805EC6C-B5BF-4961-8D34-97E99CB4EC1A} = {A805EC6C-B5BF-4961-8D34-97E99CB4EC1A}
 	EndProjectSection

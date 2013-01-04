@@ -13,13 +13,11 @@ namespace Xli
 	public:
 		TextReader(Stream* stream);
 
-		CharString ReadRaw(int len);
-		CharString ReadAllRaw();
-		Utf16String ReadAll();
+		String Read(int len);
+		String ReadAll();
 		char ReadChar();
-		CharString ReadToRaw(char terminal);
-		CharString ReadLineRaw();
-		Utf16String ReadLine();
+		String ReadTo(char terminal);
+		String ReadLine();
 		bool AtEndOfFile();
 	};
 }

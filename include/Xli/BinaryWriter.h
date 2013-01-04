@@ -23,7 +23,6 @@ namespace Xli
 		template <typename T> void Write(const Vector2t<T>& vec) { stream->WriteSafe(vec.Data(), sizeof(T), 2); }
 		template <typename T> void Write(const Vector3t<T>& vec) { stream->WriteSafe(vec.Data(), sizeof(T), 3); }
 		template <typename T> void Write(const Vector4t<T>& vec) { stream->WriteSafe(vec.Data(), sizeof(T), 4); }
-		template <typename T> void Write(const Matrix4t<T>& vec) { stream->WriteSafe(vec.Data(), sizeof(T), 16); }
 
 		inline void WriteFloat(const float& elm) { Write<float>(elm); }
 		inline void WriteDouble(const double& elm) { Write<double>(elm); }

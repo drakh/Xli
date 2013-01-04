@@ -6,7 +6,6 @@ namespace Xli
 {
 	File::File(const String& fileName, FileMode mode)
 	{
-		fp = 0;
 		const char* m = "rb";
         
 		switch (mode)
@@ -20,17 +19,24 @@ namespace Xli
             default: XLI_THROW(String("Invalid file mode: ") + FileModeToString(mode));
 		}
         
-		// TODO: Do proper testing on unicode filenames later
-		CharString utf8Filename = 
 #ifdef WIN32
-		fileName
-#else 
-		Unicode::Utf16To8(fileName)
-#endif
-		;
+		
+		fp = 0;
+		
+		Utf16String fileNameW = Unicode::Utf8To16(fileName);
+		Utf16String mW = Unicode::Utf8To16(m);
+		
+		if (_wfopen_s(&fp, fileNameW.Data(), mW.Data()) != 0 || !fp)
+		{
+			XLI_THROW_CANT_OPEN_FILE(fileName);
+		}
 
-		fopen_s(&fp, utf8Filename.Data(), m);
+#else
+		
+		fp = fopen(&fp, fileName.Data(), m);
 		if (!fp) XLI_THROW_CANT_OPEN_FILE(fileName);
+
+#endif
         
 		this->canRead = mode & FileModeRead;
 		this->canWrite = (mode & FileModeWrite) || (mode & FileModeAppend);
@@ -76,10 +82,12 @@ namespace Xli
 	{
 		return canRead && fp != 0;
 	}
+
 	bool File::CanWrite() const
 	{
 		return canWrite && fp != 0;
 	}
+
 	bool File::CanSeek() const
 	{
 		return fp != 0;
@@ -90,6 +98,7 @@ namespace Xli
 		if (!fp) XLI_THROW_STREAM_CLOSED;
 		return (int)ftell(fp);
 	}
+
 	int File::GetLength() const
 	{
 		if (!fp) XLI_THROW_STREAM_CLOSED;
@@ -104,14 +113,16 @@ namespace Xli
 	{
 		if (!fp) XLI_THROW_STREAM_CLOSED;
 		if (!canRead) XLI_THROW_STREAM_CANT_READ;
-		return fread(data, elmSize, elmCount, fp);
+		return (int)fread(data, elmSize, elmCount, fp);
 	}
+
 	int File::Write(const void* data, int elmSize, int elmCount)
 	{
 		if (!fp) XLI_THROW_STREAM_CLOSED;
 		if (!canWrite) XLI_THROW_STREAM_CANT_WRITE;
-		return fwrite(data, elmSize, elmCount, fp);
+		return (int)fwrite(data, elmSize, elmCount, fp);
 	}
+
 	void File::Seek(SeekOrigin origin, int offset)
 	{
 		if (!fp) XLI_THROW_STREAM_CLOSED;

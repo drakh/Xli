@@ -1,6 +1,7 @@
 #include <Xli/NativeFileSystem.h>
 #include <Xli/File.h>
 #include <Xli/Random.h>
+#include <Xli/Unicode.h>
 #include <Xli/Win32Header.h>
 #include <Xli/Win32Helpers.h>
 #include <ShlObj.h>
@@ -29,33 +30,33 @@ namespace Xli
 		{
 			Random rand(GetTickCount());
 			static const char* cs = "-_1234567890abcdefghijklmnopqrstuvwxyz";
-			int cl = strlen(cs);
+			int cl = (int)strlen(cs);
 
-			TCHAR pre[] = 
+			WCHAR preW[] = 
 			{
-				(TCHAR)(cs[rand.NextInt(cl)]),
-				(TCHAR)(cs[rand.NextInt(cl)]),
-				(TCHAR)(cs[rand.NextInt(cl)]),
+				(WCHAR)(cs[rand.NextInt(cl)]),
+				(WCHAR)(cs[rand.NextInt(cl)]),
+				(WCHAR)(cs[rand.NextInt(cl)]),
 				0
 			};
 
-			TCHAR path[MAX_PATH];
-			TCHAR fn[MAX_PATH];
-			GetTempPath(MAX_PATH, path);
-			GetTempFileName(path, pre, 0, fn);
+			WCHAR pathW[MAX_PATH];
+			WCHAR fnW[MAX_PATH];
+			GetTempPathW(MAX_PATH, pathW);
+			GetTempFileNameW(pathW, preW, 0, fnW);
 
-			return (const TCHAR*)fn;
+			return Unicode::Utf16To8(fnW);
 		}
 
 		static String GetKnownDirectory(REFKNOWNFOLDERID rfid)
 		{
 			String result = ".";
-			PWSTR pszPath;
+			PWSTR pszPathW;
 
-			if (::SHGetKnownFolderPath(rfid, KF_FLAG_NO_ALIAS, 0, &pszPath) == S_OK)
+			if (::SHGetKnownFolderPath(rfid, KF_FLAG_NO_ALIAS, 0, &pszPathW) == S_OK)
 			{
-				result = (Utf16Char*)pszPath;
-				CoTaskMemFree(pszPath);
+				result = Unicode::Utf16To8(pszPathW);
+				CoTaskMemFree(pszPathW);
 			}
 
 			for (int i = 0; i < result.Length(); i++)
@@ -85,20 +86,21 @@ namespace Xli
 
 		virtual String GetCurrentDirectory()
 		{
-			WCHAR buf[4096];
-			::GetCurrentDirectoryW(4096, buf);
+			WCHAR bufW[4096];
+			::GetCurrentDirectoryW(4096, bufW);
 
-			for (int i = 0; buf[i]; i++)
+			for (int i = 0; bufW[i]; i++)
 			{
-				if (buf[i] == '\\') buf[i] = '/';
+				if (bufW[i] == '\\') bufW[i] = '/';
 			}
 
-			return (Utf16Char*)buf;
+			return Unicode::Utf16To8(bufW);
 		}
 
 		virtual void ChangeDirectory(const String& dir) 
 		{
-			::SetCurrentDirectoryW((LPCWSTR)dir.Data());
+			Utf16String dirW = Unicode::Utf8To16(dir);
+			::SetCurrentDirectoryW(dirW.Data());
 		}
 
 		virtual void CreateDirectory(const String& path)
@@ -106,7 +108,9 @@ namespace Xli
 			// silent ignore on disk roots
 			if (path.EndsWith(":")) return;
 
-			if (!CreateDirectoryW((LPCWSTR)path.Data(), 0))
+			Utf16String pathW = Unicode::Utf8To16(path);
+
+			if (!CreateDirectoryW(pathW.Data(), 0))
 			{
 				DWORD err = GetLastError();
 				switch (err)
@@ -122,7 +126,9 @@ namespace Xli
 
 		virtual void DeleteDirectory(const String& name)
 		{ 
-			if (!RemoveDirectoryW((LPCWSTR)name.Data()))
+			Utf16String nameW = Unicode::Utf8To16(name);
+
+			if (!RemoveDirectoryW(nameW.Data()))
 			{
 				XLI_THROW("Unable to delete directory '" + name + "': " + Win32Helpers::GetLastErrorString());
 			}
@@ -130,7 +136,9 @@ namespace Xli
 
 		virtual void DeleteFile(const String& name)
 		{ 
-			if (!DeleteFileW((LPCWSTR)name.Data()))
+			Utf16String nameW = Unicode::Utf8To16(name);
+
+			if (!DeleteFileW(nameW.Data()))
 			{
 				XLI_THROW("Unable to delete file '" + name + "': " + Win32Helpers::GetLastErrorString());
 			}
@@ -138,15 +146,21 @@ namespace Xli
 
 		virtual void MoveDirectory(const String& oldName, const String& newName)
 		{ 
-			if (!MoveFileW((LPCWSTR)oldName.Data(), (LPCWSTR)newName.Data()))
+			Utf16String oldNameW = Unicode::Utf8To16(oldName);
+			Utf16String newNameW = Unicode::Utf8To16(newName);
+
+			if (!MoveFileW(oldNameW.Data(), newNameW.Data()))
 			{
 				XLI_THROW("Unable to move directory '" + oldName + "' to '" + newName + "': " + Win32Helpers::GetLastErrorString());
 			}			
 		}
 		
 		virtual void MoveFile(const String& oldName, const String& newName)
-		{ 
-			if (!MoveFileW((LPCWSTR)oldName.Data(), (LPCWSTR)newName.Data()))
+		{
+			Utf16String oldNameW = Unicode::Utf8To16(oldName);
+			Utf16String newNameW = Unicode::Utf8To16(newName);
+
+			if (!MoveFileW(oldNameW.Data(), newNameW.Data()))
 			{
 				XLI_THROW("Unable to move file '" + oldName + "' to '" + newName + "': " + Win32Helpers::GetLastErrorString());
 			}
@@ -154,15 +168,19 @@ namespace Xli
 
 		virtual bool FileExists(const String& path)
 		{
+			Utf16String pathW = Unicode::Utf8To16(path);
+
 			WIN32_FILE_ATTRIBUTE_DATA data;
-			return GetFileAttributesExW((LPCWSTR)path.Data(), GetFileExInfoStandard, &data) == TRUE;
+			return GetFileAttributesExW(pathW.Data(), GetFileExInfoStandard, &data) == TRUE;
 		}
 
 		virtual FileInfo GetFileInfo(const String& path)
 		{
+			Utf16String pathW = Unicode::Utf8To16(path);
+
 			WIN32_FILE_ATTRIBUTE_DATA data;
 
-			if (GetFileAttributesEx((LPCWSTR)path.Data(), GetFileExInfoStandard, &data))
+			if (GetFileAttributesEx(pathW.Data(), GetFileExInfoStandard, &data))
 			{
 				FileInfo info;
 				info.Name = path;
@@ -182,23 +200,21 @@ namespace Xli
 
 		virtual void GetFiles(const String& path, Array<FileInfo>& list)
 		{
-			WIN32_FIND_DATA findData;
-			String filter;
-			if (path.Length())
-			{
-				if (path.Last() == '/') filter = path + "*";
-				else filter = path + "/*";
-			}
-			else filter = "*";
+			String filter = path.Length() ? 
+				path + (path.Last() == '/' ? "*" : "/*") :
+				"*";
 
-			HANDLE h = FindFirstFile((LPCWSTR)filter.Data(), &findData);
+			Utf16String filterW = Unicode::Utf8To16(filter);
+
+			WIN32_FIND_DATA findData;
+			HANDLE h = FindFirstFile((LPCWSTR)filterW.Data(), &findData);
 
 			if (h != INVALID_HANDLE_VALUE)
 			{
 				do
 				{
 					FileInfo info;
-					info.Name = findData.cFileName;
+					info.Name = Unicode::Utf16To8(findData.cFileName);
 
 					if (info.Name == "." || info.Name == "..")
 					{

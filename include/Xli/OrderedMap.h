@@ -10,7 +10,7 @@ namespace Xli
 
 		HashMap clone which preserves the order of the keys. This implementation has slower look up than HashMap and is not meant to be used in performance critical code.
 	*/
-	template <typename TKey, typename TValue, uint TBufSize = 4> class OrderedMap: public Object
+	template <typename TKey, typename TValue, int TBufSize = 4> class OrderedMap: public Object
 	{
 		Array<TKey, TBufSize> keys;
 		Array<TValue, TBufSize> values;

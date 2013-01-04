@@ -119,9 +119,9 @@ namespace Xli
 	class FormatInfo
 	{
 	public:
-		static uint ComponentCount(Format format);
+		static int ComponentCount(Format format);
 		static const char* ToString(Format format);
-		static uint SizeOf(Format format);
+		static int SizeOf(Format format);
 	};
 }
 

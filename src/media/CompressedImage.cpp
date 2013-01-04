@@ -36,7 +36,7 @@ namespace Xli
 		XLI_THROW_NOT_SUPPORTED(__FUNCTION__);
 	}
 
-	unsigned int CompressedImage::GetSizeInBytes() const
+	int CompressedImage::GetSizeInBytes() const
 	{
 		return data->GetSizeInBytes();
 	}

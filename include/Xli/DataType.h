@@ -31,7 +31,7 @@ namespace Xli
 	class DataTypeInfo
 	{
 	public:
-		static unsigned int SizeOf(DataType dt);
+		static int SizeOf(DataType dt);
 		static bool IsSigned(DataType dt);
 		static const char* ToString(DataType dt);
 	};

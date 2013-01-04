@@ -25,7 +25,7 @@ namespace Xli
 		virtual Format GetFormat() const;
 		virtual Bitmap* ToBitmap();
 
-		virtual unsigned int GetSizeInBytes() const;
+		virtual int GetSizeInBytes() const;
 		virtual const UInt8* GetData() const;
 	};
 }

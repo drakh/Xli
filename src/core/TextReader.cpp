@@ -1,6 +1,5 @@
 #include <Xli/TextReader.h>
 #include <Xli/File.h>
-#include <Xli/Unicode.h>
 
 namespace Xli
 {
@@ -8,18 +7,18 @@ namespace Xli
 	{
 	}
 
-	CharString TextReader::ReadRaw(int len)
+	String TextReader::Read(int len)
 	{
-		CharString s = CharString::Create(len);
+		String s = String::Create(len);
 		stream->ReadSafe(s.Data(), 1, len);
 		return s;
 	}
 
-	CharString TextReader::ReadAllRaw()
+	String TextReader::ReadAll()
 	{
 		if (stream->CanSeek())
 		{
-			return ReadRaw(stream->GetLength());
+			return Read(stream->GetLength());
 		}
 		
 		Array<char> str;
@@ -32,12 +31,7 @@ namespace Xli
 			str.Add(buf, len);
 		}
 		
-		return CharString(str.Data(), str.Length());
-	}
-
-	Utf16String TextReader::ReadAll()
-	{
-		return Unicode::Utf8To16(ReadAllRaw());
+		return String(str.Data(), str.Length());
 	}
 
 	char TextReader::ReadChar()
@@ -47,7 +41,7 @@ namespace Xli
 		return c;
 	}
 
-	CharString TextReader::ReadToRaw(char terminal)
+	String TextReader::ReadTo(char terminal)
 	{
 		Array<char> s;
 		char c;
@@ -58,17 +52,12 @@ namespace Xli
 			if (c == terminal) break;
 		}
 
-		return CharString(s.Data(), s.Length());
+		return String(s.Data(), s.Length());
 	}
 
-	CharString TextReader::ReadLineRaw()
+	String TextReader::ReadLine()
 	{
-		return ReadToRaw('\n');
-	}
-
-	Utf16String TextReader::ReadLine()
-	{
-		return Unicode::Utf8To16(ReadLineRaw());
+		return ReadTo('\n');
 	}
 
 	bool TextReader::AtEndOfFile()

@@ -113,7 +113,7 @@ namespace Xli
 		}
 	}
 
-	uint FormatInfo::SizeOf(Format format)
+	int FormatInfo::SizeOf(Format format)
 	{
 		switch (format)
 		{
@@ -192,7 +192,7 @@ namespace Xli
 		}
 	}
 
-	uint FormatInfo::ComponentCount(Format format)
+	int FormatInfo::ComponentCount(Format format)
 	{
 		switch (format)
 		{

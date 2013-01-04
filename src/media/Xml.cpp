@@ -1,5 +1,4 @@
 #include <Xli/Console.h>
-#include <Xli/Unicode.h>
 #include <XliMedia/Xml.h>
 #include <tinyxml.h>
 
@@ -33,11 +32,11 @@ namespace Xli
 	static XmlElement* ToXmlElement(TiXmlElement* root)
 	{
 		XmlElement* elm = new XmlElement();
-		elm->Name = Unicode::Utf8To16(root->Value());
+		elm->Name = root->Value();
 
 		for (TiXmlAttribute* attr = root->FirstAttribute(); attr; attr = attr->Next())
 		{
-			elm->Attributes.Add(Unicode::Utf8To16(attr->Name()), Unicode::Utf8To16(attr->Value()));
+			elm->Attributes.Add(attr->Name(), attr->Value());
 		}
 
 		for (TiXmlNode* node = root->FirstChild(); node; node = node->NextSibling())
@@ -48,8 +47,10 @@ namespace Xli
 				{
 					TiXmlText* textNode = node->ToText();
 					XmlText* text = new XmlText();
+					
 					const char* cstr = textNode->Value();
 					Array<char> strb;
+					
 					while (*cstr)
 					{
 						// UTF8 non-breaking space
@@ -66,7 +67,7 @@ namespace Xli
 						cstr++;
 					}
 
-					text->Value = Unicode::Utf8To16(strb.Data());
+					text->Value = strb.Data();
 					elm->Children.Add(text);
 				}
 				break;
@@ -83,7 +84,7 @@ namespace Xli
 		return elm;
 	}
 
-	XmlElement* Xml::Parse(const CharString& code)
+	XmlElement* Xml::Parse(const String& code)
 	{
 		TiXmlDocument doc;
 		doc.SetCondenseWhiteSpace(false); // TiXml has buggy whitespace condensing

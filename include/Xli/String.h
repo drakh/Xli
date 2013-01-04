@@ -1,98 +1,146 @@
-#ifndef __XLI_STRING_H__
-#define __XLI_STRING_H__
+#ifndef __XLI_STRING_DECL_H__
+#define __XLI_STRING_DECL_H__
 
-#include <Xli/Exception.h>
-#include <Xli/Array.h>
+#include <Xli/BaseTypes.h>
+
+#include <stdio.h>
+#include <stdarg.h>
+#include <ctype.h>
+#include <string.h>
 
 namespace Xli
 {
-	template <typename T, uint TBufSize> int Stringt<T, TBufSize>::LastIndexOf(T c, int start) const
+	/**
+		\ingroup Core
+	*/
+	class String
 	{
-#ifdef XLI_RANGE_CHECK
-		if (start >= length)
-		{
-			XLI_THROW_INDEX_OUT_OF_BOUNDS;
-		}
-#endif
-		for (int i = start; i >= 0; i--)
-		{
-			if (data[i] == c) return i;
-		}
-		return -1;
-	}
+		friend class Unicode;
+		static const int BufSize = 8;
 
-	template <typename T, uint TBufSize> T& Stringt<T, TBufSize>::Get(int index)
-	{
-#ifdef XLI_RANGE_CHECK
-		if ((uint)index >= length)
-		{
-			XLI_THROW_INDEX_OUT_OF_BOUNDS;
-		}
-#endif
-		return data[index];
-	}
+		char* data;
+		char buf[BufSize];
+		int length;
 
-	template <typename T, uint TBufSize> const T& Stringt<T, TBufSize>::Get(int index) const
-	{
-#ifdef XLI_RANGE_CHECK
-		if ((uint)index >= length)
-		{
-			XLI_THROW_INDEX_OUT_OF_BOUNDS;
-		}
-#endif
-		return data[index];
-	}
+		void initLength(int len);
+		void init(const char* str, int len);
+		void init(int i);
+		void init(float f);
+		void init(double d);
+		void init(bool b);
+		void deinit();
 
-	template <typename T, uint TBufSize> Stringt<T, TBufSize> Stringt<T, TBufSize>::SubString(int start, int len) const
-	{
-#ifdef XLI_RANGE_CHECK
-		if (start + len > (int)length || start < 0)
-		{
-			XLI_THROW_INDEX_OUT_OF_BOUNDS;
-		}
-#endif
-		return Stringt(data + start, len);
-	}
+	public:
+		String();
+		String(const String& copy);
+		String(const char* str);
+		String(const char* str, int len);
+		String(char c);
+		String(int i);
+		String(float f);
+		String(double d);
+		~String();
 
-	template <typename T, uint TBufSize> void Stringt<T, TBufSize>::Split(T c, Array<Stringt<T, TBufSize> >& parts) const
-	{
-		uint start = 0;
+		char* DataCopy();
 
-		for (uint i = 0; i < length; i++)
-		{
-			if (data[i] == c)
-			{
-				parts.Add(SubString(start, i-start));
-				start = i+1;
-			}
-		}
+		char* Data();
+		const char* Data() const;
 
-		if (start < length)
-		{
-			parts.Add(SubString(start, length-start));
-		}
-	}
+		int Length() const;
+		UInt32 Hash() const;
 
-	template <typename T, uint TBufSize> Stringt<T, TBufSize> Stringt<T, TBufSize>::Join(T c, const Array<Stringt<T, TBufSize> >& list)
-	{
-		Stringt r;
-		r.length = -1;
-		for (int i = 0; i < list.Length(); i++) r.length += list[i].Length() + 1;
-		if (r.length == -1) return Stringt();
+		char& Get(int index);
+		const char& Get(int index) const;
 
-		r.data = new T[r.length+1];
-		int p = 0;
+		char& operator [] (int index);
+		const char& operator [] (int index) const;
 
-		for (int i = 0; i < list.Length(); i++)
-		{
-			StringTools::Copy(r.data+p, list[i].Data(), list[i].Length());
-			p += list[i].Length();
-			r.data[p++] = c;
-		}
+		const char& First() const;
+		const char& Last() const;
 
-		r.data[r.length] = 0;
-		return r;
-	}
+		int IndexOf(char c, int start) const;
+		int IndexOf(char c) const;
+
+		int LastIndexOf(char c, int start) const;
+		int LastIndexOf(char c) const;
+
+		String Substring(int start, int len) const;
+		String Substring(int start) const ;
+
+		String Trim() const;
+		String Trim(char c) const;
+
+		String ToLower() const;
+		String ToUpper() const;
+
+		void Split(char c, Array<String>& parts) const;
+		static String Join(char c, const Array<String>& list);
+
+		bool StartsWith(const String& str) const;
+		bool EndsWith(const String& str) const;
+
+		static String Create(int length);
+		static String HexFromInt(int h);
+		static String FromBool(bool b);
+		
+		static String Format(const char* format, va_list argList);
+		static String Format(const char* format, ...);
+
+		int HexToInt() const;
+		int ToInt() const;
+		float ToFloat() const;
+		double ToDouble() const;
+		bool ToBool() const;
+
+		bool Equals(const char* str, int len) const;
+		bool Equals(const char* str) const;
+		bool Equals(const String& str) const;
+
+		int CompareTo(const char* str, int len) const;
+		int CompareTo(const char* str) const;
+		int CompareTo(const String& str) const;
+
+		String Add(const char* str, int len) const;
+		String Add(const char* str) const;
+		String Add(const String& str) const;
+
+		bool operator == (const String& str) const;
+		bool operator == (const char* str) const;
+
+		bool operator != (const String& str) const;
+		bool operator != (const char* str) const;
+
+		String operator + (const String& str) const;
+		String operator + (const char* str) const;
+
+		bool operator < (const String& str) const;
+		bool operator < (const char* str) const;
+
+		bool operator <= (const String& str) const;
+		bool operator <= (const char* str) const;
+
+		bool operator > (const String& str) const;
+		bool operator > (const char* str) const;
+
+		bool operator >= (const String& str) const;
+		bool operator >= (const char* str) const;
+
+		String& operator = (const String& str);
+		String& operator = (const char* str);
+		String& operator = (char c);
+		String& operator = (int i);
+		String& operator = (float f);
+		String& operator = (double d);
+	};
 }
+
+/**
+	\addtogroup Core
+	@{
+*/
+
+Xli::String operator + (const char* a, const Xli::String& b);
+
+/** @} */
 
 #endif

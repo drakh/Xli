@@ -2,6 +2,7 @@
 #include <Xli/Window.h>
 #include <Xli/Win32Helpers.h>
 #include <Xli/Win32Header.h>
+#include <Xli/Unicode.h>
 
 namespace Xli
 {
@@ -34,7 +35,9 @@ namespace Xli
 		if (hints & DialogHintButton2Default) type |= MB_DEFBUTTON2;
 		if (hints & DialogHintButton3Default) type |= MB_DEFBUTTON3;
 
-		int result = MessageBoxW(hWnd, (LPCWSTR)message.Data(), (LPCWSTR)caption.Data(), type);
+		Utf16String messageW = Unicode::Utf8To16(message);
+		Utf16String captionW = Unicode::Utf8To16(caption);
+		int result = MessageBoxW(hWnd, messageW.Data(), captionW.Data(), type);
 
 		switch (result)
 		{

@@ -50,7 +50,6 @@
 #   define XLI_DEBUG_BREAK __debugbreak()
 # endif
 #else
-# define fopen_s(fpp, filename, mode) do { *fpp = fopen(filename, mode); } while(0)
 # define sscanf_s(str, ...) sscanf(str, __VA_ARGS__)
 # define sprintf_s(buf, bufSize, format, ...) sprintf(buf, format, __VA_ARGS__)
 # define vsnprintf_s(buf, bufSize, maxCount, format, argList) vsprintf(buf, format, argList)

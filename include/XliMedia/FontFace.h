@@ -25,10 +25,10 @@ namespace Xli
 	class FontFace: public Object
 	{
 	public:
-		virtual Vector2 GetAdvance(Utf32Char c) = 0;
-		virtual Vector2 GetKerning(Utf32Char left, Utf32Char right) = 0;
-		virtual Vector2i GetBearing(Utf32Char c) = 0;
-		virtual Bitmap* RenderGlyph(Utf32Char c, FontRenderMode mode) = 0;
+		virtual Vector2 GetAdvance(UInt32 c) = 0;
+		virtual Vector2 GetKerning(UInt32 left, UInt32 right) = 0;
+		virtual Vector2i GetBearing(UInt32 c) = 0;
+		virtual Bitmap* RenderGlyph(UInt32 c, FontRenderMode mode) = 0;
 
 		virtual String GetFamilyName() = 0;
 		virtual String GetStyleName() = 0;

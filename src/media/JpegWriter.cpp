@@ -54,7 +54,7 @@ namespace Xli
 			ClientData* cd = reinterpret_cast<ClientData*>(cinfo->client_data);
 			struct jpeg_destination_mgr *jdest = cinfo->dest;
 
-			int d = BufSize - jdest->free_in_buffer;
+			int d = BufSize - (int)jdest->free_in_buffer;
 			if (d) cd->File->Write(cd->Buf, 1, d);
 
 			cd->File->Flush();

@@ -37,7 +37,7 @@ namespace Xli
 		// wait for DATA chunk
 		while (f->GetPosition() < totalLength)
 		{
-			CharString tag = r.ReadCStr(4);
+			String tag = r.ReadCStr(4);
 			int length = r.ReadInt32();
 			if (tag == "data") return AudioStream::Create(f, dataType, channels, sampleRate);
 			f->Seek(SeekOriginCurrent, length);

@@ -1,4 +1,3 @@
-#include <Xli/Unicode.h>
 #include <Xli/BinaryReader.h>
 
 namespace Xli
@@ -16,16 +15,16 @@ namespace Xli
 		stream->ReadSafe(dst, elmSize, elmCount);
 	}
 
-	CharString BinaryReader::ReadCStr(int len)
+	String BinaryReader::ReadCStr(int len)
 	{
-		CharString str = CharString::Create(len);
+		String str = String::Create(len);
 		stream->ReadSafe((void*)str.Data(), 1, len);
 		return str;
 	}
 
-	Utf16String BinaryReader::ReadString()
+	String BinaryReader::ReadString()
 	{
-		return Xli::Unicode::Utf8To16(ReadCStr(Read7BitEncodedInt()));
+		return ReadCStr(Read7BitEncodedInt());
 	}
 
 	Buffer* BinaryReader::ReadAll()
@@ -52,6 +51,4 @@ namespace Xli
 		
 		return count;
 	}
-
-
 }

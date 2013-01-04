@@ -87,8 +87,7 @@ namespace Xli
 	Value::Value(Int64 v): Managed<IValue>(new Int64Value(v)) {}
 	Value::Value(float f): Managed<IValue>(new DoubleValue(f)) {}
 	Value::Value(double d): Managed<IValue>(new DoubleValue(d)) {}
-	Value::Value(const CharString& s): Managed<IValue>(new StringValue(s)) {}
-	Value::Value(const Utf16String& s): Managed<IValue>(new StringValue(s)) {}
+	Value::Value(const String& s): Managed<IValue>(new StringValue(s)) {}
 	Value::Value(const char* s): Managed<IValue>(new StringValue(String(s))) {}
 	Value::Value(IValue* v): Managed<IValue>(v) {}
 

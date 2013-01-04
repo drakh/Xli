@@ -184,7 +184,7 @@ namespace Xli
 	FileInfo SubFileSystem::GetFileInfo(const String& path)
 	{
 		FileInfo info = fs->GetFileInfo(this->path + path);
-		info.Name = info.Name.SubString(this->path.Length(), info.Name.Length() - this->path.Length());
+		info.Name = info.Name.Substring(this->path.Length(), info.Name.Length() - this->path.Length());
 		return info;
 	}
 
@@ -194,7 +194,7 @@ namespace Xli
 		fs->GetFiles(this->path + path, list);
 		for (int i = s; i < list.Length(); i++)
 		{
-			list[i].Name = list[i].Name.SubString(this->path.Length(), list[i].Name.Length() - this->path.Length());
+			list[i].Name = list[i].Name.Substring(this->path.Length(), list[i].Name.Length() - this->path.Length());
 		}
 	}
 

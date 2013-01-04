@@ -13,11 +13,11 @@ namespace Xli
 		int fontSize;
 		FT_Face face;
 		int ascender, descender;
-		Utf32Char activeGlyph;
+		UInt32 activeGlyph;
 		FontRenderMode activeMode;
 		Managed<Buffer> buf;
 
-		void setActiveGlyph(Utf32Char c, FontRenderMode mode)
+		void setActiveGlyph(UInt32 c, FontRenderMode mode)
 		{
 			if (activeGlyph != c || mode != activeMode)
 			{
@@ -79,13 +79,13 @@ namespace Xli
 			return face->style_name;
 		}
 
-		virtual Vector2i GetBearing(Utf32Char character)
+		virtual Vector2i GetBearing(UInt32 character)
 		{
 			setActiveGlyph(character, activeMode);
 			return Vector2i(face->glyph->bitmap_left, -face->glyph->bitmap_top);
 		}
 
-		virtual Bitmap* RenderGlyph(Utf32Char character, FontRenderMode mode)
+		virtual Bitmap* RenderGlyph(UInt32 character, FontRenderMode mode)
 		{
 			setActiveGlyph(character, mode);
 
@@ -111,14 +111,14 @@ namespace Xli
 			return bmp;
 		}
 
-		virtual Vector2 GetKerning(Utf32Char left, Utf32Char right)
+		virtual Vector2 GetKerning(UInt32 left, UInt32 right)
 		{
 			FT_Vector kerning;
 			FT_Get_Kerning(face, FT_Get_Char_Index(face, left), FT_Get_Char_Index(face, right), FT_KERNING_DEFAULT, &kerning);
 			return Vector2((float)kerning.x / 64.0f, (float)kerning.y / 64.0f);
 		}
 
-		virtual Vector2 GetAdvance(Utf32Char character)
+		virtual Vector2 GetAdvance(UInt32 character)
 		{
 			setActiveGlyph(character, activeMode);
 			return Vector2((float)face->glyph->advance.x / 64.0f, (float)face->glyph->advance.y / 64.0f);

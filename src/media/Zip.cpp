@@ -85,8 +85,7 @@ namespace Xli
 		{
 			if (fileMode != FileModeRead) XLI_THROW("Invalid FileMode; Zip is Read-Only");
 
-			CharString ascii(fileName);
-			if (unzLocateFile((unzFile)handle, ascii.Data(), 2) != UNZ_OK) XLI_THROW(String("Couldn't locate file in zip-archive: ") + fileName);
+			if (unzLocateFile((unzFile)handle, fileName.Data(), 2) != UNZ_OK) XLI_THROW(String("Couldn't locate file in zip-archive: ") + fileName);
 			if (unzOpenCurrentFile((unzFile)handle) != UNZ_OK) XLI_THROW(String("Couldn't open file in zip-archive: ") + fileName);
 
 			unz_file_info unzFileInfo;

@@ -37,7 +37,7 @@ int main(int argc, char** argv)
 /*
 #ifdef XLI_PLATFORM_IOS
         {
-            Xli::CharString cs = Xli::DateTime(Xli::GetTimestamp()).ToString() + ": " + e.GetMessage() + " - thrown by " + e.GetFunction() + ":" + e.GetLine();
+            Xli::String cs = Xli::DateTime(Xli::GetTimestamp()).ToString() + ": " + e.GetMessage() + " - thrown by " + e.GetFunction() + ":" + e.GetLine();
             Xli::Managed<Xli::Stream> f = Xli::Disk->OpenFile(Xli::Disk->GetLocalAppDataDirectory() + "/error.log", Xli::FileModeAppend);
             f->Write(cs.Data(), 1, cs.Length());
             f->Write("\n\n", 1, 2);

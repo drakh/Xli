@@ -79,11 +79,11 @@ namespace Xli
 	class Xml
 	{
 	public:
-		static XmlElement* Parse(const CharString& code);
+		static XmlElement* Parse(const String& code);
 
 		inline static XmlElement* Load(Stream* stream)
 		{
-			return Parse(TextReader(stream).ReadAllRaw());
+			return Parse(TextReader(stream).ReadAll());
 		}
 
 		inline static XmlElement* Load(const String& fileName)

@@ -17,13 +17,13 @@ namespace Xli
 			Formats a string to be outputted to a JSON document.
 			Converts to Utf8, adds quotes and escapes special characters.
 		*/
-		static CharString FormatString(const String& str);
+		static String ToStringLiteral(const String& str);
 
-		static Value Parse(const CharString& code, bool preserveOrder = false);
+		static Value Parse(const String& code, bool preserveOrder = false);
 
 		inline static Value Load(Stream* stream, bool preserveOrder = false)
 		{
-			return Parse(TextReader(stream).ReadAllRaw(), preserveOrder);
+			return Parse(TextReader(stream).ReadAll(), preserveOrder);
 		}
 
 		inline static Value Load(const String& fileName, bool preserveOrder = false)
@@ -40,7 +40,7 @@ namespace Xli
 			Save(&f, value);
 		}
 
-		static CharString ToStringRaw(const Value& value);
+		static String Stringify(const Value& value);
 	};
 }
 

@@ -62,7 +62,7 @@ namespace Xli
 		void Clear();
 		void Blit(Bitmap* src, Recti srcRect, Vector2i dstPos);
 
-		virtual unsigned int GetSizeInBytes() const;
+		virtual int GetSizeInBytes() const;
 		
 		UInt8* GetData();
 		virtual const UInt8* GetData() const;

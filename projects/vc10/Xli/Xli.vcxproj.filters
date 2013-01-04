@@ -42,341 +42,362 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\Xli\Hash.h">
+    <ClInclude Include="..\..\..\include\Xli\Hash.h">
       <Filter>Xli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Math.h">
+    <ClInclude Include="..\..\..\include\Xli\Math.h">
       <Filter>Xli\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Matrix3.h">
+    <ClInclude Include="..\..\..\include\Xli\Matrix3.h">
       <Filter>Xli\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Matrix4.h">
+    <ClInclude Include="..\..\..\include\Xli\Matrix4.h">
       <Filter>Xli\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Quaternion.h">
+    <ClInclude Include="..\..\..\include\Xli\Quaternion.h">
       <Filter>Xli\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Random.h">
+    <ClInclude Include="..\..\..\include\Xli\Random.h">
       <Filter>Xli\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Rectangle.h">
+    <ClInclude Include="..\..\..\include\Xli\Rectangle.h">
       <Filter>Xli\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Vector2.h">
+    <ClInclude Include="..\..\..\include\Xli\Vector2.h">
       <Filter>Xli\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Vector3.h">
+    <ClInclude Include="..\..\..\include\Xli\Vector3.h">
       <Filter>Xli\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Vector4.h">
+    <ClInclude Include="..\..\..\include\Xli\Vector4.h">
       <Filter>Xli\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Array.h">
+    <ClInclude Include="..\..\..\include\Xli\Array.h">
       <Filter>Xli\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\HashMap.h">
+    <ClInclude Include="..\..\..\include\Xli\HashMap.h">
       <Filter>Xli\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Managed.h">
+    <ClInclude Include="..\..\..\include\Xli\Managed.h">
       <Filter>Xli\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Queue.h">
+    <ClInclude Include="..\..\..\include\Xli\Queue.h">
       <Filter>Xli\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli.h" />
-    <ClInclude Include="..\..\src\core\3rdparty\ConvertUTF.h">
+    <ClInclude Include="..\..\..\include\Xli.h" />
+    <ClInclude Include="..\..\..\src\core\3rdparty\ConvertUTF.h">
       <Filter>3rdparty</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\DataType.h">
+    <ClInclude Include="..\..\..\include\Xli\DataType.h">
       <Filter>Xli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\BaseTypes.h">
+    <ClInclude Include="..\..\..\include\Xli\BaseTypes.h">
       <Filter>Xli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Object.h">
+    <ClInclude Include="..\..\..\include\Xli\Object.h">
       <Filter>Xli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Config.h">
+    <ClInclude Include="..\..\..\include\Xli\Config.h">
       <Filter>Xli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Exception.h">
+    <ClInclude Include="..\..\..\include\Xli\Exception.h">
       <Filter>Xli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Path.h">
+    <ClInclude Include="..\..\..\include\Xli\Path.h">
       <Filter>Xli\IO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Utils.h">
+    <ClInclude Include="..\..\..\include\Xli\Utils.h">
       <Filter>Xli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Buffer.h">
+    <ClInclude Include="..\..\..\include\Xli\Buffer.h">
       <Filter>Xli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\DateTime.h">
+    <ClInclude Include="..\..\..\include\Xli\DateTime.h">
       <Filter>Xli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\FileSystem.h">
+    <ClInclude Include="..\..\..\include\Xli\FileSystem.h">
       <Filter>Xli\IO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\File.h">
+    <ClInclude Include="..\..\..\include\Xli\File.h">
       <Filter>Xli\IO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Text.h">
+    <ClInclude Include="..\..\..\include\Xli\Text.h">
       <Filter>Xli\IO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\OrderedMap.h">
+    <ClInclude Include="..\..\..\include\Xli\OrderedMap.h">
       <Filter>Xli\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Sort.h">
+    <ClInclude Include="..\..\..\include\Xli\Sort.h">
       <Filter>Xli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\core\posix\PosixFileSystemBase.h">
+    <ClInclude Include="..\..\..\src\core\posix\PosixFileSystemBase.h">
       <Filter>Xli\Platform\posix</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\core\sdl2\SDL2FileSystem.h">
+    <ClInclude Include="..\..\..\src\core\sdl2\SDL2FileSystem.h">
       <Filter>Xli\Platform\sdl2</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Dialogs.h">
+    <ClInclude Include="..\..\..\include\Xli\Dialogs.h">
       <Filter>Xli\Platform</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Display.h">
+    <ClInclude Include="..\..\..\include\Xli\Display.h">
       <Filter>Xli\Platform</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\MessageBox.h">
+    <ClInclude Include="..\..\..\include\Xli\MessageBox.h">
       <Filter>Xli\Platform</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Mutex.h">
+    <ClInclude Include="..\..\..\include\Xli\Mutex.h">
       <Filter>Xli\Platform</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\NativeFileSystem.h">
+    <ClInclude Include="..\..\..\include\Xli\NativeFileSystem.h">
       <Filter>Xli\Platform</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Thread.h">
+    <ClInclude Include="..\..\..\include\Xli\Thread.h">
       <Filter>Xli\Platform</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Time.h">
+    <ClInclude Include="..\..\..\include\Xli\Time.h">
       <Filter>Xli\Platform</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Window.h">
+    <ClInclude Include="..\..\..\include\Xli\Window.h">
       <Filter>Xli\Platform</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\ConditionVariable.h">
+    <ClInclude Include="..\..\..\include\Xli\ConditionVariable.h">
       <Filter>Xli\Platform</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\SDL2Window.h">
+    <ClInclude Include="..\..\..\include\Xli\SDL2Window.h">
       <Filter>Xli\Platform\sdl2</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Win32Helpers.h">
+    <ClInclude Include="..\..\..\include\Xli\Win32Helpers.h">
       <Filter>Xli\Platform\win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Win32Window.h">
+    <ClInclude Include="..\..\..\include\Xli\Win32Window.h">
       <Filter>Xli\Platform\win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Win32Header.h">
+    <ClInclude Include="..\..\..\include\Xli\Win32Header.h">
       <Filter>Xli\Platform\win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\GLHeaders.h">
+    <ClInclude Include="..\..\..\include\Xli\GLHeaders.h">
       <Filter>Xli\GL</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\GLContext.h">
+    <ClInclude Include="..\..\..\include\Xli\GLContext.h">
       <Filter>Xli\GL</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Console.h">
+    <ClInclude Include="..\..\..\include\Xli\Console.h">
       <Filter>Xli\IO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\TextWriter.h">
+    <ClInclude Include="..\..\..\include\Xli\TextWriter.h">
       <Filter>Xli\IO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\BinaryReader.h">
+    <ClInclude Include="..\..\..\include\Xli\BinaryReader.h">
       <Filter>Xli\IO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\BinaryWriter.h">
+    <ClInclude Include="..\..\..\include\Xli\BinaryWriter.h">
       <Filter>Xli\IO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Stream.h">
+    <ClInclude Include="..\..\..\include\Xli\Stream.h">
       <Filter>Xli\IO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\TextReader.h">
+    <ClInclude Include="..\..\..\include\Xli\TextReader.h">
       <Filter>Xli\IO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\Unicode.h">
+    <ClInclude Include="..\..\..\include\Xli\String.h">
       <Filter>Xli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\String.h">
+    <ClInclude Include="..\..\..\include\Xli\StringBuilder.h">
       <Filter>Xli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Xli\StringBuilder.h">
-      <Filter>Xli</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Xli\StringDecl.h">
-      <Filter>Xli</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Xli\GLCheckError.h">
+    <ClInclude Include="..\..\..\include\Xli\GLCheckError.h">
       <Filter>Xli\GL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Utf16String.h">
+      <Filter>Xli</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\ToString.h">
+      <Filter>Xli</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Unicode.h">
+      <Filter>Xli</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\core\Random.cpp">
+    <ClCompile Include="..\..\..\src\core\Random.cpp">
       <Filter>Xli\Math</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\3rdparty\ConvertUTF.c">
+    <ClCompile Include="..\..\..\src\core\3rdparty\ConvertUTF.c">
       <Filter>3rdparty</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\DataType.cpp">
+    <ClCompile Include="..\..\..\src\core\DataType.cpp">
       <Filter>Xli</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\Path.cpp">
+    <ClCompile Include="..\..\..\src\core\Path.cpp">
       <Filter>Xli\IO</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\Buffer.cpp">
+    <ClCompile Include="..\..\..\src\core\Buffer.cpp">
       <Filter>Xli</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\DateTime.cpp">
+    <ClCompile Include="..\..\..\src\core\DateTime.cpp">
       <Filter>Xli</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\File.cpp">
+    <ClCompile Include="..\..\..\src\core\File.cpp">
       <Filter>Xli\IO</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\FileSystem.cpp">
+    <ClCompile Include="..\..\..\src\core\FileSystem.cpp">
       <Filter>Xli\IO</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\Text.cpp">
+    <ClCompile Include="..\..\..\src\core\Text.cpp">
       <Filter>Xli\IO</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\Thread.cpp">
+    <ClCompile Include="..\..\..\src\core\Thread.cpp">
       <Filter>Xli\Platform</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\Window.cpp">
+    <ClCompile Include="..\..\..\src\core\Window.cpp">
       <Filter>Xli\Platform</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\MessageBox.cpp">
+    <ClCompile Include="..\..\..\src\core\MessageBox.cpp">
       <Filter>Xli\Platform</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\NativeFileSystem.cpp">
+    <ClCompile Include="..\..\..\src\core\NativeFileSystem.cpp">
       <Filter>Xli\Platform</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\win32\Win32MessageBox.cpp">
+    <ClCompile Include="..\..\..\src\core\win32\Win32MessageBox.cpp">
       <Filter>Xli\Platform\win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\win32\Win32Mutex.cpp">
+    <ClCompile Include="..\..\..\src\core\win32\Win32Mutex.cpp">
       <Filter>Xli\Platform\win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\win32\Win32Thread.cpp">
+    <ClCompile Include="..\..\..\src\core\win32\Win32Thread.cpp">
       <Filter>Xli\Platform\win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\win32\Win32Time.cpp">
+    <ClCompile Include="..\..\..\src\core\win32\Win32Time.cpp">
       <Filter>Xli\Platform\win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\win32\Win32Window.cpp">
+    <ClCompile Include="..\..\..\src\core\win32\Win32Window.cpp">
       <Filter>Xli\Platform\win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\win32\Win32Cond.cpp">
+    <ClCompile Include="..\..\..\src\core\win32\Win32Cond.cpp">
       <Filter>Xli\Platform\win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\win32\Win32Dialogs.cpp">
+    <ClCompile Include="..\..\..\src\core\win32\Win32Dialogs.cpp">
       <Filter>Xli\Platform\win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\win32\Win32Display.cpp">
+    <ClCompile Include="..\..\..\src\core\win32\Win32Display.cpp">
       <Filter>Xli\Platform\win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\win32\Win32FileSystem.cpp">
+    <ClCompile Include="..\..\..\src\core\win32\Win32FileSystem.cpp">
       <Filter>Xli\Platform\win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\win32\Win32GLContext.cpp">
+    <ClCompile Include="..\..\..\src\core\win32\Win32GLContext.cpp">
       <Filter>Xli\Platform\win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\win32\Win32Helpers.cpp">
+    <ClCompile Include="..\..\..\src\core\win32\Win32Helpers.cpp">
       <Filter>Xli\Platform\win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\android\AFileSystem.cpp">
+    <ClCompile Include="..\..\..\src\core\android\AFileSystem.cpp">
       <Filter>Xli\Platform\android</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\android\AWindow.cpp">
+    <ClCompile Include="..\..\..\src\core\android\AWindow.cpp">
       <Filter>Xli\Platform\android</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\egl\EGLContext.cpp">
+    <ClCompile Include="..\..\..\src\core\egl\EGLContext.cpp">
       <Filter>Xli\Platform\egl</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\generic\GenericAssetFileSystem.cpp">
+    <ClCompile Include="..\..\..\src\core\generic\GenericAssetFileSystem.cpp">
       <Filter>Xli\Platform\generic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\generic\GenericDialogs.cpp">
+    <ClCompile Include="..\..\..\src\core\generic\GenericDialogs.cpp">
       <Filter>Xli\Platform\generic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\generic\GenericMessageBox.cpp">
+    <ClCompile Include="..\..\..\src\core\generic\GenericMessageBox.cpp">
       <Filter>Xli\Platform\generic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\posix\PosixCond.cpp">
+    <ClCompile Include="..\..\..\src\core\posix\PosixCond.cpp">
       <Filter>Xli\Platform\posix</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\posix\PosixFileSystem.cpp">
+    <ClCompile Include="..\..\..\src\core\posix\PosixFileSystem.cpp">
       <Filter>Xli\Platform\posix</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\posix\PosixMutex.cpp">
+    <ClCompile Include="..\..\..\src\core\posix\PosixMutex.cpp">
       <Filter>Xli\Platform\posix</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\posix\PosixThread.cpp">
+    <ClCompile Include="..\..\..\src\core\posix\PosixThread.cpp">
       <Filter>Xli\Platform\posix</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\posix\PosixTime.cpp">
+    <ClCompile Include="..\..\..\src\core\posix\PosixTime.cpp">
       <Filter>Xli\Platform\posix</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\sdl2\SDL2Cond.cpp">
+    <ClCompile Include="..\..\..\src\core\sdl2\SDL2Cond.cpp">
       <Filter>Xli\Platform\sdl2</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\sdl2\SDL2Display.cpp">
+    <ClCompile Include="..\..\..\src\core\sdl2\SDL2Display.cpp">
       <Filter>Xli\Platform\sdl2</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\sdl2\SDL2FileSystem.cpp">
+    <ClCompile Include="..\..\..\src\core\sdl2\SDL2FileSystem.cpp">
       <Filter>Xli\Platform\sdl2</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\sdl2\SDL2GLContext.cpp">
+    <ClCompile Include="..\..\..\src\core\sdl2\SDL2GLContext.cpp">
       <Filter>Xli\Platform\sdl2</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\sdl2\SDL2Mutex.cpp">
+    <ClCompile Include="..\..\..\src\core\sdl2\SDL2Mutex.cpp">
       <Filter>Xli\Platform\sdl2</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\sdl2\SDL2Thread.cpp">
+    <ClCompile Include="..\..\..\src\core\sdl2\SDL2Thread.cpp">
       <Filter>Xli\Platform\sdl2</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\sdl2\SDL2Time.cpp">
+    <ClCompile Include="..\..\..\src\core\sdl2\SDL2Time.cpp">
       <Filter>Xli\Platform\sdl2</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\sdl2\SDL2Window.cpp">
+    <ClCompile Include="..\..\..\src\core\sdl2\SDL2Window.cpp">
       <Filter>Xli\Platform\sdl2</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\Console.cpp">
+    <ClCompile Include="..\..\..\src\core\Console.cpp">
       <Filter>Xli\IO</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\BinaryReader.cpp">
+    <ClCompile Include="..\..\..\src\core\BinaryReader.cpp">
       <Filter>Xli\IO</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\BinaryWriter.cpp">
+    <ClCompile Include="..\..\..\src\core\BinaryWriter.cpp">
       <Filter>Xli\IO</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\Stream.cpp">
+    <ClCompile Include="..\..\..\src\core\Stream.cpp">
       <Filter>Xli\IO</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\TextReader.cpp">
+    <ClCompile Include="..\..\..\src\core\TextReader.cpp">
       <Filter>Xli\IO</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\TextWriter.cpp">
+    <ClCompile Include="..\..\..\src\core\TextWriter.cpp">
       <Filter>Xli\IO</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\StringTools.cpp">
-      <Filter>Xli</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\core\Unicode.cpp">
-      <Filter>Xli</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\core\GLCheckError.cpp">
+    <ClCompile Include="..\..\..\src\core\GLCheckError.cpp">
       <Filter>Xli\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Matrix4.cpp">
+      <Filter>Xli\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Quaternion.cpp">
+      <Filter>Xli\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Matrix3.cpp">
+      <Filter>Xli\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\String.cpp">
+      <Filter>Xli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Utf16String.cpp">
+      <Filter>Xli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\StringBuilder.cpp">
+      <Filter>Xli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\ToString.cpp">
+      <Filter>Xli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Unicode.cpp">
+      <Filter>Xli</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\core\CMakeLists.txt" />
-    <None Include="..\..\CMakeLists.txt" />
-    <None Include="..\..\src\core\sdl2\SDL2FileSystem_iOS.mm">
+    <None Include="..\..\..\src\core\CMakeLists.txt" />
+    <None Include="..\..\..\CMakeLists.txt" />
+    <None Include="..\..\..\src\core\sdl2\SDL2FileSystem_iOS.mm">
       <Filter>Xli\Platform\sdl2</Filter>
     </None>
   </ItemGroup>

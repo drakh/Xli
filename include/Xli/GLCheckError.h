@@ -11,7 +11,7 @@ namespace Xli
 		@{
 	 */
 
-	CharString GLGetErrorString(GLint err);
+	String GLGetErrorString(GLint err);
 
 	static inline void GLCheckErrorImpl(const char* func, int line)
 	{

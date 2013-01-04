@@ -1,5 +1,6 @@
 #include <Xli/Display.h>
 #include <Xli/Win32Header.h>
+#include <Xli/Array.h>
 
 namespace Xli
 {

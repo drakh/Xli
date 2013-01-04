@@ -78,7 +78,7 @@ namespace Xli
 		{
 			return (const UInt8*)AAsset_getBuffer(asset);
 		}
-		virtual unsigned int GetSizeInBytes() const
+		virtual int GetSizeInBytes() const
 		{
 			return AAsset_getLength(asset);
 		}

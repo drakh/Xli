@@ -10,7 +10,7 @@ namespace Xli
 		{
 			if (path.Get(i) == '/')
 			{
-				return path.SubString(i + 1, path.Length() - i - 1);
+				return path.Substring(i + 1, path.Length() - i - 1);
 			}
 		}
 		return path;
@@ -28,10 +28,10 @@ namespace Xli
 			}
 			else if (path.Get(i) == '/')
 			{
-				return path.SubString(i + 1, extIndex - i - 1);
+				return path.Substring(i + 1, extIndex - i - 1);
 			}
 		}
-		return path.SubString(0, extIndex);
+		return path.Substring(0, extIndex);
 	}
 
 	String Path::GetExtension(const String& path)
@@ -40,7 +40,7 @@ namespace Xli
 		{
 			if (path.Get(i) == '.')
 			{
-				return path.SubString(i, path.Length() - i);
+				return path.Substring(i, path.Length() - i);
 			}
 			else if (path.Get(i) == '/')
 			{
@@ -56,7 +56,7 @@ namespace Xli
 		{
 			if (path.Get(i) == '/')
 			{
-				return path.SubString(0, i > 0 ? i : 1);
+				return path.Substring(0, i > 0 ? i : 1);
 			}
 		}
 		return ".";

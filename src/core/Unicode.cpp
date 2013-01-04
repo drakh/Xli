@@ -1,27 +1,20 @@
 #include <Xli/Unicode.h>
+#include <Xli/Exception.h>
 #include "3rdparty/ConvertUTF.h"
 
 namespace Xli
 {
 	static const ConversionFlags Flags = strictConversion;
 	static const bool ErrorCheck = true;
-	
-	bool Unicode::IsLegalUtf8(const CharString& str)
+
+	Utf16String Unicode::Utf8To16(const char* str, int len)
 	{
-		const UTF8* src_start = (const UTF8*)str.Data();
-		const UTF8* src_end = src_start + str.Length();
+		const UTF8* src_start = (const UTF8*)str;
+		const UTF8* src_end = src_start + len;
 
-		return isLegalUTF8Sequence(src_start, src_end) != 0;
-	}
-
-	Utf16String Unicode::Utf8To16(const CharString& str)
-	{
-		const UTF8* src_start = (const UTF8*)str.Data();
-		const UTF8* src_end = src_start + str.Length();
-
-		Utf16String tmp = Utf16String::Create(str.Length());
-		UTF16* dst_start = (UTF16*)tmp.Data();
-		UTF16* dst_end = dst_start + tmp.Length();
+		Utf16String result = Utf16String::Create(len);
+		UTF16* dst_start = (UTF16*)result.data;
+		UTF16* dst_end = dst_start + result.length;
 
 		ConversionResult res = ConvertUTF8toUTF16(&src_start, src_end, &dst_start, dst_end, Flags);
 
@@ -30,36 +23,31 @@ namespace Xli
 			XLI_THROW("Unicode conversion failed");
 		}
 
-		return tmp.SubString(0, dst_start - (UTF16*)tmp.Data());
+		// adjust length
+		result.length = (int)(dst_start - (UTF16*)result.data);
+		result.data[result.length] = 0;
+
+		return result;
+	}
+	
+	Utf16String Unicode::Utf8To16(const char* str)
+	{
+		return Utf8To16(str, (int)strlen(str));
+	}
+	
+	Utf16String Unicode::Utf8To16(const String& str)
+	{
+		return Utf8To16(str.Data(), str.Length());
 	}
 
-	Utf32String Utf8To32(const CharString& str)
+	String Unicode::Utf16To8(const Utf16* str, int len)
 	{
-		const UTF8* src_start = (const UTF8*)str.Data();
-		const UTF8* src_end = src_start + str.Length();
+		const UTF16* src_start = (const UTF16*)str;
+		const UTF16* src_end = src_start + len;
 
-		Utf32String tmp = Utf32String::Create(str.Length());
-		UTF32* dst_start = (UTF32*)tmp.Data();
-		UTF32* dst_end = dst_start + tmp.Length();
-
-		ConversionResult res = ConvertUTF8toUTF32(&src_start, src_end, &dst_start, dst_end, Flags);
-
-		if (res != conversionOK && ErrorCheck)
-		{
-			XLI_THROW("Unicode conversion failed");
-		}
-
-		return tmp.SubString(0, dst_start - (UTF32*)tmp.Data());
-	}
-
-	CharString Unicode::Utf16To8(const Utf16String& str)
-	{
-		const UTF16* src_start = (const UTF16*)str.Data();
-		const UTF16* src_end = src_start + str.Length();
-
-		CharString tmp = CharString::Create(str.Length()*2);
-		UTF8* dst_start = (UTF8*)tmp.Data();
-		UTF8* dst_end = dst_start + tmp.Length();
+		String result = String::Create(len * 2);
+		UTF8* dst_start = (UTF8*)result.data;
+		UTF8* dst_end = dst_start + result.length;
 
 		ConversionResult res = ConvertUTF16toUTF8(&src_start, src_end, &dst_start, dst_end, Flags);
 
@@ -68,63 +56,20 @@ namespace Xli
 			XLI_THROW("Unicode conversion failed");
 		}
 
-		return tmp.SubString(0, dst_start - (UTF8*)tmp.Data());
+		// adjust length
+		result.length = (int)(dst_start - (UTF8*)result.data);
+		result.data[result.length] = 0;
+
+		return result;
 	}
 
-	Utf32String Unicode::Utf16To32(const Utf16String& str)
+	String Unicode::Utf16To8(const Utf16* str)
 	{
-		const UTF16* src_start = (const UTF16*)str.Data();
-		const UTF16* src_end = src_start + str.Length();
-
-		Utf32String tmp = Utf32String::Create(str.Length());
-		UTF32* dst_start = (UTF32*)tmp.Data();
-		UTF32* dst_end = dst_start + tmp.Length();
-
-		ConversionResult res = ConvertUTF16toUTF32(&src_start, src_end, &dst_start, dst_end, Flags);
-
-		if (res != conversionOK && ErrorCheck)
-		{
-			XLI_THROW("Unicode conversion failed");
-		}
-
-		return tmp.SubString(0, dst_start - (UTF32*)tmp.Data());
+		return Utf16To8(str, Utf16StrLen(str));
 	}
-
-	CharString Unicode::Utf32To8(const Utf32String& str)
+	
+	String Unicode::Utf16To8(const Utf16String& str)
 	{
-		const UTF32* src_start = (const UTF32*)str.Data();
-		const UTF32* src_end = src_start + str.Length();
-
-		CharString tmp = CharString::Create(str.Length()*4);
-		UTF8* dst_start = (UTF8*)tmp.Data();
-		UTF8* dst_end = dst_start + tmp.Length();
-
-		ConversionResult res = ConvertUTF32toUTF8(&src_start, src_end, &dst_start, dst_end, Flags);
-
-		if (res != conversionOK && ErrorCheck)
-		{
-			XLI_THROW("Unicode conversion failed");
-		}
-
-		return tmp.SubString(0, dst_start - (UTF8*)tmp.Data());
-	}
-
-	Utf16String Unicode::Utf32To16(const Utf32String& str)
-	{
-		const UTF32* src_start = (const UTF32*)str.Data();
-		const UTF32* src_end = src_start + str.Length();
-
-		Utf16String tmp = Utf16String::Create(str.Length()*2);
-		UTF16* dst_start = (UTF16*)tmp.Data();
-		UTF16* dst_end = dst_start + tmp.Length();
-
-		ConversionResult res = ConvertUTF32toUTF16(&src_start, src_end, &dst_start, dst_end, Flags);
-
-		if (res != conversionOK && ErrorCheck)
-		{
-			XLI_THROW("Unicode conversion failed");
-		}
-
-		return tmp.SubString(0, dst_start - (UTF16*)tmp.Data());
+		return Utf16To8(str.Data(), str.Length());
 	}
 }

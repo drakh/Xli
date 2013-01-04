@@ -5,7 +5,7 @@
 
 namespace Xli
 {
-	CharString ToString(void* p);
+	String ToString(void* p);
 
 	class Object
 	{
@@ -16,6 +16,7 @@ namespace Xli
 		{ 
 			refCount = 1; 
 		}
+
 		virtual ~Object() 
 		{
 			if (refCount > 1)
@@ -23,24 +24,29 @@ namespace Xli
 				XLI_THROW_BAD_DELETE;
 			}
 		}
+
 		int GetRefCount() const
 		{
 			return refCount;
 		}
+
 		void AddRef() 
 		{
 			refCount++;
 		}
+
 		void Release()
 		{
 			refCount--;			
 			if (refCount) return;
 			Delete();
-		}	
+		}
+
 		virtual void Delete() 
 		{ 
 			delete this; 
 		}
+
 		virtual String ToString()
 		{
 			return "<Object " + Xli::ToString((void*)this) + ">";

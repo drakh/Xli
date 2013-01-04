@@ -2,6 +2,7 @@
 #include <Xli/Win32Helpers.h>
 #include <Xli/Display.h>
 #include <Xli/HashMap.h>
+#include <Xli/Unicode.h>
 
 // Windows XP look and feel.
 #pragma comment(linker, \
@@ -56,7 +57,8 @@ namespace Xli
 		dwStyle = XliWindowStyleToWin32Style(style);
 		AdjustWindowRect(&rect, dwStyle, 0);
 
-		hWnd = CreateWindowW(windowClassName, (LPCWSTR)title.Data(), dwStyle, CW_USEDEFAULT, CW_USEDEFAULT, rect.right - rect.left, rect.bottom - rect.top, 0, 0, hInstance, 0);
+		Utf16String titleW = Unicode::Utf8To16(title);
+		hWnd = CreateWindowW(windowClassName, titleW.Data(), dwStyle, CW_USEDEFAULT, CW_USEDEFAULT, rect.right - rect.left, rect.bottom - rect.top, 0, 0, hInstance, 0);
 
 		if (!hWnd)
 		{
@@ -201,7 +203,8 @@ namespace Xli
 
 	void Win32Window::SetTitle(const String& title)
 	{
-		SetWindowTextW(hWnd, (LPCWSTR)title.Data());
+		Utf16String titleW = Unicode::Utf8To16(title);
+		SetWindowTextW(hWnd, titleW.Data());
 	}
 
 	String Win32Window::GetTitle()
@@ -209,12 +212,10 @@ namespace Xli
 		int l = GetWindowTextLengthW(hWnd);
 		if (l == 0) return String();
 
-		wchar_t* title = new wchar_t[l];
-		l = GetWindowText(hWnd, title, l);
+		Utf16String titleW = Utf16String::Create(l);
+		l = GetWindowText(hWnd, titleW.Data(), l);
 
-		String result(title, l);
-		delete [] title;
-		return result;
+		return Unicode::Utf16To8(titleW);
 	}
 
 	void Win32Window::SetFullscreen(bool fullscreen)

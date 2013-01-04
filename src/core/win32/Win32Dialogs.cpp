@@ -4,6 +4,7 @@
 #include <Xli/Path.h>
 #include <Xli/MessageBox.h>
 #include <Xli/Win32Header.h>
+#include <Xli/Unicode.h>
 #include <CommDlg.h>
 
 namespace Xli
@@ -13,19 +14,20 @@ namespace Xli
 		return str.Trim('.').Trim('*');
 	}
 
-	static void InitOptions(Window* parent, const Dialogs::FileDialogOptions& options, bool mustExist, OPENFILENAMEW& ofn, WCHAR fnbuf[4096], String& filter, String& def, String& dir, String& cd)
+	static void InitOptions(Window* parent, const Dialogs::FileDialogOptions& options, bool mustExist, OPENFILENAMEW& ofn, WCHAR fnbufW[4096], Utf16String& filterW, Utf16String& defW, Utf16String& dirW, Utf16String& captionW)
 	{
-		fnbuf[0] = '\0';
+		fnbufW[0] = '\0';
 
 		ZeroMemory(&ofn, sizeof(OPENFILENAMEW));
 		ofn.lStructSize = sizeof(OPENFILENAMEW);
 
-		def = FixExtension(options.DefaultExtension);
-		dir = options.DefaultFolder;
+		defW = Unicode::Utf8To16(FixExtension(options.DefaultExtension));
+		dirW = Unicode::Utf8To16(options.DefaultFolder);
+		captionW = Unicode::Utf8To16(options.Caption);
 
-		for (int i = 0; i < dir.Length(); i++)
+		for (int i = 0; i < dirW.Length(); i++)
 		{
-			if (dir[i] == '/') dir[i] = '\\';
+			if (dirW[i] == '/') dirW[i] = '\\';
 		}
 
 		if (options.FileExtensions.Length())
@@ -42,9 +44,9 @@ namespace Xli
 
 				fb.Append(options.FileExtensions[i].Description);
 				fb.Append(" (" + ext + ")");
-				fb.AppendChar('\0');
+				fb.Append('\0');
 				fb.Append(ext);
-				fb.AppendChar('\0');
+				fb.Append('\0');
 
 				if (options.FileExtensions[i].Extension == options.DefaultExtension)
 				{
@@ -52,18 +54,19 @@ namespace Xli
 				}
 			}
 
-			fb.AppendChar('\0');
-			filter = fb.GetString();
+			fb.Append('\0');
+			filterW = Unicode::Utf8To16(fb.GetString());
 		}
 		else
 		{
 			ofn.nFilterIndex = 1;
-			filter = String("All files (*.*)\0*.*\0\0", 21);
+			filterW = Unicode::Utf8To16("All files (*.*)\0*.*\0\0");
 		}
 		
 		if (options.DefaultFile.Length())
 		{
-			memcpy(fnbuf, options.DefaultFile.Data(), options.DefaultFile.Length() * 2 + 2);
+			Utf16String defaultFileW = Unicode::Utf8To16(options.DefaultFile);
+			memcpy(fnbufW, defaultFileW.Data(), defaultFileW.Length() * 2 + 2);
 		}
 		
 		if (parent)
@@ -72,11 +75,11 @@ namespace Xli
 		}
 
 		ofn.hInstance = GetModuleHandle(NULL);
-		ofn.lpstrFilter = (LPWSTR)filter.Data();
-		ofn.lpstrFile = fnbuf;
+		ofn.lpstrFilter = filterW.Data();
+		ofn.lpstrFile = fnbufW;
 		ofn.nMaxFile = 4096;
-		ofn.lpstrInitialDir = (LPWSTR)dir.Data();
-		ofn.lpstrTitle = (LPWSTR)options.Caption.Data();
+		ofn.lpstrInitialDir = dirW.Data();
+		ofn.lpstrTitle = captionW.Data();
 
 		if (mustExist)
 		{
@@ -87,16 +90,14 @@ namespace Xli
 			ofn.Flags = OFN_OVERWRITEPROMPT | OFN_ENABLESIZING;
 		}
 
-		ofn.lpstrDefExt = (LPWSTR)def.Data();
-
-		cd = Disk->GetCurrentDirectory();
+		ofn.lpstrDefExt = defW.Data();
 	}
 
-	static bool EndFileDialog(bool ret, WCHAR* fnbuf, const String& cd, String& result)
+	static bool EndFileDialog(bool ret, WCHAR* fnbufW, const String& cd, String& result)
 	{
 		if (ret)
 		{
-			result = (Utf16Char*)fnbuf;
+			result = Unicode::Utf16To8(fnbufW);
 
 			for (int i = 0; i < result.Length(); i++)
 			{
@@ -110,19 +111,21 @@ namespace Xli
 
 	bool Dialogs::OpenFile(Window* parent, const FileDialogOptions& options, String& result)
 	{
-		WCHAR fnbuf[4096];
+		WCHAR fnbufW[4096];
 		OPENFILENAMEW ofn;
-		String filter, def, dir, cd;
-		InitOptions(parent, options, true, ofn, fnbuf, filter, def, dir, cd);
-		return EndFileDialog(GetOpenFileNameW(&ofn) == TRUE, fnbuf, cd, result);
+		Utf16String filterW, defW, dirW, captionW;
+		String cd = Disk->GetCurrentDirectory();
+		InitOptions(parent, options, true, ofn, fnbufW, filterW, defW, dirW, captionW);
+		return EndFileDialog(GetOpenFileNameW(&ofn) == TRUE, fnbufW, cd, result);
 	}
 
 	bool Dialogs::SaveFile(Window* parent, const FileDialogOptions& options, String& result)
 	{
-		WCHAR fnbuf[4096];
+		WCHAR fnbufW[4096];
 		OPENFILENAMEW ofn;
-		String filter, def, dir, cd;
-		InitOptions(parent, options, false, ofn, fnbuf, filter, def, dir, cd);
-		return EndFileDialog(GetSaveFileNameW(&ofn) == TRUE, fnbuf, cd, result);
+		Utf16String filterW, defW, dirW, captionW;
+		String cd = Disk->GetCurrentDirectory();
+		InitOptions(parent, options, false, ofn, fnbufW, filterW, defW, dirW, captionW);
+		return EndFileDialog(GetSaveFileNameW(&ofn) == TRUE, fnbufW, cd, result);
 	}
 }

@@ -2,7 +2,7 @@
 #define __XLI_EXCEPTION_H__
 
 #include <Xli/Config.h>
-#include <Xli/StringDecl.h>
+#include <Xli/String.h>
 
 namespace Xli
 {

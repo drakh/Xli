@@ -13,20 +13,20 @@ namespace Xli
 	{
 		int lineCount, indent;
 		bool skipLine, disableSkip;
-		CharString indentValue;
+		String indentValue;
 		
 	public:
-		FormattedTextWriter(Stream* stream, CharString indentValue = "\t");
+		FormattedTextWriter(Stream* stream, String indentValue = "\t");
 		void WriteRaw(const char* str, int len);
 		void SkipLine();
 		void DisableSkip();
 		void PushIndent();
 		void PopIndent();
 		void WriteIndent();
-		void Write(const CharString& str);
+		void Write(const String& str);
 		void EndLine();
 		void BeginLine();
-		void WriteLine(const CharString& str);
+		void WriteLine(const String& str);
 		void NewLine();
 	};
 }

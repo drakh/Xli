@@ -15,7 +15,7 @@ namespace Xli
 	{
 	public:
 		virtual const UInt8* GetData() const = 0;
-		virtual unsigned int GetSizeInBytes() const = 0;
+		virtual int GetSizeInBytes() const = 0;
 	};
 
 	/**
@@ -28,16 +28,16 @@ namespace Xli
 	*/
 	class Buffer: public DataAccessor
 	{
-		unsigned int size;
+		int size;
 		UInt8* data;
 		
-		Buffer(unsigned int size);
-		void* operator new (size_t size, unsigned int bufSize);
-		void operator delete (void* buf, unsigned int bufSize);
+		Buffer(int size);
+		void* operator new (size_t size, int bufSize);
+		void operator delete (void* buf, int bufSize);
 
 	public:
-		static Buffer* Create(unsigned int size);
-		static Buffer* Copy(const void* data, unsigned int size);
+		static Buffer* Create(int size);
+		static Buffer* Copy(const void* data, int size);
 
 		void operator delete (void* buf);
 
@@ -47,7 +47,7 @@ namespace Xli
 			Returns the size of the buffer, in bytes.
 			@return The size of the buffer, in bytes.
 		*/
-		unsigned int Size() const
+		int Size() const
 		{
 			return size;
 		}
@@ -70,7 +70,7 @@ namespace Xli
 		{
 			return data;
 		}
-		virtual unsigned int GetSizeInBytes() const
+		virtual int GetSizeInBytes() const
 		{
 			return size;
 		}
@@ -79,12 +79,12 @@ namespace Xli
 	/**
 		\ingroup Core
 	*/
-	template <unsigned int BufSize> class StaticBuffer: public DataAccessor
+	template <int BufSize> class StaticBuffer: public DataAccessor
 	{
 		UInt8 data[BufSize];
 
 	public:
-		unsigned int Size() const
+		int Size() const
 		{
 			return BufSize;
 		}
@@ -102,7 +102,7 @@ namespace Xli
 		{
 			return data;
 		}
-		virtual unsigned int GetSizeInBytes() const
+		virtual int GetSizeInBytes() const
 		{
 			return BufSize;
 		}
@@ -114,14 +114,14 @@ namespace Xli
 	class BufferPointer: public DataAccessor
 	{
 		UInt8* data;
-		unsigned int size;
+		int size;
 		bool ownsData;
 
 	public:
-		BufferPointer(void* data, unsigned int size, bool ownsData): data((UInt8*)data), size(size), ownsData(ownsData) {}
+		BufferPointer(void* data, int size, bool ownsData): data((UInt8*)data), size(size), ownsData(ownsData) {}
 		~BufferPointer() { if (ownsData) delete [] (UInt8*)data; }
 
-		unsigned int Size() const
+		int Size() const
 		{
 			return size;
 		}
@@ -130,6 +130,7 @@ namespace Xli
 		{
 			return data;
 		}
+
 		const UInt8* Data() const
 		{
 			return data;
@@ -139,7 +140,8 @@ namespace Xli
 		{
 			return data;
 		}
-		virtual unsigned int GetSizeInBytes() const
+
+		virtual int GetSizeInBytes() const
 		{
 			return size;
 		}
@@ -151,15 +153,16 @@ namespace Xli
 	class BufferReference: public DataAccessor
 	{
 		UInt8* data;
-		unsigned int size;
+		int size;
 		Object* owner;
 
 	public:
-		BufferReference(void* data, unsigned int size, Object* owner)
+		BufferReference(void* data, int size, Object* owner)
 			: data((UInt8*)data), size(size), owner(owner)
 		{
 			if (owner != 0) owner->AddRef();
 		}
+
 		virtual ~BufferReference()
 		{
 			if (owner != 0) owner->Release();
@@ -169,7 +172,8 @@ namespace Xli
 		{
 			return data;
 		}
-		virtual unsigned int GetSizeInBytes() const
+
+		virtual int GetSizeInBytes() const
 		{
 			return size;
 		}

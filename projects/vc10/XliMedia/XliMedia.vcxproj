@@ -90,18 +90,18 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\..\lib\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\..\lib\x64\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Configuration)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)..\..\lib\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)..\..\lib\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">$(ProjectDir)..\..\lib\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">$(ProjectDir)..\..\lib\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">$(Configuration)\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\..\..\lib\x86\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\..\..\lib\x64\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\x86\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Configuration)\x64\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)..\..\..\lib\x86\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)..\..\..\lib\x64\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\x86\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)\x64\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">$(ProjectDir)..\..\..\lib\x86\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">$(ProjectDir)..\..\..\lib\x64\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">$(Configuration)\x86\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">$(Configuration)\x64\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">$(ProjectName)MT</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">$(ProjectName)MT</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release MD|Win32'">$(ProjectName)MT</TargetName>
@@ -115,7 +115,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..\..\include;..\..\src\media\3rdparty\jpeg;..\..\src\media\3rdparty\png;..\..\src\media\3rdparty\zlib;..\..\src\media\3rdparty\squish;..\..\src\media\3rdparty\tinyxml;..\..\src\media\3rdparty\freetype\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\src\media\3rdparty\jpeg;..\..\..\src\media\3rdparty\png;..\..\..\src\media\3rdparty\zlib;..\..\..\src\media\3rdparty\squish;..\..\..\src\media\3rdparty\tinyxml;..\..\..\src\media\3rdparty\freetype\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;FT_DEBUG_LEVEL_ERROR;FT_DEBUG_LEVEL_TRACE;FT2_BUILD_LIBRARY;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -132,7 +132,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>..\..\include;..\..\src\media\3rdparty\jpeg;..\..\src\media\3rdparty\png;..\..\src\media\3rdparty\zlib;..\..\src\media\3rdparty\squish;..\..\src\media\3rdparty\tinyxml;..\..\src\media\3rdparty\freetype\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\src\media\3rdparty\jpeg;..\..\..\src\media\3rdparty\png;..\..\..\src\media\3rdparty\zlib;..\..\..\src\media\3rdparty\squish;..\..\..\src\media\3rdparty\tinyxml;..\..\..\src\media\3rdparty\freetype\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;FT_DEBUG_LEVEL_ERROR;FT_DEBUG_LEVEL_TRACE;FT2_BUILD_LIBRARY;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -151,7 +151,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>..\..\include;..\..\src\media\3rdparty\jpeg;..\..\src\media\3rdparty\png;..\..\src\media\3rdparty\zlib;..\..\src\media\3rdparty\squish;..\..\src\media\3rdparty\tinyxml;..\..\src\media\3rdparty\freetype\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\src\media\3rdparty\jpeg;..\..\..\src\media\3rdparty\png;..\..\..\src\media\3rdparty\zlib;..\..\..\src\media\3rdparty\squish;..\..\..\src\media\3rdparty\tinyxml;..\..\..\src\media\3rdparty\freetype\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;FT_DEBUG_LEVEL_ERROR;FT_DEBUG_LEVEL_TRACE;FT2_BUILD_LIBRARY;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -173,7 +173,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>..\..\include;..\..\src\media\3rdparty\jpeg;..\..\src\media\3rdparty\png;..\..\src\media\3rdparty\zlib;..\..\src\media\3rdparty\squish;..\..\src\media\3rdparty\tinyxml;..\..\src\media\3rdparty\freetype\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\src\media\3rdparty\jpeg;..\..\..\src\media\3rdparty\png;..\..\..\src\media\3rdparty\zlib;..\..\..\src\media\3rdparty\squish;..\..\..\src\media\3rdparty\tinyxml;..\..\..\src\media\3rdparty\freetype\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;FT_DEBUG_LEVEL_ERROR;FT_DEBUG_LEVEL_TRACE;FT2_BUILD_LIBRARY;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -195,7 +195,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>..\..\include;..\..\src\media\3rdparty\jpeg;..\..\src\media\3rdparty\png;..\..\src\media\3rdparty\zlib;..\..\src\media\3rdparty\squish;..\..\src\media\3rdparty\tinyxml;..\..\src\media\3rdparty\freetype\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\src\media\3rdparty\jpeg;..\..\..\src\media\3rdparty\png;..\..\..\src\media\3rdparty\zlib;..\..\..\src\media\3rdparty\squish;..\..\..\src\media\3rdparty\tinyxml;..\..\..\src\media\3rdparty\freetype\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;FT_DEBUG_LEVEL_ERROR;FT_DEBUG_LEVEL_TRACE;FT2_BUILD_LIBRARY;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -217,7 +217,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>..\..\include;..\..\src\media\3rdparty\jpeg;..\..\src\media\3rdparty\png;..\..\src\media\3rdparty\zlib;..\..\src\media\3rdparty\squish;..\..\src\media\3rdparty\tinyxml;..\..\src\media\3rdparty\freetype\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\src\media\3rdparty\jpeg;..\..\..\src\media\3rdparty\png;..\..\..\src\media\3rdparty\zlib;..\..\..\src\media\3rdparty\squish;..\..\..\src\media\3rdparty\tinyxml;..\..\..\src\media\3rdparty\freetype\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;FT_DEBUG_LEVEL_ERROR;FT_DEBUG_LEVEL_TRACE;FT2_BUILD_LIBRARY;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -244,328 +244,328 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\autofit\autofit.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\base\ftapi.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\base\ftbase.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\base\ftbdf.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\base\ftbitmap.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\base\ftdebug.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\base\ftgasp.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\base\ftglyph.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\base\ftgxval.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\base\ftinit.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\base\ftlcdfil.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\base\ftmm.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\base\ftotval.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\base\ftpatent.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\base\ftpfr.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\base\ftstroke.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\base\ftsynth.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\base\ftsystem.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\base\fttype1.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\base\ftwinfnt.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\base\ftxf86.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\bdf\bdf.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\cache\ftcache.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\cff\cff.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\cid\type1cid.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\gxvalid\gxvalid.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\gzip\ftgzip.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\lzw\ftlzw.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\otvalid\otvalid.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\pcf\pcf.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\pfr\pfr.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\pfr\pfrgload.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\pfr\pfrobjs.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\pfr\pfrsbit.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\psaux\psaux.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\pshinter\pshinter.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\psnames\psnames.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\raster\raster.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\sfnt\sfnt.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\smooth\smooth.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\truetype\truetype.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\type1\type1.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\type42\t42drivr.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\type42\t42objs.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\type42\t42parse.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\freetype\src\winfonts\winfnt.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\json_parser\JSON_parser.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\zlib\adler32.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\zlib\compress.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\zlib\crc32.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\zlib\deflate.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\zlib\gzio.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\zlib\inffast.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\zlib\inflate.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\zlib\inftrees.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\zlib\trees.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\zlib\uncompr.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\zlib\zutil.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\tinyxml\tinystr.cpp" />
-    <ClCompile Include="..\..\src\media\3rdparty\tinyxml\tinyxml.cpp" />
-    <ClCompile Include="..\..\src\media\3rdparty\tinyxml\tinyxmlerror.cpp" />
-    <ClCompile Include="..\..\src\media\3rdparty\tinyxml\tinyxmlparser.cpp" />
-    <ClCompile Include="..\..\src\media\3rdparty\png\png.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\png\pngerror.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\png\pngget.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\png\pngmem.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\png\pngpread.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\png\pngread.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\png\pngrio.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\png\pngrtran.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\png\pngrutil.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\png\pngset.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\png\pngtrans.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\png\pngvcrd.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\png\pngwio.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\png\pngwrite.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\png\pngwtran.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\png\pngwutil.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jcapimin.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\autofit\autofit.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftapi.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftbase.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftbdf.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftbitmap.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftdebug.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftgasp.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftglyph.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftgxval.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftinit.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftlcdfil.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftmm.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftotval.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftpatent.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftpfr.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftstroke.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftsynth.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftsystem.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\fttype1.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftwinfnt.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftxf86.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\bdf\bdf.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\cache\ftcache.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\cff\cff.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\cid\type1cid.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\gxvalid\gxvalid.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\gzip\ftgzip.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\lzw\ftlzw.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\otvalid\otvalid.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\pcf\pcf.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\pfr\pfr.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\pfr\pfrgload.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\pfr\pfrobjs.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\pfr\pfrsbit.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\psaux\psaux.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\pshinter\pshinter.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\psnames\psnames.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\raster\raster.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\sfnt\sfnt.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\smooth\smooth.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\truetype\truetype.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\type1\type1.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\type42\t42drivr.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\type42\t42objs.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\type42\t42parse.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\winfonts\winfnt.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\json_parser\JSON_parser.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\adler32.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\compress.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\crc32.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\deflate.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\gzio.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\inffast.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\inflate.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\inftrees.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\trees.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\uncompr.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\zutil.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\tinyxml\tinystr.cpp" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\tinyxml\tinyxml.cpp" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\tinyxml\tinyxmlerror.cpp" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\tinyxml\tinyxmlparser.cpp" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\png.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngerror.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngget.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngmem.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngpread.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngread.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngrio.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngrtran.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngrutil.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngset.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngtrans.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngvcrd.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngwio.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngwrite.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngwtran.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngwutil.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcapimin.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jcapistd.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcapistd.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jccoefct.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jccoefct.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jccolor.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jccolor.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jcdctmgr.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcdctmgr.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jchuff.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jchuff.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jcinit.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcinit.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jcmainct.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcmainct.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jcmarker.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcmarker.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jcmaster.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcmaster.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jcomapi.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcomapi.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jcparam.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcparam.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jcphuff.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcphuff.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jcprepct.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcprepct.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jcsample.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcsample.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jctrans.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jctrans.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jdapimin.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdapimin.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jdapistd.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdapistd.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jdatadst.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdatadst.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jdatasrc.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdatasrc.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jdcoefct.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdcoefct.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jdcolor.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdcolor.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jddctmgr.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jddctmgr.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jdhuff.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdhuff.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jdinput.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdinput.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jdmainct.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdmainct.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jdmarker.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdmarker.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jdmaster.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdmaster.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jdmerge.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdmerge.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jdphuff.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdphuff.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jdpostct.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdpostct.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jdsample.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdsample.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jdtrans.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdtrans.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jerror.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jerror.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jfdctflt.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jfdctflt.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jfdctfst.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jfdctfst.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jfdctint.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jfdctint.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jidctflt.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jidctflt.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jidctfst.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jidctfst.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jidctint.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jidctint.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jidctred.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jidctred.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jmemmgr.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jmemmgr.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jmemnobs.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jmemnobs.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jquant1.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jquant1.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jquant2.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jquant2.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jutils.c">
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jutils.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClCompile Include="..\..\src\media\3rdparty\unzip\ioapi.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\unzip\iowin32.c" />
-    <ClCompile Include="..\..\src\media\3rdparty\unzip\unzip.c" />
-    <ClCompile Include="..\..\src\media\Bitmap.cpp" />
-    <ClCompile Include="..\..\src\media\CompressedImage.cpp" />
-    <ClCompile Include="..\..\src\media\FontFace.cpp" />
-    <ClCompile Include="..\..\src\media\Format.cpp" />
-    <ClCompile Include="..\..\src\media\FormattedTextWriter.cpp" />
-    <ClCompile Include="..\..\src\media\Gzip.cpp" />
-    <ClCompile Include="..\..\src\media\ImageReader.cpp" />
-    <ClCompile Include="..\..\src\media\ImageWriter.cpp" />
-    <ClCompile Include="..\..\src\media\Json.cpp" />
-    <ClCompile Include="..\..\src\media\Ktx.cpp" />
-    <ClCompile Include="..\..\src\media\Texture.cpp" />
-    <ClCompile Include="..\..\src\media\Value.cpp" />
-    <ClCompile Include="..\..\src\media\Xml.cpp" />
-    <ClCompile Include="..\..\src\media\JpegReader.cpp" />
-    <ClCompile Include="..\..\src\media\JpegWriter.cpp" />
-    <ClCompile Include="..\..\src\media\PngReader.cpp" />
-    <ClCompile Include="..\..\src\media\PngWriter.cpp" />
-    <ClCompile Include="..\..\src\media\Zip.cpp" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\unzip\ioapi.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\unzip\iowin32.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\unzip\unzip.c" />
+    <ClCompile Include="..\..\..\src\media\Bitmap.cpp" />
+    <ClCompile Include="..\..\..\src\media\CompressedImage.cpp" />
+    <ClCompile Include="..\..\..\src\media\FontFace.cpp" />
+    <ClCompile Include="..\..\..\src\media\Format.cpp" />
+    <ClCompile Include="..\..\..\src\media\FormattedTextWriter.cpp" />
+    <ClCompile Include="..\..\..\src\media\Gzip.cpp" />
+    <ClCompile Include="..\..\..\src\media\ImageReader.cpp" />
+    <ClCompile Include="..\..\..\src\media\ImageWriter.cpp" />
+    <ClCompile Include="..\..\..\src\media\Json.cpp" />
+    <ClCompile Include="..\..\..\src\media\Ktx.cpp" />
+    <ClCompile Include="..\..\..\src\media\Texture.cpp" />
+    <ClCompile Include="..\..\..\src\media\Value.cpp" />
+    <ClCompile Include="..\..\..\src\media\Xml.cpp" />
+    <ClCompile Include="..\..\..\src\media\JpegReader.cpp" />
+    <ClCompile Include="..\..\..\src\media\JpegWriter.cpp" />
+    <ClCompile Include="..\..\..\src\media\PngReader.cpp" />
+    <ClCompile Include="..\..\..\src\media\PngWriter.cpp" />
+    <ClCompile Include="..\..\..\src\media\Zip.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\XliMedia\Bitmap.h" />
-    <ClInclude Include="..\..\include\XliMedia\Color.h" />
-    <ClInclude Include="..\..\include\XliMedia\CompressedImage.h" />
-    <ClInclude Include="..\..\include\XliMedia\FontFace.h" />
-    <ClInclude Include="..\..\include\XliMedia\FormattedTextWriter.h" />
-    <ClInclude Include="..\..\include\XliMedia\Gzip.h" />
-    <ClInclude Include="..\..\include\XliMedia\Image.h" />
-    <ClInclude Include="..\..\include\XliMedia\Jpeg.h" />
-    <ClInclude Include="..\..\include\XliMedia\Json.h" />
-    <ClInclude Include="..\..\include\XliMedia\Ktx.h" />
-    <ClInclude Include="..\..\include\XliMedia\Png.h" />
-    <ClInclude Include="..\..\include\XliMedia\Saturated.h" />
-    <ClInclude Include="..\..\include\XliMedia\Texture.h" />
-    <ClInclude Include="..\..\include\XliMedia\Value.h" />
-    <ClInclude Include="..\..\include\XliMedia\Zip.h" />
-    <ClInclude Include="..\..\src\media\3rdparty\json_parser\JSON_parser.h" />
-    <ClInclude Include="..\..\src\media\3rdparty\tinyxml\tinystr.h" />
-    <ClInclude Include="..\..\src\media\3rdparty\tinyxml\tinyxml.h" />
-    <ClInclude Include="..\..\src\media\3rdparty\png\png.h" />
-    <ClInclude Include="..\..\src\media\3rdparty\png\pngconf.h" />
-    <ClCompile Include="..\..\src\media\3rdparty\jpeg\jconfig.h">
+    <ClInclude Include="..\..\..\include\XliMedia\Bitmap.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\Color.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\CompressedImage.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\FontFace.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\FormattedTextWriter.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\Gzip.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\Image.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\Jpeg.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\Json.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\Ktx.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\Png.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\Saturated.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\Texture.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\Value.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\Zip.h" />
+    <ClInclude Include="..\..\..\src\media\3rdparty\json_parser\JSON_parser.h" />
+    <ClInclude Include="..\..\..\src\media\3rdparty\tinyxml\tinystr.h" />
+    <ClInclude Include="..\..\..\src\media\3rdparty\tinyxml\tinyxml.h" />
+    <ClInclude Include="..\..\..\src\media\3rdparty\png\png.h" />
+    <ClInclude Include="..\..\..\src\media\3rdparty\png\pngconf.h" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jconfig.h">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
     </ClCompile>
-    <ClInclude Include="..\..\src\media\3rdparty\unzip\ioapi.h" />
-    <ClInclude Include="..\..\src\media\3rdparty\unzip\iowin32.h" />
-    <ClInclude Include="..\..\src\media\3rdparty\unzip\unzip.h" />
-    <ClInclude Include="..\..\include\XliMedia\Format.h" />
-    <ClInclude Include="..\..\include\XliMedia\ImageReader.h" />
-    <ClInclude Include="..\..\include\XliMedia\ImageWriter.h" />
-    <ClInclude Include="..\..\include\XliMedia\ProgressCallback.h" />
-    <ClInclude Include="..\..\include\XliMedia\Xml.h" />
-    <ClInclude Include="..\..\include\XliMedia.h" />
+    <ClInclude Include="..\..\..\src\media\3rdparty\unzip\ioapi.h" />
+    <ClInclude Include="..\..\..\src\media\3rdparty\unzip\iowin32.h" />
+    <ClInclude Include="..\..\..\src\media\3rdparty\unzip\unzip.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\Format.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\ImageReader.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\ImageWriter.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\ProgressCallback.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\Xml.h" />
+    <ClInclude Include="..\..\..\include\XliMedia.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\media\CMakeLists.txt" />
-    <None Include="..\..\src\media\UIImageReader.mm">
+    <None Include="..\..\..\src\media\CMakeLists.txt" />
+    <None Include="..\..\..\src\media\UIImageReader.mm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>

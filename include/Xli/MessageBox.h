@@ -1,7 +1,9 @@
 #ifndef __XLI_PLATFORM_MESSAGE_BOX_H__
 #define __XLI_PLATFORM_MESSAGE_BOX_H__
 
+#include <Xli/Exception.h>
 #include <Xli/String.h>
+#include <Xli/Window.h>
 
 namespace Xli
 {

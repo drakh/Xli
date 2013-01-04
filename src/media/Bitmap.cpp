@@ -1,5 +1,6 @@
 #include <XliMedia/Bitmap.h>
 #include <Xli/Managed.h>
+#include <Xli/Array.h>
 
 namespace Xli
 {
@@ -71,7 +72,7 @@ namespace Xli
 		return Recti(0, 0, width, height);
 	}
 
-	unsigned int Bitmap::GetSizeInBytes() const
+	int Bitmap::GetSizeInBytes() const
 	{
 		return height * pitch;
 	}
@@ -129,7 +130,7 @@ namespace Xli
 	{
 		if (rect.Left >= 0 && rect.Right <= width && rect.Top >= 0 && rect.Bottom <= height)
 		{
-			int offset = rect.Top * pitch + rect.Left * GetBytesPerPixel() + (dataOwner->GetData() - data);
+			int offset = rect.Top * pitch + rect.Left * GetBytesPerPixel() + (int)(dataOwner->GetData() - data);
 			return new Bitmap(rect.Width(), rect.Height(), format, dataOwner, pitch, offset);
 		}
 
@@ -389,7 +390,7 @@ namespace Xli
 
 				for (int c = 0; c < cc; c++)
 				{	
-					*dst++ = (UInt8)(((uint)*src0 + *src1 + *src2 + *src3) >> 2);
+					*dst++ = (UInt8)(((unsigned int)*src0 + *src1 + *src2 + *src3) >> 2);
 					src0++;
 					src1++;
 					src2++;

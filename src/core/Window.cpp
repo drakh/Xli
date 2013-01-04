@@ -22,7 +22,7 @@ namespace Xli
 		queue.Enqueue(e);
 	}
 
-	void WindowEventQueue::OnCharTyped(Utf16Char c)
+	void WindowEventQueue::OnCharTyped(UInt16 c)
 	{
 		WindowEvent e;
 		e.Type = WindowEventTypeCharTyped;

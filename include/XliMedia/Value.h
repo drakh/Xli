@@ -7,6 +7,7 @@
 #include <Xli/OrderedMap.h>
 #include <Xli/TextWriter.h>
 #include <Xli/Matrix4.h>
+#include <Xli/ToString.h>
 
 #define XLI_GET_X(label, x) do { try { x; } catch (const Xli::Exception& e) \
 	{ Xli::ErrorPrintLine((Xli::String)"WARNING: " + XLI_FUNC + ": Unable to read '" + label + "': " + e.ToString()); } } while (0)
@@ -107,8 +108,7 @@ namespace Xli
 		Value(Int64 v);
 		Value(float f);
 		Value(double d);
-		Value(const CharString& s);
-		Value(const Utf16String& s);
+		Value(const String& s);
 		Value(const char* s);
 		Value(IValue* value);
 

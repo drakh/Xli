@@ -2,7 +2,7 @@
 #define __XLI_BINARY_READER_H__
 
 #include <Xli/Stream.h>
-#include <Xli/Matrix4.h>
+#include <Xli/Vector4.h>
 
 namespace Xli
 {
@@ -23,7 +23,6 @@ namespace Xli
 		template <typename T> void Read(Vector2t<T>& vec) { stream->ReadSafe(vec.Data(), sizeof(T), 2); }
 		template <typename T> void Read(Vector3t<T>& vec) { stream->ReadSafe(vec.Data(), sizeof(T), 3); }
 		template <typename T> void Read(Vector4t<T>& vec) { stream->ReadSafe(vec.Data(), sizeof(T), 4); }
-		template <typename T> void Read(Matrix4t<T>& vec) { stream->ReadSafe(vec.Data(), sizeof(T), 16); }
 
 		template <typename T> T Read()
 		{
@@ -49,14 +48,14 @@ namespace Xli
 		template <typename T> Vector4t<T> ReadVector4t() { Vector4t<T> vec; Read(vec); return vec; }
 
 		void Read(void* dst, int elmSize, int elmCount);
-		CharString ReadCStr(int len);
+		String ReadCStr(int len);
 
 		Buffer* ReadAll();
 
     	int Read7BitEncodedInt();
 
 		/// .NET compatible string reader
-		Utf16String ReadString();
+		String ReadString();
 	};
 }
 

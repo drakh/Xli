@@ -1,5 +1,5 @@
-#include <Xli/Unicode.h>
 #include <Xli/Console.h>
+#include <Xli/StringBuilder.h>
 #include <XliMedia/Json.h>
 #include <XliMedia/FormattedTextWriter.h>
 #include "3rdparty/json_parser/JSON_parser.h"
@@ -60,10 +60,10 @@ namespace Xli
 			c->AddValue(new BoolValue(false));
 			break;
 		case JSON_T_KEY:
-			c->Keys.Add(Unicode::Utf8To16(CharString(value->vu.str.value, value->vu.str.length)));
+			c->Keys.Add(String(value->vu.str.value, (int)value->vu.str.length));
 			break;   
 		case JSON_T_STRING:
-			c->AddValue(new StringValue(Unicode::Utf8To16(CharString(value->vu.str.value, value->vu.str.length))));
+			c->AddValue(new StringValue(String(value->vu.str.value, (int)value->vu.str.length)));
 			break;
 		default:
 			XLI_THROW("JSON parser failed");
@@ -73,7 +73,7 @@ namespace Xli
 		return 1;
 	}
 
-	Value Json::Parse(const CharString& code, bool preserveOrder)
+	Value Json::Parse(const String& code, bool preserveOrder)
 	{
 		JSON_config config;
 
@@ -119,26 +119,25 @@ namespace Xli
 		return val;
 	}
 
-	CharString Json::FormatString(const String& str)
+	String Json::ToStringLiteral(const String& str)
 	{
-		Array<char> w;
+		StringBuilder w;
 
-		w.Add('"');
-		CharString k = Unicode::Utf16To8(str);
+		w.Append('"');
 
-		for (int i = 0; i < k.Length(); i++)
+		for (int i = 0; i < str.Length(); i++)
 		{
-			if (k[i] == '"') w.Add("\\\"", 2);
-			else if (k[i] == '\n') w.Add("\\n", 2);
-			else if (k[i] == '\r') w.Add("\\r", 2);
-			else if (k[i] == '\t') w.Add("\\t", 2);
-			else if (k[i] == '\0') w.Add("\\0", 2);
-			else if (k[i] == '\\') w.Add("\\\\", 2);
-			else w.Add(k[i]);
+			if (str[i] == '"') w.Append("\\\"");
+			else if (str[i] == '\n') w.Append("\\n");
+			else if (str[i] == '\r') w.Append("\\r");
+			else if (str[i] == '\t') w.Append("\\t");
+			else if (str[i] == '\0') w.Append("\\0");
+			else if (str[i] == '\\') w.Append("\\\\");
+			else w.Append(str[i]);
 		}
 
-		w.Add('"');
-		return w.Data();
+		w.Append('"');
+		return w.GetString();
 	}
 
 	class JsonWriter: public FormattedTextWriter
@@ -156,7 +155,7 @@ namespace Xli
 			switch (value.GetType())
 			{
 			case ValueTypeString:
-				Write(Json::FormatString(value.ToString()));
+				Write(Json::ToStringLiteral(value.ToString()));
 				break;
 
 			case ValueTypeUndefined:
@@ -230,7 +229,7 @@ namespace Xli
 
 							first = false;
 
-							Write(Json::FormatString(key.ToString()));
+							Write(Json::ToStringLiteral(key.ToString()));
 							Write(": ");
 							WriteRecursive(val);
 						}
@@ -272,10 +271,10 @@ namespace Xli
 		JsonWriter(stream).WriteJson(value);
 	}
 
-	CharString Json::ToStringRaw(const Value& value)
+	String Json::Stringify(const Value& value)
 	{
 		TextStream ts;
 		Save(&ts, value);
-		return ts.GetTextRaw();
+		return ts.GetText();
 	}
 }

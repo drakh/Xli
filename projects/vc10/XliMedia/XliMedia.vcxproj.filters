@@ -1,0 +1,574 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="3rdparty">
+      <UniqueIdentifier>{1b370dab-1101-485a-b881-43c93f66ad8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty\zlib">
+      <UniqueIdentifier>{b0d6927b-165e-492c-b775-3e576a70c447}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty\tinyxml">
+      <UniqueIdentifier>{16055379-3b3c-44a9-a1a8-b2a1c97331fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty\png">
+      <UniqueIdentifier>{f4fe1871-e7b8-4d10-b47d-85dc16d6ff06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty\jpeg">
+      <UniqueIdentifier>{c6392fac-fa8a-4abf-9c88-696a966660e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty\unzip">
+      <UniqueIdentifier>{86dd8d5f-b724-4d72-8701-b1dcd056ffeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XliMedia">
+      <UniqueIdentifier>{e6b257c2-e4a3-4305-aaa4-6d7376b76c88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XliMedia\Image Formats">
+      <UniqueIdentifier>{8c4513fe-8cc1-4245-a4a4-a528adaa4b9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty\json_parser">
+      <UniqueIdentifier>{9359283b-3a79-4058-aad0-d08926ddfed4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty\freetype">
+      <UniqueIdentifier>{66b9519b-62d9-45f9-a5d9-59e35b46d2c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XliMedia\Texture Formats">
+      <UniqueIdentifier>{d0f2e112-0fc3-42ba-8f92-96d2555a2df8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XliMedia\Other Formats">
+      <UniqueIdentifier>{525d76bd-4186-4b1b-96f5-d39feb7c9199}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\adler32.c">
+      <Filter>3rdparty\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\compress.c">
+      <Filter>3rdparty\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\crc32.c">
+      <Filter>3rdparty\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\deflate.c">
+      <Filter>3rdparty\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\gzio.c">
+      <Filter>3rdparty\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\inffast.c">
+      <Filter>3rdparty\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\inflate.c">
+      <Filter>3rdparty\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\inftrees.c">
+      <Filter>3rdparty\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\trees.c">
+      <Filter>3rdparty\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\uncompr.c">
+      <Filter>3rdparty\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\zutil.c">
+      <Filter>3rdparty\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\tinyxml\tinystr.cpp">
+      <Filter>3rdparty\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\tinyxml\tinyxml.cpp">
+      <Filter>3rdparty\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\tinyxml\tinyxmlerror.cpp">
+      <Filter>3rdparty\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\tinyxml\tinyxmlparser.cpp">
+      <Filter>3rdparty\tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\png.c">
+      <Filter>3rdparty\png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngerror.c">
+      <Filter>3rdparty\png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngget.c">
+      <Filter>3rdparty\png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngmem.c">
+      <Filter>3rdparty\png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngpread.c">
+      <Filter>3rdparty\png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngread.c">
+      <Filter>3rdparty\png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngrio.c">
+      <Filter>3rdparty\png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngrtran.c">
+      <Filter>3rdparty\png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngrutil.c">
+      <Filter>3rdparty\png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngset.c">
+      <Filter>3rdparty\png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngtrans.c">
+      <Filter>3rdparty\png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngvcrd.c">
+      <Filter>3rdparty\png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngwio.c">
+      <Filter>3rdparty\png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngwrite.c">
+      <Filter>3rdparty\png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngwtran.c">
+      <Filter>3rdparty\png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngwutil.c">
+      <Filter>3rdparty\png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcapimin.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcapistd.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jccoefct.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jccolor.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcdctmgr.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jchuff.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcinit.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcmainct.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcmarker.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcmaster.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcomapi.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcparam.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcphuff.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcprepct.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jcsample.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jctrans.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdapimin.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdapistd.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdatadst.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdatasrc.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdcoefct.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdcolor.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jddctmgr.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdhuff.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdinput.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdmainct.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdmarker.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdmaster.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdmerge.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdphuff.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdpostct.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdsample.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jdtrans.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jerror.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jfdctflt.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jfdctfst.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jfdctint.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jidctflt.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jidctfst.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jidctint.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jidctred.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jmemmgr.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jmemnobs.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jquant1.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jquant2.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jutils.c">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\unzip\ioapi.c">
+      <Filter>3rdparty\unzip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\unzip\iowin32.c">
+      <Filter>3rdparty\unzip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\unzip\unzip.c">
+      <Filter>3rdparty\unzip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\Format.cpp">
+      <Filter>XliMedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\ImageReader.cpp">
+      <Filter>XliMedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\ImageWriter.cpp">
+      <Filter>XliMedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\JpegReader.cpp">
+      <Filter>XliMedia\Image Formats</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\JpegWriter.cpp">
+      <Filter>XliMedia\Image Formats</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\PngReader.cpp">
+      <Filter>XliMedia\Image Formats</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\PngWriter.cpp">
+      <Filter>XliMedia\Image Formats</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jconfig.h">
+      <Filter>3rdparty\jpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\Bitmap.cpp">
+      <Filter>XliMedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\json_parser\JSON_parser.c">
+      <Filter>3rdparty\json_parser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\FontFace.cpp">
+      <Filter>XliMedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\autofit\autofit.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftbitmap.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftdebug.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftgasp.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftglyph.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftgxval.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftinit.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftlcdfil.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftmm.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftotval.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftpatent.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftpfr.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftstroke.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftsynth.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftsystem.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\fttype1.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftwinfnt.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftxf86.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftapi.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftbase.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\base\ftbdf.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\bdf\bdf.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\cache\ftcache.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\cff\cff.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\cid\type1cid.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\gxvalid\gxvalid.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\lzw\ftlzw.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\otvalid\otvalid.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\pcf\pcf.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\pfr\pfr.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\pfr\pfrgload.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\pfr\pfrobjs.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\pfr\pfrsbit.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\psaux\psaux.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\pshinter\pshinter.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\psnames\psnames.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\raster\raster.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\sfnt\sfnt.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\smooth\smooth.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\type1\type1.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\type42\t42drivr.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\type42\t42objs.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\type42\t42parse.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\winfonts\winfnt.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\gzip\ftgzip.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\freetype\src\truetype\truetype.c">
+      <Filter>3rdparty\freetype</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\Value.cpp">
+      <Filter>XliMedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\FormattedTextWriter.cpp">
+      <Filter>XliMedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\Texture.cpp">
+      <Filter>XliMedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\CompressedImage.cpp">
+      <Filter>XliMedia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\Ktx.cpp">
+      <Filter>XliMedia\Texture Formats</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\Gzip.cpp">
+      <Filter>XliMedia\Other Formats</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\Xml.cpp">
+      <Filter>XliMedia\Other Formats</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\Zip.cpp">
+      <Filter>XliMedia\Other Formats</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\Json.cpp">
+      <Filter>XliMedia\Other Formats</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\media\3rdparty\tinyxml\tinystr.h">
+      <Filter>3rdparty\tinyxml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\media\3rdparty\tinyxml\tinyxml.h">
+      <Filter>3rdparty\tinyxml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\media\3rdparty\png\png.h">
+      <Filter>3rdparty\png</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\media\3rdparty\png\pngconf.h">
+      <Filter>3rdparty\png</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\media\3rdparty\unzip\ioapi.h">
+      <Filter>3rdparty\unzip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\media\3rdparty\unzip\iowin32.h">
+      <Filter>3rdparty\unzip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\media\3rdparty\unzip\unzip.h">
+      <Filter>3rdparty\unzip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\Format.h">
+      <Filter>XliMedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\ImageReader.h">
+      <Filter>XliMedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\ImageWriter.h">
+      <Filter>XliMedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\ProgressCallback.h">
+      <Filter>XliMedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\Jpeg.h">
+      <Filter>XliMedia\Image Formats</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\Png.h">
+      <Filter>XliMedia\Image Formats</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\Bitmap.h">
+      <Filter>XliMedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\Image.h">
+      <Filter>XliMedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\media\3rdparty\json_parser\JSON_parser.h">
+      <Filter>3rdparty\json_parser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\FontFace.h">
+      <Filter>XliMedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\Saturated.h">
+      <Filter>XliMedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\Value.h">
+      <Filter>XliMedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\Color.h">
+      <Filter>XliMedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\FormattedTextWriter.h">
+      <Filter>XliMedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\CompressedImage.h">
+      <Filter>XliMedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\Texture.h">
+      <Filter>XliMedia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\Ktx.h">
+      <Filter>XliMedia\Texture Formats</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\Gzip.h">
+      <Filter>XliMedia\Other Formats</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\Xml.h">
+      <Filter>XliMedia\Other Formats</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\Zip.h">
+      <Filter>XliMedia\Other Formats</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\Json.h">
+      <Filter>XliMedia\Other Formats</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\media\CMakeLists.txt" />
+    <None Include="..\..\..\src\media\UIImageReader.mm">
+      <Filter>XliMedia\Image Formats</Filter>
+    </None>
+  </ItemGroup>
+</Project>

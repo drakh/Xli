@@ -163,7 +163,7 @@ namespace Xli
 		int WheelDeltaX, WheelDeltaY;
 		float TouchX, TouchY;
 		MouseButtons Button;
-		Utf16Char Char;
+		UInt16 Char;
 		Xli::Key Key;
 		int TouchPointIndex;
 		WindowEvent() { memset(this, 0, sizeof(WindowEvent)); }
@@ -177,7 +177,7 @@ namespace Xli
 	public:
 		virtual void OnKeyDown(Key key) = 0;
 		virtual void OnKeyUp(Key key) = 0;
-		virtual void OnCharTyped(Utf16Char c) = 0;
+		virtual void OnCharTyped(UInt16 c) = 0;
 		virtual void OnMouseDown(int x, int y, MouseButtons button) = 0;
 		virtual void OnMouseUp(int x, int y, MouseButtons button) = 0;
 		virtual void OnMouseMove(int x, int y) = 0;
@@ -237,7 +237,7 @@ namespace Xli
 
 		virtual void OnKeyDown(Key key);
 		virtual void OnKeyUp(Key key);
-		virtual void OnCharTyped(Utf16Char c);
+		virtual void OnCharTyped(UInt16 c);
 		virtual void OnMouseDown(int x, int y, MouseButtons button);
 		virtual void OnMouseUp(int x, int y, MouseButtons button);
 		virtual void OnMouseMove(int x, int y);

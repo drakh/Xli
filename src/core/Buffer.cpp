@@ -2,17 +2,17 @@
 
 namespace Xli
 {
-	Buffer::Buffer(unsigned int size)
+	Buffer::Buffer(int size)
 	{
 		this->size = size;
 		this->data = ((UInt8*)this) + sizeof(Buffer);
 	}
 	
-	void* Buffer::operator new (size_t size, unsigned int bufSize)
+	void* Buffer::operator new (size_t size, int bufSize)
 	{
 		return (Buffer*)malloc(sizeof(Buffer) + bufSize);
 	}
-	void Buffer::operator delete (void* buf, unsigned int bufSize)
+	void Buffer::operator delete (void* buf, int bufSize)
 	{
 		free(buf);
 	}
@@ -21,7 +21,7 @@ namespace Xli
 		free(buf);
 	}
 	
-	Buffer* Buffer::Create(unsigned int size)
+	Buffer* Buffer::Create(int size)
 	{
 		return new (size) Buffer(size);
 	}
@@ -32,7 +32,7 @@ namespace Xli
 		this->operator delete(this, this->size);
 	}
 
-	Buffer* Buffer::Copy(const void* data, unsigned int size)
+	Buffer* Buffer::Copy(const void* data, int size)
 	{
 		Buffer* b = Buffer::Create(size);
 		memcpy(b->Data(), data, size);

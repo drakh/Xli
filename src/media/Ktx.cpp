@@ -129,7 +129,7 @@ namespace Xli
 
 		tex->Faces.Resize(header.numberOfFaces);
 
-		for (uint i = 0; i < header.numberOfMipmapLevels; i++)
+		for (UInt32 i = 0; i < header.numberOfMipmapLevels; i++)
 		{
 			int mw = header.pixelWidth >> i;
 			int mh = header.pixelHeight >> i;
@@ -139,7 +139,7 @@ namespace Xli
 			UInt32 sizeInBytes;
 			input->ReadSafe(&sizeInBytes, sizeof(UInt32), 1);
 
-			for (uint j = 0; j < header.numberOfFaces; j++)
+			for (UInt32 j = 0; j < header.numberOfFaces; j++)
 			{
 				Managed<Buffer> buf = Buffer::Create(sizeInBytes);
 				input->ReadSafe(buf->Data(), 1, buf->Size());

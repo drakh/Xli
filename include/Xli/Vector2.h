@@ -1,10 +1,11 @@
 #ifndef __XLI_VECTOR2_H__
 #define __XLI_VECTOR2_H__
 
-#include "Xli/BaseTypes.h"
-#include "Math.h"
-#include "String.h"
-#include "Hash.h"
+#include <Xli/BaseTypes.h>
+#include <Xli/Exception.h>
+#include <Xli/Math.h>
+#include <Xli/String.h>
+#include <Xli/Hash.h>
 
 namespace Xli
 {

@@ -10,7 +10,7 @@ namespace Xli
 	/**
 		\ingroup Containers
 	*/
-	template <typename T, uint TBufSize> class Array: public Object
+	template <typename T, int TBufSize> class Array: public Object
 	{
 		T* data;
 		T buf[TBufSize];
@@ -178,6 +178,12 @@ namespace Xli
 			return -1;
 		}
 
+		int LastIndexOf(const T& elm) const
+		{
+			for (int i = used-1; i >= 0; i--) if (data[i] == elm) return i;
+			return -1;
+		}
+
 		bool Contains(const T& value) const
 		{
 			int i = IndexOf(value);
@@ -246,41 +252,6 @@ namespace Xli
 			T temp = Last();
 			RemoveAt(used-1);
 			return temp;
-		}
-
-		int FirstIndexOf(const T& elm) const
-		{
-			return IndexOf(elm);
-		}
-
-		int LastIndexOf(const T& elm) const
-		{
-			for (int i = used-1; i >= 0; i--) if (data[i] == elm) return i;
-			return -1;
-		}
-
-		void RemoveLastInstanceOf(const T& elm)
-		{
-			int i = LastIndexOf(elm);
-			RemoveAt(i);
-		}
-
-		void RemoveFirstInstanceOf(const T& elm)
-		{
-			int i = FirstIndexOf(elm);
-			RemoveAt(i);
-		}
-
-		void SwapRemoveLastInstanceOf(const T& elm)
-		{
-			int i = LastIndexOf(elm);
-			SwapRemoveAt(i);
-		}
-
-		void SwapRemoveFirstInstanceOf(const T& elm)
-		{
-			int i = FirstIndexOf(elm);
-			SwapRemoveAt(i);
 		}
 
 		/**

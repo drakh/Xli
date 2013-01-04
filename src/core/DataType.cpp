@@ -24,7 +24,7 @@ namespace Xli
 		}
 	}
 
-	unsigned int DataTypeInfo::SizeOf(DataType dt)
+	int DataTypeInfo::SizeOf(DataType dt)
 	{
 		switch (dt)
 		{

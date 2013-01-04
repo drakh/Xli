@@ -61,7 +61,7 @@ namespace Xli
     
         virtual DataAccessor* CreateDataAccessor()
         {
-            Buffer* buf = Buffer::Create((unsigned int)GetLength());
+            Buffer* buf = Buffer::Create(GetLength());
             ReadSafe(buf->Data(), 1, buf->Size());
             return buf;
         }
@@ -152,7 +152,7 @@ namespace Xli
 	{
 	public:
 		TextStream(int initCapacity = 1024): DynamicStream(initCapacity) {}
-		CharString GetTextRaw() const { return CharString((char*)buf.Data(), GetLength()); }
+		String GetText() const { return String((const char*)buf.Data(), GetLength()); }
 	};
 }
 
