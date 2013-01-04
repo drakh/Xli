@@ -143,7 +143,7 @@ namespace Xli
 	class JsonWriter: public FormattedTextWriter
 	{
 	public:
-		Array<bool> Array;
+		Array<bool> IsArray;
 		bool ArrayEndSkipLine;
 
 		JsonWriter(Stream* stream): FormattedTextWriter(stream), ArrayEndSkipLine(false)
@@ -169,7 +169,7 @@ namespace Xli
 			case ValueTypeArray:
 				{
 					Write("[");
-					Array.Add(true);
+					IsArray.Add(true);
 					ArrayEndSkipLine = false;
 
 					if (value.Count() > 0)
@@ -181,7 +181,7 @@ namespace Xli
 						}
 					}
 
-					Array.RemoveLast();
+					IsArray.RemoveLast();
 
 					if (ArrayEndSkipLine)
 					{
@@ -197,7 +197,7 @@ namespace Xli
 			case ValueTypeOrderedObject:
 			case ValueTypeObject:
 				{
-					if (Array.Last())
+					if (IsArray.Last())
 					{
 						EndLine();
 						PushIndent();
@@ -205,7 +205,7 @@ namespace Xli
 					}
 
 					Write("{");
-					Array.Add(false);
+					IsArray.Add(false);
 
 					if (value.Count() > 0)
 					{
@@ -239,10 +239,10 @@ namespace Xli
 						BeginLine();
 					}
 
-					Array.Add();
+					IsArray.Add();
 					Write("}");
 
-					if (Array.Last())
+					if (IsArray.Last())
 					{
 						PopIndent();
 						ArrayEndSkipLine = true;
@@ -259,9 +259,9 @@ namespace Xli
 		void WriteJson(const Value& value)
 		{
 			BeginLine();
-			Array.Add(false);
+			IsArray.Add(false);
 			WriteRecursive(value);
-			Array.RemoveLast();
+			IsArray.RemoveLast();
 			EndLine();
 		}
 	};

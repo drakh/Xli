@@ -13,9 +13,9 @@
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "XLI", __VA_ARGS__))
 
 #include <Xli/Console.h>
-#include <XliGL/GLContext.h>
-#include <XliPlatform/Window.h>
-#include <XliPlatform/Display.h>
+#include <Xli/GLContext.h>
+#include <Xli/Window.h>
+#include <Xli/Display.h>
 
 struct AAssetManager* XliAAssetManager = 0;
 
@@ -100,7 +100,7 @@ namespace Xli
 
 		virtual String GetTitle()
 		{
-			return String();
+			return "";
 		}
 
 		virtual Vector2i GetPosition() 
@@ -180,7 +180,7 @@ namespace Xli
 		return Vector2i(w, h);
 	}
 
-	Window* Window::Create(int width, int height, const Xli::String& title, WindowEventHandler* eventHandler, int style)
+	Window* Window::Create(int width, int height, const String& title, WindowEventHandler* eventHandler, int style)
 	{
 		if (GlobalWindow != 0)
 		{
@@ -303,7 +303,7 @@ namespace Xli
 		{
 			for (int i = 0; i < elmCount; i++)
 			{
-				char c = ((char*)src)[i];
+				char c = ((const char*)src)[i];
 				if (c == '\n')
 				{
 					buf.Add('\0');

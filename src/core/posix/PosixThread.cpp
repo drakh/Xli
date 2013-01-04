@@ -1,5 +1,4 @@
-#include <XliPlatform.h>
-
+#include <Xli/Thread.h>
 #include <pthread.h>
 #include <time.h>
 

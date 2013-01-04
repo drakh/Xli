@@ -1,4 +1,4 @@
-#include <XliGL/GLContext.h>
+#include <Xli/GLContext.h>
 #include <EGL/egl.h>
 
 #ifdef ANDROID

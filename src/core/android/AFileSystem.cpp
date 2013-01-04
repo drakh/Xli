@@ -1,4 +1,4 @@
-#include <XliPlatform/NativeFileSystem.h>
+#include <Xli/NativeFileSystem.h>
 #include "../posix/PosixFileSystemBase.h"
 
 #include <android/asset_manager.h>
@@ -11,7 +11,7 @@ namespace Xli
 		AAsset* asset;
 
 	public:
-		AAssetStream(CharString fileName, FileMode mode)
+		AAssetStream(String fileName, FileMode mode)
 		{
 			if (mode != FileModeRead && mode != FileModeReadRandom) XLI_THROW("Unsupported asset file mode: " + (String)FileModeToString(mode));
 			asset = AAssetManager_open(XliAAssetManager, fileName.Data(), ((mode & FileModeRandom) != 0) ? AASSET_MODE_RANDOM : AASSET_MODE_STREAMING);
@@ -65,7 +65,7 @@ namespace Xli
 		AAsset* asset;
 
 	public:
-		AAssetBuffer(CharString fileName)
+		AAssetBuffer(String fileName)
 		{
 			asset = AAssetManager_open(XliAAssetManager, fileName.Data(), AASSET_MODE_BUFFER);
 			if (asset == 0) XLI_THROW_CANT_OPEN_FILE(fileName);
@@ -105,22 +105,10 @@ namespace Xli
 	class APosixFileSystem: public PosixFileSystemBase
 	{
 	public:
-		virtual String GetDocumentsDirectory()
+		virtual String GetSystemDirectory()
 		{
 			// TODO: Conform to Android specifications on proper handling of shared document files
 			return "/sdcard";
-		}
-
-		virtual String GetRoamingAppDataDirectory()
-		{
-			// TODO: Conform to Android specifications on proper handling of roaming app data files
-			return "/sdcard"; 
-		}
-
-		virtual String GetLocalAppDataDirectory()
-		{
-			// TODO: Conform to Android specifications on proper handling of local app data files
-			return "/sdcard"; 
 		}
 	};
 

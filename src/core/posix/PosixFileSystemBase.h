@@ -1,6 +1,6 @@
-#include <XliPlatform/NativeFileSystem.h>
+#include <Xli/NativeFileSystem.h>
 #include <Xli/File.h>
-#include <XliPlatform/Time.h>
+#include <Xli/Time.h>
 #include <Xli/Random.h>
 #include <Xli/Hash.h>
 #include <Xli/DateTime.h>
@@ -30,11 +30,11 @@ namespace Xli
 
         virtual String GetTempDirectory()
         {
-			char* tmpdir = getenv("TMPDIR");
+			const char* tmpdir = getenv("TMPDIR");
 			if (tmpdir == 0 || strlen(tmpdir) == 0) tmpdir = getenv("TEMP");
 			if (tmpdir == 0 || strlen(tmpdir) == 0) tmpdir = getenv("TEMPDIR");
 			if (tmpdir == 0 || strlen(tmpdir) == 0) tmpdir = getenv("TMP");
-			if (tmpdir == 0 || strlen(tmpdir) == 0) tmpdir = (char*)"/tmp";
+			if (tmpdir == 0 || strlen(tmpdir) == 0) tmpdir = "/tmp";
             return tmpdir;
         }
         
@@ -52,7 +52,7 @@ namespace Xli
 
 				for (int i = 0; i < tmp.Length(); i++)
 				{
-					tmp[i] = (StringChar)cs[rand.NextInt(cl)];
+					tmp[i] = cs[rand.NextInt(cl)];
 				}
 
 				tmp = pre + tmp;
@@ -64,35 +64,38 @@ namespace Xli
 			}
 		}
 
-		virtual String GetDocumentsDirectory()
+		virtual String GetSystemDirectory(SystemDirectory dir)
 		{
-			char* home = getenv("HOME");
-			if (home == 0 || strlen(home) == 0) home = (char*)"~";
-			return (String)home;
-		}
+			const char* home = getenv("HOME");
+			if (home == 0 || strlen(home) == 0) home = "~";
 
-		virtual String GetRoamingAppDataDirectory()
-		{
-			return GetDocumentsDirectory() + "/.config";
-		}
+			switch (dir)
+			{
+			case SystemDirectoryDocuments:
+				return home;
 
-		virtual String GetLocalAppDataDirectory()
-		{
-			return GetDocumentsDirectory() + "/.local/share";
+			case SystemDirectoryRoamingAppData:
+				return (String)home + "/.config";
+
+			case SystemDirectoryLocalAppData:
+				return (String)home + "/.local/share";
+
+			default:
+				return ".";
+			}
 		}
 
 		virtual String GetCurrentDirectory()
 		{
 			char buf[1024];
-			char* ptr = getcwd(buf, 1024);
+			const char* ptr = getcwd(buf, 1024);
 			if (ptr != buf) XLI_THROW("Unable to get current directory");
-			return String(buf);
+			return buf;
 		}
 		
-		virtual void ChangeDirectory(const String& dir)
+		virtual void ChangeDirectory(const String& path)
 		{
-			if (!dir.Length()) return;
-			CharString path = dir;
+			if (!path.Length()) return;
 
 			if (chdir(path.Data()) != 0)
 			{
@@ -100,12 +103,10 @@ namespace Xli
 			}
 		}
 
-		virtual void CreateDirectory(const String& name)
+		virtual void CreateDirectory(const String& path)
 		{
-			if (!name.Length()) return;
-			if (name == "~") return;
-
-			CharString path = name;
+			if (!path.Length()) return;
+			if (path == "~") return;
 
 			struct stat st;
 			if (stat(path.Data(), &st) == 0) return;
@@ -117,40 +118,32 @@ namespace Xli
 			}
 		}
 
-		virtual void DeleteDirectory(const String& name)
+		virtual void DeleteDirectory(const String& path)
 		{ 
-			CharString path = name;
-
 			if (!rmdir(path.Data()) != 0)
 			{
 				XLI_THROW("Unable to delete directory '" + path + "'");
 			}
 		}
 
-		virtual void DeleteFile(const String& name)
+		virtual void DeleteFile(const String& path)
 		{ 
-			CharString path = name;
-
 			if (!unlink(path.Data()) != 0)
 			{
 				XLI_THROW("Unable to delete file '" + path + "'");
 			}
 		}
 
-		virtual void MoveDirectory(const String& oldName, const String& newName)
+		virtual void MoveDirectory(const String& oldPath, const String& newPath)
 		{ 
-			CharString oldPath = oldName, newPath = newName;
-
 			if (rename(oldPath.Data(), newPath.Data()) != 0)
 			{
 				XLI_THROW("Unable to move directory '" + oldPath + "' to '" + newPath + "'");
 			}
 		}
 		
-		virtual void MoveFile(const String& oldName, const String& newName)
+		virtual void MoveFile(const String& oldPath, const String& newPath)
 		{ 
-			CharString oldPath = oldName, newPath = newName;
-
 			if (rename(oldPath.Data(), newPath.Data()) != 0)
 			{
 				XLI_THROW("Unable to move file '" + oldPath + "' to '" + newPath + "'");
@@ -159,25 +152,21 @@ namespace Xli
 
 		virtual bool FileExists(const String& path)
 		{
-			CharString ascii_path = path;
-
 			struct stat attributes;
-			return stat(ascii_path.Data(), &attributes) != -1;
+			return stat(path.Data(), &attributes) != -1;
 		}
 
 		virtual FileInfo GetFileInfo(const String& path)
 		{
-			CharString ascii_path = path;
-
 			struct stat attributes;
 
-			if (stat(ascii_path.Data(), &attributes) == -1)
+			if (stat(path.Data(), &attributes) == -1)
 			{
 				XLI_THROW_FILE_NOT_FOUND(path);
 			}
 
 			FileInfo f;
-			f.Name = ascii_path;
+			f.Name = path;
 
 			f.Flags = 0;
 			if (!(((attributes.st_mode & S_IWOTH) == S_IWOTH)
@@ -199,33 +188,36 @@ namespace Xli
 			return f;
 		}
 
-		virtual void GetFiles(const String& path, Array<FileInfo>& list)
+		virtual void GetFiles(const String& _path, Array<FileInfo>& list)
 		{
-			CharString ascii_path = path;
-
-			if (ascii_path.Length() > 0 && ascii_path.Last() != '/')
+			String path;
+			if (_path.Length() > 0 && _path.Last() != '/')
 			{
-				ascii_path = ascii_path + "/";
+				path = _path + "/";
+			}
+			else
+			{
+				path = _path;
 			}
 
 			DIR *dp;
 			struct dirent *ep;
 
-			if ((dp  = opendir(ascii_path.Data())) == NULL)
+			if ((dp  = opendir(path.Data())) == NULL)
 			{
 				XLI_THROW_FILE_NOT_FOUND(path);
 			}
 
-            if (ascii_path == "./")
+            if (path == "./")
 			{
-				ascii_path = "";
+				path = "";
 			}
 
 			while ((ep = readdir(dp)) != NULL)
 			{
 				String fn = ep->d_name;
 				if (fn == "." || fn == "..") continue;
-				list.Add(GetFileInfo(ascii_path + fn));
+				list.Add(GetFileInfo(path + fn));
 			}
 
 			closedir(dp);

@@ -26,7 +26,7 @@ namespace Xli
 			}
 
             Print(": ");
-            CharString in = In->ReadLine().Trim().ToLower();
+            String in = In->ReadLine().Trim().ToLower();
 
 			if ((buttons == DialogButtonsOK || buttons == DialogButtonsOKCancel) && (in == "ok" || in == "")) { r = DialogResultOK; break; }
 			else if ((buttons == DialogButtonsOKCancel || buttons == DialogButtonsYesNoCancel || buttons == DialogButtonsCancelTryContinue) && (in == "cancel" || in == "c")) { r = DialogResultCancel; break; }

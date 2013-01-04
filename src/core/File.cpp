@@ -33,7 +33,7 @@ namespace Xli
 
 #else
 		
-		fp = fopen(&fp, fileName.Data(), m);
+		fp = fopen(fileName.Data(), m);
 		if (!fp) XLI_THROW_CANT_OPEN_FILE(fileName);
 
 #endif

@@ -1,4 +1,4 @@
-#include <XliPlatform/Mutex.h>
+#include <Xli/Mutex.h>
 #include <pthread.h>
 
 namespace Xli

@@ -1,4 +1,4 @@
-#include <XliPlatform/ConditionVariable.h>
+#include <Xli/ConditionVariable.h>
 #include <pthread.h>
 
 namespace Xli

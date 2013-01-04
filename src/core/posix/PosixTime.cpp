@@ -1,6 +1,5 @@
 #include <Xli/DateTime.h>
-#include <XliPlatform/Time.h>
-
+#include <Xli/Time.h>
 #include <sys/time.h>
 #include <time.h>
 
