@@ -3,6 +3,7 @@
 
 #include <XliMedia/ImageReader.h>
 #include <XliMedia/ImageWriter.h>
+#include <Xli/Stream.h>
 
 namespace Xli
 {

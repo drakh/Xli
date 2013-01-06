@@ -7,41 +7,16 @@
 
 Xli::Managed<*>=<object>
 
-Xli::Stringt<char,*>{
+Xli::String{
 	preview 		([$e.data,s])
 	stringview		([$e.data,sb])
 }
-Xli::Stringt<unsigned short,*>{
+
+Xli::Utf16String{
 	preview 		([$e.data,su])
 	stringview		([$e.data,su])
 }
-Xli::Selector{
-	preview 		([($e.selectorsReverse->data)[$e.handle].data,su])
-	stringview		([($e.selectorsReverse->data)[$e.handle].data,su])
-}
 
-Xli::List<*>{
-	children
-	(
-		#array
-		(
-			expr :		($e.data->data)[$i],
-			size :		$e.data->used
-		)
-	)
-	preview
-	(
-		#(
-			"[", $e.data->used , "](",
-			#array
-			(
-				expr :	($e.data->data)[$i],
-				size :	$e.data->used
-			),
-			")"
-		)
-	)
-}
 Xli::Array<*>{
 	children
 	(
@@ -64,6 +39,7 @@ Xli::Array<*>{
 		)
 	)
 }
+
 Xli::HashBucket<*>{
 	preview
 	(
@@ -97,42 +73,6 @@ Xli::HashMap<*>{
 				(
 					expr :	$c.buckets[$i],
 					size :	$c.bucketCount
-				) : #(
-					#array 
-					(
-						expr: &$e,
-						size: $e.State == 1,
-					): $e
-				)
-			),
-			" )"
-		)
-	)
-}
-Xli::Dictionary<*>{
-	children
-	(
-		#array
-		(
-			expr :	$c.map->buckets[$i],
-			size :	$c.map->bucketCount
-		) : #(
-			#array 
-			(
-				expr: &$e,
-				size: $e.State == 1,
-			): $e 
-		)
-	)
-	preview
-	(
-		#(
-			"[", $c.map->count, "] (",
-			#(
-				#array
-				(
-					expr :	$c.map->buckets[$i],
-					size :	$c.map->bucketCount
 				) : #(
 					#array 
 					(
