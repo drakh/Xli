@@ -66,8 +66,8 @@ namespace Xli
 	public:
 		virtual ~FileSystem();
 
-		virtual Stream* OpenFile(const String& fileName, FileMode mode = FileModeRead) = 0;
-		virtual DataAccessor* OpenFileAsBuffer(const String& fileName);
+		virtual Stream* OpenFile(const String& filename, FileMode mode = FileModeRead) = 0;
+		virtual DataAccessor* OpenFileAsBuffer(const String& filename);
 
 		virtual void CreateDirectory(const String& name);
 		virtual void DeleteDirectory(const String& name);

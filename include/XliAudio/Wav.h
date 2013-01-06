@@ -14,9 +14,9 @@ namespace Xli
 	public:
 		static AudioStream* Open(Stream* source);
 		
-		static AudioStream* Open(const String& fileName)
+		static AudioStream* Open(const String& filename)
 		{
-			Managed<File> f = new File(fileName, FileModeRead);	
+			Managed<File> f = new File(filename, FileModeRead);	
 			return Open(f);
 		}
 	};

@@ -9,8 +9,8 @@ namespace Xli
 	class Text
 	{
 	public:
-		static String Load(const String& fileName);
-		static void Save(const String& fileName, const String& content);
+		static String Load(const String& filename);
+		static void Save(const String& filename, const String& content);
 	};
 }
 

@@ -26,17 +26,17 @@ namespace Xli
 			return Parse(TextReader(stream).ReadAll(), preserveOrder);
 		}
 
-		inline static Value Load(const String& fileName, bool preserveOrder = false)
+		inline static Value Load(const String& filename, bool preserveOrder = false)
 		{
-			File f(fileName, FileModeRead);
+			File f(filename, FileModeRead);
 			return Load(&f, preserveOrder);
 		}
 
 		static void Save(Stream* stream, const Value& value);
 
-		inline static void Save(const String& fileName, const Value& value)
+		inline static void Save(const String& filename, const Value& value)
 		{
-			File f(fileName, FileModeWrite);
+			File f(filename, FileModeWrite);
 			Save(&f, value);
 		}
 

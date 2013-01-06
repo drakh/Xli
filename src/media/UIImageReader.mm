@@ -130,9 +130,9 @@ namespace Xli
 		return r->ReadBitmap();
 	}
 
-	Bitmap* Jpeg::Load(const String& fileName)
+	Bitmap* Jpeg::Load(const String& filename)
 	{
-		Managed<File> f = new File(fileName, FileModeRead);
+		Managed<File> f = new File(filename, FileModeRead);
 		return Load(f);
 	}
     
@@ -147,9 +147,9 @@ namespace Xli
 		return r->ReadBitmap();
 	}
 
-	Bitmap* Png::Load(const String& fileName)
+	Bitmap* Png::Load(const String& filename)
 	{
-		Managed<File> f = new File(fileName, FileModeRead);
+		Managed<File> f = new File(filename, FileModeRead);
 		return Load(f);
 	}
 }

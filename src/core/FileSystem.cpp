@@ -25,9 +25,9 @@ namespace Xli
 	{
 	}
 
-	DataAccessor* FileSystem::OpenFileAsBuffer(const String& fileName)
+	DataAccessor* FileSystem::OpenFileAsBuffer(const String& filename)
 	{
-		Managed<Stream> f = OpenFile(fileName, FileModeRead);
+		Managed<Stream> f = OpenFile(filename, FileModeRead);
 		return f->CreateDataAccessor();
 	}
 
@@ -118,7 +118,7 @@ namespace Xli
 	public:
 		SubFileSystem(FileSystem* fs, const String& path);
 
-		virtual Stream* OpenFile(const String& fileName, FileMode mode);
+		virtual Stream* OpenFile(const String& filename, FileMode mode);
 
 		virtual void CreateDirectory(const String& name);
 		virtual void DeleteDirectory(const String& name);
@@ -146,9 +146,9 @@ namespace Xli
 		if (path.Length() > 0 && path.Last() != '/') this->path = this->path + '/';
 	}
 
-	Stream* SubFileSystem::OpenFile(const String& fileName, FileMode mode)
+	Stream* SubFileSystem::OpenFile(const String& filename, FileMode mode)
 	{
-		return fs->OpenFile(path + fileName, mode);
+		return fs->OpenFile(path + filename, mode);
 	}
 
 	void SubFileSystem::CreateDirectory(const String& name)

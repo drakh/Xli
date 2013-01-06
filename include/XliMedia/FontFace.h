@@ -51,9 +51,9 @@ namespace Xli
 
 		static FontFace* OpenFontFace(Stream* fontFile, int size);
 
-		static inline FontFace* OpenFontFace(const String& fileName, int size)
+		static inline FontFace* OpenFontFace(const String& filename, int size)
 		{
-			File f(fileName, FileModeRead);
+			File f(filename, FileModeRead);
 			return OpenFontFace(&f, size);
 		}
 	};

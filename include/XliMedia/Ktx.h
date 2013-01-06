@@ -13,9 +13,9 @@ namespace Xli
 	{
 	public:
 		static void Save(Stream* output, Texture* tex);
-		static void Save(const String& fileName, Texture* tex);
+		static void Save(const String& filename, Texture* tex);
 		static Texture* Load(Stream* input);
-		static Texture* Load(const String& fileName);
+		static Texture* Load(const String& filename);
 	};
 }
 

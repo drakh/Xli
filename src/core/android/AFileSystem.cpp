@@ -11,11 +11,11 @@ namespace Xli
 		AAsset* asset;
 
 	public:
-		AAssetStream(String fileName, FileMode mode)
+		AAssetStream(String filename, FileMode mode)
 		{
 			if (mode != FileModeRead && mode != FileModeReadRandom) XLI_THROW("Unsupported asset file mode: " + (String)FileModeToString(mode));
-			asset = AAssetManager_open(XliAAssetManager, fileName.Data(), ((mode & FileModeRandom) != 0) ? AASSET_MODE_RANDOM : AASSET_MODE_STREAMING);
-			if (asset == 0) XLI_THROW_CANT_OPEN_FILE(fileName);
+			asset = AAssetManager_open(XliAAssetManager, filename.Data(), ((mode & FileModeRandom) != 0) ? AASSET_MODE_RANDOM : AASSET_MODE_STREAMING);
+			if (asset == 0) XLI_THROW_CANT_OPEN_FILE(filename);
 		}
 		virtual ~AAssetStream()
 		{
@@ -65,10 +65,10 @@ namespace Xli
 		AAsset* asset;
 
 	public:
-		AAssetBuffer(String fileName)
+		AAssetBuffer(String filename)
 		{
-			asset = AAssetManager_open(XliAAssetManager, fileName.Data(), AASSET_MODE_BUFFER);
-			if (asset == 0) XLI_THROW_CANT_OPEN_FILE(fileName);
+			asset = AAssetManager_open(XliAAssetManager, filename.Data(), AASSET_MODE_BUFFER);
+			if (asset == 0) XLI_THROW_CANT_OPEN_FILE(filename);
 		}
 		virtual ~AAssetBuffer()
 		{
@@ -87,13 +87,13 @@ namespace Xli
 	class AAssetFileSystem: public FileSystem
 	{
 	public:
-		virtual Stream* OpenFile(const String& fileName, FileMode mode)
+		virtual Stream* OpenFile(const String& filename, FileMode mode)
 		{
-			return new AAssetStream(fileName, mode);
+			return new AAssetStream(filename, mode);
 		}
-		virtual DataAccessor* OpenFileAsBuffer(const String& fileName)
+		virtual DataAccessor* OpenFileAsBuffer(const String& filename)
 		{
-			return new AAssetBuffer(fileName);
+			return new AAssetBuffer(filename);
 		}
 	};
 

@@ -4,7 +4,7 @@
 
 namespace Xli
 {
-	File::File(const String& fileName, FileMode mode)
+	File::File(const String& filename, FileMode mode)
 	{
 		const char* m = "rb";
         
@@ -23,18 +23,18 @@ namespace Xli
 		
 		fp = 0;
 		
-		Utf16String fileNameW = Unicode::Utf8To16(fileName);
+		Utf16String filenameW = Unicode::Utf8To16(filename);
 		Utf16String mW = Unicode::Utf8To16(m);
 		
-		if (_wfopen_s(&fp, fileNameW.Data(), mW.Data()) != 0 || !fp)
+		if (_wfopen_s(&fp, filenameW.Data(), mW.Data()) != 0 || !fp)
 		{
-			XLI_THROW_CANT_OPEN_FILE(fileName);
+			XLI_THROW_CANT_OPEN_FILE(filename);
 		}
 
 #else
 		
-		fp = fopen(fileName.Data(), m);
-		if (!fp) XLI_THROW_CANT_OPEN_FILE(fileName);
+		fp = fopen(filename.Data(), m);
+		if (!fp) XLI_THROW_CANT_OPEN_FILE(filename);
 
 #endif
         

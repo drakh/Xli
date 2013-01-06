@@ -393,6 +393,12 @@
     <ClCompile Include="..\..\..\src\core\Unicode.cpp">
       <Filter>Xli</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Hash.cpp">
+      <Filter>Xli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Object.cpp">
+      <Filter>Xli</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\core\CMakeLists.txt" />

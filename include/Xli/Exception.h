@@ -16,29 +16,15 @@ namespace Xli
 		String _func;
 		int _line;
 
-		Exception()
-		{
-			this->_func = "<unknown>";
-			this->_line = 0;
-		}
-		Exception(const String& message)
-		{
-			this->_message = message;
-			this->_func = "<unknown>";
-			this->_line = 0;
-		}
-		Exception(const String& message, const String& func, int line)
-		{
-			this->_message = message;
-			this->_func = func;
-			this->_line = line;
-		}
+		Exception();
+		Exception(const String& message);
+		Exception(const String& message, const String& func, int line);
 
-		const String& GetMessage() const { return _message; }
-		const String& GetFunction() const { return _func; }
-		int GetLine() const { return _line; }
+		const String& GetMessage() const;
+		const String& GetFunction() const;
+		int GetLine() const;
 
-		const String& ToString() const { return _message; }
+		const String& ToString() const;
 	};
 }
 

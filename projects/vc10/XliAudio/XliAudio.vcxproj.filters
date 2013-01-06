@@ -22,6 +22,12 @@
     <Filter Include="XliAudio\portaudio">
       <UniqueIdentifier>{e16ad626-d2c5-4306-bc77-64239c359850}</UniqueIdentifier>
     </Filter>
+    <Filter Include="XliAudio\opensles">
+      <UniqueIdentifier>{a7e31580-421f-4cb2-b529-6d3060b5b7f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XliAudio\coreaudio">
+      <UniqueIdentifier>{31a6c8cd-dbd3-412b-b215-ef0b3d72538c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\XliAudio.h" />
@@ -32,6 +38,12 @@
       <Filter>XliAudio</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\XliAudio\Wav.h">
+      <Filter>XliAudio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliAudio\SoundChannel.h">
+      <Filter>XliAudio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliAudio\Sound.h">
       <Filter>XliAudio</Filter>
     </ClInclude>
   </ItemGroup>
@@ -108,11 +120,29 @@
     <ClCompile Include="..\..\..\src\audio\AudioStream.cpp">
       <Filter>XliAudio</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\audio\PAAudioBuffer.cpp">
+    <ClCompile Include="..\..\..\src\audio\Sound.cpp">
+      <Filter>XliAudio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\audio\SoundChannel.cpp">
+      <Filter>XliAudio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\audio\portaudio\PAAudioBuffer.cpp">
       <Filter>XliAudio\portaudio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\audio\opensles\SlesSound.cpp">
+      <Filter>XliAudio\opensles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\audio\opensles\SlesSoundChannel.cpp">
+      <Filter>XliAudio\opensles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\audio\CMakeLists.txt" />
+    <None Include="..\..\..\src\audio\coreaudio\CoreAudioSound.mm">
+      <Filter>XliAudio\coreaudio</Filter>
+    </None>
+    <None Include="..\..\..\src\audio\coreaudio\CoreAudioSoundChannel.mm">
+      <Filter>XliAudio\coreaudio</Filter>
+    </None>
   </ItemGroup>
 </Project>

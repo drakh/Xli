@@ -97,9 +97,9 @@ namespace Xli
 		}
 	}
 
-	void Ktx::Save(const String& fileName, Texture* tex)
+	void Ktx::Save(const String& filename, Texture* tex)
 	{
-		File f(fileName, FileModeWrite);
+		File f(filename, FileModeWrite);
 		Save(&f, tex);
 	}
 
@@ -176,9 +176,9 @@ namespace Xli
 		return tex;
 	}
 
-	Texture* Ktx::Load(const String& fileName)
+	Texture* Ktx::Load(const String& filename)
 	{
-		File f(fileName, FileModeRead);
+		File f(filename, FileModeRead);
 		return Load(&f);
 	}
 }

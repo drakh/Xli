@@ -23,9 +23,9 @@ namespace Xli
 			return (Timestamp)time * DateTime::PerSecond + (369 * 365 + 89) * DateTime::PerDay;
 		}
 
-		virtual Stream* OpenFile(const String& fileName, FileMode mode)
+		virtual Stream* OpenFile(const String& filename, FileMode mode)
 		{
-			return new File(fileName, mode);
+			return new File(filename, mode);
 		}
 
         virtual String GetTempDirectory()

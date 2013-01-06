@@ -138,9 +138,9 @@ namespace Xli
 		w->WriteBitmap(bmp);
 	}
 
-	void Png::Save(const String& fileName, Bitmap* bmp)
+	void Png::Save(const String& filename, Bitmap* bmp)
 	{
-		File f(fileName, FileModeWrite);
+		File f(filename, FileModeWrite);
 		Save(&f, bmp);
 	}
 }

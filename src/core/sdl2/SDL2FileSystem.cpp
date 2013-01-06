@@ -11,7 +11,7 @@ namespace Xli
 		bool canRead, canWrite;
 
 	public:
-		SDL2File(const String& fileName, FileMode mode)
+		SDL2File(const String& filename, FileMode mode)
 		{
 			fp = 0;
 			const char* m = "rb";
@@ -27,14 +27,12 @@ namespace Xli
 			default: XLI_THROW(String("Invalid file mode: ") + FileModeToString(mode));
 			}
 
-			CharString utf8Filename = Unicode::Utf16To8(fileName);
-
 			// This will look inside the app bundle on MacOSX and iOS
-			fp = SDL_RWFromFile(utf8Filename.Data(), m); 
+			fp = SDL_RWFromFile(filename.Data(), m); 
 
 			if (!fp)
 			{
-				XLI_THROW_CANT_OPEN_FILE(fileName);
+				XLI_THROW_CANT_OPEN_FILE(filename);
 			}
 
 			this->canRead = (mode & FileModeRead) != 0;
@@ -129,9 +127,9 @@ namespace Xli
 		}
 	};
 
-    Stream* SDL2FileSystem::OpenFile(const String& fileName, FileMode mode)
+    Stream* SDL2FileSystem::OpenFile(const String& filename, FileMode mode)
     {
-        return new SDL2File(fileName, mode);
+        return new SDL2File(filename, mode);
     }
 
 	NativeFileSystem* CreateNativeFileSystem()

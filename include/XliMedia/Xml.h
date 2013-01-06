@@ -86,9 +86,9 @@ namespace Xli
 			return Parse(TextReader(stream).ReadAll());
 		}
 
-		inline static XmlElement* Load(const String& fileName)
+		inline static XmlElement* Load(const String& filename)
 		{
-			File f(fileName, FileModeRead);
+			File f(filename, FileModeRead);
 			return Load(&f);
 		}
 	};

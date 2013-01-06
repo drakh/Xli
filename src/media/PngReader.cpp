@@ -140,9 +140,9 @@ namespace Xli
 		Managed<ImageReader> r = CreateReader(input);
 		return r->ReadBitmap();
 	}
-	Bitmap* Png::Load(const String& fileName)
+	Bitmap* Png::Load(const String& filename)
 	{
-		Managed<File> f = new File(fileName, FileModeRead);
+		Managed<File> f = new File(filename, FileModeRead);
 		return Load(f);
 	}
 }

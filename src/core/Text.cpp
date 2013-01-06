@@ -2,15 +2,15 @@
 
 namespace Xli
 {
-	String Text::Load(const String& fileName)
+	String Text::Load(const String& filename)
 	{
-		File f(fileName, FileModeRead);
+		File f(filename, FileModeRead);
 		return TextReader(&f).ReadAll();
 	}
 
-	void Text::Save(const String& fileName, const String& content)
+	void Text::Save(const String& filename, const String& content)
 	{
-		File f(fileName, FileModeWrite);
+		File f(filename, FileModeWrite);
 		TextWriter(&f).Write(content);
 	}
 }

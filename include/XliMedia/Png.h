@@ -16,10 +16,10 @@ namespace Xli
 		static ImageReader* CreateReader(Stream* input);
 
 		static Bitmap* Load(Stream* input);
-		static Bitmap* Load(const String& fileName);
+		static Bitmap* Load(const String& filename);
 
 		static void Save(Stream* output, Bitmap* bmp);
-		static void Save(const String& fileName, Bitmap* bmp);
+		static void Save(const String& filename, Bitmap* bmp);
 	};
 }
 

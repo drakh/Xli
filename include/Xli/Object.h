@@ -12,45 +12,16 @@ namespace Xli
 		int refCount;
 
 	public:
-		Object() 
-		{ 
-			refCount = 1; 
-		}
+		Object();
+		virtual ~Object();
 
-		virtual ~Object() 
-		{
-			if (refCount > 1)
-			{
-				XLI_THROW_BAD_DELETE;
-			}
-		}
+		int GetRefCount() const;
 
-		int GetRefCount() const
-		{
-			return refCount;
-		}
+		void AddRef();
+		void Release();
 
-		void AddRef() 
-		{
-			refCount++;
-		}
-
-		void Release()
-		{
-			refCount--;			
-			if (refCount) return;
-			Delete();
-		}
-
-		virtual void Delete() 
-		{ 
-			delete this; 
-		}
-
-		virtual String ToString()
-		{
-			return "<Object " + Xli::ToString((void*)this) + ">";
-		}
+		virtual void Delete();
+		virtual String ToString();
 	};
 }
 

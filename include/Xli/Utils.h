@@ -76,6 +76,7 @@ namespace Xli
 			dst[3] = src[0];
 			return r;
 		}
+
 		template <typename T> static T Swap2(const T& i)
 		{
 			T r;

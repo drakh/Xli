@@ -165,9 +165,9 @@ namespace Xli
 		w->WriteBitmap(bmp);
 	}
 
-	void Jpeg::Save(const String& fileName, Bitmap* bmp, int quality)
+	void Jpeg::Save(const String& filename, Bitmap* bmp, int quality)
 	{
-		File f(fileName, FileModeWrite);
+		File f(filename, FileModeWrite);
 		Save(&f, bmp, quality);
 	}
 }

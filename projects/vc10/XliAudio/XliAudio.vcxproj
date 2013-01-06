@@ -30,6 +30,8 @@
     <ClInclude Include="..\..\..\include\XliAudio.h" />
     <ClInclude Include="..\..\..\include\XliAudio\AudioBuffer.h" />
     <ClInclude Include="..\..\..\include\XliAudio\AudioStream.h" />
+    <ClInclude Include="..\..\..\include\XliAudio\Sound.h" />
+    <ClInclude Include="..\..\..\include\XliAudio\SoundChannel.h" />
     <ClInclude Include="..\..\..\include\XliAudio\Wav.h" />
   </ItemGroup>
   <ItemGroup>
@@ -241,11 +243,45 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\audio\AudioBuffer.cpp" />
     <ClCompile Include="..\..\..\src\audio\AudioStream.cpp" />
-    <ClCompile Include="..\..\..\src\audio\PAAudioBuffer.cpp" />
+    <ClCompile Include="..\..\..\src\audio\opensles\SlesSoundChannel.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\audio\opensles\SlesSound.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\audio\portaudio\PAAudioBuffer.cpp" />
+    <ClCompile Include="..\..\..\src\audio\Sound.cpp" />
+    <ClCompile Include="..\..\..\src\audio\SoundChannel.cpp" />
     <ClCompile Include="..\..\..\src\audio\Wav.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\audio\CMakeLists.txt" />
+    <None Include="..\..\..\src\audio\coreaudio\CoreAudioSoundChannel.mm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
+    <None Include="..\..\..\src\audio\coreaudio\CoreAudioSound.mm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectName>XliAudio</ProjectName>

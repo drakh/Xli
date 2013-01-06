@@ -21,9 +21,9 @@ namespace Xli
 	class Win32FileSystem: public NativeFileSystem
 	{
 	public:
-		Stream* OpenFile(const String& fileName, FileMode mode)
+		Stream* OpenFile(const String& filename, FileMode mode)
 		{
-			return new File(fileName, mode);
+			return new File(filename, mode);
 		}
 
 		virtual String CreateTempFilename()
