@@ -48,10 +48,6 @@ namespace Xli
 		{
 			return String(X) + ", " + Y + ", " + Z + ", " + W;
 		}
-		UInt32 Hash() const
-		{
-			return Xli::Hash(X) ^ Xli::Hash(Y) ^ Xli::Hash(Z) ^ Xli::Hash(W);
-		}
 
 		Vector2t<T> XY() const
 		{

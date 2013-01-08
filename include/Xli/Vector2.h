@@ -52,10 +52,7 @@ namespace Xli
 		{
 			return String(X) + ", " + Y;
 		}
-		UInt32 Hash() const
-		{
-			return Xli::Hash(X) ^ Xli::Hash(Y);
-		}
+
 		bool operator == (const Vector2t& v) const
 		{
 			return X == v.X && Y == v.Y;

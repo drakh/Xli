@@ -50,7 +50,7 @@ namespace Xli
 	public:
 		virtual ValueType GetType() const = 0;
 
-		virtual UInt32 Hash() const;
+		virtual UInt32 GetHashCode() const;
 
 		virtual String ToString() const;
 		virtual Int32 ToInt32() const;
@@ -118,7 +118,7 @@ namespace Xli
 
 		static const char* TypeToString(ValueType type);
 
-		UInt32 Hash() const { return object->Hash(); }
+		UInt32 GetHashCode() const { return object->GetHashCode(); }
 		ValueType GetType() const { return object->GetType(); }
 
 		bool IsArray() const;
@@ -239,7 +239,7 @@ namespace Xli
 		virtual Int64 ToInt64() const { return value? 1 : 0; }		
 		virtual double ToDouble() const { return value? 1.0 : 0.0; } 
 
-		virtual UInt32 Hash() const { return Xli::Hash(value); }
+		virtual UInt32 GetHashCode() const { return Xli::Hash(value); }
 		
 		BoolValue(bool val) { value = val; }
 		operator bool() { return value; }
@@ -264,7 +264,7 @@ namespace Xli
 		virtual Int32 ToInt32() const { return value.ToInt(); }
 		virtual bool ToBool() const { if (value=="true") return true; if (value=="false") return false; XLI_THROW("Could not convert string to bool"); }
 
-		virtual UInt32 Hash() const { return value.Hash(); }
+		virtual UInt32 GetHashCode() const { return Xli::Hash(value); }
 		
 		StringValue(const String& str) { value = str; }
 		operator const String&() { return value; }
@@ -289,7 +289,7 @@ namespace Xli
 		virtual double ToDouble() const { return (double)value; }
 		virtual bool ToBool() const { return value != 0; }
 
-		virtual UInt32 Hash() const { return Xli::Hash(value); }
+		virtual UInt32 GetHashCode() const { return Xli::Hash(value); }
 		
 		IntegerValue(int val) { value = val; }
 		
@@ -327,7 +327,7 @@ namespace Xli
 		virtual double ToDouble() const { return (double)value; }
 		virtual bool ToBool() const { return value != 0; }
 		
-		virtual UInt32 Hash() const { return Xli::Hash(value); }
+		virtual UInt32 GetHashCode() const { return Xli::Hash(value); }
 
 		Int64Value(Int64 val) { value = val; }
 
@@ -365,7 +365,7 @@ namespace Xli
 		virtual double ToDouble() const { return value; }
 		virtual bool ToBool() const { return value != 0.0; }
 
-		virtual UInt32 Hash() const { return Xli::Hash(value); }
+		virtual UInt32 GetHashCode() const { return Xli::Hash(value); }
 
 		DoubleValue(double val) { value = val; }
 		operator double() { return value; }
@@ -454,6 +454,15 @@ namespace Xli
 		virtual Value& Get(const Value& key) { return Values[key]; }
 		virtual int Count() const { return Values.Count(); }
 	};
+
+	/**
+		\addtogroup Media
+		@{
+	*/
+
+	UInt32 Hash(const Value& value);
+
+	/** @} */
 };
 
 #endif

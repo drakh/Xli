@@ -47,7 +47,6 @@ namespace Xli
 		const char* Data() const;
 
 		int Length() const;
-		UInt32 Hash() const;
 
 		char& Get(int index);
 		const char& Get(int index) const;
@@ -132,6 +131,15 @@ namespace Xli
 		String& operator = (float f);
 		String& operator = (double d);
 	};
+
+	/**
+		\addtogroup Core
+		@{
+	*/
+
+	UInt32 Hash(const String& str);
+
+	/** @} */
 }
 
 /**

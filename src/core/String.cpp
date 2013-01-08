@@ -1,6 +1,7 @@
 #include <Xli/String.h>
 #include <Xli/Array.h>
 #include <Xli/Exception.h>
+#include <Xli/Hash.h>
 
 namespace Xli
 {
@@ -126,15 +127,9 @@ namespace Xli
 		return length;
 	}
 
-	UInt32 String::Hash() const
+	UInt32 Hash(const String& str)
 	{
-		// djb2 algorithm
-		UInt32 hash = 5381;
-		for (int i = 0; i < length; i++)
-		{
-			hash = ((hash << 5) + hash) ^ (UInt32)data[i];
-		}
-		return hash;
+		return Xli::Hash((const UInt8*)str.Data(), str.Length());
 	}
 
 	char& String::Get(int index)

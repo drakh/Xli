@@ -40,7 +40,7 @@ namespace Xli
 
 	#define UNSUPPORTED XLI_THROW(String(__FUNCTION__) + " is not supported for type: " + Value::TypeToString(GetType()))
 
-	UInt32 IValue::Hash() const { UNSUPPORTED; }
+	UInt32 IValue::GetHashCode() const { UNSUPPORTED; }
 
 	Int32 IValue::ToInt32() const { UNSUPPORTED; }
 	Int64 IValue::ToInt64() const { UNSUPPORTED; }
@@ -218,5 +218,10 @@ namespace Xli
 		Matrix4 v;
 		GetFloatArray(*this, v.Data(), 16);
 		return v;
+	}
+
+	UInt32 Hash(const Value& value)
+	{
+		return value.GetHashCode();
 	}
 }

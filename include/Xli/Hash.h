@@ -10,8 +10,10 @@ namespace Xli
 		@{
 	*/
 
+	UInt32 Hash(const UInt8* data, int size);
+
 	UInt32 Hash(bool b);
-	UInt32 Hash(void* p);
+	UInt32 Hash(const void* p);
 	UInt32 Hash(float f);
 	UInt32 Hash(double d);
 
@@ -24,9 +26,10 @@ namespace Xli
 	UInt32 Hash(Int64 i);
 	UInt32 Hash(UInt64 i);
 
-	template <class T> UInt32 Hash(const T& t) { return t.Hash(); }
-	template <class T> UInt32 Hash(T& t) { return t.Hash(); }
-	template <class T> UInt32 Hash(T* t) { return (UInt32)(long long)t; }
+	template <class T> UInt32 Hash(const T* t) { return Hash((const void*)t); }
+	template <class T> UInt32 Hash(T* t) { return Hash((const void*)t); }
+
+	template <class T> UInt32 Hash(const T& t) { return Hash((const UInt8*)&t, (int)sizeof(T)); }
 
 	/** @} */
 }
