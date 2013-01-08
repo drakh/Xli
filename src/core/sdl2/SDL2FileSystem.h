@@ -13,9 +13,7 @@ namespace Xli
 #ifdef XLI_PLATFORM_IOS
         
         virtual String GetTempDirectory();
-        virtual String GetDocumentsDirectory();
-		virtual String GetRoamingAppDataDirectory();
-        virtual String GetLocalAppDataDirectory();
+        virtual String GetSystemDirectory(SystemDirectory dir);
         
 #endif
 	};

@@ -1,5 +1,5 @@
 set(Sources
-	Binary.cpp
+	3rdparty/ConvertUTF.c
 	BinaryReader.cpp
 	BinaryWriter.cpp
 	Buffer.cpp
@@ -7,21 +7,104 @@ set(Sources
 	Console.cpp
 	DataType.cpp
 	DateTime.cpp
-	Directory.cpp
+	Exception.cpp
 	File.cpp
 	FileSystem.cpp
-	FormattedTextWriter.cpp
+	GLCheckError.cpp
+	Hash.cpp
+	Matrix3.cpp
+	Matrix4.cpp
+	MessageBox.cpp
+	NativeFileSystem.cpp
+	Object.cpp
 	Path.cpp
+	Quaternion.cpp
 	Random.cpp
 	Stream.cpp
-	StringTools.cpp
+	StringBuilder.cpp
+	String.cpp
 	Text.cpp
 	TextReader.cpp
 	TextWriter.cpp
-	TextParser.cpp
+	Thread.cpp
+	ToString.cpp
 	Unicode.cpp
-	Value.cpp
-	3rdparty/ConvertUTF.c
+	Utf16String.cpp
+	Window.cpp
 	)
 
+if (WIN32)
+
+    if (XLI_SDL2)
+
+        SET(Sources ${Sources}
+            sdl2/SDL2Cond.cpp
+            sdl2/SDL2Mutex.cpp
+            sdl2/SDL2Thread.cpp
+            sdl2/SDL2Time.cpp
+            sdl2/SDL2Window.cpp
+            sdl2/SDL2Display.cpp
+            sdl2/SDL2FileSystem.cpp
+            win32/Win32FileSystem.cpp
+            win32/Win32Helpers.cpp
+            win32/Win32MessageBox.cpp
+            )
+
+    else()
+
+        SET(Sources ${Sources}
+            generic/GenericAssetFileSystem.cpp
+            win32/Win32Cond.cpp
+            win32/Win32FileSystem.cpp
+            win32/Win32Helpers.cpp
+            win32/Win32MessageBox.cpp
+            win32/Win32Socket.cpp
+            win32/Win32Thread.cpp
+            win32/Win32Time.cpp
+            win32/Win32Window.cpp
+            win32/Win32Display.cpp
+            win32/Win32Helpers.cpp
+            )
+
+    endif()
+
+elseif (APPLE)
+
+    set(Sources ${Sources}
+        generic/GenericAssetFileSystem.cpp
+        generic/GenericDialogs.cpp
+        generic/GenericMessageBox.cpp
+        posix/PosixTime.cpp
+        sdl2/SDL2Window.cpp
+        sdl2/SDL2Display.cpp
+        sdl2/SDL2FileSystem.cpp
+        sdl2/SDL2Cond.cpp
+        sdl2/SDL2Mutex.cpp
+        sdl2/SDL2Thread.cpp
+        )
+
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lSDL2 -lm -liconv -Wl,-framework,OpenGL -Wl,-framework,ForceFeedback -lobjc -Wl,-framework,Cocoa -Wl,-framework,Carbon -Wl,-framework,IOKit -Wl,-framework,CoreAudio -Wl,-framework,AudioToolbox -Wl,-framework,AudioUnit")
+
+elseif (UNIX)
+
+    set(Sources ${Sources}
+        generic/GenericAssetFileSystem.cpp
+        generic/GenericDialogs.cpp
+        generic/GenericMessageBox.cpp
+        posix/PosixFileSystem.cpp
+        posix/PosixTime.cpp
+        sdl2/SDL2Window.cpp
+        sdl2/SDL2Display.cpp
+        sdl2/SDL2Cond.cpp
+        sdl2/SDL2Mutex.cpp
+        sdl2/SDL2Thread.cpp
+        )
+
+endif()
+
 add_library(Xli ${Sources})
+
+if (UNIX AND NOT APPLE)
+    target_link_libraries(Xli SDL2)
+endif()
+

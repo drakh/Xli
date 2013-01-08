@@ -4,29 +4,15 @@
 namespace Xli
 {
     // TODO: Should return shared dir accessible from global filesystem
-    String SDL2FileSystem::GetDocumentsDirectory()
+    String SDL2FileSystem::GetSystemDirectory(SystemDirectory dir)
     {
         NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString* documentsDirectory = [paths objectAtIndex:0];
-        return Unicode::Utf8To16([documentsDirectory UTF8String]);
-    }
-    
-    String SDL2FileSystem::GetRoamingAppDataDirectory()
-    {
-        NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString* documentsDirectory = [paths objectAtIndex:0];
-        return Unicode::Utf8To16([documentsDirectory UTF8String]);
-    }
-
-    String SDL2FileSystem::GetLocalAppDataDirectory()
-    {
-        NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString* documentsDirectory = [paths objectAtIndex:0];
-        return Unicode::Utf8To16([documentsDirectory UTF8String]);
+        return [documentsDirectory UTF8String];
     }
     
     String SDL2FileSystem::GetTempDirectory()
     {
-        return Unicode::Utf8To16([NSTemporaryDirectory() UTF8String]);
+        return [NSTemporaryDirectory() UTF8String];
     }
 }

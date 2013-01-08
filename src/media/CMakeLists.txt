@@ -1,7 +1,9 @@
 set(Sources
 	Bitmap.cpp
+	CompressedImage.cpp
 	FontFace.cpp
 	Format.cpp
+	FormattedTextWriter.cpp
 	Gzip.cpp
 	ImageReader.cpp
 	ImageWriter.cpp
@@ -10,6 +12,8 @@ set(Sources
 	Json.cpp	
 	PngReader.cpp
 	PngWriter.cpp
+	Texture.cpp
+	Value.cpp
 	Xml.cpp
 	Zip.cpp
 	)

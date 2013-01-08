@@ -1,6 +1,9 @@
 set(Sources
-	SoundPortAudio.cpp
-	WavStream.cpp
+	AudioBuffer.cpp
+	AudioStream.cpp
+	SoundChannel.cpp
+	Sound.cpp
+	Wav.cpp
 	)
 
 if (WIN32)
@@ -16,5 +19,5 @@ if (APPLE)
 
 endif()
 
-add_library(XliSound ${Sources})
-target_link_libraries(XliSound Xli XliPlatform portaudio)
+add_library(XliAudio ${Sources})
+target_link_libraries(XliAudio Xli portaudio)

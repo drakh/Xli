@@ -96,10 +96,8 @@ elseif (UNIX)
 
 endif()
 
-add_subdirectory(src/stdlib)
+add_subdirectory(src/core)
 add_subdirectory(src/media)
-add_subdirectory(src/platform)
+add_subdirectory(src/audio)
 add_subdirectory(src/main)
-add_subdirectory(src/graphics)
-add_subdirectory(src/gl)
-add_subdirectory(src/sound)
+

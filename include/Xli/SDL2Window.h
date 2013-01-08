@@ -1,4 +1,4 @@
-#include <XliPlatform/Window.h>
+#include <Xli/Window.h>
 #include <SDL.h>
 
 namespace Xli

@@ -1,10 +1,10 @@
-#include <XliPlatform/SDL2Window.h>
+#include <Xli/SDL2Window.h>
 #include <Xli/Unicode.h>
 
 #include <SDL.h>
 #include <SDL_syswm.h>
 
-#include <XliGL/GLHeaders.h>
+#include <Xli/GLHeaders.h>
 
 namespace Xli
 {
@@ -57,7 +57,7 @@ namespace Xli
     
 #endif
     
-	SDL2Window::SDL2Window(int width, int height, const Xli::String& title, WindowEventHandler* eventHandler, int style)
+	SDL2Window::SDL2Window(int width, int height, const String& title, WindowEventHandler* eventHandler, int style)
 	{
 		if (GlobalWindow == 0) GlobalWindow = this;
 
@@ -76,7 +76,6 @@ namespace Xli
 		h = height;
 
 		Uint32 flags = SDL_WINDOW_OPENGL;
-		CharString t = Unicode::Utf16To8(title);
 		
 		if ((style & WindowStyleBorderless) == WindowStyleBorderless)
 		{
@@ -96,7 +95,7 @@ namespace Xli
         
 #ifdef XLI_PLATFORM_IOS
       
-        CharString orientations = "";
+        String orientations = "";
         
         if ((style & WindowStyleOrientationLandscapeLeft) == WindowStyleOrientationLandscapeLeft)
         {
@@ -125,7 +124,7 @@ namespace Xli
         
 #endif
         
-		window = SDL_CreateWindow(t.Data(), x, y, width, height, flags);
+		window = SDL_CreateWindow(title.Data(), x, y, width, height, flags);
 
 		SDL_SetWindowData(window, "SDL2Window", this);
         
@@ -213,8 +212,7 @@ namespace Xli
 
 	String SDL2Window::GetTitle()
 	{
-		const char* t = SDL_GetWindowTitle(window);
-		return Unicode::Utf8To16(CharString(t));
+		return SDL_GetWindowTitle(window);
 	}
 
 	Vector2i SDL2Window::GetPosition()
@@ -244,8 +242,7 @@ namespace Xli
 
 	void SDL2Window::SetTitle(const String& title)
 	{
-		CharString t = Unicode::Utf16To8(title);
-		SDL_SetWindowTitle(window, t.Data());
+		SDL_SetWindowTitle(window, title.Data());
 	}
 
 	void SDL2Window::SetMainWindow()
@@ -356,7 +353,7 @@ namespace Xli
 		return Vector2i(mode.w, mode.h);
 	}
 
-	Window* Window::Create(int width, int height, const Xli::String& title, WindowEventHandler* eventHandler, int style)
+	Window* Window::Create(int width, int height, const String& title, WindowEventHandler* eventHandler, int style)
 	{
 		AssertInit();
 		return new SDL2Window(width, height, title, eventHandler, style);

@@ -1,4 +1,4 @@
-#include <XliPlatform/Display.h>
+#include <Xli/Display.h>
 #include <SDL.h>
 
 namespace Xli

@@ -1,4 +1,4 @@
-#include <XliPlatform.h>
+#include <Xli/Thread.h>
 #include <SDL.h>
 
 namespace Xli

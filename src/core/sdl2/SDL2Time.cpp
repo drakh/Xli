@@ -1,4 +1,4 @@
-#include <XliPlatform/Time.h>
+#include <Xli/Time.h>
 #include <Xli/Exception.h>
 #include <SDL.h>
 

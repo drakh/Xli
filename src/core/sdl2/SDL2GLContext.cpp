@@ -1,5 +1,5 @@
-#include <XliGL/GLContext.h>
-#include <XliPlatform/SDL2Window.h>
+#include <Xli/GLContext.h>
+#include <Xli/SDL2Window.h>
 
 namespace Xli
 {
