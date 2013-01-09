@@ -14,6 +14,7 @@ namespace Xli
 	{
 		SoundPlayHintDefault,
 		SoundPlayHintStream,
+		SoundPlayHintBuffer,
 	};
 
 	/**
