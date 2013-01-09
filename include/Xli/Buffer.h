@@ -23,8 +23,6 @@ namespace Xli
 
 		A buffer of bytes.
 		A buffer can not be resized or relocated, so other objects can depend on the pointer to the buffer data.
-		Buffer objects are meant to be constructed using an overloaded new operator which takes bufSize as an argument.
-		@see Buffer::operator new
 	*/
 	class Buffer: public DataAccessor
 	{
@@ -34,12 +32,11 @@ namespace Xli
 		Buffer(int size);
 		void* operator new (size_t size, int bufSize);
 		void operator delete (void* buf, int bufSize);
+		void operator delete (void* buf);
 
 	public:
 		static Buffer* Create(int size);
 		static Buffer* Copy(const void* data, int size);
-
-		void operator delete (void* buf);
 
 		virtual void Delete();
 
@@ -47,65 +44,18 @@ namespace Xli
 			Returns the size of the buffer, in bytes.
 			@return The size of the buffer, in bytes.
 		*/
-		int Size() const
-		{
-			return size;
-		}
+		int Size() const;
 
 		/**
 			Allows the buffer to be used as pointer.
 			This pointer will never change or become invalid during the lifetime of the buffer.
 			@returns A pointer to the data in the buffer.
 		*/
-		UInt8* Data()
-		{
-			return data;
-		}
-		const UInt8* Data() const
-		{
-			return data;
-		}
+		UInt8* Data();
+		const UInt8* Data() const;
 
-		virtual const UInt8* GetData() const
-		{
-			return data;
-		}
-		virtual int GetSizeInBytes() const
-		{
-			return size;
-		}
-	};
-
-	/**
-		\ingroup Core
-	*/
-	template <int BufSize> class StaticBuffer: public DataAccessor
-	{
-		UInt8 data[BufSize];
-
-	public:
-		int Size() const
-		{
-			return BufSize;
-		}
-
-		UInt8* Data()
-		{
-			return data;
-		}
-		const UInt8* Data() const
-		{
-			return data;
-		}
-
-		virtual const UInt8* GetData() const
-		{
-			return data;
-		}
-		virtual int GetSizeInBytes() const
-		{
-			return BufSize;
-		}
+		virtual const UInt8* GetData() const;
+		virtual int GetSizeInBytes() const;
 	};
 
 	/**
@@ -118,33 +68,16 @@ namespace Xli
 		bool ownsData;
 
 	public:
-		BufferPointer(void* data, int size, bool ownsData): data((UInt8*)data), size(size), ownsData(ownsData) {}
-		~BufferPointer() { if (ownsData) delete [] (UInt8*)data; }
+		BufferPointer(void* data, int size, bool ownsData);
+		virtual ~BufferPointer();
 
-		int Size() const
-		{
-			return size;
-		}
+		int Size() const;
 
-		UInt8* Data()
-		{
-			return data;
-		}
+		UInt8* Data();
+		const UInt8* Data() const;
 
-		const UInt8* Data() const
-		{
-			return data;
-		}
-
-		virtual const UInt8* GetData() const
-		{
-			return data;
-		}
-
-		virtual int GetSizeInBytes() const
-		{
-			return size;
-		}
+		virtual const UInt8* GetData() const;
+		virtual int GetSizeInBytes() const;
 	};
 
 	/**
@@ -157,26 +90,11 @@ namespace Xli
 		Object* owner;
 
 	public:
-		BufferReference(void* data, int size, Object* owner)
-			: data((UInt8*)data), size(size), owner(owner)
-		{
-			if (owner != 0) owner->AddRef();
-		}
+		BufferReference(void* data, int size, Object* owner);
+		virtual ~BufferReference();
 
-		virtual ~BufferReference()
-		{
-			if (owner != 0) owner->Release();
-		}
-
-		virtual const UInt8* GetData() const
-		{
-			return data;
-		}
-
-		virtual int GetSizeInBytes() const
-		{
-			return size;
-		}
+		virtual const UInt8* GetData() const;
+		virtual int GetSizeInBytes() const;
 	};
 }
 
