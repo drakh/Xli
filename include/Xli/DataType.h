@@ -2,6 +2,7 @@
 #define __XLI_DATA_TYPE_H__
 
 #include "BaseTypes.h"
+#include "String.h"
 
 namespace Xli
 {
@@ -33,7 +34,7 @@ namespace Xli
 	public:
 		static int SizeOf(DataType dt);
 		static bool IsSigned(DataType dt);
-		static const char* ToString(DataType dt);
+		static String ToString(DataType dt);
 	};
 }
 

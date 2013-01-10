@@ -3,7 +3,7 @@
 
 namespace Xli
 {
-	const char* DataTypeInfo::ToString(DataType dt)
+	String DataTypeInfo::ToString(DataType dt)
 	{
 		switch (dt)
 		{

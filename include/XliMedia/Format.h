@@ -120,7 +120,7 @@ namespace Xli
 	{
 	public:
 		static int ComponentCount(Format format);
-		static const char* ToString(Format format);
+		static String ToString(Format format);
 		static int SizeOf(Format format);
 	};
 }

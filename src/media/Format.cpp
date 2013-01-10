@@ -2,7 +2,7 @@
 
 namespace Xli
 {
-	const char* FormatInfo::ToString(Format format)
+	String FormatInfo::ToString(Format format)
 	{
 		switch (format)
 		{

@@ -14,7 +14,7 @@ namespace Xli
 		sb.Append("\n\nFunction: ");
 		sb.Append(e.GetFunction());
 		sb.Append("\nLine: ");
-		sb.Append(e.GetLine());
+		sb.Append(ToString(e.GetLine()));
 
 		if (catcher.Length())
 		{
