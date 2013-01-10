@@ -124,8 +124,8 @@
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\..\..\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\src\core\3rdparty\glew\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;GLEW_STATIC;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Lib>
@@ -143,8 +143,8 @@
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\..\..\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\src\core\3rdparty\glew\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;GLEW_STATIC;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Lib>
@@ -166,8 +166,8 @@
       <OpenMPSupport>false</OpenMPSupport>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>..\..\..\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\src\core\3rdparty\glew\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;GLEW_STATIC;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Lib>
@@ -190,8 +190,8 @@
       <OpenMPSupport>false</OpenMPSupport>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>..\..\..\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\src\core\3rdparty\glew\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;GLEW_STATIC;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Lib>
@@ -213,8 +213,8 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <OpenMPSupport>false</OpenMPSupport>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\..\..\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\src\core\3rdparty\glew\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;GLEW_STATIC;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Lib>
@@ -236,8 +236,8 @@
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <OpenMPSupport>false</OpenMPSupport>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\..\..\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\src\core\3rdparty\glew\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;GLEW_STATIC;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Lib>
@@ -319,6 +319,9 @@
     <ClInclude Include="..\..\..\include\Xli\Win32Header.h" />
     <ClInclude Include="..\..\..\include\Xli\Window.h" />
     <ClInclude Include="..\..\..\src\core\3rdparty\ConvertUTF.h" />
+    <ClInclude Include="..\..\..\src\core\3rdparty\glew\include\GL\glew.h" />
+    <ClInclude Include="..\..\..\src\core\3rdparty\glew\include\GL\glxew.h" />
+    <ClInclude Include="..\..\..\src\core\3rdparty\glew\include\GL\wglew.h" />
     <ClInclude Include="..\..\..\src\core\posix\PosixFileSystemBase.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>
@@ -338,6 +341,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\core\3rdparty\ConvertUTF.c" />
+    <ClCompile Include="..\..\..\src\core\3rdparty\glew\src\glew.c" />
     <ClCompile Include="..\..\..\src\core\android\AFileSystem.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">true</ExcludedFromBuild>

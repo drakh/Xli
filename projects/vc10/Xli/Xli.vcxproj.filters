@@ -40,6 +40,9 @@
     <Filter Include="Xli\GL">
       <UniqueIdentifier>{50b29c41-0caa-4cd6-88f4-e07229386e95}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3rdparty\glew">
+      <UniqueIdentifier>{b253214b-e0ad-4f77-b98b-b209b33df0a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Xli\Hash.h">
@@ -216,6 +219,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\Xli\Unicode.h">
       <Filter>Xli</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\core\3rdparty\glew\include\GL\glew.h">
+      <Filter>3rdparty\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\core\3rdparty\glew\include\GL\glxew.h">
+      <Filter>3rdparty\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\core\3rdparty\glew\include\GL\wglew.h">
+      <Filter>3rdparty\glew</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -401,6 +413,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\core\Exception.cpp">
       <Filter>Xli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\3rdparty\glew\src\glew.c">
+      <Filter>3rdparty\glew</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
