@@ -8,7 +8,7 @@ namespace Xli
 	static int GetFloatLength(const char* str)
 	{
 		int len = (int)strlen(str);
-		while (len > 2 && str[len - 1] == '0' && str[len - 2] != '.') len--;
+		while (len > 1 && (str[len - 1] == '0' || str[len - 1] == '.')) len--;
 		return len;
 	}
 
