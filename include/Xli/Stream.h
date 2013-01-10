@@ -98,62 +98,6 @@ namespace Xli
 		void SwitchStream(Stream* stream);
 		Stream* GetStream();
 	};
-
-	/**
-		\ingroup IO
-	*/
-	class StaticStream: public Stream
-	{
-		DataAccessor* buf;
-		int pos;
-
-	public:
-		StaticStream(DataAccessor* buf);
-		virtual ~StaticStream();
-
-		virtual bool AtEnd() const;
-
-		virtual bool CanRead() const;
-		virtual bool CanSeek() const;
-
-		virtual int Read(void* dst, int elmSize, int elmCount);
-		virtual void Seek(SeekOrigin origin, int offset);
-
-		virtual int GetPosition() const;
-		virtual int GetLength() const;
-	};
-
-	/**
-		\ingroup IO
-	*/
-	class DynamicStream: public Stream
-	{
-	protected:
-		Array<UInt8> buf;
-
-	public:
-		DynamicStream(int initCapacity = 1024);
-
-		virtual bool CanWrite() const;
-		virtual int Write(const void* src, int elmSize, int elmCount);
-
-		virtual int GetLength() const;
-
-		const UInt8* GetData() const;
-		Buffer* CopyData() const;
-
-		void Clear();
-	};
-
-	/**
-		\ingroup IO
-	*/
-	class TextStream: public DynamicStream
-	{
-	public:
-		TextStream(int initCapacity = 1024): DynamicStream(initCapacity) {}
-		String GetText() const { return String((const char*)buf.Data(), GetLength()); }
-	};
 }
 
 #endif

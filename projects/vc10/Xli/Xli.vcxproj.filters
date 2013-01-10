@@ -229,6 +229,15 @@
     <ClInclude Include="..\..\..\src\core\3rdparty\glew\include\GL\wglew.h">
       <Filter>3rdparty\glew</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\ArrayStream.h">
+      <Filter>Xli\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\BufferStream.h">
+      <Filter>Xli\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\TextStream.h">
+      <Filter>Xli\IO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\core\Random.cpp">
@@ -416,6 +425,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\core\3rdparty\glew\src\glew.c">
       <Filter>3rdparty\glew</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\BufferStream.cpp">
+      <Filter>Xli\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\ArrayStream.cpp">
+      <Filter>Xli\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\TextStream.cpp">
+      <Filter>Xli\IO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

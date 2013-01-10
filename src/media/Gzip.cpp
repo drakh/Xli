@@ -1,5 +1,6 @@
 #include <XliMedia/Gzip.h>
 #include <Xli/Console.h>
+#include <Xli/BufferStream.h>
 
 #include <zlib.h>
 //#include <zutil.h>
@@ -214,6 +215,6 @@ namespace Xli
 			ErrorPrintLine("GZIP WARNING: Buffer sizes inconsistent");
 		}
 
-		return new StaticStream(dst);
+		return new BufferStream(dst, FileModeRead);
 	}
 }

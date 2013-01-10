@@ -1,5 +1,6 @@
 set(Sources
 	3rdparty/ConvertUTF.c
+	ArrayStream.cpp
 	BinaryReader.cpp
 	BinaryWriter.cpp
 	Buffer.cpp
@@ -25,6 +26,7 @@ set(Sources
 	String.cpp
 	Text.cpp
 	TextReader.cpp
+	TextStream.cpp
 	TextWriter.cpp
 	Thread.cpp
 	ToString.cpp

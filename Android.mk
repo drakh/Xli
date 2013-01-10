@@ -15,6 +15,7 @@ LOCAL_SRC_FILES := \
 	src/core/posix/PosixMutex.cpp \
 	src/core/posix/PosixTime.cpp \
 	src/core/posix/PosixThread.cpp \
+	src/core/ArrayStream.cpp \
 	src/core/BinaryReader.cpp \
 	src/core/BinaryWriter.cpp \
 	src/core/Buffer.cpp \
@@ -40,6 +41,7 @@ LOCAL_SRC_FILES := \
 	src/core/StringBuilder.cpp \
 	src/core/Text.cpp \
 	src/core/TextReader.cpp \
+	src/core/TextStream.cpp \
 	src/core/TextWriter.cpp \
 	src/core/Thread.cpp \
 	src/core/ToString.cpp \

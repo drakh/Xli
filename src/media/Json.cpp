@@ -1,5 +1,6 @@
 #include <Xli/Console.h>
 #include <Xli/StringBuilder.h>
+#include <Xli/TextStream.h>
 #include <XliMedia/Json.h>
 #include <XliMedia/FormattedTextWriter.h>
 #include "3rdparty/json_parser/JSON_parser.h"

@@ -255,8 +255,10 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\Xli\ArrayStream.h" />
     <ClInclude Include="..\..\..\include\Xli\BaseTypes.h" />
     <ClInclude Include="..\..\..\include\Xli\Buffer.h" />
+    <ClInclude Include="..\..\..\include\Xli\BufferStream.h" />
     <ClInclude Include="..\..\..\include\Xli\ConditionVariable.h" />
     <ClInclude Include="..\..\..\include\Xli\Config.h" />
     <ClInclude Include="..\..\..\include\Xli\DataType.h" />
@@ -286,6 +288,7 @@
     <ClInclude Include="..\..\..\include\Xli\String.h" />
     <ClInclude Include="..\..\..\include\Xli\StringBuilder.h" />
     <ClInclude Include="..\..\..\include\Xli\Text.h" />
+    <ClInclude Include="..\..\..\include\Xli\TextStream.h" />
     <ClInclude Include="..\..\..\include\Xli\Thread.h" />
     <ClInclude Include="..\..\..\include\Xli\Time.h" />
     <ClInclude Include="..\..\..\include\Xli\ToString.h" />
@@ -358,7 +361,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\core\ArrayStream.cpp" />
     <ClCompile Include="..\..\..\src\core\Buffer.cpp" />
+    <ClCompile Include="..\..\..\src\core\BufferStream.cpp" />
     <ClCompile Include="..\..\..\src\core\DataType.cpp" />
     <ClCompile Include="..\..\..\src\core\DateTime.cpp" />
     <ClCompile Include="..\..\..\src\core\egl\EGLContext.cpp">
@@ -511,6 +516,7 @@
     <ClCompile Include="..\..\..\src\core\FileSystem.cpp" />
     <ClCompile Include="..\..\..\src\core\Stream.cpp" />
     <ClCompile Include="..\..\..\src\core\TextReader.cpp" />
+    <ClCompile Include="..\..\..\src\core\TextStream.cpp" />
     <ClCompile Include="..\..\..\src\core\TextWriter.cpp" />
     <ClCompile Include="..\..\..\src\core\Thread.cpp" />
     <ClCompile Include="..\..\..\src\core\ToString.cpp" />

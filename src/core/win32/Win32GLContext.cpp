@@ -126,9 +126,6 @@ namespace Xli
 			SwapBuffers();
 
 			if (pf != -1) glEnable(GL_MULTISAMPLE_ARB);
-
-
-			PrintLine("Samples: " + (String)(int)GetMultiSamples());
 		}
 
 		Win32GLContext(Win32GLContext* srcCtx)
