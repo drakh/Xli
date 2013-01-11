@@ -180,14 +180,14 @@ namespace Xli
 	bool WindowEventQueue::GetKeyState(Key k)
 	{
 		bool b = false;
-		keyStates.Get((unsigned int)k, b);
+		keyStates.TryGetValue((unsigned int)k, b);
 		return b;
 	}
 
 	bool WindowEventQueue::GetMouseButtonState(MouseButtons b)
 	{
 		bool s = false;
-		buttonStates.Get((unsigned int)b, s);
+		buttonStates.TryGetValue((unsigned int)b, s);
 		return s;
 	}
 

@@ -331,11 +331,11 @@ namespace Xli
 		}
 	}
 
-	static const unsigned int MOUSEEVENTF_FROMTOUCH = 0xff515700;
-
 	LRESULT CALLBACK Win32Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		Win32Window* wnd = reinterpret_cast<Win32Window*>(::GetWindowLongPtr(hWnd, GWLP_USERDATA));
+
+		static const unsigned int MOUSEEVENTF_FROMTOUCH = 0xff515700;
 
 		switch (message)
 		{
@@ -438,6 +438,7 @@ namespace Xli
 			if (wnd->eventHandler)
 			{
 				int numInputs = LOWORD(wParam);
+
 				if (numInputs)
 				{
 					PTOUCHINPUT touchPoints = new TOUCHINPUT[numInputs];
@@ -446,6 +447,7 @@ namespace Xli
 						for (int i = 0; i < numInputs; i++)
 						{
 							TOUCHINPUT ti = touchPoints[i];
+
 							if (ti.dwFlags & TOUCHEVENTF_DOWN)
 								wnd->eventHandler->OnTouchDown((float) ti.x / 100.0f, (float) ti.y / 100.0f, ti.dwID);
 							if (ti.dwFlags & TOUCHEVENTF_MOVE)
@@ -453,19 +455,21 @@ namespace Xli
 							if (ti.dwFlags & TOUCHEVENTF_UP)
 								wnd->eventHandler->OnTouchUp((float) ti.x / 100.0f, (float) ti.y / 100.0f, ti.dwID);
 						}
+
 						CloseTouchInputHandle((HTOUCHINPUT) lParam);
 					}
 					else
 					{
 						ErrorPrintLine("WARNING: Error reading touchpoint info.");
 					}
+
 					delete [] touchPoints;
 				}
 			}
 			break;
 
 		case WM_SIZE:
-			if (wnd->eventHandler) wnd->eventHandler->OnResize(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));			
+			if (wnd->eventHandler) wnd->eventHandler->OnResize(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 			break;
 
 		case WM_CLOSE:
@@ -515,7 +519,7 @@ namespace Xli
 			wcex.hInstance      = hInstance;
 			wcex.hIcon          = LoadIcon(hInstance, IDI_APPLICATION);
 			wcex.hCursor        = LoadCursor(NULL, IDC_ARROW);
-			wcex.hbrBackground  = (HBRUSH)(COLOR_BACKGROUND);
+			wcex.hbrBackground  = NULL;
 			wcex.lpszMenuName   = NULL;
 			wcex.lpszClassName  = windowClassName;
 			wcex.hIconSm        = LoadIcon(hInstance, IDI_APPLICATION);

@@ -215,6 +215,6 @@ namespace Xli
 			ErrorPrintLine("GZIP WARNING: Buffer sizes inconsistent");
 		}
 
-		return new BufferStream(dst, FileModeRead);
+		return new BufferStream(dst, true, false);
 	}
 }

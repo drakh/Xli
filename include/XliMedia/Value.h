@@ -399,7 +399,7 @@ namespace Xli
 		virtual const Value& GetValue(int it) const { return Values[it]; }
 
 		virtual bool ContainsKey(const Value& key) const { int k = key.ToInt32(); return (k >= 0) && (k < Values.Length()); }
-		virtual void Insert(const Value& key, const Value& value) { Values.Add(key.ToInt32(), value); }
+		virtual void Insert(const Value& key, const Value& value) { Values.Insert(key.ToInt32(), value); }
 		virtual void Remove(const Value& value) { Values.Remove(value); }
 		virtual void RemoveAt(const Value& key) { Values.RemoveAt(key.ToInt32()); }
 		virtual void Append(const Value& value) { Values.Add(value); }
@@ -425,7 +425,7 @@ namespace Xli
 		virtual const Value& GetKey(int it) const { return Values.GetKey(it); }
 
 		virtual bool ContainsKey(const Value& key) const { return Values.ContainsKey(key); }
-		virtual void Insert(const Value& key, const Value& value) { Values.Set(key, value); } // changed from .Add!!!!
+		virtual void Insert(const Value& key, const Value& value) { Values[key] = value; } // changed from .Add!!!!
 		virtual void RemoveAt(const Value& key) { Values.Remove(key); }
 		virtual Value& Get(const Value& key) { return Values[key]; }
 		virtual int Count() const { return Values.Count(); }

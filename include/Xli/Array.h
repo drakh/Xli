@@ -24,6 +24,7 @@ namespace Xli
 			capacity = TBufSize;
 			data = buf;
 		}
+
 		Array(int size)
 		{
 			used = 0;
@@ -31,6 +32,7 @@ namespace Xli
 			data = buf;
 			Resize(size);
 		}
+
 		Array(int count, const T* initItems)
 		{
 			used = 0;
@@ -39,10 +41,7 @@ namespace Xli
 			Resize(count);
 			for (int i = 0; i < count; i++) data[i] = initItems[i];
 		}
-		~Array()
-		{
-			if (data != buf) delete [] data;
-		}
+
 		Array(const Array& a)
 		{
 			used = 0;
@@ -55,6 +54,7 @@ namespace Xli
 				data[i] = a.data[i];
 			}
 		}
+
 		Array& operator = (Array& a)
 		{
 			Resize(a.Length());
@@ -65,6 +65,11 @@ namespace Xli
 			}
 
 			return *this;
+		}
+
+		~Array()
+		{
+			if (data != buf) delete [] data;
 		}
 
 		void Reserve(int newCapacity)
@@ -158,7 +163,7 @@ namespace Xli
 			return Add(values.data, values.used);
 		}
 
-		int Add(int index, const T& item)
+		int Insert(int index, const T& item)
 		{
 #ifdef XLI_RANGE_CHECK
 			if (index > used || index < 0)
@@ -376,7 +381,8 @@ namespace Xli
 		*/
 		template <typename S, typename SComparator> void MultiSort(Array<S>& s)
 		{
-			if (Length() != s.Length()) XLI_THROW("Arrays must have the same length");
+			if (Length() != s.Length()) 
+				XLI_THROW("Arrays must have the same length");
 
 			Array<RS<S> > rs(used);
 			for (int i = 0; i < rs.Length(); i++)
@@ -384,6 +390,7 @@ namespace Xli
 				rs[i].SValue = s.Get(i);
 				rs[i].TValue = Get(i);
 			}
+
 			rs.Sort<SComparator>();
 			for (int i = 0; i < rs.Length(); i++)
 			{

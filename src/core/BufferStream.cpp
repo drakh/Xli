@@ -2,15 +2,16 @@
 
 namespace Xli
 {
-	BufferStream::BufferStream(DataAccessor* buf, FileMode mode)
+	BufferStream::BufferStream(DataAccessor* buf, bool canRead, bool canWrite)
 	{
 		if (!buf) XLI_THROW_NULL_POINTER;
 		
 		this->buf = buf;
 		this->buf->AddRef();
 		this->pos = 0;
-		this->read = (mode & FileModeRead) != 0;
-		this->write = (mode & FileModeWrite) != 0;
+		this->read = canRead;
+		this->write = canWrite;
+		this->closed = false;
 	}
 
 	BufferStream::~BufferStream()
@@ -18,8 +19,19 @@ namespace Xli
 		buf->Release();
 	}
 
+	void BufferStream::Close()
+	{
+		this->closed = true;
+	}
+
+	bool BufferStream::IsClosed() const
+	{
+		return this->closed;
+	}
+
 	bool BufferStream::AtEnd() const
 	{
+		if (closed) XLI_THROW_STREAM_CLOSED;
 		return pos == buf->GetSizeInBytes();
 	}
 
@@ -40,16 +52,21 @@ namespace Xli
 
 	int BufferStream::GetLength() const
 	{
+		if (closed) XLI_THROW_STREAM_CLOSED;
 		return buf->GetSizeInBytes();
 	}
 
 	int BufferStream::GetPosition() const
 	{
+		if (closed) XLI_THROW_STREAM_CLOSED;
 		return pos;
 	}
 
 	int BufferStream::Read(void* data, int elementSize, int elementCount)
 	{
+		if (!read) XLI_THROW_STREAM_CANT_READ;
+		if (closed) XLI_THROW_STREAM_CLOSED;
+
 		int bytes = elementCount * elementSize;
 		int length = buf->GetSizeInBytes();
 
@@ -73,6 +90,9 @@ namespace Xli
 
 	int BufferStream::Write(const void* data, int elementSize, int elementCount)
 	{
+		if (!write) XLI_THROW_STREAM_CANT_READ;
+		if (closed) XLI_THROW_STREAM_CLOSED;
+
 		int bytes = elementCount * elementSize;
 		int length = buf->GetSizeInBytes();
 
@@ -96,6 +116,8 @@ namespace Xli
 
 	void BufferStream::Seek(SeekOrigin origin, int offset)
 	{
+		if (closed) XLI_THROW_STREAM_CLOSED;
+
 		switch (origin)
 		{
 		case SeekOriginBegin:

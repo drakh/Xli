@@ -49,7 +49,6 @@ namespace Xli
 		virtual void Seek(SeekOrigin origin, int offset);
 
 		void ReadSafe(void* dst, int elmSize, int elmCount);
-
 		void WriteSafe(const void* src, int elmSize, int elmCount);
 
 		/**
@@ -57,7 +56,6 @@ namespace Xli
 			@param source Stream to read from.
 		*/
 		void WriteStream(Stream* source);
-        
     
         virtual DataAccessor* CreateDataAccessor()
         {

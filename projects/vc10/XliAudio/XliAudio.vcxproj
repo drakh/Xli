@@ -349,16 +349,16 @@
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\..\..\lib\x86\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\..\..\lib\x64\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\x86\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Configuration)\x64\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)$(Configuration)\x86\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)$(Configuration)\x64\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)..\..\..\lib\x86\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)..\..\..\lib\x64\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\x86\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Configuration)\x64\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)$(Configuration)\x86\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)$(Configuration)\x64\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">$(ProjectDir)..\..\..\lib\x86\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">$(ProjectDir)..\..\..\lib\x64\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">$(Configuration)\x86\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">$(Configuration)\x64\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">$(ProjectDir)$(Configuration)\x86\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">$(ProjectDir)$(Configuration)\x64\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release MT|Win32'">$(ProjectName)MT</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release MT|x64'">$(ProjectName)MT</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release MD|Win32'">$(ProjectName)MT</TargetName>

@@ -7,8 +7,8 @@ namespace Xli
 {
 	void Thread::thread_func(void* arg)
 	{
-		Thread* t = (Thread*)arg;
-		Task* task = t->task;
+		Thread* thread = (Thread*)arg;
+		Task* task = thread->task;
 		
 		task->stopped = false;
 

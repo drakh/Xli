@@ -29,6 +29,7 @@ namespace Xli
 			tail = 0;
 			len = 0;
 		}
+
 		virtual ~Queue()
 		{
 			Clear();

@@ -2,7 +2,7 @@
 #define __XLI_GL_CHECK_ERROR_H__
 
 #include <Xli/GLHeaders.h>
-#include <Xli/Exception.h>
+#include <Xli/Console.h>
 
 namespace Xli
 {
@@ -17,10 +17,10 @@ namespace Xli
 	{
 		GLint err = glGetError();
 		if (err == GL_NO_ERROR) return;
-		XLI_BREAK_THROW("GL ERROR: " + GLGetErrorString(err) + " (in " + func + ":" + line + ")");
+		Xli::ErrorPrintLine("GL ERROR: " + Xli::String::HexFromInt(err) + " - " + GLGetErrorString(err) + " (in " + func + ":" + line + ")");
 	}
 
-#define GLCheckError() GLCheckErrorImpl(XLI_FUNC, __LINE__)
+#define XLI_GL_CHECK_ERROR() ::Xli::GLCheckErrorImpl(XLI_FUNC, __LINE__)
 
 	/** @}*/
 }

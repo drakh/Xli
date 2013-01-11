@@ -19,33 +19,40 @@ namespace Xli
 		{
 			this->object = 0;
 		}
+
 		Managed(T* object)
 		{
 			this->object = object;
 		}
+
 		Managed(const Managed& managed)
 		{
 			this->object = managed.object;
 			if (object) object->AddRef();
 		}
+
 		~Managed()
 		{
 			if (object) object->Release();
 		}
+
 		bool IsNull() const
 		{
 			return !object;
 		}
+
 		bool IsSet() const
 		{
 			return object != 0;
 		}
+
 		Managed& operator = (T* ptr)
 		{
 			if (object) object->Release();
 			object = ptr;
 			return *this;
 		}
+
 		Managed& operator = (const Managed& managed)
 		{
 			if (object) object->Release();
@@ -53,6 +60,7 @@ namespace Xli
 			if (object) object->AddRef();
 			return *this;
 		}
+
 		T* Get()
 		{
 #ifdef XLI_NULL_POINTER_CHECK
@@ -60,6 +68,7 @@ namespace Xli
 #endif
 			return object;
 		}
+
 		const T* Get() const
 		{
 #ifdef XLI_NULL_POINTER_CHECK
@@ -67,26 +76,32 @@ namespace Xli
 #endif
 			return object;
 		}
+
 		T* Pointer()
 		{
 			return object;
 		}
+
 		const T* Pointer() const
 		{
 			return object;
 		}
+
 		operator T*()
 		{
 			return Pointer();
 		}
+
 		operator const T*() const
 		{
 			return Pointer();
 		}
+
 		T* operator ->()
 		{
 			return Get();
 		}
+
 		const T* operator ->() const
 		{
 			return Get();
@@ -102,20 +117,25 @@ namespace Xli
 		Shared()
 		{
 		}
+
 		Shared(T* ptr): Managed<T>(ptr)
 		{
 			if (this->object) this->object->AddRef();
 		}
+
 		Shared(const Shared& shared): Managed<T>(shared.object)
 		{
 			if (this->object) this->object->AddRef();
 		}
+
 		Shared(const Managed<T>& managed): Managed<T>(managed)
 		{
 		}
+
 		~Shared()
 		{
 		}
+
 		Shared& operator = (T* ptr)
 		{
 			if (ptr) ptr->AddRef();
@@ -123,6 +143,7 @@ namespace Xli
 			this->object = ptr;
 			return *this;
 		}
+
 		Shared& operator = (const Managed<T>& managed)
 		{
 			T* ptr = const_cast<T*>(managed.Pointer());
@@ -131,6 +152,7 @@ namespace Xli
 			this->object = ptr;
 			return *this;
 		}
+
 		Shared& operator = (const Shared& shared)
 		{
 			if (shared.object) shared.object->AddRef();
@@ -138,10 +160,12 @@ namespace Xli
 			this->object = shared.object;
 			return *this;
 		}
+
 		operator T*()
 		{
 			return this->object;
 		}
+
 		operator const T*() const
 		{
 			return this->object;

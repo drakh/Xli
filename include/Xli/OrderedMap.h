@@ -19,6 +19,7 @@ namespace Xli
 		OrderedMap()
 		{
 		}
+
 		~OrderedMap()
 		{
 		}
@@ -110,14 +111,18 @@ namespace Xli
 			@param value The value to look up
 			@return The key at the given value.
 		*/
-		const TKey& GetKeyFromValue(const TValue& value) const
+		bool TryGetKeyFromValue(const TValue& value, TKey& result) const
 		{
 			for (int i = Begin(); i != End(); i = Next(i))
 			{
-				if (GetValue(i) == value) return GetKey(i);
+				if (GetValue(i) == value)
+				{
+					result = GetKey(i);
+					return true;
+				}
 			}
 
-			XLI_BREAK_THROW("Value not found");
+			return false;
 		}
 
 		/**
@@ -131,7 +136,8 @@ namespace Xli
 		{
 			for (int i = Begin(); i != End(); i = Next(i))
 			{
-				if (GetValue(i) == value) keys.Add(GetKey(i));
+				if (GetValue(i) == value) 
+					keys.Add(GetKey(i));
 			}
 		}
 
@@ -159,27 +165,14 @@ namespace Xli
 			values.Add(value);
 		}
 
-		void Add(const OrderedMap& h)
-		{
-			for (int i = h.Begin(); i != h.End(); i = h.Next(i))
-			{
-				Add(h.GetKey(i), h.GetValue(i));
-			}
-		}
-
-		TValue Remove(const TKey& key)
+		bool Remove(const TKey& key)
 		{
 			int i = keys.IndexOf(key);
-			if (i == -1) XLI_BREAK_THROW("Map does not contain the given key");
+			if (i == -1) return false;
 			TValue value = values[i];
-			keys.SwapRemoveAt(i);
-			values.SwapRemoveAt(i);
-			return i;
-		}
-
-		void Remove(const Array<TKey>& keys)
-		{
-			for (int i = 0; i < keys.Length(); i++) Remove(keys[i]);
+			keys.RemoveAt(i);
+			values.RemoveAt(i);
+			return true;
 		}
 
 		bool ContainsKey(const TKey& key) const
@@ -187,34 +180,12 @@ namespace Xli
 			return keys.Contains(key);
 		}
 
-		bool Get(const TKey& key, TValue& value) const
+		bool TryGetValue(const TKey& key, TValue& value) const
 		{
 			int i = keys.IndexOf(key);
 			if (i == -1) return false;
 			value = values[i];
 			return true;
-		}
-		/**
-			Sets a key-value pair, and returns true if the key already existed.
-			@return true if the key already existed, false otherwise.
-		*/
-		bool Set(const TKey& key, const TValue& value)
-		{
-			int i = keys.IndexOf(key);
-			if (i == -1)
-			{
-				Add(key, value);
-				return false;
-			}
-			values[i] = value;
-			return true;
-		}
-
-		TValue& Get(const TKey& key)
-		{
-			int i = keys.IndexOf(key);
-			if (i == -1) XLI_BREAK_THROW("Map does not contain the given key");
-			return values[i];
 		}
 
 		int Count() const

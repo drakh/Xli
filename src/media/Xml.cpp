@@ -13,7 +13,7 @@ namespace Xli
 	String XmlElement::GetAttribute(const String& name)
 	{
 		String r;
-		if (Attributes.Get(name, r)) return r;
+		if (Attributes.TryGetValue(name, r)) return r;
 		XLI_THROW("Attribute not found: " + name);
 	}
 

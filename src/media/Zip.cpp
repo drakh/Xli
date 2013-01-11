@@ -97,7 +97,7 @@ namespace Xli
 			if (unzReadCurrentFile((unzFile)handle, buf->Data(), buf->Size()) != buf->Size()) XLI_THROW(String("Couldn't read in from zip-archive: ") + filename);
 			if (unzCloseCurrentFile((unzFile)handle) != UNZ_OK ) XLI_THROW(String("Couldn't close file in zip-archive: ") + filename);
 
-			return new BufferStream(buf, FileModeRead);
+			return new BufferStream(buf, true, false);
 		}
 
 		virtual void GetFiles(const String& path, Array<FileInfo>& list)

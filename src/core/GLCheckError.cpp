@@ -17,7 +17,7 @@ namespace Xli
 		case GL_STACK_UNDERFLOW: return " This command would cause a stack underflow";
 		case GL_TABLE_TOO_LARGE: return "The specified table exceeds the implementation's maximum supported table size";
 #endif
-		default: return "Unknown error: " + String::HexFromInt(err);
+		default: return "Unknown error";
 		}
 	}
 }

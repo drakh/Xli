@@ -114,6 +114,7 @@ namespace Xli
 			for (int i = 0; i < bucketCount; i++) buckets[i].State = HashBucketStateEmpty;
 			count = 0;
 		}
+
 		~HashMap()
 		{
 			if (buckets != internalBuckets)
@@ -132,8 +133,16 @@ namespace Xli
 			return *this;
 		}
 
-		Bucket* GetBucketBuffer() { return buckets; }
-		void SetBucketBuffer(Bucket* buf) { TTraits::DeleteBuckets(buckets, memPool); buckets = buf; }
+		Bucket* GetBucketBuffer() 
+		{ 
+			return buckets; 
+		}
+		
+		void SetBucketBuffer(Bucket* buf) 
+		{ 
+			TTraits::DeleteBuckets(buckets, memPool); 
+			buckets = buf;
+		}
 
 		/**
 			Returns the number of hash buckets currently in use in the map.
@@ -177,8 +186,10 @@ namespace Xli
 		{
 			for (int i = iterator+1; i < bucketCount; i++)
 			{
-				if (buckets[i].State == HashBucketStateUsed) return i;
+				if (buckets[i].State == HashBucketStateUsed) 
+					return i;
 			}
+
 			return End();
 		}
 
@@ -239,21 +250,28 @@ namespace Xli
 			@param value The value to look up
 			@return The key at the given value.
 		*/
-		const TKey& GetKeyFromValue(const TValue& value) const
+		bool TryGetKeyFromValue(const TValue& value, TKey& result) const
 		{
 			for (int i = Begin(); i != End(); i = Next(i))
 			{
-				if (GetValue(i) == value) return GetKey(i);
+				if (GetValue(i) == value)
+				{
+					result = GetKey(i);
+					return true;
+				}
 			}
-			XLI_BREAK_THROW("Value not found");
+			
+			return false;
 		}
 
 		bool ContainsValue(const TValue& value) const
 		{
 			for (int i = Begin(); i != End(); i = Next(i))
 			{
-				if (GetValue(i) == value) return true;
+				if (GetValue(i) == value) 
+					return true;
 			}
+
 			return false;
 		}
 
@@ -268,13 +286,16 @@ namespace Xli
 		{
 			for (int i = Begin(); i != End(); i = Next(i))
 			{
-				if (GetValue(i) == value) keys.Add(GetKey(i));
+				if (GetValue(i) == value) 
+					keys.Add(GetKey(i));
 			}
 		}
 
 		void Clear()
 		{
-			for (int i = 0; i < bucketCount; i++) buckets[i].State = HashBucketStateEmpty;
+			for (int i = 0; i < bucketCount; i++) 
+				buckets[i].State = HashBucketStateEmpty;
+
 			count = 0;
 		}
 
@@ -282,24 +303,32 @@ namespace Xli
 		{
 			int x = TTraits::Hash(key) & (bucketCount-1);
 			int firstX = x;
+
 			while (true)
 			{
 				if (buckets[x].State == HashBucketStateUsed)
 				{
-					if (TTraits::Equals(buckets[x].Key, key)) return buckets[x].Value;
+					if (TTraits::Equals(buckets[x].Key, key)) 
+						return buckets[x].Value;
 				}
 				else if (buckets[x].State == HashBucketStateEmpty)
 				{
 					TValue v;
 					Add(key, v);
-					return Get(key);
+					x = firstX;
+					continue;
 				}
+
 				x += 1;
-				if (x >= bucketCount) x -= bucketCount;
+
+				if (x >= bucketCount) 
+					x -= bucketCount;
+
 				if (x == firstX)
 				{
 					rehash(bucketCount);
-					return (*this)[key];
+					x = firstX;
+					continue;
 				}
 			}
 		}
@@ -309,11 +338,13 @@ namespace Xli
 			if (count > (bucketCount/8)*5) expand();
 			int x = TTraits::Hash(key) & (bucketCount-1);
 			int firstX = x;
+
 			while (true)
 			{
 				if (buckets[x].State == HashBucketStateUsed)
 				{
-					if (TTraits::Equals(buckets[x].Key, key)) XLI_BREAK_THROW("Map already contains the given key");
+					if (TTraits::Equals(buckets[x].Key, key)) 
+						XLI_BREAK_THROW("Map already contains the given key");
 				}
 				else if (buckets[x].State == HashBucketStateEmpty)
 				{
@@ -323,8 +354,12 @@ namespace Xli
 					count++;
 					return;
 				}
+
 				x += 1;
-				if (x >= bucketCount) x -= bucketCount;
+
+				if (x >= bucketCount) 
+					x -= bucketCount;
+
 				if (x == firstX)
 				{
 					rehash(bucketCount);
@@ -334,15 +369,7 @@ namespace Xli
 			}
 		}
 
-		void Add(const HashMap& h)
-		{
-			for (int i = h.Begin(); i != h.End(); i = h.Next(i))
-			{
-				Add(h.GetKey(i), h.GetValue(i));
-			}
-		}
-
-		TValue Remove(const TKey& key)
+		bool Remove(const TKey& key)
 		{
 			int x = TTraits::Hash(key) & (bucketCount-1);
 
@@ -354,27 +381,26 @@ namespace Xli
 					{
 						buckets[x].State = HashBucketStateDummy;
 						count--;
-						return buckets[x].Value;
+						return true;
 					}
 				}
 				else if (buckets[x].State == HashBucketStateEmpty)
 				{
-					XLI_BREAK_THROW("Map does not contain the given key");
+					return false;
 				}
-				x += 1;
-				if (x >= bucketCount) x -= bucketCount;
-			}
-		}
 
-		void Remove(const Array<TKey>& keys)
-		{
-			for (int i = 0; i < keys.Length(); i++) Remove(keys[i]);
+				x += 1;
+
+				if (x >= bucketCount) 
+					x -= bucketCount;
+			}
 		}
 
 		bool ContainsKey(const TKey& key) const
 		{
 			int x = TTraits::Hash(key) & (bucketCount-1);
 			int firstX = x;
+
 			while (true)
 			{
 				if (buckets[x].State == HashBucketStateUsed)
@@ -385,16 +411,22 @@ namespace Xli
 				{
 					return false;
 				}
+
 				x += 1;
-				if (x >= bucketCount) x -= bucketCount;
-				if (x == firstX) { return false; }
+
+				if (x >= bucketCount) 
+					x -= bucketCount;
+
+				if (x == firstX) 
+					return false;
 			}
 		}
 
-		bool Get(const TKey& key, TValue& value) const
+		bool TryGetValue(const TKey& key, TValue& value) const
 		{
 			int x = TTraits::Hash(key) & (bucketCount-1);
 			int firstX = x;
+
 			while (true)
 			{
 				if (buckets[x].State == HashBucketStateUsed)
@@ -409,71 +441,14 @@ namespace Xli
 				{
 					return false;
 				}
-				x += 1;
-				if (x >= bucketCount) x -= bucketCount;
-				if (x == firstX) { return false; }
-			}
-		}
-		/**
-			Sets a key-value pair, and returns true if the key already existed.
-			@return true if the key already existed, false otherwise.
-		*/
-		bool Set(const TKey& key, const TValue& value)
-		{
-			if (count > (bucketCount/8)*5) expand();
-			int x = TTraits::Hash(key) & (bucketCount-1);
-			int firstX = x;
-			while (true)
-			{
-				if (buckets[x].State == HashBucketStateUsed)
-				{
-					if (TTraits::Equals(buckets[x].Key, key))
-					{
-						buckets[x].Value = value;
-						return true;
-					}
-				}
-				else if (buckets[x].State == HashBucketStateEmpty)
-				{
-					buckets[x].Key = key;
-					buckets[x].State = HashBucketStateUsed;
-					buckets[x].Value = value;
-					count++;
-					return false;
-				}
-				x += 1;
-				if (x >= bucketCount) x -= bucketCount;
-				if (x == firstX) rehash(bucketCount);
-			}
-		}
 
-		TValue& Get(const TKey& key)
-		{
-			int x = TTraits::Hash(key) & (bucketCount-1);
-			int firstX = x;
-			while (true)
-			{
-				if (buckets[x].State == HashBucketStateUsed)
-				{
-					if (TTraits::Equals(buckets[x].Key, key))
-					{
-						return buckets[x].Value;
-					}
-				}
-				else if (buckets[x].State == HashBucketStateEmpty)
-				{
-					XLI_BREAK_THROW("Map does not contain the given key");
-				}
 				x += 1;
 
-				if (x >= bucketCount)
-				{
+				if (x >= bucketCount) 
 					x -= bucketCount;
-				}
-				if (x == firstX)
-				{
-					XLI_BREAK_THROW("Map does not contain the given key");
-				}
+				
+				if (x == firstX) 
+					return false;
 			}
 		}
 

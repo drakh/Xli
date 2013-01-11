@@ -1,7 +1,7 @@
 #ifndef __XLI_ARRAY_STREAM_H__
 #define __XLI_ARRAY_STREAM_H__
 
-#include <Xli/File.h>
+#include <Xli/Stream.h>
 
 namespace Xli
 {
@@ -11,13 +11,16 @@ namespace Xli
 	class BufferStream: public Stream
 	{
 		DataAccessor* buf;
+		bool read, write, closed;
 		int pos;
-		bool read, write;
 
 	public:
-		BufferStream(DataAccessor* buf, FileMode mode);
+		BufferStream(DataAccessor* buf, bool canRead, bool canWrite);
 		virtual ~BufferStream();
 
+		virtual void Close();
+
+		virtual bool IsClosed() const;
 		virtual bool AtEnd() const;
 
 		virtual bool CanRead() const;
