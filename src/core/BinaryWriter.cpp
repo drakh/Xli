@@ -1,4 +1,5 @@
 #include <Xli/BinaryWriter.h>
+#include <cstring>
 
 namespace Xli
 {

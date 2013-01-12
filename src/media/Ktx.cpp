@@ -1,5 +1,6 @@
 #include <XliMedia/Ktx.h>
 #include <XliMedia/CompressedImage.h>
+#include <cstring>
 
 namespace Xli
 {

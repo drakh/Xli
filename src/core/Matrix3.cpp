@@ -102,7 +102,6 @@ namespace Xli
 		return r;
 	}
 
-
 	Matrix3& Matrix3::operator += (const Matrix3& m)
 	{
 		for (int i = 0; i < 9; i++) data[i] += m.data[i];
@@ -120,6 +119,7 @@ namespace Xli
 		for (int i = 0; i < 9; i++) data[i] += s;
 		return *this;
 	}
+
 	Matrix3& Matrix3::operator -= (float s)
 	{
 		for (int i = 0; i < 9; i++) data[i] -= s;

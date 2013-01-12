@@ -1,5 +1,6 @@
 #include <Xli/Utf16String.h>
 #include <Xli/Exception.h>
+#include <cstring>
 
 namespace Xli
 {

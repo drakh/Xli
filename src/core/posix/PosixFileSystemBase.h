@@ -9,9 +9,10 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <dirent.h>
-#include <cstdio>
 #include <fcntl.h>
 #include <errno.h>
+#include <cstdio>
+#include <cstdlib>
 
 namespace Xli
 {

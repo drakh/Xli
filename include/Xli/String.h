@@ -3,10 +3,11 @@
 
 #include <Xli/BaseTypes.h>
 
-#include <stdio.h>
-#include <stdarg.h>
-#include <ctype.h>
-#include <string.h>
+#ifdef ANDROID 
+# include <stdarg.h>
+#else
+# include <cstdarg>
+#endif
 
 namespace Xli
 {

@@ -1,9 +1,15 @@
 #include <Xli/Window.h>
 #include <Xli/Thread.h>
 #include <Xli/StringBuilder.h>
+#include <cstring>
 
 namespace Xli
 {
+	WindowEvent::WindowEvent() 
+	{ 
+		memset(this, 0, sizeof(WindowEvent)); 
+	}
+
 	void WindowEventQueue::OnKeyDown(Key key)
 	{
 		keyStates[(unsigned int)key] = true;

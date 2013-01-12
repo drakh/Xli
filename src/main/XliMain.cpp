@@ -1,6 +1,7 @@
 #include <Xli/Console.h>
 #include <Xli/NativeFileSystem.h>
 #include <Xli/MessageBox.h>
+#include <cstdlib>
 
 extern int Main(const Xli::Array<Xli::String>& args);
 

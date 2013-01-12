@@ -1,4 +1,5 @@
 #include <Xli/ToString.h>
+#include <cstdio>
 
 namespace Xli
 {

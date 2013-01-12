@@ -1,4 +1,5 @@
 #include <Xli/BufferStream.h>
+#include <cstring>
 
 namespace Xli
 {

@@ -2,6 +2,9 @@
 #include <Xli/Array.h>
 #include <Xli/Exception.h>
 #include <Xli/Hash.h>
+#include <cctype>
+#include <cstdio>
+#include <cstring>
 
 namespace Xli
 {

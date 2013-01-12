@@ -1,4 +1,5 @@
 #include <Xli/NativeFileSystem.h>
+#include <cstdlib>
 
 namespace Xli
 {

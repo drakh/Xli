@@ -1,6 +1,7 @@
 #include <Xli/Unicode.h>
 #include <Xli/Exception.h>
 #include "3rdparty/ConvertUTF.h"
+#include <cstring>
 
 namespace Xli
 {

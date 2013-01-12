@@ -1,4 +1,6 @@
 #include <Xli/Buffer.h>
+#include <cstdlib>
+#include <cstring>
 
 namespace Xli
 {

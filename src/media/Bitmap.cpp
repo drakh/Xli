@@ -1,6 +1,7 @@
 #include <XliMedia/Bitmap.h>
 #include <Xli/Managed.h>
 #include <Xli/Array.h>
+#include <cstring>
 
 namespace Xli
 {

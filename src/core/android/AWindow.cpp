@@ -1,9 +1,10 @@
 #include <jni.h>
 #include <errno.h>
 #include <unistd.h>
+#include <cstdlib>
 
 #include <EGL/egl.h>
-#include <android_native_app_glue.h>
+#include "3rdparty/android_native_app_glue.h"
 #include <android/native_window.h>
 #include <android/native_activity.h>
 #include <android/window.h>

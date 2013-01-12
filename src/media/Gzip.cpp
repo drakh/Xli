@@ -1,9 +1,8 @@
 #include <XliMedia/Gzip.h>
 #include <Xli/Console.h>
 #include <Xli/BufferStream.h>
-
+#include <cstring>
 #include <zlib.h>
-//#include <zutil.h>
 
 #define DEF_MEM_LEVEL 8
 #define Z_BUFSIZE 16384

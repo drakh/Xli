@@ -88,6 +88,7 @@ namespace Xli
 		for (int i = 0; i < 16; i++) r.data[i] = data[i] + s;
 		return r;
 	}
+
 	Matrix4 Matrix4::operator - (float s) const
 	{
 		Matrix4 r;
@@ -196,6 +197,7 @@ namespace Xli
 		t.data[15] = data[15];
 		return t;
 	}
+
 	void Matrix4::Transpose()
 	{
 		*this = Transposed();

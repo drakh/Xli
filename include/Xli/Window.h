@@ -166,7 +166,7 @@ namespace Xli
 		UInt16 Char;
 		Xli::Key Key;
 		int TouchPointIndex;
-		WindowEvent() { memset(this, 0, sizeof(WindowEvent)); }
+		WindowEvent();
 	};
 
 	/**

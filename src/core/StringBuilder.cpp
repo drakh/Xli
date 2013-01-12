@@ -1,4 +1,5 @@
 #include <Xli/StringBuilder.h>
+#include <cstring>
 
 namespace Xli
 {

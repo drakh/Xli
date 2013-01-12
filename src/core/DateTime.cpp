@@ -1,6 +1,7 @@
 #include <Xli/DateTime.h>
 #include <Xli/Exception.h>
 #include <Xli/Time.h>
+#include <cstdio>
 
 namespace Xli
 {
