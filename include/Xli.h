@@ -30,10 +30,12 @@
 */
 
 #include <Xli/Array.h>
+#include <Xli/ArrayStream.h>
 #include <Xli/BaseTypes.h>
 #include <Xli/BinaryReader.h>
 #include <Xli/BinaryWriter.h>
 #include <Xli/Buffer.h>
+#include <Xli/BufferStream.h>
 #include <Xli/ConditionVariable.h>
 #include <Xli/Config.h>
 #include <Xli/Console.h>
@@ -70,6 +72,7 @@
 #include <Xli/StringBuilder.h>
 #include <Xli/Text.h>
 #include <Xli/TextReader.h>
+#include <Xli/TextStream.h>
 #include <Xli/TextWriter.h>
 #include <Xli/Thread.h>
 #include <Xli/Time.h>
