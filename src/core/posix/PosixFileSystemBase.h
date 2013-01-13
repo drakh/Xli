@@ -13,6 +13,7 @@
 #include <errno.h>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 
 namespace Xli
 {

@@ -66,8 +66,8 @@ elseif (UNIX)
 			set(CMAKE_OSX_ARCHITECTURES "x86_64;i386" CACHE STRING "OSX architectures - 'i386', 'x86_64' or 'x86_64;i386' (universal)" FORCE)
 		endif()
 
-		include_directories(${PROJECT_SOURCE_DIR}/src/platform/sdl2/SDL2-OSX/include)
-		link_directories(${PROJECT_SOURCE_DIR}/src/platform/sdl2/SDL2-OSX/lib)
+		include_directories(${PROJECT_SOURCE_DIR}/src/core/sdl2/SDL2-OSX/include)
+		link_directories(${PROJECT_SOURCE_DIR}/src/core/sdl2/SDL2-OSX/lib)
 
 		include_directories(/usr/X11/include /usr/X11/include/freetype2)
 		link_directories(/usr/X11/lib)

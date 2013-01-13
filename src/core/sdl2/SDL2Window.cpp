@@ -91,7 +91,7 @@ namespace Xli
         SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES2);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
         
 #ifdef XLI_PLATFORM_IOS
       
@@ -207,7 +207,7 @@ namespace Xli
 
 	int SDL2Window::GetDisplay()
 	{
-		return SDL_GetWindowDisplay(window);
+		return SDL_GetWindowDisplayIndex(window);
 	}
 
 	String SDL2Window::GetTitle()
@@ -267,7 +267,7 @@ namespace Xli
 				SDL_GetWindowPosition(window, &x, &y);
 				SDL_GetWindowSize(window, &w, &h);
 
-				int i = SDL_GetWindowDisplay(window);
+				int i = SDL_GetWindowDisplayIndex(window);
 				if (i == -1) i = 0;
 
 				SDL_Rect rect;

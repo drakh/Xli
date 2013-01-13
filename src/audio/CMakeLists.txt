@@ -1,4 +1,5 @@
 set(Sources
+	portaudio/PAAudioBuffer.cpp
 	AudioBuffer.cpp
 	AudioStream.cpp
 	SoundChannel.cpp
