@@ -46,7 +46,6 @@ if (WIN32)
             sdl2/SDL2Time.cpp
             sdl2/SDL2Window.cpp
             sdl2/SDL2Display.cpp
-            sdl2/SDL2FileSystem.cpp
             win32/Win32FileSystem.cpp
             win32/Win32Helpers.cpp
             win32/Win32MessageBox.cpp
@@ -60,7 +59,6 @@ if (WIN32)
             win32/Win32FileSystem.cpp
             win32/Win32Helpers.cpp
             win32/Win32MessageBox.cpp
-            win32/Win32Socket.cpp
             win32/Win32Thread.cpp
             win32/Win32Time.cpp
             win32/Win32Window.cpp
@@ -85,6 +83,9 @@ elseif (APPLE)
         sdl2/SDL2Thread.cpp
         )
 
+    include_directories(${PROJECT_SOURCE_DIR}/src/core/sdl2/SDL2-OSX/include)
+    link_directories(${PROJECT_SOURCE_DIR}/src/core/sdl2/SDL2-OSX/lib)
+
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lSDL2 -lm -liconv -Wl,-framework,OpenGL -Wl,-framework,ForceFeedback -lobjc -Wl,-framework,Cocoa -Wl,-framework,Carbon -Wl,-framework,IOKit -Wl,-framework,CoreAudio -Wl,-framework,AudioToolbox -Wl,-framework,AudioUnit")
 
 elseif (UNIX)
@@ -101,6 +102,8 @@ elseif (UNIX)
         sdl2/SDL2Mutex.cpp
         sdl2/SDL2Thread.cpp
         )
+
+	add_definitions("`sdl2-config --cflags`")
 
 endif()
 

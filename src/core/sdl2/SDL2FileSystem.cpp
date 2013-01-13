@@ -70,10 +70,12 @@ namespace Xli
 		{
 			return canRead && fp != 0;
 		}
+        
 		bool CanWrite() const
 		{
 			return canWrite && fp != 0;
 		}
+        
 		bool CanSeek() const
 		{
 			return fp != 0;
@@ -84,6 +86,7 @@ namespace Xli
 			if (!fp) XLI_THROW_STREAM_CLOSED;
 			return (int)SDL_RWtell(fp);
 		}
+        
 		int GetLength() const
 		{
 			if (!fp) XLI_THROW_STREAM_CLOSED;
@@ -100,12 +103,14 @@ namespace Xli
 			if (!canRead) XLI_THROW_STREAM_CANT_READ;
 			return SDL_RWread(fp, data, elmSize, elmCount);
 		}
+        
 		int Write(const void* data, int elmSize, int elmCount)
 		{
 			if (!fp) XLI_THROW_STREAM_CLOSED;
 			if (!canWrite) XLI_THROW_STREAM_CANT_WRITE;
 			return SDL_RWwrite(fp, data, elmSize, elmCount);
 		}
+        
 		void Seek(SeekOrigin origin, int offset)
 		{
 			if (!fp) XLI_THROW_STREAM_CLOSED;

@@ -267,7 +267,7 @@ namespace Xli
 		Matrix3 m = Identity();
 		m.data[0] = x;
 		m.data[4] = y;
-		m.data[9] = z;
+		m.data[8] = z;
 		return m;
 	}
 
