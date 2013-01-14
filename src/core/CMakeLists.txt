@@ -41,6 +41,7 @@ if (WIN32)
 
         SET(Sources ${Sources}
             sdl2/SDL2Cond.cpp
+            sdl2/SDL2GLContext.cpp
             sdl2/SDL2Mutex.cpp
             sdl2/SDL2Thread.cpp
             sdl2/SDL2Time.cpp
@@ -71,6 +72,7 @@ if (WIN32)
 elseif (APPLE)
 
     set(Sources ${Sources}
+        3rdparty/glew/src/glew.c
         generic/GenericAssetFileSystem.cpp
         generic/GenericDialogs.cpp
         generic/GenericMessageBox.cpp
@@ -79,10 +81,12 @@ elseif (APPLE)
         sdl2/SDL2Display.cpp
         sdl2/SDL2FileSystem.cpp
         sdl2/SDL2Cond.cpp
+        sdl2/SDL2GLContext.cpp
         sdl2/SDL2Mutex.cpp
         sdl2/SDL2Thread.cpp
         )
 
+    include_directories(${PROJECT_SOURCE_DIR}/src/core/3rdparty/glew/include)
     include_directories(${PROJECT_SOURCE_DIR}/src/core/sdl2/SDL2-OSX/include)
     link_directories(${PROJECT_SOURCE_DIR}/src/core/sdl2/SDL2-OSX/lib)
 
@@ -99,6 +103,7 @@ elseif (UNIX)
         sdl2/SDL2Window.cpp
         sdl2/SDL2Display.cpp
         sdl2/SDL2Cond.cpp
+        sdl2/SDL2GLContext.cpp
         sdl2/SDL2Mutex.cpp
         sdl2/SDL2Thread.cpp
         )

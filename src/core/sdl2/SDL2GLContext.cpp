@@ -1,4 +1,5 @@
 #include <Xli/GLContext.h>
+#include <Xli/GLHeaders.h>
 #include <Xli/SDL2Window.h>
 
 namespace Xli
@@ -19,9 +20,11 @@ namespace Xli
 			}
 #endif
 
+#ifdef XLI_GLES2
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-            SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES2);
-
+            SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+#endif
+            
 			this->window = window;
 			context = SDL_GL_CreateContext(window->GetSDLWindow());
 
@@ -31,10 +34,6 @@ namespace Xli
             
             Vector2i vp = window->GetClientSize();
             glViewport(0, 0, vp.X, vp.Y);
-            
-            //printf("%s\n", glGetString(GL_VERSION));
-            //printf("%s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
-            //printf("%s\n", glGetString(GL_VENDOR));
 		}
 
 		virtual ~SDL2GLContext()
@@ -72,6 +71,11 @@ namespace Xli
 		virtual bool SetSwapInterval(int interval)
 		{
 			return SDL_GL_SetSwapInterval(interval) == 0;
+		}
+        
+		virtual int GetSwapInterval()
+		{
+			return SDL_GL_GetSwapInterval();
 		}
 	};
 
