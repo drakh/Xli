@@ -517,12 +517,12 @@ namespace Xli
 			wcex.cbClsExtra     = 0;
 			wcex.cbWndExtra     = 0;
 			wcex.hInstance      = hInstance;
-			wcex.hIcon          = LoadIcon(hInstance, IDI_APPLICATION);
 			wcex.hCursor        = LoadCursor(NULL, IDC_ARROW);
+			wcex.hIcon          = LoadIcon(hInstance, IDI_APPLICATION);
+			wcex.hIconSm        = LoadIcon(hInstance, IDI_APPLICATION);
 			wcex.hbrBackground  = NULL;
 			wcex.lpszMenuName   = NULL;
 			wcex.lpszClassName  = windowClassName;
-			wcex.hIconSm        = LoadIcon(hInstance, IDI_APPLICATION);
 
 			if (!RegisterClassEx(&wcex)) XLI_THROW("Failed to register window class");
 		}

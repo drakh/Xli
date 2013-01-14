@@ -80,20 +80,20 @@ namespace Xli
 			bucketCount = newSize;
 			count = 0;
 
-			for (int i = 0; i < bucketCount; i++) buckets[i].State = HashBucketStateEmpty;
+			for (int i = 0; i < bucketCount; i++) 
+				buckets[i].State = HashBucketStateEmpty;
 
 			for (int i = 0; i < oldSize; i++)
-			{
-				if (oldBuckets[i].State == HashBucketStateUsed) (*this)[oldBuckets[i].Key] = oldBuckets[i].Value;
-			}
+				if (oldBuckets[i].State == HashBucketStateUsed) 
+					(*this)[oldBuckets[i].Key] = oldBuckets[i].Value;
 
-			if (oldBuckets != internalBuckets) TTraits::DeleteBuckets(oldBuckets, memPool);
+			if (oldBuckets != internalBuckets) 
+				TTraits::DeleteBuckets(oldBuckets, memPool);
 		}
-
 
 		void expand()
 		{
-			rehash(bucketCount*2);
+			rehash(bucketCount * 2);
 		}
 
 	public:
@@ -111,7 +111,10 @@ namespace Xli
 				bucketCount = 1<<initialSizeLog2;
 				buckets = TTraits::NewBuckets(bucketCount, memPool);
 			}
-			for (int i = 0; i < bucketCount; i++) buckets[i].State = HashBucketStateEmpty;
+
+			for (int i = 0; i < bucketCount; i++) 
+				buckets[i].State = HashBucketStateEmpty;
+
 			count = 0;
 		}
 
@@ -301,7 +304,8 @@ namespace Xli
 
 		TValue& operator [] (const TKey& key)
 		{
-			int x = TTraits::Hash(key) & (bucketCount-1);
+			if (count > (bucketCount/8)*5) expand();
+			int x = TTraits::Hash(key) & (bucketCount - 1);
 			int firstX = x;
 
 			while (true)
@@ -313,13 +317,13 @@ namespace Xli
 				}
 				else if (buckets[x].State == HashBucketStateEmpty)
 				{
-					TValue v;
-					Add(key, v);
-					x = firstX;
-					continue;
+					buckets[x].State = HashBucketStateUsed;
+					buckets[x].Key = key;
+					count++;
+					return buckets[x].Value;
 				}
 
-				x += 1;
+				x++;
 
 				if (x >= bucketCount) 
 					x -= bucketCount;
@@ -336,7 +340,7 @@ namespace Xli
 		void Add(const TKey& key, const TValue& value)
 		{
 			if (count > (bucketCount/8)*5) expand();
-			int x = TTraits::Hash(key) & (bucketCount-1);
+			int x = TTraits::Hash(key) & (bucketCount - 1);
 			int firstX = x;
 
 			while (true)
@@ -355,7 +359,7 @@ namespace Xli
 					return;
 				}
 
-				x += 1;
+				x++;
 
 				if (x >= bucketCount) 
 					x -= bucketCount;
@@ -363,15 +367,15 @@ namespace Xli
 				if (x == firstX)
 				{
 					rehash(bucketCount);
-					Add(key, value);
-					return;
+					x = firstX;
+					continue;
 				}
 			}
 		}
 
 		bool Remove(const TKey& key)
 		{
-			int x = TTraits::Hash(key) & (bucketCount-1);
+			int x = TTraits::Hash(key) & (bucketCount - 1);
 
 			while (true)
 			{
@@ -389,7 +393,7 @@ namespace Xli
 					return false;
 				}
 
-				x += 1;
+				x++;
 
 				if (x >= bucketCount) 
 					x -= bucketCount;
@@ -398,21 +402,22 @@ namespace Xli
 
 		bool ContainsKey(const TKey& key) const
 		{
-			int x = TTraits::Hash(key) & (bucketCount-1);
+			int x = TTraits::Hash(key) & (bucketCount - 1);
 			int firstX = x;
 
 			while (true)
 			{
 				if (buckets[x].State == HashBucketStateUsed)
 				{
-					if (TTraits::Equals(buckets[x].Key, key)) return true;
+					if (TTraits::Equals(buckets[x].Key, key)) 
+						return true;
 				}
 				else if (buckets[x].State == HashBucketStateEmpty)
 				{
 					return false;
 				}
 
-				x += 1;
+				x++;
 
 				if (x >= bucketCount) 
 					x -= bucketCount;
@@ -424,7 +429,7 @@ namespace Xli
 
 		bool TryGetValue(const TKey& key, TValue& value) const
 		{
-			int x = TTraits::Hash(key) & (bucketCount-1);
+			int x = TTraits::Hash(key) & (bucketCount - 1);
 			int firstX = x;
 
 			while (true)
@@ -442,7 +447,7 @@ namespace Xli
 					return false;
 				}
 
-				x += 1;
+				x++;
 
 				if (x >= bucketCount) 
 					x -= bucketCount;
