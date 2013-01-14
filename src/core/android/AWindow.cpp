@@ -478,6 +478,12 @@ static void handle_cmd(struct android_app* app, int32_t cmd)
 			break;
 
 		case APP_CMD_STOP:
+		case APP_CMD_TERM_WINDOW:
+			if (GlobalEventHandler && !GlobalState->destroyRequested)
+			{
+				GlobalEventHandler->OnClosed();
+			}
+
 			GlobalState->destroyRequested = 1;
 			break;
 	}
@@ -489,8 +495,6 @@ extern "C" void android_main(struct android_app* state)
 {
     // Make sure glue isn't stripped.
     app_dummy();
-
-	LOGI("Initing Application");
 
     state->userData = 0;
     state->onAppCmd = handle_cmd;
@@ -520,11 +524,9 @@ extern "C" void android_main(struct android_app* state)
 
 		XliAAssetManager = GlobalState->activity->assetManager;
 
-		LOGI("Starting Application");
-
 		int exit_code = main(0, 0);
 
-		LOGI("Exiting Application");
+		LOGI("Exiting with code: %d", exit_code);
 		exit(exit_code);
 	}
 	catch (const Xli::Exception& e)

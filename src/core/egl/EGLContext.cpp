@@ -142,7 +142,12 @@ namespace Xli
 		
 		virtual bool SetSwapInterval(int interval)
 		{
-			return eglSwapInterval(display, interval);
+			return eglSwapInterval(display, interval) == EGL_TRUE;
+		}
+
+		virtual int GetSwapInterval()
+		{
+			return -1;
 		}
 
 		virtual int GetMultiSamples()
