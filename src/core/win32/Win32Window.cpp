@@ -3,6 +3,7 @@
 #include <Xli/Display.h>
 #include <Xli/HashMap.h>
 #include <Xli/Unicode.h>
+#include <cstdlib>
 
 // Windows XP look and feel.
 #pragma comment(linker, \
@@ -21,7 +22,7 @@ namespace Xli
 {
 	static int InitCount = 0;
 	static HINSTANCE hInstance;
-	static const LPWSTR windowClassName = L"XliWindow";
+	static LPCWSTR windowClassName = L"XliWindow";
 	static Win32Window* mainWindow = 0;
 
 	static DWORD XliWindowStyleToWin32Style(int style)

@@ -29,6 +29,8 @@ namespace Xli
 		*/
 		virtual bool SetSwapInterval(int interval) = 0;
 
+		virtual int GetSwapInterval() = 0;
+
 		virtual int GetMultiSamples() = 0;
 	};
 }

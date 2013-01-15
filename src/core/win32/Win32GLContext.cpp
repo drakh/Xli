@@ -90,7 +90,7 @@ namespace Xli
 						continue;
 					}
 
-					PrintLine("WGL WARNING: Unable to find any multisampled OpenGL formats");
+					ErrorPrintLine("WGL WARNING: Unable to find any multisampled OpenGL formats");
 					return -1;
 				}
 
@@ -99,7 +99,7 @@ namespace Xli
 
 			if (!SetPixelFormat(hDC, configs[0], &pfd))
 			{
-				PrintLine("WGL ERROR: Unable to set multisampled OpenGL format: " + Win32Helpers::GetLastErrorString());
+				ErrorPrintLine("WGL ERROR: Unable to set multisampled OpenGL format: " + Win32Helpers::GetLastErrorString());
 				return -1;
 			}
 
@@ -223,6 +223,11 @@ namespace Xli
 		virtual bool SetSwapInterval(int interval)
 		{
 			return wglSwapIntervalEXT(interval)	== TRUE;
+		}
+
+		virtual int GetSwapInterval()
+		{
+			return wglGetSwapIntervalEXT();
 		}
 	};
 

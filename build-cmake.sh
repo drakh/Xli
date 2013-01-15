@@ -5,5 +5,10 @@ else
 	CPU_COUNT=`grep processor /proc/cpuinfo | wc -l`
 fi
 
-cmake -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Release . && \
+mkdir -p cmake-build
+cd cmake-build || exit $?
+
+cmake -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Release .. && \
 make -j $CPU_COUNT
+
+cd -
