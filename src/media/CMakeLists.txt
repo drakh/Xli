@@ -9,7 +9,8 @@ set(Sources
 	ImageWriter.cpp
 	JpegReader.cpp
 	JpegWriter.cpp
-	Json.cpp	
+	Json.cpp
+	Ktx.cpp	
 	PngReader.cpp
 	PngWriter.cpp
 	Texture.cpp

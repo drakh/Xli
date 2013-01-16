@@ -1,10 +1,9 @@
 #include <Xli/SDL2Window.h>
+#include <Xli/GLHeaders.h>
 #include <Xli/Unicode.h>
 
 #include <SDL.h>
 #include <SDL_syswm.h>
-
-#include <Xli/GLHeaders.h>
 
 namespace Xli
 {
@@ -90,8 +89,17 @@ namespace Xli
         
         SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+
+#ifdef XLI_GLES2
+
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+
+#else
+
+        flags |= SDL_WINDOW_OPENGL;
+
+#endif
         
 #ifdef XLI_PLATFORM_IOS
       

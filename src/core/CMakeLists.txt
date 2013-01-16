@@ -86,7 +86,9 @@ elseif (APPLE)
         sdl2/SDL2Thread.cpp
         )
 
+    add_definitions(-DGLEW_STATIC)
     include_directories(${PROJECT_SOURCE_DIR}/src/core/3rdparty/glew/include)
+
     include_directories(${PROJECT_SOURCE_DIR}/src/core/sdl2/SDL2-OSX/include)
     link_directories(${PROJECT_SOURCE_DIR}/src/core/sdl2/SDL2-OSX/lib)
 
