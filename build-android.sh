@@ -1,12 +1,12 @@
 #!/bin/sh
-if [ `uname -o` = "Cygwin" ]; then
-	chmod -R 0777 src
-fi
-
 if [ `uname` = "Darwin" ]; then
 	CPU_COUNT=`sysctl hw.ncpu | cut -d " " -f 2`
 else
 	CPU_COUNT=`grep processor /proc/cpuinfo | wc -l`
+
+    if [ `uname -o` = "Cygwin" ]; then
+        chmod -R 0777 src
+    fi
 fi
 
 cd projects/android-ndk
