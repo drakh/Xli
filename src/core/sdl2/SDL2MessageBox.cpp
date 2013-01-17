@@ -6,68 +6,68 @@ namespace Xli
 	DialogResult MessageBox::Show(Window* wnd, const String& message, const String& caption, DialogButtons buttons, int hints)
 	{
 		SDL_MessageBoxData data;
-		SDL_MessageBoxButtonData buttons[3];
+		SDL_MessageBoxButtonData buttondata[3];
 
 		data.flags = 0;
 		data.window = ((SDL2Window*)wnd)->GetSDLWindow();
 		data.title = caption.Data();
 		data.message = message.Data();
 		data.numbuttons = 0;
-		data.buttons = buttons;
+		data.buttons = buttondata;
 		data.colorScheme = 0;
 
 		switch (buttons)
 		{
 		case DialogButtonsOK:
-			buttons[0].flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
-			buttons[0].buttonid = 0;
-			buttons[0].text = "OK";
+			buttondata[0].flags = SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
+			buttondata[0].buttonid = 0;
+			buttondata[0].text = "OK";
 			data.numbuttons = 1;
 			break;
 
 		case DialogButtonsOKCancel: 
-			buttons[0].flags = 0;
-			buttons[0].buttonid = 0;
-			buttons[0].text = "OK";
-			buttons[1].flags = SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
-			buttons[1].buttonid = 1;
-			buttons[1].text = "Cancel";
+			buttondata[0].flags = 0;
+			buttondata[0].buttonid = 0;
+			buttondata[0].text = "OK";
+			buttondata[1].flags = SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
+			buttondata[1].buttonid = 1;
+			buttondata[1].text = "Cancel";
 			data.numbuttons = 2;
 			break;
 
 		case DialogButtonsYesNo: 
-			buttons[0].flags = 0;
-			buttons[0].buttonid = 2;
-			buttons[0].text = "Yes";
-			buttons[1].flags = 0;
-			buttons[1].buttonid = 3;
-			buttons[1].text = "No";
+			buttondata[0].flags = 0;
+			buttondata[0].buttonid = 2;
+			buttondata[0].text = "Yes";
+			buttondata[1].flags = 0;
+			buttondata[1].buttonid = 3;
+			buttondata[1].text = "No";
 			data.numbuttons = 2;
 			break;
 
 		case DialogButtonsYesNoCancel: 
-			buttons[0].flags = 0;
-			buttons[0].buttonid = 2;
-			buttons[0].text = "Yes";
-			buttons[1].flags = 0;
-			buttons[1].buttonid = 3;
-			buttons[1].text = "No";
-			buttons[2].flags = SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
-			buttons[2].buttonid = 1;
-			buttons[2].text = "Cancel";
+			buttondata[0].flags = 0;
+			buttondata[0].buttonid = 2;
+			buttondata[0].text = "Yes";
+			buttondata[1].flags = 0;
+			buttondata[1].buttonid = 3;
+			buttondata[1].text = "No";
+			buttondata[2].flags = SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
+			buttondata[2].buttonid = 1;
+			buttondata[2].text = "Cancel";
 			data.numbuttons = 3;
 			break;
 
 		case DialogButtonsCancelTryContinue: 
-			buttons[0].flags = SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
-			buttons[0].buttonid = 1;
-			buttons[0].text = "Cancel";
-			buttons[1].flags = 0;
-			buttons[1].buttonid = 4;
-			buttons[1].text = "Try Again";
-			buttons[2].flags = 0;
-			buttons[2].buttonid = 5;
-			buttons[2].text = "Continue";
+			buttondata[0].flags = SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT;
+			buttondata[0].buttonid = 1;
+			buttondata[0].text = "Cancel";
+			buttondata[1].flags = 0;
+			buttondata[1].buttonid = 4;
+			buttondata[1].text = "Try Again";
+			buttondata[2].flags = 0;
+			buttondata[2].buttonid = 5;
+			buttondata[2].text = "Continue";
 			data.numbuttons = 3;
 			break;
 
@@ -79,9 +79,9 @@ namespace Xli
 		else if (hints & DialogHintInformation) data.flags |= SDL_MESSAGEBOX_INFORMATION;
 		else if (hints & DialogHintWarning) data.flags |= SDL_MESSAGEBOX_WARNING;
 		
-		if (hints & DialogHintButton1Default) data.buttons[0].flags |= SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
-		else if (hints & DialogHintButton2Default) data.buttons[1].flags |= SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
-		else if (hints & DialogHintButton3Default) data.buttons[2].flags |= SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
+		if (hints & DialogHintButton1Default) buttondata[0].flags |= SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
+		else if (hints & DialogHintButton2Default) buttondata[1].flags |= SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
+		else if (hints & DialogHintButton3Default) buttondata[2].flags |= SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
 
 		int result = -1;
 		if (SDL_ShowMessageBox(&data, &result))

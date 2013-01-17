@@ -119,6 +119,6 @@ endif()
 add_library(Xli ${Sources})
 
 if (UNIX AND NOT APPLE)
-    target_link_libraries(Xli SDL2)
+    target_link_libraries(Xli SDL2 pthread GL GLEW)
 endif()
 

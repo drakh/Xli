@@ -57,7 +57,8 @@ namespace Xli
 
 			tmp = pre + tmp;
 
-			if (!FileExists(tmp))
+			struct stat attributes;
+			if (stat(tmp.Data(), &attributes) == -1)
 			{
 				return tmp;
 			}
@@ -150,12 +151,6 @@ namespace Xli
 		}
 	}
 
-	bool PosixFileSystemBase::FileExists(const String& path)
-	{
-		struct stat attributes;
-		return stat(path.Data(), &attributes) != -1;
-	}
-
 	bool PosixFileSystemBase::GetFileInfo(const String& path, FileInfo& f)
 	{
 		struct stat attributes;
@@ -189,11 +184,15 @@ namespace Xli
 
 	void PosixFileSystemBase::GetFiles(const String& path, Array<FileInfo>& list)
 	{
-		String prefix = path;
+		String prefix;
 		
 		if (path.Length() > 0 && path.Last() != '/')
 		{
-			prefix += "/";
+			prefix = path + "/";
+		}
+		else
+		{
+			prefix = path;
 		}
 
 		DIR *dp;
@@ -213,7 +212,9 @@ namespace Xli
 		{
 			String fn = ep->d_name;
 			if (fn == "." || fn == "..") continue;
-			list.Add(GetFileInfo(prefix + fn));
+			FileInfo info;
+			if (GetFileInfo(prefix + fn, info))
+				list.Add(info);
 		}
 
 		closedir(dp);

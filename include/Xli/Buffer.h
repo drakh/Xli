@@ -3,6 +3,7 @@
 
 #include <Xli/BaseTypes.h>
 #include <Xli/Object.h>
+#include <cstddef>
 #include <new>
 
 namespace Xli
