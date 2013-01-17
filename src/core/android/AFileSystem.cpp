@@ -4,6 +4,8 @@
 #include <android/asset_manager.h>
 extern struct AAssetManager* XliAAssetManager;
 
+#include <cstdio>
+
 namespace Xli
 {
 	class AAssetStream: public Stream
