@@ -1,11 +1,9 @@
 #ifndef __XLI_OBJECT_H__
 #define __XLI_OBJECT_H__
 
-#include <Xli/Exception.h>
-
 namespace Xli
 {
-	String ToString(void* p);
+	class String;
 
 	class Object
 	{

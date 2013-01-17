@@ -31,7 +31,7 @@ namespace Xli
 		virtual bool IsMinimized();
 		virtual bool IsMaximized();
 
-        virtual int GetDisplay();
+        virtual int GetDisplayIndex();
 		virtual String GetTitle();
 		virtual Vector2i GetPosition();
 		virtual Vector2i GetClientSize();

@@ -56,19 +56,38 @@ namespace Xli
 		XLI_THROW_NOT_SUPPORTED(__FUNCTION__);
 	}
 
-	FileInfo FileSystem::GetFileInfo(const String& path) 
+	bool FileSystem::GetFileInfo(const String& path, FileInfo& result) 
 	{ 
-		XLI_THROW_NOT_SUPPORTED(__FUNCTION__);
+		//XLI_THROW_NOT_SUPPORTED(__FUNCTION__);
+		return false;
 	}
 
 	void FileSystem::GetFiles(const String& path, Array<FileInfo>& list) 
 	{ 
-		XLI_THROW_NOT_SUPPORTED(__FUNCTION__);
+		//XLI_THROW_NOT_SUPPORTED(__FUNCTION__);
 	}
 
-	bool FileSystem::FileExists(const String& path)
+	void FileSystem::GetFiles(Array<FileInfo>& list) 
+	{ 
+		GetFiles(".", list); 
+	}
+
+	bool FileSystem::Exists(const String& path)
 	{
-		XLI_THROW_NOT_SUPPORTED(__FUNCTION__);
+		FileInfo result;
+		return GetFileInfo(path, result);
+	}
+
+	bool FileSystem::IsFile(const String& path)
+	{
+		FileInfo result;
+		return GetFileInfo(path, result) && (result.Flags & FileFlagDirectory) == 0;
+	}
+
+	bool FileSystem::IsDirectory(const String& path)
+	{
+		FileInfo result;
+		return GetFileInfo(path, result) && (result.Flags & FileFlagDirectory) == FileFlagDirectory;
 	}
 
 	void FileSystem::CreateDirectories(const String& path)
@@ -118,7 +137,8 @@ namespace Xli
 	public:
 		SubFileSystem(FileSystem* fs, const String& path);
 
-		virtual Stream* OpenFile(const String& filename, FileMode mode);
+		virtual Stream* OpenFile(const String& filename, FileMode mode = FileModeRead);
+		virtual DataAccessor* OpenFileAsBuffer(const String& filename);
 
 		virtual void CreateDirectory(const String& name);
 		virtual void DeleteDirectory(const String& name);
@@ -127,9 +147,18 @@ namespace Xli
 		virtual void MoveDirectory(const String& oldName, const String& newName);
 		virtual void MoveFile(const String& oldName, const String& newName);
 
-		virtual bool FileExists(const String& path);
-		virtual FileInfo GetFileInfo(const String& path);
+		virtual bool GetFileInfo(const String& path, FileInfo& result);
 		virtual void GetFiles(const String& path, Array<FileInfo>& list);
+
+		virtual void GetFiles(Array<FileInfo>& list);
+
+		virtual bool Exists(const String& path);
+		virtual bool IsFile(const String& path);
+		virtual bool IsDirectory(const String& path);
+
+		virtual void CreateDirectories(const String& path);
+
+		virtual void DeleteDirectoryRecursive(const String& name);
 
 		virtual FileSystem* CreateSubFileSystem(const String& path);
 	};
@@ -149,6 +178,11 @@ namespace Xli
 	Stream* SubFileSystem::OpenFile(const String& filename, FileMode mode)
 	{
 		return fs->OpenFile(path + filename, mode);
+	}
+
+	DataAccessor* SubFileSystem::OpenFileAsBuffer(const String& filename)
+	{
+		return fs->OpenFileAsBuffer(path + filename);
 	}
 
 	void SubFileSystem::CreateDirectory(const String& name)
@@ -176,16 +210,30 @@ namespace Xli
 		fs->MoveFile(path + oldName, path + newName);
 	}
 
-	bool SubFileSystem::FileExists(const String& path)
+	bool SubFileSystem::Exists(const String& path)
 	{
-		return fs->FileExists(this->path + path);
+		return fs->Exists(this->path + path);
+	}
+
+	bool SubFileSystem::IsFile(const String& path)
+	{
+		return fs->IsFile(this->path + path);
+	}
+
+	bool SubFileSystem::IsDirectory(const String& path)
+	{
+		return fs->IsDirectory(this->path + path);
 	}
 	
-	FileInfo SubFileSystem::GetFileInfo(const String& path)
+	bool SubFileSystem::GetFileInfo(const String& path, FileInfo& result)
 	{
-		FileInfo info = fs->GetFileInfo(this->path + path);
-		info.Name = info.Name.Substring(this->path.Length(), info.Name.Length() - this->path.Length());
-		return info;
+		FileInfo info;
+		if (fs->GetFileInfo(this->path + path, info))
+		{
+			info.Name = info.Name.Substring(this->path.Length(), info.Name.Length() - this->path.Length());
+			return true;
+		}
+		return false;
 	}
 
 	void SubFileSystem::GetFiles(const String& path, Array<FileInfo>& list)
@@ -196,6 +244,26 @@ namespace Xli
 		{
 			list[i].Name = list[i].Name.Substring(this->path.Length(), list[i].Name.Length() - this->path.Length());
 		}
+	}
+
+	void SubFileSystem::GetFiles(Array<FileInfo>& list)
+	{
+		int s = list.Length();
+		fs->GetFiles(this->path + path, list);
+		for (int i = s; i < list.Length(); i++)
+		{
+			list[i].Name = list[i].Name.Substring(this->path.Length(), list[i].Name.Length() - this->path.Length());
+		}
+	}
+
+	void SubFileSystem::CreateDirectories(const String& path)
+	{
+		fs->CreateDirectories(this->path + path);
+	}
+
+	void SubFileSystem::DeleteDirectoryRecursive(const String& name)
+	{
+		fs->DeleteDirectoryRecursive(this->path + path);
 	}
 
 	FileSystem* SubFileSystem::CreateSubFileSystem(const String& path)

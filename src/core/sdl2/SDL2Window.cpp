@@ -213,7 +213,7 @@ namespace Xli
 		return (SDL_GetWindowFlags(window) & SDL_WINDOW_MAXIMIZED) == SDL_WINDOW_MAXIMIZED;
 	}
 
-	int SDL2Window::GetDisplay()
+	int SDL2Window::GetDisplayIndex()
 	{
 		return SDL_GetWindowDisplayIndex(window);
 	}

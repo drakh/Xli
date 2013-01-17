@@ -360,7 +360,7 @@ namespace Xli
 		/**
 			Returns the index for the display containing this windows center coordinate
 		*/
-		virtual int GetDisplay() = 0;
+		virtual int GetDisplayIndex() = 0;
 
 		/**
 			Returns the native windows handle

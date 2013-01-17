@@ -28,12 +28,13 @@ namespace Xli
 		}
 
 		if (hints & DialogHintError) type |= MB_ICONERROR;
-		if (hints & DialogHintInformation) type |= MB_ICONINFORMATION;
-		if (hints & DialogHintQuestion) type |= MB_ICONQUESTION;
-		if (hints & DialogHintWarning) type |= MB_ICONWARNING;
+		else if (hints & DialogHintInformation) type |= MB_ICONINFORMATION;
+		else if (hints & DialogHintQuestion) type |= MB_ICONQUESTION;
+		else if (hints & DialogHintWarning) type |= MB_ICONWARNING;
+		
 		if (hints & DialogHintButton1Default) type |= MB_DEFBUTTON1;
-		if (hints & DialogHintButton2Default) type |= MB_DEFBUTTON2;
-		if (hints & DialogHintButton3Default) type |= MB_DEFBUTTON3;
+		else if (hints & DialogHintButton2Default) type |= MB_DEFBUTTON2;
+		else if (hints & DialogHintButton3Default) type |= MB_DEFBUTTON3;
 
 		Utf16String messageW = Unicode::Utf8To16(message);
 		Utf16String captionW = Unicode::Utf8To16(caption);

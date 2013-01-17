@@ -1,4 +1,6 @@
 #include <Xli/Object.h>
+#include <Xli/Exception.h>
+#include <Xli/ToString.h>
 
 namespace Xli
 {

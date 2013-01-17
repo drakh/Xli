@@ -435,6 +435,12 @@
     <ClCompile Include="..\..\..\src\core\TextStream.cpp">
       <Filter>Xli\IO</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\core\posix\PosixFileSystemBase.cpp">
+      <Filter>Xli\Platform\posix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\sdl2\SDL2MessageBox.cpp">
+      <Filter>Xli\Platform\sdl2</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\core\CMakeLists.txt" />

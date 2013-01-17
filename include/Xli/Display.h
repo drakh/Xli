@@ -11,7 +11,8 @@ namespace Xli
 	struct DisplaySettings
 	{
 		Vector2i Resolution;
-		int RefreshRate, BitsPerPixel;
+		int RefreshRate;
+		int BitsPerPixel;
 	};
 
 	/**
@@ -33,10 +34,9 @@ namespace Xli
 		*/
 		static Recti GetRect(int index);
 
-		// TODO: Interfaces to be implemented later
-		//static void GetCurrentSettings(int index, DisplaySettings& settings);
-		//static void GetSupportedSettings(int index, Array<DisplaySettings>& settings);
-		//static void ChangeSettings(int index, const DisplaySettings& settings);
+		static void GetCurrentSettings(int index, DisplaySettings& settings);
+		static void GetSupportedSettings(int index, Array<DisplaySettings>& settings);
+		static bool ChangeSettings(int index, const DisplaySettings& settings);
 	};
 }
 

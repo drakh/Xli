@@ -94,7 +94,7 @@ namespace Xli
 			return true;
 		}
 
-		virtual int GetDisplay()
+		virtual int GetDisplayIndex()
 		{
 			return 0;
 		}

@@ -157,7 +157,7 @@ namespace Xli
 		return (GetWindowLong(hWnd, GWL_STYLE) & SW_MAXIMIZE) == SW_MAXIMIZE;
 	}
 
-	int Win32Window::GetDisplay()
+	int Win32Window::GetDisplayIndex()
 	{
 		RECT rect;
 		GetWindowRect(hWnd, &rect);
@@ -229,7 +229,7 @@ namespace Xli
 			{
 				GetWindowRect(hWnd, &rect);
 
-				Recti display = Display::GetRect(GetDisplay());
+				Recti display = Display::GetRect(GetDisplayIndex());
 
 				SetWindowLong(hWnd, GWL_STYLE, WS_POPUP);
 				SetWindowPos(hWnd, 0, display.Left, display.Top, display.Right - display.Left, display.Bottom - display.Top + 1, SWP_NOZORDER | SWP_FRAMECHANGED);

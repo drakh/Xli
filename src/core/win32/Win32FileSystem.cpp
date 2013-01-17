@@ -61,7 +61,8 @@ namespace Xli
 
 			for (int i = 0; i < result.Length(); i++)
 			{
-				if (result[i] == '\\') result[i] = '/';
+				if (result[i] == '\\') 
+					result[i] = '/';
 			}
 
 			return result;
@@ -91,7 +92,8 @@ namespace Xli
 
 			for (int i = 0; bufW[i]; i++)
 			{
-				if (bufW[i] == '\\') bufW[i] = '/';
+				if (bufW[i] == '\\') 
+					bufW[i] = '/';
 			}
 
 			return Unicode::Utf16To8(bufW);
@@ -117,6 +119,7 @@ namespace Xli
 				{
 				case ERROR_ALREADY_EXISTS:
 					break;
+
 				case ERROR_PATH_NOT_FOUND:
 				default:
 					XLI_THROW("Couldn't create directory: " + path);
@@ -166,15 +169,7 @@ namespace Xli
 			}
 		}
 
-		virtual bool FileExists(const String& path)
-		{
-			Utf16String pathW = Unicode::Utf8To16(path);
-
-			WIN32_FILE_ATTRIBUTE_DATA data;
-			return GetFileAttributesExW(pathW.Data(), GetFileExInfoStandard, &data) == TRUE;
-		}
-
-		virtual FileInfo GetFileInfo(const String& path)
+		virtual bool GetFileInfo(const String& path, FileInfo& info)
 		{
 			Utf16String pathW = Unicode::Utf8To16(path);
 
@@ -182,7 +177,6 @@ namespace Xli
 
 			if (GetFileAttributesEx(pathW.Data(), GetFileExInfoStandard, &data))
 			{
-				FileInfo info;
 				info.Name = path;
 				info.Flags = 0;
 				info.LastAccessTime = ConvertToTimestamp(data.ftLastAccessTime);
@@ -191,11 +185,10 @@ namespace Xli
 				info.Size = ConvertToUInt64(data.nFileSizeHigh, data.nFileSizeLow);
 				if (data.dwFileAttributes & FILE_ATTRIBUTE_READONLY) info.Flags |= FileFlagReadOnly;
 				if (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) info.Flags |= FileFlagDirectory;
-
-				return info;
+				return true;
 			}
 
-			XLI_THROW_FILE_NOT_FOUND(path);
+			return false;
 		}
 
 		virtual void GetFiles(const String& path, Array<FileInfo>& list)

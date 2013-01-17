@@ -3,6 +3,7 @@
 
 #include <Xli/Config.h>
 #include <Xli/Object.h>
+#include <Xli/Exception.h>
 #include "Sort.h"
 
 namespace Xli

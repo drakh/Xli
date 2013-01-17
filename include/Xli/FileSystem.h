@@ -76,22 +76,24 @@ namespace Xli
 		virtual void MoveDirectory(const String& oldName, const String& newName);
 		virtual void MoveFile(const String& oldName, const String& newName);
 
-		virtual bool FileExists(const String& path);
-		virtual FileInfo GetFileInfo(const String& path);
+		virtual bool GetFileInfo(const String& path, FileInfo& result);
 		virtual void GetFiles(const String& path, Array<FileInfo>& list);
 
+		virtual void GetFiles(Array<FileInfo>& list);
 
-		void GetFiles(Array<FileInfo>& list) { GetFiles(".", list); }
+		virtual bool Exists(const String& path);
+		virtual bool IsFile(const String& path);
+		virtual bool IsDirectory(const String& path);
 
 		/**
 			Makes sure all directories in the path exists.
 		*/
-		void CreateDirectories(const String& path);
+		virtual void CreateDirectories(const String& path);
 
 		/**
 			Removes directory and all contents.
 		*/
-		void DeleteDirectoryRecursive(const String& name);
+		virtual void DeleteDirectoryRecursive(const String& name);
 
 		virtual FileSystem* CreateSubFileSystem(const String& path);
 	};

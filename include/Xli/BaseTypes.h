@@ -21,13 +21,14 @@ namespace Xli
 	typedef unsigned long long UInt64;
 
 	// Verify size of base types at compile time
+	typedef char __TestInt8[sizeof(Int8) == 1 ? 1 : -1];
 	typedef char __TestInt16[sizeof(Int16) == 2 ? 1 : -1];
 	typedef char __TestInt32[sizeof(Int32) == 4 ? 1 : -1];
+	typedef char __TestInt64[sizeof(Int64) == 8 ? 1 : -1];
 	
 	typedef UInt64 Timestamp;
 
 	template <typename T, int TBufSize = 4> class Array;
-	template <typename T, int TBufSize = 8> class Stringt;
 
 	/** @} */
 }
