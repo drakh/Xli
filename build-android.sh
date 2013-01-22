@@ -9,7 +9,7 @@ else
     fi
 fi
 
-cd projects/android-ndk
+cd projects/android-ndk || exit $?
 ndk-build -j $CPU_COUNT && \
 
 if [ -f obj/local/armeabi/libXliAndroidStatic.a ]; then
