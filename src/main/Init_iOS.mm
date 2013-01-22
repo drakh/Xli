@@ -12,6 +12,7 @@ namespace Xli
         {
             return true;
         }
+        
         virtual int Write(const void* src, int elmSize, int elmCount)
         {
             for (int i = 0; i < elmCount; i++)
@@ -40,6 +41,7 @@ namespace Xli
             
             return elmCount;
         }
+        
         virtual void Flush()
         {
             if (buf.Length() > 0)

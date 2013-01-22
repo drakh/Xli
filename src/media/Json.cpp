@@ -32,7 +32,8 @@ namespace Xli
 	{
 		JsonContext* c = (JsonContext*)ctx;
 
-		switch(type) {
+		switch(type) 
+		{
 		case JSON_T_ARRAY_BEGIN:    
 			c->Values.Add(new ArrayValue());
 			break;

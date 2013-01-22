@@ -188,7 +188,7 @@ namespace Xli
 		case FormatD_16_UNorm: return 2;
 		case FormatR_16_UNorm: return 2;
 
-		default: XLI_THROW(String("Unknown size of ") + ToString(format));
+		default: XLI_THROW("Unknown size of " + ToString(format));
 		}
 	}
 
@@ -260,7 +260,7 @@ namespace Xli
 		case FormatRGB_32_32_32_Float: return 3;
 		case FormatRGBA_32_32_32_32_Float: return 4;
 
-		default: XLI_THROW(String("Unknown number of components in ") + ToString(format));
+		default: XLI_THROW("Unknown number of components in " + ToString(format));
 		}
 	}
 }

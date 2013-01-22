@@ -10,26 +10,32 @@ namespace Xli
 		skipLine = false;
 		disableSkip = false;
 	}
+
 	void FormattedTextWriter::WriteRaw(const char* str, int len)
 	{
 		stream->WriteSafe(str, 1, len);
 	}
+
 	void FormattedTextWriter::SkipLine()
 	{
 		skipLine = true;
 	}
+
 	void FormattedTextWriter::DisableSkip()
 	{
 		disableSkip = true;
 	}
+
 	void FormattedTextWriter::PushIndent()
 	{
 		indent++;
 	}
+
 	void FormattedTextWriter::PopIndent()
 	{
 		indent--;
 	}
+
 	void FormattedTextWriter::WriteIndent()
 	{
 		for (int i = 0; i < indent; i++)
@@ -37,6 +43,7 @@ namespace Xli
 			WriteRaw(indentValue.Data(), indentValue.Length());
 		}
 	}
+
 	void FormattedTextWriter::Write(const String& str)
 	{
 		int start = 0;
@@ -54,11 +61,13 @@ namespace Xli
 
 		WriteRaw(str.Data() + start, str.Length() - start);
 	}
+
 	void FormattedTextWriter::EndLine()
 	{
 		WriteRaw("\n", 1);
 		lineCount++;
 	}
+
 	void FormattedTextWriter::BeginLine()
 	{
 		if (skipLine && lineCount > 1 && !disableSkip)
@@ -75,12 +84,14 @@ namespace Xli
 
 		WriteIndent();
 	}
+
 	void FormattedTextWriter::WriteLine(const String& str)
 	{
 		BeginLine();
 		Write(str);
 		EndLine();
 	}
+	
 	void FormattedTextWriter::NewLine()
 	{
 		EndLine();

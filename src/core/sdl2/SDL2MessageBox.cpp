@@ -9,7 +9,7 @@ namespace Xli
 		SDL_MessageBoxButtonData buttondata[3];
 
 		data.flags = 0;
-		data.window = ((SDL2Window*)wnd)->GetSDLWindow();
+		data.window = wnd != 0 && wnd->GetPlatform() == PlatformSDL2 ? ((SDL2Window*)wnd)->GetSDLWindow() : 0;
 		data.title = caption.Data();
 		data.message = message.Data();
 		data.numbuttons = 0;
@@ -84,7 +84,7 @@ namespace Xli
 		else if (hints & DialogHintButton3Default) buttondata[2].flags |= SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
 
 		int result = -1;
-		if (SDL_ShowMessageBox(&data, &result))
+		if (SDL_ShowMessageBox(&data, &result) == 0)
 		{
 			switch (result)
 			{
