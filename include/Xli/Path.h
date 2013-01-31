@@ -11,8 +11,8 @@ namespace Xli
 	class Path
 	{
 	public:
-		static String GetFileName(const String& path);
-		static String GetFileNameWithoutExtension(const String& path);
+		static String GetFilename(const String& path);
+		static String GetFilenameWithoutExtension(const String& path);
 
 		/**
 			Returns the extension part of the path, including the prefixed dot. An empty string is returned if the path has no extension part

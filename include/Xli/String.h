@@ -49,9 +49,6 @@ namespace Xli
 
 		int Length() const;
 
-		char& Get(int index);
-		const char& Get(int index) const;
-
 		char& operator [] (int index);
 		const char& operator [] (int index) const;
 

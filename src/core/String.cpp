@@ -135,23 +135,7 @@ namespace Xli
 		return Xli::Hash((const UInt8*)str.Data(), str.Length());
 	}
 
-	char& String::Get(int index)
-	{
-#ifdef XLI_RANGE_CHECK
-		if (index >= length)
-		{
-			XLI_THROW_INDEX_OUT_OF_BOUNDS;
-		}
-#endif
-		return data[index];
-	}
-
 	char& String::operator [] (int index)
-	{
-		return Get(index);
-	}
-
-	const char& String::Get(int index) const
 	{
 #ifdef XLI_RANGE_CHECK
 		if (index >= length)
@@ -164,25 +148,31 @@ namespace Xli
 
 	const char& String::operator [] (int index) const
 	{
-		return Get(index);
+#ifdef XLI_RANGE_CHECK
+		if (index >= length)
+		{
+			XLI_THROW_INDEX_OUT_OF_BOUNDS;
+		}
+#endif
+		return data[index];
 	}
 
 	const char& String::First() const
 	{
-		return Get(0);
+		return (*this)[0];
 	}
 
 	const char& String::Last() const
 	{
-		return Get(length - 1);
+		return (*this)[length - 1];
 	}
 
 	int String::IndexOf(char c, int start) const
 	{
 		for (int i = start; i < length; i++)
-		{
-			if (data[i] == c) return (int)i;
-		}
+			if (data[i] == c) 
+				return i;
+
 		return -1;
 	}
 
@@ -195,14 +185,13 @@ namespace Xli
 	{
 #ifdef XLI_RANGE_CHECK
 		if (start >= length)
-		{
 			XLI_THROW_INDEX_OUT_OF_BOUNDS;
-		}
 #endif
+
 		for (int i = start; i >= 0; i--)
-		{
-			if (data[i] == c) return i;
-		}
+			if (data[i] == c) 
+				return i;
+
 		return -1;
 	}
 
@@ -215,10 +204,9 @@ namespace Xli
 	{
 #ifdef XLI_RANGE_CHECK
 		if (start + len > length || start < 0)
-		{
 			XLI_THROW_INDEX_OUT_OF_BOUNDS;
-		}
 #endif
+
 		return String(data + start, len);
 	}
 
