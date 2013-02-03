@@ -2,10 +2,8 @@ project("Xli Library")
 
 cmake_minimum_required(VERSION 2.6)
 
-set(XLI_INCLUDE ${PROJECT_SOURCE_DIR}/include)
-include_directories(${XLI_INCLUDE})
-
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+include_directories(${PROJECT_SOURCE_DIR}/include)
 link_directories(${LIBRARY_OUTPUT_PATH})
 
 if (MSVC)

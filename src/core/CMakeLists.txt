@@ -49,7 +49,7 @@ if (WIN32)
             win32/Win32FileSystem.cpp
             win32/Win32Helpers.cpp
             win32/Win32MessageBox.cpp
-			win32/Win32Time.cpp
+            win32/Win32Time.cpp
             )
 
     else()
@@ -75,16 +75,16 @@ elseif (APPLE)
         3rdparty/glew/src/glew.c
         generic/GenericAssetFileSystem.cpp
         generic/GenericDialogs.cpp
-		posix/PosixFileSystem.cpp
-		posix/PosixFileSystemBase.cpp
+        posix/PosixFileSystem.cpp
+        posix/PosixFileSystemBase.cpp
         posix/PosixTime.cpp
-		posix/PosixCond.cpp
-		posix/PosixMutex.cpp
-		posix/PosixThread.cpp
+        posix/PosixCond.cpp
+        posix/PosixMutex.cpp
+        posix/PosixThread.cpp
         sdl2/SDL2Window.cpp
         sdl2/SDL2Display.cpp
         sdl2/SDL2GLContext.cpp
-		sdl2/SDL2MessageBox.cpp
+        sdl2/SDL2MessageBox.cpp
         )
 
     add_definitions(-DGLEW_STATIC)
@@ -100,16 +100,16 @@ elseif (UNIX)
     set(Sources ${Sources}
         generic/GenericAssetFileSystem.cpp
         generic/GenericDialogs.cpp
-		posix/PosixFileSystem.cpp
-		posix/PosixFileSystemBase.cpp
+        posix/PosixFileSystem.cpp
+        posix/PosixFileSystemBase.cpp
         posix/PosixTime.cpp
-		posix/PosixCond.cpp
-		posix/PosixMutex.cpp
-		posix/PosixThread.cpp
+        posix/PosixCond.cpp
+        posix/PosixMutex.cpp
+        posix/PosixThread.cpp
         sdl2/SDL2Window.cpp
         sdl2/SDL2Display.cpp
         sdl2/SDL2GLContext.cpp
-		sdl2/SDL2MessageBox.cpp
+        sdl2/SDL2MessageBox.cpp
         )
 
 	add_definitions("`sdl2-config --cflags`")
