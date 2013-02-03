@@ -53,16 +53,19 @@ namespace Xli
 		this->stream = 0;
 		SwitchStream(stream);
 	}
+
 	StreamWriter::~StreamWriter()
 	{
 		stream->Release();
 	}
+
 	void StreamWriter::SwitchStream(Stream* stream)
 	{
 		if (!stream)
 		{
 			XLI_THROW_NULL_POINTER;
 		}
+
 		if (!stream->CanWrite())
 		{
 			XLI_THROW_STREAM_CANT_WRITE;
@@ -72,6 +75,7 @@ namespace Xli
 		if (this->stream) this->stream->Release();
 		this->stream = stream;
 	}
+
 	Stream* StreamWriter::GetStream()
 	{
 		return stream;
@@ -82,16 +86,19 @@ namespace Xli
 		this->stream = 0;
 		SwitchStream(stream);
 	}
+
 	StreamReader::~StreamReader()
 	{
 		stream->Release();
 	}
+
 	void StreamReader::SwitchStream(Stream* stream)
 	{
 		if (!stream)
 		{
 			XLI_THROW_NULL_POINTER;
 		}
+
 		if (!stream->CanRead())
 		{
 			XLI_THROW_STREAM_CANT_READ;
@@ -101,6 +108,7 @@ namespace Xli
 		if (this->stream) this->stream->Release();
 		this->stream = stream;
 	}
+
 	Stream* StreamReader::GetStream()
 	{
 		return stream;

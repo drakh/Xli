@@ -57,6 +57,7 @@ namespace Xli
 		AssertInit();
 		return out;
 	}
+
 	OutAccessor::operator TextWriter*()
 	{
 		AssertInit();
@@ -68,6 +69,7 @@ namespace Xli
 		AssertInit();
 		return err;
 	}
+
 	ErrAccessor::operator TextWriter*()
 	{
 		AssertInit();
@@ -79,6 +81,7 @@ namespace Xli
 		AssertInit();
 		return in;
 	}
+
 	InAccessor::operator TextReader*()
 	{
 		AssertInit();

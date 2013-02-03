@@ -13,6 +13,7 @@ namespace Xli
 				return path.Substring(i + 1, path.Length() - i - 1);
 			}
 		}
+
 		return path;
 	}
 
@@ -31,6 +32,7 @@ namespace Xli
 				return path.Substring(i + 1, extIndex - i - 1);
 			}
 		}
+
 		return path.Substring(0, extIndex);
 	}
 
@@ -47,6 +49,7 @@ namespace Xli
 				break;
 			}
 		}
+
 		return "";
 	}
 
@@ -59,6 +62,7 @@ namespace Xli
 				return path.Substring(0, i > 0 ? i : 1);
 			}
 		}
+
 		return ".";
 	}
 }
