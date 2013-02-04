@@ -489,7 +489,7 @@ static void handle_cmd(struct android_app* app, int32_t cmd)
 	}
 }
 
-int main(int argc, char* argv[]);
+extern "C" int main(int argc, char* argv[]);
 
 extern "C" void android_main(struct android_app* state)
 {

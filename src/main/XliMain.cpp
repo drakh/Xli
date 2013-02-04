@@ -15,6 +15,10 @@ extern "C" void SDL_Quit();
     extern "C"
 #endif
 
+#ifdef XLI_PLATFORM_ANDROID
+    extern "C"
+#endif
+
 int main(int argc, char** argv)
 {
 #ifdef XLI_PLATFORM_IOS

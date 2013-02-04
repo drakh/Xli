@@ -1,7 +1,12 @@
 LOCAL_PATH := $(call my-dir)
 
+
+#
+# libXli.a
+#
+
 include $(CLEAR_VARS)
-LOCAL_MODULE    := XliAndroidStatic
+LOCAL_MODULE    := Xli
 
 LOCAL_SRC_FILES := \
 	../../../src/core/3rdparty/ConvertUTF.c \
@@ -48,7 +53,41 @@ LOCAL_SRC_FILES := \
 	../../../src/core/Unicode.cpp \
 	../../../src/core/Utf16String.cpp \
 	../../../src/core/Window.cpp \
+	
+LOCAL_C_INCLUDES := \
+	../../include \
+
+LOCAL_CFLAGS   += -fexceptions -fPIC -DPIC -O3
+
+include $(BUILD_STATIC_LIBRARY)
+
+
+#
+# libXliMain.a
+#
+
+include $(CLEAR_VARS)
+LOCAL_MODULE    := XliMain
+
+LOCAL_SRC_FILES := \
 	../../../src/main/XliMain.cpp \
+	
+LOCAL_C_INCLUDES := \
+	../../include \
+
+LOCAL_CFLAGS   += -fexceptions -fPIC -DPIC -O3
+
+include $(BUILD_STATIC_LIBRARY)
+
+
+#
+# libXliMedia.a
+#
+
+include $(CLEAR_VARS)
+LOCAL_MODULE    := XliMedia
+
+LOCAL_SRC_FILES := \
 	../../../src/media/3rdparty/tinyxml/tinystr.cpp \
 	../../../src/media/3rdparty/tinyxml/tinyxml.cpp \
 	../../../src/media/3rdparty/tinyxml/tinyxmlerror.cpp \
@@ -161,7 +200,6 @@ LOCAL_C_INCLUDES := \
 	../../src/media/3rdparty/png \
 	../../src/media/3rdparty/tinyxml \ 
 
-LOCAL_LDLIBS   := -lz -lm -llog -landroid -lEGL -lGLESv2
 LOCAL_CFLAGS   += -fexceptions -fPIC -DPIC -O3
 LOCAL_CFLAGS   += "-DDARWIN_NO_CARBON"
 LOCAL_CFLAGS   += "-DFT2_BUILD_LIBRARY"
@@ -169,10 +207,14 @@ LOCAL_CFLAGS   += "-DFT2_BUILD_LIBRARY"
 include $(BUILD_STATIC_LIBRARY)
 
 
-include $(CLEAR_VARS)
-LOCAL_MODULE    := XliAndroidDummy
+#
+# libXliDummy.so (dummy library)
+#
 
-LOCAL_STATIC_LIBRARIES := XliAndroidStatic
+include $(CLEAR_VARS)
+LOCAL_MODULE    := XliDummy
+
+LOCAL_STATIC_LIBRARIES := Xli XliMain XliMedia
 LOCAL_SRC_FILES := ../../../src/Dummy.cpp
 LOCAL_LDLIBS   := -lz -lm -llog -landroid -lEGL -lGLESv2
 

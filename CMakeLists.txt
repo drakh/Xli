@@ -3,8 +3,6 @@ project("Xli Library")
 cmake_minimum_required(VERSION 2.6)
 
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
-include_directories(${PROJECT_SOURCE_DIR}/include)
-link_directories(${LIBRARY_OUTPUT_PATH})
 
 if (MSVC)
 
@@ -14,7 +12,7 @@ if (MSVC)
 	set(CMAKE_CONFIGURATION_TYPES "Debug;Release" INTERNAL)
 
 	set(XLI_MT FALSE CACHE BOOL "Static Linked Runtime Library (/MT)")
-	set(XLI_LTCG FALSE CACHE BOOL "Link-Time Code Generation (/LTCG)")
+	set(XLI_LTCG TRUE CACHE BOOL "Link-Time Code Generation (/LTCG)")
 	set(XLI_SDL2 FALSE CACHE BOOL "Use Simple Direct Media Layer 2.0")
 
 	set(CMAKE_C_FLAGS "/MP")
@@ -45,6 +43,12 @@ if (MSVC)
 		
 	endif()
 
+	if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+		set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/msvc/x64)
+	else()
+		set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/msvc/x86)
+	endif()
+
 	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${LIBRARY_OUTPUT_PATH})
 	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${LIBRARY_OUTPUT_PATH})
 	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${LIBRARY_OUTPUT_PATH})
@@ -52,7 +56,9 @@ if (MSVC)
 
 elseif (UNIX)
 
-	set(BUILD_SHARED_LIBS TRUE CACHE BOOL "Build shared or static libs")
+	if (NOT WIN32)
+		set(BUILD_SHARED_LIBS TRUE CACHE BOOL "Build shared or static libs")
+	endif()
 
 	if (NOT CMAKE_BUILD_TYPE)
 		set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Build type - Release or Debug" FORCE)
@@ -70,28 +76,46 @@ elseif (UNIX)
 		set(CMAKE_C_FLAGS "-Wno-switch-enum")
 		set(CMAKE_CXX_FLAGS "-Wno-switch-enum")
 
+		if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+
+			set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/osx/x86_universal)
+
+		endif()
+
 	else()
 
 		set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
 
+		if (CMAKE_SYSTEM_NAME MATCHES "Linux")
+
+			if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+				set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/linux/x86_64)
+			else()
+				set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/linux/x86_32)
+			endif()
+
+		endif()
+
 	endif()
 
 	install(
-		DIRECTORY ${PROJECT_SOURCE_DIR}/lib/ 
+		DIRECTORY ${LIBRARY_OUTPUT_PATH}
 		DESTINATION lib 
 		PATTERN ".svn" EXCLUDE
 		)
 
 	install(
-		DIRECTORY ${PROJECT_SOURCE_DIR}/include/ 
+		DIRECTORY ${PROJECT_SOURCE_DIR}/include
 		DESTINATION include 
 		PATTERN ".svn" EXCLUDE
 		)
 
 endif()
 
+include_directories(${PROJECT_SOURCE_DIR}/include)
+link_directories(${LIBRARY_OUTPUT_PATH})
+
 add_subdirectory(src/core)
 add_subdirectory(src/media)
 add_subdirectory(src/audio)
 add_subdirectory(src/main)
-

@@ -10,21 +10,24 @@ else
 fi
 
 cd projects/android-ndk || exit $?
-ndk-build -j $CPU_COUNT && \
 
-if [ -f obj/local/armeabi/libXliAndroidStatic.a ]; then
-	mkdir -p ../../lib/armeabi && \
-	cp -v obj/local/armeabi/libXliAndroidStatic.a ../../lib/armeabi
+ndk-build -j $CPU_COUNT
+
+mkdir -p ../../lib/android
+
+if [ -d obj/local/armeabi ]; then
+	mkdir -p ../../lib/android/armeabi && \
+	cp -v obj/local/armeabi/libXli*.a ../../lib/android/armeabi
 fi
 
-if [ -f obj/local/armeabi-v7a/libXliAndroidStatic.a ]; then
-	mkdir -p ../../lib/armeabi-v7a && \
-	cp -v obj/local/armeabi-v7a/libXliAndroidStatic.a ../../lib/armeabi-v7a
+if [ -d obj/local/armeabi-v7a ]; then
+	mkdir -p ../../lib/android/armeabi-v7a && \
+	cp -v obj/local/armeabi-v7a/libXli*.a ../../lib/android/armeabi-v7a
 fi
 
-if [ -f obj/local/x86/libXliAndroidStatic.a ]; then
-	mkdir -p ../../lib/x86 && \
-	cp -v obj/local/x86/libXliAndroidStatic.a ../../lib/x86
+if [ -d obj/local/x86 ]; then
+	mkdir -p ../../lib/android/x86 && \
+	cp -v obj/local/x86/libXli*.a ../../lib/android/x86
 fi
 
 cd -
