@@ -4,7 +4,59 @@ cmake_minimum_required(VERSION 2.6)
 
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
-if (MSVC)
+if (UNIX)
+
+	if (NOT WIN32)
+		set(BUILD_SHARED_LIBS TRUE CACHE BOOL "Build shared or static libs")
+	endif()
+
+	if (NOT CMAKE_BUILD_TYPE)
+		set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Build type - Release or Debug" FORCE)
+	endif()
+
+	if (CMAKE_COMPILER_IS_GNUCC)
+		set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
+	endif()
+
+	if (APPLE)
+		set(CMAKE_C_FLAGS "-Wno-switch-enum")
+		set(CMAKE_CXX_FLAGS "-Wno-switch-enum")
+	endif()
+
+	if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+
+		if (NOT CMAKE_OSX_ARCHITECTURES)
+			set(CMAKE_OSX_ARCHITECTURES "x86_64;i386" CACHE STRING "OSX architectures - 'i386', 'x86_64' or 'x86_64;i386' (universal)" FORCE)
+		endif()
+
+		include_directories(/usr/X11/include /usr/X11/include/freetype2)
+		link_directories(/usr/X11/lib)
+
+		set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/osx/x86_universal)
+
+	elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
+
+		if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+			set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/linux/x86_64)
+		else()
+			set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/linux/x86_32)
+		endif()
+
+	endif()
+
+	install(
+		DIRECTORY ${LIBRARY_OUTPUT_PATH}
+		DESTINATION lib 
+		PATTERN ".svn" EXCLUDE
+		)
+
+	install(
+		DIRECTORY ${PROJECT_SOURCE_DIR}/include
+		DESTINATION include 
+		PATTERN ".svn" EXCLUDE
+		)
+
+elseif (MSVC)
 
 	add_definitions(-DUNICODE -D_UNICODE)
 
@@ -49,71 +101,15 @@ if (MSVC)
 		set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/msvc/x86)
 	endif()
 
-	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${LIBRARY_OUTPUT_PATH})
-	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${LIBRARY_OUTPUT_PATH})
-	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${LIBRARY_OUTPUT_PATH})
-	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${LIBRARY_OUTPUT_PATH})
-
-elseif (UNIX)
-
-	if (NOT WIN32)
-		set(BUILD_SHARED_LIBS TRUE CACHE BOOL "Build shared or static libs")
-	endif()
-
-	if (NOT CMAKE_BUILD_TYPE)
-		set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Build type - Release or Debug" FORCE)
-	endif()
-
-	if (APPLE)
-
-		if (NOT CMAKE_OSX_ARCHITECTURES)
-			set(CMAKE_OSX_ARCHITECTURES "x86_64;i386" CACHE STRING "OSX architectures - 'i386', 'x86_64' or 'x86_64;i386' (universal)" FORCE)
-		endif()
-
-		include_directories(/usr/X11/include /usr/X11/include/freetype2)
-		link_directories(/usr/X11/lib)
-
-		set(CMAKE_C_FLAGS "-Wno-switch-enum")
-		set(CMAKE_CXX_FLAGS "-Wno-switch-enum")
-
-		if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
-
-			set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/osx/x86_universal)
-
-		endif()
-
-	else()
-
-		set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
-
-		if (CMAKE_SYSTEM_NAME MATCHES "Linux")
-
-			if (CMAKE_SIZEOF_VOID_P EQUAL 8)
-				set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/linux/x86_64)
-			else()
-				set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/linux/x86_32)
-			endif()
-
-		endif()
-
-	endif()
-
-	install(
-		DIRECTORY ${LIBRARY_OUTPUT_PATH}
-		DESTINATION lib 
-		PATTERN ".svn" EXCLUDE
-		)
-
-	install(
-		DIRECTORY ${PROJECT_SOURCE_DIR}/include
-		DESTINATION include 
-		PATTERN ".svn" EXCLUDE
-		)
-
 endif()
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 link_directories(${LIBRARY_OUTPUT_PATH})
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${LIBRARY_OUTPUT_PATH})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${LIBRARY_OUTPUT_PATH})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${LIBRARY_OUTPUT_PATH})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${LIBRARY_OUTPUT_PATH})
 
 add_subdirectory(src/core)
 add_subdirectory(src/media)
