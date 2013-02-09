@@ -90,6 +90,12 @@ namespace Xli
 		Z = cosRoll * cosPitch * sinYaw - sinRoll * sinPitch * cosYaw;
 		W = cosRoll * cosPitch * cosYaw + sinRoll * sinPitch * sinYaw;
 	}
+    
+	const Quaternion& Quaternion::Identity()
+	{
+		static const Quaternion id(0,0,0,1);
+		return id;
+	}
 
 	Quaternion Quaternion::operator + (const Quaternion& q) const
 	{
@@ -249,11 +255,5 @@ namespace Xli
 		}
 
 		return *this;
-	}
-
-	static const Quaternion& Identity()
-	{
-		static const Quaternion id(0,0,0,1);
-		return id;
 	}
 }

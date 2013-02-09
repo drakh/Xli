@@ -14,14 +14,16 @@ if (UNIX)
 		set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Build type - Release or Debug" FORCE)
 	endif()
 
-	if (CMAKE_COMPILER_IS_GNUCC)
-		set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
-	endif()
-
 	if (APPLE)
+    
 		set(CMAKE_C_FLAGS "-Wno-switch-enum")
 		set(CMAKE_CXX_FLAGS "-Wno-switch-enum")
-	endif()
+	
+    elseif (CMAKE_COMPILER_IS_GNUCC)
+	
+        set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
+	
+    endif()
 
 	if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
@@ -101,15 +103,15 @@ elseif (MSVC)
 		set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/msvc/x86)
 	endif()
 
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${LIBRARY_OUTPUT_PATH})
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${LIBRARY_OUTPUT_PATH})
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${LIBRARY_OUTPUT_PATH})
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${LIBRARY_OUTPUT_PATH})
+
 endif()
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 link_directories(${LIBRARY_OUTPUT_PATH})
-
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${LIBRARY_OUTPUT_PATH})
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${LIBRARY_OUTPUT_PATH})
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${LIBRARY_OUTPUT_PATH})
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${LIBRARY_OUTPUT_PATH})
 
 add_subdirectory(src/core)
 add_subdirectory(src/media)

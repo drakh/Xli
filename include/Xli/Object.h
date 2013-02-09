@@ -19,7 +19,8 @@ namespace Xli
 		void Release();
 
 		virtual void Delete();
-		virtual String ToString();
+		
+        virtual String ToString() const;
 	};
 }
 

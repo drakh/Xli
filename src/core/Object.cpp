@@ -39,7 +39,7 @@ namespace Xli
 		delete this; 
 	}
 
-	String Object::ToString()
+	String Object::ToString() const
 	{
 		return "<Object " + Xli::ToString((void*)this) + ">";
 	}

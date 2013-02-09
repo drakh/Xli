@@ -104,7 +104,7 @@ namespace Xli
 		return stopped;
 	}
 
-	String Task::ToString()
+	String Task::ToString() const
 	{
 		return "<Task " + Xli::ToString((void*)this) + ">";
 	}

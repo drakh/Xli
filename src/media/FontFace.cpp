@@ -25,7 +25,7 @@ namespace Xli
 				if (mode == FontRenderModeNormal) m |= FT_LOAD_RENDER;
 				else if (mode == FontRenderModeMonochrome) m |= FT_LOAD_RENDER | FT_LOAD_MONOCHROME;
 				FT_UInt glyphIndex = FT_Get_Char_Index(face, c);
-				int d = FT_Load_Glyph(face, glyphIndex, m);
+				FT_Load_Glyph(face, glyphIndex, m);
 				activeMode = mode;
 				activeGlyph = c;
 			}

@@ -34,7 +34,7 @@ namespace Xli
 
 		virtual void Run() = 0;
 
-		virtual String ToString();
+		virtual String ToString() const;
 	};
 
 	/**

@@ -100,17 +100,17 @@ namespace Xli
 			compressedStream = 0;
 		}
 
-		virtual bool CanWrite()
+		virtual bool CanWrite() const
 		{
 			return compressedStream.IsSet();
 		}
 
-		virtual int GetPosition()
+		virtual int GetPosition() const
 		{
 			return pos;
 		}
 
-		virtual int GetLength()
+		virtual int GetLength() const
 		{
 			return pos;
 		}

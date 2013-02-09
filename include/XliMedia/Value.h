@@ -308,7 +308,7 @@ namespace Xli
 
 		virtual Value BitwiseAnd(const Value& v) const { return new IntegerValue(value & v->ToInt32()); }
 		virtual Value BitwiseOr(const Value& v) const { return new IntegerValue(value | v->ToInt32()); }
-		virtual Value BitwiseNot(const Value& v) const { return new IntegerValue(~value); } 
+		virtual Value BitwiseNot() const { return new IntegerValue(~value); } 
 		virtual Value BitwiseXor(const Value& v) const { return new IntegerValue(value ^ v->ToInt32()); }
 	};
 
@@ -346,7 +346,7 @@ namespace Xli
 
 		virtual Value BitwiseAnd(const Value& v) const { return new Int64Value(value & v->ToInt64()); }
 		virtual Value BitwiseOr(const Value& v) const { return new Int64Value(value | v->ToInt64()); }
-		virtual Value BitwiseNot(const Value& v) const { return new Int64Value(~value); } 
+		virtual Value BitwiseNot() const { return new Int64Value(~value); } 
 		virtual Value BitwiseXor(const Value& v) const { return new Int64Value(value ^ v->ToInt64()); }
 	};
 	

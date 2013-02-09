@@ -36,6 +36,8 @@ namespace Xli
 
 		Quaternion(float yaw, float pitch, float roll);
 
+		static const Quaternion& Identity();
+        
 		Quaternion operator + (const Quaternion& q) const;
 		Quaternion operator - (const Quaternion& q) const;
 
@@ -67,8 +69,6 @@ namespace Xli
 
 		Quaternion Inverse() const;
 		Quaternion Slerp(const Quaternion& q, float t) const;
-
-		static const Quaternion& Identity();
 	};
 }
 

@@ -20,8 +20,8 @@ namespace Xli
 
 		int channels = r.ReadInt16();
 		int sampleRate = r.ReadInt32();
-		int bytesPerSecond = r.ReadInt32();
-		int bytesPerSample = r.ReadInt16();
+		r.ReadInt32(); // bytesPerSecond
+		r.ReadInt16(); // bytesPerSample
 		int bitsPerSample = r.ReadInt16();
 		
 		DataType dataType;
