@@ -191,6 +191,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_LDFLAGS = (
 					"-lXli",
+					"-lXliMain",
 					"-lXliMedia",
 					"-lXliAudio",
 				);
@@ -215,6 +216,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = (
 					"-lXli",
+					"-lXliMain",
 					"-lXliMedia",
 					"-lXliAudio",
 				);

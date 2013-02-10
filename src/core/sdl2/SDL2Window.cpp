@@ -40,10 +40,6 @@ namespace Xli
 		}
         
 		this->eventHandler = eventHandler;
-        
-		// TODO
-		//SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-		//SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
 #ifdef XLI_GLES2
 
@@ -78,7 +74,7 @@ namespace Xli
         if (!SDL_SetHint("SDL_HINT_IDLE_TIMER_DISABLED", "1")) 
             ErrorPrintLine("SDL WARNING: Failed to disable idle timer");
 
-        if (fullscreen) 
+        if (fullscreen)
             flags |= SDL_WINDOW_BORDERLESS;
         
 #endif
@@ -118,9 +114,9 @@ namespace Xli
 		SDL_DestroyWindow(window);
 	}
 
-	Platform SDL2Window::GetPlatform()
+	WindowImplementation SDL2Window::GetImplementation()
 	{
-		return PlatformSDL2;
+		return WindowImplementationSDL2;
 	}
 
 	void SDL2Window::Close()

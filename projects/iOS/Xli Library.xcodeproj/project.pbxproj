@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE20885616C84F9900667537 /* AudioBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6E3716C70D9A00390436 /* AudioBuffer.cpp */; };
+		CE20885716C84F9900667537 /* AudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6E3816C70D9A00390436 /* AudioStream.cpp */; };
+		CE20885816C84F9900667537 /* Wav.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6E5A16C70D9A00390436 /* Wav.cpp */; };
+		CE20885F16C8500000667537 /* Init_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6EC216C70DA600390436 /* Init_iOS.mm */; };
+		CE20886016C8500000667537 /* XliMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6EC416C70DA600390436 /* XliMain.cpp */; };
+		CE20886316C8502B00667537 /* CocoaFileSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE20886216C8502B00667537 /* CocoaFileSystem.mm */; };
 		CE2B2BDE16C72AC40036FFA0 /* SDL_atomic.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2B29BB16C72AC40036FFA0 /* SDL_atomic.c */; };
 		CE2B2BDF16C72AC40036FFA0 /* SDL_spinlock.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2B29BC16C72AC40036FFA0 /* SDL_spinlock.c */; };
 		CE2B2BEA16C72AC40036FFA0 /* SDL_coreaudio.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2B29CE16C72AC40036FFA0 /* SDL_coreaudio.c */; };
@@ -177,8 +183,6 @@
 		CE2B2D5F16C72AC40036FFA0 /* SDL_uikitviewcontroller.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2B2B9D16C72AC40036FFA0 /* SDL_uikitviewcontroller.m */; };
 		CE2B2D6016C72AC40036FFA0 /* SDL_uikitwindow.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2B2B9E16C72AC40036FFA0 /* SDL_uikitwindow.h */; };
 		CE2B2D6116C72AC40036FFA0 /* SDL_uikitwindow.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2B2B9F16C72AC40036FFA0 /* SDL_uikitwindow.m */; };
-		CE2B2DB116C735680036FFA0 /* Init_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6EC216C70DA600390436 /* Init_iOS.mm */; };
-		CE2B2DB216C735680036FFA0 /* XliMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6EC416C70DA600390436 /* XliMain.cpp */; };
 		CE2D67D116C70D8400390436 /* ConvertUTF.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2D5E0C16C70D7D00390436 /* ConvertUTF.c */; };
 		CE2D67D216C70D8400390436 /* ConvertUTF.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D5E0D16C70D7D00390436 /* ConvertUTF.h */; };
 		CE2D6C5416C70D8500390436 /* ArrayStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D66BB16C70D7F00390436 /* ArrayStream.cpp */; };
@@ -211,9 +215,6 @@
 		CE2D6CA216C70D8500390436 /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D672216C70D8000390436 /* Quaternion.cpp */; };
 		CE2D6CA316C70D8500390436 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D672316C70D8000390436 /* Random.cpp */; };
 		CE2D6CA516C70D8500390436 /* SDL2Display.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D672616C70D8000390436 /* SDL2Display.cpp */; };
-		CE2D6CA616C70D8500390436 /* SDL2FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D672716C70D8000390436 /* SDL2FileSystem.cpp */; };
-		CE2D6CA716C70D8500390436 /* SDL2FileSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D672816C70D8000390436 /* SDL2FileSystem.h */; };
-		CE2D6CA816C70D8500390436 /* SDL2FileSystem_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE2D672916C70D8000390436 /* SDL2FileSystem_iOS.mm */; };
 		CE2D6CA916C70D8500390436 /* SDL2GLContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D672A16C70D8000390436 /* SDL2GLContext.cpp */; };
 		CE2D6CAA16C70D8500390436 /* SDL2MessageBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D672B16C70D8000390436 /* SDL2MessageBox.cpp */; };
 		CE2D6CAE16C70D8500390436 /* SDL2Window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D672F16C70D8000390436 /* SDL2Window.cpp */; };
@@ -286,6 +287,8 @@
 
 /* Begin PBXFileReference section */
 		5AA38E4D151A00CC00979B55 /* libXli.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXli.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE20885E16C84F9900667537 /* libXliMain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXliMain.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE20886216C8502B00667537 /* CocoaFileSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CocoaFileSystem.mm; sourceTree = "<group>"; };
 		CE2B29BB16C72AC40036FFA0 /* SDL_atomic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDL_atomic.c; sourceTree = "<group>"; };
 		CE2B29BC16C72AC40036FFA0 /* SDL_spinlock.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDL_spinlock.c; sourceTree = "<group>"; };
 		CE2B29CE16C72AC40036FFA0 /* SDL_coreaudio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDL_coreaudio.c; sourceTree = "<group>"; };
@@ -490,9 +493,6 @@
 		CE2D672216C70D8000390436 /* Quaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Quaternion.cpp; sourceTree = "<group>"; };
 		CE2D672316C70D8000390436 /* Random.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Random.cpp; sourceTree = "<group>"; };
 		CE2D672616C70D8000390436 /* SDL2Display.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDL2Display.cpp; sourceTree = "<group>"; };
-		CE2D672716C70D8000390436 /* SDL2FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDL2FileSystem.cpp; sourceTree = "<group>"; };
-		CE2D672816C70D8000390436 /* SDL2FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDL2FileSystem.h; sourceTree = "<group>"; };
-		CE2D672916C70D8000390436 /* SDL2FileSystem_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SDL2FileSystem_iOS.mm; sourceTree = "<group>"; };
 		CE2D672A16C70D8000390436 /* SDL2GLContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDL2GLContext.cpp; sourceTree = "<group>"; };
 		CE2D672B16C70D8000390436 /* SDL2MessageBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDL2MessageBox.cpp; sourceTree = "<group>"; };
 		CE2D672F16C70D8000390436 /* SDL2Window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDL2Window.cpp; sourceTree = "<group>"; };
@@ -573,6 +573,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CE20885916C84F9900667537 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CE2D492416C703DF00390436 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -608,6 +615,7 @@
 				5AA38E4D151A00CC00979B55 /* libXli.a */,
 				CE2D492916C703DF00390436 /* libXliMedia.a */,
 				CE2D493D16C7056C00390436 /* libXliAudio.a */,
+				CE20885E16C84F9900667537 /* libXliMain.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -617,6 +625,14 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CE20886116C8502B00667537 /* cocoa */ = {
+			isa = PBXGroup;
+			children = (
+				CE20886216C8502B00667537 /* CocoaFileSystem.mm */,
+			);
+			path = cocoa;
 			sourceTree = "<group>";
 		};
 		CE2B220016C728A40036FFA0 /* src */ = {
@@ -1037,6 +1053,7 @@
 				CE2D66BD16C70D7F00390436 /* BinaryWriter.cpp */,
 				CE2D66BE16C70D7F00390436 /* Buffer.cpp */,
 				CE2D66BF16C70D7F00390436 /* BufferStream.cpp */,
+				CE20886116C8502B00667537 /* cocoa */,
 				CE2D670516C70D8000390436 /* Console.cpp */,
 				CE2D670616C70D8000390436 /* DataType.cpp */,
 				CE2D670716C70D8000390436 /* DateTime.cpp */,
@@ -1117,9 +1134,6 @@
 			isa = PBXGroup;
 			children = (
 				CE2D672616C70D8000390436 /* SDL2Display.cpp */,
-				CE2D672716C70D8000390436 /* SDL2FileSystem.cpp */,
-				CE2D672816C70D8000390436 /* SDL2FileSystem.h */,
-				CE2D672916C70D8000390436 /* SDL2FileSystem_iOS.mm */,
 				CE2D672A16C70D8000390436 /* SDL2GLContext.cpp */,
 				CE2D672B16C70D8000390436 /* SDL2MessageBox.cpp */,
 				CE2D672F16C70D8000390436 /* SDL2Window.cpp */,
@@ -1263,7 +1277,6 @@
 			files = (
 				CE2D67D216C70D8400390436 /* ConvertUTF.h in Headers */,
 				CE2D6C9E16C70D8500390436 /* PosixFileSystemBase.h in Headers */,
-				CE2D6CA716C70D8500390436 /* SDL2FileSystem.h in Headers */,
 				CE2B2BEB16C72AC40036FFA0 /* SDL_coreaudio.h in Headers */,
 				CE2B2BF416C72AC40036FFA0 /* SDL_dummyaudio.h in Headers */,
 				CE2B2C0416C72AC40036FFA0 /* SDL_audio_c.h in Headers */,
@@ -1341,6 +1354,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CE20885A16C84F9900667537 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CE2D492516C703DF00390436 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1390,6 +1410,23 @@
 			name = Xli;
 			productName = Xli;
 			productReference = 5AA38E4D151A00CC00979B55 /* libXli.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		CE20885416C84F9900667537 /* XliMain */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE20885B16C84F9900667537 /* Build configuration list for PBXNativeTarget "XliMain" */;
+			buildPhases = (
+				CE20885516C84F9900667537 /* Sources */,
+				CE20885916C84F9900667537 /* Frameworks */,
+				CE20885A16C84F9900667537 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = XliMain;
+			productName = XliMedia;
+			productReference = CE20885E16C84F9900667537 /* libXliMain.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		CE2D492216C703DF00390436 /* XliMedia */ = {
@@ -1450,6 +1487,7 @@
 				5AA38E4C151A00CC00979B55 /* Xli */,
 				CE2D492216C703DF00390436 /* XliMedia */,
 				CE2D493616C7056C00390436 /* XliAudio */,
+				CE20885416C84F9900667537 /* XliMain */,
 			);
 		};
 /* End PBXProject section */
@@ -1489,8 +1527,6 @@
 				CE2D6CA216C70D8500390436 /* Quaternion.cpp in Sources */,
 				CE2D6CA316C70D8500390436 /* Random.cpp in Sources */,
 				CE2D6CA516C70D8500390436 /* SDL2Display.cpp in Sources */,
-				CE2D6CA616C70D8500390436 /* SDL2FileSystem.cpp in Sources */,
-				CE2D6CA816C70D8500390436 /* SDL2FileSystem_iOS.mm in Sources */,
 				CE2D6CA916C70D8500390436 /* SDL2GLContext.cpp in Sources */,
 				CE2D6CAA16C70D8500390436 /* SDL2MessageBox.cpp in Sources */,
 				CE2D6CAE16C70D8500390436 /* SDL2Window.cpp in Sources */,
@@ -1602,8 +1638,19 @@
 				CE2B2D5D16C72AC40036FFA0 /* SDL_uikitview.m in Sources */,
 				CE2B2D5F16C72AC40036FFA0 /* SDL_uikitviewcontroller.m in Sources */,
 				CE2B2D6116C72AC40036FFA0 /* SDL_uikitwindow.m in Sources */,
-				CE2B2DB116C735680036FFA0 /* Init_iOS.mm in Sources */,
-				CE2B2DB216C735680036FFA0 /* XliMain.cpp in Sources */,
+				CE20886316C8502B00667537 /* CocoaFileSystem.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE20885516C84F9900667537 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE20885616C84F9900667537 /* AudioBuffer.cpp in Sources */,
+				CE20885716C84F9900667537 /* AudioStream.cpp in Sources */,
+				CE20885816C84F9900667537 /* Wav.cpp in Sources */,
+				CE20885F16C8500000667537 /* Init_iOS.mm in Sources */,
+				CE20886016C8500000667537 /* XliMain.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1747,6 +1794,51 @@
 			};
 			name = Release;
 		};
+		CE20885C16C84F9900667537 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/Xli_Library.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Xli Library/Xli Library-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					__IPHONEOS__,
+					"DEBUG=1",
+				);
+				HEADER_SEARCH_PATHS = (
+					../../include,
+					../../src/core/3rdparty/SDL2/include,
+				);
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
+				INSTALL_PATH = /usr/local/lib;
+				OBJROOT = build;
+				OTHER_CFLAGS = "-D__IPHONEOS__";
+				PRODUCT_NAME = XliMain;
+				SKIP_INSTALL = YES;
+				SYMROOT = ../../lib/iOS;
+			};
+			name = Debug;
+		};
+		CE20885D16C84F9900667537 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/Xli_Library.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Xli Library/Xli Library-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = __IPHONEOS__;
+				HEADER_SEARCH_PATHS = (
+					../../include,
+					../../src/core/3rdparty/SDL2/include,
+				);
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
+				INSTALL_PATH = /usr/local/lib;
+				OBJROOT = build;
+				OTHER_CFLAGS = "-D__IPHONEOS__";
+				PRODUCT_NAME = XliMain;
+				SKIP_INSTALL = YES;
+				SYMROOT = ../../lib/iOS;
+			};
+			name = Release;
+		};
 		CE2D492716C703DF00390436 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1848,6 +1940,15 @@
 			buildConfigurations = (
 				5AA38E5B151A00CC00979B55 /* Debug */,
 				5AA38E5C151A00CC00979B55 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CE20885B16C84F9900667537 /* Build configuration list for PBXNativeTarget "XliMain" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE20885C16C84F9900667537 /* Debug */,
+				CE20885D16C84F9900667537 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

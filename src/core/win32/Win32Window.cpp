@@ -111,9 +111,9 @@ namespace Xli
 		}
 	}
 
-	Platform Win32Window::GetPlatform()
+	WindowImplementation Win32Window::GetImplementation()
 	{
-		return PlatformWin32;
+		return WindowImplementationWin32;
 	}
 
 	void Win32Window::Close()
