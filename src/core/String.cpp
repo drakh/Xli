@@ -466,6 +466,27 @@ namespace Xli
 		return Add(str.data, str.length);
 	}
 
+    void String::Append(const char* str, int len)
+    {
+        String temp = Add(str, len);
+        char* newData = temp.data;
+        int newLength = temp.length;
+        temp.data = data;
+        temp.length = length;
+        data = newData;
+        length = newLength;
+    }
+    
+    void String::Append(const char* str)
+    {
+        Append(str, strlen(str));
+    }
+    
+    void String::Append(const String& str)
+    {
+        Append(str.data, str.length);
+    }
+    
 	bool String::operator == (const String& str) const
 	{
 		return Equals(str);
@@ -536,6 +557,18 @@ namespace Xli
 		return CompareTo(str) >= 0;
 	}
 
+    String& String::operator += (const String& str)
+    {
+        Append(str);
+        return *this;
+    }
+    
+    String& String::operator += (const char* str)
+    {
+        Append(str);
+        return *this;
+    }
+    
 	String& String::operator = (const String& str)
 	{
 		if (this == &str) return *this;

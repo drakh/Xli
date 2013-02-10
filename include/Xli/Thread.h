@@ -13,7 +13,6 @@ namespace Xli
 
 	ThreadHandle CreateThread(void (entrypoint(void*)), void* arg);
 	void WaitForThread(ThreadHandle h);
-	void KillThread(ThreadHandle h);
 	void Sleep(int ms);
 
 	/** @} */
@@ -57,7 +56,6 @@ namespace Xli
 
 		void Start(Task* task);
 		void Wait();
-		void Kill();
 
 		bool HasStarted();
 		bool IsDone();

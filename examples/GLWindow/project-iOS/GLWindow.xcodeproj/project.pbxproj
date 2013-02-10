@@ -1,0 +1,283 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CE2B21D316C7263A0036FFA0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B21D216C7263A0036FFA0 /* UIKit.framework */; };
+		CE2B21D516C7263A0036FFA0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B21D416C7263A0036FFA0 /* Foundation.framework */; };
+		CE2B21D716C7263A0036FFA0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B21D616C7263A0036FFA0 /* CoreGraphics.framework */; };
+		CE2B21D916C7263A0036FFA0 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B21D816C7263A0036FFA0 /* GLKit.framework */; };
+		CE2B21DB16C7263A0036FFA0 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B21DA16C7263A0036FFA0 /* OpenGLES.framework */; };
+		CE2B21FB16C726E30036FFA0 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2B21FA16C726E30036FFA0 /* Main.cpp */; };
+		CE2B2D9F16C72C330036FFA0 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B2D9E16C72C330036FFA0 /* CoreAudio.framework */; };
+		CE2B2DA216C72C7A0036FFA0 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B2DA116C72C7A0036FFA0 /* AudioToolbox.framework */; };
+		CE2B2DA416C72C890036FFA0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B2DA316C72C890036FFA0 /* QuartzCore.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		CE2B21CE16C7263A0036FFA0 /* GLWindow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GLWindow.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE2B21D216C7263A0036FFA0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		CE2B21D416C7263A0036FFA0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		CE2B21D616C7263A0036FFA0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		CE2B21D816C7263A0036FFA0 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		CE2B21DA16C7263A0036FFA0 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		CE2B21DE16C7263A0036FFA0 /* GLWindow-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GLWindow-Info.plist"; sourceTree = "<group>"; };
+		CE2B21E416C7263A0036FFA0 /* GLWindow-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GLWindow-Prefix.pch"; sourceTree = "<group>"; };
+		CE2B21FA16C726E30036FFA0 /* Main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Main.cpp; path = ../../Main.cpp; sourceTree = "<group>"; };
+		CE2B2D9E16C72C330036FFA0 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		CE2B2DA116C72C7A0036FFA0 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		CE2B2DA316C72C890036FFA0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CE2B21CB16C7263A0036FFA0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE2B2DA416C72C890036FFA0 /* QuartzCore.framework in Frameworks */,
+				CE2B2DA216C72C7A0036FFA0 /* AudioToolbox.framework in Frameworks */,
+				CE2B2D9F16C72C330036FFA0 /* CoreAudio.framework in Frameworks */,
+				CE2B21D316C7263A0036FFA0 /* UIKit.framework in Frameworks */,
+				CE2B21D516C7263A0036FFA0 /* Foundation.framework in Frameworks */,
+				CE2B21D716C7263A0036FFA0 /* CoreGraphics.framework in Frameworks */,
+				CE2B21D916C7263A0036FFA0 /* GLKit.framework in Frameworks */,
+				CE2B21DB16C7263A0036FFA0 /* OpenGLES.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CE2B21C316C7263A0036FFA0 = {
+			isa = PBXGroup;
+			children = (
+				CE2B21DC16C7263A0036FFA0 /* GLWindow */,
+				CE2B21D116C7263A0036FFA0 /* Frameworks */,
+				CE2B21CF16C7263A0036FFA0 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CE2B21CF16C7263A0036FFA0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CE2B21CE16C7263A0036FFA0 /* GLWindow.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CE2B21D116C7263A0036FFA0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CE2B2DA316C72C890036FFA0 /* QuartzCore.framework */,
+				CE2B2DA116C72C7A0036FFA0 /* AudioToolbox.framework */,
+				CE2B2D9E16C72C330036FFA0 /* CoreAudio.framework */,
+				CE2B21D216C7263A0036FFA0 /* UIKit.framework */,
+				CE2B21D416C7263A0036FFA0 /* Foundation.framework */,
+				CE2B21D616C7263A0036FFA0 /* CoreGraphics.framework */,
+				CE2B21D816C7263A0036FFA0 /* GLKit.framework */,
+				CE2B21DA16C7263A0036FFA0 /* OpenGLES.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CE2B21DC16C7263A0036FFA0 /* GLWindow */ = {
+			isa = PBXGroup;
+			children = (
+				CE2B21FA16C726E30036FFA0 /* Main.cpp */,
+				CE2B21DD16C7263A0036FFA0 /* Supporting Files */,
+			);
+			path = GLWindow;
+			sourceTree = "<group>";
+		};
+		CE2B21DD16C7263A0036FFA0 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				CE2B21DE16C7263A0036FFA0 /* GLWindow-Info.plist */,
+				CE2B21E416C7263A0036FFA0 /* GLWindow-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CE2B21CD16C7263A0036FFA0 /* GLWindow */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE2B21F716C7263A0036FFA0 /* Build configuration list for PBXNativeTarget "GLWindow" */;
+			buildPhases = (
+				CE2B21CA16C7263A0036FFA0 /* Sources */,
+				CE2B21CB16C7263A0036FFA0 /* Frameworks */,
+				CE2B21CC16C7263A0036FFA0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GLWindow;
+			productName = GLWindow;
+			productReference = CE2B21CE16C7263A0036FFA0 /* GLWindow.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CE2B21C516C7263A0036FFA0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = CE2B21C816C7263A0036FFA0 /* Build configuration list for PBXProject "GLWindow" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = CE2B21C316C7263A0036FFA0;
+			productRefGroup = CE2B21CF16C7263A0036FFA0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CE2B21CD16C7263A0036FFA0 /* GLWindow */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CE2B21CC16C7263A0036FFA0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CE2B21CA16C7263A0036FFA0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE2B21FB16C726E30036FFA0 /* Main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		CE2B21F516C7263A0036FFA0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_LDFLAGS = (
+					"-lXli",
+					"-lXliMain",
+					"-lXliMedia",
+					"-lXliAudio",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CE2B21F616C7263A0036FFA0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				OTHER_LDFLAGS = (
+					"-lXli",
+					"-lXliMain",
+					"-lXliMedia",
+					"-lXliAudio",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CE2B21F816C7263A0036FFA0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GLWindow/GLWindow-Prefix.pch";
+				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				HEADER_SEARCH_PATHS = ../../../include;
+				INFOPLIST_FILE = "GLWindow/GLWindow-Info.plist";
+				LIBRARY_SEARCH_PATHS = ../../../lib/ios/$CONFIGURATION$EFFECTIVE_PLATFORM_NAME;
+				LINK_WITH_STANDARD_LIBRARIES = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		CE2B21F916C7263A0036FFA0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GLWindow/GLWindow-Prefix.pch";
+				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				HEADER_SEARCH_PATHS = ../../../include;
+				INFOPLIST_FILE = "GLWindow/GLWindow-Info.plist";
+				LIBRARY_SEARCH_PATHS = ../../../lib/ios/$CONFIGURATION$EFFECTIVE_PLATFORM_NAME;
+				LINK_WITH_STANDARD_LIBRARIES = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CE2B21C816C7263A0036FFA0 /* Build configuration list for PBXProject "GLWindow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE2B21F516C7263A0036FFA0 /* Debug */,
+				CE2B21F616C7263A0036FFA0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CE2B21F716C7263A0036FFA0 /* Build configuration list for PBXNativeTarget "GLWindow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE2B21F816C7263A0036FFA0 /* Debug */,
+				CE2B21F916C7263A0036FFA0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CE2B21C516C7263A0036FFA0 /* Project object */;
+}

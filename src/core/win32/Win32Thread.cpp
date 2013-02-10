@@ -18,12 +18,6 @@ namespace Xli
 		::CloseHandle((HANDLE)handle);
 	}
 
-	void KillThread(ThreadHandle handle)
-	{
-		::TerminateThread((HANDLE)handle, -1);
-		::CloseHandle((HANDLE)handle);
-	}
-
 	void Sleep(int ms)
 	{
 		::Sleep(ms);

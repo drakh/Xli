@@ -34,12 +34,6 @@ namespace Xli
 		delete (SDL_ThreadData*)handle;
 	}
 
-	void KillThread(ThreadHandle handle)
-	{
-		delete (SDL_ThreadData*)handle;
-		XLI_THROW_NOT_SUPPORTED(__FUNCTION__);
-	}
-
 	void Sleep(int ms)
 	{
 		SDL_Delay((Uint32)ms);

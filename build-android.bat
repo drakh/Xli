@@ -1,6 +1,6 @@
 @echo off
 
-cd projects\android-ndk
+cd projects\android
 cmd /C ndk-build -j 8
 @echo.
 

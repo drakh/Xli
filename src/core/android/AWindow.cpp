@@ -12,6 +12,7 @@
 #include <android/log.h>
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "XLI", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "XLI", __VA_ARGS__))
+#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "XLI", __VA_ARGS__))
 
 #include <Xli/Console.h>
 #include <Xli/GLContext.h>
@@ -273,6 +274,7 @@ namespace Xli
 		{
 			return true;
 		}
+		
 		virtual int Write(const void* src, int elmSize, int elmCount)
 		{
 			for (int i = 0; i < elmCount; i++)
@@ -300,6 +302,7 @@ namespace Xli
 		{
 			return true;
 		}
+
 		virtual int Write(const void* src, int elmSize, int elmCount)
 		{
 			for (int i = 0; i < elmCount; i++)
@@ -515,7 +518,7 @@ extern "C" void android_main(struct android_app* state)
 				
 			if (GlobalState->destroyRequested == 1)
 			{
-				LOGW("Unable to initialize window");
+				LOGE("Unable to initialize window");
 				exit(EXIT_FAILURE);
 			}
 
@@ -531,8 +534,8 @@ extern "C" void android_main(struct android_app* state)
 	}
 	catch (const Xli::Exception& e)
 	{
-		LOGW("Unhandled exception: %s", e.GetMessage().Data());
-		LOGW("Thrown from: %s : %d", e.GetFunction().Data(), e.GetLine());
+		LOGE("Unhandled exception: %s", e.GetMessage().Data());
+		LOGE("Thrown from: %s : %d", e.GetFunction().Data(), e.GetLine());
 		exit(EXIT_FAILURE);
 	}
 }

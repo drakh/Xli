@@ -9,7 +9,7 @@ else
     fi
 fi
 
-cd projects/android-ndk || exit $?
+cd projects/android || exit $?
 
 ndk-build -j $CPU_COUNT
 

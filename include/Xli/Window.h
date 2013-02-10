@@ -292,7 +292,6 @@ namespace Xli
 	{
 		PlatformUnknown,
 		PlatformWin32,
-		PlatformX11,
 		PlatformAndroid,
 		PlatformSDL2,
 	};

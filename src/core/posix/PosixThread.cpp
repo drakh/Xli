@@ -33,15 +33,6 @@ namespace Xli
 		}
 	}
 
-	void KillThread(ThreadHandle handle)
-	{
-#ifdef ANDROID
-		XLI_THROW_NOT_SUPPORTED(__FUNCTION__);
-#else
-		pthread_cancel((pthread_t)handle);
-#endif
-	}
-
 	void Sleep(int ms)
 	{
 		struct timespec t, r;

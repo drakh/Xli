@@ -26,7 +26,7 @@ set(Sources
 	String.cpp
 	Text.cpp
 	TextReader.cpp
-	TextStream.cpp
+	TextStream.cpp 
 	TextWriter.cpp
 	Thread.cpp
 	ToString.cpp
@@ -37,39 +37,20 @@ set(Sources
 
 if (WIN32)
 
-    if (XLI_SDL2)
+    SET(Sources ${Sources}
+        generic/GenericAssetFileSystem.cpp
+        win32/Win32Cond.cpp
+        win32/Win32FileSystem.cpp
+        win32/Win32Helpers.cpp
+        win32/Win32MessageBox.cpp
+        win32/Win32Thread.cpp
+        win32/Win32Time.cpp
+        win32/Win32Window.cpp
+        win32/Win32Display.cpp
+        win32/Win32Helpers.cpp
+        )
 
-        SET(Sources ${Sources}
-            sdl2/SDL2Cond.cpp
-            sdl2/SDL2GLContext.cpp
-            sdl2/SDL2Mutex.cpp
-            sdl2/SDL2Thread.cpp
-            sdl2/SDL2Window.cpp
-            sdl2/SDL2Display.cpp
-            win32/Win32FileSystem.cpp
-            win32/Win32Helpers.cpp
-            win32/Win32MessageBox.cpp
-            win32/Win32Time.cpp
-            )
-
-    else()
-
-        SET(Sources ${Sources}
-            generic/GenericAssetFileSystem.cpp
-            win32/Win32Cond.cpp
-            win32/Win32FileSystem.cpp
-            win32/Win32Helpers.cpp
-            win32/Win32MessageBox.cpp
-            win32/Win32Thread.cpp
-            win32/Win32Time.cpp
-            win32/Win32Window.cpp
-            win32/Win32Display.cpp
-            win32/Win32Helpers.cpp
-            )
-
-    endif()
-
-elseif (APPLE)
+else()
 
     set(Sources ${Sources}
         3rdparty/glew/src/glew.c
@@ -87,30 +68,19 @@ elseif (APPLE)
         sdl2/SDL2MessageBox.cpp
         )
 
+endif()
+
+if (APPLE)
+
     add_definitions(-DGLEW_STATIC)
     include_directories(${PROJECT_SOURCE_DIR}/src/core/3rdparty/glew/include)
 
-    include_directories(${PROJECT_SOURCE_DIR}/src/core/sdl2/SDL2-OSX/include)
-    link_directories(${PROJECT_SOURCE_DIR}/src/core/sdl2/SDL2-OSX/lib)
+    include_directories(${PROJECT_SOURCE_DIR}/src/core/3rdparty/SDL2/include)
+    link_directories(${PROJECT_SOURCE_DIR}/src/core/3rdparty/SDL2/lib)
 
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lSDL2 -lm -liconv -Wl,-framework,OpenGL -Wl,-framework,ForceFeedback -lobjc -Wl,-framework,Cocoa -Wl,-framework,Carbon -Wl,-framework,IOKit -Wl,-framework,CoreAudio -Wl,-framework,AudioToolbox -Wl,-framework,AudioUnit")
 
-elseif (UNIX)
-
-    set(Sources ${Sources}
-        generic/GenericAssetFileSystem.cpp
-        generic/GenericDialogs.cpp
-        posix/PosixFileSystem.cpp
-        posix/PosixFileSystemBase.cpp
-        posix/PosixTime.cpp
-        posix/PosixCond.cpp
-        posix/PosixMutex.cpp
-        posix/PosixThread.cpp
-        sdl2/SDL2Window.cpp
-        sdl2/SDL2Display.cpp
-        sdl2/SDL2GLContext.cpp
-        sdl2/SDL2MessageBox.cpp
-        )
+elseif (UNIX AND NOT WIN32)
 
 	add_definitions("`sdl2-config --cflags`")
 
@@ -118,7 +88,7 @@ endif()
 
 add_library(Xli ${Sources})
 
-if (UNIX AND NOT APPLE)
+if (UNIX AND NOT APPLE AND NOT WIN32)
     target_link_libraries(Xli SDL2 pthread GL GLEW)
 endif()
 

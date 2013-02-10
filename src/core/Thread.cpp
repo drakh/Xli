@@ -81,19 +81,6 @@ namespace Xli
 		task = 0;
 	}
 
-	void Thread::Kill()
-	{
-		if (!handle)
-		{
-			return;
-		}
-
-		task->stopped = true;
-		KillThread(handle);
-		handle = 0;
-		task = 0;
-	}
-
 	Task::Task()
 	{
 		stopped = true;

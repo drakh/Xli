@@ -9,53 +9,6 @@ namespace Xli
 {
 	static SDL2Window* GlobalWindow = 0;
 
-#ifdef XLI_PLATFORM_IOS
-    
-    int SDLCALL SDL2Window::EventCallback(SDL_Event* ev, void* userdata)
-    {
-		SDL2Window* wnd = (SDL2Window*)userdata;
-
-        // TODO: Handle these events properly
-		switch (ev->type)
-		{ 
-		case SDL_IOS_WILLTERMINATE: 
-			Xli::ErrorPrintLine("SDL_IOS_WILLTERMINATE");
-            // TODO: Should be possible to cancel closing
-            wnd->closed = true;
-			return 1; 
-
-		case SDL_IOS_DIDRECEIVEMEMORYWARNING: 
-            Xli::ErrorPrintLine("SDL_IOS_DIDRECEIVEMEMORYWARNING");
-			if (wnd->GetEventHandler())
-			{
-				wnd->GetEventHandler()->OnLowMemory();
-			}
-			return 1;
-
-		case SDL_IOS_WILLRESIGNACTIVE: 
-			Xli::ErrorPrintLine("SDL_IOS_WILLRESIGNACTIVE");
-			return 1; 
-
-		case SDL_IOS_DIDBECOMEACTIVE: 
-			Xli::ErrorPrintLine("SDL_IOS_DIDBECOMEACTIVE");
-			return 1; 
-
-		case SDL_IOS_DIDENTERBACKGROUND: 
-			Xli::ErrorPrintLine("SDL_IOS_DIDENTERBACKGROUND");
-            // TODO: Should be possible to cancel closing
-            wnd->closed = true;
-			return 1;
-
-		case SDL_IOS_WILLENTERFOREGROUND: 
-			Xli::ErrorPrintLine("SDL_IOS_WILLENTERFOREGROUND");
-			return 1; 
-		}
-
-        return 0;
-    }
-    
-#endif
-    
 	SDL2Window::SDL2Window(int width, int height, const String& title, WindowEventHandler* eventHandler, int style)
 	{
 		if (GlobalWindow == 0) GlobalWindow = this;
@@ -80,6 +33,7 @@ namespace Xli
 		{
 			flags |= SDL_WINDOW_BORDERLESS;
 		}
+        
         if ((style & WindowStyleResizeable) == WindowStyleResizeable)
 		{
 			flags |= SDL_WINDOW_RESIZABLE;
@@ -106,29 +60,25 @@ namespace Xli
         String orientations = "";
         
         if ((style & WindowStyleOrientationLandscapeLeft) == WindowStyleOrientationLandscapeLeft)
-        {
-            orientations = "LandscapeLeft ";
-        }
-        if ((style & WindowStyleOrientationLandscapeRight) == WindowStyleOrientationLandscapeRight)
-        {
-            orientations = orientations + "LandscapeRight ";
-        }
-        if ((style & WindowStyleOrientationPortrait) == WindowStyleOrientationPortrait)
-        {
-            orientations = orientations + "Portrait ";
-        }
-        if ((style & WindowStyleOrientationPortraitUpsideDown) == WindowStyleOrientationPortraitUpsideDown)
-        {
-            orientations = orientations + "PortraitUpsideDown";
-        }
-        if (orientations.Length() > 0)
-        {
-            if (!SDL_SetHint("SDL_IOS_ORIENTATIONS", orientations.Data())) ErrorPrintLine("SDL WARNING: Failed to set orientations");
-        }
+            orientations += "LandscapeLeft ";
         
-		if (!SDL_SetHint("SDL_HINT_IDLE_TIMER_DISABLED", "1")) ErrorPrintLine("SDL WARNING: Failed to disable idle timer");
+        if ((style & WindowStyleOrientationLandscapeRight) == WindowStyleOrientationLandscapeRight)
+            orientations += "LandscapeRight ";
+        
+        if ((style & WindowStyleOrientationPortrait) == WindowStyleOrientationPortrait)
+            orientations += "Portrait ";
+        
+        if ((style & WindowStyleOrientationPortraitUpsideDown) == WindowStyleOrientationPortraitUpsideDown)
+            orientations += "PortraitUpsideDown";
 
-        if (fullscreen) flags |= SDL_WINDOW_BORDERLESS;
+        if (orientations.Length() > 0 && !SDL_SetHint("SDL_IOS_ORIENTATIONS", orientations.Data())) 
+            ErrorPrintLine("SDL WARNING: Failed to set window orientations");
+        
+		if (!SDL_SetHint("SDL_HINT_IDLE_TIMER_DISABLED", "1")) 
+            ErrorPrintLine("SDL WARNING: Failed to disable idle timer");
+
+        if (fullscreen) 
+            flags |= SDL_WINDOW_BORDERLESS;
         
 #endif
         
@@ -136,11 +86,7 @@ namespace Xli
 
 		SDL_SetWindowData(window, "SDL2Window", this);
         
-#ifdef XLI_PLATFORM_IOS
-        
-        SDL_SetEventCallback(EventCallback, this);
-        
-#else
+#ifndef XLI_PLATFORM_IOS
         
 		if (fullscreen)
 		{

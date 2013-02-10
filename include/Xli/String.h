@@ -101,6 +101,10 @@ namespace Xli
 		String Add(const char* str) const;
 		String Add(const String& str) const;
 
+        void Append(const char* str, int len);
+        void Append(const char* str);
+        void Append(const String& str);
+        
 		bool operator == (const String& str) const;
 		bool operator == (const char* str) const;
 
@@ -122,6 +126,9 @@ namespace Xli
 		bool operator >= (const String& str) const;
 		bool operator >= (const char* str) const;
 
+        String& operator += (const String& str);
+        String& operator += (const char* str);
+        
 		String& operator = (const String& str);
 		String& operator = (const char* str);
 		String& operator = (char c);
