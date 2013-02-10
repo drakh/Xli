@@ -53,7 +53,6 @@ if (WIN32)
 else()
 
     set(Sources ${Sources}
-        3rdparty/glew/src/glew.c
         generic/GenericAssetFileSystem.cpp
         generic/GenericDialogs.cpp
         posix/PosixFileSystem.cpp
@@ -74,6 +73,7 @@ if (APPLE)
 
     add_definitions(-DGLEW_STATIC)
     include_directories(${PROJECT_SOURCE_DIR}/src/core/3rdparty/glew/include)
+    set(Sources ${Sources} 3rdparty/glew/src/glew.c)
 
     include_directories(${PROJECT_SOURCE_DIR}/src/core/3rdparty/SDL2/include)
     link_directories(${PROJECT_SOURCE_DIR}/src/core/3rdparty/SDL2/lib)

@@ -9,7 +9,7 @@ mkdir -p builds/cmake
 cd builds/cmake || exit $?
 
 rm -f CMakeCache.txt
-cmake -G"Unix Makefiles" ../.. && \
-make -j $CPU_COUNT
+cmake ../.. && make -j $CPU_COUNT
 
 cd -
+

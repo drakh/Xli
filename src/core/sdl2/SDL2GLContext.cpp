@@ -24,16 +24,21 @@ namespace Xli
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
 #endif
-            
+
 			this->window = window;
 			context = SDL_GL_CreateContext(window->GetSDLWindow());
+
+			if (!context)
+			{
+			    XLI_THROW("Failed to create OpenGL context");
+			}
+
+            Vector2i vp = window->GetClientSize();
+            glViewport(0, 0, vp.X, vp.Y);
 
 #ifndef XLI_GLES2
 			glewInit();
 #endif
-            
-            Vector2i vp = window->GetClientSize();
-            glViewport(0, 0, vp.X, vp.Y);
 		}
 
 		virtual ~SDL2GLContext()
@@ -72,7 +77,7 @@ namespace Xli
 		{
 			return SDL_GL_SetSwapInterval(interval) == 0;
 		}
-        
+
 		virtual int GetSwapInterval()
 		{
 			return SDL_GL_GetSwapInterval();

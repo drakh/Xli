@@ -12,6 +12,10 @@ if (NOT CMAKE_BUILD_TYPE)
 	endif()
 endif()
 
+if (UNIX AND NOT WIN32)
+	set(BUILD_SHARED_LIBS TRUE CACHE BOOL "Build shared or static libs")
+endif()
+
 if (APPLE)
 
 	set(CMAKE_C_FLAGS "-Wno-switch-enum")
@@ -25,10 +29,8 @@ endif()
 
 if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
-    set(BUILD_SHARED_LIBS TRUE CACHE BOOL "Build shared or static libs")
-
-	set(CMAKE_OSX_ARCHITECTURES "x86_64;i386" CACHE STRING "OSX architectures - 'i386', 'x86_64' or 'x86_64;i386' (universal)" FORCE)
-	set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/osx/x86)
+	set(CMAKE_OSX_ARCHITECTURES "x86_64;i386")
+	set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/OSX/x86)
 
 	include_directories(/usr/X11/include /usr/X11/include/freetype2)
 	link_directories(/usr/X11/lib)

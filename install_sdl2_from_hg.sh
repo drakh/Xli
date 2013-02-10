@@ -5,18 +5,20 @@ else
 	CPU_COUNT=`grep processor /proc/cpuinfo | wc -l`
 fi
 
-if [ -d SDL2 ]; then
-    cd SDL2
+if [ -d src/core/3rdparty/SDL2 ]; then
+    cd src/core/3rdparty/SDL2
     hg update
     cd -
 else
+    cd src/core/3rdparty
     hg clone http://hg.libsdl.org/SDL SDL2
+    cd -
 fi
 
-mkdir -p SDL2/build
-cd SDL2/build || exit $?
+mkdir -p src/core/3rdparty/SDL2/build
+cd src/core/3rdparty/SDL2/build || exit $?
 
-../configure --srcdir=.. --prefix=/usr && \
+../configure --srcdir=.. --prefix=/usr --disable-video-opengles && \
 make -j $CPU_COUNT && \
 sudo make install
 

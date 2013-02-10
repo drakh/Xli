@@ -34,15 +34,16 @@ namespace Xli
 			flags |= SDL_WINDOW_BORDERLESS;
 		}
         
-        if ((style & WindowStyleResizeable) == WindowStyleResizeable)
+		if ((style & WindowStyleResizeable) == WindowStyleResizeable)
 		{
 			flags |= SDL_WINDOW_RESIZABLE;
 		}
         
 		this->eventHandler = eventHandler;
         
-        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+		// TODO
+		//SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+		//SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
 #ifdef XLI_GLES2
 
@@ -74,7 +75,7 @@ namespace Xli
         if (orientations.Length() > 0 && !SDL_SetHint("SDL_IOS_ORIENTATIONS", orientations.Data())) 
             ErrorPrintLine("SDL WARNING: Failed to set window orientations");
         
-		if (!SDL_SetHint("SDL_HINT_IDLE_TIMER_DISABLED", "1")) 
+        if (!SDL_SetHint("SDL_HINT_IDLE_TIMER_DISABLED", "1")) 
             ErrorPrintLine("SDL WARNING: Failed to disable idle timer");
 
         if (fullscreen) 

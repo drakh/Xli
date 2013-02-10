@@ -6,3 +6,4 @@ cd builds/cmake
 cmake ../.. && make
 
 cd -
+
