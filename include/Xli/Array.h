@@ -367,44 +367,6 @@ namespace Xli
 			Xli::Sort<T, TComparator>(data, 0, used);
 		}
 
-    private:
-        template <typename S> struct RS
-        {
-            S SValue;
-            T TValue;
-            operator const S&() const { return SValue; }
-        };
-        
-    public:
-		/**
-			Sort this array based on the reordering given by sorting another array.
-			@param s The array which defines the reordering of this array (will also be sorted).
-		*/
-		template <typename S, typename SComparator> void MultiSort(Array<S>& s)
-		{
-			if (Length() != s.Length()) 
-				XLI_THROW("Arrays must have the same length");
-
-			Array<RS<S> > rs(used);
-			for (int i = 0; i < rs.Length(); i++)
-			{
-				rs[i].SValue = s.Get(i);
-				rs[i].TValue = Get(i);
-			}
-
-			rs.Sort<SComparator>();
-			for (int i = 0; i < rs.Length(); i++)
-			{
-				s[i] = rs[i].SValue;
-				data[i] = rs[i].TValue;
-			}
-		}
-
-		template <typename S> void MultiSort(Array<S>& s)
-		{
-			MultiSort<S, ComparatorLessThan<S> >(s);
-		}
-
 		void Sort()
 		{
 			Sort<ComparatorLessThan<T> >();

@@ -91,7 +91,7 @@ elseif (MSVC)
 
 endif()
 
-if (UNIX)
+if (CMAKE_GENERATOR MATCHES "Unix Makefiles")
 
 	install(
 		DIRECTORY ${LIBRARY_OUTPUT_PATH}

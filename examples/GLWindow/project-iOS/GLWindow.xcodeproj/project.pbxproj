@@ -12,10 +12,10 @@
 		CE2B21D716C7263A0036FFA0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B21D616C7263A0036FFA0 /* CoreGraphics.framework */; };
 		CE2B21D916C7263A0036FFA0 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B21D816C7263A0036FFA0 /* GLKit.framework */; };
 		CE2B21DB16C7263A0036FFA0 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B21DA16C7263A0036FFA0 /* OpenGLES.framework */; };
-		CE2B21FB16C726E30036FFA0 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2B21FA16C726E30036FFA0 /* Main.cpp */; };
 		CE2B2D9F16C72C330036FFA0 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B2D9E16C72C330036FFA0 /* CoreAudio.framework */; };
 		CE2B2DA216C72C7A0036FFA0 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B2DA116C72C7A0036FFA0 /* AudioToolbox.framework */; };
 		CE2B2DA416C72C890036FFA0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B2DA316C72C890036FFA0 /* QuartzCore.framework */; };
+		CE52CC3316C74B2000C6AAC7 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE52CC3216C74B2000C6AAC7 /* Main.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,10 +27,10 @@
 		CE2B21DA16C7263A0036FFA0 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		CE2B21DE16C7263A0036FFA0 /* GLWindow-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GLWindow-Info.plist"; sourceTree = "<group>"; };
 		CE2B21E416C7263A0036FFA0 /* GLWindow-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GLWindow-Prefix.pch"; sourceTree = "<group>"; };
-		CE2B21FA16C726E30036FFA0 /* Main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Main.cpp; path = ../../Main.cpp; sourceTree = "<group>"; };
 		CE2B2D9E16C72C330036FFA0 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		CE2B2DA116C72C7A0036FFA0 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		CE2B2DA316C72C890036FFA0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		CE52CC3216C74B2000C6AAC7 /* Main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Main.cpp; path = ../../src/Main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,7 +87,7 @@
 		CE2B21DC16C7263A0036FFA0 /* GLWindow */ = {
 			isa = PBXGroup;
 			children = (
-				CE2B21FA16C726E30036FFA0 /* Main.cpp */,
+				CE52CC3216C74B2000C6AAC7 /* Main.cpp */,
 				CE2B21DD16C7263A0036FFA0 /* Supporting Files */,
 			);
 			path = GLWindow;
@@ -162,7 +162,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE2B21FB16C726E30036FFA0 /* Main.cpp in Sources */,
+				CE52CC3316C74B2000C6AAC7 /* Main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -191,7 +191,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_LDFLAGS = (
 					"-lXli",
-					"-lXliMain",
 					"-lXliMedia",
 					"-lXliAudio",
 				);
@@ -216,7 +215,6 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = (
 					"-lXli",
-					"-lXliMain",
 					"-lXliMedia",
 					"-lXliAudio",
 				);

@@ -28,6 +28,9 @@ else()
 
 endif()
 
-add_executable(GLWindow Main.cpp)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${EXECUTABLE_OUTPUT_PATH})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${EXECUTABLE_OUTPUT_PATH})
+
+add_executable(GLWindow src/Main.cpp)
 
 target_link_libraries(GLWindow Xli XliMain XliMedia XliAudio)

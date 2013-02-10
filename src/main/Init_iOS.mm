@@ -52,11 +52,13 @@ namespace Xli
             }
         }
     };
-    
-    void Init_iOS()
-    {
-        Managed<Stream> log = new NSLogStream();
-        Out->SwitchStream(log);
-        Err->SwitchStream(log);
-    }
+}
+
+using namespace Xli;
+
+void XliInit_iOS()
+{
+    Managed<Stream> log = new NSLogStream();
+    Out->SwitchStream(log);
+    Err->SwitchStream(log);
 }

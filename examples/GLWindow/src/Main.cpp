@@ -4,6 +4,8 @@ using namespace Xli;
 
 int Main(const Array<String>& args)
 {
+    PrintLine("Creating GLWindow");
+    
 	Managed<Window> wnd = Window::Create(1280, 720, "GLWindow", 0, WindowStyleResizeable);
     Managed<GLContext> glc = GLContext::Create(wnd, 16);
 
@@ -16,5 +18,7 @@ int Main(const Array<String>& args)
 		Window::ProcessMessages();
 	}
 
+    PrintLine("GLWindow was closed");
+    
 	return 0;
 }

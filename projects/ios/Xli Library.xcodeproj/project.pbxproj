@@ -177,6 +177,8 @@
 		CE2B2D5F16C72AC40036FFA0 /* SDL_uikitviewcontroller.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2B2B9D16C72AC40036FFA0 /* SDL_uikitviewcontroller.m */; };
 		CE2B2D6016C72AC40036FFA0 /* SDL_uikitwindow.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2B2B9E16C72AC40036FFA0 /* SDL_uikitwindow.h */; };
 		CE2B2D6116C72AC40036FFA0 /* SDL_uikitwindow.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2B2B9F16C72AC40036FFA0 /* SDL_uikitwindow.m */; };
+		CE2B2DB116C735680036FFA0 /* Init_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6EC216C70DA600390436 /* Init_iOS.mm */; };
+		CE2B2DB216C735680036FFA0 /* XliMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6EC416C70DA600390436 /* XliMain.cpp */; };
 		CE2D67D116C70D8400390436 /* ConvertUTF.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2D5E0C16C70D7D00390436 /* ConvertUTF.c */; };
 		CE2D67D216C70D8400390436 /* ConvertUTF.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D5E0D16C70D7D00390436 /* ConvertUTF.h */; };
 		CE2D6C5416C70D8500390436 /* ArrayStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D66BB16C70D7F00390436 /* ArrayStream.cpp */; };
@@ -230,8 +232,6 @@
 		CE2D6E9F16C70D9B00390436 /* AudioBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6E3716C70D9A00390436 /* AudioBuffer.cpp */; };
 		CE2D6EA016C70D9B00390436 /* AudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6E3816C70D9A00390436 /* AudioStream.cpp */; };
 		CE2D6EAF16C70D9B00390436 /* Wav.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6E5A16C70D9A00390436 /* Wav.cpp */; };
-		CE2D6EC616C70DA600390436 /* Init_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6EC216C70DA600390436 /* Init_iOS.mm */; };
-		CE2D6EC816C70DA600390436 /* XliMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6EC416C70DA600390436 /* XliMain.cpp */; };
 		CE2D732016C70DB600390436 /* JSON_parser.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70B616C70DB500390436 /* JSON_parser.c */; };
 		CE2D732116C70DB600390436 /* JSON_parser.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D70B716C70DB500390436 /* JSON_parser.h */; };
 		CE2D733416C70DB600390436 /* tinystr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70CC16C70DB500390436 /* tinystr.cpp */; };
@@ -458,7 +458,6 @@
 		CE2B2B9F16C72AC40036FFA0 /* SDL_uikitwindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDL_uikitwindow.m; sourceTree = "<group>"; };
 		CE2D492916C703DF00390436 /* libXliMedia.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXliMedia.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE2D493D16C7056C00390436 /* libXliAudio.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXliAudio.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		CE2D494616C7057100390436 /* libXliMain.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXliMain.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE2D5E0C16C70D7D00390436 /* ConvertUTF.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ConvertUTF.c; sourceTree = "<group>"; };
 		CE2D5E0D16C70D7D00390436 /* ConvertUTF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConvertUTF.h; sourceTree = "<group>"; };
 		CE2D66BB16C70D7F00390436 /* ArrayStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ArrayStream.cpp; sourceTree = "<group>"; };
@@ -588,13 +587,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CE2D494116C7057100390436 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -616,7 +608,6 @@
 				5AA38E4D151A00CC00979B55 /* libXli.a */,
 				CE2D492916C703DF00390436 /* libXliMedia.a */,
 				CE2D493D16C7056C00390436 /* libXliAudio.a */,
-				CE2D494616C7057100390436 /* libXliMain.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -641,16 +632,16 @@
 				CE2B2A6C16C72AC40036FFA0 /* loadso */,
 				CE2B2A8116C72AC40036FFA0 /* power */,
 				CE2B2A9216C72AC40036FFA0 /* render */,
-				CE2B2ABC16C72AC40036FFA0 /* SDL_assert_c.h */,
+				CE2B2AC516C72AC40036FFA0 /* SDL.c */,
 				CE2B2ABD16C72AC40036FFA0 /* SDL_assert.c */,
-				CE2B2ABE16C72AC40036FFA0 /* SDL_error_c.h */,
+				CE2B2ABC16C72AC40036FFA0 /* SDL_assert_c.h */,
 				CE2B2ABF16C72AC40036FFA0 /* SDL_error.c */,
+				CE2B2ABE16C72AC40036FFA0 /* SDL_error_c.h */,
 				CE2B2AC016C72AC40036FFA0 /* SDL_fatal.c */,
 				CE2B2AC116C72AC40036FFA0 /* SDL_fatal.h */,
-				CE2B2AC216C72AC40036FFA0 /* SDL_hints_c.h */,
 				CE2B2AC316C72AC40036FFA0 /* SDL_hints.c */,
+				CE2B2AC216C72AC40036FFA0 /* SDL_hints_c.h */,
 				CE2B2AC416C72AC40036FFA0 /* SDL_log.c */,
-				CE2B2AC516C72AC40036FFA0 /* SDL.c */,
 				CE2B2AC616C72AC40036FFA0 /* stdlib */,
 				CE2B2ADD16C72AC40036FFA0 /* thread */,
 				CE2B2B0116C72AC40036FFA0 /* timer */,
@@ -1381,13 +1372,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CE2D494216C7057100390436 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -1442,23 +1426,6 @@
 			productReference = CE2D493D16C7056C00390436 /* libXliAudio.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		CE2D493F16C7057100390436 /* XliMain */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = CE2D494316C7057100390436 /* Build configuration list for PBXNativeTarget "XliMain" */;
-			buildPhases = (
-				CE2D494016C7057100390436 /* Sources */,
-				CE2D494116C7057100390436 /* Frameworks */,
-				CE2D494216C7057100390436 /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = XliMain;
-			productName = XliMedia;
-			productReference = CE2D494616C7057100390436 /* libXliMain.a */;
-			productType = "com.apple.product-type.library.static";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1467,7 +1434,7 @@
 			attributes = {
 				LastUpgradeCheck = 0430;
 			};
-			buildConfigurationList = 5AA38E47151A00CC00979B55 /* Build configuration list for PBXProject "Xli" */;
+			buildConfigurationList = 5AA38E47151A00CC00979B55 /* Build configuration list for PBXProject "Xli Library" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -1483,7 +1450,6 @@
 				5AA38E4C151A00CC00979B55 /* Xli */,
 				CE2D492216C703DF00390436 /* XliMedia */,
 				CE2D493616C7056C00390436 /* XliAudio */,
-				CE2D493F16C7057100390436 /* XliMain */,
 			);
 		};
 /* End PBXProject section */
@@ -1636,6 +1602,8 @@
 				CE2B2D5D16C72AC40036FFA0 /* SDL_uikitview.m in Sources */,
 				CE2B2D5F16C72AC40036FFA0 /* SDL_uikitviewcontroller.m in Sources */,
 				CE2B2D6116C72AC40036FFA0 /* SDL_uikitwindow.m in Sources */,
+				CE2B2DB116C735680036FFA0 /* Init_iOS.mm in Sources */,
+				CE2B2DB216C735680036FFA0 /* XliMain.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1689,15 +1657,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CE2D494016C7057100390436 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				CE2D6EC616C70DA600390436 /* Init_iOS.mm in Sources */,
-				CE2D6EC816C70DA600390436 /* XliMain.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
@@ -1744,9 +1703,9 @@
 		5AA38E5B151A00CC00979B55 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DSTROOT = /tmp/Xli_iOS.dst;
+				DSTROOT = /tmp/Xli_Library.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Xli/Xli-Prefix.pch";
+				GCC_PREFIX_HEADER = "Xli Library/Xli Library-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					__IPHONEOS__,
 					"DEBUG=1",
@@ -1769,9 +1728,9 @@
 		5AA38E5C151A00CC00979B55 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DSTROOT = /tmp/Xli_iOS.dst;
+				DSTROOT = /tmp/Xli_Library.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Xli/Xli-Prefix.pch";
+				GCC_PREFIX_HEADER = "Xli Library/Xli Library-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = __IPHONEOS__;
 				HEADER_SEARCH_PATHS = (
 					../../include,
@@ -1791,9 +1750,9 @@
 		CE2D492716C703DF00390436 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DSTROOT = /tmp/Xli_iOS.dst;
+				DSTROOT = /tmp/Xli_Library.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Xli/Xli-Prefix.pch";
+				GCC_PREFIX_HEADER = "Xli Library/Xli Library-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					__IPHONEOS__,
 					"DEBUG=1",
@@ -1815,9 +1774,9 @@
 		CE2D492816C703DF00390436 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DSTROOT = /tmp/Xli_iOS.dst;
+				DSTROOT = /tmp/Xli_Library.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Xli/Xli-Prefix.pch";
+				GCC_PREFIX_HEADER = "Xli Library/Xli Library-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = __IPHONEOS__;
 				HEADER_SEARCH_PATHS = (
 					../../include,
@@ -1836,9 +1795,9 @@
 		CE2D493B16C7056C00390436 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DSTROOT = /tmp/Xli_iOS.dst;
+				DSTROOT = /tmp/Xli_Library.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Xli/Xli-Prefix.pch";
+				GCC_PREFIX_HEADER = "Xli Library/Xli Library-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					__IPHONEOS__,
 					"DEBUG=1",
@@ -1857,9 +1816,9 @@
 		CE2D493C16C7056C00390436 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DSTROOT = /tmp/Xli_iOS.dst;
+				DSTROOT = /tmp/Xli_Library.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Xli/Xli-Prefix.pch";
+				GCC_PREFIX_HEADER = "Xli Library/Xli Library-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = __IPHONEOS__;
 				HEADER_SEARCH_PATHS = ../../include;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
@@ -1872,49 +1831,10 @@
 			};
 			name = Release;
 		};
-		CE2D494416C7057100390436 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DSTROOT = /tmp/Xli_iOS.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Xli/Xli-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					__IPHONEOS__,
-					"DEBUG=1",
-				);
-				HEADER_SEARCH_PATHS = ../../include;
-				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
-				INSTALL_PATH = /usr/local/lib;
-				OBJROOT = build;
-				OTHER_CFLAGS = "-D__IPHONEOS__";
-				PRODUCT_NAME = XliMain;
-				SKIP_INSTALL = YES;
-				SYMROOT = ../../lib/ios;
-			};
-			name = Debug;
-		};
-		CE2D494516C7057100390436 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DSTROOT = /tmp/Xli_iOS.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Xli/Xli-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = __IPHONEOS__;
-				HEADER_SEARCH_PATHS = ../../include;
-				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
-				INSTALL_PATH = /usr/local/lib;
-				OBJROOT = build;
-				OTHER_CFLAGS = "-D__IPHONEOS__";
-				PRODUCT_NAME = XliMain;
-				SKIP_INSTALL = YES;
-				SYMROOT = ../../lib/ios;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		5AA38E47151A00CC00979B55 /* Build configuration list for PBXProject "Xli" */ = {
+		5AA38E47151A00CC00979B55 /* Build configuration list for PBXProject "Xli Library" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5AA38E58151A00CC00979B55 /* Debug */,
@@ -1946,15 +1866,6 @@
 			buildConfigurations = (
 				CE2D493B16C7056C00390436 /* Debug */,
 				CE2D493C16C7056C00390436 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		CE2D494316C7057100390436 /* Build configuration list for PBXNativeTarget "XliMain" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				CE2D494416C7057100390436 /* Debug */,
-				CE2D494516C7057100390436 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
