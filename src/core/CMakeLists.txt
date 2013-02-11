@@ -53,9 +53,7 @@ if (WIN32)
 else()
 
     set(Sources ${Sources}
-        generic/GenericAssetFileSystem.cpp
         generic/GenericDialogs.cpp
-        posix/PosixFileSystem.cpp
         posix/PosixFileSystemBase.cpp
         posix/PosixTime.cpp
         posix/PosixCond.cpp
@@ -67,24 +65,35 @@ else()
         sdl2/SDL2MessageBox.cpp
         )
 
+	if (APPLE)
+
+	    set(Sources ${Sources} 
+	    	3rdparty/glew/src/glew.c
+	    	cocoa/CocoaFileSystem.mm
+	    	)
+
+	    add_definitions(-DGLEW_STATIC -DXLI_HAS_GLEW)
+	    include_directories(${PROJECT_SOURCE_DIR}/src/core/3rdparty/glew/include)
+
+	    include_directories(${PROJECT_SOURCE_DIR}/src/core/3rdparty/SDL2/include)
+	    link_directories(${PROJECT_SOURCE_DIR}/src/core/3rdparty/SDL2/lib)
+
+	    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lSDL2 -lm -liconv -Wl,-framework,OpenGL -Wl,-framework,ForceFeedback -lobjc -Wl,-framework,Cocoa -Wl,-framework,Carbon -Wl,-framework,IOKit -Wl,-framework,CoreAudio -Wl,-framework,AudioToolbox -Wl,-framework,AudioUnit")
+
+	else()
+
+		set(Sources ${Sources}
+			generic/GenericAssetFileSystem.cpp
+			posix/PosixFileSystem.cpp
+			)
+
+		add_definitions("`sdl2-config --cflags`" -DXLI_HAS_GLEW)
+
+	endif()
+
 endif()
 
-if (APPLE)
 
-    add_definitions(-DGLEW_STATIC)
-    include_directories(${PROJECT_SOURCE_DIR}/src/core/3rdparty/glew/include)
-    set(Sources ${Sources} 3rdparty/glew/src/glew.c)
-
-    include_directories(${PROJECT_SOURCE_DIR}/src/core/3rdparty/SDL2/include)
-    link_directories(${PROJECT_SOURCE_DIR}/src/core/3rdparty/SDL2/lib)
-
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lSDL2 -lm -liconv -Wl,-framework,OpenGL -Wl,-framework,ForceFeedback -lobjc -Wl,-framework,Cocoa -Wl,-framework,Carbon -Wl,-framework,IOKit -Wl,-framework,CoreAudio -Wl,-framework,AudioToolbox -Wl,-framework,AudioUnit")
-
-elseif (UNIX AND NOT WIN32)
-
-	add_definitions("`sdl2-config --cflags`")
-
-endif()
 
 add_library(Xli ${Sources})
 

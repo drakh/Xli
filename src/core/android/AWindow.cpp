@@ -54,9 +54,9 @@ namespace Xli
 			GlobalWindow = 0;
 		}
 
-		virtual Platform GetPlatform()
+		virtual WindowImplementation GetImplementation()
 		{
-			return PlatformAndroid;
+			return WindowImplementationAndroid;
 		}
 
 		virtual void Close()
@@ -351,6 +351,7 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
 					case AMOTION_EVENT_ACTION_POINTER_DOWN:
 						GlobalEventHandler->OnTouchDown(x, y, id);
 						break;
+
 					case AMOTION_EVENT_ACTION_UP:
 					case AMOTION_EVENT_ACTION_POINTER_UP:
 						GlobalEventHandler->OnTouchUp(x, y, id);

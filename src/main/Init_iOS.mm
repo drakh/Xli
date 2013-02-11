@@ -58,7 +58,9 @@ using namespace Xli;
 
 void XliInit_iOS()
 {
+#ifndef TARGET_IPHONE_SIMULATOR
     Managed<Stream> log = new NSLogStream();
     Out->SwitchStream(log);
     Err->SwitchStream(log);
+#endif
 }

@@ -2,12 +2,8 @@
 
 namespace Xli
 {
-	class PosixFileSystem: public PosixFileSystemBase
-	{
-	};
-
 	NativeFileSystem* CreateNativeFileSystem()
 	{
-		return new PosixFileSystem();
+		return new PosixFileSystemBase();
 	}
 }

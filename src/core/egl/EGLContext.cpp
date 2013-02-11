@@ -76,7 +76,7 @@ namespace Xli
 		virtual void SetWindow(Window* window)
 		{
 #ifdef ANDROID
-			if (window->GetPlatform() == PlatformAndroid)
+			if (window->GetImplementation() == WindowImplementationAndroid)
 			{
 				EGLint format;
 				eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);

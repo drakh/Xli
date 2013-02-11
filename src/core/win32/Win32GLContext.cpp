@@ -233,7 +233,7 @@ namespace Xli
 
 	GLContext* GLContext::Create(Window* window, int multiSamples)
 	{
-		if (window->GetPlatform() != PlatformWin32) XLI_THROW("Unsupported window");
+		if (window->GetImplementation() != WindowImplementationWin32) XLI_THROW("Unsupported window");
 		return new Win32GLContext((Win32Window*)window, multiSamples);
 	}
 }

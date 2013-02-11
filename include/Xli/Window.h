@@ -288,12 +288,12 @@ namespace Xli
 	/**
 		\ingroup WM
 	*/
-	enum Platform
+	enum WindowImplementation
 	{
-		PlatformUnknown,
-		PlatformWin32,
-		PlatformAndroid,
-		PlatformSDL2,
+		WindowImplementationUnknown,
+		WindowImplementationWin32,
+		WindowImplementationAndroid,
+		WindowImplementationSDL2,
 	};
 
 	/**
@@ -307,9 +307,9 @@ namespace Xli
 		virtual ~Window() {}
 
 		/**
-			Returns the window platform type
+			Returns the window implementation type
 		*/
-		virtual Platform GetPlatform() = 0;
+		virtual WindowImplementation GetImplementation() = 0;
 
 		/**
 			Closes the window
