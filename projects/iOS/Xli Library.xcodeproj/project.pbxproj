@@ -246,29 +246,6 @@
 		CE2D733C16C70DB600390436 /* ioapi.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D70D516C70DB500390436 /* ioapi.h */; };
 		CE2D733F16C70DB600390436 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70D816C70DB500390436 /* unzip.c */; };
 		CE2D734016C70DB600390436 /* unzip.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D70D916C70DB500390436 /* unzip.h */; };
-		CE2D734116C70DB600390436 /* adler32.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70DB16C70DB500390436 /* adler32.c */; };
-		CE2D734216C70DB600390436 /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70DC16C70DB500390436 /* compress.c */; };
-		CE2D734316C70DB600390436 /* crc32.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70DD16C70DB500390436 /* crc32.c */; };
-		CE2D734416C70DB600390436 /* crc32.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D70DE16C70DB500390436 /* crc32.h */; };
-		CE2D734516C70DB600390436 /* deflate.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70DF16C70DB500390436 /* deflate.c */; };
-		CE2D734616C70DB600390436 /* deflate.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D70E016C70DB500390436 /* deflate.h */; };
-		CE2D734716C70DB600390436 /* gzio.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70E116C70DB500390436 /* gzio.c */; };
-		CE2D734816C70DB600390436 /* infback.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70E216C70DB500390436 /* infback.c */; };
-		CE2D734916C70DB600390436 /* inffast.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70E316C70DB500390436 /* inffast.c */; };
-		CE2D734A16C70DB600390436 /* inffast.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D70E416C70DB500390436 /* inffast.h */; };
-		CE2D734B16C70DB600390436 /* inffixed.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D70E516C70DB500390436 /* inffixed.h */; };
-		CE2D734C16C70DB600390436 /* inflate.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70E616C70DB500390436 /* inflate.c */; };
-		CE2D734D16C70DB600390436 /* inflate.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D70E716C70DB500390436 /* inflate.h */; };
-		CE2D734E16C70DB600390436 /* inftrees.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70E816C70DB500390436 /* inftrees.c */; };
-		CE2D734F16C70DB600390436 /* inftrees.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D70E916C70DB500390436 /* inftrees.h */; };
-		CE2D735016C70DB600390436 /* trees.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70EA16C70DB500390436 /* trees.c */; };
-		CE2D735116C70DB600390436 /* trees.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D70EB16C70DB500390436 /* trees.h */; };
-		CE2D735216C70DB600390436 /* uncompr.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70EC16C70DB500390436 /* uncompr.c */; };
-		CE2D735316C70DB600390436 /* zconf.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D70ED16C70DB500390436 /* zconf.h */; };
-		CE2D735416C70DB600390436 /* zconf.in.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D70EE16C70DB500390436 /* zconf.in.h */; };
-		CE2D735516C70DB600390436 /* zlib.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D70EF16C70DB500390436 /* zlib.h */; };
-		CE2D735616C70DB600390436 /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70F016C70DB500390436 /* zutil.c */; };
-		CE2D735716C70DB600390436 /* zutil.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D70F116C70DB500390436 /* zutil.h */; };
 		CE2D735816C70DB600390436 /* Bitmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70F216C70DB500390436 /* Bitmap.cpp */; };
 		CE2D739F16C70DB600390436 /* CompressedImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D714E16C70DB500390436 /* CompressedImage.cpp */; };
 		CE2D73A116C70DB600390436 /* Format.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D715016C70DB500390436 /* Format.cpp */; };
@@ -526,29 +503,6 @@
 		CE2D70D516C70DB500390436 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
 		CE2D70D816C70DB500390436 /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
 		CE2D70D916C70DB500390436 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
-		CE2D70DB16C70DB500390436 /* adler32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = adler32.c; sourceTree = "<group>"; };
-		CE2D70DC16C70DB500390436 /* compress.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = compress.c; sourceTree = "<group>"; };
-		CE2D70DD16C70DB500390436 /* crc32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = crc32.c; sourceTree = "<group>"; };
-		CE2D70DE16C70DB500390436 /* crc32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crc32.h; sourceTree = "<group>"; };
-		CE2D70DF16C70DB500390436 /* deflate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = deflate.c; sourceTree = "<group>"; };
-		CE2D70E016C70DB500390436 /* deflate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = deflate.h; sourceTree = "<group>"; };
-		CE2D70E116C70DB500390436 /* gzio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = gzio.c; sourceTree = "<group>"; };
-		CE2D70E216C70DB500390436 /* infback.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = infback.c; sourceTree = "<group>"; };
-		CE2D70E316C70DB500390436 /* inffast.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = inffast.c; sourceTree = "<group>"; };
-		CE2D70E416C70DB500390436 /* inffast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inffast.h; sourceTree = "<group>"; };
-		CE2D70E516C70DB500390436 /* inffixed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inffixed.h; sourceTree = "<group>"; };
-		CE2D70E616C70DB500390436 /* inflate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = inflate.c; sourceTree = "<group>"; };
-		CE2D70E716C70DB500390436 /* inflate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inflate.h; sourceTree = "<group>"; };
-		CE2D70E816C70DB500390436 /* inftrees.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = inftrees.c; sourceTree = "<group>"; };
-		CE2D70E916C70DB500390436 /* inftrees.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inftrees.h; sourceTree = "<group>"; };
-		CE2D70EA16C70DB500390436 /* trees.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = trees.c; sourceTree = "<group>"; };
-		CE2D70EB16C70DB500390436 /* trees.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trees.h; sourceTree = "<group>"; };
-		CE2D70EC16C70DB500390436 /* uncompr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = uncompr.c; sourceTree = "<group>"; };
-		CE2D70ED16C70DB500390436 /* zconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zconf.h; sourceTree = "<group>"; };
-		CE2D70EE16C70DB500390436 /* zconf.in.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zconf.in.h; sourceTree = "<group>"; };
-		CE2D70EF16C70DB500390436 /* zlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zlib.h; sourceTree = "<group>"; };
-		CE2D70F016C70DB500390436 /* zutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zutil.c; sourceTree = "<group>"; };
-		CE2D70F116C70DB500390436 /* zutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zutil.h; sourceTree = "<group>"; };
 		CE2D70F216C70DB500390436 /* Bitmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Bitmap.cpp; sourceTree = "<group>"; };
 		CE2D714E16C70DB500390436 /* CompressedImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CompressedImage.cpp; sourceTree = "<group>"; };
 		CE2D715016C70DB500390436 /* Format.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Format.cpp; sourceTree = "<group>"; };
@@ -1199,7 +1153,6 @@
 				CE2D70B516C70DB500390436 /* json_parser */,
 				CE2D70CB16C70DB500390436 /* tinyxml */,
 				CE2D70D216C70DB500390436 /* unzip */,
-				CE2D70DA16C70DB500390436 /* zlib */,
 			);
 			path = 3rdparty;
 			sourceTree = "<group>";
@@ -1236,36 +1189,6 @@
 				CE2D70D916C70DB500390436 /* unzip.h */,
 			);
 			path = unzip;
-			sourceTree = "<group>";
-		};
-		CE2D70DA16C70DB500390436 /* zlib */ = {
-			isa = PBXGroup;
-			children = (
-				CE2D70DB16C70DB500390436 /* adler32.c */,
-				CE2D70DC16C70DB500390436 /* compress.c */,
-				CE2D70DD16C70DB500390436 /* crc32.c */,
-				CE2D70DE16C70DB500390436 /* crc32.h */,
-				CE2D70DF16C70DB500390436 /* deflate.c */,
-				CE2D70E016C70DB500390436 /* deflate.h */,
-				CE2D70E116C70DB500390436 /* gzio.c */,
-				CE2D70E216C70DB500390436 /* infback.c */,
-				CE2D70E316C70DB500390436 /* inffast.c */,
-				CE2D70E416C70DB500390436 /* inffast.h */,
-				CE2D70E516C70DB500390436 /* inffixed.h */,
-				CE2D70E616C70DB500390436 /* inflate.c */,
-				CE2D70E716C70DB500390436 /* inflate.h */,
-				CE2D70E816C70DB500390436 /* inftrees.c */,
-				CE2D70E916C70DB500390436 /* inftrees.h */,
-				CE2D70EA16C70DB500390436 /* trees.c */,
-				CE2D70EB16C70DB500390436 /* trees.h */,
-				CE2D70EC16C70DB500390436 /* uncompr.c */,
-				CE2D70ED16C70DB500390436 /* zconf.h */,
-				CE2D70EE16C70DB500390436 /* zconf.in.h */,
-				CE2D70EF16C70DB500390436 /* zlib.h */,
-				CE2D70F016C70DB500390436 /* zutil.c */,
-				CE2D70F116C70DB500390436 /* zutil.h */,
-			);
-			path = zlib;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1371,17 +1294,6 @@
 				CE2D733A16C70DB600390436 /* crypt.h in Headers */,
 				CE2D733C16C70DB600390436 /* ioapi.h in Headers */,
 				CE2D734016C70DB600390436 /* unzip.h in Headers */,
-				CE2D734416C70DB600390436 /* crc32.h in Headers */,
-				CE2D734616C70DB600390436 /* deflate.h in Headers */,
-				CE2D734A16C70DB600390436 /* inffast.h in Headers */,
-				CE2D734B16C70DB600390436 /* inffixed.h in Headers */,
-				CE2D734D16C70DB600390436 /* inflate.h in Headers */,
-				CE2D734F16C70DB600390436 /* inftrees.h in Headers */,
-				CE2D735116C70DB600390436 /* trees.h in Headers */,
-				CE2D735316C70DB600390436 /* zconf.h in Headers */,
-				CE2D735416C70DB600390436 /* zconf.in.h in Headers */,
-				CE2D735516C70DB600390436 /* zlib.h in Headers */,
-				CE2D735716C70DB600390436 /* zutil.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1665,18 +1577,6 @@
 				CE2D733916C70DB600390436 /* tinyxmlparser.cpp in Sources */,
 				CE2D733B16C70DB600390436 /* ioapi.c in Sources */,
 				CE2D733F16C70DB600390436 /* unzip.c in Sources */,
-				CE2D734116C70DB600390436 /* adler32.c in Sources */,
-				CE2D734216C70DB600390436 /* compress.c in Sources */,
-				CE2D734316C70DB600390436 /* crc32.c in Sources */,
-				CE2D734516C70DB600390436 /* deflate.c in Sources */,
-				CE2D734716C70DB600390436 /* gzio.c in Sources */,
-				CE2D734816C70DB600390436 /* infback.c in Sources */,
-				CE2D734916C70DB600390436 /* inffast.c in Sources */,
-				CE2D734C16C70DB600390436 /* inflate.c in Sources */,
-				CE2D734E16C70DB600390436 /* inftrees.c in Sources */,
-				CE2D735016C70DB600390436 /* trees.c in Sources */,
-				CE2D735216C70DB600390436 /* uncompr.c in Sources */,
-				CE2D735616C70DB600390436 /* zutil.c in Sources */,
 				CE2D735816C70DB600390436 /* Bitmap.cpp in Sources */,
 				CE2D739F16C70DB600390436 /* CompressedImage.cpp in Sources */,
 				CE2D73A116C70DB600390436 /* Format.cpp in Sources */,
@@ -1849,10 +1749,7 @@
 					__IPHONEOS__,
 					"DEBUG=1",
 				);
-				HEADER_SEARCH_PATHS = (
-					../../include,
-					../../src/media/3rdparty/zlib,
-				);
+				HEADER_SEARCH_PATHS = ../../include;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				INSTALL_PATH = /usr/local/lib;
 				OBJROOT = build;
@@ -1870,10 +1767,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Xli Library/Xli Library-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = __IPHONEOS__;
-				HEADER_SEARCH_PATHS = (
-					../../include,
-					../../src/media/3rdparty/zlib,
-				);
+				HEADER_SEARCH_PATHS = ../../include;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				INSTALL_PATH = /usr/local/lib;
 				OBJROOT = build;

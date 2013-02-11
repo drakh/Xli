@@ -53,4 +53,9 @@ namespace Xli
 	{
 		return new CocoaFileSystem();
 	}
+
+	FileSystem* CreateAssetFileSystem()
+	{
+		return Disk->CreateSubFileSystem("data");
+	}
 }
