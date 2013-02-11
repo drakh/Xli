@@ -17,6 +17,7 @@ LOCAL_SRC_FILES := \
 	../../../src/core/generic/GenericDialogs.cpp \
 	../../../src/core/generic/GenericMessageBox.cpp \
 	../../../src/core/posix/PosixCond.cpp \
+	../../../src/core/posix/PosixFileSystemBase.cpp \
 	../../../src/core/posix/PosixMutex.cpp \
 	../../../src/core/posix/PosixTime.cpp \
 	../../../src/core/posix/PosixThread.cpp \
