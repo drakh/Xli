@@ -23,7 +23,7 @@ namespace Xli
 		SDL2Window(const void* nativeHandle);
 		virtual ~SDL2Window();
 
-		virtual Platform GetPlatform();
+		virtual WindowImplementation GetImplementation();
 
 		virtual bool IsClosed();
 		virtual bool IsVisible();

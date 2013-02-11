@@ -29,7 +29,7 @@ namespace Xli
 		Win32Window(HWND hWnd);
 		virtual ~Win32Window();
 
-		virtual Platform GetPlatform();
+		virtual WindowImplementation GetImplementation();
 
 		virtual void Close();
 		virtual void RegisterTouchEvents(bool emulateMouseAsTouchPoint);

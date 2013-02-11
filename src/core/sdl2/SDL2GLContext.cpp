@@ -86,7 +86,7 @@ namespace Xli
 
 	GLContext* GLContext::Create(Window* window, int multiSamples)
 	{
-		if (window->GetPlatform() != PlatformSDL2) XLI_THROW("Unsupported window");
+		if (window->GetImplementation() != WindowImplementationSDL2) XLI_THROW("Unsupported window");
 		return new SDL2GLContext((SDL2Window*)window, multiSamples);
 	}
 }

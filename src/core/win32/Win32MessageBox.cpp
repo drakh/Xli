@@ -11,7 +11,7 @@ namespace Xli
 		HWND hWnd = 0;
 		UINT type = 0;
 
-		if (wnd)
+		if (wnd && wnd->GetImplementation() == WindowImplementationWin32)
 		{
 			hWnd = (HWND)wnd->GetNativeHandle();
 		}

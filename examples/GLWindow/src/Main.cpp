@@ -2,6 +2,21 @@
 
 using namespace Xli;
 
+void PrintPlatformInfo(GLContext* glc)
+{
+	PrintLine((String)"OpenGL Vendor: " + (const char*)glGetString(GL_VENDOR));
+	PrintLine((String)"OpenGL Renderer: " + (const char*)glGetString(GL_RENDERER));
+	PrintLine((String)"OpenGL Version: " + (const char*)glGetString(GL_VERSION));
+	PrintLine((String)"OpenGL Multisamples: " + glc->GetMultiSamples());
+	PrintLine((String)"OpenGL Swap Interval: " + glc->GetSwapInterval());
+    
+    PrintLine((String)"FileSystem Working Dir: " + Disk->GetCurrentDirectory());
+    PrintLine((String)"FileSystem Documents: " + Disk->GetSystemDirectory(SystemDirectoryDocuments));
+    PrintLine((String)"FileSystem Local AppData: " + Disk->GetSystemDirectory(SystemDirectoryLocalAppData));
+    PrintLine((String)"FileSystem Roaming AppData: " + Disk->GetSystemDirectory(SystemDirectoryRoamingAppData));
+    PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
+}
+
 int Main(const Array<String>& args)
 {
     PrintLine("Creating GLWindow");
@@ -10,12 +25,7 @@ int Main(const Array<String>& args)
     Managed<GLContext> glc = GLContext::Create(wnd, 16);
 
 	glc->SetSwapInterval(1);
-
-	PrintLine((String)"OpenGL Vendor: " + (const char*)glGetString(GL_VENDOR));
-	PrintLine((String)"OpenGL Renderer: " + (const char*)glGetString(GL_RENDERER));
-	PrintLine((String)"OpenGL Version: " + (const char*)glGetString(GL_VERSION));
-	PrintLine((String)"OpenGL Multisamples: " + glc->GetMultiSamples());
-	PrintLine((String)"OpenGL Swap Interval: " + glc->GetSwapInterval());
+    PrintPlatformInfo(glc);
 
 	while (!wnd->IsClosed())
 	{
@@ -27,6 +37,5 @@ int Main(const Array<String>& args)
 	}
 
     PrintLine("GLWindow was closed");
-
 	return 0;
 }

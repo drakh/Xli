@@ -49,11 +49,6 @@ elseif (MSVC)
 	set(CMAKE_CONFIGURATION_TYPES "Debug;Release" INTERNAL)
 
 	set(XLI_MT FALSE CACHE BOOL "Static Linked Runtime Library (/MT)")
-	set(XLI_LTCG TRUE CACHE BOOL "Link-Time Code Generation (/LTCG)")
-	set(XLI_SDL2 FALSE CACHE BOOL "Use Simple Direct Media Layer 2.0")
-
-	set(CMAKE_C_FLAGS "/MP")
-	set(CMAKE_CXX_FLAGS "/MP")
 
 	if (XLI_MT)
 
@@ -73,18 +68,14 @@ elseif (MSVC)
 		
 	endif()
 
-	if (XLI_LTCG)
-	
-		set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /LTCG")
-		set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /LTCG")
-		
-	endif()
-
 	if (CMAKE_SIZEOF_VOID_P EQUAL 8)
 		set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/msvc/x64)
 	else()
 		set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/msvc/x86)
 	endif()
+
+	set(CMAKE_C_FLAGS "/MP")
+	set(CMAKE_CXX_FLAGS "/MP")
 
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${LIBRARY_OUTPUT_PATH})
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${LIBRARY_OUTPUT_PATH})

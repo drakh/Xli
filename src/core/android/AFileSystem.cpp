@@ -19,30 +19,37 @@ namespace Xli
 			asset = AAssetManager_open(XliAAssetManager, filename.Data(), ((mode & FileModeRandom) != 0) ? AASSET_MODE_RANDOM : AASSET_MODE_STREAMING);
 			if (asset == 0) XLI_THROW_CANT_OPEN_FILE(filename);
 		}
+		
 		virtual ~AAssetStream()
 		{
 			AAsset_close(asset);
 		}
+
 		virtual bool CanRead() const
 		{
 			return true;
 		}
+
 		virtual bool CanSeek() const
 		{
 			return true;
 		}
+
 		int GetPosition() const
 		{
 			return (int)(AAsset_getLength(asset) - AAsset_getRemainingLength(asset));
 		}
+
 		int GetLength() const
 		{
 			return AAsset_getLength(asset);
 		}
+
 		int Read(void* data, int elmSize, int elmCount)
 		{
 			return AAsset_read(asset, data, elmSize * elmCount) / elmSize;
 		}
+
 		void Seek(SeekOrigin origin, int offset)
 		{
 			switch (origin)
@@ -50,9 +57,11 @@ namespace Xli
 			case SeekOriginBegin:
 				AAsset_seek(asset, offset, SEEK_SET);
 				return;
+
 			case SeekOriginCurrent:
 				AAsset_seek(asset, offset, SEEK_CUR);
 				return;
+
 			case SeekOriginEnd:
 				AAsset_seek(asset, offset, SEEK_END);
 				return;
@@ -72,14 +81,17 @@ namespace Xli
 			asset = AAssetManager_open(XliAAssetManager, filename.Data(), AASSET_MODE_BUFFER);
 			if (asset == 0) XLI_THROW_CANT_OPEN_FILE(filename);
 		}
+
 		virtual ~AAssetBuffer()
 		{
 			AAsset_close(asset);
 		}
+
 		virtual const UInt8* GetData() const
 		{
 			return (const UInt8*)AAsset_getBuffer(asset);
 		}
+
 		virtual int GetSizeInBytes() const
 		{
 			return AAsset_getLength(asset);
@@ -93,6 +105,7 @@ namespace Xli
 		{
 			return new AAssetStream(filename, mode);
 		}
+
 		virtual DataAccessor* OpenFileAsBuffer(const String& filename)
 		{
 			return new AAssetBuffer(filename);
