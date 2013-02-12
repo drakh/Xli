@@ -10,10 +10,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application android:label="GLWindow"
-    		android:hasCode="false"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             >
-        <activity android:name="android.app.NativeActivity" 
+        <activity android:name="GLWindow" 
         		android:label="GLWindow"
                 android:configChanges="orientation|keyboardHidden"
                 >

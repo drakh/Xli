@@ -21,7 +21,13 @@ int Main(const Array<String>& args)
 {
     PrintLine("Creating GLWindow");
 
-	Managed<Window> wnd = Window::Create(1280, 720, "GLWindow", 0, WindowStyleResizeable);
+    int flags = WindowStyleResizeable;
+    
+#if defined(XLI_PLATFORM_IOS) || defined(XLI_PLATFORM_ANDROID)
+    flags |= WindowStyleFullscreen;
+#endif
+    
+	Managed<Window> wnd = Window::Create(1280, 720, "GLWindow", 0, flags);
     Managed<GLContext> glc = GLContext::Create(wnd, 16);
 
 	glc->SetSwapInterval(1);
