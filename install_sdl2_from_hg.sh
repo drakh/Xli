@@ -7,7 +7,7 @@ fi
 
 if [ -d src/core/3rdparty/SDL2 ]; then
     cd src/core/3rdparty/SDL2
-    hg update
+    hg pull && hg update
     cd -
 else
     cd src/core/3rdparty
