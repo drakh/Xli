@@ -221,7 +221,7 @@
     <ClCompile Include="..\..\..\src\media\3rdparty\zlib\compress.c" />
     <ClCompile Include="..\..\..\src\media\3rdparty\zlib\crc32.c" />
     <ClCompile Include="..\..\..\src\media\3rdparty\zlib\deflate.c" />
-    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\gzio.c" />
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\infback.c" />
     <ClCompile Include="..\..\..\src\media\3rdparty\zlib\inffast.c" />
     <ClCompile Include="..\..\..\src\media\3rdparty\zlib\inflate.c" />
     <ClCompile Include="..\..\..\src\media\3rdparty\zlib\inftrees.c" />
@@ -243,7 +243,6 @@
     <ClCompile Include="..\..\..\src\media\3rdparty\png\pngrutil.c" />
     <ClCompile Include="..\..\..\src\media\3rdparty\png\pngset.c" />
     <ClCompile Include="..\..\..\src\media\3rdparty\png\pngtrans.c" />
-    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngvcrd.c" />
     <ClCompile Include="..\..\..\src\media\3rdparty\png\pngwio.c" />
     <ClCompile Include="..\..\..\src\media\3rdparty\png\pngwrite.c" />
     <ClCompile Include="..\..\..\src\media\3rdparty\png\pngwtran.c" />
@@ -473,8 +472,6 @@
     <ClInclude Include="..\..\..\src\media\3rdparty\json_parser\JSON_parser.h" />
     <ClInclude Include="..\..\..\src\media\3rdparty\tinyxml\tinystr.h" />
     <ClInclude Include="..\..\..\src\media\3rdparty\tinyxml\tinyxml.h" />
-    <ClInclude Include="..\..\..\src\media\3rdparty\png\png.h" />
-    <ClInclude Include="..\..\..\src\media\3rdparty\png\pngconf.h" />
     <ClCompile Include="..\..\..\src\media\3rdparty\jpeg\jconfig.h">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>

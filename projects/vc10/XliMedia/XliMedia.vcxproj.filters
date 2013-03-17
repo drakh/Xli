@@ -51,9 +51,6 @@
     <ClCompile Include="..\..\..\src\media\3rdparty\zlib\deflate.c">
       <Filter>3rdparty\zlib</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\gzio.c">
-      <Filter>3rdparty\zlib</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\media\3rdparty\zlib\inffast.c">
       <Filter>3rdparty\zlib</Filter>
     </ClCompile>
@@ -115,9 +112,6 @@
       <Filter>3rdparty\png</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\media\3rdparty\png\pngtrans.c">
-      <Filter>3rdparty\png</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\media\3rdparty\png\pngvcrd.c">
       <Filter>3rdparty\png</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\media\3rdparty\png\pngwio.c">
@@ -477,6 +471,9 @@
     <ClCompile Include="..\..\..\src\media\Json.cpp">
       <Filter>XliMedia\Other Formats</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\media\3rdparty\zlib\infback.c">
+      <Filter>3rdparty\zlib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\media\3rdparty\tinyxml\tinystr.h">
@@ -484,12 +481,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\media\3rdparty\tinyxml\tinyxml.h">
       <Filter>3rdparty\tinyxml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\media\3rdparty\png\png.h">
-      <Filter>3rdparty\png</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\media\3rdparty\png\pngconf.h">
-      <Filter>3rdparty\png</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\media\3rdparty\unzip\ioapi.h">
       <Filter>3rdparty\unzip</Filter>
