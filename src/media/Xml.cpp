@@ -26,6 +26,7 @@ namespace Xli
 				return Children[i]->ToElement();
 			}
 		}
+		
 		XLI_THROW("Element not found: " + name);
 	}
 

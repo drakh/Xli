@@ -37,36 +37,47 @@ namespace Xli
 		case JSON_T_ARRAY_BEGIN:    
 			c->Values.Add(new ArrayValue());
 			break;
+
 		case JSON_T_ARRAY_END:
 			c->AddValue(c->Values.RemoveLast());
 			break;
+
 	    case JSON_T_OBJECT_BEGIN:
 			c->PreserveOrder ? c->Values.Add(new OrderedObjectValue()) : c->Values.Add(new ObjectValue());
 			break;
+
 		case JSON_T_OBJECT_END:
 			c->AddValue(c->Values.RemoveLast());
 			break;
+
 		case JSON_T_INTEGER:
 			c->AddValue(new IntegerValue(value->vu.integer_value));
 			break;
+
 		case JSON_T_FLOAT:
 			c->AddValue(new DoubleValue(value->vu.float_value));
 			break;
+
 		case JSON_T_NULL:
 			c->AddValue(new Undefined());
 			break;
+
 		case JSON_T_TRUE:
 			c->AddValue(new BoolValue(true));
 			break;
+
 		case JSON_T_FALSE:
 			c->AddValue(new BoolValue(false));
 			break;
+
 		case JSON_T_KEY:
 			c->Keys.Add(String(value->vu.str.value, (int)value->vu.str.length));
 			break;   
+
 		case JSON_T_STRING:
 			c->AddValue(new StringValue(String(value->vu.str.value, (int)value->vu.str.length)));
 			break;
+			
 		default:
 			XLI_THROW("JSON parser failed");
 			break;

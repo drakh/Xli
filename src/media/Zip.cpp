@@ -15,32 +15,48 @@ namespace Xli
 		{
 			return opaque;
 		}
+
 		static uLong ZCALLBACK read_file_func(voidpf opaque, voidpf stream, void* buf, uLong size)
 		{
 			return (uLong)((Stream*)stream)->Read(buf, size, 1);
 		}
+
 		static uLong ZCALLBACK write_file_func(voidpf opaque, voidpf stream, const void* buf, uLong size)
 		{
 			return (uLong)((Stream*)stream)->Write((void*)buf, size, 1);
 		}
+
 		static long ZCALLBACK tell_file_func(voidpf opaque, voidpf stream)
 		{
 			return (long)((Stream*)stream)->GetPosition();
 		}
+
 		static long ZCALLBACK seek_file_func(voidpf opaque, voidpf stream, uLong offset, int origin)
 		{
 			switch (origin)
 			{
-			case ZLIB_FILEFUNC_SEEK_CUR: ((Stream*)stream)->Seek(SeekOriginCurrent, (int)offset); return 0;
-			case ZLIB_FILEFUNC_SEEK_END: ((Stream*)stream)->Seek(SeekOriginEnd, (int)offset); return 0;
-			case ZLIB_FILEFUNC_SEEK_SET: ((Stream*)stream)->Seek(SeekOriginBegin, (int)offset); return 0;
-			default: return -1L;
+			case ZLIB_FILEFUNC_SEEK_CUR: 
+				((Stream*)stream)->Seek(SeekOriginCurrent, (int)offset); 
+				return 0L;
+				
+			case ZLIB_FILEFUNC_SEEK_END: 
+				((Stream*)stream)->Seek(SeekOriginEnd, (int)offset); 
+				return 0L;
+
+			case ZLIB_FILEFUNC_SEEK_SET: 
+				((Stream*)stream)->Seek(SeekOriginBegin, (int)offset); 
+				return 0L;
+
+			default: 
+				return -1L;
 			}
 		}
+
 		static int ZCALLBACK close_file_func(voidpf opaque, voidpf stream)
 		{
 			return 0;
 		}
+
 		static int ZCALLBACK error_file_func(voidpf opaque, voidpf stream)
 		{
 			return -1;

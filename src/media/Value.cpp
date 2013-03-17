@@ -23,11 +23,13 @@ namespace Xli
 	{
 		return object->GetType() == ValueTypeArray;
 	}
+	
 	bool Value::IsObject() const 
 	{
 		ValueType t = object->GetType();
 		return t == ValueTypeObject || t == ValueTypeOrderedObject; 
 	}
+
 	bool Value::IsUndefined() const
 	{
 		return object->GetType() == ValueTypeUndefined;
