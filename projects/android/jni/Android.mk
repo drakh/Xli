@@ -153,7 +153,6 @@ LOCAL_SRC_FILES := \
 	../../../src/media/3rdparty/png/pngrutil.c \
 	../../../src/media/3rdparty/png/pngset.c \
 	../../../src/media/3rdparty/png/pngtrans.c \
-	../../../src/media/3rdparty/png/pngvcrd.c \
 	../../../src/media/3rdparty/png/pngwio.c \
 	../../../src/media/3rdparty/png/pngwrite.c \
 	../../../src/media/3rdparty/png/pngwtran.c \
