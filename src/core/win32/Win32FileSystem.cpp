@@ -211,14 +211,14 @@ namespace Xli
 					info.Name = Unicode::Utf16To8(findData.cFileName);
 
 					if (info.Name == "." || info.Name == "..")
-					{
 						continue;
-					}
 
 					if (path.Length() && path != "." && path != "./")
 					{
-						if (path.Last() == '/') info.Name = path + info.Name;
-						else info.Name = path + "/" + info.Name;
+						if (path.Last() == '/') 
+							info.Name = path + info.Name;
+						else 
+							info.Name = path + "/" + info.Name;
 					}
 
 					info.Flags = 0;
@@ -245,16 +245,24 @@ namespace Xli
 
 	FileSystem* CreateAssetFileSystem()
 	{
-		WCHAR buf[MAX_PATH];
-		DWORD result = GetModuleFileNameW(GetModuleHandle(0), buf, MAX_PATH);
+		const size_t BufSize = 4096;
 
-		if (result > 0 && result < MAX_PATH)
+		WCHAR buf[BufSize];
+		DWORD result = GetModuleFileNameW(GetModuleHandle(0), buf, BufSize);
+
+		if (result > 0 && result < BufSize)
 		{
 			String exe = Unicode::Utf16To8(buf, (int)result);
 			String dir = Path::GetDirectoryName(exe);
 
+			for (int i = 0; i < dir.Length(); i++)
+				if (dir[i] == '\\')
+					dir[i] = '/';
+
+			dir += "/data";
+
 			if (Disk->IsDirectory(dir))
-				return Disk->CreateSubFileSystem(dir + "/data");
+				return Disk->CreateSubFileSystem(dir);
 		}
 
 		return Disk->CreateSubFileSystem(Disk->GetCurrentDirectory() + "/data");
