@@ -1,7 +1,9 @@
 @echo off
 
 cd projects\android
-cmd /C ndk-build -j 8
+call ndk-build -j %NUMBER_OF_PROCESSORS%
+if %errorlevel% neq 0 exit /b %errorlevel%
+
 @echo.
 
 if not exist "obj\local\armeabi" goto V7A
