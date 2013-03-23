@@ -18,8 +18,8 @@ endif()
 
 if (APPLE)
 
-	set(CMAKE_C_FLAGS "-Wno-switch-enum")
-	set(CMAKE_CXX_FLAGS "-Wno-switch-enum")
+	set(CMAKE_C_FLAGS "-Wno-switch-enum -Wno-logical-op-parentheses -Wno-parentheses-equality")
+	set(CMAKE_CXX_FLAGS "-Wno-switch-enum -Wno-logical-op-parentheses -Wno-parentheses-equality")
 
 elseif (CMAKE_COMPILER_IS_GNUCC)
 
