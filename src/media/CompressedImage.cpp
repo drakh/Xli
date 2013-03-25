@@ -33,7 +33,7 @@ namespace Xli
 
 	Bitmap* CompressedImage::ToBitmap()
 	{
-		XLI_THROW_NOT_SUPPORTED(__FUNCTION__);
+		XLI_THROW("Unable to convert " + FormatInfo::ToString(format) + " to bitmap");
 	}
 
 	int CompressedImage::GetSizeInBytes() const
