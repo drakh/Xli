@@ -123,10 +123,13 @@ namespace Xli
 			delete [] tmp;
 		}
 
-		Texture* tex = new Texture(TextureType2D);
-		if (header.numberOfFaces == 1) tex->Type = TextureType2D;
-		else if (header.numberOfFaces == 6) tex->Type = TextureTypeCube;
-		else XLI_THROW("Unable to load KTX file: Unsupported texture type");
+		Texture* tex = 0;
+		if (header.numberOfFaces == 1) 
+			tex = new Texture(TextureType2D);
+		else if (header.numberOfFaces == 6)
+			tex = new Texture(TextureTypeCube);
+		else 
+			XLI_THROW("Unable to load KTX file: Unsupported texture type");
 
 		tex->Faces.Resize(header.numberOfFaces);
 
