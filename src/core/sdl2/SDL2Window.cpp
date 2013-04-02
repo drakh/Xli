@@ -443,22 +443,22 @@ namespace Xli
                         int w, h;
                         SDL_GetWindowSize(GlobalWindow->GetSDLWindow(), &w, &h);
                         
-                        SDL_Touch* touch = SDL_GetTouch(e.tfinger.touchId);
-                        float x = (float)w * (float)e.tfinger.x / (float)touch->xres;
-                        float y = (float)h * (float)e.tfinger.y / (float)touch->yres;
+                        float x = e.tfinger.x;
+                        float y = e.tfinger.y;
+                        int id = (int)e.tfinger.fingerId;
                         
                         //Xli::ErrorPrintLine(String::HexFromInt((int)e.type) + " " + (String)x + " " + y + " " + (String)(int)e.tfinger.fingerId);
                         
                         switch (e.type)
                         {
                             case SDL_FINGERDOWN:
-                                GlobalWindow->GetEventHandler()->OnTouchDown(x, y, (int)e.tfinger.fingerId);
+                                GlobalWindow->GetEventHandler()->OnTouchDown(x, y, id);
                                 break;
                             case SDL_FINGERMOTION:
-                                GlobalWindow->GetEventHandler()->OnTouchMove(x, y, (int)e.tfinger.fingerId);
+                                GlobalWindow->GetEventHandler()->OnTouchMove(x, y, id);
                                 break;
                             case SDL_FINGERUP:
-                                GlobalWindow->GetEventHandler()->OnTouchUp(x, y, (int)e.tfinger.fingerId);
+                                GlobalWindow->GetEventHandler()->OnTouchUp(x, y, id);
                                 break;
                         }
                     }

@@ -14,4 +14,3 @@ rm -f CMakeCache.txt
 cmake ../.. && make -j $CPU_COUNT
 
 cd -
-

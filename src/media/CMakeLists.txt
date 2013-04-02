@@ -121,7 +121,6 @@ set(PngSrc
 	3rdparty/png/pngrutil.c
 	3rdparty/png/pngset.c
 	3rdparty/png/pngtrans.c
-	3rdparty/png/pngvcrd.c
 	3rdparty/png/pngwio.c
 	3rdparty/png/pngwrite.c
 	3rdparty/png/pngwtran.c
@@ -191,8 +190,10 @@ if (WIN32)
 
 elseif (APPLE)
 
-	include_directories(${JpegInc})
-	set(Sources ${Sources} ${JpegSrc})
+	add_definitions(-DFT2_BUILD_LIBRARY)
+	include_directories(${JpegInc} ${PngInc} ${FreetypeInc})
+	set(Sources ${Sources} ${JpegSrc} ${PngSrc} ${FreetypeSrc})
+	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-framework,CoreFoundation -Wl,-framework,CoreServices -Wl,-framework,ApplicationServices")
 
 elseif (UNIX)
 
@@ -204,7 +205,7 @@ add_library(XliMedia ${Sources})
 target_link_libraries(XliMedia Xli)
 
 if (APPLE)
-	target_link_libraries(XliMedia freetype png z)
+	target_link_libraries(XliMedia z)
 elseif (UNIX)
 	target_link_libraries(XliMedia freetype jpeg png z)
 endif()

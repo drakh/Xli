@@ -29,7 +29,7 @@ namespace Xli
 	static const UInt32 GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG = 0x8C03;
 	static const UInt32 GL_ETC1_RGB8_OES = 0x8d64;
 
-	static const UInt8 KTX_IDENTIFIER_REF[12] = { '«', 'K', 'T', 'X', ' ', '1', '1', '»', '\r', '\n', '\x1A', '\n' };
+	static const UInt8 KTX_IDENTIFIER_REF[12] = { 171 /*'«'*/, 'K', 'T', 'X', ' ', '1', '1', 187 /*'»'*/, '\r', '\n', '\x1A', '\n' };
 	static const UInt32 KTX_ENDIAN_REF = 0x04030201;
 	static const UInt32 KTX_ENDIAN_REF_REV = 0x01020304;
 
