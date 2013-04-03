@@ -32,9 +32,6 @@ if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	set(CMAKE_OSX_ARCHITECTURES "x86_64;i386")
 	set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/OSX/x86)
 
-	include_directories(/usr/X11/include /usr/X11/include/freetype2)
-	link_directories(/usr/X11/lib)
-
 elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
 
 	if (CMAKE_SIZEOF_VOID_P EQUAL 8)
