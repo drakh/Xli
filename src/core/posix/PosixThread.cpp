@@ -1,4 +1,5 @@
 #include <Xli/Thread.h>
+#include <Xli/Console.h>
 #include <pthread.h>
 #include <time.h>
 
@@ -29,7 +30,7 @@ namespace Xli
 
 		if (rc)
 		{
-			XLI_THROW("Error joining pthread: " + (String)rc);
+			ErrorPrintLine("Error joining pthread: " + String::HexFromInt(rc));
 		}
 	}
 
@@ -43,7 +44,7 @@ namespace Xli
 
 		if (rc)
 		{
-			XLI_THROW("nanosleep failed: " + (String)rc);
+			ErrorPrintLine("nanosleep failed: " + String::HexFromInt(rc));
 		}
 	}
 }
