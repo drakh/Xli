@@ -86,6 +86,7 @@ namespace Xli
 
 	Win32Window::Win32Window(HWND hWnd)
 	{
+		printf("\n\nFFSS\n\n");
 		this->hWnd = hWnd;
 		this->closed = false;
 		this->ownsHwnd = false;
@@ -334,6 +335,7 @@ namespace Xli
 
 	LRESULT CALLBACK Win32Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
+		printf("\n\nMessage\n\n");
 		Win32Window* wnd = reinterpret_cast<Win32Window*>(::GetWindowLongPtr(hWnd, GWLP_USERDATA));
 
 		static const unsigned int MOUSEEVENTF_FROMTOUCH = 0xff515700;
@@ -378,6 +380,7 @@ namespace Xli
 			break;
 
 		case WM_MBUTTONDOWN:
+			printf("\n\nDOWN\n\n");
 			if (wnd->eventHandler) wnd->eventHandler->OnMouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), MouseButtonsMiddle);		
 			break;
 
