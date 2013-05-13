@@ -171,21 +171,25 @@ namespace Xli
 			r.Second++;
 			r.Millisecond -= 1000;
 		}
+
 		while (dt.Second >= 60)
 		{
 			r.Minute++;
 			r.Second -= 60;
 		}
+
 		while (dt.Minute >= 60)
 		{
 			r.Hour++;
 			r.Minute -= 60;
 		}
+
 		while (dt.Hour >= 24)
 		{
 			r.Day++;
 			r.Hour -= 24;
 		}
+
 		if (dt.Month >= 1 && dt.Month <= 12 && dt.Year > 0)
 		{
 			while (dt.Day > DateTime::GetDaysInMonth(dt.Month, DateTime::IsLeapYear(dt.Year)))

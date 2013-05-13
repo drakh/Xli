@@ -17,7 +17,9 @@ extern "C" int main(int argc, char** argv)
 	Xli::NativeFileSystem::Init();
 
 	Xli::Array<Xli::String> args(argc);
-	for (int i = 0; i < argc; i++) args[i] = argv[i];
+	for (int i = 0; i < argc; i++) 
+		args[i] = argv[i];
+	
 	int result = EXIT_FAILURE;
 
 	try
@@ -30,6 +32,11 @@ extern "C" int main(int argc, char** argv)
 	}
 	catch (const Xli::Exception& e)
 	{
+		Xli::MessageBox::HandleException(e, "XliMain");
+	}
+	catch (...)
+	{
+		Xli::Exception e("Unknown error");
 		Xli::MessageBox::HandleException(e, "XliMain");
 	}
 
