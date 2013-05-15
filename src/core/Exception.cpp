@@ -22,23 +22,23 @@ namespace Xli
 		this->_line = line;
 	}
 
-	const String& Exception::GetMessage() const 
-	{ 
-		return _message; 
+	const String& Exception::GetMessage() const
+	{
+		return _message;
 	}
 
-	const String& Exception::GetFunction() const 
-	{ 
-		return _func; 
+	const String& Exception::GetFunction() const
+	{
+		return _func;
 	}
 
-	int Exception::GetLine() const 
-	{ 
-		return _line; 
+	int Exception::GetLine() const
+	{
+		return _line;
 	}
 
-	const String& Exception::ToString() const 
-	{ 
+	const String& Exception::ToString() const
+	{
 		return _message;
 	}
 }

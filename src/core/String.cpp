@@ -11,7 +11,10 @@ namespace Xli
 	static int GetFloatLength(const char* str)
 	{
 		int len = (int)strlen(str);
-		while (len > 1 && (str[len - 1] == '0' || str[len - 1] == '.')) len--;
+
+		while (len > 1 && (str[len - 1] == '0' || str[len - 1] == '.')) 
+			len--;
+
 		return len;
 	}
 
@@ -52,12 +55,16 @@ namespace Xli
 
 	void String::init(bool b)
 	{
-		b ? init("true", 4) : init("false", 5);
+		if (b)
+			init("true", 4);
+		else
+			init("false", 5);
 	}
 
 	void String::deinit()
 	{
-		if (length && data != buf) delete [] data;
+		if (length && data != buf) 
+			delete [] data;
 	}
 
 	String::String()
@@ -139,10 +146,9 @@ namespace Xli
 	{
 #ifdef XLI_RANGE_CHECK
 		if (index >= length)
-		{
 			XLI_THROW_INDEX_OUT_OF_BOUNDS;
-		}
 #endif
+
 		return data[index];
 	}
 
@@ -150,10 +156,9 @@ namespace Xli
 	{
 #ifdef XLI_RANGE_CHECK
 		if (index >= length)
-		{
 			XLI_THROW_INDEX_OUT_OF_BOUNDS;
-		}
 #endif
+
 		return data[index];
 	}
 
@@ -220,8 +225,17 @@ namespace Xli
 		int start = 0;
 		int end = length;
 
-		while (start < end) if (isspace(data[start])) start++; else break;
-		while (end > start) if (isspace(data[end-1])) end--; else break;
+		while (start < end) 
+			if (isspace(data[start])) 
+				start++; 
+			else 
+				break;
+
+		while (end > start) 
+			if (isspace(data[end-1])) 
+				end--; 
+			else 
+				break;
 
 		return Substring(start, end - start);
 	}
@@ -231,8 +245,17 @@ namespace Xli
 		int start = 0;
 		int end = length;
 
-		while (start < end) if (data[start] == c) start++; else break;
-		while (end > start) if (data[end - 1] == c) end--; else break;
+		while (start < end) 
+			if (data[start] == c) 
+				start++; 
+			else 
+				break;
+
+		while (end > start) 
+			if (data[end - 1] == c) 
+				end--; 
+			else 
+				break;
 
 		return Substring(start, end - start);
 	}
@@ -240,14 +263,20 @@ namespace Xli
 	String String::ToLower() const
 	{
 		String r(data, length);
-		for (int i = 0; i < length; i++) r.data[i] = tolower(r.data[i]);
+
+		for (int i = 0; i < length; i++) 
+			r.data[i] = tolower(r.data[i]);
+
 		return r;
 	}
 
 	String String::ToUpper() const
 	{
 		String r(data, length);
-		for (int i = 0; i < length; i++) r.data[i] = toupper(r.data[i]);
+
+		for (int i = 0; i < length; i++) 
+			r.data[i] = toupper(r.data[i]);
+
 		return r;
 	}
 
@@ -274,8 +303,12 @@ namespace Xli
 	{
 		String r;
 		r.length = -1;
-		for (int i = 0; i < list.Length(); i++) r.length += list[i].Length() + 1;
-		if (r.length == -1) return String();
+
+		for (int i = 0; i < list.Length(); i++) 
+			r.length += list[i].Length() + 1;
+
+		if (r.length == -1) 
+			return String();
 
 		r.data = new char[r.length + 1];
 		int p = 0;
@@ -293,21 +326,25 @@ namespace Xli
 
 	bool String::StartsWith(const String& str) const
 	{
-		if (str.length > length) return false;
+		if (str.length > length) 
+			return false;
+
 		for (int i = 0; i < str.length; i++)
-		{
-			if (str.data[i] != data[i]) return false;
-		}
+			if (str.data[i] != data[i]) 
+				return false;
+
 		return true;
 	}
 
 	bool String::EndsWith(const String& str) const
 	{
-		if (str.length > length) return false;
+		if (str.length > length)
+			return false;
+
 		for (int i = length-str.length; i < length; i++)
-		{
-			if (str.data[i-length+str.length] != data[i]) return false;
-		}
+			if (str.data[i-length+str.length] != data[i]) 
+				return false;
+
 		return true;
 	}
 
@@ -338,9 +375,7 @@ namespace Xli
 		int i = vsnprintf_s(buf, 1024, 1024, format, argList);
 
 		if (i > 1024 || i < 0) 
-		{
 			XLI_THROW_INVALID_FORMAT("Result too long");
-		}
 
 		return String(buf, i);
 	}
@@ -400,12 +435,12 @@ namespace Xli
 
 	bool String::Equals(const char* str, int len) const
 	{
-		if (length != len) return false;
+		if (length != len)
+			return false;
 
 		for (int i = 0; i < length; i++)
-		{
-			if (data[i] != str[i]) return false;
-		}
+			if (data[i] != str[i]) 
+				return false;
 
 		return true;
 	}
@@ -427,13 +462,19 @@ namespace Xli
 
 		for (int i = 0; i < l; i++)
 		{
-			if (data[i] == str[i]) continue;
-			else if (data[i] < str[i]) return -1;
-			else return 1;
+			if (data[i] == str[i]) 
+				continue;
+			else if (data[i] < str[i]) 
+				return -1;
+
+			return 1;
 		}
 
-		if (length == len) return 0;
-		else if (length < len) return -1;
+		if (length == len) 
+			return 0;
+		else if (length < len) 
+			return -1;
+		
 		return 1;
 	}
 
@@ -479,7 +520,7 @@ namespace Xli
     
     void String::Append(const char* str)
     {
-        Append(str, strlen(str));
+        Append(str, (int)strlen(str));
     }
     
     void String::Append(const String& str)

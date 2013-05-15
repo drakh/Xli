@@ -166,6 +166,7 @@ namespace Xli
 		UInt16 Char;
 		Xli::Key Key;
 		int TouchPointIndex;
+
 		WindowEvent();
 	};
 
@@ -175,27 +176,27 @@ namespace Xli
 	class WindowEventHandler: public Xli::Object
 	{
 	public:
-		virtual void OnKeyDown(Key key) = 0;
-		virtual void OnKeyUp(Key key) = 0;
-		virtual void OnCharTyped(UInt16 c) = 0;
-		virtual void OnMouseDown(int x, int y, MouseButtons button) = 0;
-		virtual void OnMouseUp(int x, int y, MouseButtons button) = 0;
-		virtual void OnMouseMove(int x, int y) = 0;
-		virtual void OnMouseLeave(int x, int y) = 0;
-		virtual void OnMouseWheel(int x, int y) = 0;
-		virtual void OnTouchDown(float x, float y, int id) = 0;
-		virtual void OnTouchMove(float x, float y, int id) = 0;
-		virtual void OnTouchUp(float x, float y, int id) = 0;
-		virtual void OnResize(int w, int h) = 0;
+		virtual void OnKeyDown(Key key);
+		virtual void OnKeyUp(Key key);
+		virtual void OnCharTyped(UInt16 c);
+		virtual void OnMouseDown(int x, int y, MouseButtons button);
+		virtual void OnMouseUp(int x, int y, MouseButtons button);
+		virtual void OnMouseMove(int x, int y);
+		virtual void OnMouseLeave(int x, int y);
+		virtual void OnMouseWheel(int x, int y);
+		virtual void OnTouchDown(float x, float y, int id);
+		virtual void OnTouchMove(float x, float y, int id);
+		virtual void OnTouchUp(float x, float y, int id);
+		virtual void OnResize(int w, int h);
 
 		/**
 			Must return true if window is allowed to close
 		*/
-		virtual bool OnClose() = 0;
+		virtual bool OnClose();
 
-		virtual void OnClosed() = 0;
+		virtual void OnClosed();
 
-		virtual void OnLowMemory() = 0;
+		virtual void OnLowMemory();
 	};
 
 	/**
@@ -221,13 +222,13 @@ namespace Xli
 	*/
 	class WindowEventQueue: public WindowEventHandler
 	{
-		Xli::Queue<WindowEvent> queue;
+		Queue<WindowEvent> queue;
 
-		Xli::HashMap<UInt32, bool> keyStates;
-		Xli::HashMap<UInt32, bool> buttonStates;
+		HashMap<UInt32, bool> keyStates;
+		HashMap<UInt32, bool> buttonStates;
 		Vector2i mousePosition;
 
-		Xli::HashMap<int, Xli::Vector2> touchPoints;
+		HashMap<int, Xli::Vector2> touchPoints;
 
 	public:
 		Managed<WindowCloseCallback> OnCloseHandler;

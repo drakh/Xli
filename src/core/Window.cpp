@@ -10,6 +10,67 @@ namespace Xli
 		memset(this, 0, sizeof(WindowEvent)); 
 	}
 
+	void WindowEventHandler::OnKeyDown(Key key)
+	{
+	}
+
+	void WindowEventHandler::OnKeyUp(Key key)
+	{
+	}
+
+	void WindowEventHandler::OnCharTyped(UInt16 c)
+	{
+	}
+
+	void WindowEventHandler::OnMouseDown(int x, int y, MouseButtons button)
+	{
+	}
+
+	void WindowEventHandler::OnMouseUp(int x, int y, MouseButtons button)
+	{
+	}
+
+	void WindowEventHandler::OnMouseMove(int x, int y)
+	{
+	}
+
+	void WindowEventHandler::OnMouseLeave(int x, int y)
+	{
+	}
+
+	void WindowEventHandler::OnMouseWheel(int x, int y)
+	{
+	}
+
+	void WindowEventHandler::OnTouchDown(float x, float y, int id)
+	{
+	}
+
+	void WindowEventHandler::OnTouchMove(float x, float y, int id)
+	{
+	}
+
+	void WindowEventHandler::OnTouchUp(float x, float y, int id)
+	{
+	}
+	
+	void WindowEventHandler::OnResize(int w, int h)
+	{
+	}
+
+	bool WindowEventHandler::OnClose()
+	{
+		return true;
+	}
+
+	void WindowEventHandler::OnClosed()
+	{
+	}
+
+	void WindowEventHandler::OnLowMemory()
+	{
+	}
+
 	void WindowEventQueue::OnKeyDown(Key key)
 	{
 		keyStates[(unsigned int)key] = true;
@@ -141,6 +202,7 @@ namespace Xli
 			OnResizeHandler->OnResize(w, h);
 			return;
 		}
+
 		WindowEvent e;
 		e.X = w;
 		e.Y = h;
@@ -150,8 +212,7 @@ namespace Xli
 
 	bool WindowEventQueue::OnClose()
 	{
-		if (OnCloseHandler.IsSet()) return OnCloseHandler->OnClose();
-		return true;
+		return !OnCloseHandler.IsSet() || OnCloseHandler->OnClose();
 	}
 
 	void WindowEventQueue::OnClosed()

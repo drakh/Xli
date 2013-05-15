@@ -66,7 +66,8 @@ namespace Xli
 		case DataTypeUInt8:
 			return false;
 
-		default: XLI_THROW("Unknown sign for " + (String)DataTypeInfo::ToString(dt));
+		default: 
+			XLI_THROW("Unknown sign for " + (String)DataTypeInfo::ToString(dt));
 		}
 	}
 }

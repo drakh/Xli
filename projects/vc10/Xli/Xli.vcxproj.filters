@@ -43,6 +43,9 @@
     <Filter Include="3rdparty\glew">
       <UniqueIdentifier>{b253214b-e0ad-4f77-b98b-b209b33df0a4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Xli\Utils">
+      <UniqueIdentifier>{5ecf6917-9e55-4b64-9630-9c1a521537cd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Xli\Hash.h">
@@ -109,9 +112,6 @@
     <ClInclude Include="..\..\..\include\Xli\Path.h">
       <Filter>Xli\IO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\Xli\Utils.h">
-      <Filter>Xli</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\Xli\Buffer.h">
       <Filter>Xli</Filter>
     </ClInclude>
@@ -129,9 +129,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\Xli\OrderedMap.h">
       <Filter>Xli\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Xli\Sort.h">
-      <Filter>Xli</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\core\posix\PosixFileSystemBase.h">
       <Filter>Xli\Platform\posix</Filter>
@@ -237,6 +234,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\Xli\TextStream.h">
       <Filter>Xli\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Utils.h">
+      <Filter>Xli\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Sort.h">
+      <Filter>Xli\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
