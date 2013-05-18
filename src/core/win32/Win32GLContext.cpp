@@ -115,9 +115,7 @@ namespace Xli
 			pf = TryEnableMultisample(multiSamples);
 
 			if (pf == -1)
-			{
 				SetPixelFormat(hDC, ChoosePixelFormat(hDC, &pfd), &pfd);
-			}
 
 			ctx = wglCreateContext(hDC);
 			MakeCurrent();
@@ -125,7 +123,8 @@ namespace Xli
 			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 			SwapBuffers();
 
-			if (pf != -1) glEnable(GL_MULTISAMPLE_ARB);
+			if (pf != -1) 
+				glEnable(GL_MULTISAMPLE_ARB);
 		}
 
 		Win32GLContext(Win32GLContext* srcCtx)
@@ -136,19 +135,13 @@ namespace Xli
 			ctx = wglCreateContext(hDC);
 
 			if (!ctx)
-			{
 				XLI_THROW("Unable to create shared OpenGL context: " + Win32Helpers::GetLastErrorString());
-			}
 
 			if (!wglMakeCurrent(hDC, 0))
-			{
 				XLI_THROW("Unable to make OpenGL context no longer current: " + Win32Helpers::GetLastErrorString());
-			}
 
 			if (!wglShareLists(srcCtx->ctx, ctx))
-			{
 				XLI_THROW("Unable to share OpenGL contexts: " + Win32Helpers::GetLastErrorString());
-			}
 
 			srcCtx->MakeCurrent();
 		}
@@ -163,28 +156,6 @@ namespace Xli
 			return new Win32GLContext(this);
 		}
 
-		virtual void SetMultiSamples(int value)
-		{
-			if (!wglMakeCurrent(hDC, 0))
-			{
-				XLI_THROW("Unable to make OpenGL context no longer current: " + Win32Helpers::GetLastErrorString());
-			}
-
-			ReleaseDC(wnd->GetHWND(), hDC);
-
-			hDC = GetDC(wnd->GetHWND());
-			pf = TryEnableMultisample(value);
-
-			if (pf == -1)
-			{
-				SetPixelFormat(hDC, ChoosePixelFormat(hDC, &pfd), &pfd);
-			}
-
-			MakeCurrent();
-
-			if (pf != -1) glEnable(GL_MULTISAMPLE_ARB);
-		}
-
 		virtual int GetMultiSamples()
 		{
 			int attr = WGL_SAMPLES_ARB;
@@ -195,24 +166,27 @@ namespace Xli
 
 		virtual void SetWindow(Window* window)
 		{
+			if (window->GetImplementation() != WindowImplementationWin32) XLI_THROW("Unsupported window");
 			if (window->GetNativeHandle() == wnd->GetNativeHandle()) return;
+			
 			this->wnd = (Win32Window*)window;
 			this->hDC = GetDC(wnd->GetHWND());
 			
-			if (pf != -1) SetPixelFormat(hDC, pf, &pfd);
-			else SetPixelFormat(hDC, ChoosePixelFormat(hDC, &pfd), &pfd);
+			if (pf != -1)
+				SetPixelFormat(hDC, pf, &pfd);
+			else 
+				SetPixelFormat(hDC, ChoosePixelFormat(hDC, &pfd), &pfd);
 			
 			MakeCurrent();
 
-			if (pf != -1) glEnable(GL_MULTISAMPLE_ARB);
+			if (pf != -1) 
+				glEnable(GL_MULTISAMPLE_ARB);
 		}
 
 		virtual void MakeCurrent()
 		{
 			if (!wglMakeCurrent(hDC, ctx))
-			{
 				XLI_THROW("Unable to make OpenGL context current: " + Win32Helpers::GetLastErrorString());
-			}
 		}
 
 		virtual void SwapBuffers()
