@@ -222,12 +222,12 @@ namespace Xli
 
 		virtual bool SetSwapInterval(int interval)
 		{
-			return wglSwapIntervalEXT(interval)	== TRUE;
+			return wglSwapIntervalEXT && wglSwapIntervalEXT(interval) == TRUE;
 		}
 
 		virtual int GetSwapInterval()
 		{
-			return wglGetSwapIntervalEXT();
+			return wglGetSwapIntervalEXT ? wglGetSwapIntervalEXT() : 0;
 		}
 	};
 

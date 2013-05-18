@@ -371,10 +371,14 @@ namespace Xli
 
 	String String::Format(const char* format, va_list argList)
 	{
-		char buf[1024];
-		int i = vsnprintf_s(buf, 1024, 1024, format, argList);
+		// TODO: Verify code
 
-		if (i > 1024 || i < 0) 
+		const int BufferSize = 2048;
+
+		char buf[BufferSize];
+		int i = vsnprintf_s(buf, BufferSize, _TRUNCATE, format, argList);
+
+		if (i >= BufferSize || i < 0) 
 			XLI_THROW_INVALID_FORMAT("Result too long");
 
 		return String(buf, i);
