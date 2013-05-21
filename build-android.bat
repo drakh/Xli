@@ -2,7 +2,10 @@
 
 cd projects\android
 call ndk-build -j %NUMBER_OF_PROCESSORS%
-if %errorlevel% neq 0 exit /b %errorlevel%
+if %errorlevel% neq 0 (
+	cd ..\..
+	exit /b %errorlevel%
+)
 
 @echo.
 

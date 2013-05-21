@@ -2,13 +2,13 @@
 
 using namespace Xli;
 
-void PrintPlatformInfo(GLContext* glc)
+void PrintPlatformInfo(GLContext* gl)
 {
 	PrintLine((String)"OpenGL Vendor: " + (const char*)glGetString(GL_VENDOR));
 	PrintLine((String)"OpenGL Renderer: " + (const char*)glGetString(GL_RENDERER));
 	PrintLine((String)"OpenGL Version: " + (const char*)glGetString(GL_VERSION));
-	PrintLine((String)"OpenGL Multisamples: " + glc->GetMultiSamples());
-	PrintLine((String)"OpenGL Swap Interval: " + glc->GetSwapInterval());
+	PrintLine((String)"OpenGL Multisamples: " + gl->GetMultiSamples());
+	PrintLine((String)"OpenGL Swap Interval: " + gl->GetSwapInterval());
     
     PrintLine((String)"FileSystem Working Dir: " + Disk->GetCurrentDirectory());
     PrintLine((String)"FileSystem Documents: " + Disk->GetSystemDirectory(SystemDirectoryDocuments));
@@ -28,20 +28,22 @@ int Main(const Array<String>& args)
 #endif
     
 	Managed<Window> wnd = Window::Create(1280, 720, "GLWindow", 0, flags);
-    Managed<GLContext> glc = GLContext::Create(wnd, 16);
+    Managed<GLContext> gl = GLContext::Create(wnd, 16);
 
-	glc->SetSwapInterval(1);
-    PrintPlatformInfo(glc);
+	gl->SetSwapInterval(1);
+    PrintPlatformInfo(gl);
 
 	while (!wnd->IsClosed())
 	{
 		glClearColor(1,0,0,1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-		glc->SwapBuffers();
+		// ...
+		
+		gl->SwapBuffers();
 		Window::ProcessMessages();
 	}
 
-    PrintLine("GLWindow was closed");
+    PrintLine("Closing GLWindow");
 	return 0;
 }

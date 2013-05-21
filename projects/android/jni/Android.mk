@@ -32,7 +32,6 @@ LOCAL_SRC_FILES := \
 	../../../src/core/Exception.cpp \
 	../../../src/core/File.cpp \
 	../../../src/core/FileSystem.cpp \
-	../../../src/core/GLCheckError.cpp \
 	../../../src/core/Hash.cpp \
 	../../../src/core/Matrix3.cpp \
 	../../../src/core/Matrix4.cpp \
@@ -208,13 +207,31 @@ include $(BUILD_STATIC_LIBRARY)
 
 
 #
+# libXliGLHelper.a
+#
+
+include $(CLEAR_VARS)
+LOCAL_MODULE    := XliGLHelper
+
+LOCAL_SRC_FILES := \
+	../../../src/gl_helper/GLHelper.cpp \
+	
+LOCAL_C_INCLUDES := \
+	../../include \
+
+LOCAL_CFLAGS   += -fexceptions -fPIC -DPIC -O3
+
+include $(BUILD_STATIC_LIBRARY)
+
+
+#
 # libXliDummy.so (dummy library)
 #
 
 include $(CLEAR_VARS)
 LOCAL_MODULE    := XliDummy
 
-LOCAL_STATIC_LIBRARIES := Xli XliMain XliMedia
+LOCAL_STATIC_LIBRARIES := Xli XliMain XliMedia XliGLHelper
 LOCAL_SRC_FILES := ../../../src/Dummy.cpp
 LOCAL_LDLIBS   := -lz -lm -llog -landroid -lEGL -lGLESv2
 
