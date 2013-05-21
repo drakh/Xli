@@ -20,7 +20,7 @@ static int const gz_magic[2] = {0x1f, 0x8b}; /* gzip magic header */
 namespace Xli
 {
 	// TODO: Writer is broken
-	class GzStreamWriter : public Stream
+	class GzStreamWriter: public Stream
 	{
 		Shared<Stream> compressedStream;
 		Bytef buf[Z_BUFSIZE];
@@ -31,7 +31,8 @@ namespace Xli
 	public:
 		GzStreamWriter(Stream* targetStream, int level)
 		{
-			if (targetStream == 0) XLI_THROW_NULL_POINTER;
+			if (!targetStream) 
+				XLI_THROW_NULL_POINTER;
 
 			this->crc = 0;
 			this->pos = 0;
@@ -65,7 +66,8 @@ namespace Xli
 
 		virtual void Flush()
 		{
-			if (compressedStream.IsNull()) XLI_THROW_STREAM_CLOSED;
+			if (compressedStream.IsNull()) 
+				XLI_THROW_STREAM_CLOSED;
 
 			while (true)
 			{
