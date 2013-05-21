@@ -1,5 +1,5 @@
-#ifndef __XLI_GL_HEADERS_H__
-#define __XLI_GL_HEADERS_H__
+#ifndef __XLI_GL_H__
+#define __XLI_GL_H__
 
 #include <Xli/Config.h>
 
@@ -7,7 +7,7 @@
 # ifndef GLEW_STATIC
 #   define GLEW_STATIC
 # endif
-# include <Xli/GLEW/glew.h>
+# include <XliGL/glew.h>
 # include <GL/gl.h>
 
 #elif defined(XLI_PLATFORM_ANDROID)
@@ -26,7 +26,7 @@
 # ifndef GLEW_STATIC
 #   define GLEW_STATIC
 # endif
-# include <Xli/GLEW/glew.h>
+# include <XliGL/glew.h>
 # include <OpenGL/gl.h>
 
 #elif defined(XLI_PLATFORM_LINUX)

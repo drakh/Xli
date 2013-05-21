@@ -5,7 +5,7 @@
 	\defgroup GLHelper OpenGL Helper Functions
 */
 
-#include <Xli/GLHeaders.h>
+#include <XliGL.h>
 #include <Xli/Console.h>
 
 namespace Xli

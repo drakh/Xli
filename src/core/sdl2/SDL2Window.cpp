@@ -1,5 +1,5 @@
+#include <XliGL.h>
 #include <Xli/SDL2Window.h>
-#include <Xli/GLHeaders.h>
 #include <Xli/Unicode.h>
 
 #include <SDL.h>

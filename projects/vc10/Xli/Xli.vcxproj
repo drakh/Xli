@@ -179,6 +179,8 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\XliGL.h" />
+    <ClInclude Include="..\..\..\include\XliGL\glew.h" />
     <ClInclude Include="..\..\..\include\Xli\ArrayStream.h" />
     <ClInclude Include="..\..\..\include\Xli\BaseTypes.h" />
     <ClInclude Include="..\..\..\include\Xli\Buffer.h" />
@@ -191,7 +193,6 @@
     <ClInclude Include="..\..\..\include\Xli\Display.h" />
     <ClInclude Include="..\..\..\include\Xli\Exception.h" />
     <ClInclude Include="..\..\..\include\Xli\GLContext.h" />
-    <ClInclude Include="..\..\..\include\Xli\GLHeaders.h" />
     <ClInclude Include="..\..\..\include\Xli\Hash.h" />
     <ClInclude Include="..\..\..\include\Xli\MessageBox.h" />
     <ClInclude Include="..\..\..\include\Xli\Mutex.h" />

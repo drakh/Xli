@@ -1,4 +1,5 @@
 #include <Xli.h>
+#include <XliGL.h>
 
 using namespace Xli;
 

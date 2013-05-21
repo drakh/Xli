@@ -43,6 +43,9 @@
     <Filter Include="Xli\Utils">
       <UniqueIdentifier>{5ecf6917-9e55-4b64-9630-9c1a521537cd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="XliGL">
+      <UniqueIdentifier>{70a173b5-a5c8-4025-893e-852ca9a6ab91}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Xli\Hash.h">
@@ -229,11 +232,12 @@
     <ClInclude Include="..\..\..\include\Xli\Sort.h">
       <Filter>Xli\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\Xli\GLHeaders.h">
-      <Filter>Xli\Platform</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\Xli\GLContext.h">
       <Filter>Xli\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliGL.h" />
+    <ClInclude Include="..\..\..\include\XliGL\glew.h">
+      <Filter>XliGL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
