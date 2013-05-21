@@ -65,6 +65,8 @@
 # endif
 #endif
 
+#define XLI_LINE __LINE__
+
 #ifndef XLI_DEBUG_BREAK
 # define XLI_DEBUG_BREAK
 #endif

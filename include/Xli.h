@@ -4,9 +4,6 @@
 /**
 	\defgroup Core Core Features
 
-	\defgroup GL OpenGL
-	\ingroup Core
-
 	\defgroup Containers Container Templates
 	\ingroup Core
 
@@ -47,7 +44,6 @@
 #include <Xli/File.h>
 #include <Xli/FileSystem.h>
 #include <Xli/Float16.h>
-#include <Xli/GLCheckError.h>
 #include <Xli/GLContext.h>
 #include <Xli/GLHeaders.h>
 #include <Xli/Hash.h>

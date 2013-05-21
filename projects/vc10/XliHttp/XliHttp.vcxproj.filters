@@ -1,0 +1,358 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="XliHttp">
+      <UniqueIdentifier>{5d8e5035-2693-4640-b188-6ed6c664dea7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty">
+      <UniqueIdentifier>{0266e5dd-782a-4d92-9810-0e03875f7635}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty\curl">
+      <UniqueIdentifier>{4c44c0ef-287c-4a39-ba19-c800de446017}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\XliHttp.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\http\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\warnless.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\wildcard.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\amigaos.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\asyn-ares.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\asyn-thread.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\axtls.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\base64.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\bundles.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\conncache.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\connect.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\content_encoding.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\cookie.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\curl_addrinfo.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\curl_darwinssl.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\curl_fnmatch.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\curl_gethostname.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\curl_gssapi.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\curl_memrchr.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\curl_multibyte.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\curl_ntlm.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\curl_ntlm_core.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\curl_ntlm_msgs.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\curl_ntlm_wb.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\curl_rand.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\curl_rtmp.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\curl_sasl.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\curl_schannel.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\curl_sspi.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\curl_threads.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\cyassl.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\dict.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\easy.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\escape.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\file.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\fileinfo.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\formdata.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\ftp.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\ftplistparser.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\getenv.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\getinfo.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\gopher.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\gtls.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\hash.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\hmac.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\hostasyn.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\hostcheck.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\hostip.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\hostip4.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\hostip6.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\hostsyn.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\http.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\http_chunks.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\http_digest.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\http_negotiate.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\http_negotiate_sspi.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\http_proxy.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\idn_win32.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\if2ip.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\imap.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\inet_ntop.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\inet_pton.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\krb4.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\krb5.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\ldap.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\llist.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\md4.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\md5.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\memdebug.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\mprintf.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\multi.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\netrc.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\non-ascii.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\nonblock.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\nss.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\nwlib.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\nwos.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\openldap.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\parsedate.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\pingpong.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\pipeline.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\polarssl.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\polarssl_threadlock.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\pop3.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\progress.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\qssl.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\rawstr.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\rtsp.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\security.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\select.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\sendf.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\share.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\slist.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\smtp.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\socks.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\socks_gssapi.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\socks_sspi.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\speedcheck.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\splay.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\ssh.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\sslgen.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\ssluse.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\strdup.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\strequal.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\strerror.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\strtok.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\strtoofft.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\telnet.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\tftp.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\timeval.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\transfer.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\url.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\version.c">
+      <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

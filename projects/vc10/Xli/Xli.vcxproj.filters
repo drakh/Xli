@@ -37,9 +37,6 @@
     <Filter Include="Xli\Platform\generic">
       <UniqueIdentifier>{25c16803-3b5d-4457-8934-7ff56dd63fe5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Xli\GL">
-      <UniqueIdentifier>{50b29c41-0caa-4cd6-88f4-e07229386e95}</UniqueIdentifier>
-    </Filter>
     <Filter Include="3rdparty\glew">
       <UniqueIdentifier>{b253214b-e0ad-4f77-b98b-b209b33df0a4}</UniqueIdentifier>
     </Filter>
@@ -175,12 +172,6 @@
     <ClInclude Include="..\..\..\include\Xli\Win32Header.h">
       <Filter>Xli\Platform\win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\Xli\GLHeaders.h">
-      <Filter>Xli\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Xli\GLContext.h">
-      <Filter>Xli\GL</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\Xli\Console.h">
       <Filter>Xli\IO</Filter>
     </ClInclude>
@@ -204,9 +195,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\Xli\StringBuilder.h">
       <Filter>Xli</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Xli\GLCheckError.h">
-      <Filter>Xli\GL</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\Xli\Utf16String.h">
       <Filter>Xli</Filter>
@@ -240,6 +228,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\Xli\Sort.h">
       <Filter>Xli\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\GLHeaders.h">
+      <Filter>Xli\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\GLContext.h">
+      <Filter>Xli\Platform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -389,9 +383,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\core\TextWriter.cpp">
       <Filter>Xli\IO</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\core\GLCheckError.cpp">
-      <Filter>Xli\GL</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\core\Matrix4.cpp">
       <Filter>Xli\Math</Filter>

@@ -13,14 +13,14 @@
 #elif defined(XLI_PLATFORM_ANDROID)
 # include <GLES2/gl2.h>
 # include <GLES2/gl2ext.h>
-# define XLI_GLES2
-# define XLI_GLES2_ETC_SUPPORT
+# define XLI_GL_ES2
+# define XLI_GL_ETC_SUPPORTED
 
 #elif defined(XLI_PLATFORM_IOS)
 # include <OpenGLES/ES2/gl.h>
 # include <OpenGLES/ES2/glext.h>
-# define XLI_GLES2
-# define XLI_GLES2_PVRTC_SUPPORT
+# define XLI_GL_ES2
+# define XLI_GL_PVRTC_SUPPORTED
 
 #elif defined(XLI_PLATFORM_MACOSX)
 # ifndef GLEW_STATIC
