@@ -178,7 +178,7 @@ LOCAL_SRC_FILES := \
 	../../../src/media/FontFace.cpp \
 	../../../src/media/Format.cpp \
 	../../../src/media/FormattedTextWriter.cpp \
-	../../../src/media/Gzip.cpp \
+	../../../src/media/GZip.cpp \
 	../../../src/media/ImageReader.cpp \
 	../../../src/media/ImageWriter.cpp \
 	../../../src/media/JpegReader.cpp \

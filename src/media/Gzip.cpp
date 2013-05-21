@@ -1,4 +1,4 @@
-#include <XliMedia/Gzip.h>
+#include <XliMedia/GZip.h>
 #include <Xli/Console.h>
 #include <Xli/BufferStream.h>
 #include <cstring>
@@ -45,7 +45,8 @@ namespace Xli
 
 			int err = deflateInit2(&stream, level, Z_DEFLATED, 15 + 16, DEF_MEM_LEVEL, Z_DEFAULT_STRATEGY);
 
-			if (err != Z_OK || !buf) XLI_THROW("Failed to create gzip stream");
+			if (err != Z_OK || !buf) 
+				XLI_THROW("Failed to create GZip stream");
 
 #if 0
 			char header[11];
@@ -77,13 +78,10 @@ namespace Xli
 				int err = deflate(&stream, Z_FINISH);
 
 				if (err == Z_OK)
-				{
 					continue;
-				}
+
 				if (err != Z_STREAM_END)
-				{
-					XLI_THROW("Failed to flush gzip stream");
-				}
+					XLI_THROW("Failed to flush GZip stream");
 
 				break;
 			}
@@ -117,7 +115,8 @@ namespace Xli
 
 		virtual int Write(const void* data, int elmSize, int elmCount)
 		{
-			if (compressedStream.IsNull()) XLI_THROW_STREAM_CLOSED;
+			if (compressedStream.IsNull()) 
+				XLI_THROW_STREAM_CLOSED;
 
 			int len = elmSize * elmCount;
 
@@ -136,9 +135,7 @@ namespace Xli
 				int err = deflate(&stream, Z_NO_FLUSH);
 				
 				if (err != Z_OK)
-				{
-					XLI_THROW("Failed to write to gzip stream");
-				}
+					XLI_THROW("Failed to write to GZip stream");
 			}
 			
 			pos += len;
@@ -148,14 +145,15 @@ namespace Xli
 		}
 	};
 	/*
-	Stream* Gzip::CreateWriter(Stream* targetStream, int level)
+	Stream* GZip::CreateWriter(Stream* targetStream, int level)
 	{
 		return new GzStreamWriter(targetStream, level);
 	}
 	*/
-	Stream* Gzip::CreateReader(Stream* sourceStream)
+	Stream* GZip::CreateReader(Stream* sourceStream)
 	{
-		if (sourceStream == 0) XLI_THROW_NULL_POINTER;
+		if (sourceStream == 0) 
+			XLI_THROW_NULL_POINTER;
 
 		int sp = sourceStream->GetPosition();
 		int sl = sourceStream->GetLength();
@@ -185,34 +183,25 @@ namespace Xli
 		stream.next_out = dst->Data();
 		stream.avail_out = dst->Size();
 
-		if (err != Z_OK) XLI_THROW("Failed to create gzip stream");
+		if (err != Z_OK) 
+			XLI_THROW("Failed to create GZip stream");
 
 		while (true)
 		{
 			int result = inflate(&stream, Z_FINISH);
 
 			if (result == Z_OK)
-			{
 				continue;
-			}
 			else if (result == Z_STREAM_END)
-			{
 				break;
-			}
 			else if (result == Z_DATA_ERROR)
-			{
-				XLI_THROW("Failed to create gzip stream: Data error");
-			}
+				XLI_THROW("Failed to create GZip stream: Data error");
 			else
-			{
-				XLI_THROW("Failed to create gzip stream: Unknown error");
-			}
+				XLI_THROW("Failed to create GZip stream: Unknown error");
 		}
 
 		if (stream.avail_out != 0 || stream.avail_in != 0)
-		{
 			ErrorPrintLine("GZIP WARNING: Buffer sizes inconsistent");
-		}
 
 		return new BufferStream(dst, true, false);
 	}

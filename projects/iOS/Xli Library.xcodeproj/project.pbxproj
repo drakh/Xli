@@ -250,7 +250,7 @@
 		CE2D739F16C70DB600390436 /* CompressedImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D714E16C70DB500390436 /* CompressedImage.cpp */; };
 		CE2D73A116C70DB600390436 /* Format.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D715016C70DB500390436 /* Format.cpp */; };
 		CE2D73A216C70DB600390436 /* FormattedTextWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D715116C70DB500390436 /* FormattedTextWriter.cpp */; };
-		CE2D73A316C70DB600390436 /* Gzip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D715216C70DB500390436 /* Gzip.cpp */; };
+		CE2D73A316C70DB600390436 /* GZip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D715216C70DB500390436 /* GZip.cpp */; };
 		CE2D73A416C70DB600390436 /* ImageReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D715316C70DB500390436 /* ImageReader.cpp */; };
 		CE2D73A516C70DB600390436 /* ImageWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D715416C70DB500390436 /* ImageWriter.cpp */; };
 		CE2D73A816C70DB600390436 /* Json.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D715716C70DB500390436 /* Json.cpp */; };
@@ -507,7 +507,7 @@
 		CE2D714E16C70DB500390436 /* CompressedImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CompressedImage.cpp; sourceTree = "<group>"; };
 		CE2D715016C70DB500390436 /* Format.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Format.cpp; sourceTree = "<group>"; };
 		CE2D715116C70DB500390436 /* FormattedTextWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FormattedTextWriter.cpp; sourceTree = "<group>"; };
-		CE2D715216C70DB500390436 /* Gzip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Gzip.cpp; sourceTree = "<group>"; };
+		CE2D715216C70DB500390436 /* GZip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GZip.cpp; sourceTree = "<group>"; };
 		CE2D715316C70DB500390436 /* ImageReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageReader.cpp; sourceTree = "<group>"; };
 		CE2D715416C70DB500390436 /* ImageWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageWriter.cpp; sourceTree = "<group>"; };
 		CE2D715716C70DB500390436 /* Json.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Json.cpp; sourceTree = "<group>"; };
@@ -1132,7 +1132,7 @@
 				CE2D714E16C70DB500390436 /* CompressedImage.cpp */,
 				CE2D715016C70DB500390436 /* Format.cpp */,
 				CE2D715116C70DB500390436 /* FormattedTextWriter.cpp */,
-				CE2D715216C70DB500390436 /* Gzip.cpp */,
+				CE2D715216C70DB500390436 /* GZip.cpp */,
 				CE2D715316C70DB500390436 /* ImageReader.cpp */,
 				CE2D715416C70DB500390436 /* ImageWriter.cpp */,
 				CE2D715716C70DB500390436 /* Json.cpp */,
@@ -1581,7 +1581,7 @@
 				CE2D739F16C70DB600390436 /* CompressedImage.cpp in Sources */,
 				CE2D73A116C70DB600390436 /* Format.cpp in Sources */,
 				CE2D73A216C70DB600390436 /* FormattedTextWriter.cpp in Sources */,
-				CE2D73A316C70DB600390436 /* Gzip.cpp in Sources */,
+				CE2D73A316C70DB600390436 /* GZip.cpp in Sources */,
 				CE2D73A416C70DB600390436 /* ImageReader.cpp in Sources */,
 				CE2D73A516C70DB600390436 /* ImageWriter.cpp in Sources */,
 				CE2D73A816C70DB600390436 /* Json.cpp in Sources */,

@@ -439,7 +439,7 @@
     <ClCompile Include="..\..\..\src\media\FontFace.cpp" />
     <ClCompile Include="..\..\..\src\media\Format.cpp" />
     <ClCompile Include="..\..\..\src\media\FormattedTextWriter.cpp" />
-    <ClCompile Include="..\..\..\src\media\Gzip.cpp" />
+    <ClCompile Include="..\..\..\src\media\GZip.cpp" />
     <ClCompile Include="..\..\..\src\media\ImageReader.cpp" />
     <ClCompile Include="..\..\..\src\media\ImageWriter.cpp" />
     <ClCompile Include="..\..\..\src\media\Json.cpp" />
@@ -459,7 +459,7 @@
     <ClInclude Include="..\..\..\include\XliMedia\CompressedImage.h" />
     <ClInclude Include="..\..\..\include\XliMedia\FontFace.h" />
     <ClInclude Include="..\..\..\include\XliMedia\FormattedTextWriter.h" />
-    <ClInclude Include="..\..\..\include\XliMedia\Gzip.h" />
+    <ClInclude Include="..\..\..\include\XliMedia\GZip.h" />
     <ClInclude Include="..\..\..\include\XliMedia\Image.h" />
     <ClInclude Include="..\..\..\include\XliMedia\Jpeg.h" />
     <ClInclude Include="..\..\..\include\XliMedia\Json.h" />

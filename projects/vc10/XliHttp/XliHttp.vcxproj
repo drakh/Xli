@@ -180,6 +180,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\XliHttp.h" />
+    <ClInclude Include="..\..\..\include\XliHttp\HttpClient.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\http\CMakeLists.txt" />
@@ -297,6 +298,7 @@
     <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\version.c" />
     <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\warnless.c" />
     <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\wildcard.c" />
+    <ClCompile Include="..\..\..\src\http\CurlClient.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

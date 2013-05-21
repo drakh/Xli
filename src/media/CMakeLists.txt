@@ -4,7 +4,7 @@ set(Sources
 	FontFace.cpp
 	Format.cpp
 	FormattedTextWriter.cpp
-	Gzip.cpp
+	GZip.cpp
 	ImageReader.cpp
 	ImageWriter.cpp
 	JpegReader.cpp

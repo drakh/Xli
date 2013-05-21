@@ -8,13 +8,13 @@ namespace Xli
 	/**
 		\ingroup Compression
 	*/
-	class Gzip
+	class GZip
 	{
-		Gzip();
+		GZip();
 
 	public:
 		static Stream* CreateReader(Stream* sourceStream);
-		//static Stream* CreateWriter(Stream* targetStream, int level = 9);
+		//static Stream* CreateWriter(Stream* targetStream, int level = 5);
 	};
 }
 

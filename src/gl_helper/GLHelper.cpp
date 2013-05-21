@@ -4,7 +4,7 @@
 #include <XliMedia/Ktx.h>
 #include <XliMedia/Jpeg.h>
 #include <XliMedia/Png.h>
-#include <XliMedia/Gzip.h>
+#include <XliMedia/GZip.h>
 #include <Xli/Path.h>
 
 namespace Xli
@@ -114,7 +114,7 @@ namespace Xli
 
 		if (fnUpper.EndsWith(".GZ"))
 		{
-			Managed<Xli::Stream> gz = Gzip::CreateReader(stream);
+			Managed<Xli::Stream> gz = GZip::CreateReader(stream);
 			return GLLoadTextureData(filename.Substring(0, filename.Length() - 3), gz);
 		}
 

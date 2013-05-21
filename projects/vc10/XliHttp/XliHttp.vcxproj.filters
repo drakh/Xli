@@ -13,6 +13,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\XliHttp.h" />
+    <ClInclude Include="..\..\..\include\XliHttp\HttpClient.h">
+      <Filter>XliHttp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\http\CMakeLists.txt" />
@@ -353,6 +356,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\version.c">
       <Filter>3rdparty\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\CurlClient.cpp">
+      <Filter>XliHttp</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

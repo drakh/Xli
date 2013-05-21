@@ -23,7 +23,7 @@
 #include <XliMedia/FontFace.h>
 #include <XliMedia/Format.h>
 #include <XliMedia/FormattedTextWriter.h>
-#include <XliMedia/Gzip.h>
+#include <XliMedia/GZip.h>
 #include <XliMedia/Image.h>
 #include <XliMedia/ImageReader.h>
 #include <XliMedia/ImageWriter.h>

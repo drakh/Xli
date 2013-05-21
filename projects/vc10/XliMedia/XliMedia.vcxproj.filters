@@ -459,9 +459,6 @@
     <ClCompile Include="..\..\..\src\media\Ktx.cpp">
       <Filter>XliMedia\Texture Formats</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\media\Gzip.cpp">
-      <Filter>XliMedia\Other Formats</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\media\Xml.cpp">
       <Filter>XliMedia\Other Formats</Filter>
     </ClCompile>
@@ -473,6 +470,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\media\3rdparty\zlib\infback.c">
       <Filter>3rdparty\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\media\GZip.cpp">
+      <Filter>XliMedia\Other Formats</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -543,9 +543,6 @@
     <ClInclude Include="..\..\..\include\XliMedia\Ktx.h">
       <Filter>XliMedia\Texture Formats</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\XliMedia\Gzip.h">
-      <Filter>XliMedia\Other Formats</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\XliMedia\Xml.h">
       <Filter>XliMedia\Other Formats</Filter>
     </ClInclude>
@@ -553,6 +550,9 @@
       <Filter>XliMedia\Other Formats</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\XliMedia\Json.h">
+      <Filter>XliMedia\Other Formats</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliMedia\GZip.h">
       <Filter>XliMedia\Other Formats</Filter>
     </ClInclude>
   </ItemGroup>
