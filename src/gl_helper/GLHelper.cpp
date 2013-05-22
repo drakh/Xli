@@ -66,16 +66,16 @@ namespace Xli
 
 		glCompileShader(shaderHandle);
 
-		GLint status;
-		glGetShaderiv(shaderHandle, GL_COMPILE_STATUS, &status);
+		GLint compileStatus;
+		glGetShaderiv(shaderHandle, GL_COMPILE_STATUS, &compileStatus);
 
-		if (!status)
+		if (!compileStatus)
 		{
 			int len = 0;
 			const int bufSize = 4096;
 			char buf[bufSize];
 			glGetShaderInfoLog(shaderHandle, bufSize, &len, buf);
-			XLI_THROW("Error compiling GLSL shader:\n\n" + Xli::String(buf, len));
+			XLI_THROW("Error compiling GLSL shader:\n\n" + String(buf, len));
 		}
 
 		XLI_GL_CHECK_ERROR;
@@ -90,16 +90,16 @@ namespace Xli
 		glAttachShader(progHandle, fsHandle);
 		glLinkProgram(progHandle);
 
-		GLint status;
-		glGetProgramiv(progHandle, GL_LINK_STATUS, &status);
+		GLint linkStatus;
+		glGetProgramiv(progHandle, GL_LINK_STATUS, &linkStatus);
 
-		if (!status)
+		if (!linkStatus)
 		{
 			int len = 0;
 			const int bufSize = 4096;
 			char buf[bufSize];
 			glGetProgramInfoLog(progHandle, bufSize, &len, buf);
-			XLI_THROW("Error linking GLSL program:\n\n" + Xli::String(buf, len));
+			XLI_THROW("Error linking GLSL program:\n\n" + String(buf, len));
 		}
 
 		glUseProgram(progHandle);
@@ -114,7 +114,7 @@ namespace Xli
 
 		if (fnUpper.EndsWith(".GZ"))
 		{
-			Managed<Xli::Stream> gz = GZip::CreateReader(stream);
+			Managed<Stream> gz = GZip::CreateReader(stream);
 			return GLLoadTextureData(filename.Substring(0, filename.Length() - 3), gz);
 		}
 
@@ -130,7 +130,7 @@ namespace Xli
 		else if (fnUpper.EndsWith(".JPG") || fnUpper.EndsWith(".JPEG"))
 			ir = Jpeg::CreateReader(stream);
 		else
-			XLI_THROW("Unsupported texture extension: " + Path::GetExtension(filename));
+			XLI_THROW("Unsupported texture extension '" + Path::GetExtension(filename) + "'");
 
 		Managed<Bitmap> bmp = ir->ReadBitmap();
 		return Texture::Create(bmp);
