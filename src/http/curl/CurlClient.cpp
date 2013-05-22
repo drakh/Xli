@@ -101,7 +101,7 @@ namespace Xli
 
 		}
 
-		virtual void Send(const String& url, const HttpRequest& req, HttpResponse& res)
+		virtual void Send(const String& uri, const HttpRequest& req, HttpResponse& res)
 		{
 
 		}

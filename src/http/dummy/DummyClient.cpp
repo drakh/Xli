@@ -7,23 +7,23 @@ namespace Xli
 	public:
 		DummyClient()
 		{
-
 		}
 
 		virtual ~DummyClient()
 		{
+		}
 
+		virtual void Send(const String& uri, const HttpRequest& req, HttpResponse& res)
+		{
 		}
 	};
 
 	void HttpClient::Init()
 	{
-
 	}
 
 	void HttpClient::Shutdown()
 	{
-
 	}
 
 	HttpClient* HttpClient::Create()

@@ -27,7 +27,7 @@ namespace Xli
 
 		static HttpClient* Create();
 
-		virtual void Send(const String& url, const HttpRequest& req, HttpResponse& res) = 0;
+		virtual void Send(const String& uri, const HttpRequest& req, HttpResponse& res) = 0;
 	};
 }
 

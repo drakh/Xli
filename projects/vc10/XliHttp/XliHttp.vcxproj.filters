@@ -13,6 +13,9 @@
     <Filter Include="XliHttp\curl">
       <UniqueIdentifier>{482c3d62-addb-4c8b-be0a-cb1fba14ef5e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="XliHttp\dummy">
+      <UniqueIdentifier>{a36d5713-31cd-4caa-906d-77ca1b0a2aac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\XliHttp.h" />
@@ -360,8 +363,11 @@
     <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\version.c">
       <Filter>3rdparty\curl</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\http\CurlClient.cpp">
+    <ClCompile Include="..\..\..\src\http\curl\CurlClient.cpp">
       <Filter>XliHttp\curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\dummy\DummyClient.cpp">
+      <Filter>XliHttp\dummy</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

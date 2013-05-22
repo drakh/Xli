@@ -298,7 +298,13 @@
     <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\version.c" />
     <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\warnless.c" />
     <ClCompile Include="..\..\..\src\http\3rdparty\curl-7.30.0\lib\wildcard.c" />
-    <ClCompile Include="..\..\..\src\http\CurlClient.cpp" />
+    <ClCompile Include="..\..\..\src\http\curl\CurlClient.cpp" />
+    <ClCompile Include="..\..\..\src\http\dummy\DummyClient.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
