@@ -6,6 +6,7 @@
 #include <XliMedia/Png.h>
 #include <XliMedia/GZip.h>
 #include <Xli/Path.h>
+#include <cstring>
 
 namespace Xli
 {

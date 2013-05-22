@@ -11,7 +11,6 @@ set(Sources
 	Exception.cpp
 	File.cpp
 	FileSystem.cpp
-	GLCheckError.cpp
 	Hash.cpp
 	Matrix3.cpp
 	Matrix4.cpp

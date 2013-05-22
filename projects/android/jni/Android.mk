@@ -225,13 +225,31 @@ include $(BUILD_STATIC_LIBRARY)
 
 
 #
+# libXliHttp.a
+#
+
+include $(CLEAR_VARS)
+LOCAL_MODULE    := XliHttp
+
+LOCAL_SRC_FILES := \
+	../../../src/http/dummy/DummyClient.cpp \
+	
+LOCAL_C_INCLUDES := \
+	../../include \
+
+LOCAL_CFLAGS   += -fexceptions -fPIC -DPIC -O3
+
+include $(BUILD_STATIC_LIBRARY)
+
+
+#
 # libXliDummy.so (dummy library)
 #
 
 include $(CLEAR_VARS)
 LOCAL_MODULE    := XliDummy
 
-LOCAL_STATIC_LIBRARIES := Xli XliMain XliMedia XliGLHelper
+LOCAL_STATIC_LIBRARIES := Xli XliMain XliMedia XliGLHelper XliHttp
 LOCAL_SRC_FILES := ../../../src/Dummy.cpp
 LOCAL_LDLIBS   := -lz -lm -llog -landroid -lEGL -lGLESv2
 
