@@ -100,6 +100,11 @@ namespace Xli
 		{
 
 		}
+
+		virtual void Send(const String& url, const HttpRequest& req, HttpResponse& res)
+		{
+
+		}
 	};
 
 	void HttpClient::Init()

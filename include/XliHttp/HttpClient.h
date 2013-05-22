@@ -13,6 +13,12 @@ namespace Xli
 		Managed<Stream> BodyStream;
 	};
 
+	class HttpRequest
+	{
+	public:
+
+	};
+
 	class HttpClient: public Object
 	{
 	public:
@@ -21,7 +27,7 @@ namespace Xli
 
 		static HttpClient* Create();
 
-
+		virtual void Send(const String& url, const HttpRequest& req, HttpResponse& res) = 0;
 	};
 }
 

@@ -177,12 +177,12 @@ namespace Xli
 		int mipCount = texData->Faces[0].MipLevels.Length();
 		int depth = 1;
 
-		GLenum glTarget =
+		GLenum texTarget =
 			texData->Type == TextureTypeCube ?
 				GL_TEXTURE_CUBE_MAP :
 				GL_TEXTURE_2D;
 
-		glBindTexture(glTarget, texHandle);
+		glBindTexture(texTarget, texHandle);
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
@@ -190,8 +190,8 @@ namespace Xli
 
 		for (int i = 0; i < texData->Faces.Length(); i++)
 		{
-			GLenum glFace =
-				glTarget == GL_TEXTURE_CUBE_MAP ?
+			GLenum texFace =
+				texTarget == GL_TEXTURE_CUBE_MAP ?
 					GL_TEXTURE_CUBE_MAP_POSITIVE_X + i :
 					GL_TEXTURE_2D;
 
@@ -204,7 +204,7 @@ namespace Xli
 #ifdef XLI_GL_ETC_SUPPORTED
 
 				case FormatCompressedRGB_ETC1:
-					glCompressedTexImage2D(glFace, j, GL_ETC1_RGB8_OES, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetData());
+					glCompressedTexImage2D(texFace, j, GL_ETC1_RGB8_OES, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetData());
 					compressed = true;
 					break;
 
@@ -212,22 +212,22 @@ namespace Xli
 #ifdef XLI_GL_PVRTC_SUPPORTED
 
 				case FormatCompressedRGB_PVRTC_4BPP:
-					glCompressedTexImage2D(glFace, j, GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetData());
+					glCompressedTexImage2D(texFace, j, GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetData());
 					compressed = true;
 					break;
 
 				case FormatCompressedRGB_PVRTC_2BPP:
-					glCompressedTexImage2D(glFace, j, GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetData());
+					glCompressedTexImage2D(texFace, j, GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetData());
 					compressed = true;
 					break;
 
 				case FormatCompressedRGBA_PVRTC_4BPP:
-					glCompressedTexImage2D(glFace, j, GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetData());
+					glCompressedTexImage2D(texFace, j, GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetData());
 					compressed = true;
 					break;
 
 				case FormatCompressedRGBA_PVRTC_2BPP:
-					glCompressedTexImage2D(glFace, j, GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetData());
+					glCompressedTexImage2D(texFace, j, GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetData());
 					compressed = true;
 					break;
 
@@ -241,7 +241,7 @@ namespace Xli
 						if (!TryGetGLFormat(bmp->GetFormat(), glFormat, glType))
 							XLI_THROW("Unsupported texture format: " + FormatInfo::ToString(bmp->GetFormat()));
 
-						glTexImage2D(glFace, j, glFormat, bmp->GetWidth(), bmp->GetHeight(), 0, glFormat, glType, bmp->GetData());
+						glTexImage2D(texFace, j, glFormat, bmp->GetWidth(), bmp->GetHeight(), 0, glFormat, glType, bmp->GetData());
 					}
 
 					break;
@@ -255,7 +255,7 @@ namespace Xli
 
 		if (generateMips && !compressed)
 		{
-			glGenerateMipmap(glTarget);
+			glGenerateMipmap(texTarget);
 			GLenum err = glGetError();
 
 			if (err == GL_NO_ERROR)
@@ -273,7 +273,7 @@ namespace Xli
 
 		if (outInfo) 
 		{
-			outInfo->Target = glTarget;
+			outInfo->Target = texTarget;
 			outInfo->Width = width;
 			outInfo->Height = height;
 			outInfo->Depth = depth;

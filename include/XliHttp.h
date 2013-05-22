@@ -5,7 +5,7 @@
 	\defgroup Http Http(s) Interface
 */
 
-//#include
+#include <XliHttp/HttpClient.h>
 
 
 #endif
