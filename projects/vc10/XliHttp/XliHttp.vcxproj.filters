@@ -22,6 +22,9 @@
     <ClInclude Include="..\..\..\include\XliHttp\HttpClient.h">
       <Filter>XliHttp</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\XliHttp\Uri.h">
+      <Filter>XliHttp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\http\CMakeLists.txt" />
@@ -368,6 +371,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\http\dummy\DummyClient.cpp">
       <Filter>XliHttp\dummy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\http\Uri.cpp">
+      <Filter>XliHttp</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

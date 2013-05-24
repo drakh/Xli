@@ -103,22 +103,48 @@ namespace Xli
 
 		virtual void Send(const String& uri, const HttpRequest& req, HttpResponse& res)
 		{
+			CURL* curl = curl_easy_init();
+			if (!curl) 
+				XLI_THROW("CURL ERROR: Failed to create handle");
 
+			CURLcode result = CURLE_OK;
+			if (result == CURLE_OK) result = curl_easy_setopt(curl, CURLOPT_URL, uri.Data());
+			if (result == CURLE_OK) result = curl_easy_setopt(curl, CURLOPT_HTTPGET, 1);
+			if (result == CURLE_OK) result = curl_easy_perform(curl);
+
+			curl_easy_cleanup(curl);
+
+			if (result != CURLE_OK)
+				XLI_THROW("CURL ERROR: Request failed with code " + CURLcodeToString(result));
 		}
 	};
 
+	// TODO: RefCount
+	static bool inited = false;
+
 	void HttpClient::Init()
 	{
+		if (!inited)
+		{
+			if (curl_global_init(CURL_GLOBAL_ALL) != 0)
+				XLI_THROW("CURL ERROR: Global init failed");
 
+			inited = true;
+		}
 	}
 
 	void HttpClient::Shutdown()
 	{
-
+		if (inited)
+		{
+			curl_global_cleanup();
+			inited = false;
+		}
 	}
 
 	HttpClient* HttpClient::Create()
 	{
+		if (!inited) Init();
 		return new CurlClient();
 	}
 }

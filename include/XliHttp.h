@@ -6,6 +6,7 @@
 */
 
 #include <XliHttp/HttpClient.h>
+#include <XliHttp/Uri.h>
 
 
 #endif
