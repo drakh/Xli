@@ -17,7 +17,7 @@ namespace Xli
 
 		virtual GLContext* CreateSharedContext() = 0;
 
-		virtual void SetWindow(Window* window) { XLI_THROW_NOT_SUPPORTED(__FUNCTION__); }
+		virtual void SetWindow(Window* window) { XLI_THROW_NOT_SUPPORTED(XLI_FUNC); }
 
         virtual void MakeCurrent() = 0;
 		virtual void SwapBuffers() = 0;

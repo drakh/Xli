@@ -119,7 +119,7 @@ namespace Xli
 			return Share(this);
 
 		// TODO: Implement this
-		XLI_THROW_NOT_SUPPORTED(__FUNCTION__);
+		XLI_THROW_NOT_SUPPORTED(XLI_FUNC);
 	}
 
 	Bitmap* Bitmap::ToBitmap()
