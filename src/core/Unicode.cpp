@@ -1,5 +1,5 @@
 #include <Xli/Unicode.h>
-#include <Xli/Exception.h>
+#include <Xli/Console.h>
 #include "3rdparty/ConvertUTF.h"
 #include <cstring>
 
@@ -20,9 +20,7 @@ namespace Xli
 		ConversionResult res = ConvertUTF8toUTF16(&src_start, src_end, &dst_start, dst_end, Flags);
 
 		if (res != conversionOK && ErrorCheck)
-		{
-			XLI_THROW("Unicode conversion failed");
-		}
+			ErrorPrintLine("WARNING: Unicode conversion failed");
 
 		// adjust length
 		result.length = (int)(dst_start - (UTF16*)result.data);
@@ -53,9 +51,7 @@ namespace Xli
 		ConversionResult res = ConvertUTF16toUTF8(&src_start, src_end, &dst_start, dst_end, Flags);
 
 		if (res != conversionOK && ErrorCheck)
-		{
-			XLI_THROW("Unicode conversion failed");
-		}
+			ErrorPrintLine("WARNING: Unicode conversion failed");
 
 		// adjust length
 		result.length = (int)(dst_start - (UTF8*)result.data);
