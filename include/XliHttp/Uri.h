@@ -5,6 +5,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup Http
+	*/
 	class Uri
 	{
 	public:

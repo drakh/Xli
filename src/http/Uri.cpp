@@ -11,13 +11,14 @@ namespace Xli
 
 		for (int i = 0; i < uri.Length(); i++)
 		{
-			if (uri[i] >= 32 && (isalnum(uri[i]) || uri[i] == '.' || uri[i] == '/' || uri[i] == ':'))
+			int c = (int)(unsigned char)uri[i];
+
+			if (isalnum(c) || c == '.' || c == '/' || c == ':')
 			{
 				sb.Append(uri[i]);
 			}
 			else
 			{
-				unsigned int c = (unsigned int)(unsigned char)uri[i];
 				static const char* hex = "0123456789ABCDEF";
 
 				sb.Append('%');

@@ -6,6 +6,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup Http
+	*/
 	class HttpResponse
 	{
 	public:
@@ -13,12 +16,18 @@ namespace Xli
 		Managed<Stream> BodyStream;
 	};
 
+	/**
+		\ingroup Http
+	*/
 	class HttpRequest
 	{
 	public:
 
 	};
 
+	/**
+		\ingroup Http
+	*/
 	class HttpClient: public Object
 	{
 	public:
