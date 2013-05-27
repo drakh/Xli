@@ -5,8 +5,7 @@
 
 namespace Xli
 {
-	static const ConversionFlags Flags = strictConversion;
-	static const bool ErrorCheck = true;
+	static const ConversionFlags Flags = lenientConversion;
 
 	Utf16String Unicode::Utf8To16(const char* str, int len)
 	{
@@ -19,7 +18,7 @@ namespace Xli
 
 		ConversionResult res = ConvertUTF8toUTF16(&src_start, src_end, &dst_start, dst_end, Flags);
 
-		if (res != conversionOK && ErrorCheck)
+		if (res != conversionOK)
 			ErrorPrintLine("WARNING: Unicode conversion failed");
 
 		// adjust length
@@ -50,7 +49,7 @@ namespace Xli
 
 		ConversionResult res = ConvertUTF16toUTF8(&src_start, src_end, &dst_start, dst_end, Flags);
 
-		if (res != conversionOK && ErrorCheck)
+		if (res != conversionOK)
 			ErrorPrintLine("WARNING: Unicode conversion failed");
 
 		// adjust length

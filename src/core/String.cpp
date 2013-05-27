@@ -20,8 +20,7 @@ namespace Xli
 
 	void String::initLength(int len)
 	{
-		if (len < BufSize - 1) data = buf;
-		else data = new char[len + 1];
+		data = len < BufSize - 1 ? buf : new char[len + 1];
 		data[len] = 0;
 		length = len;
 	}
@@ -116,7 +115,7 @@ namespace Xli
 
 	char* String::DataCopy()
 	{
-		char* buf = new char[length+1];
+		char* buf = new char[length + 1];
 		buf[length] = 0;
 		memcpy(buf, data, length);
 		return buf;
@@ -226,13 +225,13 @@ namespace Xli
 		int end = length;
 
 		while (start < end) 
-			if (isspace(data[start])) 
+			if (isspace((int)(unsigned char)data[start])) 
 				start++; 
 			else 
 				break;
 
 		while (end > start) 
-			if (isspace(data[end-1])) 
+			if (isspace((int)(unsigned char)data[end - 1])) 
 				end--; 
 			else 
 				break;
@@ -265,7 +264,7 @@ namespace Xli
 		String r(data, length);
 
 		for (int i = 0; i < length; i++) 
-			r.data[i] = tolower(r.data[i]);
+			r.data[i] = (char)(unsigned char)tolower((int)(unsigned char)r.data[i]);
 
 		return r;
 	}
@@ -275,7 +274,7 @@ namespace Xli
 		String r(data, length);
 
 		for (int i = 0; i < length; i++) 
-			r.data[i] = toupper(r.data[i]);
+			r.data[i] = (char)(unsigned char)toupper((int)(unsigned char)r.data[i]);
 
 		return r;
 	}
@@ -341,8 +340,8 @@ namespace Xli
 		if (str.length > length)
 			return false;
 
-		for (int i = length-str.length; i < length; i++)
-			if (str.data[i-length+str.length] != data[i]) 
+		for (int i = length - str.length; i < length; i++)
+			if (str.data[i - length + str.length] != data[i]) 
 				return false;
 
 		return true;

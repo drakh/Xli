@@ -5,6 +5,8 @@
 
 namespace Xli
 {
+	static const char* HexLits = "0123456789ABCDEF";
+
 	String Uri::Encode(const String& uri)
 	{
 		StringBuilder sb;
@@ -19,11 +21,9 @@ namespace Xli
 			}
 			else
 			{
-				static const char* hex = "0123456789ABCDEF";
-
 				sb.Append('%');
-				sb.Append(hex[(c >> 4) & 0xf]);
-				sb.Append(hex[(c >> 0) & 0xf]);
+				sb.Append(HexLits[(c >> 4) & 0xf]);
+				sb.Append(HexLits[(c >> 0) & 0xf]);
 			}
 		}
 
