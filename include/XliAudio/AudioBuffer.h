@@ -22,7 +22,7 @@ namespace Xli
 
 
 		static void Init();
-		static void Shutdown();
+		static void Done();
 
 		static AudioBuffer* Create(Stream* source, DataType dataType, int channelCount, double sampleRate);
 		static AudioBuffer* Create(AudioStream* source);

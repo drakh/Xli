@@ -6,9 +6,15 @@
 #include <Xli/HashMap.h>
 #include <Xli/Queue.h>
 #include <Xli/Console.h>
+#include <Xli/Utf16String.h>
 
 namespace Xli
 {
+	/**
+		\ingroup WM
+	*/
+	class Window;
+
 	/**
 		\ingroup WM
 	*/
@@ -103,187 +109,102 @@ namespace Xli
 
 		Enumerates the standard mouse buttons.
 	*/
-	enum MouseButtons
+	enum MouseButton
 	{
-		MouseButtonsNone = 0,
+		MouseButtonUnknown = 0,
 
 		/**
 			Left mouse button
 		*/
-		MouseButtonsLeft = 1,
+		MouseButtonLeft = 1,
 
 		/**
 			Right mouse button
 		*/
-		MouseButtonsRight = 2,
+		MouseButtonRight = 2,
 
 		/**
 			Middle mouse button
 		*/
-		MouseButtonsMiddle = 4,
+		MouseButtonMiddle = 3,
 
 		/**
 			Extra mouse button 1 (aka Mouse4)
 		*/
-		MouseButtonsX1 = 8,
+		MouseButtonX1 = 4,
 
 		/**
 			Extra mouse button 2 (aka Mouse5)
 		*/
-		MouseButtonsX2 = 16
+		MouseButtonX2 = 5
 	};
 
 	/**
 		\ingroup WM
 	*/
-	enum WindowEventType
-	{
-		WindowEventTypeKeyDown,
-		WindowEventTypeKeyUp,
-		WindowEventTypeCharTyped,
-		WindowEventTypeMouseDown,
-		WindowEventTypeMouseUp,
-		WindowEventTypeMouseMove,
-		WindowEventTypeMouseLeave,
-		WindowEventTypeMouseWheel,
-		WindowEventTypeTouchDown,
-		WindowEventTypeTouchMove,
-		WindowEventTypeTouchUp,
-		WindowEventTypeResize,
-		WindowEventTypeClosed,
-	};
-
-	/**
-		\ingroup WM
-	*/
-	struct WindowEvent
-	{
-		WindowEventType Type;
-		int X, Y;
-		int WheelDeltaX, WheelDeltaY;
-		float TouchX, TouchY;
-		MouseButtons Button;
-		UInt16 Char;
-		Xli::Key Key;
-		int TouchPointIndex;
-
-		WindowEvent();
-	};
-
-	/**
-		\ingroup WM
-	*/
-	class WindowEventHandler: public Xli::Object
+	class WindowEventHandler: public Object
 	{
 	public:
-		virtual void OnKeyDown(Key key);
-		virtual void OnKeyUp(Key key);
-		virtual void OnCharTyped(UInt16 c);
-		virtual void OnMouseDown(int x, int y, MouseButtons button);
-		virtual void OnMouseUp(int x, int y, MouseButtons button);
-		virtual void OnMouseMove(int x, int y);
-		virtual void OnMouseLeave(int x, int y);
-		virtual void OnMouseWheel(int x, int y);
-		virtual void OnTouchDown(float x, float y, int id);
-		virtual void OnTouchMove(float x, float y, int id);
-		virtual void OnTouchUp(float x, float y, int id);
-		virtual void OnResize(int w, int h);
+		virtual bool OnKeyDown(Window* wnd, Key key);
+		virtual bool OnKeyUp(Window* wnd, Key key);
+		virtual bool OnTextInput(Window* wnd, const String& text);
+		
+		virtual bool OnMouseDown(Window* wnd, Vector2i pos, MouseButton button);
+		virtual bool OnMouseUp(Window* wnd, Vector2i pos, MouseButton button);
+		virtual bool OnMouseMove(Window* wnd, Vector2i pos);
+		virtual bool OnMouseLeave(Window* wnd, Vector2i pos);
+		virtual bool OnMouseWheel(Window* wnd, Vector2i delta);
+		
+		virtual bool OnTouchDown(Window* wnd, Vector2 pos, int id);
+		virtual bool OnTouchMove(Window* wnd, Vector2 pos, int id);
+		virtual bool OnTouchUp(Window* wnd, Vector2 pos, int id);
+		
+		virtual bool OnSizeChanged(Window* wnd, Vector2i clientSize);
+		virtual bool OnClosing(Window* wnd, bool& cancel);
+		virtual bool OnClosed(Window* wnd);
 
-		/**
-			Must return true if window is allowed to close
-		*/
-		virtual bool OnClose();
-
-		virtual void OnClosed();
-
-		virtual void OnLowMemory();
+		virtual void OnAppLowMemory(Window* wnd);
+		virtual void OnAppWillEnterForeground(Window* wnd);
+		virtual void OnAppDidEnterForeground(Window* wnd);
+		virtual void OnAppWillEnterBackground(Window* wnd);
+		virtual void OnAppDidEnterBackground(Window* wnd);
 	};
 
 	/**
 		\ingroup WM
 	*/
-	class WindowCloseCallback: public Object
+	enum SystemCursor
 	{
-	public:
-		virtual bool OnClose() = 0;
+		SystemCursorNone = 0,
+		SystemCursorArrow = 1,
+		SystemCursorIBeam = 2,
+		SystemCursorWait = 3,
+		SystemCursorCrosshair = 4,
+		SystemCursorWaitArrow = 5,
+		SystemCursorSizeNWSE = 6,
+		SystemCursorSizeNESW = 7,
+		SystemCursorSizeWE = 8,
+		SystemCursorSizeNS = 9,
+		SystemCursorSizeAll = 10,
+		SystemCursorNo = 11,
+		SystemCursorHand = 12,
 	};
 
 	/**
 		\ingroup WM
 	*/
-	class WindowResizeCallback: public Object
+	enum WindowFlags
 	{
-	public:
-		virtual void OnResize(int w, int h) = 0;
-	};
-
-	/**
-		\ingroup WM
-	*/
-	class WindowEventQueue: public WindowEventHandler
-	{
-		Queue<WindowEvent> queue;
-
-		HashMap<UInt32, bool> keyStates;
-		HashMap<UInt32, bool> buttonStates;
-		Vector2i mousePosition;
-
-		HashMap<int, Xli::Vector2> touchPoints;
-
-	public:
-		Managed<WindowCloseCallback> OnCloseHandler;
-		Managed<WindowResizeCallback> OnResizeHandler;
-
-		WindowEventQueue() {}
-
-		virtual void OnKeyDown(Key key);
-		virtual void OnKeyUp(Key key);
-		virtual void OnCharTyped(UInt16 c);
-		virtual void OnMouseDown(int x, int y, MouseButtons button);
-		virtual void OnMouseUp(int x, int y, MouseButtons button);
-		virtual void OnMouseMove(int x, int y);
-		virtual void OnMouseLeave(int x, int y);
-		virtual void OnMouseWheel(int x, int y);
-		virtual void OnTouchDown(float x, float y, int id);
-		virtual void OnTouchMove(float x, float y, int id);
-		virtual void OnTouchUp(float x, float y, int id);
-		virtual void OnResize(int w, int h);
-		virtual bool OnClose();
-		virtual void OnClosed();
-		virtual void OnLowMemory();
-
-		bool PollEvent(WindowEvent& e);
-
-		/**
-			Clears the event queue
-		*/
-		void FlushEvents();
-
-		/**
-			Resets the key and mouse button states
-		*/
-		void ResetStates();
-
-		bool GetKeyState(Key k);
-		bool GetMouseButtonState(MouseButtons b);
-		Vector2i GetMousePosition();
-	};
-
-	/**
-		\ingroup WM
-	*/
-	enum WindowStyle
-	{
-		WindowStyleFixed = 0, ///< Fixed size window with a title bar and minimize and close buttons
-		WindowStyleBorderless = 1 << 0, ///< Borderless window without titlebar and buttons
-		WindowStyleResizeable = 1 << 1, ///< Resizeable window with a title bar and minimize, maximize and close buttons
-		WindowStyleFullscreen = 1 << 2, ///< Fullscreen window which should always be on top
-		WindowStyleFullscreenResizeable = WindowStyleResizeable | WindowStyleFullscreen, ///< Resizeable window that opens in fullscreen mode
+		WindowFlagsFixed = 0, ///< Fixed size window with a title bar and minimize and close buttons
+		WindowFlagsBorderless = 1 << 0, ///< Borderless window without titlebar and buttons
+		WindowFlagsResizeable = 1 << 1, ///< Resizeable window with a title bar and minimize, maximize and close buttons
+		WindowFlagsFullscreen = 1 << 2, ///< Fullscreen window which should always be on top
+		WindowFlagsFullscreenResizeable = WindowFlagsResizeable | WindowFlagsFullscreen, ///< Resizeable window that opens in fullscreen mode
         
-        WindowStyleOrientationLandscapeLeft = 1 << 3, ///< Enable left landscape orientation (on phones and tablets)
-        WindowStyleOrientationLandscapeRight = 1 << 4, ///< Enable left landscape orientation (on phones and tablets)
-        WindowStyleOrientationPortrait = 1 << 5, ///< Enable portrait orientation (on phones and tablets)
-        WindowStyleOrientationPortraitUpsideDown = 1 << 6, ///< Enable upside down portrait orientation (on phones and tablets)
+        WindowFlagsOrientationLandscapeLeft = 1 << 3, ///< Enable left landscape orientation (on phones and tablets)
+        WindowFlagsOrientationLandscapeRight = 1 << 4, ///< Enable left landscape orientation (on phones and tablets)
+        WindowFlagsOrientationPortrait = 1 << 5, ///< Enable portrait orientation (on phones and tablets)
+        WindowFlagsOrientationPortraitUpsideDown = 1 << 6, ///< Enable upside down portrait orientation (on phones and tablets)
 	};
 	
 	/**
@@ -409,9 +330,34 @@ namespace Xli
 		virtual void Restore() = 0;
 
 		/**
-			Show or hide the mouse cursor
+			Returns true if the specified Key is currently pressed
 		*/
-		virtual void ShowCursor(bool show) = 0;
+		virtual bool GetKeyState(Key key) = 0;
+
+		/**
+			Returns true if the specified MouseButton is currently pressed
+		*/
+		virtual bool GetMouseButtonState(MouseButton button) = 0;
+		
+		/**
+			Returns the current mouse position relative to the client area of the window
+		*/
+		virtual Vector2i GetMousePosition() = 0;
+
+		/**
+			Sets the current mouse position relative to the client area of the window
+		*/
+		virtual void SetMousePosition(Vector2i position) = 0;
+
+		/**
+			Returns the current system cursor used in the window
+		*/
+		virtual SystemCursor GetSystemCursor() = 0;
+
+		/**
+			Sets the system cursor to be used in the window
+		*/
+		virtual void SetSystemCursor(SystemCursor cursor) = 0;
 
 		/**
 			Initializes the Window implementation.
@@ -423,7 +369,7 @@ namespace Xli
 			Shuts down the Window implementation.
 			Is called automatically if XliMain is used.
 		*/
-		static void Shutdown();
+		static void Done();
 
 		/**
 			Returns the first window created. Can return 0.
@@ -438,14 +384,14 @@ namespace Xli
 		/**
 			Creates a window
 		*/
-		static Window* Create(int width, int height, const Xli::String& title, WindowEventHandler* eventHandler = 0, int style = WindowStyleFixed);
+		static Window* Create(int width, int height, const Xli::String& title, WindowEventHandler* eventHandler = 0, int flags = 0);
 
 		/**
 			Creates a window
 		*/
-		static inline Window* Create(const Vector2i& size, const Xli::String& title, WindowEventHandler* eventHandler = 0, int style = WindowStyleFixed)
+		static inline Window* Create(const Vector2i& size, const Xli::String& title, WindowEventHandler* eventHandler = 0, int flags = 0)
 		{ 
-			return Create(size.X, size.Y, title, eventHandler, style);
+			return Create(size.X, size.Y, title, eventHandler, flags);
 		}
 
 		/**

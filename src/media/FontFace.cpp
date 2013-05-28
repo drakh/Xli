@@ -146,7 +146,7 @@ namespace Xli
 		RefCount++;
 	}
 
-	void FreeType::Shutdown()
+	void FreeType::Done()
 	{
 		RefCount--;
 
@@ -161,7 +161,7 @@ namespace Xli
 		if (RefCount == 0)
 		{
 			Init();
-			atexit(Shutdown);
+			atexit(Done);
 		}
 
 		return new FreeType2FontFace(fontFile, fontSize);

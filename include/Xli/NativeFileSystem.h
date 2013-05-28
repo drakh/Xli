@@ -42,7 +42,7 @@ namespace Xli
 		virtual void ChangeDirectory(const String& dir) = 0;
 
 		static void Init();
-		static void Shutdown();
+		static void Done();
 	};
 
 	/**
@@ -67,13 +67,13 @@ namespace Xli
 	{
 	public:
 		static void Init();
-		static void Shutdown();
+		static void Done();
 	};
 
 	/**
 		\ingroup IO
 	*/
-	class AssetAccessor
+	class AssetsAccessor
 	{
 	public:
 		void SetFilesystem(FileSystem* fs);
@@ -84,7 +84,7 @@ namespace Xli
 	/**
 		\ingroup IO
 	*/
-	extern AssetAccessor Assets;
+	extern AssetsAccessor Assets;
 }
 
 

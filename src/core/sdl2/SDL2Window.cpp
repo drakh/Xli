@@ -277,7 +277,7 @@ namespace Xli
 		inited = true;
 	}
 
-	void Window::Shutdown()
+	void Window::Done()
 	{
 		SDL_VideoQuit();
 		inited = false;
@@ -288,7 +288,7 @@ namespace Xli
 		if (!inited)
 		{
 			Window::Init();
-			atexit(Window::Shutdown);
+			atexit(Window::Done);
 		}
 	}
 

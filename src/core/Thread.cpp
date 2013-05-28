@@ -29,17 +29,13 @@ namespace Xli
 		this->handle = 0;
 
 		if (task)
-		{
 			Start(task);
-		}
 	}
 
 	Thread::~Thread()
 	{
 		if (handle)
-		{
 			Wait();
-		}
 	}
 
 	bool Thread::IsDone()
@@ -55,14 +51,10 @@ namespace Xli
 	void Thread::Start(Task* task)
 	{
 		if (!task)
-		{
 			XLI_THROW_NULL_POINTER;
-		}
 
 		if (handle)
-		{
 			XLI_THROW("Thread is already started");
-		}
 
 		this->task = task;
 		this->handle = CreateThread(thread_func, (void*)this);
@@ -71,9 +63,7 @@ namespace Xli
 	void Thread::Wait()
 	{
 		if (!handle)
-		{
 			return;
-		}
 
 		task->stopped = true;
 		WaitForThread(handle);

@@ -7,7 +7,7 @@ namespace Xli
 	{
 	}
 
-	void Display::Shutdown()
+	void Display::Done()
 	{
 	}
 

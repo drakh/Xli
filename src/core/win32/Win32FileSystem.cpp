@@ -46,7 +46,13 @@ namespace Xli
 			GetTempPathW(MAX_PATH, pathW);
 			GetTempFileNameW(pathW, preW, 0, fnW);
 
-			return Unicode::Utf16To8(fnW);
+			String result = Unicode::Utf16To8(fnW);
+
+			for (int i = 0; i < result.Length(); i++)
+				if (result[i] == '\\') 
+					result[i] = '/';
+
+			return result;
 		}
 
 		static String GetKnownDirectory(REFKNOWNFOLDERID rfid)
@@ -61,10 +67,8 @@ namespace Xli
 			}
 
 			for (int i = 0; i < result.Length(); i++)
-			{
 				if (result[i] == '\\') 
 					result[i] = '/';
-			}
 
 			return result;
 		}
@@ -91,13 +95,13 @@ namespace Xli
 			WCHAR bufW[4096];
 			::GetCurrentDirectoryW(4096, bufW);
 
-			for (int i = 0; bufW[i]; i++)
-			{
-				if (bufW[i] == '\\') 
-					bufW[i] = '/';
-			}
+			String result = Unicode::Utf16To8(bufW);
 
-			return Unicode::Utf16To8(bufW);
+			for (int i = 0; i < result.Length(); i++)
+				if (result[i] == '\\') 
+					result[i] = '/';
+
+			return result;
 		}
 
 		virtual void ChangeDirectory(const String& dir) 

@@ -22,7 +22,7 @@ namespace Xli
 	{
 	public:
 		static void Init();
-		static void Shutdown();
+		static void Done();
 
 		/**
 			Returns the number of screens connected to the system.
@@ -34,7 +34,7 @@ namespace Xli
 		*/
 		static Recti GetRect(int index);
 
-		static void GetCurrentSettings(int index, DisplaySettings& settings);
+		static bool GetCurrentSettings(int index, DisplaySettings& settings);
 		static void GetSupportedSettings(int index, Array<DisplaySettings>& settings);
 		static bool ChangeSettings(int index, const DisplaySettings& settings);
 	};

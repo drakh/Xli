@@ -15,7 +15,6 @@ namespace Xli
 		bool closed, ownsHwnd;
 		
 		Shared<WindowEventHandler> eventHandler;
-		bool emulateMouseAsTouchPoint, capturedMouseTouchPoint;
 
 		DWORD dwStyle;
 		RECT rect;
@@ -32,7 +31,6 @@ namespace Xli
 		virtual WindowImplementation GetImplementation();
 
 		virtual void Close();
-		virtual void RegisterTouchEvents(bool emulateMouseAsTouchPoint);
 
 		virtual bool IsClosed();
 		virtual bool IsVisible();
@@ -56,8 +54,15 @@ namespace Xli
 		virtual void Maximize();
 		virtual void Restore();
 
-		virtual void ShowCursor(bool show);
+		virtual bool GetKeyState(Key key);
+		virtual bool GetMouseButtonState(MouseButton button);
+		virtual Vector2i GetMousePosition();
+		virtual void SetMousePosition(Vector2i position);
 
+		virtual SystemCursor GetSystemCursor();
+		virtual void SetSystemCursor(SystemCursor cursor);
+
+		void RegisterTouchEvents();
 		HWND GetHWND() { return hWnd; }
 		void SetIconByID(int id);
 	};

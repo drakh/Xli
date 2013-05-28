@@ -18,4 +18,11 @@ namespace Xli
 		time(&now);
 		return (Timestamp)now * DateTime::PerSecond + (369 * 365 + 89) * DateTime::PerDay;
 	}
+
+	Timestamp GetTimestampUtc()
+	{
+		time_t now;
+		time(&now);
+		return (Timestamp)now * DateTime::PerSecond + (369 * 365 + 89) * DateTime::PerDay;
+	}
 }

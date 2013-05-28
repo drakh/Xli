@@ -31,6 +31,7 @@ namespace Xli
 		{
 			handle = CreateMutex();
 		}
+
 		~Mutex()
 		{
 			DeleteMutex(handle);
@@ -40,6 +41,7 @@ namespace Xli
 		{
 			LockMutex(handle);
 		}
+
 		inline void Unlock()
 		{
 			UnlockMutex(handle);

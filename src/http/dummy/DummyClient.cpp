@@ -22,7 +22,7 @@ namespace Xli
 	{
 	}
 
-	void HttpClient::Shutdown()
+	void HttpClient::Done()
 	{
 	}
 

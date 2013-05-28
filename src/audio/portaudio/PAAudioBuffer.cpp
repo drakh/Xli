@@ -148,7 +148,7 @@ namespace Xli
 		SoundRefCount++;
 	}
 
-	void AudioBuffer::Shutdown()
+	void AudioBuffer::Done()
 	{
 		SoundRefCount--;
 
@@ -167,7 +167,7 @@ namespace Xli
 		if (!SoundRefCount)
 		{
 			AudioBuffer::Init();
-			atexit(AudioBuffer::Shutdown);
+			atexit(AudioBuffer::Done);
 		}
 	}
 

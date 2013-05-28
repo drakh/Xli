@@ -22,14 +22,14 @@ namespace Xli
 		initCount++;
 	}
 
-	void Console::Shutdown()
+	void Console::Done()
 	{
 		initCount--;
 
 		if (!initCount)
 		{
             out->GetStream()->Flush();
-            out->GetStream()->Flush();
+            err->GetStream()->Flush();
 			delete out;
 			delete err;
 			delete in;
@@ -48,7 +48,7 @@ namespace Xli
 		if (!initCount)
 		{
 			Console::Init();
-			atexit(Console::Shutdown);
+			atexit(Console::Done);
 		}
 	}
 

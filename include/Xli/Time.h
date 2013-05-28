@@ -11,7 +11,9 @@ namespace Xli
 	*/
 
 	double GetTime();
+
 	Timestamp GetTimestamp();
+	Timestamp GetTimestampUtc();
 
 	/** @} */
 }

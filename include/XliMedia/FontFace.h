@@ -47,7 +47,7 @@ namespace Xli
 	{
 	public:
 		static void Init();
-		static void Shutdown();
+		static void Done();
 
 		static FontFace* OpenFontFace(Stream* fontFile, int size);
 

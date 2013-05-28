@@ -34,6 +34,7 @@ namespace Xli
 		DateTime(Timestamp timestamp);
 
 		static DateTime Now();
+		static DateTime NowUtc();
 		static DateTime FromString(const String& str);
 
 		Timestamp ToTimestamp() const;

@@ -21,7 +21,7 @@ namespace Xli
 		}
 	}
 
-	void NativeFileSystem::Shutdown()
+	void NativeFileSystem::Done()
 	{
 		if (fs && fs->GetRefCount() > 1)
 		{
@@ -46,7 +46,7 @@ namespace Xli
 		}
 	}
 
-	void AssetFileSystem::Shutdown()
+	void AssetFileSystem::Done()
 	{
 		if (as && as->GetRefCount() > 1)
 		{
@@ -64,8 +64,9 @@ namespace Xli
 		if (!fs)
 		{
 			NativeFileSystem::Init();
-			atexit(NativeFileSystem::Shutdown);
+			atexit(NativeFileSystem::Done);
 		}
+
 		return fs;
 	}
 
@@ -74,40 +75,46 @@ namespace Xli
 		if (!fs)
 		{
 			NativeFileSystem::Init();
-			atexit(NativeFileSystem::Shutdown);
+			atexit(NativeFileSystem::Done);
 		}
+
 		return fs;
 	}
 
 	DiskAccessor Disk;
 
-	void AssetAccessor::SetFilesystem(FileSystem* fs)
+	void AssetsAccessor::SetFilesystem(FileSystem* fs)
 	{
-		if (!as) atexit(AssetFileSystem::Shutdown);
-		else as->Release();
+		if (!as) 
+			atexit(AssetFileSystem::Done);
+		else 
+			as->Release();
+
 		fs->AddRef();
 		as = fs;
 	}
 
-	FileSystem* AssetAccessor::operator ->()
+	FileSystem* AssetsAccessor::operator ->()
 	{
 		if (!as)
 		{
 			AssetFileSystem::Init();
-			atexit(AssetFileSystem::Shutdown);
+			atexit(AssetFileSystem::Done);
 		}
+
 		return as;
 	}
 
-	AssetAccessor::operator FileSystem*()
+	AssetsAccessor::operator FileSystem*()
 	{
 		if (!as)
 		{
 			AssetFileSystem::Init();
-			atexit(AssetFileSystem::Shutdown);
+			atexit(AssetFileSystem::Done);
 		}
+
 		return as;
 	}
 
-	AssetAccessor Assets;
+	AssetsAccessor Assets;
 }

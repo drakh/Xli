@@ -32,7 +32,7 @@ namespace Xli
 	{
 	public:
 		static void Init();
-		static void Shutdown();
+		static void Done();
 
 		static HttpClient* Create();
 

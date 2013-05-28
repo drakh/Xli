@@ -41,8 +41,8 @@ extern "C" int main(int argc, char** argv)
 	}
 
 	// Global shutdowns goes here
-	Xli::NativeFileSystem::Shutdown();
-	Xli::Console::Shutdown();
+	Xli::NativeFileSystem::Done();
+	Xli::Console::Done();
     
 	return result;
 }

@@ -21,4 +21,11 @@ namespace Xli
 		FileTimeToLocalFileTime(&utcft, &ft);
 		return ((Timestamp)ft.dwHighDateTime << 32) | ft.dwLowDateTime;
 	}
+
+	Timestamp GetTimestampUtc()
+	{
+		FILETIME ft;
+		GetSystemTimeAsFileTime(&ft);
+		return ((Timestamp)ft.dwHighDateTime << 32) | ft.dwLowDateTime;
+	}
 }

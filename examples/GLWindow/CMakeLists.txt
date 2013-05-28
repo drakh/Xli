@@ -20,6 +20,16 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
 		link_directories(${XLI_DIR}/lib/linux/x86_32)
 	endif()
 
+elseif (MSVC)
+
+	set(CMAKE_CONFIGURATION_TYPES "Debug;Release" INTERNAL)
+
+	if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+		link_directories(${XLI_DIR}/lib/msvc/x64)
+	else()
+		link_directories(${XLI_DIR}/lib/msvc/x86)
+	endif()
+	
 else()
 
 	link_directories(${XLI_DIR}/lib)
@@ -32,5 +42,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${EXECUTABLE_OUTPUT_PATH})
 
 add_executable(GLWindow src/Main.cpp)
 
-target_link_libraries(GLWindow Xli XliMain)
-
+if (MSVC)
+	target_link_libraries(GLWindow debug XliMDD XliMainMDD optimized XliMD XliMainMD)
+elseif (UNIX)
+	target_link_libraries(GLWindow Xli XliMain)
+endif()

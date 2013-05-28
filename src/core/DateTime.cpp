@@ -124,19 +124,24 @@ namespace Xli
 
 	String DateTime::ToString() const
 	{
-		return String::Format("%04d-%02d-%02d %02d:%02d:%02d:%03d", Year, Month, Day, Hour, Minute, Second, Millisecond);
+		return String::Format("%04d-%02d-%02d %02d:%02d:%02d.%03d", Year, Month, Day, Hour, Minute, Second, Millisecond);
 	}
 
 	DateTime DateTime::FromString(const String& str)
 	{
 		DateTime dt;
-		sscanf_s(str.Data(), "%04d-%02d-%02d %02d:%02d:%02d:%03d", &dt.Year, &dt.Month, &dt.Day, &dt.Hour, &dt.Minute, &dt.Second, &dt.Millisecond);
+		sscanf_s(str.Data(), "%04d-%02d-%02d %02d:%02d:%02d.%03d", &dt.Year, &dt.Month, &dt.Day, &dt.Hour, &dt.Minute, &dt.Second, &dt.Millisecond);
 		return dt;
 	}
 
 	DateTime DateTime::Now()
 	{
 		return DateTime(GetTimestamp());
+	}
+
+	DateTime DateTime::NowUtc()
+	{
+		return DateTime(GetTimestampUtc());
 	}
 
 	DateTime DateTime::operator - (const DateTime& dt) const

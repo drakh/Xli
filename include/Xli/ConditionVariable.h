@@ -33,6 +33,7 @@ namespace Xli
 		{
 			handle = CreateCond();
 		}
+
 		~ConditionVariable()
 		{
 			DeleteCond(handle);
@@ -42,10 +43,12 @@ namespace Xli
 		{
 			CondWait(handle, mutex);
 		}
+
 		inline void Signal()
 		{
 			CondSignal(handle);
 		}
+
 		inline void Broadcast()
 		{
 			CondBroadcast(handle);

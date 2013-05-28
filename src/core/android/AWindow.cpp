@@ -38,9 +38,7 @@ namespace Xli
 		AWindow()
 		{
 			if (GlobalEventHandler != 0)
-			{
 				GlobalEventHandler->AddRef();
-			}
 		}
 
 		virtual ~AWindow()
@@ -63,8 +61,9 @@ namespace Xli
 		{
 			if (GlobalEventHandler != 0)
 			{
-				if (!GlobalEventHandler->OnClose()) return;
-				GlobalEventHandler->OnClosed();
+				bool cancel = false;
+				if (GlobalEventHandler->OnClosing(this, cancel) && cancel) return;
+				GlobalEventHandler->OnClosed(this);
 			}
 
 			GlobalState->destroyRequested = 1;
@@ -115,11 +114,6 @@ namespace Xli
 			return Vector2i(GlobalWidth, GlobalHeight);
 		}
 
-        virtual WindowStyle GetStyle()
-		{
-			return WindowStyleFullscreen;
-		}
-
 		virtual void* GetNativeHandle()
 		{
 			return GlobalState->window;
@@ -160,13 +154,41 @@ namespace Xli
 		virtual void ShowCursor(bool show)
 		{
 		}
+
+		virtual bool GetKeyState(Key key)
+		{
+			return false;
+		}
+
+		virtual bool GetMouseButtonState(MouseButton button)
+		{
+			return false;
+		}
+
+		virtual Vector2i GetMousePosition()
+		{
+			return Vector2i(0, 0);
+		}
+		
+		virtual void SetMousePosition(Vector2i position)
+		{
+		}
+
+		virtual SystemCursor GetSystemCursor()
+		{
+			return SystemCursorNone;
+		}
+		
+		virtual void SetSystemCursor(SystemCursor cursor)
+		{
+		}
 	};
 
 	void Window::Init()
 	{
 	}
 
-	void Window::Shutdown()
+	void Window::Done()
 	{
 	}
 
@@ -182,12 +204,10 @@ namespace Xli
 		return Vector2i(w, h);
 	}
 
-	Window* Window::Create(int width, int height, const String& title, WindowEventHandler* eventHandler, int style)
+	Window* Window::Create(int width, int height, const String& title, WindowEventHandler* eventHandler, int flags)
 	{
 		if (GlobalWindow != 0)
-		{
 			XLI_THROW("Only one window instance is allowed on the Android platform");
-		}
 
 		GlobalWidth = width;
 		GlobalHeight = height;
@@ -209,22 +229,11 @@ namespace Xli
 		struct android_poll_source* source;
 
 		while ((ident = ALooper_pollAll(0, NULL, &events, (void**)&source)) >= 0) 
-		{
 			if (source != NULL)
-			{
 				source->process(GlobalState, source);
-			}
-		
-			if (ident == LOOPER_ID_USER)
-			{
-				// nothing to do yet
-			}
-		}
 
 		if (GlobalState->destroyRequested != 0)
-		{
 			LOGI("DESTROY REQUESTED");
-		}
 
 		if (inited)
 		{
@@ -238,9 +247,7 @@ namespace Xli
 				GlobalHeight = h;
 
 				if (GlobalEventHandler != 0)
-				{
-					GlobalEventHandler->OnResize(w, h);
-				}
+					GlobalEventHandler->OnSizeChanged(GlobalWindow, Vector2i(w, h));
 			}
 		}
 	}
@@ -249,7 +256,7 @@ namespace Xli
 	{
 	}
 
-	void Display::Shutdown()
+	void Display::Done()
 	{
 	}
 
@@ -263,6 +270,20 @@ namespace Xli
 		int w = ANativeWindow_getWidth(GlobalState->window);
 		int h = ANativeWindow_getHeight(GlobalState->window);
 		return Recti(0, 0, w, h);
+	}
+
+	bool GetCurrentSettings(int index, DisplaySettings& settings)
+	{
+		return false;
+	}
+
+	void GetSupportedSettings(int index, Array<DisplaySettings>& settings)
+	{
+	}
+
+	bool ChangeSettings(int index, const DisplaySettings& settings)
+	{
+		return false;
 	}
 
 	class AOutStream: public Stream
@@ -280,6 +301,7 @@ namespace Xli
 			for (int i = 0; i < elmCount; i++)
 			{
 				char c = ((char*)src)[i];
+
 				if (c == '\n')
 				{
 					buf.Add('\0');
@@ -287,8 +309,10 @@ namespace Xli
 					buf.Clear();
 					continue;
 				}
+
 				buf.Add(c);
 			}
+
 			return elmCount;
 		}
 	};
@@ -308,6 +332,7 @@ namespace Xli
 			for (int i = 0; i < elmCount; i++)
 			{
 				char c = ((const char*)src)[i];
+
 				if (c == '\n')
 				{
 					buf.Add('\0');
@@ -315,8 +340,10 @@ namespace Xli
 					buf.Clear();
 					continue;
 				}
+
 				buf.Add(c);
 			}
+
 			return elmCount;
 		}
 	};
@@ -349,12 +376,12 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
 					{
 					case AMOTION_EVENT_ACTION_DOWN:
 					case AMOTION_EVENT_ACTION_POINTER_DOWN:
-						GlobalEventHandler->OnTouchDown(x, y, id);
+						GlobalEventHandler->OnTouchDown(GlobalWindow, Xli::Vector2(x, y), id);
 						break;
 
 					case AMOTION_EVENT_ACTION_UP:
 					case AMOTION_EVENT_ACTION_POINTER_UP:
-						GlobalEventHandler->OnTouchUp(x, y, id);
+						GlobalEventHandler->OnTouchUp(GlobalWindow, Xli::Vector2(x, y), id);
 						break;
 					}
 				}
@@ -369,7 +396,7 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
 						int id = AMotionEvent_getPointerId(event, i);
 						int x = AMotionEvent_getX(event, i);
 						int y = AMotionEvent_getY(event, i);
-						GlobalEventHandler->OnTouchMove(x, y, id);
+						GlobalEventHandler->OnTouchMove(GlobalWindow, Xli::Vector2(x, y), id);
 
 						//LOGI("TOUCH MOVE: %d  %d  %d  %d  %d", a, i, id, x, y);
 					}
@@ -385,7 +412,7 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
 						int id = AMotionEvent_getPointerId(event, i);
 						int x = AMotionEvent_getX(event, i);
 						int y = AMotionEvent_getY(event, i);
-						GlobalEventHandler->OnTouchUp(x, y, id);
+						GlobalEventHandler->OnTouchUp(GlobalWindow, Xli::Vector2(x, y), id);
 
 						//LOGI("TOUCH CANCEL: %d  %d  %d  %d  %d", a, i, id, x, y);
 					}
@@ -405,12 +432,14 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
 				switch (AKeyEvent_getKeyCode(event))
 				{
 				case AKEYCODE_BACK:
-					if (GlobalWindow != 0) GlobalWindow->Close();
+					if (GlobalWindow != 0) GlobalWindow->Close(); // TODO
 					return 1;
 
 				case AKEYCODE_MENU:
-					GlobalEventHandler->OnKeyDown(Xli::KeyMenu);
-					return 1;
+					if (GlobalEventHandler->OnKeyDown(GlobalWindow, Xli::KeyMenu))
+						return 1;
+
+					break;
 				}
 			}
 			else if (AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_UP)
@@ -421,8 +450,10 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
 					return 1;
 
 				case AKEYCODE_MENU:
-					GlobalEventHandler->OnKeyUp(Xli::KeyMenu);
-					return 1;
+					if (GlobalEventHandler->OnKeyUp(GlobalWindow, Xli::KeyMenu))
+						return 1;
+
+					break;
 				}
 			}
 		}
@@ -455,8 +486,9 @@ static const char* get_cmd_string(int32_t cmd)
 	CASE(APP_CMD_STOP);
 	CASE(APP_CMD_DESTROY);
 #undef CASE
-	default: return "<UNKNOWN>";
 	}
+
+	return "<UNKNOWN>";
 }
 
 static void handle_cmd(struct android_app* app, int32_t cmd)
@@ -470,25 +502,43 @@ static void handle_cmd(struct android_app* app, int32_t cmd)
 			break;
 
 		case APP_CMD_PAUSE:
+			if (GlobalEventHandler)
+				GlobalEventHandler->OnAppWillEnterBackground(GlobalWindow);
+			
 			visible = 0;
+
+			if (GlobalEventHandler)
+				GlobalEventHandler->OnAppDidEnterBackground(GlobalWindow);
+
 			break;
 
 		case APP_CMD_RESUME:
+			if (GlobalEventHandler)
+				GlobalEventHandler->OnAppWillEnterForeground(GlobalWindow);
+
 			visible = 1;
+
+			if (GlobalEventHandler)
+				GlobalEventHandler->OnAppDidEnterForeground(GlobalWindow);
+
 			break;
 
 		case APP_CMD_LOW_MEMORY:
-			if (GlobalEventHandler) GlobalEventHandler->OnLowMemory();
+			if (GlobalEventHandler) 
+				GlobalEventHandler->OnAppLowMemory(GlobalWindow);
+			
 			break;
 
 		case APP_CMD_STOP:
 		case APP_CMD_TERM_WINDOW:
-			if (GlobalEventHandler && !GlobalState->destroyRequested)
+			if (!GlobalState->destroyRequested)
 			{
-				GlobalEventHandler->OnClosed();
+				if (GlobalEventHandler)
+					GlobalEventHandler->OnClosed(GlobalWindow);
+
+				GlobalState->destroyRequested = 1;
 			}
 
-			GlobalState->destroyRequested = 1;
 			break;
 	}
 }
