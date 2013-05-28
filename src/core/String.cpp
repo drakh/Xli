@@ -512,13 +512,25 @@ namespace Xli
 
     void String::Append(const char* str, int len)
     {
+	if (!len) return;
         String temp = Add(str, len);
-        char* newData = temp.data;
-        int newLength = temp.length;
-        temp.data = data;
-        temp.length = length;
-        data = newData;
-        length = newLength;
+
+	if (temp.data != temp.buf)
+    	{	
+		// Hack: 
+		// 1. Swap data with temp 
+		// 2. Let temp free old data when it goes out of scope, as long as old data does not point to buf which is stack allocated
+		char* newData = temp.data;
+		temp.data = data != buf ? data : temp.buf;
+		data = newData;
+		length = temp.length;
+    	}
+	else
+    	{
+		// If hack fails we must reallocate the data
+		deinit();
+		init(temp.data, temp.length);
+	}		
     }
     
     void String::Append(const char* str)

@@ -45,7 +45,7 @@ namespace Xli
         pre += (String)(int)getpid() + "-";
 
 		Random rand(Hash(GetTimestamp()));
-		static const char* cs = "-_1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		static const char* cs = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		int cl = strlen(cs);
 
 		while (true)

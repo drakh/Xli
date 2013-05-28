@@ -8,6 +8,8 @@
 namespace Xli
 {
 	static SDL2Window* GlobalWindow = 0;
+	static bool QuitRecieved = false;
+	static int CancelCount = 0;
 
 #ifdef XLI_PLATFORM_IOS
     static int HandleAppEvents(void *userdata, SDL_Event *event)
@@ -183,7 +185,7 @@ namespace Xli
 
 	bool SDL2Window::IsClosed()
 	{
-		return closed;
+		return closed || QuitRecieved;
 	}
 
 	bool SDL2Window::IsVisible()
@@ -640,13 +642,20 @@ namespace Xli
                     continue;
             }
 #endif
-
-            if (e.type == SDL_QUIT && GlobalWindow != 0)
-            {
-                GlobalWindow->Close();
-                continue;
-            }
             
+			if (e.type == SDL_QUIT)
+			{
+				if (CancelCount > 0)
+				{
+					CancelCount--;
+					continue;
+				}
+				
+				QuitRecieved = true;
+				//exit(1);
+				continue;
+			}
+
             SDL2Window* wnd = 0;
             SDL_Window* sdlwnd = SDL_GetWindowFromID(e.window.windowID);
             if (sdlwnd != 0) wnd = (SDL2Window*)SDL_GetWindowData(sdlwnd, "SDL2Window");
@@ -659,15 +668,26 @@ namespace Xli
             
 			switch (e.type)
 			{
-				case SDL_QUIT:
-					wnd->Close();
-					break;
-                     
 				case SDL_WINDOWEVENT:
 					switch (e.window.event)
 					{
 						case SDL_WINDOWEVENT_CLOSE:
-							wnd->Close();
+							if (!wnd->closed)
+							{
+							    if (wnd->eventHandler.IsSet())
+							    {
+								bool cancel = false;
+								if (wnd->eventHandler->OnClosing(wnd, cancel) && cancel) 
+								{
+									CancelCount++;
+									continue;
+								}
+							    }
+
+							    SDL_HideWindow(wnd->window);
+							    wnd->closed = true;
+							    wnd->eventHandler->OnClosed(wnd);
+							}
 							break;
 
 						case SDL_WINDOWEVENT_RESIZED:
