@@ -438,15 +438,15 @@ namespace Xli
 		return Scaling(s, s, s);
 	}
 
-	Matrix4 Matrix4::GLLookAt(Vector3t<float> eye, Vector3t<float> center, Vector3t<float> up)
+	Matrix4 Matrix4::GLLookAt(const Vector3& eye, const Vector3& center, const Vector3& upVec)
 	{
 		Vector3 forward = (center - eye).Normalized();
 
 		/* Side = forward x up */
-		Vector3 side = forward.Cross(up).Normalized();
+		Vector3 side = forward.Cross(upVec).Normalized();
 
 		/* Recompute up as: up = side x forward */
-		up = side.Cross(forward);
+		Vector3 up = side.Cross(forward);
 
 		Matrix4 m = Identity();
 			
@@ -476,9 +476,7 @@ namespace Xli
 		sine = Sin(fovRadians/(float)2);
 
 		if ((deltaZ == 0) || (sine == 0) || (aspect == 0))
-		{
 			return m;
-		}
 
 		cotangent = Cos(fovRadians/(float)2) / sine;
 

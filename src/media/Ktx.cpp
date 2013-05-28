@@ -106,16 +106,22 @@ namespace Xli
 
 	Texture* Ktx::Load(Stream* input)
 	{
-		// TODO: Proper support for cube maps
-
 		KTX_header header;
 		input->ReadSafe(&header, sizeof(KTX_header), 1);
 
-		if (memcmp(header.identifier, KTX_IDENTIFIER_REF, 12) != 0) XLI_THROW("Unable to load KTX file: Invalid header");
-		if (header.endianness != KTX_ENDIAN_REF) XLI_THROW("Unable to load KTX file: Unhandled endianess");
-		if (header.pixelDepth > 1) XLI_THROW("Unable to load KTX file: Unsupported texture depth: " + (String)(int)header.pixelDepth);
-		if (header.numberOfArrayElements > 1) XLI_THROW("Unable to load KTX file: Unsupported array size: " + (String)(int)header.numberOfArrayElements);
+		if (memcmp(header.identifier, KTX_IDENTIFIER_REF, 12) != 0) 
+			XLI_THROW("Unable to load KTX file: Invalid header");
+		
+		if (header.endianness != KTX_ENDIAN_REF) 
+			XLI_THROW("Unable to load KTX file: Unhandled endianess");
+		
+		if (header.pixelDepth > 1) 
+			XLI_THROW("Unable to load KTX file: Unsupported texture depth: " + (String)(int)header.pixelDepth);
+		
+		if (header.numberOfArrayElements > 1) 
+			XLI_THROW("Unable to load KTX file: Unsupported array size: " + (String)(int)header.numberOfArrayElements);
 
+		// Skip meta data
 		if (header.bytesOfKeyValueData > 0)
 		{
 			UInt8* tmp = new UInt8[header.bytesOfKeyValueData];

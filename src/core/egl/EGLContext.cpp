@@ -10,10 +10,10 @@ namespace Xli
 {
 	class EglContext: public GLContext
 	{
-		::EGLDisplay display;
-		::EGLSurface surface;
-		::EGLContext context;
-		::EGLConfig config;
+		EGLDisplay display;
+		EGLSurface surface;
+		EGLContext context;
+		EGLConfig config;
 
 	public:
 		EglContext(Window* wnd, int multiSamples)

@@ -21,7 +21,7 @@ void PrintPlatformInfo(GLContext* gl)
     PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
 }
 
-class GLWindowEventHandler: public WindowEventHandler
+class EventHandler: public WindowEventHandler
 {
 	virtual bool OnKeyDown(Window* wnd, Key key)
 	{
@@ -193,7 +193,7 @@ int Main(const Array<String>& args)
     flags |= WindowFlagsFullscreen;
 #endif
     
-	Managed<GLWindowEventHandler> events = new GLWindowEventHandler();
+	Managed<EventHandler> events = new EventHandler();
 	Managed<Window> wnd = Window::Create(1280, 720, "GLWindow", events, flags);
     Managed<GLContext> gl = GLContext::Create(wnd, 16);
 
@@ -214,7 +214,7 @@ int Main(const Array<String>& args)
 		if (wnd->GetKeyState(KeySpace))
 		{
 			Vector2i mousePos = wnd->GetMousePosition();
-			Out->WriteFormat("%.2lf %d %d\r", GetTime(), mousePos.X, mousePos.Y);
+			wnd->SetTitle(String::Format("%.2lf %d %d", GetTime(), mousePos.X, mousePos.Y));
 		}
 	}
 

@@ -21,10 +21,14 @@ namespace Xli
 
 		void AddValue(Value v)
 		{
-			if (!Values.Length() && Result.IsUndefined()) Result = v;
-			else if (Values.Last().IsArray()) Values.Last()->Append(v);
-			else if (Values.Last().IsObject()) Values.Last()->Insert(Keys.RemoveLast(), v);
-			else XLI_THROW("JSON parser failed");
+			if (!Values.Length() && Result.IsUndefined()) 
+				Result = v;
+			else if (Values.Last().IsArray()) 
+				Values.Last()->Append(v);
+			else if (Values.Last().IsObject()) 
+				Values.Last()->Insert(Keys.RemoveLast(), v);
+			else 
+				XLI_THROW("JSON parser failed");
 		}
 	};
 
@@ -140,13 +144,16 @@ namespace Xli
 
 		for (int i = 0; i < str.Length(); i++)
 		{
-			if (str[i] == '"') w.Append("\\\"");
-			else if (str[i] == '\n') w.Append("\\n");
-			else if (str[i] == '\r') w.Append("\\r");
-			else if (str[i] == '\t') w.Append("\\t");
-			else if (str[i] == '\0') w.Append("\\0");
-			else if (str[i] == '\\') w.Append("\\\\");
-			else w.Append(str[i]);
+			switch (str[i])
+			{
+			case '"': w.Append("\\\""); break;
+			case '\n': w.Append("\\n"); break;
+			case '\r': w.Append("\\r"); break;
+			case '\t': w.Append("\\t"); break;
+			case '\0': w.Append("\\0"); break;
+			case '\\': w.Append("\\\\"); break;
+			default: w.Append(str[i]); break;
+			}
 		}
 
 		w.Append('"');

@@ -9,6 +9,10 @@
 #include <Xli/Matrix4.h>
 #include <Xli/ToString.h>
 
+/**
+	\addtogroup Media
+	@{
+*/
 #define XLI_GET_X(label, x) do { try { x; } catch (const Xli::Exception& e) \
 	{ Xli::ErrorPrintLine((Xli::String)"WARNING: " + XLI_FUNC + ": Unable to read '" + label + "': " + e.ToString()); } } while (0)
 
@@ -21,6 +25,8 @@
 #define XLI_GET_VECTOR2I(value, result)	XLI_GET_X(#result, result = value[#result].ToVector2i())
 #define XLI_GET_VECTOR3I(value, result)	XLI_GET_X(#result, result = value[#result].ToVector3i())
 #define XLI_GET_VECTOR4I(value, result)	XLI_GET_X(#result, result = value[#result].ToVector4i())
+
+/** @} */
 
 namespace Xli
 {

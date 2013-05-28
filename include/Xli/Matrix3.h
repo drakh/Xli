@@ -28,7 +28,10 @@ namespace Xli
 		Matrix3();
 		explicit Matrix3(const float* values);
 		Matrix3(const Matrix3& m);
-		Matrix3(float v0, float v1, float v2, float v3, float v4, float v5, float v6, float v7, float v8);
+		
+		Matrix3(float m11, float m12, float m13, 
+			    float m21, float m22, float m23, 
+			    float m31, float m32, float m33);
 
 		Matrix3& operator = (const Matrix3& m);
 

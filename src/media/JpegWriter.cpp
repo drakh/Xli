@@ -78,10 +78,12 @@ namespace Xli
 				cinfo.input_components = 1;
 				cinfo.in_color_space = JCS_GRAYSCALE;
 				break;
+
 			case FormatRGB_8_8_8_UInt_Normalize: 
 				cinfo.input_components = 3;
 				cinfo.in_color_space = JCS_RGB;
 				break;
+				
 			default:
 				XLI_THROW(String("Unsupported JPEG Format: ") + FormatInfo::ToString(format));
 				break;

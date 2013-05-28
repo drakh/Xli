@@ -30,7 +30,10 @@ namespace Xli
 
 		Matrix4(const Matrix4& m);
 
-		Matrix4(float v0, float v1, float v2, float v3, float v4, float v5, float v6, float v7, float v8, float v9, float v10, float v11, float v12, float v13, float v14, float v15);
+		Matrix4(float m11, float m12, float m13, float m14, 
+			    float m21, float m22, float m23, float m24, 
+			    float m31, float m32, float m33, float m34, 
+			    float m41, float m42, float m43, float m44);
 
 		Matrix4& operator = (const Matrix4& m);
 
@@ -81,7 +84,7 @@ namespace Xli
 		static Matrix4 Scaling(const Vector3& v);
 		static Matrix4 Scaling(float s);
 
-		static Matrix4 GLLookAt(Vector3t<float> eye, Vector3t<float> center, Vector3t<float> up);
+		static Matrix4 GLLookAt(const Vector3& eye, const Vector3& center, const Vector3& up);
 		static Matrix4 GLPerspective(float fovRadians, float aspect, float zNear, float zFar);
 		static Matrix4 GLOrtho(float left, float right, float bottom, float top, float nearval = (float)-1, float farval = (float)1);
 	};

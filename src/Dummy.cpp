@@ -1,3 +1,6 @@
-static void Dummy()
+namespace Xli
 {
+	static void Dummy()
+	{
+	}
 }
