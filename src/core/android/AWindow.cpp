@@ -351,8 +351,9 @@ namespace Xli
 
 static int32_t handle_input(struct android_app* app, AInputEvent* event)
 {
-	if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION)
+	switch (AInputEvent_getType(event))
 	{
+	case AINPUT_EVENT_TYPE_MOTION:
 		if (GlobalEventHandler != 0)
 		{
 			int ai = AMotionEvent_getAction(event);
@@ -421,20 +422,20 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
 			}
 		}
 
-		return 1;
-	}
-	else if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_KEY)
-	{
+		break;
+	
+	case AINPUT_EVENT_TYPE_KEY:
 		if (GlobalEventHandler != 0)
 		{
 			if (AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_DOWN)
 			{
 				switch (AKeyEvent_getKeyCode(event))
 				{
+					/*
 				case AKEYCODE_BACK:
 					if (GlobalWindow != 0) GlobalWindow->Close(); // TODO
 					return 1;
-
+					*/
 				case AKEYCODE_MENU:
 					if (GlobalEventHandler->OnKeyDown(GlobalWindow, Xli::KeyMenu))
 						return 1;
@@ -446,9 +447,10 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
 			{
 				switch (AKeyEvent_getKeyCode(event))
 				{
+					/*
 				case AKEYCODE_BACK:
 					return 1;
-
+					*/
 				case AKEYCODE_MENU:
 					if (GlobalEventHandler->OnKeyUp(GlobalWindow, Xli::KeyMenu))
 						return 1;
@@ -458,7 +460,7 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
 			}
 		}
 
-		//return 1;
+		break;
 	}
 
 	return 0;
@@ -493,7 +495,7 @@ static const char* get_cmd_string(int32_t cmd)
 
 static void handle_cmd(struct android_app* app, int32_t cmd)
 {
-	LOGI("INCOMING CMD: %s", get_cmd_string(cmd));
+	//LOGI("INCOMING CMD: %s", get_cmd_string(cmd));
 
 	switch (cmd)
 	{

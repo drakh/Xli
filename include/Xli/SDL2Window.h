@@ -8,18 +8,18 @@ namespace Xli
 	*/
 	class SDL2Window: public Window
 	{
-        static int SDLCALL EventCallback(SDL_Event* ev, void* userdata);
+        friend class Window;
         
 		Shared<WindowEventHandler> eventHandler;
 		SDL_Window* window;
 		bool closed, fullscreen;
-		int x, y, w, h;
+		int x, y, w, h, buttons;
 
 	public:
 		WindowEventHandler* GetEventHandler() { return eventHandler; }
 		SDL_Window* GetSDLWindow() { return window; }
 
-		SDL2Window(int width, int height, const Xli::String& title, WindowEventHandler* eventHandler, int style);
+		SDL2Window(int width, int height, const Xli::String& title, WindowEventHandler* eventHandler, int flags);
 		SDL2Window(const void* nativeHandle);
 		virtual ~SDL2Window();
 
@@ -49,6 +49,12 @@ namespace Xli
 		virtual void Maximize();
 		virtual void Restore();
 
-		virtual void ShowCursor(bool show);
+		virtual bool GetKeyState(Key key);
+		virtual bool GetMouseButtonState(MouseButton button);
+		virtual Vector2i GetMousePosition();
+		virtual void SetMousePosition(Vector2i position);
+
+		virtual SystemCursor GetSystemCursor();
+		virtual void SetSystemCursor(SystemCursor cursor);
 	};
 }

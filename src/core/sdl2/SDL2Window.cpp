@@ -9,16 +9,63 @@ namespace Xli
 {
 	static SDL2Window* GlobalWindow = 0;
 
-	SDL2Window::SDL2Window(int width, int height, const String& title, WindowEventHandler* eventHandler, int style)
+#ifdef XLI_PLATFORM_IOS
+    static int HandleAppEvents(void *userdata, SDL_Event *event)
+    {
+        switch (event->type)
+        {
+        case SDL_APP_TERMINATING:
+            if (GlobalWindow && GlobalWindow->GetEventHandler())
+                GlobalWindow->GetEventHandler()->OnClosed(GlobalWindow);
+            
+            return 0;
+            
+        case SDL_APP_LOWMEMORY:
+            if (GlobalWindow && GlobalWindow->GetEventHandler())
+                GlobalWindow->GetEventHandler()->OnAppLowMemory(GlobalWindow);
+            
+            return 0;
+            
+        case SDL_APP_WILLENTERBACKGROUND:
+            if (GlobalWindow && GlobalWindow->GetEventHandler())
+                GlobalWindow->GetEventHandler()->OnAppWillEnterBackground(GlobalWindow);
+            
+            return 0;
+            
+        case SDL_APP_DIDENTERBACKGROUND:
+            if (GlobalWindow && GlobalWindow->GetEventHandler())
+                GlobalWindow->GetEventHandler()->OnAppDidEnterBackground(GlobalWindow);
+            
+            return 0;
+            
+        case SDL_APP_WILLENTERFOREGROUND:
+            if (GlobalWindow && GlobalWindow->GetEventHandler())
+                GlobalWindow->GetEventHandler()->OnAppWillEnterForeground(GlobalWindow);
+            
+            return 0;
+            
+        case SDL_APP_DIDENTERFOREGROUND:
+            if (GlobalWindow && GlobalWindow->GetEventHandler())
+                GlobalWindow->GetEventHandler()->OnAppDidEnterForeground(GlobalWindow);
+            
+            return 0;
+        }
+        
+        return 1;
+    }
+#endif
+    
+	SDL2Window::SDL2Window(int width, int height, const String& title, WindowEventHandler* eventHandler, int flags)
 	{
-		if (GlobalWindow == 0) GlobalWindow = this;
+		if (GlobalWindow == 0) 
+			GlobalWindow = this;
 
 		closed = false;
 		fullscreen = false;
 
-		if ((style & WindowStyleFullscreen) == WindowStyleFullscreen)
+		if ((flags & WindowFlagsFullscreen) == WindowFlagsFullscreen)
 		{
-			style &= ~WindowStyleFullscreen;
+			flags &= ~WindowFlagsFullscreen;
 			fullscreen = true;
 		}
 
@@ -26,18 +73,15 @@ namespace Xli
 		y = SDL_WINDOWPOS_UNDEFINED;
 		w = width;
 		h = height;
+        buttons = 0;
 
-		Uint32 flags = SDL_WINDOW_OPENGL;
+		Uint32 sdlFlags = SDL_WINDOW_OPENGL;
 		
-		if ((style & WindowStyleBorderless) == WindowStyleBorderless)
-		{
-			flags |= SDL_WINDOW_BORDERLESS;
-		}
+		if (flags & WindowFlagsBorderless)
+			sdlFlags |= SDL_WINDOW_BORDERLESS;
         
-		if ((style & WindowStyleResizeable) == WindowStyleResizeable)
-		{
-			flags |= SDL_WINDOW_RESIZABLE;
-		}
+		if (flags & WindowFlagsResizeable)
+			sdlFlags |= SDL_WINDOW_RESIZABLE;
         
 		this->eventHandler = eventHandler;
 
@@ -48,7 +92,7 @@ namespace Xli
 
 #else
 
-        flags |= SDL_WINDOW_OPENGL;
+        sdlFlags |= SDL_WINDOW_OPENGL;
 
 #endif
         
@@ -56,16 +100,16 @@ namespace Xli
       
         String orientations = "";
         
-        if ((style & WindowStyleOrientationLandscapeLeft) == WindowStyleOrientationLandscapeLeft)
+        if (flags & WindowFlagsOrientationLandscapeLeft)
             orientations += "LandscapeLeft ";
         
-        if ((style & WindowStyleOrientationLandscapeRight) == WindowStyleOrientationLandscapeRight)
+        if (flags & WindowFlagsOrientationLandscapeRight)
             orientations += "LandscapeRight ";
         
-        if ((style & WindowStyleOrientationPortrait) == WindowStyleOrientationPortrait)
+        if (flags & WindowFlagsOrientationPortrait)
             orientations += "Portrait ";
         
-        if ((style & WindowStyleOrientationPortraitUpsideDown) == WindowStyleOrientationPortraitUpsideDown)
+        if (flags & WindowFlagsOrientationPortraitUpsideDown)
             orientations += "PortraitUpsideDown";
 
         if (orientations.Length() > 0 && !SDL_SetHint("SDL_IOS_ORIENTATIONS", orientations.Data())) 
@@ -75,11 +119,13 @@ namespace Xli
             ErrorPrintLine("SDL WARNING: Failed to disable idle timer");
 
         if (fullscreen)
-            flags |= SDL_WINDOW_BORDERLESS;
+            sdlFlags |= SDL_WINDOW_BORDERLESS;
+        
+        SDL_SetEventFilter(HandleAppEvents, NULL);
         
 #endif
         
-		window = SDL_CreateWindow(title.Data(), x, y, width, height, flags);
+		window = SDL_CreateWindow(title.Data(), x, y, width, height, sdlFlags);
 
 		SDL_SetWindowData(window, "SDL2Window", this);
         
@@ -121,14 +167,18 @@ namespace Xli
 
 	void SDL2Window::Close()
 	{
-		if (eventHandler.IsSet())
-		{
-			if (!eventHandler->OnClose()) return;
-			eventHandler->OnClosed();
-		}
+        if (!closed)
+        {
+            if (eventHandler.IsSet())
+            {
+                bool cancel = false;
+                if (eventHandler->OnClosing(this, cancel) && cancel) return;
+            }
 
-		SDL_HideWindow(window);
-		closed = true;
+            SDL_HideWindow(window);
+            closed = true;
+            eventHandler->OnClosed(this);
+        }
 	}
 
 	bool SDL2Window::IsClosed()
@@ -188,6 +238,7 @@ namespace Xli
 			// TODO: This may need to be changed for X11 platforms
 			return *(void**)&info.info;
 		}
+
 		return 0;
 	}
 
@@ -264,9 +315,124 @@ namespace Xli
 		SDL_RestoreWindow(window);
 	}
 
-	void SDL2Window::ShowCursor(bool show)
+	bool SDL2Window::GetKeyState(Key key)
 	{
-		SDL_ShowCursor(show ? 1 : 0);
+#ifndef XLI_PLATFORM_IOS
+        Uint8* keys = SDL_GetKeyboardState(0);
+        
+        switch (key)
+        {
+            case KeyBackspace: return keys[SDL_SCANCODE_BACKSPACE];
+            case KeyTab: return keys[SDL_SCANCODE_TAB];
+            case KeyEnter: return keys[SDL_SCANCODE_RETURN] || keys[SDL_SCANCODE_RETURN2];
+            case KeyShift: return keys[SDL_SCANCODE_LSHIFT] || keys[SDL_SCANCODE_RSHIFT];
+            case KeyCtrl: return keys[SDL_SCANCODE_LCTRL] || keys[SDL_SCANCODE_RCTRL];
+            case KeyAlt: return keys[SDL_SCANCODE_LALT] || keys[SDL_SCANCODE_RALT];
+            case KeyBreak: return keys[SDL_SCANCODE_PAUSE];
+            case KeyCapsLock: return keys[SDL_SCANCODE_CAPSLOCK];
+            case KeyEscape: return keys[SDL_SCANCODE_ESCAPE];
+            case KeySpace: return keys[SDL_SCANCODE_SPACE];
+            case KeyPageUp: return keys[SDL_SCANCODE_PAGEUP];
+            case KeyPageDown: return keys[SDL_SCANCODE_PAGEDOWN];
+            case KeyEnd: return keys[SDL_SCANCODE_END];
+            case KeyHome: return keys[SDL_SCANCODE_HOME];
+            case KeyLeft: return keys[SDL_SCANCODE_LEFT];
+            case KeyUp: return keys[SDL_SCANCODE_UP];
+            case KeyRight: return keys[SDL_SCANCODE_RIGHT];
+            case KeyDown: return keys[SDL_SCANCODE_DOWN];
+            case KeyInsert: return keys[SDL_SCANCODE_INSERT];
+            case KeyDelete: return keys[SDL_SCANCODE_DELETE];
+            case Key0: return keys[SDL_SCANCODE_0];
+            case Key1: return keys[SDL_SCANCODE_1];
+            case Key2: return keys[SDL_SCANCODE_2];
+            case Key3: return keys[SDL_SCANCODE_3];
+            case Key4: return keys[SDL_SCANCODE_4];
+            case Key5: return keys[SDL_SCANCODE_5];
+            case Key6: return keys[SDL_SCANCODE_6];
+            case Key7: return keys[SDL_SCANCODE_7];
+            case Key8: return keys[SDL_SCANCODE_8];
+            case Key9: return keys[SDL_SCANCODE_9];
+            case KeyA: return keys[SDL_SCANCODE_A];
+            case KeyB: return keys[SDL_SCANCODE_B];
+            case KeyC: return keys[SDL_SCANCODE_C];
+            case KeyD: return keys[SDL_SCANCODE_D];
+            case KeyE: return keys[SDL_SCANCODE_E];
+            case KeyF: return keys[SDL_SCANCODE_F];
+            case KeyG: return keys[SDL_SCANCODE_G];
+            case KeyH: return keys[SDL_SCANCODE_H];
+            case KeyI: return keys[SDL_SCANCODE_I];
+            case KeyJ: return keys[SDL_SCANCODE_J];
+            case KeyK: return keys[SDL_SCANCODE_K];
+            case KeyL: return keys[SDL_SCANCODE_L];
+            case KeyM: return keys[SDL_SCANCODE_M];
+            case KeyN: return keys[SDL_SCANCODE_N];
+            case KeyO: return keys[SDL_SCANCODE_O];
+            case KeyP: return keys[SDL_SCANCODE_P];
+            case KeyQ: return keys[SDL_SCANCODE_Q];
+            case KeyR: return keys[SDL_SCANCODE_R];
+            case KeyS: return keys[SDL_SCANCODE_S];
+            case KeyT: return keys[SDL_SCANCODE_T];
+            case KeyU: return keys[SDL_SCANCODE_U];
+            case KeyV: return keys[SDL_SCANCODE_V];
+            case KeyW: return keys[SDL_SCANCODE_W];
+            case KeyX: return keys[SDL_SCANCODE_X];
+            case KeyY: return keys[SDL_SCANCODE_Y];
+            case KeyZ: return keys[SDL_SCANCODE_Z];
+            case KeyNumPad0: return keys[SDL_SCANCODE_KP_0];
+            case KeyNumPad1: return keys[SDL_SCANCODE_KP_1];
+            case KeyNumPad2: return keys[SDL_SCANCODE_KP_2];
+            case KeyNumPad3: return keys[SDL_SCANCODE_KP_3];
+            case KeyNumPad4: return keys[SDL_SCANCODE_KP_4];
+            case KeyNumPad5: return keys[SDL_SCANCODE_KP_5];
+            case KeyNumPad6: return keys[SDL_SCANCODE_KP_6];
+            case KeyNumPad7: return keys[SDL_SCANCODE_KP_7];
+            case KeyNumPad8: return keys[SDL_SCANCODE_KP_8];
+            case KeyNumPad9: return keys[SDL_SCANCODE_KP_9];
+            case KeyF1: return keys[SDL_SCANCODE_F1];
+            case KeyF2: return keys[SDL_SCANCODE_F2];
+            case KeyF3: return keys[SDL_SCANCODE_F3];
+            case KeyF4: return keys[SDL_SCANCODE_F4];
+            case KeyF5: return keys[SDL_SCANCODE_F5];
+            case KeyF6: return keys[SDL_SCANCODE_F6];
+            case KeyF7: return keys[SDL_SCANCODE_F7];
+            case KeyF8: return keys[SDL_SCANCODE_F8];
+            case KeyF9: return keys[SDL_SCANCODE_F9];
+            case KeyF10: return keys[SDL_SCANCODE_F10];
+            case KeyF11: return keys[SDL_SCANCODE_F11];
+            case KeyF12: return keys[SDL_SCANCODE_F12];
+                
+            case KeyMenu:
+            case KeyUnknown: break;
+        }
+#endif
+		return false;
+	}
+
+	bool SDL2Window::GetMouseButtonState(MouseButton button)
+	{
+        return buttons & SDL_BUTTON((int)button);
+	}
+
+	Vector2i SDL2Window::GetMousePosition()
+	{
+		int x, y;
+        SDL_GetMouseState(&x, &y);
+        return Vector2i(x, y);
+	}
+
+	void SDL2Window::SetMousePosition(Vector2i position)
+	{
+        SDL_WarpMouseInWindow(window, position.X, position.Y);
+	}
+
+	SystemCursor SDL2Window::GetSystemCursor()
+	{
+		return SystemCursorNone;
+	}
+
+	void SDL2Window::SetSystemCursor(SystemCursor cursor)
+	{
+
 	}
 
 	static bool inited = false;
@@ -322,10 +488,14 @@ namespace Xli
 		{
 		case SDLK_BACKSPACE: return KeyBackspace;
 		case SDLK_TAB: return KeyTab;
-		case SDLK_RETURN: case SDLK_RETURN2: return KeyEnter;
-		case SDLK_LSHIFT: case SDLK_RSHIFT: return KeyShift;
-		case SDLK_LCTRL: case SDLK_RCTRL: return KeyCtrl;
-		case SDLK_LALT: case SDLK_RALT: return KeyAlt;
+		case SDLK_RETURN: 
+		case SDLK_RETURN2: return KeyEnter;
+		case SDLK_LSHIFT: 
+		case SDLK_RSHIFT: return KeyShift;
+		case SDLK_LCTRL: 
+		case SDLK_RCTRL: return KeyCtrl;
+		case SDLK_LALT: 
+		case SDLK_RALT: return KeyAlt;
 		case SDLK_PAUSE: return KeyBreak;
 		case SDLK_CAPSLOCK: return KeyCapsLock;
 		case SDLK_ESCAPE: return KeyEscape;
@@ -402,23 +572,22 @@ namespace Xli
         case SDLK_LGUI:
         case SDLK_RGUI:
 		case SDLK_MENU: return KeyMenu;
-
-		default: 
-            //Xli::ErrorPrintLine("SDL WARNING: Unknown key: " + CharString::HexFromInt((int)key.sym));
-            return KeyUnknown;
 		}
+        
+        //Xli::ErrorPrintLine("SDL WARNING: Unknown key: " + CharString::HexFromInt((int)key.sym));
+        return KeyUnknown;
 	}
 
-	static MouseButtons SDLButtonToXliMouseButtons(Uint8 button)
+	static MouseButton SDLButtonToXliMouseButton(Uint8 button)
 	{
 		switch (button)
 		{
-		case SDL_BUTTON_LEFT: return MouseButtonsLeft;
-		case SDL_BUTTON_RIGHT: return MouseButtonsRight;
-		case SDL_BUTTON_MIDDLE: return MouseButtonsMiddle;
-		case SDL_BUTTON_X1: return MouseButtonsX1;
-		case SDL_BUTTON_X2: return MouseButtonsX2;
-		default: return MouseButtonsNone;
+		case SDL_BUTTON_LEFT: return MouseButtonLeft;
+		case SDL_BUTTON_RIGHT: return MouseButtonRight;
+		case SDL_BUTTON_MIDDLE: return MouseButtonMiddle;
+		case SDL_BUTTON_X1: return MouseButtonX1;
+		case SDL_BUTTON_X2: return MouseButtonX2;
+		default: return MouseButtonUnknown;
 		}
 	}
     
@@ -443,8 +612,8 @@ namespace Xli
                         int w, h;
                         SDL_GetWindowSize(GlobalWindow->GetSDLWindow(), &w, &h);
                         
-                        float x = e.tfinger.x;
-                        float y = e.tfinger.y;
+                        float x = e.tfinger.x * w;
+                        float y = e.tfinger.y * h;
                         int id = (int)e.tfinger.fingerId;
                         
                         //Xli::ErrorPrintLine(String::HexFromInt((int)e.type) + " " + (String)x + " " + y + " " + (String)(int)e.tfinger.fingerId);
@@ -452,13 +621,15 @@ namespace Xli
                         switch (e.type)
                         {
                             case SDL_FINGERDOWN:
-                                GlobalWindow->GetEventHandler()->OnTouchDown(x, y, id);
+                                GlobalWindow->GetEventHandler()->OnTouchDown(GlobalWindow, Vector2(x, y), id);
                                 break;
+                                
                             case SDL_FINGERMOTION:
-                                GlobalWindow->GetEventHandler()->OnTouchMove(x, y, id);
+                                GlobalWindow->GetEventHandler()->OnTouchMove(GlobalWindow, Vector2(x, y), id);
                                 break;
+                                
                             case SDL_FINGERUP:
-                                GlobalWindow->GetEventHandler()->OnTouchUp(x, y, id);
+                                GlobalWindow->GetEventHandler()->OnTouchUp(GlobalWindow, Vector2(x, y), id);
                                 break;
                         }
                     }
@@ -469,7 +640,7 @@ namespace Xli
                     continue;
             }
 #endif
-            
+
             if (e.type == SDL_QUIT && GlobalWindow != 0)
             {
                 GlobalWindow->Close();
@@ -482,7 +653,7 @@ namespace Xli
             
 			if (wnd == 0)
 			{
-				ErrorPrintLine("SDL WARNING: wnd pointer was NULL in Window::ProcessMessages (" + String::HexFromInt((int)e.type) + ")");
+				//ErrorPrintLine("SDL WARNING: wnd pointer was NULL in Window::ProcessMessages (" + String::HexFromInt((int)e.type) + ")");
                 continue;
 			}
             
@@ -491,25 +662,25 @@ namespace Xli
 				case SDL_QUIT:
 					wnd->Close();
 					break;
-                
+                     
 				case SDL_WINDOWEVENT:
 					switch (e.window.event)
 					{
 						case SDL_WINDOWEVENT_CLOSE:
 							wnd->Close();
 							break;
-                        
+
 						case SDL_WINDOWEVENT_RESIZED:
 							if (wnd->GetEventHandler() != 0)
 							{
-								wnd->GetEventHandler()->OnResize(e.window.data1, e.window.data2);
+								wnd->GetEventHandler()->OnSizeChanged(wnd, Vector2i(e.window.data1, e.window.data2));
 							}
 							break;
-                        
+
 						case SDL_WINDOWEVENT_SIZE_CHANGED:
 							if (wnd->GetEventHandler() != 0)
 							{
-								wnd->GetEventHandler()->OnResize(e.window.data1, e.window.data2);
+								wnd->GetEventHandler()->OnSizeChanged(wnd, Vector2i(e.window.data1, e.window.data2));
 							}
 							break;
                         
@@ -529,42 +700,52 @@ namespace Xli
 				case SDL_KEYDOWN:
 					if (wnd->GetEventHandler() != 0)
 					{
-						wnd->GetEventHandler()->OnKeyDown(SDLKeyToXliKey(e.key.keysym));
+						Key key = SDLKeyToXliKey(e.key.keysym);
+						if (key) wnd->GetEventHandler()->OnKeyDown(wnd, key);
 					}
 					break;
                 
 				case SDL_KEYUP:
 					if (wnd->GetEventHandler() != 0)
 					{
-						wnd->GetEventHandler()->OnKeyUp(SDLKeyToXliKey(e.key.keysym));
+						Key key = SDLKeyToXliKey(e.key.keysym);
+						if (key) wnd->GetEventHandler()->OnKeyUp(wnd, key);
 					}
 					break;
                     
 				case SDL_MOUSEBUTTONDOWN:
+                    wnd->buttons |= SDL_BUTTON(e.button.button);
+                    
 					if (wnd->GetEventHandler() != 0)
 					{
-						wnd->GetEventHandler()->OnMouseDown(e.button.x, e.button.y, SDLButtonToXliMouseButtons(e.button.button));
+						MouseButton button = SDLButtonToXliMouseButton(e.button.button);
+						if (button) wnd->GetEventHandler()->OnMouseDown(wnd, Vector2i(e.button.x, e.button.y), button);
 					}
+                    
 					break;
                 
 				case SDL_MOUSEBUTTONUP:
+                    wnd->buttons &= ~SDL_BUTTON(e.button.button);
+                    
 					if (wnd->GetEventHandler() != 0)
 					{
-						wnd->GetEventHandler()->OnMouseUp(e.button.x, e.button.y, SDLButtonToXliMouseButtons(e.button.button));
+						MouseButton button = SDLButtonToXliMouseButton(e.button.button);
+						if (button) wnd->GetEventHandler()->OnMouseUp(wnd, Vector2i(e.button.x, e.button.y), button);
 					}
+                    
 					break;
                 
 				case SDL_MOUSEMOTION:
 					if (wnd->GetEventHandler() != 0)
 					{
-						wnd->GetEventHandler()->OnMouseMove(e.button.x, e.button.y);
+						wnd->GetEventHandler()->OnMouseMove(wnd, Vector2i(e.button.x, e.button.y));
 					}
 					break;
                 
 				case SDL_MOUSEWHEEL:
 					if (wnd->GetEventHandler() != 0)
 					{
-						wnd->GetEventHandler()->OnMouseWheel(e.wheel.x, e.wheel.y);
+						wnd->GetEventHandler()->OnMouseWheel(wnd, Vector2i(e.wheel.x, e.wheel.y));
 					}
 					break;
 #endif

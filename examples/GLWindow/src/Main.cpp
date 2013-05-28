@@ -27,7 +27,7 @@ class GLWindowEventHandler: public WindowEventHandler
 	{
 		Err->WriteLine("OnKeyDown: " + (String)(int)key);
 
-		if (key == KeyF11 || key == KeyEnter && wnd->GetKeyState(KeyCtrl))
+		if (key == KeyF11 || (key == KeyEnter && wnd->GetKeyState(KeyCtrl)))
 		{
 			wnd->SetFullscreen(!wnd->IsFullscreen());
 			return true;
@@ -100,21 +100,40 @@ class GLWindowEventHandler: public WindowEventHandler
 		return false;
 	}
 
+    double touchDownTime;
+    double tapTime;
+    
 	virtual bool OnTouchDown(Window* wnd, Vector2 pos, int id)
 	{
 		Err->WriteLine("OnTouchDown: " + pos.ToString() + ", " + id);
+        touchDownTime = GetTime();
 		return false;
 	}
 
 	virtual bool OnTouchMove(Window* wnd, Vector2 pos, int id)
 	{
 		Err->WriteLine("OnTouchMove: " + pos.ToString() + ", " + id);
+        Vector2i size = wnd->GetClientSize();
+        glClearColor(pos.X / size.X, pos.Y / size.Y, 0, 1);
 		return false;
 	}
 
 	virtual bool OnTouchUp(Window* wnd, Vector2 pos, int id)
 	{
 		Err->WriteLine("OnTouchUp: " + pos.ToString() + ", " + id);
+        
+        if (GetTime() - touchDownTime < 0.15)
+        {
+            if (GetTime() - tapTime < 0.3)
+            {
+                // double tap
+                if (MessageBox::Show(wnd, "Double tap detected", "Hello", DialogButtonsOKCancel) == DialogResultOK)
+                    glClearColor(1,1,1,1);
+            }
+            
+            tapTime = GetTime();
+        }
+        
 		return false;
 	}
 
@@ -193,9 +212,12 @@ int Main(const Array<String>& args)
 		Window::ProcessMessages();
 
 		if (wnd->GetKeyState(KeySpace))
-			Out->WriteFormat("%.2lf %d %d\r", GetTime(), wnd->GetMousePosition());
+		{
+			Vector2i mousePos = wnd->GetMousePosition();
+			Out->WriteFormat("%.2lf %d %d\r", GetTime(), mousePos.X, mousePos.Y);
+		}
 	}
 
-    PrintLine("Closing GLWindow");
+    PrintLine("Exiting GLWindow");
 	return 0;
 }

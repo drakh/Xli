@@ -204,7 +204,6 @@
 		CE2D6C8C16C70D8500390436 /* Exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D670A16C70D8000390436 /* Exception.cpp */; };
 		CE2D6C8D16C70D8500390436 /* File.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D670B16C70D8000390436 /* File.cpp */; };
 		CE2D6C8E16C70D8500390436 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D670C16C70D8000390436 /* FileSystem.cpp */; };
-		CE2D6C8F16C70D8500390436 /* GenericAssetFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D670E16C70D8000390436 /* GenericAssetFileSystem.cpp */; };
 		CE2D6C9016C70D8500390436 /* GenericDialogs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D670F16C70D8000390436 /* GenericDialogs.cpp */; };
 		CE2D6C9316C70D8500390436 /* Hash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D671216C70D8000390436 /* Hash.cpp */; };
 		CE2D6C9516C70D8500390436 /* Matrix3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D671416C70D8000390436 /* Matrix3.cpp */; };
@@ -462,7 +461,6 @@
 		CE2D670A16C70D8000390436 /* Exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Exception.cpp; sourceTree = "<group>"; };
 		CE2D670B16C70D8000390436 /* File.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = File.cpp; sourceTree = "<group>"; };
 		CE2D670C16C70D8000390436 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
-		CE2D670E16C70D8000390436 /* GenericAssetFileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenericAssetFileSystem.cpp; sourceTree = "<group>"; };
 		CE2D670F16C70D8000390436 /* GenericDialogs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenericDialogs.cpp; sourceTree = "<group>"; };
 		CE2D671216C70D8000390436 /* Hash.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Hash.cpp; sourceTree = "<group>"; };
 		CE2D671416C70D8000390436 /* Matrix3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix3.cpp; sourceTree = "<group>"; };
@@ -1118,7 +1116,6 @@
 		CE2D670D16C70D8000390436 /* generic */ = {
 			isa = PBXGroup;
 			children = (
-				CE2D670E16C70D8000390436 /* GenericAssetFileSystem.cpp */,
 				CE2D670F16C70D8000390436 /* GenericDialogs.cpp */,
 			);
 			path = generic;
@@ -1524,7 +1521,6 @@
 				CE2D6C8C16C70D8500390436 /* Exception.cpp in Sources */,
 				CE2D6C8D16C70D8500390436 /* File.cpp in Sources */,
 				CE2D6C8E16C70D8500390436 /* FileSystem.cpp in Sources */,
-				CE2D6C8F16C70D8500390436 /* GenericAssetFileSystem.cpp in Sources */,
 				CE2D6C9016C70D8500390436 /* GenericDialogs.cpp in Sources */,
 				CE2D6C9316C70D8500390436 /* Hash.cpp in Sources */,
 				CE2D6C9516C70D8500390436 /* Matrix3.cpp in Sources */,

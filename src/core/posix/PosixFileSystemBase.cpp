@@ -40,7 +40,9 @@ namespace Xli
         
 	String PosixFileSystemBase::CreateTempFilename()
 	{
-		const String pre = GetTempDirectory() + "/" + (int)getpid() + "-";
+		String pre = GetTempDirectory();
+        if (pre.Last() != '/') pre += "/";
+        pre += (String)(int)getpid() + "-";
 
 		Random rand(Hash(GetTimestamp()));
 		static const char* cs = "-_1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
