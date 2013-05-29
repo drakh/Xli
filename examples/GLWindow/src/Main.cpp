@@ -39,7 +39,7 @@ class EventHandler: public WindowEventHandler
 		}
 		else if (key == KeyF4 || key == KeyAlt)
 		{
-			// Set as handled to disable default closing behaviour on Win32 (TODO: This does not work)
+			// Set as handled to disable default closing behaviour on Win32 (TODO: This does not work as expected)
 			return true;
 		}
 
@@ -82,6 +82,26 @@ class EventHandler: public WindowEventHandler
 			float y = (float)pos.Y / size.Y;
 
 			glClearColor(x, y, 0, 1);
+			return true;
+		}
+		else if (wnd->GetMouseButtonState(MouseButtonMiddle))
+		{
+			Vector2i size = wnd->GetClientSize();
+
+			float x = (float)pos.X / size.X;
+			float y = (float)pos.Y / size.Y;
+
+			glClearColor(x, y, x, 1);
+			return true;
+		}
+		else if (wnd->GetMouseButtonState(MouseButtonRight))
+		{
+			Vector2i size = wnd->GetClientSize();
+
+			float x = (float)pos.X / size.X;
+			float y = (float)pos.Y / size.Y;
+
+			glClearColor(y, 0, x, 1);
 			return true;
 		}
 
@@ -160,6 +180,11 @@ class EventHandler: public WindowEventHandler
 	virtual void OnAppLowMemory(Window* wnd)
 	{
 		Err->WriteLine("OnAppLowMemory");
+	}
+
+	virtual void OnAppTerminating(Window* wnd)
+	{
+		Err->WriteLine("OnAppTerminating");
 	}
 
 	virtual void OnAppWillEnterForeground(Window* wnd)

@@ -147,9 +147,7 @@ namespace Xli
 			Utf16String nameW = Unicode::Utf8To16(name);
 
 			if (!DeleteFileW(nameW.Data()))
-			{
 				XLI_THROW("Unable to delete file '" + name + "': " + Win32Helpers::GetLastErrorString());
-			}
 		}
 
 		virtual void MoveDirectory(const String& oldName, const String& newName)
@@ -158,9 +156,7 @@ namespace Xli
 			Utf16String newNameW = Unicode::Utf8To16(newName);
 
 			if (!MoveFileW(oldNameW.Data(), newNameW.Data()))
-			{
 				XLI_THROW("Unable to move directory '" + oldName + "' to '" + newName + "': " + Win32Helpers::GetLastErrorString());
-			}			
 		}
 		
 		virtual void MoveFile(const String& oldName, const String& newName)
@@ -169,9 +165,7 @@ namespace Xli
 			Utf16String newNameW = Unicode::Utf8To16(newName);
 
 			if (!MoveFileW(oldNameW.Data(), newNameW.Data()))
-			{
 				XLI_THROW("Unable to move file '" + oldName + "' to '" + newName + "': " + Win32Helpers::GetLastErrorString());
-			}
 		}
 
 		virtual bool GetFileInfo(const String& path, FileInfo& info)

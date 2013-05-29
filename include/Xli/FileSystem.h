@@ -32,7 +32,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup IO
+		\addtogroup IO
 	*/
 	const char* FileModeToString(FileMode mode);
 	

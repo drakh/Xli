@@ -37,8 +37,8 @@ set(Sources
 if (WIN32)
 
     SET(Sources ${Sources}
-        generic/GenericAssetFileSystem.cpp
         win32/Win32Cond.cpp
+		win32/Win32Dialogs.cpp
         win32/Win32FileSystem.cpp
         win32/Win32Helpers.cpp
         win32/Win32MessageBox.cpp
@@ -83,7 +83,7 @@ else()
 
 		set(Sources ${Sources}
 			generic/GenericAssetFileSystem.cpp
-			posix/PosixFileSystem.cpp
+			xdg/XdgFileSystem.cpp
 			)
 
 		add_definitions("`sdl2-config --cflags`" -DXLI_HAS_GLEW)

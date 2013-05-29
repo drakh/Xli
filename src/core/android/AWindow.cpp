@@ -1,27 +1,21 @@
-#include <jni.h>
+#include "3rdparty/android_native_app_glue.h"
+#include "AInternal.h"
+
+#include <android/window.h>
+#include <EGL/egl.h>
+
+#include <cstdlib>
 #include <errno.h>
 #include <unistd.h>
-#include <cstdlib>
-
-#include <EGL/egl.h>
-#include "3rdparty/android_native_app_glue.h"
-#include <android/native_window.h>
-#include <android/native_activity.h>
-#include <android/window.h>
-
-#include <android/log.h>
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "XLI", __VA_ARGS__))
-#define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "XLI", __VA_ARGS__))
-#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "XLI", __VA_ARGS__))
 
 #include <Xli/Console.h>
+#include <Xli/Display.h>
 #include <Xli/GLContext.h>
 #include <Xli/Window.h>
-#include <Xli/Display.h>
 
-struct AAssetManager* XliAAssetManager = 0;
+struct ANativeActivity* XliActivity = 0;
 
-static struct android_app* GlobalState = 0;
+static struct android_app* GlobalAndroidApp = 0;
 static Xli::WindowEventHandler* GlobalEventHandler = 0;
 static Xli::Window* GlobalWindow = 0;
 static int GlobalWidth = 0;
@@ -66,12 +60,12 @@ namespace Xli
 				GlobalEventHandler->OnClosed(this);
 			}
 
-			GlobalState->destroyRequested = 1;
+			GlobalAndroidApp->destroyRequested = 1;
 		}
 
 		virtual bool IsClosed()
 		{
-			return GlobalState->destroyRequested == 1;
+			return GlobalAndroidApp->destroyRequested == 1;
 		}
 
 		virtual bool IsVisible()
@@ -116,7 +110,7 @@ namespace Xli
 
 		virtual void* GetNativeHandle()
 		{
-			return GlobalState->window;
+			return GlobalAndroidApp->window;
 		}
 
 		virtual void SetTitle(const String& title)
@@ -199,8 +193,8 @@ namespace Xli
 
 	Vector2i Window::GetScreenSize()
 	{
-		int w = ANativeWindow_getWidth(GlobalState->window);
-		int h = ANativeWindow_getHeight(GlobalState->window);
+		int w = ANativeWindow_getWidth(GlobalAndroidApp->window);
+		int h = ANativeWindow_getHeight(GlobalAndroidApp->window);
 		return Vector2i(w, h);
 	}
 
@@ -230,16 +224,13 @@ namespace Xli
 
 		while ((ident = ALooper_pollAll(0, NULL, &events, (void**)&source)) >= 0) 
 			if (source != NULL)
-				source->process(GlobalState, source);
+				source->process(GlobalAndroidApp, source);
 
-		if (GlobalState->destroyRequested != 0)
-			LOGI("DESTROY REQUESTED");
-
-		if (inited)
+		if (inited && !GlobalAndroidApp->destroyRequested)
 		{
 			// Detect window resize / screen rotation automatically here
-			int w = ANativeWindow_getWidth(GlobalState->window);
-			int h = ANativeWindow_getHeight(GlobalState->window);
+			int w = ANativeWindow_getWidth(GlobalAndroidApp->window);
+			int h = ANativeWindow_getHeight(GlobalAndroidApp->window);
 
 			if (w != GlobalWidth || h != GlobalHeight)
 			{
@@ -267,8 +258,8 @@ namespace Xli
 
 	Recti Display::GetRect(int index)
 	{
-		int w = ANativeWindow_getWidth(GlobalState->window);
-		int h = ANativeWindow_getHeight(GlobalState->window);
+		int w = ANativeWindow_getWidth(GlobalAndroidApp->window);
+		int h = ANativeWindow_getHeight(GlobalAndroidApp->window);
 		return Recti(0, 0, w, h);
 	}
 
@@ -371,7 +362,7 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
 					int x = AMotionEvent_getX(event, i);
 					int y = AMotionEvent_getY(event, i);
 
-					//LOGI("TOUCH EVENT: %d  %d  %d  %d  %d", a, i, id, x, y);
+					//LOGD("TOUCH EVENT: %d  %d  %d  %d  %d", a, i, id, x, y);
 
 					switch (a)
 					{
@@ -399,7 +390,7 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
 						int y = AMotionEvent_getY(event, i);
 						GlobalEventHandler->OnTouchMove(GlobalWindow, Xli::Vector2(x, y), id);
 
-						//LOGI("TOUCH MOVE: %d  %d  %d  %d  %d", a, i, id, x, y);
+						//LOGD("TOUCH MOVE: %d  %d  %d  %d  %d", a, i, id, x, y);
 					}
 				}
 				break;
@@ -415,7 +406,7 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
 						int y = AMotionEvent_getY(event, i);
 						GlobalEventHandler->OnTouchUp(GlobalWindow, Xli::Vector2(x, y), id);
 
-						//LOGI("TOUCH CANCEL: %d  %d  %d  %d  %d", a, i, id, x, y);
+						//LOGD("TOUCH CANCEL: %d  %d  %d  %d  %d", a, i, id, x, y);
 					}
 				}
 				break;
@@ -495,7 +486,7 @@ static const char* get_cmd_string(int32_t cmd)
 
 static void handle_cmd(struct android_app* app, int32_t cmd)
 {
-	//LOGI("INCOMING CMD: %s", get_cmd_string(cmd));
+	//LOGD("INCOMING CMD: %s", get_cmd_string(cmd));
 
 	switch (cmd)
 	{
@@ -533,12 +524,12 @@ static void handle_cmd(struct android_app* app, int32_t cmd)
 
 		case APP_CMD_STOP:
 		case APP_CMD_TERM_WINDOW:
-			if (!GlobalState->destroyRequested)
+			if (!app->destroyRequested)
 			{
-				if (GlobalEventHandler)
-					GlobalEventHandler->OnClosed(GlobalWindow);
+				app->destroyRequested = 1;
 
-				GlobalState->destroyRequested = 1;
+				if (GlobalEventHandler)
+					GlobalEventHandler->OnAppTerminating(GlobalWindow);
 			}
 
 			break;
@@ -547,18 +538,19 @@ static void handle_cmd(struct android_app* app, int32_t cmd)
 
 extern "C" int main(int argc, char* argv[]);
 
-extern "C" void android_main(struct android_app* state)
+extern "C" void android_main(struct android_app* app)
 {
     // Make sure glue isn't stripped.
     app_dummy();
 
-    state->userData = 0;
-    state->onAppCmd = handle_cmd;
-    state->onInputEvent = handle_input;
+    app->userData = 0;
+    app->onAppCmd = handle_cmd;
+    app->onInputEvent = handle_input;
 	
-	GlobalState = state;
+	GlobalAndroidApp = app;
+	XliActivity = app->activity;
 
-	ANativeActivity_setWindowFlags(state->activity, AWINDOW_FLAG_FULLSCREEN | AWINDOW_FLAG_KEEP_SCREEN_ON | AWINDOW_FLAG_TURN_SCREEN_ON, 0);
+	ANativeActivity_setWindowFlags(XliActivity, AWINDOW_FLAG_FULLSCREEN | AWINDOW_FLAG_KEEP_SCREEN_ON | AWINDOW_FLAG_TURN_SCREEN_ON, 0);
 
 	try
 	{
@@ -569,7 +561,7 @@ extern "C" void android_main(struct android_app* state)
 		{
 			Xli::Window::ProcessMessages();
 				
-			if (GlobalState->destroyRequested == 1)
+			if (app->destroyRequested == 1)
 			{
 				LOGE("Unable to initialize window");
 				exit(EXIT_FAILURE);
@@ -578,11 +570,9 @@ extern "C" void android_main(struct android_app* state)
 			usleep(10000);
 		}
 
-		XliAAssetManager = GlobalState->activity->assetManager;
-
 		int exit_code = main(0, 0);
 
-		LOGI("Exiting with code: %d", exit_code);
+		//LOGD("Exiting with code: %d", exit_code);
 		exit(exit_code);
 	}
 	catch (const Xli::Exception& e)

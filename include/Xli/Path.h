@@ -11,7 +11,7 @@ namespace Xli
 	class Path
 	{
 	public:
-		//static String MakeRelative(const String& absolutePath, const String& relativeTo);
+		static String Combine(const String& path1, const String& path2);
 
 		static String GetFilename(const String& path);
 		static String GetFilenameWithoutExtension(const String& path);

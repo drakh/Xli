@@ -79,6 +79,10 @@ namespace Xli
 	{
 	}
 
+	void WindowEventHandler::OnAppTerminating(Window* wnd)
+	{
+	}
+
 	void WindowEventHandler::OnAppWillEnterForeground(Window* wnd)
 	{
 	}

@@ -52,43 +52,43 @@ namespace Xli
 		}
 	}
 
-	TextWriter* OutAccessor::operator ->()
+	TextWriter* StdOutAccessor::operator ->()
 	{
 		AssertInit();
 		return out;
 	}
 
-	OutAccessor::operator TextWriter*()
+	StdOutAccessor::operator TextWriter*()
 	{
 		AssertInit();
 		return out;
 	}
 
-	TextWriter* ErrAccessor::operator ->()
+	TextWriter* StdErrAccessor::operator ->()
 	{
 		AssertInit();
 		return err;
 	}
 
-	ErrAccessor::operator TextWriter*()
+	StdErrAccessor::operator TextWriter*()
 	{
 		AssertInit();
 		return err;
 	}
 
-	TextReader* InAccessor::operator ->()
+	TextReader* StdInAccessor::operator ->()
 	{
 		AssertInit();
 		return in;
 	}
 
-	InAccessor::operator TextReader*()
+	StdInAccessor::operator TextReader*()
 	{
 		AssertInit();
 		return in;
 	}
 
-	OutAccessor Out;
-	ErrAccessor Err;
-	InAccessor In;
+	StdOutAccessor Out;
+	StdErrAccessor Err;
+	StdInAccessor In;
 }

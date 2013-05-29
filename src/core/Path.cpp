@@ -4,15 +4,19 @@
 
 namespace Xli
 {
+	String Path::Combine(const String& path1, const String& path2)
+	{
+		return 
+			path1.Length() && path1.Last() != '/' && path1.Last() != '\\' ?
+				path1 + "/" + path2 :
+				path1 + path2;
+	}
+
 	String Path::GetFilename(const String& path)
 	{
 		for (int i = path.Length() - 1; i >= 0; i--)
-		{
 			if (path[i] == '/' || path[i] == '\\')
-			{
 				return path.Substring(i + 1, path.Length() - i - 1);
-			}
-		}
 
 		return path;
 	}
@@ -22,16 +26,10 @@ namespace Xli
 		int extIndex = path.Length();
 
 		for (int i = path.Length() - 1; i >= 0; i--)
-		{
 			if (path[i] == '.')
-			{
 				extIndex = i;
-			}
 			else if (path[i] == '/' || path[i] == '\\')
-			{
 				return path.Substring(i + 1, extIndex - i - 1);
-			}
-		}
 
 		return path.Substring(0, extIndex);
 	}
@@ -39,16 +37,10 @@ namespace Xli
 	String Path::GetExtension(const String& path)
 	{
 		for (int i = path.Length() - 1; i >= 0; i--)
-		{
 			if (path[i] == '.')
-			{
 				return path.Substring(i, path.Length() - i);
-			}
 			else if (path[i] == '/' || path[i] == '\\')
-			{
 				break;
-			}
-		}
 
 		return "";
 	}
@@ -56,12 +48,8 @@ namespace Xli
 	String Path::GetDirectoryName(const String& path)
 	{
 		for (int i = path.Length() - 1; i >= 0; i--)
-		{
 			if (path[i] == '/' || path[i] == '\\')
-			{
 				return path.Substring(0, i > 0 ? i : 1);
-			}
-		}
 
 		return ".";
 	}

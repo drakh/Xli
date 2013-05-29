@@ -12,13 +12,14 @@ namespace Xli
 	static int CancelCount = 0;
 
 #ifdef XLI_PLATFORM_IOS
+
     static int HandleAppEvents(void *userdata, SDL_Event *event)
     {
         switch (event->type)
         {
         case SDL_APP_TERMINATING:
             if (GlobalWindow && GlobalWindow->GetEventHandler())
-                GlobalWindow->GetEventHandler()->OnClosed(GlobalWindow);
+                GlobalWindow->GetEventHandler()->OnAppTerminating(GlobalWindow);
             
             return 0;
             
@@ -55,6 +56,7 @@ namespace Xli
         
         return 1;
     }
+
 #endif
     
 	SDL2Window::SDL2Window(int width, int height, const String& title, WindowEventHandler* eventHandler, int flags)
@@ -87,17 +89,6 @@ namespace Xli
         
 		this->eventHandler = eventHandler;
 
-#ifdef XLI_GL_ES2
-
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
-
-#else
-
-        sdlFlags |= SDL_WINDOW_OPENGL;
-
-#endif
-        
 #ifdef XLI_PLATFORM_IOS
       
         String orientations = "";
@@ -125,6 +116,13 @@ namespace Xli
         
         SDL_SetEventFilter(HandleAppEvents, NULL);
         
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+
+#else
+
+		sdlFlags |= SDL_WINDOW_OPENGL;
+
 #endif
         
 		window = SDL_CreateWindow(title.Data(), x, y, width, height, sdlFlags);
@@ -138,7 +136,7 @@ namespace Xli
 			fullscreen = false;
 			SetFullscreen(true);
 		}
-        
+
 #endif
 	}
 
@@ -320,6 +318,7 @@ namespace Xli
 	bool SDL2Window::GetKeyState(Key key)
 	{
 #ifndef XLI_PLATFORM_IOS
+
         Uint8* keys = SDL_GetKeyboardState(0);
         
         switch (key)
@@ -406,7 +405,9 @@ namespace Xli
             case KeyMenu:
             case KeyUnknown: break;
         }
+
 #endif
+
 		return false;
 	}
 
@@ -434,7 +435,11 @@ namespace Xli
 
 	void SDL2Window::SetSystemCursor(SystemCursor cursor)
 	{
+#ifndef XLI_PLATFORM_IOS
 
+
+
+#endif
 	}
 
 	static bool inited = false;
@@ -580,19 +585,6 @@ namespace Xli
         return KeyUnknown;
 	}
 
-	static MouseButton SDLButtonToXliMouseButton(Uint8 button)
-	{
-		switch (button)
-		{
-		case SDL_BUTTON_LEFT: return MouseButtonLeft;
-		case SDL_BUTTON_RIGHT: return MouseButtonRight;
-		case SDL_BUTTON_MIDDLE: return MouseButtonMiddle;
-		case SDL_BUTTON_X1: return MouseButtonX1;
-		case SDL_BUTTON_X2: return MouseButtonX2;
-		default: return MouseButtonUnknown;
-		}
-	}
-    
 	void Window::ProcessMessages()
 	{
 		SDL_PumpEvents();
@@ -602,8 +594,6 @@ namespace Xli
 		{
             //ErrorPrintLine("SDL EVENT (" + String::HexFromInt((int)e.type) + ")");
             
-#ifdef XLI_PLATFORM_IOS
-      
             switch (e.type)
             {
                 case SDL_FINGERDOWN:
@@ -640,22 +630,19 @@ namespace Xli
                     
                 case SDL_MULTIGESTURE:
                     continue;
-            }
-#endif
-            
-			if (e.type == SDL_QUIT)
-			{
-				if (CancelCount > 0)
-				{
-					CancelCount--;
-					continue;
-				}
-				
-				QuitRecieved = true;
-				//exit(1);
-				continue;
-			}
 
+				case SDL_QUIT:
+					if (CancelCount > 0)
+					{
+						CancelCount--;
+						continue;
+					}
+				
+					QuitRecieved = true;
+					//exit(1);
+					continue;
+            }
+            
             SDL2Window* wnd = 0;
             SDL_Window* sdlwnd = SDL_GetWindowFromID(e.window.windowID);
             if (sdlwnd != 0) wnd = (SDL2Window*)SDL_GetWindowData(sdlwnd, "SDL2Window");
@@ -676,12 +663,12 @@ namespace Xli
 							{
 							    if (wnd->eventHandler.IsSet())
 							    {
-								bool cancel = false;
-								if (wnd->eventHandler->OnClosing(wnd, cancel) && cancel) 
-								{
-									CancelCount++;
-									continue;
-								}
+									bool cancel = false;
+									if (wnd->eventHandler->OnClosing(wnd, cancel) && cancel) 
+									{
+										CancelCount++;
+										continue;
+									}
 							    }
 
 							    SDL_HideWindow(wnd->window);
@@ -689,14 +676,14 @@ namespace Xli
 							    wnd->eventHandler->OnClosed(wnd);
 							}
 							break;
-
+							/*
 						case SDL_WINDOWEVENT_RESIZED:
 							if (wnd->GetEventHandler() != 0)
 							{
 								wnd->GetEventHandler()->OnSizeChanged(wnd, Vector2i(e.window.data1, e.window.data2));
 							}
 							break;
-
+							*/
 						case SDL_WINDOWEVENT_SIZE_CHANGED:
 							if (wnd->GetEventHandler() != 0)
 							{
@@ -737,10 +724,7 @@ namespace Xli
                     wnd->buttons |= SDL_BUTTON(e.button.button);
                     
 					if (wnd->GetEventHandler() != 0)
-					{
-						MouseButton button = SDLButtonToXliMouseButton(e.button.button);
-						if (button) wnd->GetEventHandler()->OnMouseDown(wnd, Vector2i(e.button.x, e.button.y), button);
-					}
+						wnd->GetEventHandler()->OnMouseDown(wnd, Vector2i(e.button.x, e.button.y), (MouseButton)e.button.button);
                     
 					break;
                 
@@ -748,10 +732,7 @@ namespace Xli
                     wnd->buttons &= ~SDL_BUTTON(e.button.button);
                     
 					if (wnd->GetEventHandler() != 0)
-					{
-						MouseButton button = SDLButtonToXliMouseButton(e.button.button);
-						if (button) wnd->GetEventHandler()->OnMouseUp(wnd, Vector2i(e.button.x, e.button.y), button);
-					}
+						wnd->GetEventHandler()->OnMouseUp(wnd, Vector2i(e.button.x, e.button.y), (MouseButton)e.button.button);
                     
 					break;
                 

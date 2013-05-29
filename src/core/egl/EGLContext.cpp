@@ -156,6 +156,11 @@ namespace Xli
 			eglGetConfigAttrib(display, config, EGL_SAMPLES, &samples);
 			return samples;
 		}
+
+		virtual unsigned int GetBackbufferHandle()
+		{
+			return 0;
+		}
 	};
 
 	GLContext* GLContext::Create(Window* window, int multiSamples)

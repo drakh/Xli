@@ -164,6 +164,7 @@ namespace Xli
 		virtual bool OnClosed(Window* wnd);
 
 		virtual void OnAppLowMemory(Window* wnd);
+		virtual void OnAppTerminating(Window* wnd);
 		virtual void OnAppWillEnterForeground(Window* wnd);
 		virtual void OnAppDidEnterForeground(Window* wnd);
 		virtual void OnAppWillEnterBackground(Window* wnd);

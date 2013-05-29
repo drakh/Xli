@@ -1,9 +1,6 @@
-#include <Xli/NativeFileSystem.h>
+#include "AInternal.h"
 #include "../posix/PosixFileSystemBase.h"
-
-#include <android/asset_manager.h>
-extern struct AAssetManager* XliAAssetManager;
-
+#include <Xli/NativeFileSystem.h>
 #include <cstdio>
 
 namespace Xli
@@ -16,7 +13,7 @@ namespace Xli
 		AAssetStream(String filename, FileMode mode)
 		{
 			if (mode != FileModeRead && mode != FileModeReadRandom) XLI_THROW("Unsupported asset file mode: " + (String)FileModeToString(mode));
-			asset = AAssetManager_open(XliAAssetManager, filename.Data(), ((mode & FileModeRandom) != 0) ? AASSET_MODE_RANDOM : AASSET_MODE_STREAMING);
+			asset = AAssetManager_open(XliActivity->assetManager, filename.Data(), ((mode & FileModeRandom) != 0) ? AASSET_MODE_RANDOM : AASSET_MODE_STREAMING);
 			if (asset == 0) XLI_THROW_CANT_OPEN_FILE(filename);
 		}
 		
@@ -78,7 +75,7 @@ namespace Xli
 	public:
 		AAssetBuffer(String filename)
 		{
-			asset = AAssetManager_open(XliAAssetManager, filename.Data(), AASSET_MODE_BUFFER);
+			asset = AAssetManager_open(XliActivity->assetManager, filename.Data(), AASSET_MODE_BUFFER);
 			if (asset == 0) XLI_THROW_CANT_OPEN_FILE(filename);
 		}
 
@@ -120,7 +117,13 @@ namespace Xli
 	class APosixFileSystem: public PosixFileSystemBase
 	{
 	public:
-		virtual String GetSystemDirectory()
+		virtual String GetTempDirectory()
+		{
+			// TODO: Conform to Android specifications on proper handling of shared document files
+			return "/sdcard";
+		}
+
+		virtual String GetSystemDirectory(SystemDirectory dir)
 		{
 			// TODO: Conform to Android specifications on proper handling of shared document files
 			return "/sdcard";

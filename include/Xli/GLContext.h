@@ -6,7 +6,7 @@
 namespace Xli
 {
 	/**
-		\ingroup GL
+		\ingroup WM
 	 */
 	class GLContext: public Object
 	{
@@ -32,6 +32,8 @@ namespace Xli
 		virtual int GetSwapInterval() = 0;
 
 		virtual int GetMultiSamples() = 0;
+
+		virtual unsigned int GetBackbufferHandle() = 0;
 	};
 }
 

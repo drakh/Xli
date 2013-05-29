@@ -9,27 +9,24 @@ namespace Xli
 	public:
         virtual Stream* Open(const String& filename, FileMode mode)
         {
-            if ((mode & FileModeRead) != 0)
+            if (mode & FileModeRead)
             {
                 File* result = 0;
                 
-                @autoreleasepool {
+                @autoreleasepool
+				{
                     NSFileManager* file_manager = [NSFileManager defaultManager];
                     NSString* resource_path = [[NSBundle mainBundle] resourcePath];
                     
                     NSString* ns_string_file_component = [file_manager stringWithFileSystemRepresentation:filename.Data() length:filename.Length()];
                     
                     NSString* full_path_with_file_to_try = [resource_path stringByAppendingPathComponent:ns_string_file_component];
-                    if([file_manager fileExistsAtPath:full_path_with_file_to_try])
-                    {
+                    if ([file_manager fileExistsAtPath:full_path_with_file_to_try])
                         result = new File([full_path_with_file_to_try fileSystemRepresentation], mode);
-                    }
                 }
                 
-                if (result != 0)
-                {
+                if (result)
                     return result;
-                }
             }
         
             return new File(filename, mode);

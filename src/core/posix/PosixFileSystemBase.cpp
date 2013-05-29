@@ -5,6 +5,7 @@
 #include <Xli/Random.h>
 #include <Xli/Hash.h>
 #include <Xli/DateTime.h>
+#include <Xli/Path.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -28,21 +29,9 @@ namespace Xli
 		return new File(filename, mode);
 	}
 
-    String PosixFileSystemBase::GetTempDirectory()
-    {
-		const char* tmpdir = getenv("TMPDIR");
-		if (tmpdir == 0 || strlen(tmpdir) == 0) tmpdir = getenv("TEMP");
-		if (tmpdir == 0 || strlen(tmpdir) == 0) tmpdir = getenv("TEMPDIR");
-		if (tmpdir == 0 || strlen(tmpdir) == 0) tmpdir = getenv("TMP");
-		if (tmpdir == 0 || strlen(tmpdir) == 0) tmpdir = "/tmp";
-        return tmpdir;
-    }
-        
 	String PosixFileSystemBase::CreateTempFilename()
 	{
-		String pre = GetTempDirectory();
-        if (pre.Last() != '/') pre += "/";
-        pre += (String)(int)getpid() + "-";
+		String prefix = Path::Combine(GetTempDirectory(), (String)(int)getpid() + "-");
 
 		Random rand(Hash(GetTimestamp()));
 		static const char* cs = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -53,38 +42,13 @@ namespace Xli
 			String tmp = String::Create(8);
 
 			for (int i = 0; i < tmp.Length(); i++)
-			{
 				tmp[i] = cs[rand.NextInt(cl)];
-			}
 
-			tmp = pre + tmp;
+			String result = prefix + tmp;
 
 			struct stat attributes;
-			if (stat(tmp.Data(), &attributes) == -1)
-			{
-				return tmp;
-			}
-		}
-	}
-
-	String PosixFileSystemBase::GetSystemDirectory(SystemDirectory dir)
-	{
-		const char* home = getenv("HOME");
-		if (home == 0 || strlen(home) == 0) home = "~";
-
-		switch (dir)
-		{
-		case SystemDirectoryDocuments:
-			return home;
-
-		case SystemDirectoryRoamingAppData:
-			return (String)home + "/.config";
-
-		case SystemDirectoryLocalAppData:
-			return (String)home + "/.local/share";
-
-		default:
-			return ".";
+			if (stat(result.Data(), &attributes) == -1)
+				return result;
 		}
 	}
 
@@ -101,9 +65,7 @@ namespace Xli
 		if (!path.Length()) return;
 
 		if (chdir(path.Data()) != 0)
-		{
 			XLI_THROW("Unable to change directory to '" + path + "'");
-		}
 	}
 
 	void PosixFileSystemBase::CreateDirectory(const String& path)
@@ -124,33 +86,25 @@ namespace Xli
 	void PosixFileSystemBase::DeleteDirectory(const String& path)
 	{ 
 		if (!rmdir(path.Data()) != 0)
-		{
 			XLI_THROW("Unable to delete directory '" + path + "'");
-		}
 	}
 
 	void PosixFileSystemBase::DeleteFile(const String& path)
 	{ 
 		if (!unlink(path.Data()) != 0)
-		{
 			XLI_THROW("Unable to delete file '" + path + "'");
-		}
 	}
 
 	void PosixFileSystemBase::MoveDirectory(const String& oldPath, const String& newPath)
 	{ 
 		if (rename(oldPath.Data(), newPath.Data()) != 0)
-		{
 			XLI_THROW("Unable to move directory '" + oldPath + "' to '" + newPath + "'");
-		}
 	}
 		
 	void PosixFileSystemBase::MoveFile(const String& oldPath, const String& newPath)
 	{ 
 		if (rename(oldPath.Data(), newPath.Data()) != 0)
-		{
 			XLI_THROW("Unable to move file '" + oldPath + "' to '" + newPath + "'");
-		}
 	}
 
 	bool PosixFileSystemBase::GetFileInfo(const String& path, FileInfo& f)
@@ -158,9 +112,7 @@ namespace Xli
 		struct stat attributes;
 
 		if (stat(path.Data(), &attributes) == -1)
-		{
 			return false;
-		}
 
 		f.Name = path;
 
@@ -168,14 +120,10 @@ namespace Xli
 		if (!(((attributes.st_mode & S_IWOTH) == S_IWOTH)
 			|| (attributes.st_gid == getgid() && ((attributes.st_mode & S_IWGRP) == S_IWGRP))
 			|| (attributes.st_uid == getuid() && ((attributes.st_mode & S_IWUSR) == S_IWUSR))))
-		{
 			f.Flags |= FileFlagReadOnly;
-		}
 
 		if (S_ISDIR(attributes.st_mode))
-		{
 			f.Flags |= FileFlagDirectory;
-		}
 
 		f.CreationTime = ConvertToTimeStamp(attributes.st_mtime);
 		f.LastAccessTime = ConvertToTimeStamp(attributes.st_atime);
@@ -186,29 +134,19 @@ namespace Xli
 
 	void PosixFileSystemBase::GetFiles(const String& path, Array<FileInfo>& list)
 	{
-		String prefix;
-		
-		if (path.Length() > 0 && path.Last() != '/')
-		{
-			prefix = path + "/";
-		}
-		else
-		{
-			prefix = path;
-		}
+		String prefix = 
+			path.Length() > 0 && path.Last() != '/' ? 
+				path + "/" : 
+				path;
 
 		DIR *dp;
 		struct dirent *ep;
 
-		if ((dp  = opendir(prefix.Data())) == NULL)
-		{
+		if ((dp = opendir(prefix.Data())) == NULL)
 			XLI_THROW_FILE_NOT_FOUND(prefix);
-		}
 
         if (prefix == "./")
-		{
 			prefix = "";
-		}
 
 		while ((ep = readdir(dp)) != NULL)
 		{

@@ -19,7 +19,7 @@ namespace Xli
 	/**
 		\ingroup IO
 	*/
-	class OutAccessor
+	class StdOutAccessor
 	{
 	public:
 		TextWriter* operator ->();
@@ -29,7 +29,7 @@ namespace Xli
 	/**
 		\ingroup IO
 	*/
-	class ErrAccessor
+	class StdErrAccessor
 	{
 	public:
 		TextWriter* operator ->();
@@ -39,7 +39,7 @@ namespace Xli
 	/**
 		\ingroup IO
 	*/
-	class InAccessor
+	class StdInAccessor
 	{
 	public:
 		TextReader* operator ->();
@@ -51,18 +51,20 @@ namespace Xli
 		@{
 	*/
 
-	extern OutAccessor Out;
-	extern ErrAccessor Err;
-	extern InAccessor In;
+	extern StdOutAccessor Out;
+	extern StdErrAccessor Err;
+	extern StdInAccessor In;
 
 	template <typename T> static inline void Print(const T& t)
 	{
 		Out->Write(t);
 	}
+
 	template <typename T> static inline void PrintLine(const T& t)
 	{
 		Out->WriteLine(t);
 	}
+
 	static inline void PrintLine()
 	{
 		Out->Write('\n');
@@ -72,10 +74,12 @@ namespace Xli
 	{
 		Err->Write(t);
 	}
+
 	template <typename T> void ErrorPrintLine(const T& t)
 	{
 		Err->WriteLine(t);
 	}
+
 	static inline void ErrorPrintLine()
 	{
 		Err->Write('\n');

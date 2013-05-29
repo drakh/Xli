@@ -7,10 +7,9 @@ namespace Xli
 	public:
 		virtual Stream* OpenFile(const String& filename, FileMode mode);
 
-        virtual String GetTempDirectory();
-		virtual String CreateTempFilename();
+        virtual String GetTempDirectory() = 0;
 
-		virtual String GetSystemDirectory(SystemDirectory dir);
+		virtual String CreateTempFilename();
 
 		virtual String GetCurrentDirectory();
 		virtual void ChangeDirectory(const String& path);

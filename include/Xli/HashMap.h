@@ -40,18 +40,6 @@ namespace Xli
 
 	/**
 		\ingroup Containers
-	*/
-	template <typename TKey, typename TValue> class HashMapConstCastTraits
-	{
-	public:
-		inline static UInt32 Hash(const TKey& key) { return Xli::Hash(const_cast<TKey>(key)); }
-		inline static bool Equals(const TKey& a, const TKey& b) { return const_cast<TKey>(a) == const_cast<TKey>(b); }
-		inline static HashBucket<TKey, TValue>* NewBuckets(int buckets, void* memPool) { return new HashBucket<TKey, TValue>[buckets]; }
-		inline static void DeleteBuckets(HashBucket<TKey, TValue>* ptr, void* memPool) { delete [] ptr; }
-	};
-
-	/**
-		\ingroup Containers
 
 		Dictionary template.
 		Maps keys to values using a very efficient hash map. For user-defined TKey types, methods
@@ -60,11 +48,11 @@ namespace Xli
 		functions used. This is useful i.e. when using pointers to objects as keys and you want to
 		compare the value of the objects and not the pointers.
 	*/
-	template <typename TKey, typename TValue, typename TTraits = HashMapDefaultTraits<TKey, TValue>, int bufSize=8> class HashMap: public Object
+	template <typename TKey, typename TValue, typename TTraits = HashMapDefaultTraits<TKey, TValue>, int TBufSize = 8> class HashMap: public Object
 	{
 	private:
 		typedef HashBucket<TKey, TValue> Bucket;
-		Bucket internalBuckets[bufSize];
+		Bucket internalBuckets[TBufSize];
 		Bucket* buckets;
 		void* memPool;
 
@@ -103,12 +91,12 @@ namespace Xli
 
 			if (initialSizeLog2 == 0)
 			{
-				bucketCount = bufSize;
+				bucketCount = TBufSize;
 				buckets = internalBuckets;
 			}
 			else
 			{
-				bucketCount = 1<<initialSizeLog2;
+				bucketCount = 1 << initialSizeLog2;
 				buckets = TTraits::NewBuckets(bucketCount, memPool);
 			}
 
@@ -129,10 +117,10 @@ namespace Xli
 		HashMap& operator = (const HashMap& map)
 		{
 			Clear();
+
 			for (int it = map.Begin(); it != map.End(); it = map.Next(it))
-			{
 				Add(map.GetKey(it), map.GetValue(it));
-			}
+
 			return *this;
 		}
 
@@ -187,11 +175,9 @@ namespace Xli
 		*/
 		int Next(int iterator) const
 		{
-			for (int i = iterator+1; i < bucketCount; i++)
-			{
+			for (int i = iterator + 1; i < bucketCount; i++)
 				if (buckets[i].State == HashBucketStateUsed) 
 					return i;
-			}
 
 			return End();
 		}
@@ -204,7 +190,11 @@ namespace Xli
 		*/
 		const TValue& GetValue(int iterator) const
 		{
-			if (buckets[iterator].State != HashBucketStateUsed) XLI_BREAK_THROW("Invalid iterator");
+#ifdef XLI_RANGE_CHECK
+			if (buckets[iterator].State != HashBucketStateUsed) 
+				XLI_BREAK_THROW("Invalid iterator");
+#endif
+			
 			return buckets[iterator].Value;
 		}
 
@@ -216,7 +206,11 @@ namespace Xli
 		*/
 		TValue& GetValue(int iterator)
 		{
-			if (buckets[iterator].State != HashBucketStateUsed) XLI_BREAK_THROW("Invalid iterator");
+#ifdef XLI_RANGE_CHECK
+			if (buckets[iterator].State != HashBucketStateUsed) 
+				XLI_BREAK_THROW("Invalid iterator");
+#endif
+			
 			return buckets[iterator].Value;
 		}
 
@@ -228,7 +222,9 @@ namespace Xli
 		*/
 		void SetValue(int iterator, const TValue& value)
 		{
-			if (buckets[iterator].State != HashBucketStateUsed) XLI_BREAK_THROW("Invalid iterator");
+			if (buckets[iterator].State != HashBucketStateUsed) 
+				XLI_BREAK_THROW("Invalid iterator");
+			
 			buckets[iterator].Value = value;
 		}
 
@@ -240,7 +236,11 @@ namespace Xli
 		*/
 		const TKey& GetKey(int iterator) const
 		{
-			if (buckets[iterator].State != HashBucketStateUsed) XLI_BREAK_THROW("Invalid iterator");
+#ifdef XLI_RANGE_CHECK
+			if (buckets[iterator].State != HashBucketStateUsed) 
+				XLI_BREAK_THROW("Invalid iterator");
+#endif
+			
 			return buckets[iterator].Key;
 		}
 
@@ -270,10 +270,8 @@ namespace Xli
 		bool ContainsValue(const TValue& value) const
 		{
 			for (int i = Begin(); i != End(); i = Next(i))
-			{
 				if (GetValue(i) == value) 
 					return true;
-			}
 
 			return false;
 		}
@@ -288,10 +286,8 @@ namespace Xli
 		void GetKeysFromValue(const TValue& value, Array<TKey>& keys) const
 		{
 			for (int i = Begin(); i != End(); i = Next(i))
-			{
 				if (GetValue(i) == value) 
 					keys.Add(GetKey(i));
-			}
 		}
 
 		void Clear()
@@ -348,7 +344,7 @@ namespace Xli
 				if (buckets[x].State == HashBucketStateUsed)
 				{
 					if (TTraits::Equals(buckets[x].Key, key)) 
-						XLI_BREAK_THROW("Map already contains the given key");
+						XLI_THROW("Map already contains the given key");
 				}
 				else if (buckets[x].State == HashBucketStateEmpty)
 				{

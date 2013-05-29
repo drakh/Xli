@@ -28,11 +28,12 @@ namespace Xli
             Print(": ");
             String in = In->ReadLine().Trim().ToLower();
 
-			if ((buttons == DialogButtonsOK || buttons == DialogButtonsOKCancel) && (in == "ok" || in == "")) { r = DialogResultOK; break; }
-			else if ((buttons == DialogButtonsOKCancel || buttons == DialogButtonsYesNoCancel || buttons == DialogButtonsCancelTryContinue) && (in == "cancel" || in == "c")) { r = DialogResultCancel; break; }
+			if (buttons == DialogButtonsOK) { r = DialogResultOK; break; }
+			else if ((buttons == DialogButtonsOKCancel) && (in == "ok")) { r = DialogResultOK; break; }
 			else if ((buttons == DialogButtonsYesNo || buttons == DialogButtonsYesNoCancel) && (in == "yes" || in == "y")) { r = DialogResultYes; break; }
 			else if ((buttons == DialogButtonsYesNo || buttons == DialogButtonsYesNoCancel) && (in == "no" || in == "n")) { r = DialogResultNo; break; }
-			else if ((buttons == DialogButtonsCancelTryContinue) && (in == "retry" || in== "r")) { r = DialogResultTryAgain; break; }
+			else if ((buttons == DialogButtonsOKCancel || buttons == DialogButtonsYesNoCancel || buttons == DialogButtonsCancelTryContinue) && (in == "cancel")) { r = DialogResultCancel; break; }
+			else if ((buttons == DialogButtonsCancelTryContinue) && (in == "retry")) { r = DialogResultTryAgain; break; }
 			else if ((buttons == DialogButtonsCancelTryContinue) && (in == "continue")) { r = DialogResultContinue; break; }
 		}
 

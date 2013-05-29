@@ -203,6 +203,11 @@ namespace Xli
 		{
 			return wglGetSwapIntervalEXT ? wglGetSwapIntervalEXT() : 0;
 		}
+
+		virtual unsigned int GetBackbufferHandle()
+		{
+			return 0;
+		}
 	};
 
 	GLContext* GLContext::Create(Window* window, int multiSamples)

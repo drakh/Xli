@@ -13,7 +13,7 @@
 	\defgroup IO I/O
 	\ingroup Core
 
-	\defgroup WM Window Management
+	\defgroup WM Window Management and OpenGL
 	\ingroup Core
 
 	\defgroup Threading Threading and Concurrency

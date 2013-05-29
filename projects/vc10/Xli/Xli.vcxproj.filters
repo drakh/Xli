@@ -46,6 +46,12 @@
     <Filter Include="XliGL">
       <UniqueIdentifier>{70a173b5-a5c8-4025-893e-852ca9a6ab91}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Xli\Platform\cocoa">
+      <UniqueIdentifier>{cb6102cd-412b-493a-bb1b-e52d068f36b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Xli\Platform\xdg">
+      <UniqueIdentifier>{3e47164f-a3a6-4ad2-b666-9d2f18f34c3e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Xli\Hash.h">
@@ -132,9 +138,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\core\posix\PosixFileSystemBase.h">
       <Filter>Xli\Platform\posix</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\core\sdl2\SDL2FileSystem.h">
-      <Filter>Xli\Platform\sdl2</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\Xli\Dialogs.h">
       <Filter>Xli\Platform</Filter>
@@ -238,6 +241,9 @@
     <ClInclude Include="..\..\..\include\XliGL.h" />
     <ClInclude Include="..\..\..\include\XliGL\glew.h">
       <Filter>XliGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\core\android\AInternal.h">
+      <Filter>Xli\Platform\android</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -346,25 +352,10 @@
     <ClCompile Include="..\..\..\src\core\posix\PosixTime.cpp">
       <Filter>Xli\Platform\posix</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\core\sdl2\SDL2Cond.cpp">
-      <Filter>Xli\Platform\sdl2</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\core\sdl2\SDL2Display.cpp">
       <Filter>Xli\Platform\sdl2</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\core\sdl2\SDL2FileSystem.cpp">
-      <Filter>Xli\Platform\sdl2</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\core\sdl2\SDL2GLContext.cpp">
-      <Filter>Xli\Platform\sdl2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\core\sdl2\SDL2Mutex.cpp">
-      <Filter>Xli\Platform\sdl2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\core\sdl2\SDL2Thread.cpp">
-      <Filter>Xli\Platform\sdl2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\core\sdl2\SDL2Time.cpp">
       <Filter>Xli\Platform\sdl2</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\core\sdl2\SDL2Window.cpp">
@@ -439,12 +430,18 @@
     <ClCompile Include="..\..\..\src\core\sdl2\SDL2MessageBox.cpp">
       <Filter>Xli\Platform\sdl2</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\core\android\AMessageBox.cpp">
+      <Filter>Xli\Platform\android</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\xdg\XdgFileSystem.cpp">
+      <Filter>Xli\Platform\xdg</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\core\CMakeLists.txt" />
     <None Include="..\..\..\CMakeLists.txt" />
-    <None Include="..\..\..\src\core\sdl2\SDL2FileSystem_iOS.mm">
-      <Filter>Xli\Platform\sdl2</Filter>
+    <None Include="..\..\..\src\core\cocoa\CocoaFileSystem.mm">
+      <Filter>Xli\Platform\cocoa</Filter>
     </None>
   </ItemGroup>
 </Project>

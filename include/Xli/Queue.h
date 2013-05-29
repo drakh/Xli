@@ -39,9 +39,7 @@ namespace Xli
 		void Trim()
 		{
 			for (int i = 0; i < freeNodes.Length(); i++)
-			{
 				delete freeNodes[i];
-			}
 
 			freeNodes.Clear();
 			freeNodes.Trim();
@@ -62,10 +60,7 @@ namespace Xli
 
 		void Enqueue(const T& value)
 		{
-			Node* n;
-			
-			if (freeNodes.Length()) n = freeNodes.RemoveLast();
-			else n = new Node();
+			Node* n = freeNodes.Length() ? freeNodes.RemoveLast() : new Node();
 
 			n->Next = 0;
 			n->Value = value;

@@ -150,16 +150,14 @@ namespace Xli
 		TValue& operator [] (const TKey& key)
 		{
 			int i = keys.IndexOf(key);
-			if (i == -1) XLI_BREAK_THROW("Map does not contain the given key");
+			if (i == -1) XLI_THROW("Map does not contain the given key");
 			return values[i];
 		}
 
 		void Add(const TKey& key, const TValue& value)
 		{
 			if (keys.Contains(key))
-			{
-				XLI_BREAK_THROW("Map already contains the given key");
-			}
+				XLI_THROW("Map already contains the given key");
 
 			keys.Add(key);
 			values.Add(value);
