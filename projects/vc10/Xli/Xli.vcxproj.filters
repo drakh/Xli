@@ -340,9 +340,6 @@
     <ClCompile Include="..\..\..\src\core\posix\PosixCond.cpp">
       <Filter>Xli\Platform\posix</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\core\posix\PosixFileSystem.cpp">
-      <Filter>Xli\Platform\posix</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\core\posix\PosixMutex.cpp">
       <Filter>Xli\Platform\posix</Filter>
     </ClCompile>
@@ -435,6 +432,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\core\xdg\XdgFileSystem.cpp">
       <Filter>Xli\Platform\xdg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\android\AInternal.cpp">
+      <Filter>Xli\Platform\android</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

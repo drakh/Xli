@@ -13,7 +13,7 @@ namespace Xli
 		AAssetStream(String filename, FileMode mode)
 		{
 			if (mode != FileModeRead && mode != FileModeReadRandom) XLI_THROW("Unsupported asset file mode: " + (String)FileModeToString(mode));
-			asset = AAssetManager_open(XliActivity->assetManager, filename.Data(), ((mode & FileModeRandom) != 0) ? AASSET_MODE_RANDOM : AASSET_MODE_STREAMING);
+			asset = AAssetManager_open(AndroidActivity->assetManager, filename.Data(), ((mode & FileModeRandom) != 0) ? AASSET_MODE_RANDOM : AASSET_MODE_STREAMING);
 			if (asset == 0) XLI_THROW_CANT_OPEN_FILE(filename);
 		}
 		
@@ -75,7 +75,7 @@ namespace Xli
 	public:
 		AAssetBuffer(String filename)
 		{
-			asset = AAssetManager_open(XliActivity->assetManager, filename.Data(), AASSET_MODE_BUFFER);
+			asset = AAssetManager_open(AndroidActivity->assetManager, filename.Data(), AASSET_MODE_BUFFER);
 			if (asset == 0) XLI_THROW_CANT_OPEN_FILE(filename);
 		}
 
@@ -114,24 +114,37 @@ namespace Xli
 		return new AAssetFileSystem();
 	}
 
-	class APosixFileSystem: public PosixFileSystemBase
+	class AFileSystem: public PosixFileSystemBase
 	{
 	public:
 		virtual String GetTempDirectory()
 		{
-			// TODO: Conform to Android specifications on proper handling of shared document files
-			return "/sdcard";
+			JniHelper jni;
+			jobject cacheDir = jni.CallObjectMethod(AndroidActivity->clazz, "getCacheDir", "()Ljava/io/File;");
+			jobject absoluteDir = jni.CallObjectMethod(cacheDir, "getAbsolutePath", "()Ljava/lang/String;");
+			return jni.GetString(absoluteDir);
 		}
 
 		virtual String GetSystemDirectory(SystemDirectory dir)
 		{
-			// TODO: Conform to Android specifications on proper handling of shared document files
-			return "/sdcard";
+			switch (dir)
+			{
+			case SystemDirectoryLocalAppData:
+				return (String)AndroidActivity->internalDataPath;
+
+			case SystemDirectoryRoamingAppData:
+				return (String)AndroidActivity->externalDataPath;
+
+			// TODO: Conform to Android specifications on proper handling of system directories
+			case SystemDirectoryDocuments:
+			default:
+				return "/sdcard";
+			}
 		}
 	};
 
 	NativeFileSystem* CreateNativeFileSystem()
 	{
-		return new APosixFileSystem();
+		return new AFileSystem();
 	}
 }

@@ -11,9 +11,10 @@ LOCAL_MODULE    := Xli
 LOCAL_SRC_FILES := \
 	../../../src/core/3rdparty/ConvertUTF.c \
 	../../../src/core/android/3rdparty/android_native_app_glue.c \
-	../../../src/core/android/AWindow.cpp \
-	../../../src/core/android/AMessageBox.cpp \
 	../../../src/core/android/AFileSystem.cpp \
+	../../../src/core/android/AInternal.cpp \
+	../../../src/core/android/AMessageBox.cpp \
+	../../../src/core/android/AWindow.cpp \
 	../../../src/core/egl/EGLContext.cpp \
 	../../../src/core/generic/GenericDialogs.cpp \
 	../../../src/core/posix/PosixCond.cpp \

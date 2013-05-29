@@ -13,8 +13,6 @@
 #include <Xli/GLContext.h>
 #include <Xli/Window.h>
 
-struct ANativeActivity* XliActivity = 0;
-
 static struct android_app* GlobalAndroidApp = 0;
 static Xli::WindowEventHandler* GlobalEventHandler = 0;
 static Xli::Window* GlobalWindow = 0;
@@ -228,7 +226,7 @@ namespace Xli
 
 		if (inited && !GlobalAndroidApp->destroyRequested)
 		{
-			// Detect window resize / screen rotation automatically here
+			// Detect window resize / screen rotation
 			int w = ANativeWindow_getWidth(GlobalAndroidApp->window);
 			int h = ANativeWindow_getHeight(GlobalAndroidApp->window);
 
@@ -237,7 +235,7 @@ namespace Xli
 				GlobalWidth = w;
 				GlobalHeight = h;
 
-				if (GlobalEventHandler != 0)
+				if (GlobalEventHandler)
 					GlobalEventHandler->OnSizeChanged(GlobalWindow, Vector2i(w, h));
 			}
 		}
@@ -277,11 +275,27 @@ namespace Xli
 		return false;
 	}
 
-	class AOutStream: public Stream
+	class ALogStream: public Stream
 	{
+		int prio;
 		Array<char> buf;
 
 	public:
+		ALogStream(int prio)
+		{
+			this->prio = prio;
+		}
+
+		virtual ~ALogStream()
+		{
+			if (buf.Length())
+			{
+				buf.Add(0);
+				__android_log_write(prio, GetAppName(), buf.Data());
+				buf.Clear();
+			}
+		}
+
 		virtual bool CanWrite() const
 		{
 			return true;
@@ -291,46 +305,17 @@ namespace Xli
 		{
 			for (int i = 0; i < elmCount; i++)
 			{
-				char c = ((char*)src)[i];
-
-				if (c == '\n')
-				{
-					buf.Add('\0');
-					LOGI(buf.Data());
-					buf.Clear();
-					continue;
-				}
-
-				buf.Add(c);
-			}
-
-			return elmCount;
-		}
-	};
-
-	class AErrStream: public Stream
-	{
-		Array<char> buf;
-
-	public:
-		virtual bool CanWrite() const
-		{
-			return true;
-		}
-
-		virtual int Write(const void* src, int elmSize, int elmCount)
-		{
-			for (int i = 0; i < elmCount; i++)
-			{
 				char c = ((const char*)src)[i];
 
 				if (c == '\n')
 				{
-					buf.Add('\0');
-					LOGW(buf.Data());
+					buf.Add(0);
+					__android_log_write(prio, GetAppName(), buf.Data());
 					buf.Clear();
 					continue;
 				}
+
+				// TODO: NULL characters ?
 
 				buf.Add(c);
 			}
@@ -340,245 +325,254 @@ namespace Xli
 	};
 }
 
-static int32_t handle_input(struct android_app* app, AInputEvent* event)
+extern "C"
 {
-	switch (AInputEvent_getType(event))
+	static int32_t handle_input(struct android_app* app, AInputEvent* event)
 	{
-	case AINPUT_EVENT_TYPE_MOTION:
-		if (GlobalEventHandler != 0)
+		switch (AInputEvent_getType(event))
 		{
-			int ai = AMotionEvent_getAction(event);
-			int a = ai & AMOTION_EVENT_ACTION_MASK;
-
-			switch (a)
+		case AINPUT_EVENT_TYPE_MOTION:
+			if (GlobalEventHandler)
 			{
-			case AMOTION_EVENT_ACTION_DOWN:
-			case AMOTION_EVENT_ACTION_POINTER_DOWN:
-			case AMOTION_EVENT_ACTION_UP:
-			case AMOTION_EVENT_ACTION_POINTER_UP:
+				int ai = AMotionEvent_getAction(event);
+				int a = ai & AMOTION_EVENT_ACTION_MASK;
+
+				switch (a)
 				{
-					int i = (ai & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
-					int id = AMotionEvent_getPointerId(event, i);
-					int x = AMotionEvent_getX(event, i);
-					int y = AMotionEvent_getY(event, i);
-
-					//LOGD("TOUCH EVENT: %d  %d  %d  %d  %d", a, i, id, x, y);
-
-					switch (a)
+				case AMOTION_EVENT_ACTION_DOWN:
+				case AMOTION_EVENT_ACTION_POINTER_DOWN:
+				case AMOTION_EVENT_ACTION_UP:
+				case AMOTION_EVENT_ACTION_POINTER_UP:
 					{
-					case AMOTION_EVENT_ACTION_DOWN:
-					case AMOTION_EVENT_ACTION_POINTER_DOWN:
-						GlobalEventHandler->OnTouchDown(GlobalWindow, Xli::Vector2(x, y), id);
-						break;
-
-					case AMOTION_EVENT_ACTION_UP:
-					case AMOTION_EVENT_ACTION_POINTER_UP:
-						GlobalEventHandler->OnTouchUp(GlobalWindow, Xli::Vector2(x, y), id);
-						break;
-					}
-				}
-				break;
-
-			case AMOTION_EVENT_ACTION_MOVE:
-				{
-					int p = AMotionEvent_getPointerCount(event);
-
-					for (int i = 0; i < p; i++)
-					{
+						int i = (ai & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
 						int id = AMotionEvent_getPointerId(event, i);
 						int x = AMotionEvent_getX(event, i);
 						int y = AMotionEvent_getY(event, i);
-						GlobalEventHandler->OnTouchMove(GlobalWindow, Xli::Vector2(x, y), id);
 
-						//LOGD("TOUCH MOVE: %d  %d  %d  %d  %d", a, i, id, x, y);
+						//LOGD("TOUCH EVENT: %d  %d  %d  %d  %d", a, i, id, x, y);
+
+						switch (a)
+						{
+						case AMOTION_EVENT_ACTION_DOWN:
+						case AMOTION_EVENT_ACTION_POINTER_DOWN:
+							GlobalEventHandler->OnTouchDown(GlobalWindow, Xli::Vector2(x, y), id);
+							break;
+
+						case AMOTION_EVENT_ACTION_UP:
+						case AMOTION_EVENT_ACTION_POINTER_UP:
+							GlobalEventHandler->OnTouchUp(GlobalWindow, Xli::Vector2(x, y), id);
+							break;
+						}
 					}
-				}
-				break;
+					break;
 
-			default:
-				{
-					int p = AMotionEvent_getPointerCount(event);
-
-					for (int i = 0; i < p; i++)
+				case AMOTION_EVENT_ACTION_MOVE:
 					{
-						int id = AMotionEvent_getPointerId(event, i);
-						int x = AMotionEvent_getX(event, i);
-						int y = AMotionEvent_getY(event, i);
-						GlobalEventHandler->OnTouchUp(GlobalWindow, Xli::Vector2(x, y), id);
+						int p = AMotionEvent_getPointerCount(event);
 
-						//LOGD("TOUCH CANCEL: %d  %d  %d  %d  %d", a, i, id, x, y);
+						for (int i = 0; i < p; i++)
+						{
+							int id = AMotionEvent_getPointerId(event, i);
+							int x = AMotionEvent_getX(event, i);
+							int y = AMotionEvent_getY(event, i);
+							GlobalEventHandler->OnTouchMove(GlobalWindow, Xli::Vector2(x, y), id);
+
+							//LOGD("TOUCH MOVE: %d  %d  %d  %d  %d", a, i, id, x, y);
+						}
 					}
+					break;
+
+				default:
+					{
+						int p = AMotionEvent_getPointerCount(event);
+
+						for (int i = 0; i < p; i++)
+						{
+							int id = AMotionEvent_getPointerId(event, i);
+							int x = AMotionEvent_getX(event, i);
+							int y = AMotionEvent_getY(event, i);
+							GlobalEventHandler->OnTouchUp(GlobalWindow, Xli::Vector2(x, y), id);
+
+							//LOGD("TOUCH CANCEL: %d  %d  %d  %d  %d", a, i, id, x, y);
+						}
+					}
+					break;
 				}
-				break;
 			}
-		}
 
-		break;
+			break;
 	
-	case AINPUT_EVENT_TYPE_KEY:
-		if (GlobalEventHandler != 0)
-		{
-			if (AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_DOWN)
+		case AINPUT_EVENT_TYPE_KEY:
+			if (GlobalEventHandler)
 			{
-				switch (AKeyEvent_getKeyCode(event))
+				switch (AKeyEvent_getAction(event))
 				{
-					/*
-				case AKEYCODE_BACK:
-					if (GlobalWindow != 0) GlobalWindow->Close(); // TODO
-					return 1;
-					*/
-				case AKEYCODE_MENU:
-					if (GlobalEventHandler->OnKeyDown(GlobalWindow, Xli::KeyMenu))
+				case AKEY_EVENT_ACTION_DOWN:
+					switch (AKeyEvent_getKeyCode(event))
+					{
+						/*
+					case AKEYCODE_BACK:
+						if (GlobalWindow != 0) GlobalWindow->Close(); // TODO
 						return 1;
+						*/
+					case AKEYCODE_MENU:
+						if (GlobalEventHandler->OnKeyDown(GlobalWindow, Xli::KeyMenu))
+							return 1;
+
+						break;
+					}
+
+					break;
+
+				case AKEY_EVENT_ACTION_UP:
+					switch (AKeyEvent_getKeyCode(event))
+					{
+						/*
+					case AKEYCODE_BACK:
+						return 1;
+						*/
+					case AKEYCODE_MENU:
+						if (GlobalEventHandler->OnKeyUp(GlobalWindow, Xli::KeyMenu))
+							return 1;
+
+						break;
+					}
 
 					break;
 				}
 			}
-			else if (AKeyEvent_getAction(event) == AKEY_EVENT_ACTION_UP)
-			{
-				switch (AKeyEvent_getKeyCode(event))
-				{
-					/*
-				case AKEYCODE_BACK:
-					return 1;
-					*/
-				case AKEYCODE_MENU:
-					if (GlobalEventHandler->OnKeyUp(GlobalWindow, Xli::KeyMenu))
-						return 1;
 
-					break;
-				}
-			}
+			break;
 		}
 
-		break;
+		return 0;
 	}
 
-	return 0;
-}
-
-static const char* get_cmd_string(int32_t cmd)
-{
-	switch (cmd)
+	static const char* get_cmd_string(int32_t cmd)
 	{
+		switch (cmd)
+		{
 #define CASE(x) case x: return #x;
-	CASE(APP_CMD_INPUT_CHANGED);
-	CASE(APP_CMD_INIT_WINDOW);
-	CASE(APP_CMD_TERM_WINDOW);
-	CASE(APP_CMD_WINDOW_RESIZED);
-	CASE(APP_CMD_WINDOW_REDRAW_NEEDED);
-	CASE(APP_CMD_CONTENT_RECT_CHANGED);
-	CASE(APP_CMD_GAINED_FOCUS);
-	CASE(APP_CMD_LOST_FOCUS);
-	CASE(APP_CMD_CONFIG_CHANGED);
-	CASE(APP_CMD_LOW_MEMORY);
-	CASE(APP_CMD_START);
-	CASE(APP_CMD_RESUME);
-	CASE(APP_CMD_SAVE_STATE);
-	CASE(APP_CMD_PAUSE);
-	CASE(APP_CMD_STOP);
-	CASE(APP_CMD_DESTROY);
+		CASE(APP_CMD_INPUT_CHANGED);
+		CASE(APP_CMD_INIT_WINDOW);
+		CASE(APP_CMD_TERM_WINDOW);
+		CASE(APP_CMD_WINDOW_RESIZED);
+		CASE(APP_CMD_WINDOW_REDRAW_NEEDED);
+		CASE(APP_CMD_CONTENT_RECT_CHANGED);
+		CASE(APP_CMD_GAINED_FOCUS);
+		CASE(APP_CMD_LOST_FOCUS);
+		CASE(APP_CMD_CONFIG_CHANGED);
+		CASE(APP_CMD_LOW_MEMORY);
+		CASE(APP_CMD_START);
+		CASE(APP_CMD_RESUME);
+		CASE(APP_CMD_SAVE_STATE);
+		CASE(APP_CMD_PAUSE);
+		CASE(APP_CMD_STOP);
+		CASE(APP_CMD_DESTROY);
 #undef CASE
+		}
+
+		return "<UNKNOWN>";
 	}
 
-	return "<UNKNOWN>";
-}
-
-static void handle_cmd(struct android_app* app, int32_t cmd)
-{
-	//LOGD("INCOMING CMD: %s", get_cmd_string(cmd));
-
-	switch (cmd)
+	static void handle_cmd(struct android_app* app, int32_t cmd)
 	{
-		case APP_CMD_INIT_WINDOW:
-			inited = 1;
-			break;
+		//LOGD("INCOMING CMD: %s", get_cmd_string(cmd));
 
-		case APP_CMD_PAUSE:
-			if (GlobalEventHandler)
-				GlobalEventHandler->OnAppWillEnterBackground(GlobalWindow);
+		switch (cmd)
+		{
+			case APP_CMD_INIT_WINDOW:
+				inited = 1;
+				break;
+
+			case APP_CMD_PAUSE:
+				if (GlobalEventHandler)
+					GlobalEventHandler->OnAppWillEnterBackground(GlobalWindow);
 			
-			visible = 0;
-
-			if (GlobalEventHandler)
-				GlobalEventHandler->OnAppDidEnterBackground(GlobalWindow);
-
-			break;
-
-		case APP_CMD_RESUME:
-			if (GlobalEventHandler)
-				GlobalEventHandler->OnAppWillEnterForeground(GlobalWindow);
-
-			visible = 1;
-
-			if (GlobalEventHandler)
-				GlobalEventHandler->OnAppDidEnterForeground(GlobalWindow);
-
-			break;
-
-		case APP_CMD_LOW_MEMORY:
-			if (GlobalEventHandler) 
-				GlobalEventHandler->OnAppLowMemory(GlobalWindow);
-			
-			break;
-
-		case APP_CMD_STOP:
-		case APP_CMD_TERM_WINDOW:
-			if (!app->destroyRequested)
-			{
-				app->destroyRequested = 1;
+				visible = 0;
 
 				if (GlobalEventHandler)
-					GlobalEventHandler->OnAppTerminating(GlobalWindow);
-			}
+					GlobalEventHandler->OnAppDidEnterBackground(GlobalWindow);
 
-			break;
-	}
-}
+				break;
 
-extern "C" int main(int argc, char* argv[]);
+			case APP_CMD_RESUME:
+				if (GlobalEventHandler)
+					GlobalEventHandler->OnAppWillEnterForeground(GlobalWindow);
 
-extern "C" void android_main(struct android_app* app)
-{
-    // Make sure glue isn't stripped.
-    app_dummy();
+				visible = 1;
 
-    app->userData = 0;
-    app->onAppCmd = handle_cmd;
-    app->onInputEvent = handle_input;
-	
-	GlobalAndroidApp = app;
-	XliActivity = app->activity;
+				if (GlobalEventHandler)
+					GlobalEventHandler->OnAppDidEnterForeground(GlobalWindow);
 
-	ANativeActivity_setWindowFlags(XliActivity, AWINDOW_FLAG_FULLSCREEN | AWINDOW_FLAG_KEEP_SCREEN_ON | AWINDOW_FLAG_TURN_SCREEN_ON, 0);
+				break;
 
-	try
-	{
-		Xli::Out->SwitchStream(Manage(new Xli::AOutStream()));
-		Xli::Err->SwitchStream(Manage(new Xli::AErrStream()));
+			case APP_CMD_LOW_MEMORY:
+				if (GlobalEventHandler)
+					GlobalEventHandler->OnAppLowMemory(GlobalWindow);
+			
+				break;
 
-		while (!inited)
-		{
-			Xli::Window::ProcessMessages();
-				
-			if (app->destroyRequested == 1)
-			{
-				LOGE("Unable to initialize window");
-				exit(EXIT_FAILURE);
-			}
+			case APP_CMD_STOP:
+			case APP_CMD_TERM_WINDOW:
+				if (!app->destroyRequested)
+				{
+					app->destroyRequested = 1;
 
-			usleep(10000);
+					if (GlobalEventHandler)
+						GlobalEventHandler->OnAppTerminating(GlobalWindow);
+				}
+
+				break;
 		}
-
-		int exit_code = main(0, 0);
-
-		//LOGD("Exiting with code: %d", exit_code);
-		exit(exit_code);
 	}
-	catch (const Xli::Exception& e)
+
+	int main(int argc, char* argv[]);
+
+	void android_main(struct android_app* app)
 	{
-		LOGE("Unhandled exception: %s", e.GetMessage().Data());
-		LOGE("Thrown from: %s : %d", e.GetFunction().Data(), e.GetLine());
-		exit(EXIT_FAILURE);
+		// Make sure glue isn't stripped.
+		app_dummy();
+
+		app->userData = 0;
+		app->onAppCmd = handle_cmd;
+		app->onInputEvent = handle_input;
+	
+		GlobalAndroidApp = app;
+		Xli::AndroidActivity = app->activity;
+
+		ANativeActivity_setWindowFlags(app->activity, AWINDOW_FLAG_FULLSCREEN | AWINDOW_FLAG_KEEP_SCREEN_ON | AWINDOW_FLAG_TURN_SCREEN_ON, 0);
+
+		try
+		{
+			Xli::JniHelper::Init();
+
+			Xli::Out->SwitchStream(Manage(new Xli::ALogStream(ANDROID_LOG_INFO)));
+			Xli::Err->SwitchStream(Manage(new Xli::ALogStream(ANDROID_LOG_WARN)));
+
+			while (!inited)
+			{
+				Xli::Window::ProcessMessages();
+				
+				if (app->destroyRequested)
+				{
+					LOGF("Unable to initialize window");
+					exit(EXIT_FAILURE);
+				}
+
+				usleep(10000);
+			}
+
+			int exit_code = main(0, 0);
+
+			//LOGD("Exiting with code: %d", exit_code);
+			exit(exit_code);
+		}
+		catch (const Xli::Exception& e)
+		{
+			LOGF("Unhandled exception: %s", e.GetMessage().Data());
+			LOGF("Thrown from: %s : %d", e.GetFunction().Data(), e.GetLine());
+			exit(EXIT_FAILURE);
+		}
 	}
 }
