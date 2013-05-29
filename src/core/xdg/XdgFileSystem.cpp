@@ -1,6 +1,7 @@
 #include "../posix/PosixFileSystemBase.h"
 #include <Xli/Console.h>
 #include <cstdlib>
+#include <cstring>
 
 namespace Xli
 {

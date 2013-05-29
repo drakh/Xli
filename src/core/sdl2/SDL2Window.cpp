@@ -599,6 +599,7 @@ namespace Xli
                 case SDL_FINGERDOWN:
                 case SDL_FINGERMOTION:
                 case SDL_FINGERUP:
+#ifdef XLI_PLATFORM_IOS
                     if (GlobalWindow != 0 && GlobalWindow->GetEventHandler() != 0)
                     {
                         int w, h;
@@ -625,7 +626,8 @@ namespace Xli
                                 break;
                         }
                     }
-                    
+#endif                 
+   
                     continue;
                     
                 case SDL_MULTIGESTURE:
