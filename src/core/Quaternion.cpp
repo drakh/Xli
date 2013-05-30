@@ -62,7 +62,7 @@ namespace Xli
 
 	Quaternion::Quaternion(const Vector3& axis, float angleRadians)
 	{
-		float d = axis.Length();
+		float d = Xli::Length(axis);
 		if (d == float(0.0)) return;
 		float s = Sin(angleRadians * float(0.5)) / d;
 

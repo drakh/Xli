@@ -34,10 +34,14 @@ namespace Xli
 
 		JniHelper();
 
+		jmethodID FindMethod(const char* className, const char* methodName, const char* methodSig);
+
 		jobject CallObjectMethod(jobject inst, const char* name, const char* sig);
 
 		String GetString(jobject str);
 		JNIEnv* GetEnv();
+
+		JNIEnv* operator->();
 	};
 }
 

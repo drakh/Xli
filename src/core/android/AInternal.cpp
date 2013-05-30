@@ -19,7 +19,7 @@ namespace Xli
 	void JniHelper::Init()
 	{
 		if (pthread_key_create(&JniThreadKey, JniDestroyThread))
-			LOGE("JNI ERROR: Unable to create pthread key");
+			LOGE("JNI ERROR: Unable to create pthread key"); // Not fatal
 	}
 
 	JniHelper::JniHelper()
@@ -31,6 +31,17 @@ namespace Xli
 
 			pthread_setspecific(JniThreadKey, (void*)env);
 		}
+	}
+
+	jmethodID JniHelper::FindMethod(const char* className, const char* methodName, const char* methodSig)
+	{
+		jclass cls = env->FindClass(className);
+		if (!cls) XLI_THROW((String)"Failed to get JNI class '" + className + "'");
+
+		jmethodID method = env->GetMethodID(cls, methodName, methodSig);
+		if (!method) XLI_THROW((String)"Failed to get JNI method '" + className + "." + methodName + methodSig + "'");
+
+		return method;
 	}
 
 	jobject JniHelper::CallObjectMethod(jobject inst, const char* name, const char* sig)
@@ -60,6 +71,13 @@ namespace Xli
 
 	JNIEnv* JniHelper::GetEnv()
 	{
+		// TODO: Check jni exceptions
+		return env;
+	}
+
+	JNIEnv* JniHelper::operator->()
+	{
+		// TODO: Check jni exceptions
 		return env;
 	}
 }

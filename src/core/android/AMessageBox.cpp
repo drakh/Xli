@@ -7,8 +7,6 @@ namespace Xli
 {
 	DialogResult MessageBox::Show(Window* parent, const String& message, const String& caption, DialogButtons buttons, int hints)
 	{
-
-
 		Err->WriteLine(caption + ": " + message);
 
 		switch (buttons)

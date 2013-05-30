@@ -377,7 +377,7 @@ namespace Xli
 
 	Matrix4 Matrix4::Rotation(const Vector3& axis, float angleRadians)
 	{
-		Vector3 normalized_axis = axis.Normalized();
+		Vector3 normalized_axis = Normalize(axis);
 		float x = normalized_axis.X;
 		float y = normalized_axis.Y;
 		float z = normalized_axis.Z;
@@ -440,13 +440,13 @@ namespace Xli
 
 	Matrix4 Matrix4::GLLookAt(const Vector3& eye, const Vector3& center, const Vector3& upVec)
 	{
-		Vector3 forward = (center - eye).Normalized();
+		Vector3 forward = Normalize(center - eye);
 
 		/* Side = forward x up */
-		Vector3 side = forward.Cross(upVec).Normalized();
+		Vector3 side = Normalize(Cross(forward, upVec));
 
 		/* Recompute up as: up = side x forward */
-		Vector3 up = side.Cross(forward);
+		Vector3 up = Cross(side, forward);
 
 		Matrix4 m = Identity();
 			

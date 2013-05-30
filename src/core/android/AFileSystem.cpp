@@ -116,13 +116,23 @@ namespace Xli
 
 	class AFileSystem: public PosixFileSystemBase
 	{
+		jmethodID Context_getCacheDir;
+		jmethodID File_getAbsolutePath;
+
 	public:
+		AFileSystem()
+		{
+			JniHelper jni;
+			Context_getCacheDir = jni.FindMethod("android/content/Context", "getCacheDir", "()Ljava/io/File;");
+			File_getAbsolutePath = jni.FindMethod("java/io/File", "getAbsolutePath", "()Ljava/lang/String;");
+		}
+
 		virtual String GetTempDirectory()
 		{
 			JniHelper jni;
-			jobject cacheDir = jni.CallObjectMethod(AndroidActivity->clazz, "getCacheDir", "()Ljava/io/File;");
-			jobject absoluteDir = jni.CallObjectMethod(cacheDir, "getAbsolutePath", "()Ljava/lang/String;");
-			return jni.GetString(absoluteDir);
+			jobject cacheDir = jni->CallObjectMethod(AndroidActivity->clazz, Context_getCacheDir);
+			jobject absolutePath = jni->CallObjectMethod(cacheDir, File_getAbsolutePath);
+			return jni.GetString(absolutePath);
 		}
 
 		virtual String GetSystemDirectory(SystemDirectory dir)

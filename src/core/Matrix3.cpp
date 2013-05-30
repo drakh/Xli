@@ -227,7 +227,7 @@ namespace Xli
 
 	Matrix3 Matrix3::Rotation(const Vector3& axis, float angleRadians)
 	{
-		Vector3 normalized_axis = axis.Normalized();
+		Vector3 normalized_axis = Normalize(axis);
 		float x = normalized_axis.X;
 		float y = normalized_axis.Y;
 		float z = normalized_axis.Z;
@@ -259,7 +259,7 @@ namespace Xli
 
 	Matrix3 Matrix3::Rotation(float x, float y, float z, float angleRadians)
 	{
-		return Rotation(Vector3t<float>(x, y, z), angleRadians);
+		return Rotation(Vector3(x, y, z), angleRadians);
 	}
 
 	Matrix3 Matrix3::Scaling(float x, float y, float z)
