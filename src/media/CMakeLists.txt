@@ -46,7 +46,6 @@ set(ZlibSrc
 	3rdparty/zlib/compress.c
 	3rdparty/zlib/crc32.c
 	3rdparty/zlib/deflate.c
-	3rdparty/zlib/gzio.c
 	3rdparty/zlib/infback.c
 	3rdparty/zlib/inffast.c
 	3rdparty/zlib/inflate.c
