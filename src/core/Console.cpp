@@ -14,9 +14,9 @@ namespace Xli
 	{
 		if (!initCount)
 		{
-			out = new TextWriter(Manage(new File(stdout, false, true)));
-			err = new TextWriter(Manage(new File(stderr, false, true)));
-			in = new TextReader(Manage(new File(stdin, true, false)));
+			out = new TextWriter(ManagePtr(new File(stdout, false, true)));
+			err = new TextWriter(ManagePtr(new File(stderr, false, true)));
+			in = new TextReader(ManagePtr(new File(stdin, true, false)));
 		}
 
 		initCount++;

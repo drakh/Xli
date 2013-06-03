@@ -148,7 +148,13 @@ class EventHandler: public WindowEventHandler
             {
                 // double tap
                 if (MessageBox::Show(wnd, "Double tap detected", "Hello", DialogButtonsOKCancel) == DialogResultOK)
-                    glClearColor(1,1,1,1);
+                {
+                    wnd->BeginTextInput();
+                }
+            }
+            else if (wnd->IsTextInputActive())
+            {
+                wnd->EndTextInput();
             }
             
             tapTime = GetTime();

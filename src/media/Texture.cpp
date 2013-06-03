@@ -9,7 +9,7 @@ namespace Xli
 
 	Texture::Face::Face(Image* img)
 	{
-		MipLevels.Add(Share(img));
+		MipLevels.Add(SharePtr(img));
 	}
 
 	Texture::Face& Texture::Face::operator = (const Face& copy)
