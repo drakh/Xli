@@ -119,14 +119,14 @@ namespace Xli
 		MouseButtonLeft = 1,
 
 		/**
-			Right mouse button
-		*/
-		MouseButtonRight = 2,
-
-		/**
 			Middle mouse button
 		*/
-		MouseButtonMiddle = 3,
+		MouseButtonMiddle = 2,
+
+		/**
+			Right mouse button
+		*/
+		MouseButtonRight = 3,
 
 		/**
 			Extra mouse button 1 (aka Mouse4)
@@ -359,6 +359,15 @@ namespace Xli
 			Sets the system cursor to be used in the window
 		*/
 		virtual void SetSystemCursor(SystemCursor cursor) = 0;
+
+
+		// TODO:
+		virtual void BeginTextInput() {}
+		virtual void EndTextInput() {}
+		virtual bool IsTextInputActive() { return false; }
+		virtual bool HasOnscreenKeyboardSupport() { return false; }
+		virtual bool IsOnscreenKeyboardVisible() { return false; }
+
 
 		/**
 			Initializes the Window implementation.
