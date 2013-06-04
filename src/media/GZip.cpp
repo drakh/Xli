@@ -19,10 +19,10 @@ static int const gz_magic[2] = {0x1f, 0x8b}; /* gzip magic header */
 
 namespace Xli
 {
-	// TODO: Writer is broken
 	class GzStreamWriter: public Stream
 	{
 		Shared<Stream> compressedStream;
+
 		Bytef buf[Z_BUFSIZE];
 		z_stream stream;
 		uLong crc;
@@ -38,7 +38,7 @@ namespace Xli
 			this->pos = 0;
 			this->compressedStream = targetStream;
 
-			level = Clamp(level, Z_BEST_SPEED, Z_BEST_COMPRESSION);
+			level = Clamp(level, Z_NO_COMPRESSION, Z_BEST_COMPRESSION);
 
 			memset(&stream, 0, sizeof(z_stream));
 			stream.next_out = buf;
@@ -49,14 +49,12 @@ namespace Xli
 			if (err != Z_OK || !buf) 
 				XLI_THROW("Failed to create GZip stream");
 
-#if 0
 			char header[11];
 
 			sprintf_s(header, "%c%c%c%c%c%c%c%c%c%c", gz_magic[0], gz_magic[1],
-				Z_DEFLATED, 0 /*flags*/, 0,0,0,0 /*time*/, 0 /*xflags*/, OS_CODE);
+				Z_DEFLATED, 0 /*flags*/, 0,0,0,0 /*time*/, 0 /*xflags*/, 0);
 
-			compressedStream->WriteSafe(header, 1, 10);
-#endif
+			compressedStream->WriteSafe(header, 1, 11);
 		}
 
 		virtual ~GzStreamWriter()
@@ -64,11 +62,8 @@ namespace Xli
 			Close();
 		}
 
-		virtual void Flush()
+		void FlushBuffer()
 		{
-			if (compressedStream.IsNull()) 
-				XLI_THROW_STREAM_CLOSED;
-
 			while (true)
 			{
 				int len = Z_BUFSIZE - stream.avail_out;
@@ -79,23 +74,33 @@ namespace Xli
 
 				int err = deflate(&stream, Z_FINISH);
 
+				if (err == Z_STREAM_END)
+					break;
+				
 				if (err == Z_OK)
 					continue;
 
-				if (err != Z_STREAM_END)
-					XLI_THROW("Failed to flush GZip stream");
-
-				break;
+				XLI_THROW("Failed to flush GZip stream");
 			}
+		}
+
+		virtual void Flush()
+		{
+			if (compressedStream.IsNull()) 
+				XLI_THROW_STREAM_CLOSED;
+
+			FlushBuffer();
+			compressedStream->Flush();
 		}
 
 		virtual void Close()
 		{
-			if (compressedStream.IsNull()) return;
+			if (compressedStream.IsNull()) 
+				return;
 			
-			Flush();
-			//compressedStream->WriteSafe(&crc, 4, 1);
-			//compressedStream->WriteSafe(&pos, 4, 1);
+			FlushBuffer();
+			compressedStream->WriteSafe(&crc, 4, 1);
+			compressedStream->WriteSafe(&pos, 4, 1);
 			compressedStream->Close();
 			compressedStream = 0;
 		}
@@ -146,12 +151,12 @@ namespace Xli
 			return elmCount;
 		}
 	};
-	/*
+	
 	Stream* GZip::CreateWriter(Stream* targetStream, int level)
 	{
 		return new GzStreamWriter(targetStream, level);
 	}
-	*/
+	
 	Stream* GZip::CreateReader(Stream* sourceStream)
 	{
 		if (sourceStream == 0) 
@@ -178,12 +183,12 @@ namespace Xli
 		z_stream stream;
 		memset(&stream, 0, sizeof(z_stream));
 
-		int err = inflateInit2(&stream, 16 + MAX_WBITS);
-
 		stream.next_in = src->Data();
 		stream.avail_in = src->Size();
 		stream.next_out = dst->Data();
 		stream.avail_out = dst->Size();
+
+		int err = inflateInit2(&stream, 16 + MAX_WBITS);
 
 		if (err != Z_OK) 
 			XLI_THROW("Failed to create GZip stream");
@@ -199,7 +204,7 @@ namespace Xli
 			else if (result == Z_DATA_ERROR)
 				XLI_THROW("Failed to create GZip stream: Data error");
 			else
-				XLI_THROW("Failed to create GZip stream: Unknown error");
+				XLI_THROW("Failed to create GZip stream");
 		}
 
 		if (stream.avail_out != 0 || stream.avail_in != 0)

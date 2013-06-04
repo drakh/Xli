@@ -17,8 +17,8 @@ namespace Xli
 	{
 		int loc = buf.Length();
 		buf.Expand();
-		buf.Resize(buf.Length()+elmSize*elmCount);
-		memcpy(buf.Data()+loc, src, elmSize*elmCount);
+		buf.Resize(buf.Length() + elmSize * elmCount);
+		memcpy(buf.Data() + loc, src, elmSize * elmCount);
 		return elmCount;
 	}
 
