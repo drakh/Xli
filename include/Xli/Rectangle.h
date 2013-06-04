@@ -34,6 +34,7 @@ namespace Xli
 				// One plus the highest Y-coordinate of the interior of the rectangle
 				T Bottom;
 			};
+
 			T data[4];
 		};
 
@@ -41,16 +42,16 @@ namespace Xli
 		{
 			return data;
 		}
+		
 		T& operator [] (int i)
 		{
 #ifdef XLI_RANGE_CHECK
 			if (i >= 4 || i < 0)
-			{
 				XLI_THROW_INDEX_OUT_OF_BOUNDS;
-			}
 #endif
 			return data[i];
 		}
+		
 		String ToString() const
 		{
 			return String(Left) + ", " + Top + ", " + Right + ", " + Bottom;
@@ -59,6 +60,7 @@ namespace Xli
 		Rectanglet()
 		{
 		}
+		
 		Rectanglet(T left, T top, T right, T bottom)
 		{
 			Left = left;
@@ -66,6 +68,7 @@ namespace Xli
 			Right = right;
 			Bottom = bottom;
 		}
+		
 		Rectanglet(const Rectanglet& v)
 		{
 			Left = v.Left;
@@ -73,6 +76,7 @@ namespace Xli
 			Right = v.Right;
 			Bottom = v.Bottom;
 		}
+		
 		template <typename U> explicit Rectanglet(const Rectanglet<U>& v)
 		{
 			Left = (T)v.Left;
@@ -80,10 +84,12 @@ namespace Xli
 			Right = (T)v.Right;
 			Bottom = (T)v.Bottom;
 		}
+		
 		template <typename U> operator Rectanglet<U>() const
 		{
 			return Rectanglet<U>((U) Left, (U) Top, (U) Right, (U) Bottom);
 		}
+		
 		Rectanglet& operator = (const Rectanglet& v)
 		{
 			Left = v.Left;
@@ -115,6 +121,7 @@ namespace Xli
 			case 2: return Vector2t<T>(Right, Bottom);
 			case 3: return Vector2t<T>(Right, Top);
 			}
+		
 			XLI_THROW_INDEX_OUT_OF_BOUNDS;
 		}
 
@@ -122,6 +129,7 @@ namespace Xli
 		{
 			return Right - Left;
 		}
+		
 		T Height() const
 		{
 			return Bottom - Top;
@@ -131,6 +139,7 @@ namespace Xli
 		{
 			return Vector2t<T>(Left, Top);
 		}
+		
 		Vector2t<T> Size() const
 		{
 			return Vector2t<T>(Width(), Height());
@@ -140,21 +149,25 @@ namespace Xli
 		{
 			return Vector2t<T>(Left, Top);
 		}
+		
 		Vector2t<T> TopRight() const
 		{
 			return Vector2t<T>(Right, Top);
 		}
+		
 		Vector2t<T> BottomLeft() const
 		{
 			return Vector2t<T>(Left, Bottom);
 		}
+		
 		Vector2t<T> BottomRight() const
 		{
 			return Vector2t<T>(Right, Bottom);
 		}
+
 		Vector2t<T> Center() const
 		{
-			return Vector2t<T>(Left + Width()/2, Top + Height()/2);
+			return Vector2t<T>(Left + Width() / 2, Top + Height() / 2);
 		}
 
 		T Area() const
@@ -166,6 +179,7 @@ namespace Xli
 		{
 			Move(dp.X, dp.Y);
 		}
+
 		void Move(const T& dX, const T& dY)
 		{
 			Left += dX;
@@ -173,14 +187,17 @@ namespace Xli
 			Right += dX;
 			Bottom += dY;
 		}
+		
 		void MoveTo(const Vector2t<T>& dp)
 		{
 			MoveTo(dp.X, dp.Y);
 		}
+
 		void MoveTo(const T& x, const T& y)
 		{
-			Move(x-Left, y-Top);
+			Move(x - Left, y - Top);
 		}
+
 		void Resize(const T& width, const T& height)
 		{
 			Right = Left + width;
@@ -195,6 +212,7 @@ namespace Xli
 			if (y > Bottom) return false;
 			return true;
 		}
+
 		bool Intersects(const Rectanglet& rect) const
 		{
 			return (! (Left > rect.Right
@@ -225,6 +243,7 @@ namespace Xli
 			r.Bottom = Bottom + offset.Y;
 			return r;
 		}
+
 		Rectanglet operator - (const Vector2t<T>& offset) const
 		{
 			return *this + (-offset);

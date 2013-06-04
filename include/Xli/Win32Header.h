@@ -1,5 +1,5 @@
-#ifndef __XLI_PLATFORM_WIN32_WINDOWS_H__
-#define __XLI_PLATFORM_WIN32_WINDOWS_H__
+#ifndef __XLI_PLATFORM_WIN32_HEADER_H__
+#define __XLI_PLATFORM_WIN32_HEADER_H__
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

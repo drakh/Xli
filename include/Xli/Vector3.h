@@ -191,7 +191,11 @@ namespace Xli
 
 		Vector3t operator / (const T& s) const
 		{
-			return *this * ((T)1.0 / s);
+			Vector3t r;
+			r.X = X / s;
+			r.Y = Y / s;
+			r.Z = Z / s;
+			return r;
 		}
 
 		Vector3t& operator += (const Vector3t& v)
@@ -252,7 +256,10 @@ namespace Xli
 
 		Vector3t& operator /= (const T& s)
 		{
-			return *this *= (T(1.0) / s);
+			X /= s;
+			Y /= s;
+			Z /= s;
+			return *this;
 		}
 
 		/*

@@ -26,9 +26,7 @@ namespace Xli
 	{
 #ifdef XLI_RANGE_CHECK
 		if (i >= 9 || i < 0)
-		{
 			XLI_THROW_INDEX_OUT_OF_BOUNDS;
-		}
 #endif
 		return data[i];
 	}

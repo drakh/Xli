@@ -43,7 +43,6 @@
 #include <Xli/Exception.h>
 #include <Xli/File.h>
 #include <Xli/FileSystem.h>
-#include <Xli/Float16.h>
 #include <Xli/GLContext.h>
 #include <Xli/Hash.h>
 #include <Xli/HashMap.h>

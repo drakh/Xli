@@ -655,6 +655,9 @@ namespace Xli
                 continue;
 			}
             
+			if (wnd->closed)
+				continue;
+
 			switch (e.type)
 			{
 				case SDL_WINDOWEVENT:
