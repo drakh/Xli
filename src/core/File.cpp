@@ -26,10 +26,8 @@ namespace Xli
 		Utf16String filenameW = Unicode::Utf8To16(filename);
 		Utf16String mW = Unicode::Utf8To16(m);
 		
-		if (_wfopen_s(&fp, filenameW.Data(), mW.Data()) != 0 || !fp)
-		{
+		if (_wfopen_s(&fp, filenameW.Data(), mW.Data()) != 0)
 			XLI_THROW_CANT_OPEN_FILE(filename);
-		}
 
 #else
 		
@@ -132,9 +130,11 @@ namespace Xli
 		case SeekOriginBegin:
 			if (fseek(fp, offset, SEEK_SET) == 0) return;
 			break;
+
 		case SeekOriginCurrent:
 			if (fseek(fp, offset, SEEK_CUR) == 0) return;
 			break;
+
 		case SeekOriginEnd:
 			if (fseek(fp, offset, SEEK_END) == 0) return;
 			break;

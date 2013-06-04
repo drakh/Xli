@@ -116,7 +116,7 @@ namespace Xli
 	Bitmap* Bitmap::Pack()
 	{
 		if (pitch == FormatInfo::SizeOf(format) * width)
-			return Share(this);
+			return SharePtr(this);
 
 		// TODO: Implement this
 		XLI_THROW_NOT_SUPPORTED(XLI_FUNC);
@@ -124,7 +124,7 @@ namespace Xli
 
 	Bitmap* Bitmap::ToBitmap()
 	{
-		return Share(this);
+		return SharePtr(this);
 	}
 
 	Bitmap* Bitmap::SubBitmap(const Recti& rect)
@@ -174,7 +174,7 @@ namespace Xli
 	{
 		if (dstFormat == this->format)
 		{
-			return Share(this);
+			return SharePtr(this);
 		}
 		else if (this->format == FormatL_8_UInt_Normalize && dstFormat == FormatRGBA_8_8_8_8_UInt_Normalize)
 		{
@@ -405,7 +405,7 @@ namespace Xli
 
 	void Bitmap::GenerateMipMaps(Array<Bitmap*>& chain)
 	{
-		chain.Add(Share(this));
+		chain.Add(SharePtr(this));
 		Bitmap* bmp = this;
 
 		while (bmp->GetWidth() > 1 || bmp->GetHeight() > 1)

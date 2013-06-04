@@ -43,7 +43,7 @@ namespace Xli
 
 		bool IsSet() const
 		{
-			return object != 0;
+			return object;
 		}
 
 		Managed& operator = (T* ptr)
@@ -89,12 +89,12 @@ namespace Xli
 
 		operator T*()
 		{
-			return Pointer();
+			return object;
 		}
 
 		operator const T*() const
 		{
-			return Pointer();
+			return object;
 		}
 
 		T* operator ->()
@@ -163,19 +163,19 @@ namespace Xli
 
 		operator T*()
 		{
-			return this->object;
+			return object;
 		}
 
 		operator const T*() const
 		{
-			return this->object;
+			return object;
 		}
 	};
 
 	/**
 		\ingroup Containers
 	*/
-	template <class T> Managed<T> Manage(T* oject)
+	template <class T> Managed<T> ManagePtr(T* oject)
 	{
 		return oject;
 	}
@@ -183,7 +183,7 @@ namespace Xli
 	/**
 		\ingroup Containers
 	*/
-	template <class T> T* Share(T* object)
+	template <class T> T* SharePtr(T* object)
 	{
 		if (object) object->AddRef();
 		return object;

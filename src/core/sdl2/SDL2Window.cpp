@@ -90,7 +90,7 @@ namespace Xli
 		this->eventHandler = eventHandler;
 
 #ifdef XLI_PLATFORM_IOS
-      
+      /*
         String orientations = "";
         
         if (flags & WindowFlagsOrientationLandscapeLeft)
@@ -105,14 +105,17 @@ namespace Xli
         if (flags & WindowFlagsOrientationPortraitUpsideDown)
             orientations += "PortraitUpsideDown";
 
-        if (orientations.Length() > 0 && !SDL_SetHint("SDL_IOS_ORIENTATIONS", orientations.Data())) 
+        if (orientations.Length() > 0 && !SDL_SetHint(SDL_HINT_ORIENTATIONS, orientations.Data()))
             ErrorPrintLine("SDL WARNING: Failed to set window orientations");
+        */
         
-        if (!SDL_SetHint("SDL_HINT_IDLE_TIMER_DISABLED", "1")) 
+        if (flags & WindowFlagsDisableScreenSaver && !SDL_SetHint(SDL_HINT_IDLE_TIMER_DISABLED, "1"))
             ErrorPrintLine("SDL WARNING: Failed to disable idle timer");
 
         if (fullscreen)
             sdlFlags |= SDL_WINDOW_BORDERLESS;
+        
+        sdlFlags |= SDL_WINDOW_RESIZABLE;
         
         SDL_SetEventFilter(HandleAppEvents, NULL);
         
@@ -442,6 +445,33 @@ namespace Xli
 #endif
 	}
 
+	void SDL2Window::BeginTextInput() 
+	{
+		SDL_StartTextInput();
+	}
+
+	void SDL2Window::EndTextInput() 
+	{
+		SDL_StopTextInput();
+	}
+
+	bool SDL2Window::IsTextInputActive() 
+	{
+		return SDL_IsTextInputActive();
+	}
+
+	bool SDL2Window::HasOnscreenKeyboardSupport() 
+	{
+		return SDL_HasScreenKeyboardSupport();
+	}
+
+	bool SDL2Window::IsOnscreenKeyboardVisible() 
+	{
+		return SDL_IsScreenKeyboardShown(window);
+	}
+
+
+
 	static bool inited = false;
 
 	void Window::Init()
@@ -691,9 +721,8 @@ namespace Xli
 							*/
 						case SDL_WINDOWEVENT_SIZE_CHANGED:
 							if (wnd->GetEventHandler() != 0)
-							{
 								wnd->GetEventHandler()->OnSizeChanged(wnd, Vector2i(e.window.data1, e.window.data2));
-							}
+
 							break;
                         
 						case SDL_WINDOWEVENT_HIDDEN:
@@ -706,14 +735,13 @@ namespace Xli
 							break;
 					}
 					break;
-                
-#ifndef XLI_PLATFORM_IOS
                     
 				case SDL_KEYDOWN:
 					if (wnd->GetEventHandler() != 0)
 					{
 						Key key = SDLKeyToXliKey(e.key.keysym);
 						if (key) wnd->GetEventHandler()->OnKeyDown(wnd, key);
+						else Err->WriteLine("SDL_KEYDOWN: " + (String)*(int*)&e.key.keysym);
 					}
 					break;
                 
@@ -722,14 +750,29 @@ namespace Xli
 					{
 						Key key = SDLKeyToXliKey(e.key.keysym);
 						if (key) wnd->GetEventHandler()->OnKeyUp(wnd, key);
+						else Err->WriteLine("SDL_KEYUP: " + (String)*(int*)&e.key.keysym);
 					}
 					break;
+
+                case SDL_TEXTINPUT:
+                    if (wnd->GetEventHandler())
+                        wnd->GetEventHandler()->OnTextInput(wnd, e.text.text);
+
+                    break;
                     
+                case SDL_TEXTEDITING:
+                    if (wnd->GetEventHandler())
+                        Err->WriteLine("SDL_TEXTEDITING: " + (String)e.edit.text + " " + e.edit.start + " " + e.edit.length);
+
+                    break;
+                    
+#ifndef XLI_PLATFORM_IOS
+
 				case SDL_MOUSEBUTTONDOWN:
                     wnd->buttons |= SDL_BUTTON(e.button.button);
                     
 					if (wnd->GetEventHandler() != 0)
-						wnd->GetEventHandler()->OnMouseDown(wnd, Vector2i(e.button.x, e.button.y), (MouseButton)e.button.button);
+						wnd->GetEventHandler()->OnMouseDown(wnd, Vector2i(e.button.x, e.button.y), (MouseButton)e.button.button); // TODO: Right/middle are swapped
                     
 					break;
                 
@@ -743,16 +786,14 @@ namespace Xli
                 
 				case SDL_MOUSEMOTION:
 					if (wnd->GetEventHandler() != 0)
-					{
 						wnd->GetEventHandler()->OnMouseMove(wnd, Vector2i(e.button.x, e.button.y));
-					}
+
 					break;
                 
 				case SDL_MOUSEWHEEL:
 					if (wnd->GetEventHandler() != 0)
-					{
 						wnd->GetEventHandler()->OnMouseWheel(wnd, Vector2i(e.wheel.x, e.wheel.y));
-					}
+
 					break;
 #endif
 			}

@@ -29,12 +29,12 @@ namespace Xli
 	{
 		DWORD dwStyle;
 
-		if (flags & WindowFlagsBorderless) 
+		if (flags & WindowFlagsBorderless)
 			dwStyle = WS_POPUP;
-		else if (flags & WindowFlagsResizeable) 
+		else if (flags & WindowFlagsResizeable)
 			dwStyle = WS_OVERLAPPEDWINDOW;
 		else // WindowFlagsFixed
-			dwStyle = WS_OVERLAPPEDWINDOW & ~(WS_THICKFRAME | WS_MAXIMIZEBOX); 
+			dwStyle = WS_OVERLAPPEDWINDOW & ~(WS_THICKFRAME | WS_MAXIMIZEBOX);
 
 		return dwStyle;
 	}
@@ -64,14 +64,10 @@ namespace Xli
 		hWnd = CreateWindowW(windowClassName, titleW.Data(), dwStyle, CW_USEDEFAULT, CW_USEDEFAULT, rect.right - rect.left, rect.bottom - rect.top, 0, 0, hInstance, 0);
 
 		if (!hWnd)
-		{
 			XLI_THROW("Failed to create window: " + Win32Helpers::GetLastErrorString());
-		}
 
 		if (!mainWindow)
-		{
 			mainWindow = this;
-		}
 
 		SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 
@@ -114,6 +110,7 @@ namespace Xli
 	void Win32Window::Close()
 	{
 		bool cancel = false;
+
 		if (!eventHandler || !eventHandler->OnClosing(this, cancel) || !cancel)
 		{
 			CloseWindow(hWnd);
@@ -286,7 +283,7 @@ namespace Xli
 
 	static Key VirtualToXliKey(WPARAM vk)
 	{
-		// http://msdn2.microsoft.com/en-us/library/ms927178.aspx
+		// http://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
 
 		switch (vk)
 		{
@@ -367,7 +364,7 @@ namespace Xli
 		return 0;
 	}
 
-	static int VirtualFromXliMouseButtons(MouseButton buttons)
+	static int VirtualFromXliMouseButton(MouseButton buttons)
 	{
 		switch (buttons)
 		{
@@ -393,13 +390,13 @@ namespace Xli
 	bool Win32Window::GetKeyState(Key key)
 	{
 		int vk = VirtualFromXliKey(key);
-		return vk != 0 && (GetAsyncKeyState(vk) & 0xff00) != 0;
+		return vk && (GetAsyncKeyState(vk) & 0x8000);
 	}
 
 	bool Win32Window::GetMouseButtonState(MouseButton button)
 	{
-		int vk = VirtualFromXliMouseButtons(button);
-		return vk != 0 && (GetAsyncKeyState(vk) & 0xff00) != 0;
+		int vk = VirtualFromXliMouseButton(button);
+		return vk && (GetAsyncKeyState(vk) & 0x8000);
 	}
 
 	Vector2i Win32Window::GetMousePosition()
@@ -439,6 +436,10 @@ namespace Xli
 				Key key = VirtualToXliKey(wParam);
 				if (key != KeyUnknown && wnd->eventHandler->OnKeyDown(wnd, key))
 					return 0;
+				/*
+				else
+					TranslateMessage(&msg);
+				*/
 			}
 			break;
 			
@@ -452,71 +453,81 @@ namespace Xli
 			break;
 
 		case WM_CHAR:
-			if (wnd->eventHandler)
-			{
-				if (wnd->eventHandler->OnTextInput(wnd, (String)(char)(unsigned char)(int)wParam))
-					return 0;
-			}
+			if (wnd->eventHandler && wnd->eventHandler->OnTextInput(wnd, (String)(char)(unsigned char)(int)wParam))
+				return 0;
+
 			break;
 
 		case WM_MOUSEMOVE:
 			if (wnd->eventHandler && wnd->eventHandler->OnMouseMove(wnd, Vector2i(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))))
 				return 0;
+
 			break;
 
 		case WM_MOUSELEAVE:
 			if (wnd->eventHandler && wnd->eventHandler->OnMouseLeave(wnd, Vector2i(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))))
 				return 0;
+
 			break;
 
 		case WM_MBUTTONDOWN:
 			if (wnd->eventHandler && wnd->eventHandler->OnMouseDown(wnd, Vector2i(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)), MouseButtonMiddle))
 				return 0;
+
 			break;
 
 		case WM_MBUTTONUP:
 			if (wnd->eventHandler && wnd->eventHandler->OnMouseUp(wnd, Vector2i(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)), MouseButtonMiddle))
 				return 0;
+
 			break;
 
 		case WM_LBUTTONDOWN:
 			if (wnd->eventHandler && wnd->eventHandler->OnMouseDown(wnd, Vector2i(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)), MouseButtonLeft))
 				return 0;
+
 			break;
 
 		case WM_LBUTTONUP:
 			if (wnd->eventHandler && wnd->eventHandler->OnMouseUp(wnd, Vector2i(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)), MouseButtonLeft))
 				return 0;
+
 			break;
 
 		case WM_RBUTTONDOWN:
 			if (wnd->eventHandler && wnd->eventHandler->OnMouseDown(wnd, Vector2i(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)), MouseButtonRight))
 				return 0;
+
 			break;
 
 		case WM_RBUTTONUP:
 			if (wnd->eventHandler && wnd->eventHandler->OnMouseUp(wnd, Vector2i(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)), MouseButtonRight))
 				return 0;
+
 			break;
 
 		case WM_MOUSEWHEEL:
 			if (wnd->eventHandler && wnd->eventHandler->OnMouseWheel(wnd, Vector2i(0, GET_WHEEL_DELTA_WPARAM(wParam))))
 				return 0;
+
 			break;
 
 		case WM_MOUSEHWHEEL:
 			if (wnd->eventHandler && wnd->eventHandler->OnMouseWheel(wnd, Vector2i(GET_WHEEL_DELTA_WPARAM(wParam), 0)))
 				return 0;
+
 			break;
 
 		case WM_XBUTTONDOWN:
 			if (wnd->eventHandler && wnd->eventHandler->OnMouseDown(wnd, Vector2i(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)), GET_XBUTTON_WPARAM(wParam) == XBUTTON1 ? MouseButtonX1 : MouseButtonX2))
 				return 0;
+
 			break;
 
 		case WM_XBUTTONUP:
 			if (wnd->eventHandler && wnd->eventHandler->OnMouseUp(wnd, Vector2i(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)), GET_XBUTTON_WPARAM(wParam) == XBUTTON1 ? MouseButtonX1 : MouseButtonX2))
 				return 0;
+
 			break;
 
 		case WM_TOUCH:
@@ -526,7 +537,8 @@ namespace Xli
 
 				if (numInputs)
 				{
-					PTOUCHINPUT touchPoints = new TOUCHINPUT[numInputs];
+					PTOUCHINPUT touchPoints = (PTOUCHINPUT)alloca(numInputs * sizeof(TOUCHINPUT));
+
 					if (GetTouchInputInfo((HTOUCHINPUT) lParam, numInputs, touchPoints, sizeof(TOUCHINPUT)))
 					{
 						for (int i = 0; i < numInputs; i++)
@@ -543,14 +555,13 @@ namespace Xli
 								wnd->eventHandler->OnTouchUp(wnd, Vector2((float)ti.x / 100.0f, (float)ti.y / 100.0f), ti.dwID);
 						}
 
-						CloseTouchInputHandle((HTOUCHINPUT) lParam);
+						CloseTouchInputHandle((HTOUCHINPUT)lParam);
 					}
 					else
 					{
 						ErrorPrintLine("WARNING: Error reading touchpoint info.");
 					}
 
-					delete [] touchPoints;
 					return 0;
 				}
 			}
@@ -559,6 +570,7 @@ namespace Xli
 		case WM_SIZE:
 			if (wnd->eventHandler && wnd->eventHandler->OnSizeChanged(wnd, Vector2i(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))))
 				return 0;
+
 			break;
 
 		case WM_CLOSE:
@@ -576,6 +588,7 @@ namespace Xli
 			wnd->closed = true;
 			if (wnd->eventHandler && wnd->eventHandler->OnClosed(wnd))
 				return 0;
+
 			break;
 
 		case WM_DESTROY:
@@ -632,14 +645,10 @@ namespace Xli
 	{
 		InitCount--;
 
-		if (InitCount == 0)
-		{
+		if (!InitCount)
 			UnregisterClass(windowClassName, hInstance);
-		}
 		else if (InitCount < 0)
-		{
 			XLI_THROW_BAD_DELETE;
-		}
 	}
 
 	static void AssertInit()

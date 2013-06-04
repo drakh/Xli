@@ -1,5 +1,5 @@
-#ifndef __XLI_ARRAY_STREAM_H__
-#define __XLI_ARRAY_STREAM_H__
+#ifndef __XLI_BUFFER_STREAM_H__
+#define __XLI_BUFFER_STREAM_H__
 
 #include <Xli/Stream.h>
 

@@ -14,7 +14,7 @@ namespace Xli
 
 	public:
 		static Stream* CreateReader(Stream* sourceStream);
-		//static Stream* CreateWriter(Stream* targetStream, int level = 5);
+		static Stream* CreateWriter(Stream* targetStream, int level = 5);
 	};
 }
 

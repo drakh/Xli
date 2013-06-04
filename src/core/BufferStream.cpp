@@ -22,12 +22,12 @@ namespace Xli
 
 	void BufferStream::Close()
 	{
-		this->closed = true;
+		closed = true;
 	}
 
 	bool BufferStream::IsClosed() const
 	{
-		return this->closed;
+		return closed;
 	}
 
 	bool BufferStream::AtEnd() const
@@ -119,20 +119,26 @@ namespace Xli
 	{
 		if (closed) XLI_THROW_STREAM_CLOSED;
 
+		int len = buf->GetSizeInBytes();
+
 		switch (origin)
 		{
 		case SeekOriginBegin:
 			pos = offset;
 			break;
+
 		case SeekOriginCurrent:
 			pos += offset;
 			break;
+
 		case SeekOriginEnd:
-			pos = GetLength() + offset;
+			pos = len + offset;
 			break;
 		}
 
-		if (pos < 0) pos = 0;
-		if (pos > GetLength()) pos = GetLength();
+		if (pos < 0) 
+			pos = 0;
+		else if (pos > len)
+			pos = len;
 	}
 }
