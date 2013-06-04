@@ -24,13 +24,17 @@ namespace Xli
 
 		KeyBackspace = 8,
 		KeyTab = 9,
+
 		KeyEnter = 13,
+
 		KeyShift = 16,
 		KeyCtrl = 17,
 		KeyAlt = 18,
 		KeyBreak = 19,
 		KeyCapsLock = 20,
+
 		KeyEscape = 27,
+
 		KeySpace = 32,
 		KeyPageUp = 33,
 		KeyPageDown = 34,
@@ -42,6 +46,7 @@ namespace Xli
 		KeyDown = 40,
 		KeyInsert = 45,
 		KeyDelete = 46,
+
 		Key0 = 48,
 		Key1 = 49,
 		Key2 = 50,
@@ -52,6 +57,7 @@ namespace Xli
 		Key7 = 55,
 		Key8 = 56,
 		Key9 = 57,
+
 		KeyA = 65,
 		KeyB = 66,
 		KeyC = 67,
@@ -78,6 +84,7 @@ namespace Xli
 		KeyX = 88,
 		KeyY = 89,
 		KeyZ = 90,
+
 		KeyNumPad0 = 96,
 		KeyNumPad1 = 97,
 		KeyNumPad2 = 98,
@@ -88,6 +95,7 @@ namespace Xli
 		KeyNumPad7 = 103,
 		KeyNumPad8 = 104,
 		KeyNumPad9 = 105,
+
 		KeyF1 = 112,
 		KeyF2 = 113,
 		KeyF3 = 114,
@@ -201,11 +209,8 @@ namespace Xli
 		WindowFlagsResizeable = 1 << 1, ///< Resizeable window with a title bar and minimize, maximize and close buttons
 		WindowFlagsFullscreen = 1 << 2, ///< Fullscreen window which should always be on top
 		WindowFlagsFullscreenResizeable = WindowFlagsResizeable | WindowFlagsFullscreen, ///< Resizeable window that opens in fullscreen mode
-        
-        WindowFlagsOrientationLandscapeLeft = 1 << 3, ///< Enable left landscape orientation (on phones and tablets)
-        WindowFlagsOrientationLandscapeRight = 1 << 4, ///< Enable left landscape orientation (on phones and tablets)
-        WindowFlagsOrientationPortrait = 1 << 5, ///< Enable portrait orientation (on phones and tablets)
-        WindowFlagsOrientationPortraitUpsideDown = 1 << 6, ///< Enable upside down portrait orientation (on phones and tablets)
+		
+		WindowFlagsDisableScreenSaver = 1 << 3, ///< Prevents the screen saver while window is in fullscreen mode
 	};
 	
 	/**

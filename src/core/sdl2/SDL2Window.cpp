@@ -90,7 +90,7 @@ namespace Xli
 		this->eventHandler = eventHandler;
 
 #ifdef XLI_PLATFORM_IOS
-      
+      /*
         String orientations = "";
         
         if (flags & WindowFlagsOrientationLandscapeLeft)
@@ -105,14 +105,17 @@ namespace Xli
         if (flags & WindowFlagsOrientationPortraitUpsideDown)
             orientations += "PortraitUpsideDown";
 
-        if (orientations.Length() > 0 && !SDL_SetHint("SDL_IOS_ORIENTATIONS", orientations.Data())) 
+        if (orientations.Length() > 0 && !SDL_SetHint(SDL_HINT_ORIENTATIONS, orientations.Data()))
             ErrorPrintLine("SDL WARNING: Failed to set window orientations");
+        */
         
-        if (!SDL_SetHint("SDL_HINT_IDLE_TIMER_DISABLED", "1")) 
+        if (flags & WindowFlagsDisableScreenSaver && !SDL_SetHint(SDL_HINT_IDLE_TIMER_DISABLED, "1"))
             ErrorPrintLine("SDL WARNING: Failed to disable idle timer");
 
         if (fullscreen)
             sdlFlags |= SDL_WINDOW_BORDERLESS;
+        
+        sdlFlags |= SDL_WINDOW_RESIZABLE;
         
         SDL_SetEventFilter(HandleAppEvents, NULL);
         
