@@ -26,75 +26,58 @@ namespace Xli
 		{
 			return Comps;
 		}
+
 		const T* Data() const
 		{
 			return Comps;
 		}
+
 		operator T* ()
 		{
 			return Comps;
 		}
+
 		operator const T* () const
 		{
 			return Comps;
 		}
+
 		T& operator [] (int i)
 		{
 #ifdef XLI_RANGE_CHECK
 			if (i >= 2 || i < 0)
-			{
 				XLI_THROW_INDEX_OUT_OF_BOUNDS;
-			}
 #endif
 			return Comps[i];
 		}
+
 		String ToString() const
 		{
 			return String(X) + ", " + Y;
 		}
 
-		bool operator == (const Vector2t& v) const
-		{
-			return X == v.X && Y == v.Y;
-		}
-		bool operator != (const Vector2t& v) const
-		{
-			return !(*this == v);
-		}
-
 		Vector2t()
 		{
 		}
+
 		Vector2t(const T& x, const T& y)
 		{
 			X = x;
 			Y = y;
 		}
-		/** Used to construct a vector when const T& is not possible for arguments (managed bindings etc.) */
-		static Vector2t From(T x, T y)
-		{
-			Vector2t v;
-			v.X = x;
-			v.Y = y;
-			return v;
-		}
+
 		Vector2t(const Vector2t& v)
 		{
 			X = v.X;
 			Y = v.Y;
 		}
+
 		template <typename U> explicit Vector2t(const Vector2t<U>& v)
 		{
 			X = (T)v.X;
 			Y = (T)v.Y;
 		}
-		template <typename U> operator Vector2t<U>() const
-		{
-			Vector2t<U> r;
-			r.X = (U)X;
-			r.Y = (U)Y;
-			return r;
-		}
+
 		Vector2t& operator = (const Vector2t& v)
 		{
 			X = v.X;
@@ -102,13 +85,23 @@ namespace Xli
 			return *this;
 		}
 
-	/*	Vector2t operator - () const
+		bool operator == (const Vector2t& v) const
+		{
+			return X == v.X && Y == v.Y;
+		}
+
+		bool operator != (const Vector2t& v) const
+		{
+			return !(*this == v);
+		}
+
+		Vector2t operator - () const
 		{
 			Vector2t r;
 			r.X = -v.X;
 			r.Y = -v.Y;
 			return r;
-		}*/
+		}
 
 		Vector2t operator + (const Vector2t& v) const
 		{
@@ -117,6 +110,7 @@ namespace Xli
 			r.Y = Y + v.Y;
 			return r;
 		}
+
 		Vector2t operator - (const Vector2t& v) const
 		{
 			Vector2t r;
@@ -124,6 +118,7 @@ namespace Xli
 			r.Y = Y - v.Y;
 			return r;
 		}
+
 		Vector2t operator * (const Vector2t& v) const
 		{
 			Vector2t r;
@@ -131,6 +126,7 @@ namespace Xli
 			r.Y = Y * v.Y;
 			return r;
 		}
+
 		Vector2t operator / (const Vector2t& v) const
 		{
 			Vector2t r;
@@ -146,6 +142,7 @@ namespace Xli
 			r.Y = Y + s;
 			return r;
 		}
+
 		Vector2t operator - (const T& s) const
 		{
 			Vector2t r;
@@ -153,6 +150,7 @@ namespace Xli
 			r.Y = Y - s;
 			return r;
 		}
+
 		Vector2t operator * (const T& s) const
 		{
 			Vector2t r;
@@ -160,6 +158,7 @@ namespace Xli
 			r.Y = Y * s;
 			return r;
 		}
+
 		Vector2t operator / (const T& s) const
 		{
 			Vector2t r;
@@ -168,25 +167,27 @@ namespace Xli
 			return r;
 		}
 
-
 		Vector2t& operator += (const Vector2t& v)
 		{
 			X += v.X;
 			Y += v.Y;
 			return *this;
 		}
+
 		Vector2t& operator -= (const Vector2t& v)
 		{
 			X -= v.X;
 			Y -= v.Y;
 			return *this;
 		}
+
 		Vector2t& operator *= (const Vector2t& v)
 		{
 			X *= v.X;
 			Y *= v.Y;
 			return *this;
 		}
+
 		Vector2t& operator /= (const Vector2t& v)
 		{
 			X /= v.X;
@@ -200,76 +201,26 @@ namespace Xli
 			Y += s;
 			return *this;
 		}
+
 		Vector2t& operator -= (const T& s)
 		{
 			X -= s;
 			Y -= s;
 			return *this;
 		}
+
 		Vector2t& operator *= (const T& s)
 		{
 			X *= s;
 			Y *= s;
 			return *this;
 		}
+
 		Vector2t& operator /= (const T& s)
 		{
 			X /= s;
 			Y /= s;
 			return *this;
-		}
-
-
-		T Dot(const Vector2t& v) const
-		{
-			return X*v.X + Y*v.Y;
-		}
-		T LengthSquared() const
-		{
-			return Dot(*this);
-		}
-		T Length() const
-		{
-			return Sqrt(LengthSquared());
-		}
-		void Normalize()
-		{
-			*this /= Length();
-		}
-		Vector2t Normalized() const
-		{
-			return *this / Length();
-		}
-
-		Vector2t Rotated(T angleRadians) const
-		{
-			Vector2t w;
-
-			float c = Cos(angleRadians);
-			float s = Sin(angleRadians);
-
-			w.X = c*X + s*Y;
-			w.Y = c*Y - s*X;
-			w.Normalize();
-			w = w * Length();
-
-			return w;
-		}
-
-		static Vector2t FromAngle(const T& angleRadians)
-		{
-			return Vector2t(Cos(angleRadians), Sin(angleRadians));
-		}
-
-		T ToAngle() const
-		{
-			if (Y > 0) return ArcCos(X);
-			else return (T)(2.0*PI) - ArcCos(X);
-		}
-
-		T AngleBetween(const Vector2t& v) const
-		{
-			return ArcCos((*this).Normalized().Dot(v.Normalized()));
 		}
 	};
 
@@ -291,6 +242,54 @@ namespace Xli
 	typedef Vector2t<UInt32> Vector2u32;
 	typedef Vector2t<UInt16> Vector2u16;
 	typedef Vector2t<UInt8> Vector2u8;
+
+	static inline float Dot(const Vector2& v1, const Vector2& v2)
+	{
+		return v1.X * v2.X + v1.Y * v2.Y;
+	}
+
+	static inline float LengthSquared(const Vector2& v)
+	{
+		return Dot(v, v);
+	}
+
+	static inline float Length(const Vector2& v)
+	{
+		return Sqrt(Dot(v, v));
+	}
+
+	static inline Vector2 Normalize(const Vector2& v)
+	{
+		return v * (1.0f / Length(v));
+	}
+
+	static inline Vector2 Rotate(const Vector2& v, float angleRadians)
+	{
+		float c = Cos(angleRadians);
+		float s = Sin(angleRadians);
+
+		Vector2 w;
+		w.X = c * v.X + s * v.Y;
+		w.Y = c * v.Y - s * v.X;
+
+		return Normalize(w) * Length(v);
+	}
+
+	static inline Vector2 Vector2FromAngle(float angleRadians)
+	{
+		return Vector2(Cos(angleRadians), Sin(angleRadians));
+	}
+
+	static inline float Vector2ToAngle(const Vector2& v)
+	{
+		float linv = 1.0f / Length(v);
+		return v.Y > 0.0f ? ArcCos(v.X * linv) : 2.0f * PIf - ArcCos(v.X * linv);
+	}
+
+	static inline float AngleBetween(const Vector2& v1, const Vector2& v2)
+	{
+		return ArcCos(Dot(Normalize(v1), Normalize(v2)));
+	}
 
 	/** @} */
 }

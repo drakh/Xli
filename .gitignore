@@ -19,6 +19,7 @@ Thumbs.db
 
 # Ignore compiled and generated code.
 *.sdf
+*.opensdf
 ipch/
 bin/
 obj/
