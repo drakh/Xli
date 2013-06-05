@@ -17,19 +17,15 @@ namespace Xli
 	String TextReader::ReadAll()
 	{
 		if (stream->CanSeek())
-		{
 			return Read(stream->GetLength());
-		}
 		
 		Array<char> str;
 
 		char buf[1024];
 		int len = 0;
 		
-		while ((len = stream->Read(buf, 1, 1024)) > 0)
-		{
+		while (len = stream->Read(buf, 1, 1024))
 			str.Add(buf, len);
-		}
 		
 		return String(str.Data(), str.Length());
 	}

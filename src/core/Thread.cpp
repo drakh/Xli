@@ -40,7 +40,7 @@ namespace Xli
 
 	bool Thread::IsDone()
 	{
-		return handle == 0 || task.IsNull() || task->stopped;
+		return !handle || !task || task->stopped;
 	}
 
 	bool Thread::HasStarted()

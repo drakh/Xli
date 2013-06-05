@@ -7,112 +7,74 @@
 #define DEF_MEM_LEVEL 8
 #define Z_BUFSIZE 16384
 
-static int const gz_magic[2] = {0x1f, 0x8b}; /* gzip magic header */
-
-/* gzip flag byte */
-#define ASCII_FLAG   0x01 /* bit 0 set: file probably ascii text */
-#define HEAD_CRC     0x02 /* bit 1 set: header CRC present */
-#define EXTRA_FIELD  0x04 /* bit 2 set: extra field present */
-#define ORIG_NAME    0x08 /* bit 3 set: original file name present */
-#define COMMENT      0x10 /* bit 4 set: file comment present */
-#define RESERVED     0xE0 /* bits 5..7: reserved */
-
 namespace Xli
 {
-	class GzStreamWriter: public Stream
+	class GZipWriter: public Stream
 	{
-		Shared<Stream> compressedStream;
-
+		Shared<Stream> dst;
 		Bytef buf[Z_BUFSIZE];
 		z_stream stream;
-		uLong crc;
 		int pos;
 
 	public:
-		GzStreamWriter(Stream* targetStream, int level)
+		GZipWriter(Stream* targetStream, int level, bool header)
 		{
 			if (!targetStream) 
 				XLI_THROW_NULL_POINTER;
 
-			this->crc = 0;
 			this->pos = 0;
-			this->compressedStream = targetStream;
-
-			level = Clamp(level, Z_NO_COMPRESSION, Z_BEST_COMPRESSION);
+			this->dst = targetStream;
 
 			memset(&stream, 0, sizeof(z_stream));
-			stream.next_out = buf;
-			stream.avail_out = Z_BUFSIZE;
 
-			int err = deflateInit2(&stream, level, Z_DEFLATED, 15 + 16, DEF_MEM_LEVEL, Z_DEFAULT_STRATEGY);
+			int windowBits = header ? MAX_WBITS + 16 : -MAX_WBITS;
 
-			if (err != Z_OK || !buf) 
+			if (deflateInit2(&stream, level, Z_DEFLATED, windowBits, DEF_MEM_LEVEL, Z_DEFAULT_STRATEGY) != Z_OK) 
 				XLI_THROW("Failed to create GZip stream");
 
-			char header[11];
-
-			sprintf_s(header, "%c%c%c%c%c%c%c%c%c%c", gz_magic[0], gz_magic[1],
-				Z_DEFLATED, 0 /*flags*/, 0,0,0,0 /*time*/, 0 /*xflags*/, 0);
-
-			compressedStream->WriteSafe(header, 1, 11);
+			stream.next_out = buf;
+			stream.avail_out = Z_BUFSIZE;
 		}
 
-		virtual ~GzStreamWriter()
+		virtual ~GZipWriter()
 		{
 			Close();
 		}
 
-		void FlushBuffer()
-		{
-			while (true)
-			{
-				int len = Z_BUFSIZE - stream.avail_out;
-				if (len > 0) compressedStream->WriteSafe(buf, 1, len);
-
-				stream.next_out = buf;
-				stream.avail_out = Z_BUFSIZE;
-
-				int err = deflate(&stream, Z_FINISH);
-
-				if (err == Z_STREAM_END)
-					break;
-				
-				if (err == Z_OK)
-					continue;
-
-				XLI_THROW("Failed to flush GZip stream");
-			}
-		}
-
 		virtual void Flush()
 		{
-			if (compressedStream.IsNull()) 
+			if (!dst) 
 				XLI_THROW_STREAM_CLOSED;
 
-			FlushBuffer();
-			compressedStream->Flush();
+			// TODO: Flush gzip buffer
+
+			dst->Flush();
 		}
 
 		virtual void Close()
 		{
-			if (compressedStream.IsNull()) 
+			if (!dst) 
 				return;
-			
-			FlushBuffer();
-			compressedStream->WriteSafe(&crc, 4, 1);
-			compressedStream->WriteSafe(&pos, 4, 1);
-			compressedStream->Close();
-			compressedStream = 0;
+
+			if (deflate(&stream, Z_FINISH) != Z_STREAM_END)
+				XLI_THROW("Failed to finish GZip writer");
+
+			if (deflateEnd(&stream) != Z_OK)
+				XLI_THROW("Failed to close GZip writer");
+
+			dst->WriteSafe(buf, 1, Z_BUFSIZE - stream.avail_out);
+			dst->Close();
+			dst = 0;
+		}
+
+		virtual bool IsClosed() const
+		{
+			return !dst;
 		}
 
 		virtual bool CanWrite() const
 		{
-			return compressedStream.IsSet();
-		}
-
-		virtual int GetPosition() const
-		{
-			return pos;
+			return true;
 		}
 
 		virtual int GetLength() const
@@ -122,7 +84,7 @@ namespace Xli
 
 		virtual int Write(const void* data, int elmSize, int elmCount)
 		{
-			if (compressedStream.IsNull()) 
+			if (!dst) 
 				XLI_THROW_STREAM_CLOSED;
 
 			int len = elmSize * elmCount;
@@ -130,31 +92,34 @@ namespace Xli
 			stream.next_in = (Bytef*)data;
 			stream.avail_in = len;
 
-			while (stream.avail_in != 0)
+			pos += len;
+
+			do
 			{
-				if (stream.avail_out == 0)
+				if (deflate(&stream, Z_NO_FLUSH) != Z_OK)
+					XLI_THROW("Failed to write to GZip stream");
+
+				if (!stream.avail_out)
 				{
 					stream.next_out = buf;
 					stream.avail_out = Z_BUFSIZE;
-					compressedStream->WriteSafe(buf, 1, Z_BUFSIZE);
+					dst->WriteSafe(buf, 1, Z_BUFSIZE);
 				}
-
-				int err = deflate(&stream, Z_NO_FLUSH);
-				
-				if (err != Z_OK)
-					XLI_THROW("Failed to write to GZip stream");
-			}
+			} 
+			while (stream.avail_in > 0);
 			
-			pos += len;
-			crc = crc32(crc, (const Bytef*)data, len);
-
 			return elmCount;
 		}
 	};
-	
-	Stream* GZip::CreateWriter(Stream* targetStream, int level)
+/*
+	class GZipReader: public Stream
 	{
-		return new GzStreamWriter(targetStream, level);
+
+	};
+*/	
+	Stream* GZip::CreateWriter(Stream* targetStream, int level, bool header)
+	{
+		return new GZipWriter(targetStream, level, header);
 	}
 	
 	Stream* GZip::CreateReader(Stream* sourceStream)
@@ -195,13 +160,13 @@ namespace Xli
 
 		while (true)
 		{
-			int result = inflate(&stream, Z_FINISH);
+			err = inflate(&stream, Z_FINISH);
 
-			if (result == Z_OK)
+			if (err == Z_OK)
 				continue;
-			else if (result == Z_STREAM_END)
+			else if (err == Z_STREAM_END)
 				break;
-			else if (result == Z_DATA_ERROR)
+			else if (err == Z_DATA_ERROR)
 				XLI_THROW("Failed to create GZip stream: Data error");
 			else
 				XLI_THROW("Failed to create GZip stream");

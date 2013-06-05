@@ -100,12 +100,12 @@ namespace Xli
 
 	UInt8* Bitmap::GetPixelPtr(int x, int y)
 	{
-		return data + pitch*y + GetBytesPerPixel() * x;
+		return data + pitch * y + GetBytesPerPixel() * x;
 	}
 
 	const UInt8* Bitmap::GetPixelPtr(int x, int y) const
 	{
-		return data + pitch*y + GetBytesPerPixel() * x;
+		return data + pitch * y + GetBytesPerPixel() * x;
 	}
 
 	DataAccessor* Bitmap::GetDataAccessor()
@@ -138,35 +138,35 @@ namespace Xli
 		XLI_THROW_INDEX_OUT_OF_BOUNDS;
 	}
 
-	Coloru8 Bitmap::GetPixelColor(int x, int y)
+	Vector4u8 Bitmap::GetPixelColor(int x, int y)
 	{
 		switch (format)
 		{
-		case FormatRGBA_8_8_8_8_UInt_Normalize: return *(Coloru8*)GetPixelPtr(x, y);
+		case FormatRGBA_8_8_8_8_UInt_Normalize: 
+			return *(Vector4u8*)GetPixelPtr(x, y);
+
 		case FormatRGB_8_8_8_UInt_Normalize: 
-			{
-				unsigned char *c = (unsigned char*)GetPixelPtr(x, y);
-				return Coloru8(c[0], c[1], c[2]);
-			}
-			break;
-		default: XLI_THROW("Bitmap::GetPixelColor(): unsupported pixel format");
+			return Vector4u8(Vector3u8(*(Vector3u8*)GetPixelPtr(x, y)), (UInt8)0xff);
+
+		default: 
+			XLI_THROW("Bitmap::GetPixelColor: unsupported pixel format");
 		}
 	}
 
-	void Bitmap::SetPixelColor(int x, int y, const Coloru8& color)
+	void Bitmap::SetPixelColor(int x, int y, const Vector4u8& color)
 	{
 		switch (format)
 		{
-		case FormatRGBA_8_8_8_8_UInt_Normalize: *(Coloru8*)GetPixelPtr(x,y) = color;
-		case FormatRGB_8_8_8_UInt_Normalize: 
-			{
-				unsigned char *c = (unsigned char*)GetPixelPtr(x, y);
-				c[0] = color.R;
-				c[1] = color.G;
-				c[2] = color.B;
-			}
+		case FormatRGBA_8_8_8_8_UInt_Normalize: 
+			*(Vector4u8*)GetPixelPtr(x,y) = color;
 			break;
-		default: XLI_THROW("Bitmap::SetPixelColor(): unsupported pixel format");
+
+		case FormatRGB_8_8_8_UInt_Normalize: 
+			*(Vector3u8*)GetPixelPtr(x, y) = color.XYZ();
+			break;
+
+		default: 
+			XLI_THROW("Bitmap::SetPixelColor: unsupported pixel format");
 		}
 	}
 	
@@ -179,7 +179,7 @@ namespace Xli
 		else if (this->format == FormatL_8_UInt_Normalize && dstFormat == FormatRGBA_8_8_8_8_UInt_Normalize)
 		{
 			Bitmap* bmp = new Bitmap(width, height, FormatRGBA_8_8_8_8_UInt_Normalize);
-			Coloru8* dst = (Coloru8*)bmp->GetData();
+			Vector4u8* dst = (Vector4u8*)bmp->GetData();
 
 			for (int y = 0; y < height; y++)
 			{
@@ -221,7 +221,7 @@ namespace Xli
 		else if (this->format == FormatRGB_8_8_8_UInt_Normalize && dstFormat == FormatRGBA_8_8_8_8_UInt_Normalize)
 		{
 			Bitmap* bmp = new Bitmap(width, height, FormatRGBA_8_8_8_8_UInt_Normalize);
-			Coloru8* dst = (Coloru8*)bmp->GetData();
+			Vector4u8* dst = (Vector4u8*)bmp->GetData();
 
 			for (int y = 0; y < height; y++)
 			{

@@ -155,7 +155,7 @@ namespace Xli
 		r.Second = Second - dt.Second;
 		r.Millisecond = Millisecond - dt.Millisecond;
 
-		// todo
+		// TODO
 
 		return r;
 	}

@@ -3,9 +3,9 @@
 
 #include <Xli/Buffer.h>
 #include <Xli/Vector2.h>
+#include <Xli/Vector4.h>
 #include <Xli/Rectangle.h>
 #include <XliMedia/Image.h>
-#include <XliMedia/Color.h>
 
 namespace Xli
 {
@@ -43,8 +43,8 @@ namespace Xli
 		int GetBytesPerPixel() const;
 		Recti GetRect() const;
 
-		Coloru8 GetPixelColor(int x, int y);
-		void SetPixelColor(int x, int y, const Coloru8& color);
+		Vector4u8 GetPixelColor(int x, int y);
+		void SetPixelColor(int x, int y, const Vector4u8& color);
 
 		/**
 			Returns a version of this bitmap where pixels are packed (pitch = pixelsize*width).

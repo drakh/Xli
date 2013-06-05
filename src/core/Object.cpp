@@ -12,9 +12,7 @@ namespace Xli
 	Object::~Object() 
 	{
 		if (refCount > 1)
-		{
 			XLI_THROW_BAD_DELETE;
-		}
 	}
 
 	int Object::GetRefCount() const
@@ -29,9 +27,10 @@ namespace Xli
 
 	void Object::Release()
 	{
-		refCount--;			
-		if (refCount) return;
-		Delete();
+		refCount--;
+
+		if (!refCount) 
+			Delete();
 	}
 
 	void Object::Delete() 

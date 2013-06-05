@@ -8,7 +8,8 @@ namespace Xli
 
 	void Stream::Flush() {}
 	void Stream::Close() {}
-	bool Stream::AtEnd() const { return CanSeek() ? GetPosition() == GetLength() : false; }
+
+	bool Stream::AtEnd() const { return IsClosed() || CanSeek() ? GetPosition() == GetLength() : false; }
 	bool Stream::IsClosed() const { return false; }
 
 	bool Stream::CanRead() const { return false; }
@@ -17,8 +18,8 @@ namespace Xli
 
 	int Stream::Read(void* dst, int elmSize, int elmCount) { XLI_THROW_STREAM_CANT_READ; }
 	int Stream::Write(const void* src, int elmSize, int elmCount) { XLI_THROW_STREAM_CANT_WRITE; }
-	void Stream::Seek(SeekOrigin origin, int offset) { XLI_THROW_STREAM_CANT_SEEK; }
 
+	void Stream::Seek(SeekOrigin origin, int offset) { XLI_THROW_STREAM_CANT_SEEK; }
 	int Stream::GetPosition() const { XLI_THROW_STREAM_CANT_SEEK; }
 	int Stream::GetLength() const { XLI_THROW_STREAM_CANT_SEEK; }
 
@@ -43,6 +44,7 @@ namespace Xli
 
 	void Stream::WriteStream(Stream* source)
 	{
+		// TODO: Use constant size buffer
 		Managed<Buffer> buf = Buffer::Create(source->GetLength());
 		source->Read(buf->Data(), 1, buf->Size());
 		Write(buf->Data(), 1, buf->Size());
@@ -62,17 +64,16 @@ namespace Xli
 	void StreamWriter::SwitchStream(Stream* stream)
 	{
 		if (!stream)
-		{
 			XLI_THROW_NULL_POINTER;
-		}
 
 		if (!stream->CanWrite())
-		{
 			XLI_THROW_STREAM_CANT_WRITE;
-		}
 
 		stream->AddRef();
-		if (this->stream) this->stream->Release();
+		
+		if (this->stream) 
+			this->stream->Release();
+
 		this->stream = stream;
 	}
 
@@ -95,17 +96,16 @@ namespace Xli
 	void StreamReader::SwitchStream(Stream* stream)
 	{
 		if (!stream)
-		{
 			XLI_THROW_NULL_POINTER;
-		}
 
 		if (!stream->CanRead())
-		{
 			XLI_THROW_STREAM_CANT_READ;
-		}
 
 		stream->AddRef();
-		if (this->stream) this->stream->Release();
+		
+		if (this->stream) 
+			this->stream->Release();
+		
 		this->stream = stream;
 	}
 

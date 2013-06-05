@@ -132,7 +132,7 @@ namespace Xli
 
 	Vector3 Matrix3::operator * (const Vector3& v) const
 	{
-		Vector3t<float> r;
+		Vector3 r;
 		r.X = data[0]*v.X + data[3]*v.Y + data[6]*v.Z;
 		r.Y = data[1]*v.X + data[4]*v.Y + data[7]*v.Z;
 		r.Z = data[2]*v.X + data[5]*v.Y + data[8]*v.Z;

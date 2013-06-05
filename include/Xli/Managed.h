@@ -163,21 +163,21 @@ namespace Xli
 
 		operator T*()
 		{
-			return object;
+			return this->object;
 		}
 
 		operator const T*() const
 		{
-			return object;
+			return this->object;
 		}
 	};
 
 	/**
 		\ingroup Containers
 	*/
-	template <class T> Managed<T> ManagePtr(T* oject)
+	template <class T> Managed<T> ManagePtr(T* object)
 	{
-		return oject;
+		return object;
 	}
 
 	/**

@@ -261,47 +261,6 @@ namespace Xli
 			Z /= s;
 			return *this;
 		}
-
-		/*
-		static Vector3t Rotate(const Vector3t& v, Vector3t axis, T angleRadians)
-		{  
-			Vector3t w;
-			axis = Normalize(axis);
-
-			// calculate parameters of the rotation matrix
-			T c = Cos(angleRadians);
-			T s = Sin(angleRadians);
-			T t = 1 - c;
-
-			// multiply v with rotation matrix
-			w.X = (t * axis.X * axis.X +          c) * v.X
-				+ (t * axis.X * axis.Y + s * axis.Z) * v.Y
-				+ (t * axis.X * axis.Z - s * axis.Y) * v.Z;
-
-			w.Y = (t * axis.X * axis.Y - s * axis.Z) * v.X 
-				+ (t * axis.Y * axis.Y +          c) * v.Y 
-				+ (t * axis.Y * axis.Z + s * axis.X) * v.Z;
-
-			w.Z = (t * axis.X * axis.Z + s * axis.Y) * v.X 
-				+ (t * axis.Y * axis.Z - s * axis.X) * v.Y 
-				+ (t * axis.Z * axis.Z +          c) * v.Z;
-
-			w = Normalize(w);
-			w = w * v.Length();
-
-			return w;
-		}
-
-		void Rotate(const Vector3t& axis, const T& angleRadians)
-		{
-			*this = Rotated(axis, angleRadians);
-		}
-
-		T AngleBetween(const Vector3t& v) const
-		{
-			return ArcCos((*this).Normalized().Dot(v.Normalized()));
-		}
-		*/
 	};
 
 	/**
@@ -349,7 +308,36 @@ namespace Xli
 	{
 		return v / Length(v);
 	}
+/*
+	static Vector3t Rotate(const Vector3& v, const Vector3& axis, float angleRadians)
+	{  
+		Vector3t w;
+		axis = Normalize(axis);
 
+		// calculate parameters of the rotation matrix
+		T c = Cos(angleRadians);
+		T s = Sin(angleRadians);
+		T t = 1 - c;
+
+		// multiply v with rotation matrix
+		w.X = (t * axis.X * axis.X +          c) * v.X
+			+ (t * axis.X * axis.Y + s * axis.Z) * v.Y
+			+ (t * axis.X * axis.Z - s * axis.Y) * v.Z;
+
+		w.Y = (t * axis.X * axis.Y - s * axis.Z) * v.X 
+			+ (t * axis.Y * axis.Y +          c) * v.Y 
+			+ (t * axis.Y * axis.Z + s * axis.X) * v.Z;
+
+		w.Z = (t * axis.X * axis.Z + s * axis.Y) * v.X 
+			+ (t * axis.Y * axis.Z - s * axis.X) * v.Y 
+			+ (t * axis.Z * axis.Z +          c) * v.Z;
+
+		w = Normalize(w);
+		w = w * v.Length();
+
+		return w;
+	}
+*/
 	/** @} */
 }
 
