@@ -322,7 +322,7 @@ namespace Xli
 	{
 #ifndef XLI_PLATFORM_IOS
 
-        Uint8* keys = SDL_GetKeyboardState(0);
+        const Uint8* keys = SDL_GetKeyboardState(0);
         
         switch (key)
         {
