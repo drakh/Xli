@@ -5,7 +5,7 @@
 #include <zlib.h>
 
 #define DEF_MEM_LEVEL 8
-#define Z_BUFSIZE 16384
+#define Z_BUFSIZE 0x4000
 
 namespace Xli
 {
@@ -56,14 +56,24 @@ namespace Xli
 			if (!dst) 
 				return;
 
-			if (deflate(&stream, Z_FINISH) != Z_STREAM_END)
-				XLI_THROW("Failed to finish GZip writer");
+			while (true)
+			{
+				int err = deflate(&stream, Z_FINISH);
 
+				if (err == Z_STREAM_END)
+					break;
+				else if (err != Z_OK || stream.avail_out != 0)
+					XLI_THROW("Failed to finish GZip writer");
+
+				stream.next_out = buf;
+				stream.avail_out = Z_BUFSIZE;
+				dst->WriteSafe(buf, 1, Z_BUFSIZE);
+			}
+			
 			if (deflateEnd(&stream) != Z_OK)
 				XLI_THROW("Failed to close GZip writer");
 
 			dst->WriteSafe(buf, 1, Z_BUFSIZE - stream.avail_out);
-			dst->Close();
 			dst = 0;
 		}
 

@@ -43,7 +43,7 @@ namespace Xli
 
 		bool IsSet() const
 		{
-			return object;
+			return object != 0;
 		}
 
 		Managed& operator = (T* ptr)
