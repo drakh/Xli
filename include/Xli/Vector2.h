@@ -98,8 +98,8 @@ namespace Xli
 		Vector2t operator - () const
 		{
 			Vector2t r;
-			r.X = -v.X;
-			r.Y = -v.Y;
+			r.X = -X;
+			r.Y = -Y;
 			return r;
 		}
 

@@ -128,10 +128,10 @@ namespace Xli
 		Vector4t operator - () const
 		{
 			Vector4t r;
-			r.X = -v.X;
-			r.Y = -v.Y;
-			r.Z = -v.Z;
-			r.W = -v.W;
+			r.X = -X;
+			r.Y = -Y;
+			r.Z = -Z;
+			r.W = -W;
 			return r;
 		}
 

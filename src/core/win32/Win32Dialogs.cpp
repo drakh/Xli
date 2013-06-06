@@ -82,13 +82,9 @@ namespace Xli
 		ofn.lpstrTitle = captionW.Data();
 
 		if (mustExist)
-		{
 			ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_ENABLESIZING;
-		}
 		else
-		{
 			ofn.Flags = OFN_OVERWRITEPROMPT | OFN_ENABLESIZING;
-		}
 
 		ofn.lpstrDefExt = defW.Data();
 	}
@@ -100,9 +96,8 @@ namespace Xli
 			result = Unicode::Utf16To8(fnbufW);
 
 			for (int i = 0; i < result.Length(); i++)
-			{
-				if (result[i] == '\\') result[i] = '/';
-			}
+				if (result[i] == '\\') 
+					result[i] = '/';
 		}
 
 		Disk->ChangeDirectory(cd);
