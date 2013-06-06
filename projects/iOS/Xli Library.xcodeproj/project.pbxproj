@@ -630,7 +630,6 @@
 			children = (
 				CE2D6DE416C70D9A00390436 /* audio */,
 				CE2D5E0A16C70D7D00390436 /* core */,
-				5AA38E4F151A00CC00979B55 /* Frameworks */,
 				CE1537CF174CF316009C6275 /* gl_helper */,
 				CE1535D7174CF305009C6275 /* http */,
 				CE2D6EB016C70DA600390436 /* main */,
@@ -650,13 +649,6 @@
 				CE1535D6174CF171009C6275 /* libXliHttp.a */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		5AA38E4F151A00CC00979B55 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		CE1535D7174CF305009C6275 /* http */ = {

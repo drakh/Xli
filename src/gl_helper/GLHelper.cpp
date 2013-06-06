@@ -20,7 +20,7 @@ namespace Xli
 		case GL_INVALID_OPERATION: return "The specified operation is not allowed in the current state";
 		case GL_OUT_OF_MEMORY: return "There is not enough memory left to execute the command";
 		case GL_INVALID_FRAMEBUFFER_OPERATION: return "Invalid framebuffer operation";
-#ifndef XLI_GL_ES2
+#ifdef XLI_GL_DESKTOP
 		case GL_STACK_OVERFLOW: return "This command would cause a stack overflow";
 		case GL_STACK_UNDERFLOW: return " This command would cause a stack underflow";
 		case GL_TABLE_TOO_LARGE: return "The specified table exceeds the implementation's maximum supported table size";
@@ -33,11 +33,13 @@ namespace Xli
 	{
 		GLuint shaderHandle = glCreateShader(shaderType);
 
-#ifdef XLI_GL_ES2
-
 		const char* code[] =
 		{
+#ifdef XLI_GL_ES2
 			"precision mediump float;\n",
+#else
+            "",
+#endif
 			source.Data(),
 		};
 
@@ -48,23 +50,6 @@ namespace Xli
 		};
 
 		glShaderSource(shaderHandle, 2, code, len);
-
-#else
-
-		const char* code[] =
-		{
-			source.Data(),
-		};
-
-		GLint len[] =
-		{
-			source.Length(),
-		};
-
-		glShaderSource(shaderHandle, 1, code, len);
-
-#endif
-
 		glCompileShader(shaderHandle);
 
 		GLint compileStatus;
@@ -202,7 +187,7 @@ namespace Xli
 
 				switch (mip->GetFormat())
 				{
-#ifdef XLI_GL_ETC_SUPPORTED
+#ifdef GL_ETC1_RGB8_OES
 
 				case FormatCompressedRGB_ETC1:
 					glCompressedTexImage2D(texFace, j, GL_ETC1_RGB8_OES, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetData());
@@ -210,22 +195,31 @@ namespace Xli
 					break;
 
 #endif
-#ifdef XLI_GL_PVRTC_SUPPORTED
+#ifdef GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG
 
 				case FormatCompressedRGB_PVRTC_4BPP:
 					glCompressedTexImage2D(texFace, j, GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetData());
 					compressed = true;
 					break;
 
+#endif
+#ifdef GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG
+                        
 				case FormatCompressedRGB_PVRTC_2BPP:
 					glCompressedTexImage2D(texFace, j, GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetData());
 					compressed = true;
 					break;
 
+#endif
+#ifdef GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG
+                        
 				case FormatCompressedRGBA_PVRTC_4BPP:
 					glCompressedTexImage2D(texFace, j, GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetData());
 					compressed = true;
 					break;
+                        
+#endif
+#ifdef GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG
 
 				case FormatCompressedRGBA_PVRTC_2BPP:
 					glCompressedTexImage2D(texFace, j, GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetData());

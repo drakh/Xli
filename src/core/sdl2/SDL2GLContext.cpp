@@ -12,7 +12,7 @@ namespace Xli
 	public:
 		SDL2GLContext(SDL2Window* window, int multiSamples)
 		{
-#ifndef XLI_GL_ES2
+#ifdef XLI_GL_DESKTOP
 			if (multiSamples > 1)
 			{
 				SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
@@ -36,7 +36,7 @@ namespace Xli
             Vector2i vp = window->GetClientSize();
             glViewport(0, 0, vp.X, vp.Y);
 
-#ifndef XLI_GL_ES2
+#ifdef XLI_GL_DESKTOP
 			glewInit();
 #endif
 		}
