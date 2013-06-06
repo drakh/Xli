@@ -85,11 +85,6 @@ namespace Xli
 			Bottom = (T)v.Bottom;
 		}
 		
-		template <typename U> operator Rectanglet<U>() const
-		{
-			return Rectanglet<U>((U) Left, (U) Top, (U) Right, (U) Bottom);
-		}
-		
 		Rectanglet& operator = (const Rectanglet& v)
 		{
 			Left = v.Left;

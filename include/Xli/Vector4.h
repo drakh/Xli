@@ -22,28 +22,31 @@ namespace Xli
 		{
 			return Comps;
 		}
+
 		const T* Data() const
 		{
 			return Comps;
 		}
+
 		operator T* ()
 		{
 			return Comps;
 		}
+
 		operator const T* () const
 		{
 			return Comps;
 		}
+
 		T& operator [] (int i)
 		{
 #ifdef XLI_RANGE_CHECK
 			if (i >= 4 || i < 0)
-			{
 				XLI_THROW_INDEX_OUT_OF_BOUNDS;
-			}
 #endif
 			return Comps[i];
 		}
+
 		String ToString() const
 		{
 			return String(X) + ", " + Y + ", " + Z + ", " + W;
@@ -53,6 +56,7 @@ namespace Xli
 		{
 			return Vector2t<T>(X, Y);
 		}
+
 		Vector3t<T> XYZ() const
 		{
 			return Vector3t<T>(X, Y, Z);
@@ -65,6 +69,7 @@ namespace Xli
 			Z = z;
 			W = w;
 		}
+
 		Vector4t(const Vector3t<T>& xyz, T w)
 		{
 			X = xyz.X;
@@ -76,6 +81,7 @@ namespace Xli
 		Vector4t()
 		{
 		}
+
 		Vector4t(const T& x, const T& y, const T& z, const T& w)
 		{
 			X = x;
@@ -84,16 +90,6 @@ namespace Xli
 			W = w;
 		}
 
-		/** Used to construct a vector when const T& is not possible for arguments (managed bindings etc.) */
-		static Vector4t From(T x, T y, T z, T w)
-		{
-			Vector4t<T> v;
-			v.X = x;
-			v.Y = y;
-			v.Z = z;
-			v.W = w;
-			return v;
-		}
 		Vector4t(const Vector4t& v)
 		{
 			X = v.X;
@@ -101,6 +97,7 @@ namespace Xli
 			Z = v.Z;
 			W = v.W;
 		}
+
 		template <typename U> explicit Vector4t(const Vector4t<U>& v)
 		{
 			X = (T)v.X;
@@ -108,15 +105,7 @@ namespace Xli
 			Z = (T)v.Z;
 			W = (T)v.W;
 		}
-		template <typename U> operator Vector4t<U>() const
-		{
-			Vector4t<U> r;
-			r.X = X;
-			r.Y = Y;
-			r.Z = Z;
-			r.W = W;
-			return r;
-		}
+
 		Vector4t& operator = (const Vector4t& v)
 		{
 			X = v.X;
@@ -126,15 +115,25 @@ namespace Xli
 			return *this;
 		}
 
-		/*Vector4t operator - () const
+		bool operator == (const Vector4t& v) const
+		{
+			return (X == v.X) && (Y == v.Y) && (Z == v.Z) && (W == v.W);
+		}
+
+		bool operator != (const Vector4t& v) const
+		{
+			return !(*this == v);
+		}
+
+		Vector4t operator - () const
 		{
 			Vector4t r;
-			r.X = -v.X;
-			r.Y = -v.Y;
-			r.Z = -v.Z;
-			r.W = -v.W;
+			r.X = -X;
+			r.Y = -Y;
+			r.Z = -Z;
+			r.W = -W;
 			return r;
-		}*/
+		}
 
 		Vector4t operator + (const Vector4t& v) const
 		{
@@ -145,6 +144,7 @@ namespace Xli
 			r.W = W + v.W;
 			return r;
 		}
+
 		Vector4t operator - (const Vector4t& v) const
 		{
 			Vector4t r;
@@ -163,6 +163,7 @@ namespace Xli
 			r.W = W * v.W;
 			return r;
 		}
+
 		Vector4t operator / (const Vector4t& v) const
 		{
 			Vector4t r;
@@ -182,6 +183,7 @@ namespace Xli
 			r.W = W + s;
 			return r;
 		}
+
 		Vector4t operator - (const T& s) const
 		{
 			Vector4t r;
@@ -191,6 +193,7 @@ namespace Xli
 			r.W = W - s;
 			return r;
 		}
+
 		Vector4t operator * (const T& s) const
 		{
 			Vector4t r;
@@ -200,11 +203,16 @@ namespace Xli
 			r.W = W * s;
 			return r;
 		}
+
 		Vector4t operator / (const T& s) const
 		{
-			return *this * ((T)1.0 / s);
+			Vector4t r;
+			r.X = X / s;
+			r.Y = Y / s;
+			r.Z = Z / s;
+			r.W = W / s;
+			return r;
 		}
-
 
 		Vector4t& operator += (const Vector4t& v)
 		{
@@ -214,6 +222,7 @@ namespace Xli
 			W += v.W;
 			return *this;
 		}
+
 		Vector4t& operator -= (const Vector4t& v)
 		{
 			X -= v.X;
@@ -222,6 +231,7 @@ namespace Xli
 			W -= v.W;
 			return *this;
 		}
+
 		Vector4t& operator *= (const Vector4t& v)
 		{
 			X *= v.X;
@@ -230,6 +240,7 @@ namespace Xli
 			W *= v.W;
 			return *this;
 		}
+
 		Vector4t& operator /= (const Vector4t& v)
 		{
 			X /= v.X;
@@ -247,6 +258,7 @@ namespace Xli
 			W += s;
 			return *this;
 		}
+
 		Vector4t& operator -= (const T& s)
 		{
 			X -= s;
@@ -255,6 +267,7 @@ namespace Xli
 			W -= s;
 			return *this;
 		}
+
 		Vector4t& operator *= (const T& s)
 		{
 			X *= s;
@@ -263,46 +276,14 @@ namespace Xli
 			W *= s;
 			return *this;
 		}
+
 		Vector4t& operator /= (const T& s)
 		{
-			return *this *= ((T)1.0 / s);
-		}
-
-
-		T Dot(const Vector4t& v) const
-		{
-			return X*v.X + Y*v.Y + Z*v.Z + W*v.W;
-		}
-		T LengthSquared() const
-		{
-			return Dot(*this);
-		}
-		T Length() const
-		{
-			return Sqrt(LengthSquared());
-		}
-		void Normalize()
-		{
-			*this /= Length();
-		}
-		Vector4t Normalized() const
-		{
-			return *this / Length();
-		}
-
-		bool operator == (const Vector4t& v) const
-		{
-			return (X == v.X) && (Y == v.Y) && (Z == v.Z) && (W == v.W);
-		}
-
-		bool operator != (const Vector4t& v) const
-		{
-			return !(*this == v);
-		}
-
-		T AngleBetween(const Vector4t& v) const
-		{
-			return ArcCos((*this).Normalized().Dot(v.Normalized()));
+			X /= s;
+			Y /= s;
+			Z /= s;
+			W /= s;
+			return *this;
 		}
 	};
 
@@ -325,6 +306,26 @@ namespace Xli
 	typedef Vector4t<UInt32> Vector4u32;
 	typedef Vector4t<UInt16> Vector4u16;
 	typedef Vector4t<UInt8> Vector4u8;
+
+	static inline float Dot(const Vector4& v1, const Vector4& v2)
+	{
+		return v1.X * v2.X + v1.Y * v2.Y + v1.Z * v2.Z + v1.W * v2.W;
+	}
+
+	static inline float LengthSquared(const Vector4& v)
+	{
+		return Dot(v, v);
+	}
+
+	static inline float Length(const Vector4& v)
+	{
+		return Sqrt(Dot(v, v));
+	}
+
+	static inline Vector4 Normalize(const Vector4& v)
+	{
+		return v / Length(v);
+	}
 
 	/** @} */
 }

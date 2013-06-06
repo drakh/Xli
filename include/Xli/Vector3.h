@@ -90,15 +90,6 @@ namespace Xli
 			Z = (T)v.Z;
 		}
 
-		template <typename U> operator Vector3t<U>() const
-		{
-			Vector3t<U> r;
-			r.X = X;
-			r.Y = Y;
-			r.Z = Z;
-			return r;
-		}
-
 		bool operator == (const Vector3t& v) const
 		{
 			return (X == v.X) && (Y == v.Y) && (Z == v.Z);
@@ -301,43 +292,14 @@ namespace Xli
 
 	static inline float Length(const Vector3& v)
 	{
-		return Sqrt(LengthSquared(v));
+		return Sqrt(Dot(v, v));
 	}
 
 	static inline Vector3 Normalize(const Vector3& v)
 	{
 		return v / Length(v);
 	}
-/*
-	static Vector3t Rotate(const Vector3& v, const Vector3& axis, float angleRadians)
-	{  
-		Vector3t w;
-		axis = Normalize(axis);
 
-		// calculate parameters of the rotation matrix
-		T c = Cos(angleRadians);
-		T s = Sin(angleRadians);
-		T t = 1 - c;
-
-		// multiply v with rotation matrix
-		w.X = (t * axis.X * axis.X +          c) * v.X
-			+ (t * axis.X * axis.Y + s * axis.Z) * v.Y
-			+ (t * axis.X * axis.Z - s * axis.Y) * v.Z;
-
-		w.Y = (t * axis.X * axis.Y - s * axis.Z) * v.X 
-			+ (t * axis.Y * axis.Y +          c) * v.Y 
-			+ (t * axis.Y * axis.Z + s * axis.X) * v.Z;
-
-		w.Z = (t * axis.X * axis.Z + s * axis.Y) * v.X 
-			+ (t * axis.Y * axis.Z - s * axis.X) * v.Y 
-			+ (t * axis.Z * axis.Z +          c) * v.Z;
-
-		w = Normalize(w);
-		w = w * v.Length();
-
-		return w;
-	}
-*/
 	/** @} */
 }
 

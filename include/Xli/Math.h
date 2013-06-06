@@ -14,9 +14,10 @@ namespace Xli
 	*/
 
 	static const double PI = 3.1415926535897932384626433832795;
-	static const double TwoPI = 2.0 * PI;
-	static const double HalfPI = 0.5 * PI;
 	static const double E = 2.71828182845904523536;
+
+	static const float PIf = 3.1415926535897932384626433832795f;
+	static const float Ef = 2.71828182845904523536f;
 
 	static const int IntMax = INT_MAX;
 	static const int IntMin = INT_MIN;
