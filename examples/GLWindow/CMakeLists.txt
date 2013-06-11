@@ -25,9 +25,9 @@ elseif (MSVC)
 	set(CMAKE_CONFIGURATION_TYPES "Debug;Release" INTERNAL)
 
 	if (CMAKE_SIZEOF_VOID_P EQUAL 8)
-		link_directories(${XLI_DIR}/lib/msvc/x64)
+		link_directories(${XLI_DIR}/lib/vs2010/x64)
 	else()
-		link_directories(${XLI_DIR}/lib/msvc/x86)
+		link_directories(${XLI_DIR}/lib/vs2010/x86)
 	endif()
 	
 else()

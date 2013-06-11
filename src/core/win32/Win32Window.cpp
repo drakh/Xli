@@ -599,6 +599,12 @@ namespace Xli
 				return 0;
 
 			break;
+
+		case WM_GETMINMAXINFO:
+			if (wnd->eventHandler)
+				wnd->eventHandler->OnSizeChanged(wnd, wnd->GetClientSize());
+			
+			break;
 		}
 
 		return DefWindowProc(hWnd, message, wParam, lParam);
