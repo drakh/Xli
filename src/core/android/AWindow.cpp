@@ -547,8 +547,8 @@ extern "C"
 		{
 			Xli::JniHelper::Init();
 
-			Xli::Out->SwitchStream(Manage(new Xli::ALogStream(ANDROID_LOG_INFO)));
-			Xli::Err->SwitchStream(Manage(new Xli::ALogStream(ANDROID_LOG_WARN)));
+			Xli::Out->SwitchStream(ManagePtr(new Xli::ALogStream(ANDROID_LOG_INFO)));
+			Xli::Err->SwitchStream(ManagePtr(new Xli::ALogStream(ANDROID_LOG_WARN)));
 
 			while (!inited)
 			{
