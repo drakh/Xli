@@ -7,6 +7,9 @@ class GLApp: public Application
 {
 	Managed<GLContext> gl;
 
+    double touchDownTime;
+    double tapTime;
+
 public:
 	GLApp()
 	{
@@ -18,14 +21,12 @@ public:
 		PrintLine("Exiting GLApp");
 	}
 
-	virtual void OnLoad(Window* wnd)
+	void PrintPlatformInfo(Window* wnd)
 	{
-		this->gl = GLContext::Create(wnd, 16);
-
-		glClearColor(1,0,0,1);
-
 		PrintLine((String)"Time: " + DateTime::Now().ToString());
 		PrintLine((String)"Time (UTC): " + DateTime::NowUtc().ToString());
+
+		PrintLine((String)"Resolution: " + wnd->GetClientSize().ToString());
 
 		PrintLine((String)"OpenGL Vendor: " + (const char*)glGetString(GL_VENDOR));
 		PrintLine((String)"OpenGL Renderer: " + (const char*)glGetString(GL_RENDERER));
@@ -38,6 +39,14 @@ public:
 		PrintLine((String)"FileSystem Local AppData: " + Disk->GetSystemDirectory(SystemDirectoryLocalAppData));
 		PrintLine((String)"FileSystem Roaming AppData: " + Disk->GetSystemDirectory(SystemDirectoryRoamingAppData));
 		PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
+	}
+
+	virtual void OnLoad(Window* wnd)
+	{
+		this->gl = GLContext::Create(wnd, 16);
+
+		glClearColor(1,0,0,1);
+		PrintPlatformInfo(wnd);
 	}
 
 	virtual void OnDraw(Window* wnd)
@@ -152,9 +161,6 @@ public:
 		return false;
 	}
 
-    double touchDownTime;
-    double tapTime;
-    
 	virtual bool OnTouchDown(Window* wnd, Vector2 pos, int id)
 	{
 		Err->WriteLine("OnTouchDown: " + pos.ToString() + ", " + id);
