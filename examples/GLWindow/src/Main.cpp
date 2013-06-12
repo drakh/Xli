@@ -21,8 +21,23 @@ public:
 		PrintLine("Exiting GLApp");
 	}
 
-	void PrintPlatformInfo(Window* wnd)
+	virtual void OnInit(Window* wnd)
 	{
+		Err->WriteLine("OnInit");
+
+		// Setup OpenGL
+
+		this->gl = GLContext::Create(wnd, 16);
+
+		glClearColor(1,0,0,1);
+	}
+
+	virtual void OnLoad(Window* wnd)
+	{
+		Err->WriteLine("OnLoad");
+
+		// Print platform info
+
 		PrintLine((String)"Time: " + DateTime::Now().ToString());
 		PrintLine((String)"Time (UTC): " + DateTime::NowUtc().ToString());
 
@@ -41,19 +56,11 @@ public:
 		PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
 	}
 
-	virtual void OnLoad(Window* wnd)
-	{
-		this->gl = GLContext::Create(wnd, 16);
-
-		glClearColor(1,0,0,1);
-		PrintPlatformInfo(wnd);
-	}
-
 	virtual void OnDraw(Window* wnd)
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-		// ...
+		// TODO: Draw something
 		
 		gl->SwapBuffers();
 

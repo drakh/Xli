@@ -6,14 +6,28 @@ namespace Xli
 	{
 		Managed<Window> wnd = Window::Create(app->GetInitSize(), app->GetInitTitle(), flags);
 
-		app->OnLoad(wnd);
+		app->OnInit(wnd);
 		wnd->SetEventHandler(app);
+		
+		app->OnLoad(wnd);
 
 		while (!wnd->IsClosed())
 		{
 			app->OnDraw(wnd);
 			Window::ProcessMessages();
 		}
+	}
+
+	void Application::OnInit(Window* wnd)
+	{
+	}
+	
+	void Application::OnLoad(Window* wnd)
+	{
+	}
+
+	void Application::OnDraw(Window* wnd)
+	{
 	}
 
 	String Application::GetInitTitle()
