@@ -11,16 +11,15 @@ namespace Xli
 	class Application: public WindowEventHandler
 	{
 	public:
-		static void Run(Application* app);
+		static void Run(Application* app, int flags = WindowFlagsResizeable);
 
-		virtual void Load(Window* wnd) = 0;
-		virtual void Draw() = 0;
+		virtual void OnLoad(Window* wnd) = 0;
+		virtual void OnDraw() = 0;
 
-		virtual int GetInitFlags();
 		virtual String GetInitTitle();
 		virtual Vector2i GetInitSize();
 
-		virtual bool OnSizeChanged(Window* wnd, Vector2i size);
+		virtual void OnSizeChanged(Window* wnd, Vector2i size);
 	};
 }
 

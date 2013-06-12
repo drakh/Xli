@@ -245,6 +245,16 @@ namespace Xli
 		virtual WindowImplementation GetImplementation() = 0;
 
 		/**
+			Sets the handler that should recieve events from the window
+		*/
+		virtual void SetEventHandler(WindowEventHandler* handler) = 0;
+
+		/**
+			Returns the current event handler for the window
+		*/
+		virtual WindowEventHandler* GetEventHandler() = 0;
+
+		/**
 			Closes the window
 		*/
 		virtual void Close() = 0;
@@ -260,9 +270,30 @@ namespace Xli
 		virtual bool IsVisible() = 0;
 
 		/**
+			Sets the fullscreen mode of the window. 
+			The window will go fullscreen on the display which contains the windows centre coordinate and stretched to that displays resolution.
+		*/
+		virtual void SetFullscreen(bool fullscreen) = 0;
+
+		/**
 			Returns if this is a fullscreen window
 		*/
 		virtual bool IsFullscreen() = 0;
+
+		/**
+			Minimizes the window
+		*/
+		virtual void Minimize() = 0;
+
+		/**
+			Maximizes the window
+		*/
+		virtual void Maximize() = 0;
+
+		/**
+			Restores the window from maximized/minimized state to normal position
+		*/
+		virtual void Restore() = 0;
 
 		/**
 			Returns if this window is minimized
@@ -275,14 +306,29 @@ namespace Xli
 		virtual bool IsMaximized() = 0;
 
 		/**
+            Sets the windows title
+		*/
+		virtual void SetTitle(const String& title) = 0;
+
+		/**
 			Returns the windows title
 		*/
 		virtual String GetTitle() = 0;
 
 		/**
+			Sets the position of the window
+		*/
+		virtual void SetPosition(Vector2i pos) = 0;
+
+		/**
 			Returns the position of the window
 		*/
 		virtual Vector2i GetPosition() = 0;
+
+		/**
+			Sets the size of the client area of the window
+		*/
+		virtual void SetClientSize(Vector2i size) = 0;
 
 		/**
 			Returns the size of the client area of the window
@@ -300,47 +346,6 @@ namespace Xli
 		virtual void* GetNativeHandle() = 0;
 
 		/**
-            Sets the windows title
-		*/
-		virtual void SetTitle(const String& title) = 0;
-
-		/**
-			Sets the window as main window
-		*/
-		virtual void SetMainWindow() = 0;
-
-		/**
-			Sets the position of the window
-		*/
-		virtual void SetPosition(Vector2i pos) = 0;
-
-		/**
-			Sets the size of the client area of the window
-		*/
-		virtual void SetClientSize(Vector2i size) = 0;
-
-		/**
-			Sets the fullscreen mode of the window. 
-			The window will go fullscreen on the display which contains the windows centre coordinate and stretched to that displays resolution.
-		*/
-		virtual void SetFullscreen(bool fullscreen) = 0;
-
-		/**
-			Minimizes the window
-		*/
-		virtual void Minimize() = 0;
-
-		/**
-			Maximizes the window
-		*/
-		virtual void Maximize() = 0;
-
-		/**
-			Restores the window to normal position
-		*/
-		virtual void Restore() = 0;
-
-		/**
 			Returns true if the specified Key is currently pressed
 		*/
 		virtual bool GetKeyState(Key key) = 0;
@@ -349,11 +354,6 @@ namespace Xli
 			Returns true if the specified MouseButton is currently pressed
 		*/
 		virtual bool GetMouseButtonState(MouseButton button) = 0;
-		
-		/**
-			Returns the current mouse position relative to the client area of the window
-		*/
-		virtual Vector2i GetMousePosition() = 0;
 
 		/**
 			Sets the current mouse position relative to the client area of the window
@@ -361,14 +361,19 @@ namespace Xli
 		virtual void SetMousePosition(Vector2i position) = 0;
 
 		/**
-			Returns the current system cursor used in the window
+			Returns the current mouse position relative to the client area of the window
 		*/
-		virtual SystemCursor GetSystemCursor() = 0;
+		virtual Vector2i GetMousePosition() = 0;
 
 		/**
 			Sets the system cursor to be used in the window
 		*/
 		virtual void SetSystemCursor(SystemCursor cursor) = 0;
+
+		/**
+			Returns the current system cursor used in the window
+		*/
+		virtual SystemCursor GetSystemCursor() = 0;
 
 
 		// TODO:
@@ -392,6 +397,11 @@ namespace Xli
 		static void Done();
 
 		/**
+			Sets the window that should be used as main window
+		*/
+		static void SetMainWindow(Window* wnd);
+
+		/**
 			Returns the first window created or the window currently set using SetMainWindow().
 			If no window is created or the main window is destroyed this function will return NULL.
 		*/
@@ -405,14 +415,14 @@ namespace Xli
 		/**
 			Creates a window
 		*/
-		static Window* Create(int width, int height, const Xli::String& title, WindowEventHandler* eventHandler = 0, int flags = 0);
+		static Window* Create(int width, int height, const Xli::String& title, int flags = 0);
 
 		/**
 			Creates a window
 		*/
-		static inline Window* Create(const Vector2i& size, const Xli::String& title, WindowEventHandler* eventHandler = 0, int flags = 0)
+		static inline Window* Create(const Vector2i& size, const Xli::String& title, int flags = 0)
 		{ 
-			return Create(size.X, size.Y, title, eventHandler, flags);
+			return Create(size.X, size.Y, title, flags);
 		}
 
 		/**

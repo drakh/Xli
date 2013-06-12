@@ -39,16 +39,16 @@ namespace Xli
 		return dwStyle;
 	}
 
-	Win32Window::Win32Window(int width, int height, const Xli::String& title, WindowEventHandler* eventHandler, int style)
+	Win32Window::Win32Window(int width, int height, const Xli::String& title, int flags)
 	{
 		this->ownsHwnd = true;
 		this->closed = false;
 		this->fullscreen = false;
 		this->eventHandler = eventHandler;
 
-		if (style & WindowFlagsFullscreen)
+		if (flags & WindowFlagsFullscreen)
 		{
-			style &= ~WindowFlagsFullscreen;
+			flags &= ~WindowFlagsFullscreen;
 			fullscreen = true;
 		}
 
@@ -57,7 +57,7 @@ namespace Xli
 		rect.bottom = height;
 		rect.right = width;
 
-		dwStyle = StyleFromXliWindowFlags(style);
+		dwStyle = StyleFromXliWindowFlags(flags);
 		AdjustWindowRect(&rect, dwStyle, 0);
 
 		Utf16String titleW = Unicode::Utf8To16(title);
@@ -105,6 +105,16 @@ namespace Xli
 	WindowImplementation Win32Window::GetImplementation()
 	{
 		return WindowImplementationWin32;
+	}
+
+	void Win32Window::SetEventHandler(WindowEventHandler* handler)
+	{
+		eventHandler = handler;
+	}
+
+	WindowEventHandler* Win32Window::GetEventHandler()
+	{
+		return eventHandler;
 	}
 
 	void Win32Window::Close()
@@ -181,14 +191,14 @@ namespace Xli
 		return Vector2i(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
 	}
 
+	void Window::SetMainWindow(Window* wnd)
+	{
+		mainWindow = wnd->GetImplementation() == WindowImplementationWin32 ? (Win32Window*)wnd : NULL;
+	}
+
 	Window* Window::GetMainWindow()
 	{
 		return mainWindow;
-	}
-
-	void Win32Window::SetMainWindow()
-	{
-		mainWindow = this;
 	}
 
 	void Win32Window::SetTitle(const String& title)
@@ -669,10 +679,10 @@ namespace Xli
 		}
 	}
 
-	Window* Window::Create(int width, int height, const Xli::String& title, WindowEventHandler* eventHandler, int style)
+	Window* Window::Create(int width, int height, const Xli::String& title, int flags)
 	{
 		AssertInit();
-		return new Win32Window(width, height, title, eventHandler, style);
+		return new Win32Window(width, height, title, flags);
 	}
 
 	Window* Window::Adopt(void* nativeWindowHandle)

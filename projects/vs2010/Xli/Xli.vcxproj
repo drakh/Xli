@@ -183,6 +183,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\include\XliGL.h" />
     <ClInclude Include="..\..\..\include\XliGL\glew.h" />
+    <ClInclude Include="..\..\..\include\Xli\Application.h" />
     <ClInclude Include="..\..\..\include\Xli\ArrayStream.h" />
     <ClInclude Include="..\..\..\include\Xli\BaseTypes.h" />
     <ClInclude Include="..\..\..\include\Xli\Buffer.h" />
@@ -289,6 +290,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Application.cpp" />
     <ClCompile Include="..\..\..\src\core\ArrayStream.cpp" />
     <ClCompile Include="..\..\..\src\core\Buffer.cpp" />
     <ClCompile Include="..\..\..\src\core\BufferStream.cpp" />

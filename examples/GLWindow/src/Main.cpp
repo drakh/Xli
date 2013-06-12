@@ -3,37 +3,59 @@
 
 using namespace Xli;
 
-void PrintPlatformInfo(GLContext* gl)
+class GLApp: public Application
 {
-	PrintLine((String)"Time: " + DateTime::Now().ToString());
-	PrintLine((String)"Time (UTC): " + DateTime::NowUtc().ToString());
+	Managed<GLContext> gl;
+	Shared<Window> wnd;
 
-	PrintLine((String)"OpenGL Vendor: " + (const char*)glGetString(GL_VENDOR));
-	PrintLine((String)"OpenGL Renderer: " + (const char*)glGetString(GL_RENDERER));
-	PrintLine((String)"OpenGL Version: " + (const char*)glGetString(GL_VERSION));
-	PrintLine((String)"OpenGL Multisamples: " + gl->GetMultiSamples());
-	PrintLine((String)"OpenGL Swap Interval: " + gl->GetSwapInterval());
-    
-    PrintLine((String)"FileSystem Working Dir: " + Disk->GetCurrentDirectory());
-    PrintLine((String)"FileSystem Documents: " + Disk->GetSystemDirectory(SystemDirectoryDocuments));
-    PrintLine((String)"FileSystem Local AppData: " + Disk->GetSystemDirectory(SystemDirectoryLocalAppData));
-    PrintLine((String)"FileSystem Roaming AppData: " + Disk->GetSystemDirectory(SystemDirectoryRoamingAppData));
-    PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
-}
-
-void DrawFrame(GLContext* gl)
-{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-	// ...
-		
-	gl->SwapBuffers();
-}
-
-class EventHandler: public WindowEventHandler
-{
 public:
-	GLContext* gl;
+	GLApp()
+	{
+		PrintLine("Starting GLApp");
+	}
+
+	virtual ~GLApp()
+	{
+		PrintLine("Exiting GLApp");
+	}
+
+	virtual void OnLoad(Window* wnd)
+	{
+		this->wnd = wnd;
+		this->gl = GLContext::Create(wnd, 16);
+
+		glClearColor(1,0,0,1);
+
+		PrintLine((String)"Time: " + DateTime::Now().ToString());
+		PrintLine((String)"Time (UTC): " + DateTime::NowUtc().ToString());
+
+		PrintLine((String)"OpenGL Vendor: " + (const char*)glGetString(GL_VENDOR));
+		PrintLine((String)"OpenGL Renderer: " + (const char*)glGetString(GL_RENDERER));
+		PrintLine((String)"OpenGL Version: " + (const char*)glGetString(GL_VERSION));
+		PrintLine((String)"OpenGL Multisamples: " + gl->GetMultiSamples());
+		PrintLine((String)"OpenGL Swap Interval: " + gl->GetSwapInterval());
+    
+		PrintLine((String)"FileSystem Working Dir: " + Disk->GetCurrentDirectory());
+		PrintLine((String)"FileSystem Documents: " + Disk->GetSystemDirectory(SystemDirectoryDocuments));
+		PrintLine((String)"FileSystem Local AppData: " + Disk->GetSystemDirectory(SystemDirectoryLocalAppData));
+		PrintLine((String)"FileSystem Roaming AppData: " + Disk->GetSystemDirectory(SystemDirectoryRoamingAppData));
+		PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
+	}
+
+	virtual void OnDraw()
+	{
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+		// ...
+		
+		gl->SwapBuffers();
+
+		if (wnd->GetKeyState(KeySpace))
+		{
+			Vector2i mousePos = wnd->GetMousePosition();
+			wnd->SetTitle(String::Format("%.2lf %d %d", GetTime(), mousePos.X, mousePos.Y));
+		}
+	}
 
 	virtual bool OnKeyDown(Window* wnd, Key key)
 	{
@@ -177,10 +199,7 @@ public:
 	{
 		Err->WriteLine("OnSizeChanged: " + clientSize.ToString());
 		glViewport(0, 0, clientSize.X, clientSize.Y);
-
-#ifdef WIN32
-		DrawFrame(gl);
-#endif
+		Application::OnSizeChanged(wnd, clientSize);
 	}
 
 	virtual bool OnClosing(Window* wnd, bool& cancel)
@@ -228,37 +247,7 @@ public:
 
 int Main(const Array<String>& args)
 {
-    PrintLine("Creating GLWindow");
-
-    int flags = WindowFlagsResizeable;
-    
-#if defined(XLI_PLATFORM_IOS) || defined(XLI_PLATFORM_ANDROID)
-    flags |= WindowFlagsFullscreen;
-#endif
-    
-	Managed<EventHandler> events = new EventHandler();
-	Managed<Window> wnd = Window::Create(1280, 720, "GLWindow", events, flags);
-    Managed<GLContext> gl = GLContext::Create(wnd, 16);
-
-	events->gl = gl;
-
-	gl->SetSwapInterval(1);
-    PrintPlatformInfo(gl);
-
-	glClearColor(1,0,0,1);
-
-	while (!wnd->IsClosed())
-	{
-		DrawFrame(gl);
-		Window::ProcessMessages();
-
-		if (wnd->GetKeyState(KeySpace))
-		{
-			Vector2i mousePos = wnd->GetMousePosition();
-			wnd->SetTitle(String::Format("%.2lf %d %d", GetTime(), mousePos.X, mousePos.Y));
-		}
-	}
-
-    PrintLine("Exiting GLWindow");
+    GLApp app;
+	Application::Run(&app);
 	return 0;
 }

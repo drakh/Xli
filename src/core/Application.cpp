@@ -2,22 +2,27 @@
 
 namespace Xli
 {
-	void Run(Application* app)
+	void Application::Run(Application* app, int flags)
 	{
-		// TODO
+		Managed<Window> wnd = Window::Create(app->GetInitSize(), app->GetInitTitle(), flags);
+
+		app->OnLoad(wnd);
+		wnd->SetEventHandler(app);
+
+		while (!wnd->IsClosed())
+		{
+			app->OnDraw();
+
+			Window::ProcessMessages();
+		}
 	}
 
-	int GetInitFlags()
-	{
-		return WindowFlagsResizeable;
-	}
-
-	String GetInitTitle()
+	String Application::GetInitTitle()
 	{
 		return "Xli Application";
 	}
 
-	Vector2i GetInitSize()
+	Vector2i Application::GetInitSize()
 	{
 #if defined(XLI_PLATFORM_IOS) || defined(XLI_PLATFORM_ANDROID)
 		return Window::GetScreenSize();
@@ -26,12 +31,11 @@ namespace Xli
 #endif
 	}
 
-	bool OnSizeChanged(Window* wnd, Vector2i size)
+	void Application::OnSizeChanged(Window* wnd, Vector2i size)
 	{
 #ifdef WIN32
 		if (wnd->GetMouseButtonState(MouseButtonLeft))
-			Draw();
+			OnDraw();
 #endif
-		return true;
 	}
 }

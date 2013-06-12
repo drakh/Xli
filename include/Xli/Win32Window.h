@@ -24,11 +24,14 @@ namespace Xli
 		static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 	public:
-		Win32Window(int width, int height, const Xli::String& title, WindowEventHandler* eventHandler, int style);
+		Win32Window(int width, int height, const Xli::String& title, int flags);
 		Win32Window(HWND hWnd);
 		virtual ~Win32Window();
 
 		virtual WindowImplementation GetImplementation();
+
+		virtual void SetEventHandler(WindowEventHandler* handler);
+		virtual WindowEventHandler* GetEventHandler();
 
 		virtual void Close();
 
@@ -39,12 +42,12 @@ namespace Xli
 		virtual bool IsMaximized();
 
 		virtual int GetDisplayIndex();
+
 		virtual String GetTitle();
 		virtual Vector2i GetPosition();
 		virtual Vector2i GetClientSize();
 		virtual void* GetNativeHandle() { return (void*)hWnd; }
 
-		virtual void SetMainWindow();
 		virtual void SetTitle(const String& title);
 		virtual void SetFullscreen(bool fullscren);
 		virtual void SetPosition(Vector2i pos);

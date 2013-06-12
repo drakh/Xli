@@ -245,6 +245,9 @@
     <ClInclude Include="..\..\..\src\core\android\AInternal.h">
       <Filter>Xli\Platform\android</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Application.h">
+      <Filter>Xli\Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\core\Random.cpp">
@@ -435,6 +438,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\core\android\AInternal.cpp">
       <Filter>Xli\Platform\android</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Application.cpp">
+      <Filter>Xli\Platform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -26,6 +26,7 @@
 	\ingroup Core
 */
 
+#include <Xli/Application.h>
 #include <Xli/Array.h>
 #include <Xli/ArrayStream.h>
 #include <Xli/BaseTypes.h>
