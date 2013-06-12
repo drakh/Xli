@@ -633,6 +633,9 @@ namespace Xli
 		}
 	}
 
+	void DisplayInit();
+	void DisplayDone();
+
 	void Window::Init()
 	{
 		if (!InitCount) 
@@ -655,6 +658,8 @@ namespace Xli
 
 			if (!RegisterClassEx(&wcex)) 
 				XLI_THROW("Failed to register window class");
+
+			DisplayInit();
 		}
 
 		InitCount++;
@@ -665,9 +670,14 @@ namespace Xli
 		InitCount--;
 
 		if (!InitCount)
+		{
+			DisplayDone();
 			UnregisterClass(windowClassName, hInstance);
+		}
 		else if (InitCount < 0)
+		{
 			XLI_THROW_BAD_DELETE;
+		}
 	}
 
 	static void AssertInit()

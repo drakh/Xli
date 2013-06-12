@@ -4,6 +4,8 @@ namespace Xli
 {
 	void Application::Run(Application* app, int flags)
 	{
+		Window::Init();
+
 		Managed<Window> wnd = Window::Create(app->GetInitSize(), app->GetInitTitle(), flags);
 
 		app->OnInit(wnd);
@@ -16,6 +18,8 @@ namespace Xli
 			app->OnDraw(wnd);
 			Window::ProcessMessages();
 		}
+
+		Window::Done();
 	}
 
 	void Application::OnInit(Window* wnd)

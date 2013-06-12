@@ -21,9 +21,6 @@ namespace Xli
 	class Display
 	{
 	public:
-		static void Init();
-		static void Done();
-
 		/**
 			Returns the number of screens connected to the system.
 		*/

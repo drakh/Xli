@@ -13,7 +13,7 @@ namespace Xli
 		return TRUE;
 	}
 
-	void Display::Init()
+	void DisplayInit()
 	{
 		if (!initCount)
 		{
@@ -24,7 +24,7 @@ namespace Xli
 		initCount++;
 	}
 
-	void Display::Done()
+	void DisplayDone()
 	{
 		initCount--;
 
@@ -43,8 +43,8 @@ namespace Xli
 	{
 		if (!initCount)
 		{
-			Display::Init();
-			atexit(Display::Done);
+			DisplayInit();
+			atexit(DisplayDone);
 		}
 	}
 
