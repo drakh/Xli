@@ -1,5 +1,6 @@
 set(Sources
 	3rdparty/ConvertUTF.c
+	Application.cpp
 	ArrayStream.cpp
 	BinaryReader.cpp
 	BinaryWriter.cpp

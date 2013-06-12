@@ -109,7 +109,7 @@ namespace Xli
             ErrorPrintLine("SDL WARNING: Failed to set window orientations");
         */
         
-        if (flags & WindowFlagsDisableScreenSaver && !SDL_SetHint(SDL_HINT_IDLE_TIMER_DISABLED, "1"))
+        if (flags & WindowFlagsDisablePowerSaver && !SDL_SetHint(SDL_HINT_IDLE_TIMER_DISABLED, "1"))
             ErrorPrintLine("SDL WARNING: Failed to disable idle timer");
 
         if (fullscreen)

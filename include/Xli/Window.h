@@ -209,9 +209,13 @@ namespace Xli
 		WindowFlagsBorderless = 1 << 0, ///< Borderless window without titlebar and buttons
 		WindowFlagsResizeable = 1 << 1, ///< Resizeable window with a title bar and minimize, maximize and close buttons
 		WindowFlagsFullscreen = 1 << 2, ///< Fullscreen window which should always be on top
-		WindowFlagsFullscreenResizeable = WindowFlagsResizeable | WindowFlagsFullscreen, ///< Resizeable window that opens in fullscreen mode
-		
-		WindowFlagsDisableScreenSaver = 1 << 3, ///< Prevents the screen saver while window is in fullscreen mode
+
+		/// Disables power saver on mobile platforms. 
+		/// This is useful to avoid the screen from going black for apps not using touch input
+		/// -- such as sensor based apps, demos, video players, etc. On desktop platforms this is 
+		/// the default behaviour when in fullscreen mode, but on mobile it must be explicitly 
+		/// enabled for apps that needs it because it can potentially drain the battery.
+		WindowFlagsDisablePowerSaver = 1 << 3,
 	};
 	
 	/**
@@ -388,7 +392,8 @@ namespace Xli
 		static void Done();
 
 		/**
-			Returns the first window created. Can return 0.
+			Returns the first window created or the window currently set using SetMainWindow().
+			If no window is created or the main window is destroyed this function will return NULL.
 		*/
 		static Window* GetMainWindow();
 
