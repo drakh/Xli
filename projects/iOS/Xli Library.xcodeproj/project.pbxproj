@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE0CD81C1768C90A00C02095 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0CD81B1768C90A00C02095 /* Application.cpp */; };
 		CE1535BF174CF162009C6275 /* AudioBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6E3716C70D9A00390436 /* AudioBuffer.cpp */; };
 		CE1535C0174CF162009C6275 /* AudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6E3816C70D9A00390436 /* AudioStream.cpp */; };
 		CE1535C1174CF162009C6275 /* Wav.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6E5A16C70D9A00390436 /* Wav.cpp */; };
@@ -296,6 +297,7 @@
 
 /* Begin PBXFileReference section */
 		5AA38E4D151A00CC00979B55 /* libXli.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXli.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE0CD81B1768C90A00C02095 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
 		CE1535C9174CF162009C6275 /* libXliGLHelper.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXliGLHelper.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE1535D6174CF171009C6275 /* libXliHttp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXliHttp.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE1536DD174CF306009C6275 /* DummyClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DummyClient.cpp; sourceTree = "<group>"; };
@@ -1098,6 +1100,7 @@
 			isa = PBXGroup;
 			children = (
 				CE2D5E0B16C70D7D00390436 /* 3rdparty */,
+				CE0CD81B1768C90A00C02095 /* Application.cpp */,
 				CE2D66BB16C70D7F00390436 /* ArrayStream.cpp */,
 				CE2D66BC16C70D7F00390436 /* BinaryReader.cpp */,
 				CE2D66BD16C70D7F00390436 /* BinaryWriter.cpp */,
@@ -1738,6 +1741,7 @@
 				CE2B2D5F16C72AC40036FFA0 /* SDL_uikitviewcontroller.m in Sources */,
 				CE2B2D6116C72AC40036FFA0 /* SDL_uikitwindow.m in Sources */,
 				CE20886316C8502B00667537 /* CocoaFileSystem.mm in Sources */,
+				CE0CD81C1768C90A00C02095 /* Application.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

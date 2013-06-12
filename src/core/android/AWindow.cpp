@@ -317,7 +317,7 @@ namespace Xli
 					continue;
 				}
 
-				// TODO: NULL characters ?
+				// TODO: NULL characters? Test if java-style MUTF-8 works
 
 				buf.Add(c);
 			}
