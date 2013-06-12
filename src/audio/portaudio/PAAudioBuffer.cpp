@@ -69,6 +69,28 @@ namespace Xli
 		}
 
 	public:
+		PAAudioBuffer(Stream* source, DataType dataType, int channels, double sampleRate, int latency, int framesPerBuffer)
+		{
+			this->src = source;
+			this->dataType = dataType;
+			this->channels = channels;
+			this->sampleRate = sampleRate;
+
+			PaStreamParameters outputParams;
+			outputParams.device = Pa_GetDefaultOutputDevice();
+			outputParams.channelCount = channels;
+			outputParams.sampleFormat = XliDataTypeToPaSampleFormat(dataType);
+			outputParams.suggestedLatency = (double)latency / 1000.0;
+			outputParams.hostApiSpecificStreamInfo = 0;
+
+			int err = Pa_OpenStream(&stream, 0, &outputParams, sampleRate, framesPerBuffer, 0, paCallback, this);
+
+			if (err)
+			{
+				XLI_THROW("Unable to open sound stream: " + (String)Pa_GetErrorText(err));
+			}
+		}
+
 		PAAudioBuffer(Stream* source, DataType dataType, int channels, double sampleRate)
 		{
 			this->src = source;
@@ -169,6 +191,12 @@ namespace Xli
 			AudioBuffer::Init();
 			atexit(AudioBuffer::Done);
 		}
+	}
+
+	AudioBuffer* AudioBuffer::Create(Stream* source, DataType dataType, int channels, double sampleRate, int latency, int framesPerBuffer)
+	{
+		AssertInit();
+		return new PAAudioBuffer(source, dataType, channels, sampleRate, latency, framesPerBuffer);
 	}
 
 	AudioBuffer* AudioBuffer::Create(Stream* source, DataType dataType, int channels, double sampleRate)
