@@ -21,8 +21,20 @@ void PrintPlatformInfo(GLContext* gl)
     PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
 }
 
+void DrawFrame(GLContext* gl)
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+	// ...
+		
+	gl->SwapBuffers();
+}
+
 class EventHandler: public WindowEventHandler
 {
+public:
+	GLContext* gl;
+
 	virtual bool OnKeyDown(Window* wnd, Key key)
 	{
 		Err->WriteLine("OnKeyDown: " + (String)(int)key);
@@ -148,9 +160,7 @@ class EventHandler: public WindowEventHandler
             {
                 // double tap
                 if (MessageBox::Show(wnd, "Double tap detected", "Hello", DialogButtonsOKCancel) == DialogResultOK)
-                {
                     wnd->BeginTextInput();
-                }
             }
             else if (wnd->IsTextInputActive())
             {
@@ -163,11 +173,14 @@ class EventHandler: public WindowEventHandler
 		return false;
 	}
 
-	virtual bool OnSizeChanged(Window* wnd, Vector2i clientSize)
+	virtual void OnSizeChanged(Window* wnd, Vector2i clientSize)
 	{
 		Err->WriteLine("OnSizeChanged: " + clientSize.ToString());
 		glViewport(0, 0, clientSize.X, clientSize.Y);
-		return true;
+
+#ifdef WIN32
+		DrawFrame(gl);
+#endif
 	}
 
 	virtual bool OnClosing(Window* wnd, bool& cancel)
@@ -177,10 +190,9 @@ class EventHandler: public WindowEventHandler
 		return true;
 	}
 
-	virtual bool OnClosed(Window* wnd)
+	virtual void OnClosed(Window* wnd)
 	{
 		Err->WriteLine("OnClosed");
-		return false;
 	}
 
 	virtual void OnAppLowMemory(Window* wnd)
@@ -228,6 +240,8 @@ int Main(const Array<String>& args)
 	Managed<Window> wnd = Window::Create(1280, 720, "GLWindow", events, flags);
     Managed<GLContext> gl = GLContext::Create(wnd, 16);
 
+	events->gl = gl;
+
 	gl->SetSwapInterval(1);
     PrintPlatformInfo(gl);
 
@@ -235,11 +249,7 @@ int Main(const Array<String>& args)
 
 	while (!wnd->IsClosed())
 	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-		// ...
-		
-		gl->SwapBuffers();
+		DrawFrame(gl);
 		Window::ProcessMessages();
 
 		if (wnd->GetKeyState(KeySpace))

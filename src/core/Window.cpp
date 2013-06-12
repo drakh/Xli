@@ -60,9 +60,8 @@ namespace Xli
 		return false;
 	}
 	
-	bool WindowEventHandler::OnSizeChanged(Window* wnd, Vector2i clientSize)
+	void WindowEventHandler::OnSizeChanged(Window* wnd, Vector2i clientSize)
 	{
-		return false;
 	}
 
 	bool WindowEventHandler::OnClosing(Window* wnd, bool& cancel)
@@ -70,9 +69,8 @@ namespace Xli
 		return false;
 	}
 
-	bool WindowEventHandler::OnClosed(Window* wnd)
+	void WindowEventHandler::OnClosed(Window* wnd)
 	{
-		return false;
 	}
 
 	void WindowEventHandler::OnAppLowMemory(Window* wnd)

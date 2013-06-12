@@ -167,9 +167,10 @@ namespace Xli
 		virtual bool OnTouchMove(Window* wnd, Vector2 pos, int id);
 		virtual bool OnTouchUp(Window* wnd, Vector2 pos, int id);
 		
-		virtual bool OnSizeChanged(Window* wnd, Vector2i clientSize);
+		virtual void OnSizeChanged(Window* wnd, Vector2i clientSize);
+		
 		virtual bool OnClosing(Window* wnd, bool& cancel);
-		virtual bool OnClosed(Window* wnd);
+		virtual void OnClosed(Window* wnd);
 
 		virtual void OnAppLowMemory(Window* wnd);
 		virtual void OnAppTerminating(Window* wnd);

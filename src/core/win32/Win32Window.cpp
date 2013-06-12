@@ -568,8 +568,11 @@ namespace Xli
 			break;
 
 		case WM_SIZE:
-			if (wnd->eventHandler && wnd->eventHandler->OnSizeChanged(wnd, Vector2i(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))))
+			if (wnd->eventHandler)
+			{
+				wnd->eventHandler->OnSizeChanged(wnd, Vector2i(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)));
 				return 0;
+			}
 
 			break;
 
@@ -586,8 +589,11 @@ namespace Xli
 
 		case WM_QUIT:
 			wnd->closed = true;
-			if (wnd->eventHandler && wnd->eventHandler->OnClosed(wnd))
+			if (wnd->eventHandler)
+			{
+				wnd->eventHandler->OnClosed(wnd);
 				return 0;
+			}
 
 			break;
 
@@ -595,15 +601,12 @@ namespace Xli
 			PostQuitMessage(0);
 
 			wnd->closed = true;
-			if (wnd->eventHandler && wnd->eventHandler->OnClosed(wnd))
-				return 0;
-
-			break;
-
-		case WM_GETMINMAXINFO:
 			if (wnd->eventHandler)
-				wnd->eventHandler->OnSizeChanged(wnd, wnd->GetClientSize());
-			
+			{
+				wnd->eventHandler->OnClosed(wnd);
+				return 0;
+			}
+
 			break;
 		}
 
