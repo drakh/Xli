@@ -16,14 +16,16 @@ namespace Xli
 		int x, y, w, h, buttons;
 
 	public:
-		WindowEventHandler* GetEventHandler() { return eventHandler; }
-		SDL_Window* GetSDLWindow() { return window; }
+		SDL_Window* GetSDL_Window() { return window; }
 
-		SDL2Window(int width, int height, const Xli::String& title, WindowEventHandler* eventHandler, int flags);
+		SDL2Window(int width, int height, const Xli::String& title, int flags);
 		SDL2Window(const void* nativeHandle);
 		virtual ~SDL2Window();
 
 		virtual WindowImplementation GetImplementation();
+
+		virtual void SetEventHandler(WindowEventHandler* handler);
+		virtual WindowEventHandler* GetEventHandler();
 
 		virtual bool IsClosed();
 		virtual bool IsVisible();
@@ -38,7 +40,6 @@ namespace Xli
 		virtual void* GetNativeHandle();
 
 		virtual void SetTitle(const String& title);
-		virtual void SetMainWindow();
 		virtual void SetFullscreen(bool fullscreen);
 		virtual void SetPosition(Vector2i pos);
 		virtual void SetClientSize(Vector2i size);

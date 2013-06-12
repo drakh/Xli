@@ -26,7 +26,7 @@ namespace Xli
 #endif
 
 			this->window = window;
-			context = SDL_GL_CreateContext(window->GetSDLWindow());
+			context = SDL_GL_CreateContext(window->GetSDL_Window());
 
 			if (!context)
 			{
@@ -65,12 +65,12 @@ namespace Xli
 
 		virtual void MakeCurrent()
 		{
-			SDL_GL_MakeCurrent(window->GetSDLWindow(), context);
+			SDL_GL_MakeCurrent(window->GetSDL_Window(), context);
 		}
 
 		virtual void SwapBuffers()
 		{
-			SDL_GL_SwapWindow(window->GetSDLWindow());
+			SDL_GL_SwapWindow(window->GetSDL_Window());
 		}
 
 		virtual bool SetSwapInterval(int interval)

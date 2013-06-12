@@ -9,7 +9,7 @@ namespace Xli
 		SDL_MessageBoxButtonData buttondata[3];
 
 		data.flags = 0;
-		data.window = wnd != 0 && wnd->GetImplementation() == WindowImplementationSDL2 ? ((SDL2Window*)wnd)->GetSDLWindow() : 0;
+		data.window = wnd != 0 && wnd->GetImplementation() == WindowImplementationSDL2 ? ((SDL2Window*)wnd)->GetSDL_Window() : NULL;
 		data.title = caption.Data();
 		data.message = message.Data();
 		data.numbuttons = 0;

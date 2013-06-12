@@ -3,14 +3,6 @@
 
 namespace Xli
 {
-	void Display::Init()
-	{
-	}
-
-	void Display::Done()
-	{
-	}
-
 	int Display::GetCount()
 	{
 		return SDL_GetNumVideoDisplays();

@@ -22,6 +22,7 @@ LOCAL_SRC_FILES := \
 	../../../src/core/posix/PosixMutex.cpp \
 	../../../src/core/posix/PosixTime.cpp \
 	../../../src/core/posix/PosixThread.cpp \
+	../../../src/core/Application.cpp \
 	../../../src/core/ArrayStream.cpp \
 	../../../src/core/BinaryReader.cpp \
 	../../../src/core/BinaryWriter.cpp \

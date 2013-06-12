@@ -59,7 +59,7 @@ namespace Xli
 
 #endif
     
-	SDL2Window::SDL2Window(int width, int height, const String& title, WindowEventHandler* eventHandler, int flags)
+	SDL2Window::SDL2Window(int width, int height, const String& title, int flags)
 	{
 		if (GlobalWindow == 0) 
 			GlobalWindow = this;
@@ -168,6 +168,16 @@ namespace Xli
 		return WindowImplementationSDL2;
 	}
 
+	void SDL2Window::SetEventHandler(WindowEventHandler* handler)
+	{
+		eventHandler = handler;
+	}
+
+	WindowEventHandler* SDL2Window::GetEventHandler()
+	{
+		return eventHandler;
+	}
+
 	void SDL2Window::Close()
 	{
         if (!closed)
@@ -248,11 +258,6 @@ namespace Xli
 	void SDL2Window::SetTitle(const String& title)
 	{
 		SDL_SetWindowTitle(window, title.Data());
-	}
-
-	void SDL2Window::SetMainWindow()
-	{
-		GlobalWindow = this;
 	}
 
 	void SDL2Window::SetFullscreen(bool fullscreen)
@@ -470,8 +475,6 @@ namespace Xli
 		return SDL_IsScreenKeyboardShown(window);
 	}
 
-
-
 	static bool inited = false;
 
 	void Window::Init()
@@ -495,6 +498,11 @@ namespace Xli
 		}
 	}
 
+	void Window::SetMainWindow(Window* wnd)
+	{
+		GlobalWindow = wnd && wnd->GetImplementation() == WindowImplementationSDL2 ? (SDL2Window*)wnd : NULL;
+	}
+
 	Window* Window::GetMainWindow()
 	{
 		return GlobalWindow;
@@ -507,10 +515,10 @@ namespace Xli
 		return Vector2i(mode.w, mode.h);
 	}
 
-	Window* Window::Create(int width, int height, const String& title, WindowEventHandler* eventHandler, int style)
+	Window* Window::Create(int width, int height, const String& title, int flags)
 	{
 		AssertInit();
-		return new SDL2Window(width, height, title, eventHandler, style);
+		return new SDL2Window(width, height, title, flags);
 	}
 
 	Window* Window::Adopt(void* nativeWindowHandle)
@@ -633,7 +641,7 @@ namespace Xli
                     if (GlobalWindow != 0 && GlobalWindow->GetEventHandler() != 0)
                     {
                         int w, h;
-                        SDL_GetWindowSize(GlobalWindow->GetSDLWindow(), &w, &h);
+                        SDL_GetWindowSize(GlobalWindow->GetSDL_Window(), &w, &h);
                         
                         float x = e.tfinger.x * w;
                         float y = e.tfinger.y * h;

@@ -35,18 +35,29 @@ namespace Xli
 
 		virtual ~AWindow()
 		{
-			if (GlobalEventHandler != 0)
-			{
-				GlobalEventHandler->Release();
-				GlobalEventHandler = 0;
-			}
-
+			SetEventHandler(0);
 			GlobalWindow = 0;
 		}
 
 		virtual WindowImplementation GetImplementation()
 		{
 			return WindowImplementationAndroid;
+		}
+
+		virtual void SetEventHandler(WindowEventHandler* handler)
+		{
+			if (handler != 0)
+				handler->AddRef();
+
+			if (GlobalEventHandler != 0)
+				GlobalEventHandler->Release();
+
+			GlobalEventHandler = handler;
+		}
+
+		virtual WindowEventHandler* GetEventHandler()
+		{
+			return GlobalEventHandler;
 		}
 
 		virtual void Close()
@@ -115,10 +126,6 @@ namespace Xli
 		{
 		}
 
-		virtual void SetMainWindow()
-		{
-		}
-
 		virtual void SetFullscreen(bool fullscreen)
 		{
 		}
@@ -184,6 +191,10 @@ namespace Xli
 	{
 	}
 
+	void Window::SetMainWindow(Window* wnd)
+	{
+	}
+
 	Window* Window::GetMainWindow()
 	{
 		return GlobalWindow;
@@ -196,14 +207,13 @@ namespace Xli
 		return Vector2i(w, h);
 	}
 
-	Window* Window::Create(int width, int height, const String& title, WindowEventHandler* eventHandler, int flags)
+	Window* Window::Create(int width, int height, const String& title, int flags)
 	{
 		if (GlobalWindow != 0)
 			XLI_THROW("Only one window instance is allowed on the Android platform");
 
 		GlobalWidth = width;
 		GlobalHeight = height;
-		GlobalEventHandler = eventHandler;
 		GlobalWindow = new AWindow();
 	
 		return GlobalWindow;
@@ -239,14 +249,6 @@ namespace Xli
 					GlobalEventHandler->OnSizeChanged(GlobalWindow, Vector2i(w, h));
 			}
 		}
-	}
-
-	void Display::Init()
-	{
-	}
-
-	void Display::Done()
-	{
 	}
 
 	int Display::GetCount()
