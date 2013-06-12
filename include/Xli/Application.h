@@ -14,7 +14,7 @@ namespace Xli
 		static void Run(Application* app, int flags = WindowFlagsResizeable);
 
 		virtual void OnLoad(Window* wnd) = 0;
-		virtual void OnDraw() = 0;
+		virtual void OnDraw(Window* wnd) = 0;
 
 		virtual String GetInitTitle();
 		virtual Vector2i GetInitSize();

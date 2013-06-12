@@ -6,7 +6,6 @@ using namespace Xli;
 class GLApp: public Application
 {
 	Managed<GLContext> gl;
-	Shared<Window> wnd;
 
 public:
 	GLApp()
@@ -21,7 +20,6 @@ public:
 
 	virtual void OnLoad(Window* wnd)
 	{
-		this->wnd = wnd;
 		this->gl = GLContext::Create(wnd, 16);
 
 		glClearColor(1,0,0,1);
@@ -42,7 +40,7 @@ public:
 		PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
 	}
 
-	virtual void OnDraw()
+	virtual void OnDraw(Window* wnd)
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 

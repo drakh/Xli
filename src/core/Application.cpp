@@ -11,8 +11,7 @@ namespace Xli
 
 		while (!wnd->IsClosed())
 		{
-			app->OnDraw();
-
+			app->OnDraw(wnd);
 			Window::ProcessMessages();
 		}
 	}
@@ -35,7 +34,7 @@ namespace Xli
 	{
 #ifdef WIN32
 		if (wnd->GetMouseButtonState(MouseButtonLeft))
-			OnDraw();
+			OnDraw(wnd);
 #endif
 	}
 }
