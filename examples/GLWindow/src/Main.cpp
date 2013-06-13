@@ -25,16 +25,13 @@ public:
 	{
 		Err->WriteLine("OnInit");
 
+
 		// Setup OpenGL
 
 		this->gl = GLContext::Create(wnd, 16);
 
 		glClearColor(1,0,0,1);
-	}
 
-	virtual void OnLoad(Window* wnd)
-	{
-		Err->WriteLine("OnLoad");
 
 		// Print platform info
 
@@ -54,6 +51,13 @@ public:
 		PrintLine((String)"FileSystem Local AppData: " + Disk->GetSystemDirectory(SystemDirectoryLocalAppData));
 		PrintLine((String)"FileSystem Roaming AppData: " + Disk->GetSystemDirectory(SystemDirectoryRoamingAppData));
 		PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
+	}
+
+	virtual void OnLoad(Window* wnd)
+	{
+		Err->WriteLine("OnLoad");
+
+		// TODO: Load something
 	}
 
 	virtual void OnDraw(Window* wnd)
