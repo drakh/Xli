@@ -22,6 +22,7 @@
     <ClInclude Include="..\..\..\include\XliAudio.h" />
     <ClInclude Include="..\..\..\include\XliAudio\AudioBuffer.h" />
     <ClInclude Include="..\..\..\include\XliAudio\AudioStream.h" />
+    <ClInclude Include="..\..\..\include\XliAudio\SampleReader.h" />
     <ClInclude Include="..\..\..\include\XliAudio\Sound.h" />
     <ClInclude Include="..\..\..\include\XliAudio\SoundChannel.h" />
     <ClInclude Include="..\..\..\include\XliAudio\Wav.h" />
@@ -197,6 +198,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\..\src\audio\portaudio\PAAudioBuffer.cpp" />
+    <ClCompile Include="..\..\..\src\audio\SampleReader.cpp" />
     <ClCompile Include="..\..\..\src\audio\Sound.cpp" />
     <ClCompile Include="..\..\..\src\audio\SoundChannel.cpp" />
     <ClCompile Include="..\..\..\src\audio\Wav.cpp" />
