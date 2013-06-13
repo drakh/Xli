@@ -15,6 +15,7 @@ namespace Xli
 		virtual double GetSampleRate() const = 0;
 		virtual int GetChannelCount() const = 0;
 		virtual DataType GetDataType() const = 0;
+		virtual int GetAverageBytesPerSecond() const;
 
 		static AudioStream* Create(Stream* source, DataType dataType, int channelCount, double sampleRate);
 	};

@@ -39,6 +39,11 @@ namespace Xli
 		}
 	};
 
+	int AudioStream::GetAverageBytesPerSecond() const
+	{
+		return (int)((double)(DataTypeInfo::SizeOf(GetDataType()) * GetChannelCount()) * GetSampleRate());
+	}
+
 	AudioStream* AudioStream::Create(Stream* source, DataType dataType, int channelCount, double sampleRate)
 	{
 		return new DefaultAudioStream(source, dataType, channelCount, sampleRate);
