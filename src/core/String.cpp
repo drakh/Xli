@@ -12,7 +12,10 @@ namespace Xli
 	{
 		int len = (int)strlen(str);
 
-		while (len > 1 && (str[len - 1] == '0' || str[len - 1] == '.')) 
+		while (len > 1 && str[len - 1] == '0')
+			len--;
+
+		if (len > 1 && str[len - 1] == '.')
 			len--;
 
 		return len;
