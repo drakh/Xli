@@ -39,193 +39,227 @@ namespace Xli
 	static const UInt64 UInt64Max = 0xffffffffffffffffull;
 
 
-	template <typename T> inline T SignPositiveZero(const T& x)
+	template <typename T> T SignPositiveZero(const T& x)
 	{
 		return (x < (T)0)? (T)-1: (T)1;
 	}
-	template <typename T> inline T Sign(const T& x)
+
+	template <typename T> T Sign(const T& x)
 	{
 		return x==(T)-0||x==(T)0? x : SignPositiveZero(x);
 	}
-	template <typename T> inline T Min(const T& a, const T& b)
+
+	template <typename T> T Min(const T& a, const T& b)
 	{
 		return (a < b)? a: b;
 	}
-	template <typename T> inline T Max(const T& a, const T& b)
+
+	template <typename T> T Max(const T& a, const T& b)
 	{
 		return (a > b)? a: b;
 	}
-	template <typename T> inline T Abs(const T& a)
+
+	template <typename T> T Abs(const T& a)
 	{
 		return (a < (T)0)? -a: a;
 	}
-	template <typename T> inline T Clamp(const T& x, const T& minimum, const T& maximum)
+
+	template <typename T> T Clamp(const T& x, const T& minimum, const T& maximum)
 	{
 		return Max(minimum, Min(maximum, x));
 	}
-	template <typename T> inline T Saturate(const T& x)
+
+	template <typename T> T Saturate(const T& x)
 	{
 		return Clamp(x, T(0), T(1));
 	}
 
 
-	inline float Sin(const float& x)
+	static float Sin(float x)
 	{
 		return sinf(x);
 	}
-	inline float Cos(const float& x)
+
+	static float Cos(float x)
 	{
 		return cosf(x);
 	}
-	inline float Tan(const float& x)
+
+	static float Tan(float x)
 	{
 		return tanf(x);
 	}
-	inline float ArcSin(const float& x)
+
+	static float ArcSin(float x)
 	{
 		return asinf(x);
 	}
-	inline float ArcCos(const float& x)
+
+	static float ArcCos(float x)
 	{
 		return acosf(x);
 	}
-	inline float ArcTan(const float& x)
+
+	static float ArcTan(float x)
 	{
 		return atanf(x);
 	}
-	inline float Log(const float& x)
+
+	static float Log(float x)
 	{
 		return logf(x);
 	}
-	inline float Log10(const float& x)
+
+	static float Log10(float x)
 	{
 		return log10f(x);
 	}
-	inline float Sqrt(const float& x)
+
+	static float Sqrt(float x)
 	{
 		return sqrtf(x);
 	}
-	inline float Pow(const float& base, const float& exponent)
+
+	static float Pow(float base, float exponent)
 	{
 		return powf(base, exponent);
 	}
-	inline float Exp(const float& x)
+
+	static float Exp(float x)
 	{
 		return expf(x);
 	}
-	inline float Fmod(const float& x, const float& y)
+
+	static float Fmod(float x, float y)
 	{
 		return fmodf(x, y);
 	}
 
 
-	inline double Sin(const double& x)
+	static double Sin(double x)
 	{
 		return sin(x);
 	}
-	inline double Cos(const double& x)
+
+	static double Cos(double x)
 	{
 		return cos(x);
 	}
-	inline double Tan(const double& x)
+
+	static double Tan(double x)
 	{
 		return tan(x);
 	}
-	inline double ArcSin(const double& x)
+
+	static double ArcSin(double x)
 	{
 		return asin(x);
 	}
-	inline double ArcCos(const double& x)
+
+	static double ArcCos(double x)
 	{
 		return acos(x);
 	}
-	inline double ArcTan(const double& x)
+
+	static double ArcTan(double x)
 	{
 		return atan(x);
 	}
-	inline double Log(const double& x)
+
+	static double Log(double x)
 	{
 		return log(x);
 	}
-	inline double Log10(const double& x)
+
+	static double Log10(double x)
 	{
 		return log10(x);
 	}
-	inline double Sqrt(const double& x)
+
+	static double Sqrt(double x)
 	{
 		return sqrt(x);
 	}
-	inline double Pow(const double& base, const double& exponent)
+
+	static double Pow(double base, double exponent)
 	{
 		return pow(base, exponent);
 	}
-	inline double Exp(const double& x)
+
+	static double Exp(double x)
 	{
 		return exp(x);
 	}
-	inline double Fmod(const double& x, const double& y)
+
+	static double Fmod(double x, double y)
 	{
 		return fmod(x, y);
 	}
 
 
-	template <typename T> inline T Log2(const T& x)
+	template <typename T> T Log2(const T& x)
 	{
 		return Log(x) / Log((T)2.0);
 	}
-	template <typename T> inline T Log(const T& x, const T& base)
+
+	template <typename T> T Log(const T& x, const T& base)
 	{
 		return Log(x) / Log(base);
 	}
-	template <typename T> inline T Floor(const T& x)
+
+	template <typename T> T Floor(const T& x)
 	{
 		return (T)((x >= (T)0.0)? (int)x: (int)x - 1);
 	}
-	template <typename T> inline T Ceil(const T& x)
+
+	template <typename T> T Ceil(const T& x)
 	{
 		return (T)((x > (T)0.0)? (int)x + 1: (int)x);
 	}
-	template <typename T> inline T Round(const T& x)
+
+	template <typename T> T Round(const T& x)
 	{
 		return Floor(x + (T)0.5);
 	}
-	template <typename T> inline T Frac(const T& x)
+
+	template <typename T> T Frac(const T& x)
 	{
 		return x - Floor(x);
 	}
 
 
-	inline float RadToDeg(const float& x)
+	static float RadToDeg(float x)
 	{
 		return x * 180.0f / (float)PI;
 	}
-	inline float DegToRad(const float& x)
+
+	static float DegToRad(float x)
 	{
 		return x * (float)PI / 180.0f;
 	}
 
 
-	template <typename T> inline float Map(const T& a, const T& b, const T& t)
+	template <typename T> float Map(const T& a, const T& b, const T& t)
 	{
 		return float(t - a) / float(b - a);
 	}
 
-	template <typename T> inline T Lerp(const T& a, const T& b, float t)
+	template <typename T> T Lerp(const T& a, const T& b, float t)
 	{
 		return a + (b - a) * t;
 	}
 
-	template <typename T> inline T SCurve(const T& a, const T& b, float t)
+	template <typename T> T SCurve(const T& a, const T& b, float t)
 	{
 		return a + (b - a) * (0.5f - Cos(t * (float)PI) * 0.5f);
 	}
 
-	template <typename T> inline T Ramp(const T& a, const T& b, float t)
+	template <typename T> T Ramp(const T& a, const T& b, float t)
 	{
 		return a + (b - a) * (t*t);
 	}
 
-	template <typename T> inline T InterpolateCatmullRom(const T& a, const T& b, const T& c, const T& d, float t)
+	template <typename T> T InterpolateCatmullRom(const T& a, const T& b, const T& c, const T& d, float t)
 	{
 		T p = b*3.0f - c*3.0f + d - a;
 		T q = a*2.0f - b*5.0f + c*4.0f - d;
@@ -234,7 +268,7 @@ namespace Xli
 		return (p*(t*t*t) + q*(t*t) + r*t)*0.5f + s;
 	}
 
-	template <typename T> inline T InterpolateCubic(const T& a, const T& b, const T& c, const T& d, float t)
+	template <typename T> T InterpolateCubic(const T& a, const T& b, const T& c, const T& d, float t)
 	{
 		T p = (d - c) - (a - b);
 		T q = (a - b) - p;
@@ -244,7 +278,7 @@ namespace Xli
 	}
 
 
-	inline int UpperPow2(int x)
+	static int UpperPow2(int x)
 	{
 		int y = x - 1;
 		y = y | (y >> 1);
@@ -255,7 +289,7 @@ namespace Xli
 		return y + 1;
 	}
 
-	inline bool IsPow2(int x)
+	static bool IsPow2(int x)
 	{
 		return (x == (x & -x));
 	}

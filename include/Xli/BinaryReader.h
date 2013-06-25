@@ -31,17 +31,17 @@ namespace Xli
 			return elm;
 		}
 
-		inline float ReadFloat() { return Read<float>(); }
-		inline double ReadDouble() { return Read<double>(); }
-		inline Int64 ReadInt64() { return Read<Int64>(); }
-		inline Int32 ReadInt32() { return Read<Int32>(); }
-		inline Int16 ReadInt16() { return Read<Int16>(); }
-		inline Int8 ReadInt8() { return Read<Int8>(); }
-		inline UInt64 ReadUInt64() { return Read<UInt64>(); }
-		inline UInt32 ReadUInt32() { return Read<UInt32>(); }
-		inline UInt16 ReadUInt16() { return Read<UInt16>(); }
-		inline UInt8 ReadUInt8() { return Read<UInt8>(); }
-		inline bool ReadBool() { return Read<UInt8>() != 0; }
+		float ReadFloat() { return Read<float>(); }
+		double ReadDouble() { return Read<double>(); }
+		Int64 ReadInt64() { return Read<Int64>(); }
+		Int32 ReadInt32() { return Read<Int32>(); }
+		Int16 ReadInt16() { return Read<Int16>(); }
+		Int8 ReadInt8() { return Read<Int8>(); }
+		UInt64 ReadUInt64() { return Read<UInt64>(); }
+		UInt32 ReadUInt32() { return Read<UInt32>(); }
+		UInt16 ReadUInt16() { return Read<UInt16>(); }
+		UInt8 ReadUInt8() { return Read<UInt8>(); }
+		bool ReadBool() { return Read<UInt8>() != 0; }
 
 		template <typename T> Vector2t<T> ReadVector2t() { Vector2t<T> vec; Read(vec); return vec; }
 		template <typename T> Vector3t<T> ReadVector3t() { Vector3t<T> vec; Read(vec); return vec; }

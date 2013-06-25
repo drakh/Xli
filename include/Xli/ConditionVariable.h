@@ -39,17 +39,17 @@ namespace Xli
 			DeleteCond(handle);
 		}
 
-		inline void Wait(MutexHandle mutex)
+		void Wait(MutexHandle mutex)
 		{
 			CondWait(handle, mutex);
 		}
 
-		inline void Signal()
+		void Signal()
 		{
 			CondSignal(handle);
 		}
 
-		inline void Broadcast()
+		void Broadcast()
 		{
 			CondBroadcast(handle);
 		}

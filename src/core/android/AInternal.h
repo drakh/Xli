@@ -19,7 +19,7 @@ namespace Xli
 {
 	extern ANativeActivity* AndroidActivity;
 
-	static inline const char* GetAppName()
+	static const char* GetAppName()
 	{
 		const char* name = getenv("XLI_APP_NAME");
 		return name ? name : "XLI";

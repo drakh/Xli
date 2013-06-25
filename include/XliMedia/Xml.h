@@ -81,12 +81,12 @@ namespace Xli
 	public:
 		static XmlElement* Parse(const String& code);
 
-		inline static XmlElement* Load(Stream* stream)
+		static XmlElement* Load(Stream* stream)
 		{
 			return Parse(TextReader(stream).ReadAll());
 		}
 
-		inline static XmlElement* Load(const String& filename)
+		static XmlElement* Load(const String& filename)
 		{
 			File f(filename, FileModeRead);
 			return Load(&f);

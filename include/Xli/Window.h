@@ -420,7 +420,7 @@ namespace Xli
 		/**
 			Creates a window
 		*/
-		static inline Window* Create(const Vector2i& size, const Xli::String& title, int flags = 0)
+		static Window* Create(const Vector2i& size, const Xli::String& title, int flags = 0)
 		{ 
 			return Create(size.X, size.Y, title, flags);
 		}

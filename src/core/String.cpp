@@ -51,7 +51,7 @@ namespace Xli
 	void String::init(double d)
 	{
 		char buf[128];
-		sprintf_s(buf, 128, "%f", d);
+		sprintf_s(buf, 128, "%lf", d);
 		init(buf, GetFloatLength(buf));
 	}
 

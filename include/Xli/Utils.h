@@ -7,7 +7,7 @@ namespace Xli
 		\addtogroup Utils
 		@{
 	*/
-	template <typename T> inline void Swap(T& a, T& b)
+	template <typename T> void Swap(T& a, T& b)
 	{
 		T temp = a;
 		a = b;
@@ -21,7 +21,7 @@ namespace Xli
 	*/
 	template <typename T> struct ComparatorLessThan
 	{
-		inline static bool Compare(const T& a, const T& b)
+		static bool Compare(const T& a, const T& b)
 		{
 			return a < b;
 		}
@@ -32,7 +32,7 @@ namespace Xli
 	*/
 	template <typename T> struct ComparatorGreaterThan
 	{
-		inline static bool Compare(const T& a, const T& b)
+		static bool Compare(const T& a, const T& b)
 		{
 			return a > b;
 		}
@@ -43,7 +43,7 @@ namespace Xli
 	*/
 	template <typename T> struct ComparatorPointerLessThan
 	{
-		inline static bool Compare(const T& a, const T& b)
+		static bool Compare(const T& a, const T& b)
 		{
 			return *a < *b;
 		}
@@ -54,7 +54,7 @@ namespace Xli
 	*/
 	template <typename T> struct ComparatorPointerGreaterThan
 	{
-		inline static bool Compare(const T& a, const T& b)
+		static bool Compare(const T& a, const T& b)
 		{
 			return *a > *b;
 		}

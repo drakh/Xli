@@ -9,12 +9,12 @@
 
 namespace Xli
 {
-	static inline UInt64 ConvertToUInt64(const DWORD& high, const DWORD& low)
+	static UInt64 ConvertToUInt64(const DWORD& high, const DWORD& low)
 	{
 		return ((UInt64)high << 32) | low;
 	}
 
-	static inline Timestamp ConvertToTimestamp(const FILETIME& ft)
+	static Timestamp ConvertToTimestamp(const FILETIME& ft)
 	{
 		return ConvertToUInt64(ft.dwHighDateTime, ft.dwLowDateTime);
 	}

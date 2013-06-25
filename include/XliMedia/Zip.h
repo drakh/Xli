@@ -15,23 +15,23 @@ namespace Xli
 		static FileSystem* Open(Stream* file, const char* password);
 
 	public:
-		static inline FileSystem* Open(Stream* file) 
+		static FileSystem* Open(Stream* file) 
 		{ 
 			return Open(file, 0); 
 		}
 		
-		static inline FileSystem* Open(Stream* file, const String& password) 
+		static FileSystem* Open(Stream* file, const String& password) 
 		{ 
 			return Open(file, password.Data()); 
 		}
 		
-		static inline FileSystem* Open(const String& filename) 
+		static FileSystem* Open(const String& filename) 
 		{ 
 			Managed<File> f = new File(filename, FileModeRead); 
 			return Open(f); 
 		}
 		
-		static inline FileSystem* Open(const String& filename, const String& password) 
+		static FileSystem* Open(const String& filename, const String& password) 
 		{ 
 			Managed<File> f = new File(filename, FileModeRead); 
 			return Open(f, password.Data()); 

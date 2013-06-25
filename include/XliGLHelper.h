@@ -17,7 +17,7 @@ namespace Xli
 
 	String GLGetErrorString(GLint err);
 
-	static inline void GLCheckErrorImpl(const char* func, int line)
+	static void GLCheckErrorImpl(const char* func, int line)
 	{
 		GLint err = glGetError();
 		

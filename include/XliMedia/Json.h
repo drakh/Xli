@@ -21,12 +21,12 @@ namespace Xli
 
 		static Value Parse(const String& code, bool preserveOrder = false);
 
-		inline static Value Load(Stream* stream, bool preserveOrder = false)
+		static Value Load(Stream* stream, bool preserveOrder = false)
 		{
 			return Parse(TextReader(stream).ReadAll(), preserveOrder);
 		}
 
-		inline static Value Load(const String& filename, bool preserveOrder = false)
+		static Value Load(const String& filename, bool preserveOrder = false)
 		{
 			File f(filename, FileModeRead);
 			return Load(&f, preserveOrder);
@@ -34,7 +34,7 @@ namespace Xli
 
 		static void Save(Stream* stream, const Value& value);
 
-		inline static void Save(const String& filename, const Value& value)
+		static void Save(const String& filename, const Value& value)
 		{
 			File f(filename, FileModeWrite);
 			Save(&f, value);

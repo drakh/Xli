@@ -307,22 +307,22 @@ namespace Xli
 	typedef Vector4t<UInt16> Vector4u16;
 	typedef Vector4t<UInt8> Vector4u8;
 
-	static inline float Dot(const Vector4& v1, const Vector4& v2)
+	static float Dot(const Vector4& v1, const Vector4& v2)
 	{
 		return v1.X * v2.X + v1.Y * v2.Y + v1.Z * v2.Z + v1.W * v2.W;
 	}
 
-	static inline float LengthSquared(const Vector4& v)
+	static float LengthSquared(const Vector4& v)
 	{
 		return Dot(v, v);
 	}
 
-	static inline float Length(const Vector4& v)
+	static float Length(const Vector4& v)
 	{
 		return Sqrt(Dot(v, v));
 	}
 
-	static inline Vector4 Normalize(const Vector4& v)
+	static Vector4 Normalize(const Vector4& v)
 	{
 		return v / Length(v);
 	}

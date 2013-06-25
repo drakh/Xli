@@ -32,10 +32,10 @@ namespace Xli
 	template <typename TKey, typename TValue> class HashMapDefaultTraits
 	{
 	public:
-		inline static UInt32 Hash(const TKey& key) { return Xli::Hash(key); }
-		inline static bool Equals(const TKey& a, const TKey& b) { return a == b; }
-		inline static HashBucket<TKey, TValue>* NewBuckets(int buckets, void* memPool) { return new HashBucket<TKey, TValue>[buckets]; }
-		inline static void DeleteBuckets(HashBucket<TKey, TValue>* ptr, void* memPool) { delete [] ptr; }
+		static UInt32 Hash(const TKey& key) { return Xli::Hash(key); }
+		static bool Equals(const TKey& a, const TKey& b) { return a == b; }
+		static HashBucket<TKey, TValue>* NewBuckets(int buckets, void* memPool) { return new HashBucket<TKey, TValue>[buckets]; }
+		static void DeleteBuckets(HashBucket<TKey, TValue>* ptr, void* memPool) { delete [] ptr; }
 	};
 
 	/**

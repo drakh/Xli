@@ -37,12 +37,12 @@ namespace Xli
 			DeleteMutex(handle);
 		}
 
-		inline void Lock()
+		void Lock()
 		{
 			LockMutex(handle);
 		}
 
-		inline void Unlock()
+		void Unlock()
 		{
 			UnlockMutex(handle);
 		}
