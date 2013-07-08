@@ -41,3 +41,8 @@ Release/
 
 # Resharper
 *.DotSettings.user
+
+/examples/GLWindow/GLWindow.exe
+/examples/GLWindow/GLWindow.ilk
+/examples/GLWindow/glwindow.pdb
+/examples/GLWindow/project-vs2012/
