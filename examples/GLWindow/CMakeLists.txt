@@ -22,14 +22,8 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
 
 elseif (MSVC)
 
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GR-")
-	set(CMAKE_CONFIGURATION_TYPES "Debug;Release" INTERNAL)
-
-	if (CMAKE_SIZEOF_VOID_P EQUAL 8)
-		link_directories(${XLI_DIR}/lib/vs2010/x64)
-	else()
-		link_directories(${XLI_DIR}/lib/vs2010/x86)
-	endif()
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GR-")	set(CMAKE_CONFIGURATION_TYPES "Debug;Release" INTERNAL)
+	link_directories("${XLI_DIR}/lib/vs2012/$(PlatformShortName)")
 	
 else()
 
@@ -42,10 +36,4 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${EXECUTABLE_OUTPUT_PATH})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${EXECUTABLE_OUTPUT_PATH})
 
 add_executable(GLWindow src/Main.cpp)
-
-if (MSVC)
-	target_link_libraries(GLWindow debug XliMDD optimized XliMD)
-	target_link_libraries(GLWindow debug XliMainMDD optimized XliMainMD)
-elseif (UNIX)
-	target_link_libraries(GLWindow Xli XliMain)
-endif()
+target_link_libraries(GLWindow Xli XliMain)
