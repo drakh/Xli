@@ -26,6 +26,8 @@ obj/
 Debug/
 Release/
 /lib/
+/builds/
+/src/core/3rdparty/SDL2/
 
 
 # WiX objects
