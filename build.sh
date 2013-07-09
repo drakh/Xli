@@ -7,8 +7,14 @@ else
 	CPU_COUNT=1
 fi
 
-mkdir -p builds/cmake
-cd builds/cmake || exit $?
+if [ $DEBUG ]; then
+	BUILD_DIR="builds/cmake-debug"
+else
+	BUILD_DIR="builds/cmake"
+fi
+
+mkdir -p $BUILD_DIR
+cd $BUILD_DIR || exit $?
 
 rm -f CMakeCache.txt
 cmake ../.. && make -j $CPU_COUNT

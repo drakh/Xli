@@ -22,7 +22,8 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
 
 elseif (MSVC)
 
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GR-")	set(CMAKE_CONFIGURATION_TYPES "Debug;Release" INTERNAL)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GR-")
+	set(CMAKE_CONFIGURATION_TYPES "Debug;Release" INTERNAL)
 	link_directories("${XLI_DIR}/lib/vs2012/$(PlatformShortName)")
 	
 else()

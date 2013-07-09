@@ -11,11 +11,7 @@ Thumbs.db
 
 # Ignore user-specific Visual Studio .NET-files
 *.suo
-*.ccproj.user
-*.wixproj.user
-*.csproj.user
 *.vcxproj.user
-*.uduser
 
 # Ignore compiled and generated code.
 *.sdf
@@ -25,26 +21,14 @@ bin/
 obj/
 Debug/
 Release/
-/lib/
-/builds/
+lib/
+builds/
 /src/core/3rdparty/SDL2/
-
-
-# WiX objects
-*.wixobj
-*.ast
-/packages-wix.xml
-.Cache/
-.Build/
-.CodeDruid/
-.CodeMage/
-.CodeNinja/
-/Products/Uno/UnoTest/buildlog.txt
-
-# Resharper
-*.DotSettings.user
-
 /examples/GLWindow/GLWindow.exe
 /examples/GLWindow/GLWindow.ilk
 /examples/GLWindow/glwindow.pdb
 /examples/GLWindow/project-vs2012/
+/examples/GLWindow/GLWindow
+
+# Resharper
+*.DotSettings.user
