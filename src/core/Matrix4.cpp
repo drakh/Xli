@@ -211,7 +211,7 @@ namespace Xli
 	bool Matrix4::Decompose(const Matrix4& m, Quaternion& outRotation, Vector3& outScale, Vector3& outTranslation)
 	{
 		outTranslation = m.GetTranslation();
-		outScale = m.GetScale();
+		outScale = m.GetScaling();
 
 		const float ZeroTolerance = 1e-4f;
 
@@ -354,7 +354,7 @@ namespace Xli
         return Vector3(data[3*4 + 0], data[3*4 + 1], data[3*4 + 2]);
 	}
 
-	Vector3 Matrix4::GetScale() const
+	Vector3 Matrix4::GetScaling() const
 	{
 		return Vector3(
 			Sqrt((data[0*4 + 0] * data[0*4 + 0]) + (data[0*4 + 1] * data[0*4 + 1]) + (data[0*4 + 2] * data[0*4 + 2])),

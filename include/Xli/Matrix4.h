@@ -54,7 +54,7 @@ namespace Xli
 		String ToString() const;
 		Matrix3 GetUpperLeft3x3() const;
 		Vector3 GetTranslation() const;
-		Vector3 GetScale() const;
+		Vector3 GetScaling() const;
 
 		void Transpose();
 		bool Invert();
