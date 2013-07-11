@@ -124,7 +124,7 @@ namespace Xli
 
 		virtual GLContext* CreateSharedContext()
 		{
-			XLI_THROW_NOT_SUPPORTED(XLI_FUNC);
+			XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
 		}
 
         virtual void MakeCurrent()

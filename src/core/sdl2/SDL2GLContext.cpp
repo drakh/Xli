@@ -48,7 +48,7 @@ namespace Xli
 
 		virtual GLContext* CreateSharedContext()
 		{
-			XLI_THROW_NOT_SUPPORTED(XLI_FUNC);
+			XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
 		}
 
 		virtual int GetMultiSamples()
@@ -60,7 +60,7 @@ namespace Xli
 
 		virtual void SetWindow(Window* window)
 		{
-			XLI_THROW_NOT_SUPPORTED(XLI_FUNC);
+			XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
 		}
 
 		virtual void MakeCurrent()

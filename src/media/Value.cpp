@@ -40,7 +40,7 @@ namespace Xli
 		return Value::TypeToString(GetType());
 	}
 
-	#define UNSUPPORTED XLI_THROW((String)XLI_FUNC + " is not supported for value of type " + Value::TypeToString(GetType()))
+	#define UNSUPPORTED XLI_THROW((String)XLI_FUNCTION + " is not supported for value of type " + Value::TypeToString(GetType()))
 
 	UInt32 IValue::GetHashCode() const { UNSUPPORTED; }
 

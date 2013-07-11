@@ -221,7 +221,7 @@ namespace Xli
 
 	Window* Window::Adopt(void* nativeWindowHandle)
 	{
-		XLI_THROW_NOT_SUPPORTED(XLI_FUNC);
+		XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
 	}
 
 	void Window::ProcessMessages()

@@ -45,7 +45,7 @@
 #endif
 
 #ifdef XLI_MSVC // Visual C++ specific
-# define XLI_FUNC __FUNCTION__ //__FUNCSIG__
+# define XLI_FUNCTION __FUNCTION__ //__FUNCSIG__
 # ifdef XLI_DEBUG
 #   define XLI_DEBUG_BREAK __debugbreak()
 # endif
@@ -54,14 +54,14 @@
 # define sprintf_s(buf, bufSize, format, ...) sprintf(buf, format, __VA_ARGS__)
 # define vsnprintf_s(buf, bufSize, maxCount, format, argList) vsprintf(buf, format, argList)
 # if 1 // GCC specific (TODO: Add GCC check)
-#	define XLI_FUNC __PRETTY_FUNCTION__
+#	define XLI_FUNCTION __PRETTY_FUNCTION__
 #	ifdef XLI_DEBUG
 #       if !defined(XLI_PLATFORM_IOS) && !defined(XLI_PLATFORM_ANDROID)
 #           define XLI_DEBUG_BREAK __builtin_trap()
 #       endif
 #	endif
 # else
-#	define XLI_FUNC __FUNC__
+#	define XLI_FUNCTION __FUNCTION__
 # endif
 #endif
 

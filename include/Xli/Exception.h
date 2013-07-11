@@ -43,10 +43,10 @@ namespace Xli
 
 #define XLI_DECLARE_EXCEPTION(ClassName, Message)	XLI_DECLARE_EXCEPTION_SUB(Xli::Exception, ClassName, Message)
 
-#define XLI_THROW_EX(ClassName, Message)			do { ClassName e(Message); e._func = XLI_FUNC; e._line = XLI_LINE; throw e; } while(0)
-#define XLI_THROW_E(ClassName)						do { ClassName e; e._func = XLI_FUNC; e._line = XLI_LINE; throw e; } while(0)
-#define XLI_BREAK_THROW_EX(ClassName, Message)		do { XLI_DEBUG_BREAK; ClassName e(Message); e._func = XLI_FUNC; e._line = XLI_LINE; throw e; } while(0)
-#define XLI_BREAK_THROW_E(ClassName)				do { XLI_DEBUG_BREAK; ClassName e; e._func = XLI_FUNC; e._line = XLI_LINE; throw e; } while(0)
+#define XLI_THROW_EX(ClassName, Message)			do { ClassName e(Message); e._func = XLI_FUNCTION; e._line = XLI_LINE; throw e; } while(0)
+#define XLI_THROW_E(ClassName)						do { ClassName e; e._func = XLI_FUNCTION; e._line = XLI_LINE; throw e; } while(0)
+#define XLI_BREAK_THROW_EX(ClassName, Message)		do { XLI_DEBUG_BREAK; ClassName e(Message); e._func = XLI_FUNCTION; e._line = XLI_LINE; throw e; } while(0)
+#define XLI_BREAK_THROW_E(ClassName)				do { XLI_DEBUG_BREAK; ClassName e; e._func = XLI_FUNCTION; e._line = XLI_LINE; throw e; } while(0)
 
 #define XLI_THROW(Message)							XLI_THROW_EX(::Xli::Exception, Message)
 #define XLI_BREAK_THROW(Message)					XLI_BREAK_THROW_EX(::Xli::Exception, Message)
@@ -110,7 +110,7 @@ namespace Xli
 #define XLI_THROW_FILE_NOT_FOUND(msg)		XLI_THROW_EX(::Xli::FileNotFoundException, msg)
 
 #define XLI_IGNORE_EXCEPTION(x)				do { try { x; } catch (const ::Xli::Exception&) { } } while(0)
-#define XLI_WARN_ON_EXCEPTION(x)			do { try { x; } catch (const ::Xli::Exception& e) { ::Xli::ErrorPrintLine((::Xli::String)"WARNING: " + XLI_FUNC + "(" + XLI_LINE + "): " + e.ToString()); } } while (0)
+#define XLI_WARN_ON_EXCEPTION(x)			do { try { x; } catch (const ::Xli::Exception& e) { ::Xli::ErrorPrintLine((::Xli::String)"WARNING: " + XLI_FUNCTION + "(" + XLI_LINE + "): " + e.ToString()); } } while (0)
 
 /** @} */
 

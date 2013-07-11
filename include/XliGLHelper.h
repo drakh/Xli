@@ -25,7 +25,7 @@ namespace Xli
 			ErrorPrintLine("GL ERROR: " + String::HexFromInt(err) + " - " + GLGetErrorString(err) + " (in " + func + ":" + line + ")");
 	}
 
-#define XLI_GL_CHECK_ERROR ::Xli::GLCheckErrorImpl(XLI_FUNC, XLI_LINE)
+#define XLI_GL_CHECK_ERROR ::Xli::GLCheckErrorImpl(XLI_FUNCTION, XLI_LINE)
 
 	GLuint GLCompileShader(GLenum shaderType, const String& source);
 	GLuint GLLinkProgram(GLuint vsHandle, GLuint fsHandle);

@@ -118,7 +118,7 @@ namespace Xli
 
 		virtual void GetFiles(const String& path, Array<FileInfo>& list)
 		{
-			XLI_THROW_NOT_SUPPORTED(XLI_FUNC);
+			XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
 		}
 	};
 

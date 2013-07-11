@@ -33,38 +33,38 @@ namespace Xli
 
 	void FileSystem::CreateDirectory(const String& name) 
 	{ 
-		XLI_THROW_NOT_SUPPORTED(XLI_FUNC);
+		XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
 	}
 
 	void FileSystem::DeleteDirectory(const String& name)
 	{ 
-		XLI_THROW_NOT_SUPPORTED(XLI_FUNC);
+		XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
 	}
 
 	void FileSystem::DeleteFile(const String& name)
 	{ 
-		XLI_THROW_NOT_SUPPORTED(XLI_FUNC);
+		XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
 	}
 
 	void FileSystem::MoveDirectory(const String& oldName, const String& newName)
 	{ 
-		XLI_THROW_NOT_SUPPORTED(XLI_FUNC);
+		XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
 	}
 		
 	void FileSystem::MoveFile(const String& oldName, const String& newName)
 	{ 
-		XLI_THROW_NOT_SUPPORTED(XLI_FUNC);
+		XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
 	}
 
 	bool FileSystem::GetFileInfo(const String& path, FileInfo& result) 
 	{ 
-		//XLI_THROW_NOT_SUPPORTED(XLI_FUNC);
+		//XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
 		return false;
 	}
 
 	void FileSystem::GetFiles(const String& path, Array<FileInfo>& list) 
 	{ 
-		//XLI_THROW_NOT_SUPPORTED(XLI_FUNC);
+		//XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
 	}
 
 	void FileSystem::GetFiles(Array<FileInfo>& list) 
