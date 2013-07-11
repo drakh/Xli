@@ -45,7 +45,7 @@ namespace Xli
 
 		GLint len[] =
 		{
-			strlen(code[0]),
+			(GLint)strlen(code[0]),
 			source.Length(),
 		};
 

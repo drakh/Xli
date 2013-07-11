@@ -52,7 +52,9 @@ namespace Xli
 		float& operator [] (int i);
 
 		String ToString() const;
-		Matrix3 UpperLeft3x3() const;
+		Matrix3 GetUpperLeft3x3() const;
+		Vector3 GetTranslation() const;
+		Vector3 GetScale() const;
 
 		void Transpose();
 		bool Invert();

@@ -41,27 +41,27 @@ namespace Xli
 
 	template <typename T> T SignPositiveZero(const T& x)
 	{
-		return (x < (T)0)? (T)-1: (T)1;
+		return (x < (T)0) ? (T)-1 : (T)1;
 	}
 
 	template <typename T> T Sign(const T& x)
 	{
-		return x==(T)-0||x==(T)0? x : SignPositiveZero(x);
+		return x == (T)-0 || x == (T)0 ? x : SignPositiveZero(x);
 	}
 
 	template <typename T> T Min(const T& a, const T& b)
 	{
-		return (a < b)? a: b;
+		return (a < b) ? a : b;
 	}
 
 	template <typename T> T Max(const T& a, const T& b)
 	{
-		return (a > b)? a: b;
+		return (a > b) ? a : b;
 	}
 
 	template <typename T> T Abs(const T& a)
 	{
-		return (a < (T)0)? -a: a;
+		return (a < (T)0) ? -a : a;
 	}
 
 	template <typename T> T Clamp(const T& x, const T& minimum, const T& maximum)

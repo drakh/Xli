@@ -210,19 +210,11 @@ namespace Xli
 
 	bool Matrix4::Decompose(const Matrix4& m, Quaternion& outRotation, Vector3& outScale, Vector3& outTranslation)
 	{
-        //Get the translation.
-        outTranslation.X = m[3*4 + 0];
-        outTranslation.Y = m[3*4 + 1];
-        outTranslation.Z = m[3*4 + 2];
-
-        //Scaling is the length of the rows.
-        outScale.X = Sqrt((m[0*4 + 0] * m[0*4 + 0]) + (m[0*4 + 1] * m[0*4 + 1]) + (m[0*4 + 2] * m[0*4 + 2]));
-        outScale.Y = Sqrt((m[1*4 + 0] * m[1*4 + 0]) + (m[1*4 + 1] * m[1*4 + 1]) + (m[1*4 + 2] * m[1*4 + 2]));
-        outScale.Z = Sqrt((m[2*4 + 0] * m[2*4 + 0]) + (m[2*4 + 1] * m[2*4 + 1]) + (m[2*4 + 2] * m[2*4 + 2]));
+		outTranslation = m.GetTranslation();
+		outScale = m.GetScale();
 
 		const float ZeroTolerance = 1e-4f;
 
-        //If any of the scaling factors are zero, than the rotation matrix can not exist.
         if (Abs(outScale.X) < ZeroTolerance ||
             Abs(outScale.Y) < ZeroTolerance ||
             Abs(outScale.Z) < ZeroTolerance)
@@ -231,7 +223,6 @@ namespace Xli
             return false;
         }
 
-        //The rotation is the left over matrix after dividing out the scaling.
         Matrix3 rotationMatrix = Matrix3(
             m[0*4 + 0] / outScale.X, m[0*4 + 1] / outScale.X, m[0*4 + 2] / outScale.X,
             m[1*4 + 0] / outScale.Y, m[1*4 + 1] / outScale.Y, m[1*4 + 2] / outScale.Y,
@@ -343,7 +334,7 @@ namespace Xli
 		return outResult.Invert();
 	}
 
-	Matrix3 Matrix4::UpperLeft3x3() const
+	Matrix3 Matrix4::GetUpperLeft3x3() const
 	{
 		Matrix3 m;
 		m[0] = data[0];
@@ -356,6 +347,19 @@ namespace Xli
 		m[7] = data[9];
 		m[8] = data[10];
 		return m;
+	}
+
+	Vector3 Matrix4::GetTranslation() const
+	{
+        return Vector3(data[3*4 + 0], data[3*4 + 1], data[3*4 + 2]);
+	}
+
+	Vector3 Matrix4::GetScale() const
+	{
+		return Vector3(
+			Sqrt((data[0*4 + 0] * data[0*4 + 0]) + (data[0*4 + 1] * data[0*4 + 1]) + (data[0*4 + 2] * data[0*4 + 2])),
+			Sqrt((data[1*4 + 0] * data[1*4 + 0]) + (data[1*4 + 1] * data[1*4 + 1]) + (data[1*4 + 2] * data[1*4 + 2])),
+			Sqrt((data[2*4 + 0] * data[2*4 + 0]) + (data[2*4 + 1] * data[2*4 + 1]) + (data[2*4 + 2] * data[2*4 + 2])));
 	}
 
 	const Matrix4& Matrix4::Identity()
