@@ -28,13 +28,17 @@ namespace Xli
 		if (i >= 16 || i < 0)
 			XLI_THROW_INDEX_OUT_OF_BOUNDS;
 #endif
+		
 		return data[i];
 	}
 
 	String Matrix4::ToString() const
 	{
 		String s = data[0];
-		for (int i = 1; i < 16; i++) s = s + ", " + data[i];
+		
+		for (int i = 1; i < 16; i++) 
+			s = s + ", " + data[i];
+
 		return s;
 	}
 
@@ -44,12 +48,14 @@ namespace Xli
 
 	Matrix4::Matrix4(const float* values)
 	{
-		for (int i = 0; i < 16; i++) data[i] = values[i];
+		for (int i = 0; i < 16; i++) 
+			data[i] = values[i];
 	}
 
 	Matrix4::Matrix4(const Matrix4& m)
 	{
-		for (int i = 0; i < 16; i++) data[i] = m.data[i];
+		for (int i = 0; i < 16; i++) 
+			data[i] = m.data[i];
 	}
 
 	Matrix4::Matrix4(float v0, float v1, float v2, float v3, float v4, float v5, float v6, float v7, float v8, float v9, float v10, float v11, float v12, float v13, float v14, float v15) 
@@ -62,109 +68,138 @@ namespace Xli
 
 	Matrix4& Matrix4::operator = (const Matrix4& m)
 	{
-		for (int i = 0; i < 16; i++) data[i] = m.data[i];
+		for (int i = 0; i < 16; i++) 
+			data[i] = m.data[i];
+
 		return *this;
 	}
 
 	Matrix4 Matrix4::operator + (const Matrix4& m) const
 	{
 		Matrix4 r;
-		for (int i = 0; i < 16; i++) r.data[i] = data[i] + m.data[i];
+
+		for (int i = 0; i < 16; i++)
+			r.data[i] = data[i] + m.data[i];
+
 		return r;
 	}
 
 	Matrix4 Matrix4::operator - (const Matrix4& m) const
 	{
 		Matrix4 r;
-		for (int i = 0; i < 16; i++) r.data[i] = data[i] - m.data[i];
+
+		for (int i = 0; i < 16; i++) 
+			r.data[i] = data[i] - m.data[i];
+
 		return r;
 	}
 
 	Matrix4 Matrix4::operator + (float s) const
 	{
 		Matrix4 r;
-		for (int i = 0; i < 16; i++) r.data[i] = data[i] + s;
+
+		for (int i = 0; i < 16; i++) 
+			r.data[i] = data[i] + s;
+
 		return r;
 	}
 
 	Matrix4 Matrix4::operator - (float s) const
 	{
 		Matrix4 r;
-		for (int i = 0; i < 16; i++) r.data[i] = data[i] - s;
+
+		for (int i = 0; i < 16; i++) 
+			r.data[i] = data[i] - s;
+
 		return r;
 	}
 
 	Matrix4 Matrix4::operator * (float s) const
 	{
 		Matrix4 r;
-		for (int i = 0; i < 16; i++) r.data[i] = data[i] * s;
+
+		for (int i = 0; i < 16; i++) 
+			r.data[i] = data[i] * s;
+
 		return r;
 	}
 
 	Matrix4& Matrix4::operator += (const Matrix4& m)
 	{
-		for (int i = 0; i < 16; i++) data[i] += m.data[i];
+		for (int i = 0; i < 16; i++) 
+			data[i] += m.data[i];
+
 		return *this;
 	}
 
 	Matrix4& Matrix4::operator -= (const Matrix4& m)
 	{
-		for (int i = 0; i < 16; i++) data[i] -= m.data[i];
+		for (int i = 0; i < 16; i++) 
+			data[i] -= m.data[i];
+
 		return *this;
 	}
 
 	Matrix4& Matrix4::operator += (float s)
 	{
-		for (int i = 0; i < 16; i++) data[i] += s;
+		for (int i = 0; i < 16; i++) 
+			data[i] += s;
+
 		return *this;
 	}
 
 	Matrix4& Matrix4::operator -= (float s)
 	{
-		for (int i = 0; i < 16; i++) data[i] -= s;
+		for (int i = 0; i < 16; i++) 
+			data[i] -= s;
+
 		return *this;
 	}
 	
 	Matrix4& Matrix4::operator *= (float s)
 	{
-		for (int i = 0; i < 16; i++) data[i] *= s;
+		for (int i = 0; i < 16; i++) 
+			data[i] *= s;
+
 		return *this;
 	}
 
 	Vector3 Matrix4::operator * (const Vector3& v) const
 	{
 		Vector3 r;
-		r.X = data[0]*v.X + data[4]*v.Y + data[8]*v.Z + data[12];
-		r.Y = data[1]*v.X + data[5]*v.Y + data[9]*v.Z + data[13];
-		r.Z = data[2]*v.X + data[6]*v.Y + data[10]*v.Z + data[14];
+		r.X = data[0] * v.X + data[4] * v.Y + data[8] * v.Z + data[12];
+		r.Y = data[1] * v.X + data[5] * v.Y + data[9] * v.Z + data[13];
+		r.Z = data[2] * v.X + data[6] * v.Y + data[10] * v.Z + data[14];
 		return r;
 	}
 
 	Vector4 Matrix4::operator * (const Vector4& v) const
 	{
 		Vector4 r;
-		r.X = data[0]*v.X + data[4]*v.Y + data[8]*v.Z + data[12]*v.W;
-		r.Y = data[1]*v.Y + data[5]*v.Y + data[9]*v.Z + data[13]*v.W;
-		r.Z = data[2]*v.Z + data[6]*v.Y + data[10]*v.Z + data[14]*v.W;
-		r.W = data[3]*v.W + data[7]*v.Y + data[11]*v.Z + data[15]*v.W;
+		r.X = data[0] * v.X + data[4] * v.Y + data[8] * v.Z + data[12] * v.W;
+		r.Y = data[1] * v.Y + data[5] * v.Y + data[9] * v.Z + data[13] * v.W;
+		r.Z = data[2] * v.Z + data[6] * v.Y + data[10] * v.Z + data[14] * v.W;
+		r.W = data[3] * v.W + data[7] * v.Y + data[11] * v.Z + data[15] * v.W;
 		return r;
 	}
 
 	Matrix4 Matrix4::operator * (const Matrix4& m) const
 	{
 		Matrix4 res;
+
 		for (int i = 0; i < 4; ++i)
 		{
-			int idx = i*4;
+			int idx = i * 4;
 			for (int j = 0; j < 4; ++j)
 			{
 				res.data[idx+j] =
-					m.data[idx+0] * data[0*4+j] +
-					m.data[idx+1] * data[1*4+j] +
-					m.data[idx+2] * data[2*4+j] +
-					m.data[idx+3] * data[3*4+j];
+					m.data[idx + 0] * data[0 * 4 + j] +
+					m.data[idx + 1] * data[1 * 4 + j] +
+					m.data[idx + 2] * data[2 * 4 + j] +
+					m.data[idx + 3] * data[3 * 4 + j];
 			}
 		}
+
 		return res;
 	}
 
@@ -173,32 +208,64 @@ namespace Xli
 		return *this = *this * m;
 	}
 
+	bool Matrix4::Decompose(const Matrix4& m, Quaternion& outRotation, Vector3& outScale, Vector3& outTranslation)
+	{
+        //Get the translation.
+        outTranslation.X = m[3*4 + 0];
+        outTranslation.Y = m[3*4 + 1];
+        outTranslation.Z = m[3*4 + 2];
 
-	Matrix4 Matrix4::Transposed() const
+        //Scaling is the length of the rows.
+        outScale.X = Sqrt((m[0*4 + 0] * m[0*4 + 0]) + (m[0*4 + 1] * m[0*4 + 1]) + (m[0*4 + 2] * m[0*4 + 2]));
+        outScale.Y = Sqrt((m[1*4 + 0] * m[1*4 + 0]) + (m[1*4 + 1] * m[1*4 + 1]) + (m[1*4 + 2] * m[1*4 + 2]));
+        outScale.Z = Sqrt((m[2*4 + 0] * m[2*4 + 0]) + (m[2*4 + 1] * m[2*4 + 1]) + (m[2*4 + 2] * m[2*4 + 2]));
+
+		const float ZeroTolerance = 1e-4f;
+
+        //If any of the scaling factors are zero, than the rotation matrix can not exist.
+        if (Abs(outScale.X) < ZeroTolerance ||
+            Abs(outScale.Y) < ZeroTolerance ||
+            Abs(outScale.Z) < ZeroTolerance)
+        {
+            outRotation = Quaternion::Identity();
+            return false;
+        }
+
+        //The rotation is the left over matrix after dividing out the scaling.
+        Matrix3 rotationMatrix = Matrix3(
+            m[0*4 + 0] / outScale.X, m[0*4 + 1] / outScale.X, m[0*4 + 2] / outScale.X,
+            m[1*4 + 0] / outScale.Y, m[1*4 + 1] / outScale.Y, m[1*4 + 2] / outScale.Y,
+            m[2*4 + 0] / outScale.Z, m[2*4 + 1] / outScale.Z, m[2*4 + 2] / outScale.Z);
+
+		outRotation = rotationMatrix.ToQuaternion();
+		return true;
+	}
+
+	Matrix4 Matrix4::Transpose(const Matrix4& m)
 	{
 		Matrix4 t;
-		t.data[0] = data[0];
-		t.data[1] = data[4];
-		t.data[2] = data[8];
-		t.data[3] = data[12];
-		t.data[4] = data[1];
-		t.data[5] = data[5];
-		t.data[6] = data[9];
-		t.data[7] = data[13];
-		t.data[8] = data[2];
-		t.data[9] = data[6];
-		t.data[10] = data[10];
-		t.data[11] = data[14];
-		t.data[12] = data[3];
-		t.data[13] = data[7];
-		t.data[14] = data[11];
-		t.data[15] = data[15];
+		t.data[0] = m.data[0];
+		t.data[1] = m.data[4];
+		t.data[2] = m.data[8];
+		t.data[3] = m.data[12];
+		t.data[4] = m.data[1];
+		t.data[5] = m.data[5];
+		t.data[6] = m.data[9];
+		t.data[7] = m.data[13];
+		t.data[8] = m.data[2];
+		t.data[9] = m.data[6];
+		t.data[10] = m.data[10];
+		t.data[11] = m.data[14];
+		t.data[12] = m.data[3];
+		t.data[13] = m.data[7];
+		t.data[14] = m.data[11];
+		t.data[15] = m.data[15];
 		return t;
 	}
 
 	void Matrix4::Transpose()
 	{
-		*this = Transposed();
+		*this = Transpose(*this);
 	}
 
 	bool Matrix4::Invert()
@@ -213,19 +280,16 @@ namespace Xli
 		float temp[4][4];
 
 		for (i = 0; i < 4; i++)
-		{
 			for (j = 0; j < 4; j++)
-			{
 				temp[i][j] = src[i*4+j];
-			}
-		}
 
 		for (i = 0; i < 4; i++)
 		{
 			if (temp[i][i] == (float)0.0)
 			{
 				for (j = i + 1; j < 4; j++)
-					if (temp[j][i] != 0.0) break;
+					if (temp[j][i] != 0.0) 
+						break;
 
 				if (j != 4)
 				{
@@ -267,25 +331,19 @@ namespace Xli
 			}
 		}
 
-		for (int i = 0; i < 16; i++) src[i] = inverse[i];
+		for (int i = 0; i < 16; i++) 
+			src[i] = inverse[i];
+
 		return true;
 	}
 
-	Vector3 Matrix4::GetScale() const
+	bool Matrix4::Invert(const Matrix4& m, Matrix4& outResult)
 	{
-		return Vector3(Sqrt((data[0] * data[0]) + (data[1] * data[1]) + (data[2] * data[2])),
-			            Sqrt((data[4] * data[4]) + (data[5] * data[5]) + (data[6] * data[6])),
-			            Sqrt((data[8] * data[8]) + (data[9] * data[9]) + (data[10] * data[10])));
+		outResult = m;
+		return outResult.Invert();
 	}
 
-	Matrix4 Matrix4::Inverse() const
-	{
-		Matrix4 m = *this;
-		m.Invert();
-		return m;
-	}
-
-	Matrix3 Matrix4::ToMatrix3() const
+	Matrix3 Matrix4::UpperLeft3x3() const
 	{
 		Matrix3 m;
 		m[0] = data[0];
@@ -417,6 +475,11 @@ namespace Xli
 		return Rotation(Vector3(x, y, z), angleRadians);
 	}
 
+	Matrix4 Matrix4::Rotation(const Quaternion& q)
+	{
+		return Rotation(q.Axis(), q.Angle());
+	}
+
 	Matrix4 Matrix4::Scaling(float x, float y, float z)
 	{
 		Matrix4 m = Identity();
@@ -434,86 +497,5 @@ namespace Xli
 	Matrix4 Matrix4::Scaling(float s)
 	{
 		return Scaling(s, s, s);
-	}
-
-	Matrix4 Matrix4::GLLookAt(const Vector3& eye, const Vector3& center, const Vector3& upVec)
-	{
-		Vector3 forward = Normalize(center - eye);
-
-		/* Side = forward x up */
-		Vector3 side = Normalize(Cross(forward, upVec));
-
-		/* Recompute up as: up = side x forward */
-		Vector3 up = Cross(side, forward);
-
-		Matrix4 m = Identity();
-			
-		m[ 0] = side[0];
-		m[ 4] = side[1];
-		m[ 8] = side[2];
-
-		m[ 1] = up[0];
-		m[ 5] = up[1];
-		m[ 9] = up[2];
-
-		m[ 2] = -forward[0];
-		m[ 6] = -forward[1];
-		m[10] = -forward[2];
-
-		return m * Translation(-eye);
-	}
-
-	Matrix4 Matrix4::GLPerspective(float fovRadians, float aspect, float zNear, float zFar)
-	{
-		fovRadians = (float)0.5 * fovRadians;
-
-		Matrix4 m = Identity();
-		float sine, cotangent, deltaZ;
-
-		deltaZ = zFar - zNear;
-		sine = Sin(fovRadians/(float)2);
-
-		if ((deltaZ == 0) || (sine == 0) || (aspect == 0))
-			return m;
-
-		cotangent = Cos(fovRadians/(float)2) / sine;
-
-		m.data[ 0] = cotangent / aspect;
-		m.data[ 5] = cotangent;
-		m.data[10] = -(zFar + zNear) / deltaZ;
-		m.data[11] = -1;
-		m.data[14] = -2 * zNear * zFar / deltaZ;
-		m.data[15] = 0;
-
-		return m;
-	}
-
-	Matrix4 Matrix4::GLOrtho(float left, float right, float bottom, float top, float nearval, float farval)
-	{
-		Matrix4 m;
-
-		#define M(row, col)  m.data[col*4+row]
-		M(0,0) = (float)2 / (right-left);
-		M(0,1) = (float)0;
-		M(0,2) = (float)0;
-		M(0,3) = -(right+left) / (right-left);
-
-		M(1,0) = (float)0;
-		M(1,1) = (float)2 / (top-bottom);
-		M(1,2) = (float)0;
-		M(1,3) = -(top+bottom) / (top-bottom);
-
-		M(2,0) = (float)0;
-		M(2,1) = (float)0;
-		M(2,2) = (float)-2 / (farval-nearval);
-		M(2,3) = -(farval+nearval) / (farval-nearval);
-
-		M(3,0) = (float)0;
-		M(3,1) = (float)0;
-		M(3,2) = (float)0;
-		M(3,3) = (float)1;
-		#undef M
-
-		return m;
 	}
 }

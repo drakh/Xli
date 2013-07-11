@@ -7,6 +7,7 @@
 
 #include <XliGL.h>
 #include <Xli/Console.h>
+#include <Xli/Matrix4.h>
 
 namespace Xli
 {
@@ -43,6 +44,10 @@ namespace Xli
 	};
 
 	GLuint GLCreateTexture(Texture* texData, bool generateMips = true, GLTextureInfo* outInfo = 0);
+
+	Matrix4 GLLookAtMatrix(const Vector3& eye, const Vector3& center, const Vector3& upVec);
+	Matrix4 GLPerspectiveMatrix(float fovRadians, float aspect, float zNear, float zFar);
+	Matrix4 GLOrthoMatrix(float left, float right, float bottom, float top, float nearval = -1.0f, float farval = 1.0f);
 
 	/** @}*/
 }

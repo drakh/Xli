@@ -2,8 +2,6 @@
 #define __XLI_QUATERNION_H__
 
 #include "Vector4.h"
-#include "Matrix3.h"
-#include "Matrix4.h"
 
 namespace Xli
 {
@@ -63,9 +61,6 @@ namespace Xli
 
 		float Angle() const;
 		Vector3 Axis() const;
-
-		Matrix3 ToMatrix3() const;
-		Matrix4 ToMatrix4() const;
 
 		Quaternion Inverse() const;
 		Quaternion Slerp(const Quaternion& q, float t) const;

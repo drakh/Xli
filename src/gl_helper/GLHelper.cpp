@@ -278,4 +278,85 @@ namespace Xli
 		XLI_GL_CHECK_ERROR;
 		return texHandle;
 	}
+
+	Matrix4 GLLookAtMatrix(const Vector3& eye, const Vector3& center, const Vector3& upVec)
+	{
+		Vector3 forward = Normalize(center - eye);
+
+		/* Side = forward x up */
+		Vector3 side = Normalize(Cross(forward, upVec));
+
+		/* Recompute up as: up = side x forward */
+		Vector3 up = Cross(side, forward);
+
+		Matrix4 m = Matrix4::Identity();
+			
+		m[ 0] = side[0];
+		m[ 4] = side[1];
+		m[ 8] = side[2];
+
+		m[ 1] = up[0];
+		m[ 5] = up[1];
+		m[ 9] = up[2];
+
+		m[ 2] = -forward[0];
+		m[ 6] = -forward[1];
+		m[10] = -forward[2];
+
+		return m * Matrix4::Translation(-eye);
+	}
+
+	Matrix4 GLPerspectiveMatrix(float fovRadians, float aspect, float zNear, float zFar)
+	{
+		fovRadians = (float)0.5 * fovRadians;
+
+		Matrix4 m = Matrix4::Identity();
+		float sine, cotangent, deltaZ;
+
+		deltaZ = zFar - zNear;
+		sine = Sin(fovRadians/(float)2);
+
+		if ((deltaZ == 0) || (sine == 0) || (aspect == 0))
+			return m;
+
+		cotangent = Cos(fovRadians/(float)2) / sine;
+
+		m[ 0] = cotangent / aspect;
+		m[ 5] = cotangent;
+		m[10] = -(zFar + zNear) / deltaZ;
+		m[11] = -1;
+		m[14] = -2 * zNear * zFar / deltaZ;
+		m[15] = 0;
+
+		return m;
+	}
+
+	Matrix4 GLOrthoMatrix(float left, float right, float bottom, float top, float nearval, float farval)
+	{
+		Matrix4 m;
+
+		#define M(row, col)  m[col*4+row]
+		M(0,0) = (float)2 / (right-left);
+		M(0,1) = (float)0;
+		M(0,2) = (float)0;
+		M(0,3) = -(right+left) / (right-left);
+
+		M(1,0) = (float)0;
+		M(1,1) = (float)2 / (top-bottom);
+		M(1,2) = (float)0;
+		M(1,3) = -(top+bottom) / (top-bottom);
+
+		M(2,0) = (float)0;
+		M(2,1) = (float)0;
+		M(2,2) = (float)-2 / (farval-nearval);
+		M(2,3) = -(farval+nearval) / (farval-nearval);
+
+		M(3,0) = (float)0;
+		M(3,1) = (float)0;
+		M(3,2) = (float)0;
+		M(3,3) = (float)1;
+		#undef M
+
+		return m;
+	}
 }

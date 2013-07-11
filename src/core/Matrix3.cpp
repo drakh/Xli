@@ -1,3 +1,4 @@
+#include <Xli/Utils.h>
 #include <Xli/Matrix3.h>
 
 namespace Xli
@@ -28,14 +29,70 @@ namespace Xli
 		if (i >= 9 || i < 0)
 			XLI_THROW_INDEX_OUT_OF_BOUNDS;
 #endif
+
 		return data[i];
 	}
 
 	String Matrix3::ToString() const
 	{
 		String s = data[0];
-		for (int i = 1; i < 9; i++) s = s + ", " + data[i];
+
+		for (int i = 1; i < 9; i++) 
+			s = s + ", " + data[i];
+
 		return s;
+	}
+
+	Quaternion Matrix3::ToQuaternion() const
+	{
+        float sqrt;
+        float halff;
+        float scale = data[0*3 + 0] + data[1*3 + 1] + data[2*3 + 2];
+
+		Quaternion result;
+
+        if (scale > 0.0f)
+        {
+            sqrt = Sqrt(scale + 1.0f);
+            result.W = sqrt * 0.5f;
+            sqrt = 0.5f / sqrt;
+
+            result.X = (data[1*3 + 2] - data[2*3 + 1]) * sqrt;
+            result.Y = (data[2*3 + 0] - data[0*3 + 2]) * sqrt;
+            result.Z = (data[0*3 + 1] - data[1*3 + 0]) * sqrt;
+        }
+        else if ((data[0*3 + 0] >= data[1*3 + 1]) && (data[0*3 + 0] >= data[2*3 + 2]))
+        {
+            sqrt = Sqrt(1.0f + data[0*3 + 0] - data[1*3 + 1] - data[2*3 + 2]);
+            halff = 0.5f / sqrt;
+
+            result.X = 0.5f * sqrt;
+            result.Y = (data[0*3 + 1] + data[1*3 + 0]) * halff;
+            result.Z = (data[0*3 + 2] + data[2*3 + 0]) * halff;
+            result.W = (data[1*3 + 2] - data[2*3 + 1]) * halff;
+        }
+        else if (data[1*3 + 1] > data[2*3 + 2])
+        {
+            sqrt = Sqrt(1.0f + data[1*3 + 1] - data[0*3 + 0] - data[2*3 + 2]);
+            halff = 0.5f / sqrt;
+
+            result.X = (data[1*3 + 0] + data[0*3 + 1]) * halff;
+            result.Y = 0.5f * sqrt;
+            result.Z = (data[2*3 + 1] + data[1*3 + 2]) * halff;
+            result.W = (data[2*3 + 0] - data[0*3 + 2]) * halff;
+        }
+        else
+        {
+            sqrt = Sqrt(1.0f + data[2*3 + 2] - data[0*3 + 0] - data[1*3 + 1]);
+            halff = 0.5f / sqrt;
+
+            result.X = (data[2*3 + 0] + data[0*3 + 2]) * halff;
+            result.Y = (data[2*3 + 1] + data[1*3 + 2]) * halff;
+            result.Z = 0.5f * sqrt;
+            result.W = (data[0*3 + 1] - data[1*3 + 0]) * halff;
+        }
+
+		return result;
 	}
 
 	Matrix3::Matrix3()
@@ -44,12 +101,14 @@ namespace Xli
 
 	Matrix3::Matrix3(const float* values)
 	{
-		for (int i = 0; i < 9; i++) data[i] = values[i];
+		for (int i = 0; i < 9; i++) 
+			data[i] = values[i];
 	}
 
 	Matrix3::Matrix3(const Matrix3& m)
 	{
-		for (int i = 0; i < 9; i++) data[i] = m.data[i];
+		for (int i = 0; i < 9; i++) 
+			data[i] = m.data[i];
 	}
 
 	Matrix3::Matrix3(float v0, float v1, float v2, float v3, float v4, float v5, float v6, float v7, float v8) 
@@ -61,72 +120,99 @@ namespace Xli
 
 	Matrix3& Matrix3::operator = (const Matrix3& m)
 	{
-		for (int i = 0; i < 9; i++) data[i] = m.data[i];
+		for (int i = 0; i < 9; i++) 
+			data[i] = m.data[i];
+
 		return *this;
 	}
 
 	Matrix3 Matrix3::operator + (const Matrix3& m) const
 	{
 		Matrix3 r;
-		for (int i = 0; i < 9; i++) r.data[i] = data[i] + m.data[i];
+
+		for (int i = 0; i < 9; i++) 
+			r.data[i] = data[i] + m.data[i];
+
 		return r;
 	}
 
 	Matrix3 Matrix3::operator - (const Matrix3& m) const
 	{
 		Matrix3 r;
-		for (int i = 0; i < 9; i++) r.data[i] = data[i] - m.data[i];
+
+		for (int i = 0; i < 9; i++) 
+			r.data[i] = data[i] - m.data[i];
+
 		return r;
 	}
 
 	Matrix3 Matrix3::operator + (float s) const
 	{
 		Matrix3 r;
-		for (int i = 0; i < 9; i++) r.data[i] = data[i] + s;
+
+		for (int i = 0; i < 9; i++) 
+			r.data[i] = data[i] + s;
+
 		return r;
 	}
 
 	Matrix3 Matrix3::operator - (float s) const
 	{
 		Matrix3 r;
-		for (int i = 0; i < 9; i++) r.data[i] = data[i] - s;
+
+		for (int i = 0; i < 9; i++) 
+			r.data[i] = data[i] - s;
+
 		return r;
 	}
 
 	Matrix3 Matrix3::operator * (float s) const
 	{
 		Matrix3 r;
-		for (int i = 0; i < 9; i++) r.data[i] = data[i] * s;
+
+		for (int i = 0; i < 9; i++) 
+			r.data[i] = data[i] * s;
+
 		return r;
 	}
 
 	Matrix3& Matrix3::operator += (const Matrix3& m)
 	{
-		for (int i = 0; i < 9; i++) data[i] += m.data[i];
+		for (int i = 0; i < 9; i++) 
+			data[i] += m.data[i];
+
 		return *this;
 	}
 
 	Matrix3& Matrix3::operator -= (const Matrix3& m)
 	{
-		for (int i = 0; i < 9; i++) data[i] -= m.data[i];
+		for (int i = 0; i < 9; i++) 
+			data[i] -= m.data[i];
+
 		return *this;
 	}
 
 	Matrix3& Matrix3::operator += (float s)
 	{
-		for (int i = 0; i < 9; i++) data[i] += s;
+		for (int i = 0; i < 9; i++)
+			data[i] += s;
+
 		return *this;
 	}
 
 	Matrix3& Matrix3::operator -= (float s)
 	{
-		for (int i = 0; i < 9; i++) data[i] -= s;
+		for (int i = 0; i < 9; i++) 
+			data[i] -= s;
+
 		return *this;
 	}
 
 	Matrix3& Matrix3::operator *= (float s)
 	{
-		for (int i = 0; i < 9; i++) data[i] *= s;
+		for (int i = 0; i < 9; i++) 
+			data[i] *= s;
+
 		return *this;
 	}
 
@@ -153,6 +239,7 @@ namespace Xli
 					m.data[idx+2] * data[2*3+j];
 			}
 		}
+
 		return res;
 	}
 
@@ -258,6 +345,11 @@ namespace Xli
 	Matrix3 Matrix3::Rotation(float x, float y, float z, float angleRadians)
 	{
 		return Rotation(Vector3(x, y, z), angleRadians);
+	}
+
+	Matrix3 Matrix3::Rotation(const Quaternion& q)
+	{
+		return Rotation(q.Axis(), q.Angle());
 	}
 
 	Matrix3 Matrix3::Scaling(float x, float y, float z)

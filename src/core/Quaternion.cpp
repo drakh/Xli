@@ -129,7 +129,7 @@ namespace Xli
 
 	Quaternion Quaternion::operator / (float s) const
 	{
-		return *this * (float(1.0) / s);
+		return *this * (1.0f / s);
 	}
 
 	Quaternion& Quaternion::operator += (const Quaternion& q)
@@ -216,16 +216,6 @@ namespace Xli
 		if (s2 < 0.00001f) return Vector3(1.0f, 0.0f, 0.0f);
 		float s = Sqrt(s2);
 		return Vector3(X / s, Y / s, Z / s);
-	}
-
-	Matrix3 Quaternion::ToMatrix3() const
-	{
-		return Matrix3::Rotation(Axis(), Angle());
-	}
-
-	Matrix4 Quaternion::ToMatrix4() const
-	{
-		return Matrix4::Rotation(Axis(), Angle());
 	}
 
 	Quaternion Quaternion::Inverse() const
