@@ -44,6 +44,7 @@ namespace Xli
 			if (i >= 4 || i < 0)
 				XLI_THROW_INDEX_OUT_OF_BOUNDS;
 #endif
+
 			return Comps[i];
 		}
 

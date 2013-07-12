@@ -48,6 +48,7 @@ namespace Xli
 			if (i >= 2 || i < 0)
 				XLI_THROW_INDEX_OUT_OF_BOUNDS;
 #endif
+
 			return Comps[i];
 		}
 

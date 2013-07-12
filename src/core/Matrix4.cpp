@@ -213,11 +213,9 @@ namespace Xli
 		outTranslation = m.GetTranslation();
 		outScale = m.GetScaling();
 
-		const float ZeroTolerance = 1e-4f;
-
-        if (Abs(outScale.X) < ZeroTolerance ||
-            Abs(outScale.Y) < ZeroTolerance ||
-            Abs(outScale.Z) < ZeroTolerance)
+        if (Abs(outScale.X) < FloatZeroTolerance ||
+            Abs(outScale.Y) < FloatZeroTolerance ||
+            Abs(outScale.Z) < FloatZeroTolerance)
         {
             outRotation = Quaternion::Identity();
             return false;
@@ -437,10 +435,16 @@ namespace Xli
 
 	Matrix4 Matrix4::Rotation(const Vector3& axis, float angleRadians)
 	{
-		Vector3 normalized_axis = Normalize(axis);
-		float x = normalized_axis.X;
-		float y = normalized_axis.Y;
-		float z = normalized_axis.Z;
+		float len = Length(axis);
+
+		if (Abs(len) < FloatZeroTolerance) 
+			return Identity();
+
+		float lenInv = 1.0f / len;
+
+		float x = axis.X * lenInv;
+		float y = axis.Y * lenInv;
+		float z = axis.Z * lenInv;
 
 		Matrix4 m;
 		float* a = m.data;

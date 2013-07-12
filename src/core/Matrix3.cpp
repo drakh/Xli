@@ -312,10 +312,16 @@ namespace Xli
 
 	Matrix3 Matrix3::Rotation(const Vector3& axis, float angleRadians)
 	{
-		Vector3 normalized_axis = Normalize(axis);
-		float x = normalized_axis.X;
-		float y = normalized_axis.Y;
-		float z = normalized_axis.Z;
+		float len = Length(axis);
+
+		if (Abs(len) < FloatZeroTolerance) 
+			return Identity();
+
+		float lenInv = 1.0f / len;
+
+		float x = axis.X * lenInv;
+		float y = axis.Y * lenInv;
+		float z = axis.Z * lenInv;
 
 		Matrix3 m;
 		float* a = m.data;

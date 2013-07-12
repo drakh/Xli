@@ -19,6 +19,8 @@ namespace Xli
 	static const float PIf = 3.1415926535897932384626433832795f;
 	static const float Ef = 2.71828182845904523536f;
 
+	static const float FloatZeroTolerance = 1e-4f;
+
 	static const int IntMax = INT_MAX;
 	static const int IntMin = INT_MIN;
 	static const float FloatMax = FLT_MAX;

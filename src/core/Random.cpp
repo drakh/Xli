@@ -14,31 +14,26 @@ namespace Xli
 		w = seed + 1;
 	}
 
-	UInt32 Random::NextInt()
+	UInt32 Random::NextUInt32()
 	{
 		z = 36969 * (z & UInt16Max) + (z >> 16);
 		w = 18000 * (w & UInt16Max) + (w >> 16);
 		return (z << 16) + w;
 	}
 
-	UInt32 Random::NextInt(UInt32 high)
+	int Random::NextInt(int high)
 	{
-		return (UInt32)(NextFloat() * (float)high);
+		return (int)(NextFloat() * (float)high);
 	}
 
-	UInt32 Random::NextInt(UInt32 low, UInt32 high)
+	int Random::NextInt(int low, int high)
 	{
-		return (UInt32)(NextFloat() * (float)(high - low) + (float)low);
+		return (int)(NextFloat() * (float)(high - low) + (float)low);
 	}
 
 	float Random::NextFloat()
 	{
-		return ((float)NextInt() / (float)UInt32Max);
-	}
-
-	float Random::NextFloatSign()
-	{
-		return NextFloat() * 2.0f - 1.0f;
+		return ((float)NextUInt32() / (float)UInt32Max);
 	}
 
 	float Random::NextFloat(float min, float max)
@@ -46,19 +41,19 @@ namespace Xli
 		return NextFloat() * (max - min) + min;
 	}
 	
-	Vector2 Random::NextVector2Sign()
+	Vector2 Random::NextVector2(float min, float max)
 	{
-		return Vector2(NextFloatSign(), NextFloatSign());
+		return Vector2(NextFloat(min, max), NextFloat(min, max));
 	}
 
-	Vector3 Random::NextVector3Sign()
+	Vector3 Random::NextVector3(float min, float max)
 	{
-		return Vector3(NextFloatSign(), NextFloatSign(), NextFloatSign());
+		return Vector3(NextFloat(min, max), NextFloat(min, max), NextFloat(min, max));
 	}
 
-	Vector4 Random::NextVector4Sign()
+	Vector4 Random::NextVector4(float min, float max)
 	{
-		return Vector4(NextFloatSign(), NextFloatSign(), NextFloatSign(), NextFloatSign());
+		return Vector4(NextFloat(min, max), NextFloat(min, max), NextFloat(min, max), NextFloat(min, max));
 	}
 
 

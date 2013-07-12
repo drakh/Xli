@@ -11,10 +11,9 @@ namespace Xli
 	{
 #ifdef XLI_RANGE_CHECK
 		if (i >= 4 || i < 0)
-		{
 			XLI_THROW_INDEX_OUT_OF_BOUNDS;
-		}
 #endif
+
 		return Coord[i];
 	}
 	
@@ -63,7 +62,14 @@ namespace Xli
 	Quaternion::Quaternion(const Vector3& axis, float angleRadians)
 	{
 		float d = Xli::Length(axis);
-		if (d == float(0.0)) return;
+		
+		if (Abs(d) < FloatZeroTolerance)
+		{
+			X = Y = Z = 0;
+			W = 1;
+			return;
+		}
+
 		float s = Sin(angleRadians * float(0.5)) / d;
 
 		X = axis.X * s;
@@ -201,7 +207,10 @@ namespace Xli
 	float Quaternion::AngleBetween(const Quaternion& q) const
 	{
 		float s = Sqrt(LengthSquared() * q.LengthSquared());
-		if (s == float(0.0)) return float(0.0);
+		
+		if (Abs(s) < FloatZeroTolerance) 
+			return 0.0f;
+		
 		return ArcCos(Dot(q)/s);
 	}
 
@@ -213,7 +222,10 @@ namespace Xli
 	Vector3 Quaternion::Axis() const
 	{
 		float s2 = 1.0f - Pow(W, 2.0f);
-		if (s2 < 0.00001f) return Vector3(1.0f, 0.0f, 0.0f);
+		
+		if (s2 < FloatZeroTolerance) 
+			return Vector3(1.0f, 0.0f, 0.0f);
+		
 		float s = Sqrt(s2);
 		return Vector3(X / s, Y / s, Z / s);
 	}
