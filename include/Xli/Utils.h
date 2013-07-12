@@ -1,6 +1,8 @@
 #ifndef __XLI_UTILS_H__
 #define __XLI_UTILS_H__
 
+#include <Xli/BaseTypes.h>
+
 namespace Xli
 {
 	/**
