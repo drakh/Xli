@@ -12,7 +12,8 @@ else
 	CPU_COUNT=1	
 fi
 
-cd projects/android || exit $?
+set -e
+cd projects/android
 
 ndk-build -j $CPU_COUNT
 

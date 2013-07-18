@@ -1,6 +1,6 @@
 #!/bin/sh
-
-cd projects/iOS || exit $?
+set -e
+cd projects/iOS
 
 xcodebuild -alltargets -configuration Debug -sdk iphoneos
 xcodebuild -alltargets -configuration Release -sdk iphoneos

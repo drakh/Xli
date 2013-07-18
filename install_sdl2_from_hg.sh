@@ -15,12 +15,13 @@ else
     cd -
 fi
 
-mkdir -p src/core/3rdparty/SDL2/build
-cd src/core/3rdparty/SDL2/build || exit $?
+set -e
 
-../configure --srcdir=.. --prefix=/usr --disable-video-opengles && \
-make -j $CPU_COUNT && \
+mkdir -p src/core/3rdparty/SDL2/build
+cd src/core/3rdparty/SDL2/build
+
+../configure --srcdir=.. --prefix=/usr --disable-video-opengles
+make -j $CPU_COUNT
 sudo make install
 
 cd -
-

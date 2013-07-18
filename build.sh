@@ -13,10 +13,13 @@ else
 	BUILD_DIR="builds/cmake"
 fi
 
+set -e
+
 mkdir -p $BUILD_DIR
-cd $BUILD_DIR || exit $?
+cd $BUILD_DIR
 
 rm -f CMakeCache.txt
-cmake ../.. && make -j $CPU_COUNT
+cmake ../..
+make -j $CPU_COUNT
 
 cd -

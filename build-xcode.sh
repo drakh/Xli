@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 mkdir -p builds/xcode
 cd builds/xcode
