@@ -35,21 +35,26 @@ namespace Xli
 		if (!fp) XLI_THROW_CANT_OPEN_FILE(filename);
 
 #endif
+
+		this->flags = FileFlagsCanClose | FileFlagsCanSeek;
         
-		this->canRead = mode & FileModeRead;
-		this->canWrite = (mode & FileModeWrite) || (mode & FileModeAppend);
+		if (mode & FileModeRead)
+			this->flags |= FileFlagsCanRead;
+
+		if ((mode & FileModeWrite) || (mode & FileModeAppend))
+			this->flags |= FileFlagsCanWrite;
 	}
 	
-    File::File(FILE* fp, bool canRead, bool canWrite)
+    File::File(FILE* fp, int flags)
 	{
 		this->fp = fp;
-		this->canRead = canRead;
-		this->canWrite = canWrite;
+		this->flags = flags;
 	}
 
 	File::~File()
 	{
-		if (fp) fclose(fp);
+		if (fp && (flags & FileFlagsCanClose)) 
+			fclose(fp);
 	}
 
 	void File::Flush()
@@ -60,8 +65,12 @@ namespace Xli
 
 	void File::Close()
 	{
-		if (!fp) XLI_THROW_STREAM_CLOSED;
-		fclose(fp);
+		if (!fp) 
+			XLI_THROW_STREAM_CLOSED;
+
+		if (flags & FileFlagsCanClose)
+			fclose(fp);
+
 		fp = 0;
 	}
 
@@ -78,17 +87,17 @@ namespace Xli
 
 	bool File::CanRead() const
 	{
-		return canRead && fp != 0;
+		return fp != 0 && (flags & FileFlagsCanRead);
 	}
 
 	bool File::CanWrite() const
 	{
-		return canWrite && fp != 0;
+		return fp != 0 && (flags & FileFlagsCanWrite);
 	}
 
 	bool File::CanSeek() const
 	{
-		return fp != 0;
+		return fp != 0 && (flags & FileFlagsCanSeek);
 	}
 
 	int File::GetPosition() const
@@ -110,20 +119,21 @@ namespace Xli
 	int File::Read(void* data, int elmSize, int elmCount)
 	{
 		if (!fp) XLI_THROW_STREAM_CLOSED;
-		if (!canRead) XLI_THROW_STREAM_CANT_READ;
+		if (!(flags & FileFlagsCanRead)) XLI_THROW_STREAM_CANT_READ;
 		return (int)fread(data, elmSize, elmCount, fp);
 	}
 
 	int File::Write(const void* data, int elmSize, int elmCount)
 	{
 		if (!fp) XLI_THROW_STREAM_CLOSED;
-		if (!canWrite) XLI_THROW_STREAM_CANT_WRITE;
+		if (!(flags & FileFlagsCanWrite)) XLI_THROW_STREAM_CANT_WRITE;
 		return (int)fwrite(data, elmSize, elmCount, fp);
 	}
 
 	void File::Seek(SeekOrigin origin, int offset)
 	{
 		if (!fp) XLI_THROW_STREAM_CLOSED;
+		if (!(flags & FileFlagsCanSeek)) XLI_THROW_STREAM_CANT_SEEK;
 
 		switch (origin)
 		{

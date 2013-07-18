@@ -9,14 +9,25 @@ namespace Xli
 	/**
 		\ingroup IO
 	*/
+	enum FileFlags
+	{
+		FileFlagsCanRead = 1 << 0,
+		FileFlagsCanWrite = 1 << 1,
+		FileFlagsCanSeek = 1 << 2,
+		FileFlagsCanClose = 1 << 3,
+	};
+
+	/**
+		\ingroup IO
+	*/
 	class File: public Stream
 	{
 		FILE* fp;
-		bool canRead, canWrite;
+		int flags;
 		
 	public:
 		File(const String& filename, FileMode mode);
-		File(FILE* fp, bool canRead, bool canWrite);
+		File(FILE* fp, int flags);
 		virtual ~File();
 
 		virtual void Flush();
