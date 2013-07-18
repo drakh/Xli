@@ -1,4 +1,7 @@
 #!/bin/sh
+set -e
+cd "$( dirname "${BASH_SOURCE[0]}" )"
+
 if [ `uname` = "Darwin" ]; then
 	CPU_COUNT=`sysctl hw.ncpu | cut -d " " -f 2`
 else
@@ -7,7 +10,8 @@ fi
 
 if [ -d src/core/3rdparty/SDL2 ]; then
     cd src/core/3rdparty/SDL2
-    hg pull && hg update
+    hg pull
+    hg update
     cd -
 else
     cd src/core/3rdparty
@@ -15,13 +19,9 @@ else
     cd -
 fi
 
-set -e
-
 mkdir -p src/core/3rdparty/SDL2/build
 cd src/core/3rdparty/SDL2/build
 
 ../configure --srcdir=.. --prefix=/usr --disable-video-opengles
 make -j $CPU_COUNT
 sudo make install
-
-cd -

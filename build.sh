@@ -1,4 +1,7 @@
 #!/bin/sh
+set -e
+cd "$( dirname "${BASH_SOURCE[0]}" )"
+
 if [ -f /proc/cpuinfo ]; then
 	CPU_COUNT=`grep processor /proc/cpuinfo | wc -l`
 elif [ `uname` = "Darwin" ]; then
@@ -13,13 +16,10 @@ else
 	BUILD_DIR="builds/cmake"
 fi
 
-set -e
-
 mkdir -p $BUILD_DIR
 cd $BUILD_DIR
 
 rm -f CMakeCache.txt
+
 cmake ../..
 make -j $CPU_COUNT
-
-cd -

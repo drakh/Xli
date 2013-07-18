@@ -1,11 +1,15 @@
 #!/bin/sh
+set -e
+cd "$( dirname "${BASH_SOURCE[0]}" )"
+
 sudo port install cmake
 sudo port install mercurial
 sudo port install portaudio +universal
 
 if [ -d src/core/3rdparty/SDL2 ]; then
     cd src/core/3rdparty/SDL2
-    hg pull && hg update
+    hg pull
+    hg update
     cd -
 else
     cd src/core/3rdparty

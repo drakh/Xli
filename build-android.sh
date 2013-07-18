@@ -1,4 +1,7 @@
 #!/bin/sh
+set -e
+cd "$( dirname "${BASH_SOURCE[0]}" )"
+
 if [ -f /proc/cpuinfo ]; then
 	CPU_COUNT=`grep processor /proc/cpuinfo | wc -l`
 
@@ -12,7 +15,6 @@ else
 	CPU_COUNT=1	
 fi
 
-set -e
 cd projects/android
 
 ndk-build -j $CPU_COUNT
@@ -33,5 +35,3 @@ if [ -d obj/local/x86 ]; then
 	mkdir -p ../../lib/android/x86 && \
 	cp -v obj/local/x86/libXli*.a ../../lib/android/x86
 fi
-
-cd -
