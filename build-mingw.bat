@@ -1,6 +1,10 @@
 @echo off
-mkdir build\mingw
-cd build\mingw
+set START_DIR=%CD%
+
+mkdir "%~dp0\build\mingw"
+cd "%~dp0\build\mingw"
+
 cmake ..\.. -G"Unix Makefiles"
 make
-cd ..\..
+
+cd %START_DIR%
