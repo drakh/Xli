@@ -11,7 +11,7 @@
 /examples/GLWindow/project-vs2012/
 /src/core/3rdparty/SDL2/
 bin/
-builds/
+build/
 Debug/
 docs/
 ipch/

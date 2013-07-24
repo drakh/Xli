@@ -20,25 +20,21 @@ namespace Xli
             this->stream = stream;
             buf = stream->CreateDataAccessor();
             
-            NSData* data = [NSData dataWithBytesNoCopy:(void*)buf->GetData() length:buf->GetSizeInBytes() freeWhenDone:NO];
+            NSData* data = [[NSData alloc] initWithBytesNoCopy:(void*)buf->GetData() length:buf->GetSizeInBytes() freeWhenDone:NO];
             
             if (data == nil)
-            {
                 XLI_THROW("Failed to open image: Unable to create NSData object");
-            }
             
-            image = [UIImage imageWithData:data];
-            //[data release];
+            image = [[UIImage alloc] initWithData:data];
+            [data release];
 
             if (image == nil)
-            {
                 XLI_THROW("Failed to open image: Unable to create NSImage object");
-            }
         }
         
         virtual ~UIImageReader()
         {
-            //[image release];
+            [image release];
         }
         
 		virtual int GetWidth()
@@ -68,10 +64,12 @@ namespace Xli
 
 		virtual Format GetFormat()
 		{
-            int cc = GetComponentCount();
-            if (cc == 1) return FormatL_8_UInt_Normalize;
-            if (cc == 3) return FormatRGB_8_8_8_UInt_Normalize;
-            return FormatRGBA_8_8_8_8_UInt_Normalize;
+            switch (GetComponentCount())
+            {
+                case 1: return FormatL_8_UInt_Normalize;
+                case 3: return FormatRGB_8_8_8_UInt_Normalize;
+                default: return FormatRGBA_8_8_8_8_UInt_Normalize;
+            }
 		}
         
 		virtual void Read(void* targetBuffer, ProgressCallback* callback)

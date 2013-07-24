@@ -1,25 +1,4 @@
 #!/bin/sh
-set -e
-cd "$( dirname "${BASH_SOURCE[0]}" )"
-
-if [ -f /proc/cpuinfo ]; then
-	CPU_COUNT=`grep processor /proc/cpuinfo | wc -l`
-elif [ `uname` = "Darwin" ]; then
-	CPU_COUNT=`sysctl hw.ncpu | cut -d " " -f 2`
-else
-	CPU_COUNT=1
-fi
-
-if [ $DEBUG ]; then
-	BUILD_DIR="builds/cmake-debug"
-else
-	BUILD_DIR="builds/cmake"
-fi
-
-mkdir -p $BUILD_DIR
-cd $BUILD_DIR
-
-rm -f CMakeCache.txt
-
-cmake ../..
-make -j $CPU_COUNT
+START_DIR="$( dirname "${BASH_SOURCE[0]}" )"
+PATH=$PATH:$START_DIR/utils
+cmakemake $@ $START_DIR || exit 1

@@ -20,6 +20,7 @@ namespace Xli
 		{
 			((Stream*)png_get_io_ptr(png_ptr))->Read(data, 1, (int)length);
 		}
+
 		static void error(png_structp png_ptr, png_const_charp)
 		{
 			XLI_THROW("Error while reading from PNG file");
@@ -72,47 +73,58 @@ namespace Xli
 				format = FormatL_8_UInt_Normalize;
 				comps = 1;
 				break;
+
 			case PNG_COLOR_TYPE_GRAY_ALPHA:
 				format = FormatLA_8_8_UInt_Normalize;
 				comps = 2;
 				break;
+
 			case PNG_COLOR_TYPE_RGB: 
 				format = FormatRGB_8_8_8_UInt_Normalize; 
 				comps = 3;
 				break;
+
 			case PNG_COLOR_TYPE_RGB_ALPHA: 
 				format = FormatRGBA_8_8_8_8_UInt_Normalize; 
 				comps = 4;
 				break;
+
 			default:
 				XLI_THROW("Unsupported PNG pixel format");
 				break;
 			}
 		}
+		
 		virtual ~PngReader()
 		{
 			png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
 		}
+
 		virtual int GetWidth()
 		{
 			return width;
 		}
+		
 		virtual int GetHeight()
 		{
 			return height;
 		}
+		
 		virtual int GetDepth()
 		{
 			return 0;
 		}
+		
 		virtual Format GetFormat()
 		{
 			return format;
 		}
+		
 		virtual int GetBufferSize()
 		{
 			return comps * width * height;
 		}
+		
 		virtual void Read(void* targetBuffer, ProgressCallback* callback)
 		{
 			png_bytep row = (png_bytep)targetBuffer;
@@ -140,6 +152,7 @@ namespace Xli
 		Managed<ImageReader> r = CreateReader(input);
 		return r->ReadBitmap();
 	}
+	
 	Bitmap* Png::Load(const String& filename)
 	{
 		Managed<File> f = new File(filename, FileModeRead);
