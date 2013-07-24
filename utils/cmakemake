@@ -1,6 +1,6 @@
 #!/bin/sh
 
-while getopts ":hcdrit:-:" opt; do 
+while getopts ":hcdritp:-:" opt; do 
 	if [ "$opt" == "-" ]; then 
 		opt=$OPTARG 
 	fi; 
@@ -24,14 +24,20 @@ while getopts ":hcdrit:-:" opt; do
 	t)
 		TARGET=$OPTARG
 		;;
-	target=xcode)
-		TARGET="xcode"
+	target=*)
+		TARGET=${opt:7}
+		;;
+	p)
+		INSTALL_PREFIX=$OPTARG
+		;;
+	prefix=*)
+		INSTALL_PREFIX=${opt:7}
 		;;
 	*) 
 		echo "ERROR: Invalid option -$OPTARG.\n\nType 'cmakemake --help' for usage." >&2
 		exit 1 
-		;; 
-	esac 
+		;;
+	esac
 done 
 
 if [ $HELP ]; then
@@ -48,6 +54,7 @@ This command wraps 'cmake && make', but with some additional features:
   - Paralell builds out of the box
   - Xcode batch builds (OS X only)
 
+Additional arguments to cmake can be passed using environment variable CMAKE_ARGS.
 E0
 	exit 0
 fi
@@ -100,8 +107,14 @@ fi
 
 if [ "$DEBUG" == "1" ]; then
 	BUILD_DIR="build/cmake-debug"
+	CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_BUILD_TYPE:STRING=Debug"
 else
 	BUILD_DIR="build/cmake-release"
+	CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_BUILD_TYPE:STRING=Release"
+fi
+
+if [ $INSTALL_PREFIX ]; then
+	CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=$INSTALL_PREFIX"
 fi
 
 mkdir -p $BUILD_DIR
@@ -109,7 +122,7 @@ cd $BUILD_DIR
 
 rm -f CMakeCache.txt
 
-cmake ../..
+cmake ../.. $CMAKE_ARGS
 make -j $CPU_COUNT
 
 if [ "$INSTALL" == "1" ]; then

@@ -4,14 +4,6 @@ cmake_minimum_required(VERSION 2.6)
 
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
-if (NOT CMAKE_BUILD_TYPE)
-	if ($ENV{DEBUG} MATCHES "1")
-		set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Build type - Release or Debug" FORCE)
-	else()
-		set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Build type - Release or Debug" FORCE)
-	endif()
-endif()
-
 if (UNIX AND NOT WIN32)
 	set(BUILD_SHARED_LIBS TRUE CACHE BOOL "Build shared or static libs")
 endif()
@@ -41,6 +33,8 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
 	endif()
 
 elseif (MSVC)
+
+	error("FIXME: Visual Studio builds are broken.")
 
 	set(CMAKE_BUILD_SHARED_LIBS FALSE INTERNAL)
 	set(CMAKE_CONFIGURATION_TYPES "Debug;Release" INTERNAL)
@@ -79,6 +73,10 @@ elseif (MSVC)
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${LIBRARY_OUTPUT_PATH})
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${LIBRARY_OUTPUT_PATH})
 
+else()
+
+	error("Unsupported system")
+
 endif()
 
 if (CMAKE_GENERATOR MATCHES "Unix Makefiles")
@@ -99,6 +97,9 @@ endif()
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 link_directories(${LIBRARY_OUTPUT_PATH})
+
+
+# Add component source directories
 
 add_subdirectory(src/core)
 add_subdirectory(src/media)
