@@ -79,24 +79,22 @@ else()
 
 endif()
 
+include_directories(${PROJECT_SOURCE_DIR}/include)
+link_directories(${LIBRARY_OUTPUT_PATH})
+
 if (CMAKE_GENERATOR MATCHES "Unix Makefiles")
 
 	install(
-		DIRECTORY ${LIBRARY_OUTPUT_PATH}
-		DESTINATION lib 
-		PATTERN ".svn" EXCLUDE
-		)
+		DIRECTORY ${LIBRARY_OUTPUT_PATH}/
+		DESTINATION lib
+		PATTERN "Debug" EXCLUDE
+		PATTERN "Release" EXCLUDE)
 
 	install(
-		DIRECTORY ${PROJECT_SOURCE_DIR}/include
-		DESTINATION include 
-		PATTERN ".svn" EXCLUDE
-		)
+		DIRECTORY ${PROJECT_SOURCE_DIR}/include/
+		DESTINATION include)
 
 endif()
-
-include_directories(${PROJECT_SOURCE_DIR}/include)
-link_directories(${LIBRARY_OUTPUT_PATH})
 
 
 # Add component source directories

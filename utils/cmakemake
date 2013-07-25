@@ -1,9 +1,17 @@
 #!/bin/sh
 
-while getopts ":hcdritp:-:" opt; do 
+while getopts ":hcdrit:p:-:" opt; do
+
 	if [ "$opt" == "-" ]; then 
-		opt=$OPTARG 
-	fi; 
+		# FIXME: Hardcoded indices
+		if [ "${OPTARG:6:1}" == "=" ]; then  
+			opt=${OPTARG:0:6}
+			OPTARG=${OPTARG:7}
+		else
+			opt=$OPTARG
+			OPTARG=""
+		fi
+	fi
 
 	case $opt in 
 	h|help) 
@@ -21,30 +29,30 @@ while getopts ":hcdritp:-:" opt; do
 	i|install)
 		INSTALL=1
 		;;
-	t)
+	t|target)
 		TARGET=$OPTARG
 		;;
-	target=*)
-		TARGET=${opt:7}
-		;;
-	p)
+	p|prefix)
 		INSTALL_PREFIX=$OPTARG
 		;;
-	prefix=*)
-		INSTALL_PREFIX=${opt:7}
-		;;
 	*) 
-		echo "ERROR: Invalid option -$OPTARG.\n\nType 'cmakemake --help' for usage." >&2
+		echo "ERROR: Invalid option --$opt.\n\nType 'cmakemake --help' for usage." >&2
 		exit 1 
 		;;
 	esac
-done 
+done
 
-if [ $HELP ]; then
+shift $((OPTIND-1))
+
+PROJECT="$@"
+
+#echo "'$DEBUG' '$INSTALL' '$TARGET' '$INSTALL_PREFIX' '$PROJECT'" && exit 0
+
+if [[ "$HELP" == "1" || -z "$PROJECT" ]]; then
 	cat <<E0
-Usage: cmakemake [--debug|--release] [--install] <project-path>
-       cmakemake --target=xcode <project-path>
-       cmakemake --clean <project-path>
+Usage: cmakemake [--debug|--release] [--install] [--prefix=<path>] <project-dir>
+       cmakemake --target=xcode <project-dir>
+       cmakemake --clean <project-dir>
 
 Build script for CMake projects.
 
@@ -59,32 +67,27 @@ E0
 	exit 0
 fi
 
-shift $((OPTIND-1))
-
-PROJECT="$@"
-
-if [ -z "$PROJECT" ]; then
-	echo "ERROR: No project path was specified"
-	exit 1
-fi
-
-#echo "'$DEBUG' '$INSTALL' '$TARGET' '$PROJECT'" && exit 0
-
 set -e
 cd "$PROJECT"
 
 if [ "$CLEAN" == "1" ]; then
+	# TODO: Should probably also do a make clean first
 	rm -rf build/cmake-*
 	exit 0
 fi
 
-if [ $TARGET ]; then
+if [ !`which cmake` ]; then
+	# This is sometimes needed when run from GUI applications
+	PATH=$PATH:/opt/local/bin
+fi
+
+if [ -n "$TARGET" ]; then
 	case $TARGET in
 	xcode)
 		mkdir -p build/cmake-xcode
 		cd build/cmake-xcode
 
-		cmake ../.. -GXcode
+		cmake ../.. -GXcode $CMAKE_ARGS	
 		xcodebuild -alltargets -configuration Debug
 		xcodebuild -alltargets -configuration Release
 
@@ -113,7 +116,7 @@ else
 	CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_BUILD_TYPE:STRING=Release"
 fi
 
-if [ $INSTALL_PREFIX ]; then
+if [ -n "$INSTALL_PREFIX" ]; then
 	CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=$INSTALL_PREFIX"
 fi
 
