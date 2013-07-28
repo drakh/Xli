@@ -1,5 +1,7 @@
 #!/bin/sh
-START_DIR="$( dirname "${BASH_SOURCE[0]}" )"
-PATH=$PATH:$START_DIR/../utils
+START_DIR=`dirname "$0"`
+PATH="$PATH:$START_DIR/../utils"
 
-cmakemake $@ $START_DIR || exit 1
+set -e
+cmakemake $@ $START_DIR
+

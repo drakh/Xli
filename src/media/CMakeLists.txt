@@ -23,8 +23,9 @@ set(JsonSrc
 	3rdparty/json_parser/JSON_parser.c
 	)
 
-set(TinyXmlInc 3rdparty/tinyxml)
-
+set(TinyXmlInc 
+	3rdparty/tinyxml
+	)
 set(TinyXmlSrc
 	3rdparty/tinyxml/tinystr.cpp
 	3rdparty/tinyxml/tinyxml.cpp
@@ -32,15 +33,17 @@ set(TinyXmlSrc
 	3rdparty/tinyxml/tinyxmlparser.cpp
 	)
 
-set(UnzipInc 3rdparty/unzip)
-	
+set(UnzipInc 
+	3rdparty/unzip
+	)	
 set(UnzipSrc
 	3rdparty/unzip/ioapi.c
 	3rdparty/unzip/unzip.c
 	)
 
-set(ZlibInc 3rdparty/zlib)
-
+set(ZlibInc 
+	3rdparty/zlib
+	)
 set(ZlibSrc
 	3rdparty/zlib/adler32.c
 	3rdparty/zlib/compress.c
@@ -55,8 +58,9 @@ set(ZlibSrc
 	3rdparty/zlib/zutil.c
 	)
 
-set(JpegInc 3rdparty/jpeg)
-
+set(JpegInc 
+	3rdparty/jpeg
+	)
 set(JpegSrc
 	3rdparty/jpeg/jcapimin.c
 	3rdparty/jpeg/jcapistd.c
@@ -106,8 +110,9 @@ set(JpegSrc
 	3rdparty/jpeg/jutils.c
 	)
 
-set(PngInc 3rdparty/png)
-
+set(PngInc 
+	3rdparty/png
+	)
 set(PngSrc
 	3rdparty/png/png.c
 	3rdparty/png/pngerror.c
@@ -126,8 +131,9 @@ set(PngSrc
 	3rdparty/png/pngwutil.c
 	)
 
-set(FreetypeInc 3rdparty/freetype/include)
-
+set(FreetypeInc 
+	3rdparty/freetype/include
+	)
 set(FreetypeSrc
 	3rdparty/freetype/src/autofit/autofit.c
 	3rdparty/freetype/src/bdf/bdf.c
@@ -208,3 +214,4 @@ if (APPLE)
 elseif (UNIX)
 	target_link_libraries(XliMedia freetype jpeg png z)
 endif()
+

@@ -1,6 +1,6 @@
 #!/bin/sh
 set -e
-cd "$( dirname "${BASH_SOURCE[0]}" )"
+cd "`dirname "$0"`"
 
 cd projects/iOS
 

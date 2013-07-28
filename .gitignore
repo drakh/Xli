@@ -8,14 +8,16 @@
 *.user
 .DS_Store
 /examples/GLWindow/GLWindow
-/examples/GLWindow/project-vs2012/
 /src/core/3rdparty/SDL2/
 bin/
 build/
+cmake_install.cmake
+CMakeFiles/
 Debug/
 docs/
 ipch/
 lib/
+Makefile
 obj/
 Release/
 Thumbs.db

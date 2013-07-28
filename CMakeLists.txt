@@ -8,17 +8,6 @@ if (UNIX AND NOT WIN32)
 	set(BUILD_SHARED_LIBS TRUE CACHE BOOL "Build shared or static libs")
 endif()
 
-if (APPLE)
-
-	set(CMAKE_C_FLAGS "-Wno-switch-enum -Wno-logical-op-parentheses -Wno-parentheses-equality -Wno-extra-tokens -Wno-deprecated-declarations")
-	set(CMAKE_CXX_FLAGS "-Wno-switch-enum -Wno-logical-op-parentheses -Wno-parentheses-equality")
-
-elseif (CMAKE_COMPILER_IS_GNUCC)
-
-    set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
-
-endif()
-
 if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
 	set(CMAKE_OSX_ARCHITECTURES "x86_64;i386")
@@ -75,7 +64,18 @@ elseif (MSVC)
 
 else()
 
-	error("Unsupported system")
+	error("Unsupported system, patches welcome :)")
+
+endif()
+
+if (APPLE)
+
+	set(CMAKE_C_FLAGS "-Wno-switch-enum -Wno-logical-op-parentheses -Wno-parentheses-equality -Wno-extra-tokens -Wno-deprecated-declarations")
+	set(CMAKE_CXX_FLAGS "-Wno-switch-enum -Wno-logical-op-parentheses -Wno-parentheses-equality")
+
+elseif (CMAKE_COMPILER_IS_GNUCC)
+
+    set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
 
 endif()
 

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 while getopts ":hcdrit:p:-:" opt; do
 
@@ -131,3 +131,4 @@ make -j $CPU_COUNT
 if [ "$INSTALL" == "1" ]; then
 	make install
 fi
+

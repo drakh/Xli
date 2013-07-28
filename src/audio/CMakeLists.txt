@@ -11,9 +11,7 @@ if (WIN32)
 	
 	include_directories(3rdparty/portaudio/include)
 
-endif()
-
-if (APPLE)
+elseif (APPLE)
 
 	include_directories(/opt/local/include)
 	link_directories(/opt/local/lib)
