@@ -65,6 +65,8 @@ elseif (UNIX)
         sdl2/SDL2MessageBox.cpp
         )
 
+	add_definitions(-DXLI_HAS_GLEW)
+
 	if (APPLE)
 
 	    set(Sources ${Sources} 
@@ -72,7 +74,7 @@ elseif (UNIX)
 	    	cocoa/CocoaFileSystem.mm
 	    	)
 
-	    add_definitions(-DGLEW_STATIC -DXLI_HAS_GLEW)
+	    add_definitions(-DGLEW_STATIC)
 	    include_directories(${PROJECT_SOURCE_DIR}/src/core/3rdparty/glew/include)
 
 	    include_directories(${PROJECT_SOURCE_DIR}/src/core/3rdparty/SDL2/include)
@@ -87,7 +89,7 @@ elseif (UNIX)
 			xdg/XdgFileSystem.cpp
 			)
 
-		add_definitions("`sdl2-config --cflags`" -DXLI_HAS_GLEW)
+		add_definitions(`sdl2-config --cflags`)
 
 	endif()
 

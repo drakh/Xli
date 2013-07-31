@@ -64,7 +64,7 @@ elseif (MSVC)
 
 else()
 
-	error("Unsupported system, patches welcome :)")
+	error("Unsupported system")
 
 endif()
 
@@ -88,11 +88,12 @@ if (CMAKE_GENERATOR MATCHES "Unix Makefiles")
 		DIRECTORY ${LIBRARY_OUTPUT_PATH}/
 		DESTINATION lib
 		PATTERN "Debug" EXCLUDE
-		PATTERN "Release" EXCLUDE)
-
+		PATTERN "Release" EXCLUDE
+		)
 	install(
 		DIRECTORY ${PROJECT_SOURCE_DIR}/include/
-		DESTINATION include)
+		DESTINATION include
+		)
 
 endif()
 
