@@ -63,9 +63,9 @@ namespace Xli
 			XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
 		}
 
-		virtual void MakeCurrent()
+		virtual void MakeCurrent(bool current)
 		{
-			SDL_GL_MakeCurrent(window->GetSDL_Window(), context);
+			SDL_GL_MakeCurrent(window->GetSDL_Window(), current ? context : 0);
 		}
 
 		virtual void SwapBuffers()

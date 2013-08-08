@@ -183,9 +183,9 @@ namespace Xli
 				glEnable(GL_MULTISAMPLE_ARB);
 		}
 
-		virtual void MakeCurrent()
+		virtual void MakeCurrent(bool current)
 		{
-			if (!wglMakeCurrent(hDC, ctx))
+			if (!wglMakeCurrent(hDC, current ? ctx : 0))
 				XLI_THROW("Unable to make OpenGL context current: " + Win32Helpers::GetLastErrorString());
 		}
 

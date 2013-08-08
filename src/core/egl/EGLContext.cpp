@@ -127,9 +127,9 @@ namespace Xli
 			XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
 		}
 
-        virtual void MakeCurrent()
+        virtual void MakeCurrent(bool current)
         {
-			if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE)
+			if (eglMakeCurrent(display, surface, surface, current ? context : 0) == EGL_FALSE)
 			{
 				XLI_THROW("Unable to make EGL context current");
 			}
