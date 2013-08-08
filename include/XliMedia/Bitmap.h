@@ -10,7 +10,7 @@
 namespace Xli
 {
 	/**
-		\ingroup Textures
+		\ingroup XliMediaTextures
 	*/
 	enum RotateAngle
 	{
@@ -20,7 +20,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Textures
+		\ingroup XliMediaTextures
 	*/
 	class Bitmap: public Image
 	{

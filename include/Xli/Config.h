@@ -39,9 +39,9 @@
 #endif
 
 #ifdef XLI_DEBUG
-# define XLI_RANGE_CHECK
-# define XLI_NULL_POINTER_CHECK
-# define XLI_DEBUG_PRINT(x) Xli::PrintLine(x)
+# define XLI_RANGE_CHECK 1
+# define XLI_NULL_POINTER_CHECK 1
+# define XLI_DEBUG_PRINT(x) ::Xli::PrintLine(x)
 #endif
 
 #ifdef XLI_MSVC // Visual C++ specific

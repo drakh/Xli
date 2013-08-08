@@ -7,7 +7,7 @@
 namespace Xli
 {
 	/**
-		\ingroup Textures
+		\ingroup XliMediaTextures
 	*/
 	class Ktx
 	{

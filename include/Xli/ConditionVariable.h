@@ -6,7 +6,7 @@
 namespace Xli
 {
 	/**
-		\addtogroup Threading
+		\addtogroup XliCoreThreading
 		@{
 	*/
 
@@ -22,7 +22,7 @@ namespace Xli
 	/** @} */
 
 	/**
-		\ingroup Threading
+		\ingroup XliCoreThreading
 	*/
 	class ConditionVariable
 	{

@@ -6,7 +6,7 @@
 namespace Xli
 {
 	/**
-		\ingroup Containers
+		\ingroup XliCoreContainers
 	*/
 	template <typename T> class Queue: public Object
 	{

@@ -13,7 +13,7 @@ namespace Xli
 	class XmlText;
 
 	/**
-		\ingroup Markup
+		\ingroup XliMediaMarkup
 	*/
 	class XmlNode: public Object
 	{
@@ -31,7 +31,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Markup
+		\ingroup XliMediaMarkup
 	*/
 	class XmlText: public XmlNode
 	{
@@ -43,7 +43,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Markup
+		\ingroup XliMediaMarkup
 	*/
 	class XmlElement: public XmlNode
 	{
@@ -74,7 +74,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Markup
+		\ingroup XliMediaMarkup
 	*/
 	class Xml
 	{

@@ -6,7 +6,7 @@
 namespace Xli
 {
 	/**
-		\addtogroup Core
+		\addtogroup Xli
 		@{
 	*/
 
@@ -22,9 +22,9 @@ namespace Xli
 
 	typedef UInt64 Timestamp;
 
-	template <typename T, int TBufSize = 4> class Array;
-
 	/** @} */
+
+	template <typename T, int TBufSize = 4> class Array;
 
 	// Verify size of base types at compile time
 	typedef char __TestInt8[sizeof(Int8) == 1 ? 1 : -1];

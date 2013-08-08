@@ -7,7 +7,7 @@
 namespace Xli
 {
 	/**
-		\ingroup Textures
+		\ingroup XliMediaTextures
 	*/
 	enum Format
 	{
@@ -114,7 +114,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Textures
+		\ingroup XliMediaTextures
 	*/
 	class FormatInfo
 	{

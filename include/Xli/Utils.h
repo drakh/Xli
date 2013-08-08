@@ -6,7 +6,7 @@
 namespace Xli
 {
 	/**
-		\addtogroup Utils
+		\addtogroup XliCoreUtils
 		@{
 	*/
 	template <typename T> void Swap(T& a, T& b)
@@ -19,7 +19,7 @@ namespace Xli
 	/** @} */
 
 	/**
-		\ingroup Utils
+		\ingroup XliCoreUtils
 	*/
 	template <typename T> struct ComparatorLessThan
 	{
@@ -30,7 +30,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Utils
+		\ingroup XliCoreUtils
 	*/
 	template <typename T> struct ComparatorGreaterThan
 	{
@@ -41,7 +41,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Utils
+		\ingroup XliCoreUtils
 	*/
 	template <typename T> struct ComparatorPointerLessThan
 	{
@@ -52,7 +52,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Utils
+		\ingroup XliCoreUtils
 	*/
 	template <typename T> struct ComparatorPointerGreaterThan
 	{
@@ -63,7 +63,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Utils
+		\ingroup XliCoreUtils
 	*/
 	class Endian
 	{

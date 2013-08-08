@@ -7,7 +7,7 @@
 namespace Xli
 {
 	/**
-		\ingroup Markup
+		\ingroup XliMediaMarkup
 	*/
 	class FormattedTextWriter: public StreamWriter
 	{

@@ -9,7 +9,7 @@ namespace Xli
 	class Bitmap;
 
 	/**
-		\ingroup Textures
+		\ingroup XliMediaTextures
 	*/
 	class Image: public DataAccessor
 	{

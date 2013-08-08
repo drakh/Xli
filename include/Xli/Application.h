@@ -6,7 +6,7 @@
 namespace Xli
 {
 	/**
-		\ingroup WM
+		\ingroup XliCorePlatform
 	*/
 	class Application: public WindowEventHandler
 	{

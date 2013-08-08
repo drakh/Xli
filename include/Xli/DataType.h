@@ -7,7 +7,7 @@
 namespace Xli
 {
 	/**
-		\ingroup Core
+		\ingroup Xli
 	*/
 	enum DataType
 	{
@@ -27,7 +27,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Core
+		\ingroup Xli
 	*/
 	class DataTypeInfo
 	{

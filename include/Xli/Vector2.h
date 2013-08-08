@@ -10,7 +10,7 @@
 namespace Xli
 {
 	/**
-		\ingroup Math
+		\ingroup XliCoreMath
 	*/
 	template <typename T> class Vector2t
 	{
@@ -226,7 +226,7 @@ namespace Xli
 	};
 
 	/**
-		\addtogroup Math
+		\addtogroup XliCoreMath
 		@{
 	*/
 

@@ -7,7 +7,7 @@
 namespace Xli
 {
 	/**
-		\ingroup Containers
+		\ingroup XliCoreContainers
 	*/
 	enum HashBucketState
 	{
@@ -17,7 +17,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Containers
+		\ingroup XliCoreContainers
 	*/
 	template <typename TKey, typename TValue> struct HashBucket
 	{
@@ -27,7 +27,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Containers
+		\ingroup XliCoreContainers
 	*/
 	template <typename TKey, typename TValue> class HashMapDefaultTraits
 	{
@@ -39,7 +39,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Containers
+		\ingroup XliCoreContainers
 
 		Dictionary template.
 		Maps keys to values using a very efficient hash map. For user-defined TKey types, methods

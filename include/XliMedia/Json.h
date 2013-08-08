@@ -8,7 +8,7 @@
 namespace Xli
 {
 	/**
-		\ingroup Markup
+		\ingroup XliMediaMarkup
 	*/
 	class Json
 	{

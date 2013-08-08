@@ -6,7 +6,7 @@
 namespace Xli
 {
 	/**
-		\ingroup WM
+		\ingroup XliGL
 	 */
 	class GLContext: public Object
 	{
@@ -19,7 +19,7 @@ namespace Xli
 
 		virtual void SetWindow(Window* window) { XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION); }
 
-        virtual void MakeCurrent() = 0;
+        virtual void MakeCurrent(bool current) = 0;
 		virtual void SwapBuffers() = 0;
 
 		/**

@@ -11,12 +11,12 @@
 namespace Xli
 {
 	/**
-		\ingroup WM
+		\ingroup XliCorePlatform
 	*/
 	class Window;
 
 	/**
-		\ingroup WM
+		\ingroup XliCorePlatform
 	*/
 	enum Key
 	{
@@ -113,7 +113,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup WM
+		\ingroup XliCorePlatform
 
 		Enumerates the standard mouse buttons.
 	*/
@@ -148,7 +148,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup WM
+		\ingroup XliCorePlatform
 	*/
 	class WindowEventHandler: public Object
 	{
@@ -181,7 +181,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup WM
+		\ingroup XliCorePlatform
 	*/
 	enum SystemCursor
 	{
@@ -201,7 +201,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup WM
+		\ingroup XliCorePlatform
 	*/
 	enum WindowFlags
 	{
@@ -219,7 +219,7 @@ namespace Xli
 	};
 	
 	/**
-		\ingroup WM
+		\ingroup XliCorePlatform
 	*/
 	enum WindowImplementation
 	{
@@ -230,7 +230,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup WM
+		\ingroup XliCorePlatform
 
 		Represents a window in the native window system.
 	*/

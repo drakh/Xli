@@ -8,7 +8,7 @@
 namespace Xli
 {
 	/**
-		\ingroup Textures
+		\ingroup XliMediaTextures
 	*/
 	enum TextureType
 	{
@@ -18,7 +18,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Textures
+		\ingroup XliMediaTextures
 	*/
 	class Texture: public Object
 	{

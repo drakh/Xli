@@ -8,7 +8,7 @@
 namespace Xli
 {
 	/**
-		\ingroup Math
+		\ingroup XliCoreMath
 	*/
 	class Matrix3
 	{

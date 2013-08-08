@@ -2,7 +2,8 @@
 #define __XLI_HTTP_H__
 
 /**
-	\defgroup Http Http(s) Interface
+	\defgroup XliHttp 
+	\brief Http(s) interface and helpers
 */
 
 #include <XliHttp/HttpClient.h>

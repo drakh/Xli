@@ -9,7 +9,7 @@
 namespace Xli
 {
 	/**
-		\addtogroup Math
+		\addtogroup XliCoreMath
 		@{
 	*/
 

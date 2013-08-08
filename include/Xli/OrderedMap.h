@@ -6,7 +6,7 @@
 namespace Xli
 {
 	/**
-		\ingroup Containers
+		\ingroup XliCoreContainers
 
 		HashMap clone which preserves the order of the keys. This implementation has slower look up than HashMap and is not meant to be used in performance critical code.
 	*/

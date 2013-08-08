@@ -14,7 +14,7 @@
 namespace Xli
 {
 	/**
-		\ingroup IO
+		\ingroup XliCoreIO
 	*/
 	enum SeekOrigin
 	{
@@ -24,7 +24,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup IO
+		\ingroup XliCoreIO
 	*/
 	class Stream: public Object
 	{
@@ -66,7 +66,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup IO
+		\ingroup XliCoreIO
 	*/
 	class StreamWriter: public Object
 	{
@@ -82,7 +82,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup IO
+		\ingroup XliCoreIO
 	*/
 	class StreamReader: public Object
 	{

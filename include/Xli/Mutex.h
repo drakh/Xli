@@ -6,7 +6,7 @@
 namespace Xli
 {
 	/**
-		\addtogroup Threading
+		\addtogroup XliCoreThreading
 		@{
 	*/
 	typedef void* MutexHandle;
@@ -20,7 +20,7 @@ namespace Xli
 	/** @} */
 
 	/**
-		\ingroup Threading
+		\ingroup XliCoreThreading
 	*/
 	class Mutex
 	{

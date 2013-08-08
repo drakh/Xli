@@ -7,7 +7,7 @@
 namespace Xli
 {
 	/**
-		\ingroup WM
+		\ingroup XliCorePlatformSpecific
 	*/
 	class Win32Window: public Window
 	{

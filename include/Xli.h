@@ -2,28 +2,48 @@
 #define __XLI_H__
 
 /**
-	\defgroup Core Core Features
+	\defgroup Xli
+	\brief Core features
 
-	\defgroup Containers Container Templates
-	\ingroup Core
+	\defgroup XliCoreBuffers Buffers
+	\brief Buffers and buffer references
+	\ingroup Xli
 
-	\defgroup DateTime Date & Time
-	\ingroup Core
+	\defgroup XliCoreContainers Containers
+	\brief Container templates
+	\ingroup Xli
 
-	\defgroup IO I/O
-	\ingroup Core
+	\defgroup XliCoreIO I/O
+	\brief Console, streams, file systems, memory mapping
+	\ingroup Xli
 
-	\defgroup WM Window Management and OpenGL
-	\ingroup Core
+	\defgroup XliCoreMath Math
+	\brief Vectors, matrices and random numbers
+	\ingroup Xli
 
-	\defgroup Threading Threading and Concurrency
-	\ingroup Core
+	\defgroup XliCorePlatform Platform
+	\brief Windows and input devices
+	\ingroup Xli
 
-	\defgroup Math Math Library
-	\ingroup Core
+	\defgroup XliCorePlatformSpecific Specific
+	\brief Platform specific implementations
+	\ingroup XliCorePlatform
 
-	\defgroup Utils Utilities
-	\ingroup Core
+	\defgroup XliCoreText Text
+	\brief Strings, string builders and unicode support
+	\ingroup Xli
+
+	\defgroup XliCoreThreading Threading 
+	\brief Threading and concurrency
+	\ingroup Xli
+
+	\defgroup XliCoreTime Time
+	\brief Date, time and timers 
+	\ingroup Xli
+
+	\defgroup XliCoreUtils Utils
+	\brief Utility functions
+	\ingroup Xli
 */
 
 #include <Xli/Application.h>

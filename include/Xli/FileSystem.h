@@ -6,7 +6,7 @@
 namespace Xli
 {
 	/**
-		\ingroup IO
+		\ingroup XliCoreIO
 	*/
 	enum FileMode
 	{
@@ -32,12 +32,12 @@ namespace Xli
 	};
 
 	/**
-		\addtogroup IO
+		\addtogroup XliCoreIO
 	*/
 	const char* FileModeToString(FileMode mode);
 	
 	/**
-		\ingroup IO
+		\ingroup XliCoreIO
 	*/
 	enum FileFlag
 	{
@@ -46,7 +46,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup IO
+		\ingroup XliCoreIO
 	*/
 	struct FileInfo
 	{
@@ -59,7 +59,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup IO
+		\ingroup XliCoreIO
 	*/
 	class FileSystem: public Object
 	{

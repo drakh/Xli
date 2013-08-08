@@ -6,7 +6,7 @@
 namespace Xli
 {
 	/**
-		\ingroup IO
+		\ingroup XliCoreIO
 	*/
 	enum SystemDirectory
 	{
@@ -16,7 +16,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup IO
+		\ingroup XliCoreIO
 	*/
 	class NativeFileSystem: public FileSystem
 	{
@@ -46,7 +46,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup IO
+		\ingroup XliCoreIO
 	*/
 	class DiskAccessor
 	{
@@ -56,12 +56,12 @@ namespace Xli
 	};
 
 	/**
-		\ingroup IO
+		\ingroup XliCoreIO
 	*/
 	extern DiskAccessor Disk;
 
 	/**
-		\ingroup IO
+		\ingroup XliCoreIO
 	*/
 	class AssetFileSystem
 	{
@@ -71,7 +71,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup IO
+		\ingroup XliCoreIO
 	*/
 	class AssetsAccessor
 	{
@@ -82,7 +82,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup IO
+		\ingroup XliCoreIO
 	*/
 	extern AssetsAccessor Assets;
 }

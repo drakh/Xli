@@ -9,7 +9,7 @@
 namespace Xli
 {
 	/**
-		\ingroup Math
+		\ingroup XliCoreMath
 
 		A simple 32-bit pseudo-random number generator
 	*/
@@ -22,52 +22,57 @@ namespace Xli
 		void SetSeed(UInt32 seed);
 
 		/**
-			Returns a Random Integer in range [0..UInt32Max]
+			Returns a UInt32 in range [0..UInt32Max]
 		*/
 		UInt32 NextUInt32();
 
 		/**
-			Returns a Random Integer in range [0..high-1]
+			Returns an int in range [0..high-1]
 		*/
 		int NextInt(int high);
 
 		/**
-			Returns a Random Integer in range [low..high-1]
+			Returns an int in range [low..high-1]
 		*/
 		int NextInt(int low, int high);
 
 		/**
-			Returns a Random float in range [0..1]
+			Returns a float in range [0..1]
 		*/
 		float NextFloat();
 
 		/**
-			Returns a Random float in range [min..max]
+			Returns a float in range [min..max]
 		*/
 		float NextFloat(float min, float max);
 
 		/**
-			Returns a Random Vector2 in range [min..max]
+			Returns a Vector2 in range [min..max]
 		*/
 		Vector2 NextVector2(float min, float max);
 
 		/**
-			Returns a Random Vector3 in range [min..max]
+			Returns a random Vector3 in range [min..max]
 		*/
 		Vector3 NextVector3(float min, float max);
 
 		/**
-			Returns a Random Vector4 in range [min..max]
+			Returns a random Vector4 in range [min..max]
 		*/
 		Vector4 NextVector4(float min, float max);
 	};
 
 	/**
-		\addtogroup Math
+		\addtogroup XliCoreMath
+		@{
+	*/
 
-		Global Random Object
+	/**
+		Global Random object
 	*/
 	extern Random Rand;
+
+	/** @} */
 }
 
 #endif

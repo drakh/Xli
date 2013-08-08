@@ -6,7 +6,7 @@
 namespace Xli
 {
 	/**
-		\addtogroup Core
+		\addtogroup XliCoreText
 		@{
 	*/
 
@@ -21,7 +21,7 @@ namespace Xli
 	/** @} */
 
 	/**
-		\ingroup Core
+		\ingroup XliCoreText
 	*/
 	class Utf16String
 	{

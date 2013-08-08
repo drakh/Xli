@@ -10,7 +10,7 @@
 #include <Xli/ToString.h>
 
 /**
-	\addtogroup Media
+	\addtogroup XliMedia
 	@{
 */
 #define XLI_GET_X(label, x) do { try { x; } catch (const Xli::Exception& e) \
@@ -33,7 +33,7 @@ namespace Xli
 	class Value;
 
 	/**
-		\ingroup Media
+		\ingroup XliMedia
 	*/
 	enum ValueType
 	{
@@ -49,7 +49,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Media
+		\ingroup XliMedia
 	*/
 	class IValue: public Object
 	{
@@ -103,7 +103,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Media
+		\ingroup XliMedia
 	*/
 	class Value: public Managed<IValue>
 	{
@@ -221,7 +221,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Media
+		\ingroup XliMedia
 	*/
 	class Undefined: public IValue
 	{
@@ -231,7 +231,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Media
+		\ingroup XliMedia
 	*/
 	class BoolValue: public IValue
 	{
@@ -258,7 +258,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Media
+		\ingroup XliMedia
 	*/
 	class StringValue: public IValue
 	{
@@ -281,7 +281,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Media
+		\ingroup XliMedia
 	*/
 	class IntegerValue: public IValue
 	{
@@ -319,7 +319,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Media
+		\ingroup XliMedia
 	*/
 	class Int64Value: public IValue
 	{
@@ -357,7 +357,7 @@ namespace Xli
 	};
 	
 	/**
-		\ingroup Media
+		\ingroup XliMedia
 	*/
 	class DoubleValue: public IValue
 	{
@@ -389,7 +389,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Media
+		\ingroup XliMedia
 	*/
 	class ArrayValue: public IValue
 	{
@@ -414,7 +414,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Media
+		\ingroup XliMedia
 	*/
 	class ObjectValue: public IValue
 	{
@@ -438,7 +438,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Media
+		\ingroup XliMedia
 	*/
 	class OrderedObjectValue: public IValue
 	{
@@ -462,7 +462,7 @@ namespace Xli
 	};
 
 	/**
-		\addtogroup Media
+		\addtogroup XliMedia
 		@{
 	*/
 

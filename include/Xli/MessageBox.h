@@ -6,7 +6,7 @@
 namespace Xli
 {
 	/**
-		\ingroup WM
+		\ingroup XliCorePlatform
 
 		Defines button combinations for dialog boxes.
 	*/
@@ -41,7 +41,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup WM
+		\ingroup XliCorePlatform
 
 		Defines button combinations for dialog boxes.
 	*/
@@ -79,7 +79,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup WM
+		\ingroup XliCorePlatform
 
 		Defines appearance hints for dialog boxes.
 		The window manager chooses how to interpret these hints
@@ -125,7 +125,7 @@ namespace Xli
 	class Window;
 
 	/**
-		\ingroup WM
+		\ingroup XliCorePlatform
 	*/
 	class MessageBox
 	{

@@ -4,7 +4,7 @@
 namespace Xli
 {
 	/**
-		\ingroup WM
+		\ingroup XliCorePlatformSpecific
 	*/
 	class SDL2Window: public Window
 	{

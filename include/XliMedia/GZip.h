@@ -6,7 +6,7 @@
 namespace Xli
 {
 	/**
-		\ingroup Compression
+		\ingroup XliMediaCompression
 	*/
 	class GZip
 	{

@@ -6,7 +6,7 @@
 namespace Xli
 {
 	/**
-		\ingroup Media
+		\ingroup XliMediaMedia
 	*/
 	class ProgressCallback: public Object
 	{

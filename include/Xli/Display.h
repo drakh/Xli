@@ -6,7 +6,7 @@
 namespace Xli
 {
 	/**
-		\ingroup WM
+		\ingroup XliCorePlatform
 	*/
 	struct DisplaySettings
 	{
@@ -16,7 +16,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup WM
+		\ingroup XliCorePlatform
 	*/
 	class Display
 	{

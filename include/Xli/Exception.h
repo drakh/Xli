@@ -7,7 +7,7 @@
 namespace Xli
 {
 	/**
-		\ingroup Core
+		\ingroup Xli
 	*/
 	class Exception
 	{
@@ -29,7 +29,7 @@ namespace Xli
 }
 
 /**
-	\addtogroup Core
+	\addtogroup Xli
 	@{
 */
 
@@ -55,42 +55,42 @@ namespace Xli
 
 namespace Xli
 {
-	/** \ingroup Core */
+	/** \ingroup Xli */
 	XLI_DECLARE_EXCEPTION(IndexOutOfBoundsException, "Index out of bounds");
-	/** \ingroup Core */
+	/** \ingroup Xli */
 	XLI_DECLARE_EXCEPTION(NullPointerException, "Null pointer access attempt");
-	/** \ingroup Core */
+	/** \ingroup Xli */
 	XLI_DECLARE_EXCEPTION(BadDeleteException, "Attemt to delete object with refcount > 1");
-	/** \ingroup Core */
+	/** \ingroup Xli */
 	XLI_DECLARE_EXCEPTION(FormatException, "Invalid format");
-	/** \ingroup Core */
+	/** \ingroup Xli */
 	XLI_DECLARE_EXCEPTION(ArgumentException, "Illegal argument");
-	/** \ingroup Core */
+	/** \ingroup Xli */
 	XLI_DECLARE_EXCEPTION(NotSupportedException, "Not supported");
 
-	/** \ingroup IO */
+	/** \ingroup XliCoreIO */
 	class FileException: public Exception {};
-	/** \ingroup IO */
+	/** \ingroup XliCoreIO */
 	class StreamException: public Exception {};
 
-	/** \ingroup IO */
+	/** \ingroup XliCoreIO */
 	XLI_DECLARE_EXCEPTION_SUB(StreamException, StreamClosedException, "Stream has closed");
-	/** \ingroup IO */
+	/** \ingroup XliCoreIO */
 	XLI_DECLARE_EXCEPTION_SUB(StreamException, StreamCantReadException, "Stream not readable");
-	/** \ingroup IO */
+	/** \ingroup XliCoreIO */
 	XLI_DECLARE_EXCEPTION_SUB(StreamException, StreamCantWriteException, "Stream not writeable");
-	/** \ingroup IO */
+	/** \ingroup XliCoreIO */
 	XLI_DECLARE_EXCEPTION_SUB(StreamException, StreamCantSeekException, "Stream not seekable");
-	/** \ingroup IO */
+	/** \ingroup XliCoreIO */
 	XLI_DECLARE_EXCEPTION_SUB(StreamException, EndOfStreamException, "End of Stream reached");
-	/** \ingroup IO */
+	/** \ingroup XliCoreIO */
 	XLI_DECLARE_EXCEPTION_SUB(FileException, FileCantOpenException, "Couldn't open file");
-	/** \ingroup IO */
+	/** \ingroup XliCoreIO */
 	XLI_DECLARE_EXCEPTION_SUB(FileException, FileNotFoundException, "File not found");
 }
 
 /**
-	\addtogroup Core
+	\addtogroup Xli
 	@{
 */
 

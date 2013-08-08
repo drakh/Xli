@@ -9,7 +9,7 @@
 namespace Xli
 {
 	/**
-		\ingroup Core
+		\ingroup XliCoreBuffers
 	*/
 	class DataAccessor: public Object
 	{
@@ -19,7 +19,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Core
+		\ingroup XliCoreBuffers
 
 		A buffer of bytes.
 		A buffer can not be resized or relocated, so other objects can depend on the pointer to the buffer data.
@@ -59,7 +59,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Core
+		\ingroup XliCoreBuffers
 	*/
 	class BufferPointer: public DataAccessor
 	{
@@ -81,7 +81,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Core
+		\ingroup XliCoreBuffers
 	*/
 	class BufferReference: public DataAccessor
 	{

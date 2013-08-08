@@ -7,7 +7,7 @@
 namespace Xli
 {
 	/**
-		\ingroup IO
+		\ingroup XliCoreIO
 	*/
 	enum FileFlags
 	{
@@ -18,7 +18,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup IO
+		\ingroup XliCoreIO
 	*/
 	class File: public Stream
 	{

@@ -2,7 +2,8 @@
 #define __XLI_GL_HELPER_H__
 
 /**
-	\defgroup GLHelper OpenGL Helper Functions
+	\defgroup XliGLHelper 
+	\brief OpenGL helper functions
 */
 
 #include <XliGL.h>
@@ -12,7 +13,7 @@
 namespace Xli
 {
 	/**
-		\addtogroup GLHelper
+		\addtogroup XliGLHelper
 		@{
 	 */
 

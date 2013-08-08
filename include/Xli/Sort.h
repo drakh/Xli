@@ -6,7 +6,7 @@
 namespace Xli
 {
 	/**
-		\addtogroup Utils
+		\addtogroup XliCoreUtils
 		@{
 	*/
 

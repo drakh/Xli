@@ -6,7 +6,7 @@
 namespace Xli
 {
 	/**
-		\addtogroup Threading
+		\addtogroup XliCoreThreading
 		@{
 	*/
 	typedef void* ThreadHandle;
@@ -18,7 +18,7 @@ namespace Xli
 	/** @} */
 
 	/**
-		\ingroup Threading
+		\ingroup XliCoreThreading
 	*/
 	class Task: public Object
 	{
@@ -37,7 +37,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Threading
+		\ingroup XliCoreThreading
 	*/
 	class Thread
 	{

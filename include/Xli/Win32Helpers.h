@@ -5,6 +5,9 @@
 
 namespace Xli
 {
+	/**
+		\ingroup XliCorePlatformSpecific
+	*/
 	class Win32Helpers
 	{
 	public:

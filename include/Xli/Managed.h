@@ -7,7 +7,7 @@
 namespace Xli
 {
 	/**
-		\ingroup Containers
+		\ingroup XliCoreContainers
 	*/
 	template <class T> class Managed
 	{
@@ -109,7 +109,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Containers
+		\ingroup XliCoreContainers
 	*/
 	template <class T> class Shared: public Managed<T>
 	{
@@ -173,7 +173,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Containers
+		\ingroup XliCoreContainers
 	*/
 	template <class T> Managed<T> ManagePtr(T* object)
 	{
@@ -181,7 +181,7 @@ namespace Xli
 	}
 
 	/**
-		\ingroup Containers
+		\ingroup XliCoreContainers
 	*/
 	template <class T> T* SharePtr(T* object)
 	{

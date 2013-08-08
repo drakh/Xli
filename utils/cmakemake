@@ -51,8 +51,8 @@ PROJECT="$@"
 if [[ "$HELP" == "1" || -z "$PROJECT" ]]; then
 	cat <<E0
 Usage: cmakemake [--debug|--release] [--install] [--prefix=<path>] <project-dir>
-       cmakemake --target=xcode <project-dir>
-       cmakemake --clean <project-dir>
+   or: cmakemake --target=xcode <project-dir>
+   or: cmakemake --clean <project-dir>
 
 Build script for CMake projects.
 
@@ -71,7 +71,14 @@ set -e
 cd "$PROJECT"
 
 if [ "$CLEAN" == "1" ]; then
-	# TODO: Should probably also do a make clean first
+	for dir in "build/cmake-release" "build/cmake-debug"; do
+		if [ -f "$dir/Makefile" ]; then
+			cd "$dir"
+			make clean
+			cd -
+		fi
+	done
+
 	rm -rf build/cmake-*
 	exit 0
 fi

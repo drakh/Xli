@@ -8,7 +8,7 @@
 namespace Xli
 {
 	/**
-		\ingroup Textures
+		\ingroup XliMediaTextures
 	*/
 	class ImageReader: public Object
 	{
