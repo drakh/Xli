@@ -84,7 +84,7 @@ if [ "$CLEAN" == "1" ]; then
 fi
 
 if [ !`which cmake` ]; then
-	# This is sometimes needed when run from GUI applications
+	# This is sometimes needed when run from GUI applications on OS X
 	PATH=$PATH:/opt/local/bin
 fi
 
@@ -138,4 +138,3 @@ make -j $CPU_COUNT
 if [ "$INSTALL" == "1" ]; then
 	make install
 fi
-

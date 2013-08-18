@@ -108,7 +108,7 @@ namespace Xli
 				}
 			}
 	
-			MakeCurrent();
+			MakeCurrent(true);
 		}
 
 		virtual ~EglContext()

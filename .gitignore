@@ -17,6 +17,7 @@ Debug/
 docs/
 ipch/
 lib/
+libs/
 Makefile
 obj/
 Release/

@@ -1,5 +1,4 @@
-#!/bin/sh
-
+#!/bin/sh	
 set -e
 cd "`dirname "$0"`"
 
@@ -11,27 +10,22 @@ else
 	CPU_COUNT=1	
 fi
 
-if [ `uname -o 2> /dev/null` = "Cygwin" ]; then
+if [ "`uname -o 2> /dev/null`" = "Cygwin" ]; then
 	chmod -R 0777 src
 fi
 
 cd projects/android
-
 ndk-build -j $CPU_COUNT
+cd -
 
-mkdir -p ../../lib/android
+SOURCE="projects/android/obj/local"
+TARGET="lib/android"
 
-if [ -d obj/local/armeabi ]; then
-	mkdir -p ../../lib/android/armeabi && \
-	cp -v obj/local/armeabi/libXli*.a ../../lib/android/armeabi
-fi
+mkdir -p "$TARGET"
 
-if [ -d obj/local/armeabi-v7a ]; then
-	mkdir -p ../../lib/android/armeabi-v7a && \
-	cp -v obj/local/armeabi-v7a/libXli*.a ../../lib/android/armeabi-v7a
-fi
-
-if [ -d obj/local/x86 ]; then
-	mkdir -p ../../lib/android/x86 && \
-	cp -v obj/local/x86/libXli*.a ../../lib/android/x86
-fi
+for arch in armeabi armeabi-v7a x86; do
+	if [ -d "$SOURCE/$arch" ]; then
+		mkdir -p "$TARGET/$arch"
+		cp -v $SOURCE/$arch/libXli*.a "$TARGET/$arch"
+	fi
+done
