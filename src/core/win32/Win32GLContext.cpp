@@ -118,7 +118,7 @@ namespace Xli
 				SetPixelFormat(hDC, ChoosePixelFormat(hDC, &pfd), &pfd);
 
 			ctx = wglCreateContext(hDC);
-			MakeCurrent();
+			MakeCurrent(true);
 
 			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 			SwapBuffers();
@@ -143,7 +143,7 @@ namespace Xli
 			if (!wglShareLists(srcCtx->ctx, ctx))
 				XLI_THROW("Unable to share OpenGL contexts: " + Win32Helpers::GetLastErrorString());
 
-			srcCtx->MakeCurrent();
+			srcCtx->MakeCurrent(true);
 		}
 
 		virtual ~Win32GLContext()
@@ -177,7 +177,7 @@ namespace Xli
 			else 
 				SetPixelFormat(hDC, ChoosePixelFormat(hDC, &pfd), &pfd);
 			
-			MakeCurrent();
+			MakeCurrent(true);
 
 			if (pf != -1) 
 				glEnable(GL_MULTISAMPLE_ARB);
