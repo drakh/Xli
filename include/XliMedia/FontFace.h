@@ -10,7 +10,7 @@
 namespace Xli
 {
 	/**
-		\ingroup Fonts
+		\ingroup XliMediaFonts
 	*/
 	enum FontRenderMode
 	{
@@ -20,7 +20,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Fonts
+		\ingroup XliMediaFonts
 	*/
 	class FontFace: public Object
 	{
@@ -41,7 +41,7 @@ namespace Xli
 	};
 
 	/**
-		\ingroup Fonts
+		\ingroup XliMediaFonts
 	*/
 	class FreeType
 	{
