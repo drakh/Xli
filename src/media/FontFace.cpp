@@ -17,7 +17,7 @@ namespace Xli
 		FontRenderMode activeMode;
 		Managed<Buffer> buf;
 
-		void setActiveGlyph(UInt32 c, FontRenderMode mode)
+		void SetActiveGlyph(UInt32 c, FontRenderMode mode)
 		{
 			if (activeGlyph != c || mode != activeMode)
 			{
@@ -31,7 +31,7 @@ namespace Xli
 			}
 		}
 
-		float fontUnitsToPixels(FT_Pos units)
+		float FontUnitsToPixels(FT_Pos units)
 		{
 			return (float)fontSize * (float)units / (float)face->units_per_EM;
 		}
@@ -43,8 +43,11 @@ namespace Xli
 			fontFile->ReadSafe(buf->Data(), 1, buf->Size());
 
 			FT_Error error = FT_New_Memory_Face(Library, (FT_Byte*)buf->Data(), buf->Size(), 0, &face);
-			if (error == FT_Err_Unknown_File_Format) XLI_THROW("Unknown file format");
-			else if (error) XLI_THROW("Error loading font");
+			
+			if (error == FT_Err_Unknown_File_Format) 
+				XLI_THROW("Unknown file format");
+			else if (error) 
+				XLI_THROW("Error loading font");
 
 			this->activeMode = FontRenderModeNormal;
 			this->activeGlyph = ~0;
@@ -60,7 +63,10 @@ namespace Xli
 		virtual void SetPixelSize(int fontSize)
 		{
 			FT_Error error = FT_Set_Pixel_Sizes(face, 0, (FT_UInt)fontSize);
-			if (error) XLI_THROW("Error setting font pixel size");
+			
+			if (error) 
+				XLI_THROW("Error setting font pixel size");
+			
 			this->fontSize = fontSize;
 		}
 
@@ -81,13 +87,13 @@ namespace Xli
 
 		virtual Vector2i GetBearing(UInt32 character)
 		{
-			setActiveGlyph(character, activeMode);
+			SetActiveGlyph(character, activeMode);
 			return Vector2i(face->glyph->bitmap_left, -face->glyph->bitmap_top);
 		}
 
 		virtual Bitmap* RenderGlyph(UInt32 character, FontRenderMode mode)
 		{
-			setActiveGlyph(character, mode);
+			SetActiveGlyph(character, mode);
 
 			int w = face->glyph->bitmap.width;
 			int h = face->glyph->bitmap.rows;
@@ -120,18 +126,23 @@ namespace Xli
 
 		virtual Vector2 GetAdvance(UInt32 character)
 		{
-			setActiveGlyph(character, activeMode);
+			SetActiveGlyph(character, activeMode);
 			return Vector2((float)face->glyph->advance.x / 64.0f, (float)face->glyph->advance.y / 64.0f);
 		}
 
 		virtual float GetAscender() 
 		{ 
-			return fontUnitsToPixels(face->ascender); 
+			return FontUnitsToPixels(face->ascender); 
 		}
 
 		virtual float GetDescender()
 		{ 
-			return -fontUnitsToPixels(face->descender); 
+			return -FontUnitsToPixels(face->descender); 
+		}
+
+		virtual float GetLineHeight()
+		{
+			return FontUnitsToPixels(face->height);
 		}
 	};
 
@@ -151,9 +162,7 @@ namespace Xli
 		RefCount--;
 
 		if (RefCount == 0)
-		{
 			FT_Done_FreeType(Library);
-		}
 	}
 
 	FontFace* FreeType::OpenFontFace(Stream* fontFile, int fontSize)

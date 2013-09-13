@@ -35,6 +35,7 @@ namespace Xli
 
 		virtual float GetAscender() = 0;
 		virtual float GetDescender() = 0;
+		virtual float GetLineHeight() = 0;
 
 		virtual void SetPixelSize(int fontSize) = 0;		
 		virtual int GetPixelSize() = 0;
