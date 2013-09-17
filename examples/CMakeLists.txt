@@ -36,3 +36,4 @@ endif()
 # Add example source directories
 
 add_subdirectory(GLWindow)
+add_subdirectory(AssetLoading)

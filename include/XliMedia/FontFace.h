@@ -50,12 +50,12 @@ namespace Xli
 		static void Init();
 		static void Done();
 
-		static FontFace* OpenFontFace(Stream* fontFile, int size);
+		static FontFace* LoadFontFace(Stream* fontFile, int size);
 
-		static FontFace* OpenFontFace(const String& filename, int size)
+		static FontFace* LoadFontFace(const String& filename, int size)
 		{
 			File f(filename, FileModeRead);
-			return OpenFontFace(&f, size);
+			return LoadFontFace(&f, size);
 		}
 	};
 }

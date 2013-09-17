@@ -165,7 +165,7 @@ namespace Xli
 			FT_Done_FreeType(Library);
 	}
 
-	FontFace* FreeType::OpenFontFace(Stream* fontFile, int fontSize)
+	FontFace* FreeType::LoadFontFace(Stream* fontFile, int fontSize)
 	{
 		if (RefCount == 0)
 		{
