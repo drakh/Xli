@@ -75,12 +75,12 @@ namespace Xli
 			return FontUnitsToPixels(pixelSize, _face->height);
 		}
 
-		virtual bool HasGlyph(float pixelSize, UInt32 c)
+		virtual bool HasGlyph(float pixelSize, Utf32 c)
 		{
 			return true;
 		}
 
-		virtual Bitmap* RenderGlyph(float pixelSize, UInt32 c, FontRenderMode mode, Vector2* outAdvance, Vector2* outBearing)
+		virtual Bitmap* RenderGlyph(float pixelSize, Utf32 c, FontRenderMode mode, Vector2* outAdvance, Vector2* outBearing)
 		{
 			SetPixelSize(pixelSize);
 
@@ -133,7 +133,7 @@ namespace Xli
 			return result;
 		}
 
-		virtual bool TryGetKerning(float pixelSize, UInt32 left, UInt32 right, Vector2* outKerning)
+		virtual bool TryGetKerning(float pixelSize, Utf32 left, Utf32 right, Vector2* outKerning)
 		{
 			SetPixelSize(pixelSize);
 

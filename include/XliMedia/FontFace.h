@@ -32,10 +32,10 @@ namespace Xli
 		virtual float GetDescender(float pixelSize) = 0;
 		virtual float GetLineHeight(float pixelSize) = 0;
 
-		virtual bool HasGlyph(float pixelSize, UInt32 c) = 0;
-		virtual Bitmap* RenderGlyph(float pixelSize, UInt32 c, FontRenderMode mode, Vector2* outAdvance, Vector2* outBearing) = 0;
+		virtual bool HasGlyph(float pixelSize, Utf32 c) = 0;
+		virtual Bitmap* RenderGlyph(float pixelSize, Utf32 c, FontRenderMode mode, Vector2* outAdvance, Vector2* outBearing) = 0;
 
-		virtual bool TryGetKerning(float pixelSize, UInt32 left, UInt32 right, Vector2* outKerning) = 0;
+		virtual bool TryGetKerning(float pixelSize, Utf32 left, Utf32 right, Vector2* outKerning) = 0;
 	};
 
 	/**

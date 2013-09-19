@@ -20,11 +20,25 @@ namespace Xli
 	typedef unsigned int UInt32;
 	typedef unsigned long long UInt64;
 
+#ifdef WIN32
+	typedef wchar_t Utf16;
+#else
+	typedef UInt16 Utf16;
+#endif
+
+	typedef UInt32 Utf32;
 	typedef UInt64 Timestamp;
 
 	/** @} */
 
+	/**
+		\addtogroup XliCoreContainers
+		@{
+	*/
+
 	template <typename T, int TBufSize = 4> class Array;
+
+	/** @} */
 
 	// Verify size of base types at compile time
 	typedef char __TestInt8[sizeof(Int8) == 1 ? 1 : -1];

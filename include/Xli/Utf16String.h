@@ -10,12 +10,6 @@ namespace Xli
 		@{
 	*/
 
-#ifdef WIN32
-	typedef wchar_t Utf16;
-#else
-	typedef UInt16 Utf16;
-#endif
-
 	int Utf16StrLen(const Utf16* str);
 
 	/** @} */
@@ -48,6 +42,8 @@ namespace Xli
 		const Utf16* Data() const;
 
 		Utf16String& operator = (const Utf16String& copy);
+
+		Utf16String operator + (const Utf16String& str) const;
 	};
 }
 

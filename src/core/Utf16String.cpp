@@ -7,7 +7,10 @@ namespace Xli
 	int Utf16StrLen(const Utf16* str)
 	{
 		int len = 0;
-		while (*str++) len++;
+		
+		while (*str++) 
+			len++;
+		
 		return len;
 	}
 
@@ -88,5 +91,13 @@ namespace Xli
 	const Utf16* Utf16String::Data() const
 	{
 		return data;
+	}
+
+	Utf16String Utf16String::operator + (const Utf16String& str) const
+	{
+		Utf16String r = Utf16String::Create(length + str.length);
+		memcpy(r.data, data, length * sizeof(Utf16));
+		memcpy(r.data + length, str.data, str.length * sizeof(Utf16));
+		return r;
 	}
 }
