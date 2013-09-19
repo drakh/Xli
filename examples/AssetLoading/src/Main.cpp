@@ -18,7 +18,7 @@ static void LoadFontFace(const String& filename, float size)
 
 	for (int i = 32; i < 127; i++)
 	{
-		if (font->HasGlyph(size, i))
+		if (font->ContainsGlyph(size, i))
 		{
 			Vector2 advance, bearing;
 			Managed<Bitmap> bmp = font->RenderGlyph(size, i, FontRenderModeNormal, &advance, &bearing);

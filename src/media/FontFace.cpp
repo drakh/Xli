@@ -75,7 +75,7 @@ namespace Xli
 			return FontUnitsToPixels(pixelSize, _face->height);
 		}
 
-		virtual bool HasGlyph(float pixelSize, Utf32 c)
+		virtual bool ContainsGlyph(float pixelSize, Utf32 c)
 		{
 			return true;
 		}
