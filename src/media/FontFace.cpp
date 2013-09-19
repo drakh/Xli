@@ -91,6 +91,9 @@ namespace Xli
 			
 			switch (mode) 
 			{
+			case FontRenderModeNone:
+				break;
+
 			case FontRenderModeNormal:
 				m |= FT_LOAD_RENDER;
 				break;
