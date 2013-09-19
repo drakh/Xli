@@ -3,23 +3,27 @@
 
 using namespace Xli;
 
-static void LoadFontFace(const String& filename, int size)
+static void LoadFontFace(const String& filename, float size)
 {
 	PrintLine("------------------------------------------------");
 	PrintLine("Loading Font Face: " + filename + ", size = " + size);
 	PrintLine("------------------------------------------------");
 
 	Managed<Stream> stream = Assets->OpenFile(filename);
-	Managed<FontFace> font = FreeType::LoadFontFace(stream, size);
+	Managed<FontFace> font = FreeType::LoadFontFace(stream);
 
-	PrintLine((String)"Ascender: " + font->GetAscender());
-	PrintLine((String)"Descender: " + font->GetDescender());
-	PrintLine((String)"LineHeight: " + font->GetLineHeight());
+	PrintLine((String)"Ascender: " + font->GetAscender(size));
+	PrintLine((String)"Descender: " + font->GetDescender(size));
+	PrintLine((String)"LineHeight: " + font->GetLineHeight(size));
 
 	for (int i = 32; i < 127; i++)
 	{
-		Managed<Bitmap> bmp = font->RenderGlyph(i, FontRenderModeNormal);
-		PrintLine(String(i) + " (" + (char)i + "): " + font->GetAdvance(i).ToString() + "; " + font->GetBearing(i).ToString() + "; " + bmp->GetWidth() + "x" + bmp->GetHeight());
+		if (font->HasGlyph(size, i))
+		{
+			Vector2 advance, bearing;
+			Managed<Bitmap> bmp = font->RenderGlyph(size, i, FontRenderModeNormal, &advance, &bearing);
+			PrintLine(String(i) + " (" + (char)i + "): " + advance.ToString() + "; " + bearing.ToString() + "; " + bmp->GetWidth() + "x" + bmp->GetHeight());
+		}
 	}
 }
 

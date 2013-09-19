@@ -5,154 +5,155 @@
 
 namespace Xli
 {
-	static FT_Library Library;
+	static FT_Library FreeType2Library;
 	static int RefCount = 0;
 
 	class FreeType2FontFace: public FontFace
 	{
-		int fontSize;
-		FT_Face face;
-		int ascender, descender;
-		UInt32 activeGlyph;
-		FontRenderMode activeMode;
-		Managed<Buffer> buf;
+		Managed<Buffer> _buf;
+		FT_Face _face;
 
-		void SetActiveGlyph(UInt32 c, FontRenderMode mode)
+		float FontUnitsToPixels(float pixelSize, FT_Pos units)
 		{
-			if (activeGlyph != c || mode != activeMode)
-			{
-				int m = FT_LOAD_DEFAULT;
-				if (mode == FontRenderModeNormal) m |= FT_LOAD_RENDER;
-				else if (mode == FontRenderModeMonochrome) m |= FT_LOAD_RENDER | FT_LOAD_MONOCHROME;
-				FT_UInt glyphIndex = FT_Get_Char_Index(face, c);
-				FT_Load_Glyph(face, glyphIndex, m);
-				activeMode = mode;
-				activeGlyph = c;
-			}
+			return pixelSize * (float)units / (float)_face->units_per_EM;
 		}
 
-		float FontUnitsToPixels(FT_Pos units)
+		void SetPixelSize(float pixelSize)
 		{
-			return (float)fontSize * (float)units / (float)face->units_per_EM;
+			if (FT_Set_Pixel_Sizes(_face, 0, (FT_UInt)pixelSize))
+				XLI_THROW("Error setting font face pixel size");
 		}
 
 	public:
-		FreeType2FontFace(Stream* fontFile, int fontSize)
+		FreeType2FontFace(Stream* fontFile)
 		{
-			buf = Buffer::Create(fontFile->GetLength());
-			fontFile->ReadSafe(buf->Data(), 1, buf->Size());
+			_buf = Buffer::Create(fontFile->GetLength());
+			fontFile->ReadSafe(_buf->Data(), 1, _buf->Size());
 
-			FT_Error error = FT_New_Memory_Face(Library, (FT_Byte*)buf->Data(), buf->Size(), 0, &face);
-			
-			if (error == FT_Err_Unknown_File_Format) 
-				XLI_THROW("Unknown file format");
-			else if (error) 
+			switch (FT_New_Memory_Face(FreeType2Library, (FT_Byte*)_buf->Data(), _buf->Size(), 0, &_face))
+			{
+			case 0:
+				break;
+
+			case FT_Err_Unknown_File_Format:
+				XLI_THROW("Error loading font: Unknown file format");
+				break;
+
+			default:
 				XLI_THROW("Error loading font");
-
-			this->activeMode = FontRenderModeNormal;
-			this->activeGlyph = ~0;
-
-			SetPixelSize(fontSize);
+				break;
+			}
 		}
 
 		virtual ~FreeType2FontFace()
 		{
-			FT_Done_Face(face);
-		}
-
-		virtual void SetPixelSize(int fontSize)
-		{
-			FT_Error error = FT_Set_Pixel_Sizes(face, 0, (FT_UInt)fontSize);
-			
-			if (error) 
-				XLI_THROW("Error setting font pixel size");
-			
-			this->fontSize = fontSize;
-		}
-
-		virtual int GetPixelSize()
-		{
-			return fontSize;
+			FT_Done_Face(_face);
 		}
 
 		virtual String GetFamilyName()
 		{
-			return face->family_name;
+			return _face->family_name;
 		}
 
 		virtual String GetStyleName()
 		{
-			return face->style_name;
+			return _face->style_name;
 		}
 
-		virtual Vector2i GetBearing(UInt32 character)
-		{
-			SetActiveGlyph(character, activeMode);
-			return Vector2i(face->glyph->bitmap_left, -face->glyph->bitmap_top);
+		virtual float GetAscender(float pixelSize) 
+		{ 
+			return FontUnitsToPixels(pixelSize, _face->ascender);
 		}
 
-		virtual Bitmap* RenderGlyph(UInt32 character, FontRenderMode mode)
+		virtual float GetDescender(float pixelSize)
+		{ 
+			return -FontUnitsToPixels(pixelSize, _face->descender);
+		}
+
+		virtual float GetLineHeight(float pixelSize)
 		{
-			SetActiveGlyph(character, mode);
+			return FontUnitsToPixels(pixelSize, _face->height);
+		}
 
-			int w = face->glyph->bitmap.width;
-			int h = face->glyph->bitmap.rows;
-			Bitmap* bmp = new Bitmap(w, h, FormatL_8_UInt_Normalize);
+		virtual bool HasGlyph(float pixelSize, UInt32 c)
+		{
+			return true;
+		}
 
-			if (mode == FontRenderModeMonochrome)
+		virtual Bitmap* RenderGlyph(float pixelSize, UInt32 c, FontRenderMode mode, Vector2* outAdvance, Vector2* outBearing)
+		{
+			SetPixelSize(pixelSize);
+
+			Bitmap* result = 0;
+			FT_UInt glyphIndex = FT_Get_Char_Index(_face, c);
+
+			int m = FT_LOAD_DEFAULT;
+			
+			switch (mode) 
 			{
-				UInt8* src = face->glyph->bitmap.buffer;
-				UInt8* dst = bmp->GetData();
-				int p = face->glyph->bitmap.pitch;
+			case FontRenderModeNormal:
+				m |= FT_LOAD_RENDER;
+				break;
 
-				for (int y = 0; y < h; y++)
-					for (int x = 0; x < w; x++)
-						*dst++ = ((src[y * p + (x >> 3)] >> (7 - (x & 7))) & 1) * 255;
+			case FontRenderModeMonochrome:
+				m |= FT_LOAD_RENDER | FT_LOAD_MONOCHROME;
+				break;
 			}
-			else
+
+			FT_Load_Glyph(_face, glyphIndex, m);
+
+			if (mode != FontRenderModeNone)
 			{
-				memcpy(bmp->GetData(), face->glyph->bitmap.buffer, w * h);
+				int w = _face->glyph->bitmap.width;
+				int h = _face->glyph->bitmap.rows;
+				result = new Bitmap(w, h, FormatL_8_UInt_Normalize);
+
+				if (mode == FontRenderModeMonochrome)
+				{
+					UInt8* src = _face->glyph->bitmap.buffer;
+					UInt8* dst = result->GetData();
+					int p = _face->glyph->bitmap.pitch;
+
+					for (int y = 0; y < h; y++)
+						for (int x = 0; x < w; x++)
+							*dst++ = ((src[y * p + (x >> 3)] >> (7 - (x & 7))) & 1) * 255;
+				}
+				else
+				{
+					memcpy(result->GetData(), _face->glyph->bitmap.buffer, w * h);
+				}
 			}
 
-			return bmp;
+			if (outAdvance)
+				*outAdvance = Vector2((float)_face->glyph->advance.x / 64.0f, (float)_face->glyph->advance.y / 64.0f);
+
+			if (outBearing)
+				*outBearing = Vector2((float)_face->glyph->bitmap_left, (float)-_face->glyph->bitmap_top);
+
+			return result;
 		}
 
-		virtual Vector2 GetKerning(UInt32 left, UInt32 right)
+		virtual bool TryGetKerning(float pixelSize, UInt32 left, UInt32 right, Vector2* outKerning)
 		{
+			SetPixelSize(pixelSize);
+
 			FT_Vector kerning;
-			FT_Get_Kerning(face, FT_Get_Char_Index(face, left), FT_Get_Char_Index(face, right), FT_KERNING_DEFAULT, &kerning);
-			return Vector2((float)kerning.x / 64.0f, (float)kerning.y / 64.0f);
-		}
-
-		virtual Vector2 GetAdvance(UInt32 character)
-		{
-			SetActiveGlyph(character, activeMode);
-			return Vector2((float)face->glyph->advance.x / 64.0f, (float)face->glyph->advance.y / 64.0f);
-		}
-
-		virtual float GetAscender() 
-		{ 
-			return FontUnitsToPixels(face->ascender); 
-		}
-
-		virtual float GetDescender()
-		{ 
-			return -FontUnitsToPixels(face->descender); 
-		}
-
-		virtual float GetLineHeight()
-		{
-			return FontUnitsToPixels(face->height);
+			if (!FT_Get_Kerning(_face, FT_Get_Char_Index(_face, left), FT_Get_Char_Index(_face, right), FT_KERNING_DEFAULT, &kerning))
+			{
+				if (outKerning)
+					*outKerning = Vector2((float)kerning.x / 64.0f, (float)kerning.y / 64.0f);
+				
+				return true;
+			}
+			
+			return false;
 		}
 	};
 
 	void FreeType::Init()
 	{
-		if (RefCount == 0)
-		{
-			FT_Error error = FT_Init_FreeType(&Library);
-			if (error) XLI_THROW("Error initializing FreeType 2");
-		}
+		if (RefCount == 0 && FT_Init_FreeType(&FreeType2Library) != 0)
+			XLI_THROW("Error initializing FreeType 2");
 
 		RefCount++;
 	}
@@ -162,10 +163,10 @@ namespace Xli
 		RefCount--;
 
 		if (RefCount == 0)
-			FT_Done_FreeType(Library);
+			FT_Done_FreeType(FreeType2Library);
 	}
 
-	FontFace* FreeType::LoadFontFace(Stream* fontFile, int fontSize)
+	FontFace* FreeType::LoadFontFace(Stream* fontFile)
 	{
 		if (RefCount == 0)
 		{
@@ -173,6 +174,6 @@ namespace Xli
 			atexit(Done);
 		}
 
-		return new FreeType2FontFace(fontFile, fontSize);
+		return new FreeType2FontFace(fontFile);
 	}
 }

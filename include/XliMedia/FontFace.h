@@ -25,20 +25,17 @@ namespace Xli
 	class FontFace: public Object
 	{
 	public:
-		virtual Vector2 GetAdvance(UInt32 c) = 0;
-		virtual Vector2 GetKerning(UInt32 left, UInt32 right) = 0;
-		virtual Vector2i GetBearing(UInt32 c) = 0;
-		virtual Bitmap* RenderGlyph(UInt32 c, FontRenderMode mode) = 0;
-
 		virtual String GetFamilyName() = 0;
 		virtual String GetStyleName() = 0;
 
-		virtual float GetAscender() = 0;
-		virtual float GetDescender() = 0;
-		virtual float GetLineHeight() = 0;
+		virtual float GetAscender(float pixelSize) = 0;
+		virtual float GetDescender(float pixelSize) = 0;
+		virtual float GetLineHeight(float pixelSize) = 0;
 
-		virtual void SetPixelSize(int fontSize) = 0;		
-		virtual int GetPixelSize() = 0;
+		virtual bool HasGlyph(float pixelSize, UInt32 c) = 0;
+		virtual Bitmap* RenderGlyph(float pixelSize, UInt32 c, FontRenderMode mode, Vector2* outAdvance, Vector2* outBearing) = 0;
+
+		virtual bool TryGetKerning(float pixelSize, UInt32 left, UInt32 right, Vector2* outKerning) = 0;
 	};
 
 	/**
@@ -50,12 +47,12 @@ namespace Xli
 		static void Init();
 		static void Done();
 
-		static FontFace* LoadFontFace(Stream* fontFile, int size);
+		static FontFace* LoadFontFace(Stream* fontFile);
 
-		static FontFace* LoadFontFace(const String& filename, int size)
+		static FontFace* LoadFontFace(const String& filename)
 		{
 			File f(filename, FileModeRead);
-			return LoadFontFace(&f, size);
+			return LoadFontFace(&f);
 		}
 	};
 }
