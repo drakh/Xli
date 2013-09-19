@@ -184,9 +184,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\XliGL.h" />
+    <ClInclude Include="..\..\..\include\XliGL\3rdparty\glew.h" />
     <ClInclude Include="..\..\..\include\XliGL\GL.h" />
     <ClInclude Include="..\..\..\include\XliGL\GLContext.h" />
-    <ClInclude Include="..\..\..\include\XliGL\glew.h" />
     <ClInclude Include="..\..\..\include\Xli\Application.h" />
     <ClInclude Include="..\..\..\include\Xli\ArrayStream.h" />
     <ClInclude Include="..\..\..\include\Xli\BaseTypes.h" />

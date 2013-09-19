@@ -7,7 +7,7 @@
 # ifndef GLEW_STATIC
 #   define GLEW_STATIC
 # endif
-# include <XliGL/glew.h>
+# include <XliGL/3rdparty/glew.h>
 # include <GL/gl.h>
 # define XLI_GL_DESKTOP
 
@@ -25,7 +25,7 @@
 # ifndef GLEW_STATIC
 #   define GLEW_STATIC
 # endif
-# include <XliGL/glew.h>
+# include <XliGL/3rdparty/glew.h>
 # include <OpenGL/gl.h>
 # define XLI_GL_DESKTOP
 

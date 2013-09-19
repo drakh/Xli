@@ -52,6 +52,9 @@
     <Filter Include="Xli\Platform\xdg">
       <UniqueIdentifier>{3e47164f-a3a6-4ad2-b666-9d2f18f34c3e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="XliGL\3rdparty">
+      <UniqueIdentifier>{f42f31fe-ff72-49ef-b6c2-4cbcab667fd8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Xli\Hash.h">
@@ -236,9 +239,6 @@
       <Filter>Xli\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\XliGL.h" />
-    <ClInclude Include="..\..\..\include\XliGL\glew.h">
-      <Filter>XliGL</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\core\android\AInternal.h">
       <Filter>Xli\Platform\android</Filter>
     </ClInclude>
@@ -250,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\XliGL\GL.h">
       <Filter>XliGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliGL\3rdparty\glew.h">
+      <Filter>XliGL\3rdparty</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
