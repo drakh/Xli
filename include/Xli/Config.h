@@ -2,7 +2,7 @@
 #define __XLI_CONFIG_H__
 
 #if defined(WIN32)
-# define XLI_PLATFORM_WINDOWS
+# define XLI_PLATFORM_WIN32
 
 #elif defined(ANDROID)
 # define XLI_PLATFORM_ANDROID
@@ -12,7 +12,7 @@
 # if TARGET_OS_IPHONE
 #   define XLI_PLATFORM_IOS
 # else
-#   define XLI_PLATFORM_MACOSX
+#   define XLI_PLATFORM_OSX
 # endif
 
 #elif defined(__linux)
@@ -21,7 +21,7 @@
 #endif
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1400)
-# define XLI_MSVC
+# define XLI_COMPILER_MSVC
 #endif
 
 #ifndef XLI_DEBUG
@@ -44,7 +44,7 @@
 # define XLI_DEBUG_PRINT(x) ::Xli::PrintLine(x)
 #endif
 
-#ifdef XLI_MSVC // Visual C++ specific
+#ifdef XLI_COMPILER_MSVC // Visual C++ specific
 # define XLI_FUNCTION __FUNCTION__ //__FUNCSIG__
 # ifdef XLI_DEBUG
 #   define XLI_DEBUG_BREAK __debugbreak()

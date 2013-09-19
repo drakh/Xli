@@ -184,6 +184,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\XliGL.h" />
+    <ClInclude Include="..\..\..\include\XliGL\GL.h" />
+    <ClInclude Include="..\..\..\include\XliGL\GLContext.h" />
     <ClInclude Include="..\..\..\include\XliGL\glew.h" />
     <ClInclude Include="..\..\..\include\Xli\Application.h" />
     <ClInclude Include="..\..\..\include\Xli\ArrayStream.h" />
@@ -197,7 +199,6 @@
     <ClInclude Include="..\..\..\include\Xli\Dialogs.h" />
     <ClInclude Include="..\..\..\include\Xli\Display.h" />
     <ClInclude Include="..\..\..\include\Xli\Exception.h" />
-    <ClInclude Include="..\..\..\include\Xli\GLContext.h" />
     <ClInclude Include="..\..\..\include\Xli\Hash.h" />
     <ClInclude Include="..\..\..\include\Xli\MessageBox.h" />
     <ClInclude Include="..\..\..\include\Xli\Mutex.h" />

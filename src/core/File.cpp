@@ -19,7 +19,7 @@ namespace Xli
             default: XLI_THROW(String("Invalid file mode: ") + FileModeToString(mode));
 		}
         
-#ifdef XLI_MSVC
+#ifdef XLI_COMPILER_MSVC
 		
 		fp = 0;
 		

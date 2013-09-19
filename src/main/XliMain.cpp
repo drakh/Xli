@@ -47,7 +47,7 @@ extern "C" int main(int argc, char** argv)
 	return result;
 }
 
-#ifdef XLI_PLATFORM_WINDOWS
+#ifdef XLI_PLATFORM_WIN32
 #include <Xli/Win32Header.h>
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)

@@ -235,9 +235,6 @@
     <ClInclude Include="..\..\..\include\Xli\Sort.h">
       <Filter>Xli\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\Xli\GLContext.h">
-      <Filter>Xli\Platform</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\XliGL.h" />
     <ClInclude Include="..\..\..\include\XliGL\glew.h">
       <Filter>XliGL</Filter>
@@ -247,6 +244,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\Xli\Application.h">
       <Filter>Xli\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliGL\GLContext.h">
+      <Filter>XliGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliGL\GL.h">
+      <Filter>XliGL</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
