@@ -5,10 +5,10 @@
 
 namespace Xli
 {
-	static FT_Library FreeType2Library;
-	static int RefCount = 0;
+	static FT_Library FreeTypeLibrary;
+	static int FreeTypeRefCount = 0;
 
-	class FreeType2FontFace: public FontFace
+	class FreeTypeFontFace: public FontFace
 	{
 		Managed<Buffer> _buf;
 		FT_Face _face;
@@ -25,12 +25,12 @@ namespace Xli
 		}
 
 	public:
-		FreeType2FontFace(Stream* fontFile)
+		FreeTypeFontFace(Stream* fontFile)
 		{
 			_buf = Buffer::Create(fontFile->GetLength());
 			fontFile->ReadSafe(_buf->Data(), 1, _buf->Size());
 
-			switch (FT_New_Memory_Face(FreeType2Library, (FT_Byte*)_buf->Data(), _buf->Size(), 0, &_face))
+			switch (FT_New_Memory_Face(FreeTypeLibrary, (FT_Byte*)_buf->Data(), _buf->Size(), 0, &_face))
 			{
 			case 0:
 				break;
@@ -45,7 +45,7 @@ namespace Xli
 			}
 		}
 
-		virtual ~FreeType2FontFace()
+		virtual ~FreeTypeFontFace()
 		{
 			FT_Done_Face(_face);
 		}
@@ -152,28 +152,28 @@ namespace Xli
 
 	void FreeType::Init()
 	{
-		if (RefCount == 0 && FT_Init_FreeType(&FreeType2Library) != 0)
-			XLI_THROW("Error initializing FreeType 2");
+		if (FreeTypeRefCount == 0 && FT_Init_FreeType(&FreeTypeLibrary) != 0)
+			XLI_THROW("Error initializing FreeType");
 
-		RefCount++;
+		FreeTypeRefCount++;
 	}
 
 	void FreeType::Done()
 	{
-		RefCount--;
+		FreeTypeRefCount--;
 
-		if (RefCount == 0)
-			FT_Done_FreeType(FreeType2Library);
+		if (FreeTypeRefCount == 0)
+			FT_Done_FreeType(FreeTypeLibrary);
 	}
 
 	FontFace* FreeType::LoadFontFace(Stream* fontFile)
 	{
-		if (RefCount == 0)
+		if (FreeTypeRefCount == 0)
 		{
 			Init();
 			atexit(Done);
 		}
 
-		return new FreeType2FontFace(fontFile);
+		return new FreeTypeFontFace(fontFile);
 	}
 }
