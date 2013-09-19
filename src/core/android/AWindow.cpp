@@ -10,8 +10,8 @@
 
 #include <Xli/Console.h>
 #include <Xli/Display.h>
-#include <Xli/GLContext.h>
 #include <Xli/Window.h>
+#include <XliGL/GLContext.h>
 
 static struct android_app* GlobalAndroidApp = 0;
 static Xli::WindowEventHandler* GlobalEventHandler = 0;
