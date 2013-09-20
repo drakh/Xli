@@ -12,6 +12,9 @@ static void LoadFontFace(const String& filename, float size)
 	Managed<Stream> stream = Assets->OpenFile(filename);
 	Managed<FontFace> font = FreeType::LoadFontFace(stream);
 
+	PrintLine((String)"FamilyName: " + font->GetFamilyName());
+	PrintLine((String)"StyleName: " + font->GetStyleName());
+
 	PrintLine((String)"Ascender: " + font->GetAscender(size));
 	PrintLine((String)"Descender: " + font->GetDescender(size));
 	PrintLine((String)"LineHeight: " + font->GetLineHeight(size));
