@@ -177,9 +177,9 @@ namespace Xli
 	{
 		Vector4 r;
 		r.X = data[0] * v.X + data[4] * v.Y + data[8] * v.Z + data[12] * v.W;
-		r.Y = data[1] * v.Y + data[5] * v.Y + data[9] * v.Z + data[13] * v.W;
-		r.Z = data[2] * v.Z + data[6] * v.Y + data[10] * v.Z + data[14] * v.W;
-		r.W = data[3] * v.W + data[7] * v.Y + data[11] * v.Z + data[15] * v.W;
+		r.Y = data[1] * v.X + data[5] * v.Y + data[9] * v.Z + data[13] * v.W;
+		r.Z = data[2] * v.X + data[6] * v.Y + data[10] * v.Z + data[14] * v.W;
+		r.W = data[3] * v.X + data[7] * v.Y + data[11] * v.Z + data[15] * v.W;
 		return r;
 	}
 
