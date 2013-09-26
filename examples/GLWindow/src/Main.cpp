@@ -1,5 +1,6 @@
 #include <Xli.h>
 #include <XliGL.h>
+#include <android/native_activity.h>
 
 using namespace Xli;
 
@@ -196,8 +197,7 @@ public:
             if (GetTime() - tapTime < 0.3)
             {
                 // double tap
-                if (MessageBox::Show(wnd, "Double tap detected", "Hello", DialogButtonsOKCancel) == DialogResultOK)
-                    wnd->BeginTextInput();
+                MessageBox::Show(wnd, "Double tap detected", "Hello", DialogButtonsOKCancel);
             }
             else if (wnd->IsTextInputActive())
             {
