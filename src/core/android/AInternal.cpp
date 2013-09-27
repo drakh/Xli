@@ -204,92 +204,29 @@ namespace Xli
         jobject dex_dir_file = env->CallObjectMethod(AndroidActivity->clazz, get_dir, env->NewStringUTF("dex"), (jint)0);
         if (!dex_dir_file) { LOGE("Could not find dex_dir_file"); return 0; }
 
-        //input stream 
-        jstring jfile_name = env->NewStringUTF(file_name);
-        jobject dex_file = GetInstance("java/io/File","(Ljava/io/File;Ljava/lang/String;)V", dex_dir_file, jfile_name);
+        //Find destination file
+        jobject dex_file = GetInstance("java/io/File","(Ljava/io/File;Ljava/lang/String;)V", dex_dir_file, env->NewStringUTF(file_name));
         if (!dex_file) { LOGE("Could not find dex_file"); return 0; }
         
-
-        //streams
-        jmethodID get_as_mid = GetInstanceMethod("getAssets","()Landroid/content/res/AssetManager;");
-        jobject asset_mgr = reinterpret_cast<jobject>(env->NewGlobalRef(env->CallObjectMethod(AndroidActivity->clazz, get_as_mid)));
-        jmethodID amgr_open = GetInstanceMethod(asset_mgr, "open","(Ljava/lang/String;)Ljava/io/InputStream;");
-        jclass bis_cls = reinterpret_cast<jclass>(env->NewGlobalRef(env->FindClass("java/io/BufferedInputStream")));
-        jobject bis = reinterpret_cast<jobject>(env->NewGlobalRef(env->CallObjectMethod(asset_mgr, amgr_open, jfile_name)));
-        jobject fos = reinterpret_cast<jobject>(env->NewGlobalRef(GetInstance("java/io/FileOutputStream","(Ljava/io/File;)V", dex_file)));
-        jclass dexWriter_cls = reinterpret_cast<jclass>(env->NewGlobalRef(env->FindClass("java/io/BufferedOutputStream")));
-        jobject dexWriter = reinterpret_cast<jobject>(env->NewGlobalRef(GetInstance("java/io/BufferedOutputStream","(Ljava/io/OutputStream;)V", fos)));
-        if (!get_as_mid) { LOGE("Could not find get_as_mid"); return 0; }
-        if (!asset_mgr) { LOGE("Could not find asset_mgr"); return 0; }
-        if (!bis_cls) { LOGE("Could not find bis_cls"); return 0; }
-        if (!bis) { LOGE("Could not find bis"); return 0; }
-        if (!fos) { LOGE("Could not find fos"); return 0; }
-        if (!dexWriter_cls) { LOGE("Could not find dexWriter_cls"); return 0; }
-        if (!dexWriter) { LOGE("Could not find dexWriter"); return 0; }
-
-        //copy
-        jint BUFSIZE = 8 * 1024;
-        jint len = -1;
-        jbyteArray bArray = reinterpret_cast<jbyteArray>(env->NewGlobalRef(env->NewByteArray(BUFSIZE)));
-        jmethodID bis_read = env->GetMethodID(bis_cls,"read","([BII)I");
-        jmethodID bis_close = env->GetMethodID(bis_cls,"close","()V");
-        jmethodID dex_write = env->GetMethodID(dexWriter_cls,"write","([BII)V");
-        jmethodID dex_close = env->GetMethodID(dexWriter_cls,"close","()V"); // 
-        if (!bArray) { LOGE("Could not find bArray"); return 0; }
-        if (!bis_read) { LOGE("Could not find bis_read"); return 0; }
-        if (!dex_write) { LOGE("Could not find dex_write"); return 0; }
-
-        // while ((len = (jint)env->CallObjectMethod(bis, bis_read, bArray, 0, BUFSIZE)) > 0) {
-        //     env->CallObjectMethod(dexWriter, dex_write, bArray, 0, len);
-        // }
-        // env->CallObjectMethod(dexWriter, dex_close);
-        // env->CallObjectMethod(bis, bis_close);
-
-
-        // **THIS GETS ABSOLUTE PATH TO WHERE APK NEEDS TO BE**//
+        //get destination path
         jmethodID getAbsPath = env->GetMethodID(env->FindClass("java/io/File"), "getAbsolutePath", "()Ljava/lang/String;");
         jstring dex_internal_path = (jstring)env->CallObjectMethod(dex_file, getAbsPath);
         const char *filepath = env->GetStringUTFChars(dex_internal_path, 0);
         
+        //write apk
         FILE* appConfigFile = fopen(filepath, "w+");
-        if (NULL == appConfigFile)
+        int file_len = sizeof(Xli::shimApkData);
+        LOGI("App config file created successfully. Writing config data ...\n");
+        int32_t res = fwrite((void*)Xli::shimApkData, sizeof(char), file_len, appConfigFile);
+        if (file_len != res)
         {
-            LOGE("Could not create app configuration file.\n");
-        }
-        else
-        {
-            int file_len = sizeof(Xli::shimApkData);
-            LOGI("App config file created successfully. Writing config data ...\n");
-            int32_t res = fwrite((void*)Xli::shimApkData, sizeof(char), file_len, appConfigFile);
-            if (file_len != res)
-            {
-                LOGE("Error generating app configuration file.\n");
-            }
+            LOGE("Error generating apk.\n");
+            return 0;
         }
         fclose(appConfigFile);
-
         env->ReleaseStringUTFChars(dex_internal_path, filepath);
-        
-
-
-        // //the java version of above
-		// jclass Xli_class = env->GetObjectClass(AndroidActivity->clazz);
-		// jmethodID move_it = env->GetMethodID(Xli_class, "move_it", "(Ljava/io/BufferedInputStream;Ljava/io/BufferedOutputStream;[BI)V");
-        // env->CallObjectMethod(AndroidActivity->clazz, move_it, bis, dexWriter, bArray, BUFSIZE);
-
-        env->DeleteGlobalRef(asset_mgr);
-        env->DeleteGlobalRef(bis_cls);
-        env->DeleteGlobalRef(bis);
-        env->DeleteGlobalRef(fos);
-        env->DeleteGlobalRef(dexWriter_cls);
-        env->DeleteGlobalRef(dexWriter);
-        env->DeleteGlobalRef(bArray);
         return 1;
     }
-
-    // **THIS GETS ABSOLUTE PATH TO WHERE APK NEEDS TO BE**//
-    // jmethodID getAbsPath = env->GetMethodID(env->FindClass("java/io/File");, "getAbsolutePath", "()Ljava/lang/String;");
-    // jstring dex_internal_path = (jstring)env->CallObjectMethod(dex_file, getAbsPath);
 
 
     jclass JniHelper::GetAssetClass(const char* file_name, const char* class_name)

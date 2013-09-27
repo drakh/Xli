@@ -10,7 +10,7 @@ namespace Xli
         jni->CallObjectMethod(shim_class, mid);
     }
 
-    void XliJ::ShowMessageBox() {
+    void XliJ::ShowMessageBox(const String& message, const String& caption, int buttons, int hints) {
         //setup for call
         JniHelper jni;
         jclass shim_class = jni.GetShim();
@@ -18,10 +18,10 @@ namespace Xli
 
         //vars for call
         jobject activity = jni.GetInstance();
-        jstring caption = jni->NewStringUTF("lets go");
-        jstring message = jni->NewStringUTF("here is a message");
+        jstring jcaption = jni->NewStringUTF(caption.Data());
+        jstring jmessage = jni->NewStringUTF(message.Data());
 
         //call
-        jni->CallObjectMethod(shim_class, mid, activity, message, caption, 0, 0);
+        jni->CallObjectMethod(shim_class, mid, activity, jmessage, jcaption, (jint)buttons, (jint)hints);
     }
 }

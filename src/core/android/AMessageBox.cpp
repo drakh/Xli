@@ -8,8 +8,7 @@ namespace Xli
 	DialogResult MessageBox::Show(Window* parent, const String& message, const String& caption, DialogButtons buttons, int hints)
 	{
 		JniHelper jni;
-        XliJ::MakeNoise();
-        XliJ::ShowMessageBox();
+        XliJ::ShowMessageBox(message, caption, (int)buttons, (int)hints);
         return (DialogResult)0;
 	}
 }

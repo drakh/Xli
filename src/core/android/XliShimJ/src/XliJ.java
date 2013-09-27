@@ -20,18 +20,55 @@ public class XliJ extends android.app.NativeActivity {
     	
     	b.setTitle(caption);
     	b.setMessage(message);
-    	b.setPositiveButton("positive", new DialogInterface.OnClickListener() {
-    		public void onClick(DialogInterface dialog, int which) { 
-    			result[0] = 1;
-    			bufferLock.open();
-    		}
-    	});
-    	b.setNegativeButton("negative", new DialogInterface.OnClickListener() {
-    		public void onClick(DialogInterface dialog, int which) { 
-    			result[0] = 2;
-    			bufferLock.open();
-    		}
-    	});  
+    	
+    	switch (buttons) {
+		case 0:
+	    	b.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+	    		public void onClick(DialogInterface dialog, int which) { result[0] = 0; bufferLock.open(); }
+	    	});		
+			break;
+		case 1:
+	    	b.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+	    		public void onClick(DialogInterface dialog, int which) { result[0] = 0; bufferLock.open(); }
+	    	});
+	    	b.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+	    		public void onClick(DialogInterface dialog, int which) { result[0] = 1; bufferLock.open(); }
+	    	});  
+			break;	
+		case 2:
+	    	b.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+	    		public void onClick(DialogInterface dialog, int which) { result[0] = 2; bufferLock.open(); }
+	    	});
+	    	b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+	    		public void onClick(DialogInterface dialog, int which) { result[0] = 3; bufferLock.open(); }
+	    	});  
+			break;
+		case 3:
+	    	b.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+	    		public void onClick(DialogInterface dialog, int which) { result[0] = 2; bufferLock.open(); }
+	    	});
+	    	b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+	    		public void onClick(DialogInterface dialog, int which) { result[0] = 3; bufferLock.open(); }
+	    	});
+	    	b.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+	    		public void onClick(DialogInterface dialog, int which) { result[0] = 1; bufferLock.open(); }
+	    	});
+			break;
+		case 4:
+	    	b.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
+	    		public void onClick(DialogInterface dialog, int which) { result[0] = 5; bufferLock.open(); }
+	    	});
+	    	b.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+	    		public void onClick(DialogInterface dialog, int which) { result[0] = 1; bufferLock.open(); }
+	    	});
+	    	b.setNeutralButton("Try Again", new DialogInterface.OnClickListener() {
+	    		public void onClick(DialogInterface dialog, int which) { result[0] = 4; bufferLock.open(); }
+	    	});
+			break;			
+		default:
+			break;
+		}
+
     	try {
     		 activity.runOnUiThread(new Runnable() {
     			  public void run() {
@@ -39,7 +76,7 @@ public class XliJ extends android.app.NativeActivity {
     				  d.setOnDismissListener(new DialogInterface.OnDismissListener() {
     					  @Override
     					  public void onDismiss(final DialogInterface dialog) {
-    						  result[0]=3;
+    						  result[0]=1;
     						  bufferLock.open();
     					  }});
     				  d.show();

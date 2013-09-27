@@ -22,7 +22,7 @@ namespace Xli
 
 	public:
         static void MakeNoise();
-        static void ShowMessageBox();
+        static void ShowMessageBox(const String& message, const String& caption, int buttons, int hints);
 	};
 }
 
