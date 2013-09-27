@@ -22,19 +22,19 @@ public class XliJ extends android.app.NativeActivity {
     	b.setMessage(message);
     	
     	switch (buttons) {
+		case 1:
+	    	b.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+	    		public void onClick(DialogInterface dialog, int which) { result[0] = 1; bufferLock.open(); }
+	    	});      	
 		case 0:
 	    	b.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 	    		public void onClick(DialogInterface dialog, int which) { result[0] = 0; bufferLock.open(); }
 	    	});		
 			break;
-		case 1:
-	    	b.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-	    		public void onClick(DialogInterface dialog, int which) { result[0] = 0; bufferLock.open(); }
-	    	});
-	    	b.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		case 3:
+	    	b.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
 	    		public void onClick(DialogInterface dialog, int which) { result[0] = 1; bufferLock.open(); }
-	    	});  
-			break;	
+	    	});			
 		case 2:
 	    	b.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 	    		public void onClick(DialogInterface dialog, int which) { result[0] = 2; bufferLock.open(); }
@@ -42,17 +42,6 @@ public class XliJ extends android.app.NativeActivity {
 	    	b.setNegativeButton("No", new DialogInterface.OnClickListener() {
 	    		public void onClick(DialogInterface dialog, int which) { result[0] = 3; bufferLock.open(); }
 	    	});  
-			break;
-		case 3:
-	    	b.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-	    		public void onClick(DialogInterface dialog, int which) { result[0] = 2; bufferLock.open(); }
-	    	});
-	    	b.setNegativeButton("No", new DialogInterface.OnClickListener() {
-	    		public void onClick(DialogInterface dialog, int which) { result[0] = 3; bufferLock.open(); }
-	    	});
-	    	b.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-	    		public void onClick(DialogInterface dialog, int which) { result[0] = 1; bufferLock.open(); }
-	    	});
 			break;
 		case 4:
 	    	b.setPositiveButton("Continue", new DialogInterface.OnClickListener() {

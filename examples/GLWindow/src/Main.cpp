@@ -10,6 +10,7 @@ class GLApp: public Application
 
     double touchDownTime;
     double tapTime;
+    int dialogType;
 
 public:
 	GLApp()
@@ -25,7 +26,8 @@ public:
 	virtual void OnInit(Window* wnd)
 	{
 		Err->WriteLine("OnInit");
-
+        
+        dialogType = 0;
 
 		// Setup OpenGL
 
@@ -197,7 +199,7 @@ public:
             if (GetTime() - tapTime < 0.3)
             {
                 // double tap
-                MessageBox::Show(wnd, "Double tap detected", "Hello", DialogButtonsCancelTryContinue);
+                MessageBox::Show(wnd, "Double tap detected", "Hello", (DialogButtons)(dialogType++ % 5));
             }
             else if (wnd->IsTextInputActive())
             {
