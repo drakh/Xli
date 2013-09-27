@@ -71,16 +71,7 @@ public class XliJ extends android.app.NativeActivity {
 
     	try {
     		 activity.runOnUiThread(new Runnable() {
-    			  public void run() {
-    				  AlertDialog d = b.create();
-    				  d.setOnDismissListener(new DialogInterface.OnDismissListener() {
-    					  @Override
-    					  public void onDismiss(final DialogInterface dialog) {
-    						  result[0]=1;
-    						  bufferLock.open();
-    					  }});
-    				  d.show();
-    				  }
+    			  public void run() { b.show(); }
     				});
     		bufferLock.block();
     	} catch (Exception e) {
