@@ -11,15 +11,17 @@ namespace Xli
     }
 
     void XliJ::ShowMessageBox() {
+        //setup for call
         JniHelper jni;
         jclass shim_class = jni.GetShim();
-        jmethodID mid = jni->GetStaticMethodID(shim_class, "ShowMessageBox", "(Landroid/app/NativeActivity;Ljava/lang/CharSequence;Ljava/lang/CharSequence;)I");
+        jmethodID mid = jni->GetStaticMethodID(shim_class, "ShowMessageBox", "(Landroid/app/NativeActivity;Ljava/lang/CharSequence;Ljava/lang/CharSequence;II)I");
 
+        //vars for call
         jobject activity = jni.GetInstance();
         jstring caption = jni->NewStringUTF("lets go");
         jstring message = jni->NewStringUTF("here is a message");
-        if (!mid) LOGE("damn");
-        jni->CallObjectMethod(shim_class, mid, activity, caption, message);
+
+        //call
+        jni->CallObjectMethod(shim_class, mid, activity, message, caption, 0, 0);
     }
-    
 }

@@ -1,6 +1,7 @@
 #ifndef __XLI_A_INTERNAL_H__
 #define __XLI_A_INTERNAL_H__
 
+#include <stdio.h>
 #include <jni.h>
 #include <cstdlib>
 #include <android/log.h>
