@@ -1,4 +1,5 @@
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.NativeActivity;
 import android.content.DialogInterface;
 import android.os.ConditionVariable;
@@ -20,6 +21,7 @@ public class XliJ extends android.app.NativeActivity {
     	
     	b.setTitle(caption);
     	b.setMessage(message);
+    	b.setCancelable(false);
     	
     	switch (buttons) {
 		case 1:
@@ -59,9 +61,7 @@ public class XliJ extends android.app.NativeActivity {
 		}
 
     	try {
-    		 activity.runOnUiThread(new Runnable() {
-    			  public void run() { b.show(); }
-    				});
+    		 activity.runOnUiThread(new Runnable() { public void run() { AlertDialog d = b.create(); d.setCanceledOnTouchOutside(false); d.show(); }});
     		bufferLock.block();
     	} catch (Exception e) {
     		Log.e("XLI", e.getMessage());
