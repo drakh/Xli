@@ -1,5 +1,4 @@
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.NativeActivity;
 import android.content.DialogInterface;
 import android.os.ConditionVariable;
@@ -22,6 +21,19 @@ public class XliJ extends android.app.NativeActivity {
     	b.setTitle(caption);
     	b.setMessage(message);
     	b.setCancelable(false);
+    	
+    	switch (hints) {
+    	case 0:
+    		b.setIcon(android.R.drawable.stat_notify_error);
+    		break;
+    	case 1:
+    		b.setIcon(android.R.drawable.btn_star_big_on);
+    		break;
+    	case 2:
+    		b.setIcon(android.R.drawable.stat_sys_warning);
+    		break;   		
+    	}
+    	
     	
     	switch (buttons) {
 		case 1:
