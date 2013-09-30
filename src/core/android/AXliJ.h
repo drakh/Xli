@@ -22,6 +22,8 @@ namespace Xli
 
 	public:
         static void MakeNoise();
+        static void RaiseSoftKeyboard();
+        static void HideSoftKeyboard();
         static int ShowMessageBox(const String& message, const String& caption, int buttons, int hints);
 	};
 }

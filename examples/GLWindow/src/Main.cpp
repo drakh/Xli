@@ -199,7 +199,12 @@ public:
             if (GetTime() - tapTime < 0.3)
             {
                 // double tap
-                MessageBox::Show(wnd, "Double tap detected", "Hello", (DialogButtons)(dialogType++ % 5));
+                if ((dialogType++%2)){
+                    wnd->BeginTextInput();
+                } else {
+                    wnd->EndTextInput();
+                }
+                //MessageBox::Show(wnd, "Double tap detected", "Hello", (DialogButtons)(dialogType++ % 5));
             }
             else if (wnd->IsTextInputActive())
             {

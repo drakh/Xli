@@ -1,14 +1,46 @@
 import android.app.AlertDialog;
 import android.app.NativeActivity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.ConditionVariable;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.BaseInputConnection;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.TextView;
 
+
+@SuppressWarnings("unused")
 public class XliJ extends android.app.NativeActivity {
 
+	
 	//===========	
 	
 	public static void makeNoise() { Log.e("XLI", "************ Noise! ************"); }
+	
+	//===========		
+	
+	public static void raiseKeyboard(final NativeActivity activity) {   
+		activity.runOnUiThread(new Runnable() { public void run() { 		        
+	        InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+	        imm.showSoftInput(activity.getWindow().getDecorView(), 0);
+		}});
+	}
+	
+	public static void hideKeyboard(final NativeActivity activity) {   
+		activity.runOnUiThread(new Runnable() { public void run() { 		        
+	        InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+	        imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
+		}});
+	}
 	
 	//===========
 	

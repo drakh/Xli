@@ -1,6 +1,6 @@
 #include "3rdparty/android_native_app_glue.h"
 #include "AInternal.h"
-
+#include "AXliJ.h"
 #include <android/window.h>
 #include <EGL/egl.h>
 
@@ -153,6 +153,16 @@ namespace Xli
 		virtual void ShowCursor(bool show)
 		{
 		}
+
+        virtual void BeginTextInput()
+        {
+            XliJ::RaiseSoftKeyboard();
+        }
+
+        virtual void EndTextInput()
+        {
+            XliJ::HideSoftKeyboard();
+        }
 
 		virtual bool GetKeyState(Key key)
 		{

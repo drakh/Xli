@@ -10,6 +10,22 @@ namespace Xli
         jni->CallObjectMethod(shim_class, mid);
     }
 
+    void XliJ::RaiseSoftKeyboard() {
+        JniHelper jni;
+        jclass shim_class = jni.GetShim();
+        jmethodID mid = jni->GetStaticMethodID(shim_class, "raiseKeyboard", "(Landroid/app/NativeActivity;)V");
+        jobject activity = jni.GetInstance();
+        jni->CallObjectMethod(shim_class, mid, activity);
+    }
+
+    void XliJ::HideSoftKeyboard() {
+        JniHelper jni;
+        jclass shim_class = jni.GetShim();
+        jmethodID mid = jni->GetStaticMethodID(shim_class, "hideKeyboard", "(Landroid/app/NativeActivity;)V");
+        jobject activity = jni.GetInstance();
+        jni->CallObjectMethod(shim_class, mid, activity);
+    }
+
     int XliJ::ShowMessageBox(const String& message, const String& caption, int buttons, int hints) {
         //setup for call
         JniHelper jni;
