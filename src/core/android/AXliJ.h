@@ -19,11 +19,12 @@
     {
         extern "C"
         {
-            void JNICALL XliJ_OnKey(JNIEnv *env , jobject obj, jint keyCode, jint keyEvent);
-            void JNICALL XliJ_OnKeyUp(JNIEnv *env , jobject obj, jint keyCode, jint keyEvent);
-            void JNICALL XliJ_OnKeyDown(JNIEnv *env , jobject obj, jint keyCode, jint keyEvent);
-            void JNICALL XliJ_OnKeyMultiple(JNIEnv *env , jobject obj, jint keyCode, jint keyEvent);
-            void JNICALL XliJ_OnKeyLongPress(JNIEnv *env , jobject obj, jint keyCode, jint keyEvent);
+            void JNICALL XliJ_OnKey(JNIEnv *env , jobject obj, jint keyCode);
+            void JNICALL XliJ_OnKeyUp(JNIEnv *env , jobject obj, jint keyCode);
+            void JNICALL XliJ_OnKeyDown(JNIEnv *env , jobject obj, jint keyCode);
+            void JNICALL XliJ_OnKeyMultiple(JNIEnv *env , jobject obj, jint keyCode, jint count);
+            void JNICALL XliJ_OnKeyLongPress(JNIEnv *env , jobject obj, jint keyCode);
+            void AttachNativeCallbacks(jclass* shim_class, JNIEnv *l_env);
         }
 
         class XliJ
@@ -291,11 +292,11 @@
                 META_SHIFT_RIGHT_ON = 128,
                 META_SYM_ON = 4
             };
-            static int AndroidToXliKeyEvent(XliJ::AKeyEvent keyEvent);
             static void MakeNoise();
             static void RaiseSoftKeyboard();
             static void HideSoftKeyboard();
             static int ShowMessageBox(const String& message, const String& caption, int buttons, int hints);
+            static int AndroidToXliKeyEvent(XliJ::AKeyEvent keyEvent);
         };
     }
 

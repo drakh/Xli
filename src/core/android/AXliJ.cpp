@@ -7,25 +7,41 @@ namespace Xli
 
     extern "C"
     {
-        void JNICALL XliJ_OnKey (JNIEnv *env , jobject obj, jint keyCode, jint keyEvent) 
+        void JNICALL XliJ_OnKey (JNIEnv *env , jobject obj, jint keyCode) 
         {
             LOGE("XliJ_OnKey: %d", XliJ::AndroidToXliKeyEvent((XliJ::AKeyEvent)keyCode));
         }
-        void JNICALL XliJ_OnKeyUp (JNIEnv *env , jobject obj, jint keyCode, jint keyEvent) 
+        void JNICALL XliJ_OnKeyUp (JNIEnv *env , jobject obj, jint keyCode) 
         {
             LOGE("XliJ_OnKeyUp: %d", XliJ::AndroidToXliKeyEvent((XliJ::AKeyEvent)keyCode));
         }
-        void JNICALL XliJ_OnKeyDown (JNIEnv *env , jobject obj, jint keyCode, jint keyEvent) 
+        void JNICALL XliJ_OnKeyDown (JNIEnv *env , jobject obj, jint keyCode) 
         {
             LOGE("XliJ_OnKeyDown: %d", XliJ::AndroidToXliKeyEvent((XliJ::AKeyEvent)keyCode));
         }
-        void JNICALL XliJ_OnKeyMultiple (JNIEnv *env , jobject obj, jint keyCode, jint keyEvent) 
+        void JNICALL XliJ_OnKeyMultiple (JNIEnv *env , jobject obj, jint keyCode, jint count) 
         {
             LOGE("XliJ_OnKeyMultiple: %d", XliJ::AndroidToXliKeyEvent((XliJ::AKeyEvent)keyCode));
         }
-        void JNICALL XliJ_OnKeyLongPress (JNIEnv *env , jobject obj, jint keyCode, jint keyEvent)
+        void JNICALL XliJ_OnKeyLongPress (JNIEnv *env , jobject obj, jint keyCode)
         {
             LOGE("XliJ_OnKeyLongPress: %d", XliJ::AndroidToXliKeyEvent((XliJ::AKeyEvent)keyCode));
+        }
+
+        void AttachNativeCallbacks(jclass* shim_class, JNIEnv *l_env)
+        {
+            static JNINativeMethod native_funcs[] = {
+                {(char* const)"XliJ_OnKey", (char* const)"(I)V", (void *)&XliJ_OnKey},
+                {(char* const)"XliJ_OnKeyUp", (char* const)"(I)V", (void *)&XliJ_OnKeyUp},
+                {(char* const)"XliJ_OnKeyDown", (char* const)"(I)V", (void *)&XliJ_OnKeyDown},
+                {(char* const)"XliJ_OnKeyMultiple", (char* const)"(II)V", (void *)&XliJ_OnKeyMultiple},
+                {(char* const)"XliJ_OnKeyLongPress", (char* const)"(I)V", (void *)&XliJ_OnKeyLongPress},
+            };
+            // the last argument is the number of native functions
+            jint attached = l_env->RegisterNatives(*shim_class, native_funcs, 5);
+            if (attached < 0) {
+                LOGE("COULD NOT REGISTER NATIVE FUNCTIONS");
+            }
         }
     }
 

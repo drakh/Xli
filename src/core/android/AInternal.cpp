@@ -37,22 +37,7 @@ namespace Xli
 
     extern "C"
     {
-        void AttachShimNativeCallbacks(jclass* shim_class, JNIEnv *l_env)
-        {
-            static JNINativeMethod native_funcs[] = {
-                {(char* const)"XliJ_OnKey", (char* const)"(I)V", (void *)&XliJ_OnKey},
-                {(char* const)"XliJ_OnKeyUp", (char* const)"(I)V", (void *)&XliJ_OnKeyUp},
-                {(char* const)"XliJ_OnKeyDown", (char* const)"(I)V", (void *)&XliJ_OnKeyDown},
-                {(char* const)"XliJ_OnKeyMultiple", (char* const)"(I)V", (void *)&XliJ_OnKeyMultiple},
-                {(char* const)"XliJ_OnKeyLongPress", (char* const)"(I)V", (void *)&XliJ_OnKeyLongPress},
-            };
-        
-            // the '1' is the number of functions
-            jint attached = l_env->RegisterNatives(*shim_class, native_funcs, 5);
-            if (attached < 0) {
-                LOGE("COULD NOT REGISTER NATIVE FUNCTIONS");
-            }
-        }
+
     }
 
 	void JniHelper::Init()
@@ -81,7 +66,7 @@ namespace Xli
                 jclass *shim_class = new jclass;
                 *shim_class = GetAssetClass("XliShimJ.apk","XliJ");
                 
-                AttachShimNativeCallbacks(shim_class, env);
+                AttachNativeCallbacks(shim_class, env);
 
                 pthread_setspecific(JniThreadKey, (void*)env);
                 pthread_setspecific(JniShimKey, (void*)shim_class);

@@ -44,11 +44,11 @@ public class XliJ extends android.app.NativeActivity {
 		}});
 	}
 	
-	public static native void XliJ_OnKey(int keyCode, int event);
-	public static native void XliJ_OnKeyUp(int keyCode, int event);
-	public static native void XliJ_OnKeyDown(int keyCode, int event);
-	public static native void XliJ_OnKeyMultiple(int keyCode, int event, int count);
-	public static native void XliJ_OnKeyLongPress(int keyCode, int event);
+	public static native void XliJ_OnKey(int keyCode);
+	public static native void XliJ_OnKeyUp(int keyCode);
+	public static native void XliJ_OnKeyDown(int keyCode);
+	public static native void XliJ_OnKeyMultiple(int keyCode, int count);
+	public static native void XliJ_OnKeyLongPress(int keyCode);
 	
 	public static class Hidden extends View {
 	    public Hidden(Context context) {
@@ -61,8 +61,7 @@ public class XliJ extends android.app.NativeActivity {
 	            }
 	        });
 	    }
-	   
-	    
+	  
 	    @Override
 	    public boolean onKeyUp(int keyCode, KeyEvent event) {
 	    	XliJ_OnKeyUp(keyCode);
@@ -75,12 +74,12 @@ public class XliJ extends android.app.NativeActivity {
 	    };
 	    @Override
 	    public boolean onKeyMultiple(int keyCode, int count, KeyEvent event) {
-	    	XliJ_OnKeyUp(keyCode);
+	    	XliJ_OnKeyMultiple(keyCode, count);
 	    	return true;
 	    };
 	    @Override
 	    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-	    	XliJ_OnKeyDown(keyCode);
+	    	XliJ_OnKeyLongPress(keyCode);
 	    	return true;
 	    };
 	    
