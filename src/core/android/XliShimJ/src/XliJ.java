@@ -3,9 +3,7 @@ import android.app.NativeActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.ConditionVariable;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -14,25 +12,88 @@ import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.FrameLayout;
 
-
-@SuppressWarnings("unused")
 public class XliJ extends android.app.NativeActivity {
-
+	static Hidden hidden_text;
+    protected static ViewGroup hidden_layout;	
 	
 	//===========	
 	
 	public static void makeNoise() { Log.e("XLI", "************ Noise! ************"); }
 	
-	//===========		
+	//===========
 	
-	public static void raiseKeyboard(final NativeActivity activity) {   
-		activity.runOnUiThread(new Runnable() { public void run() { 		        
-	        InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-	        imm.showSoftInput(activity.getWindow().getDecorView(), 0);
+	public static void raiseKeyboard(final NativeActivity activity) { 
+		if (hidden_layout == null) 
+		{
+			hidden_layout = new FrameLayout(activity);
+			activity.runOnUiThread(new Runnable() { public void run() { activity.setContentView(hidden_layout); }});
+		}
+		activity.runOnUiThread(new Runnable() { public void run() { 	
+			try {
+				hidden_text = new Hidden(activity);
+				hidden_layout.addView(hidden_text);
+				hidden_text.setVisibility(View.VISIBLE);
+				hidden_text.requestFocus();
+		        InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+		        imm.showSoftInput(hidden_text, 0);	    
+			} catch (Exception e) {
+				Log.e("XLI","oh sweet jesus");
+			}
 		}});
+	}
+	
+	public static native void XliJ_OnKey(int keyCode, int event);
+	public static native void XliJ_OnKeyUp(int keyCode, int event);
+	public static native void XliJ_OnKeyDown(int keyCode, int event);
+	public static native void XliJ_OnKeyMultiple(int keyCode, int event, int count);
+	public static native void XliJ_OnKeyLongPress(int keyCode, int event);
+	
+	public static class Hidden extends View {
+	    public Hidden(Context context) {
+	        super(context);
+	        setFocusableInTouchMode(true); 
+	        setOnKeyListener(new OnKeyListener() {
+	            public boolean onKey(View v, int keyCode, KeyEvent event) {
+	            	XliJ_OnKey(keyCode);
+	                return false;
+	            }
+	        });
+	    }
+	   
+	    
+	    @Override
+	    public boolean onKeyUp(int keyCode, KeyEvent event) {
+	    	XliJ_OnKeyUp(keyCode);
+	    	return true;
+	    };
+	    @Override
+	    public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    	XliJ_OnKeyDown(keyCode);
+	    	return true;
+	    };
+	    @Override
+	    public boolean onKeyMultiple(int keyCode, int count, KeyEvent event) {
+	    	XliJ_OnKeyUp(keyCode);
+	    	return true;
+	    };
+	    @Override
+	    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+	    	XliJ_OnKeyDown(keyCode);
+	    	return true;
+	    };
+	    
+	    @Override
+	    public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
+	        BaseInputConnection fic = new BaseInputConnection(this, false);
+	        outAttrs.actionLabel = null;
+	        outAttrs.inputType = InputType.TYPE_NULL;
+	        outAttrs.imeOptions = EditorInfo.IME_ACTION_NEXT;
+	        return fic;
+	    }
+	    @Override
+	    public boolean onCheckIsTextEditor() { Log.d("XLI", "onCheckIsTextEditor"); return true; }
 	}
 	
 	public static void hideKeyboard(final NativeActivity activity) {   
