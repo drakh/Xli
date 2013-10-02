@@ -14,8 +14,8 @@
 #include <XliGL/GLContext.h>
 
 static struct android_app* GlobalAndroidApp = 0;
-static Xli::WindowEventHandler* GlobalEventHandler = 0;
-static Xli::Window* GlobalWindow = 0;
+extern Xli::WindowEventHandler* GlobalEventHandler = 0;
+extern Xli::Window* GlobalWindow = 0;
 static int GlobalWidth = 0;
 static int GlobalHeight = 0;
 

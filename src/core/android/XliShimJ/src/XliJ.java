@@ -16,30 +16,49 @@ import android.widget.FrameLayout;
 
 public class XliJ extends android.app.NativeActivity {
 	static Hidden hidden_text;
-    protected static ViewGroup hidden_layout;	
+    protected static ViewGroup hidden_layout;
 	
+    public static int AttachHiddenView(final NativeActivity activity) 
+    {
+    	final int[] result = {1};
+    	Log.d("XLI","Initialising shim on Java side");
+    	if (hidden_layout == null) 
+		{
+			hidden_layout = new FrameLayout(activity);
+			activity.runOnUiThread(new Runnable() { public void run() { 	
+				try {
+					activity.setContentView(hidden_layout);
+					hidden_text = new Hidden(activity);
+					hidden_layout.addView(hidden_text);
+					hidden_text.setVisibility(View.VISIBLE);
+					hidden_text.requestFocus();
+				} catch (Exception e) {
+					Log.e("XLI","Unable to create Layout or View for input cpature.");
+					result[0] = 0;
+				}
+			}});
+		}
+		return result[0];
+    }
+    
 	//===========	
 	
 	public static void makeNoise() { Log.e("XLI", "************ Noise! ************"); }
 	
 	//===========
 	
-	public static void raiseKeyboard(final NativeActivity activity) { 
-		if (hidden_layout == null) 
-		{
-			hidden_layout = new FrameLayout(activity);
-			activity.runOnUiThread(new Runnable() { public void run() { activity.setContentView(hidden_layout); }});
+	public static void raiseKeyboard(final NativeActivity activity) {
+		if (hidden_text == null) 
+		{ 
+			Log.e("XLI","Hidden View not available"); 
+			return;
 		}
 		activity.runOnUiThread(new Runnable() { public void run() { 	
 			try {
-				hidden_text = new Hidden(activity);
-				hidden_layout.addView(hidden_text);
-				hidden_text.setVisibility(View.VISIBLE);
-				hidden_text.requestFocus();
 		        InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
 		        imm.showSoftInput(hidden_text, 0);	    
 			} catch (Exception e) {
-				Log.e("XLI","oh sweet jesus");
+				Log.e("XLI","Unable to get get resources to raise keyboard");
 			}
 		}});
 	}
@@ -47,19 +66,19 @@ public class XliJ extends android.app.NativeActivity {
 	public static native void XliJ_OnKey(int keyCode);
 	public static native void XliJ_OnKeyUp(int keyCode);
 	public static native void XliJ_OnKeyDown(int keyCode);
-	public static native void XliJ_OnKeyMultiple(int keyCode, int count);
-	public static native void XliJ_OnKeyLongPress(int keyCode);
+//	public static native void XliJ_OnKeyMultiple(int keyCode, int count);
+//	public static native void XliJ_OnKeyLongPress(int keyCode);
 	
 	public static class Hidden extends View {
 	    public Hidden(Context context) {
 	        super(context);
 	        setFocusableInTouchMode(true); 
-	        setOnKeyListener(new OnKeyListener() {
-	            public boolean onKey(View v, int keyCode, KeyEvent event) {
-	            	XliJ_OnKey(keyCode);
-	                return false;
-	            }
-	        });
+//	        setOnKeyListener(new OnKeyListener() {
+//	            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//	            	XliJ_OnKey(keyCode);
+//	                return false;
+//	            }
+//	        });
 	    }
 	  
 	    @Override
@@ -72,16 +91,16 @@ public class XliJ extends android.app.NativeActivity {
 	    	XliJ_OnKeyDown(keyCode);
 	    	return true;
 	    };
-	    @Override
-	    public boolean onKeyMultiple(int keyCode, int count, KeyEvent event) {
-	    	XliJ_OnKeyMultiple(keyCode, count);
-	    	return true;
-	    };
-	    @Override
-	    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-	    	XliJ_OnKeyLongPress(keyCode);
-	    	return true;
-	    };
+//	    @Override
+//	    public boolean onKeyMultiple(int keyCode, int count, KeyEvent event) {
+//	    	XliJ_OnKeyMultiple(keyCode, count);
+//	    	return true;
+//	    };
+//	    @Override
+//	    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+//	    	XliJ_OnKeyLongPress(keyCode);
+//	    	return true;
+//	    };
 	    
 	    @Override
 	    public InputConnection onCreateInputConnection(EditorInfo outAttrs) {

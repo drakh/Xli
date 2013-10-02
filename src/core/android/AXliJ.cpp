@@ -2,46 +2,65 @@
 #include "AXliJ.h"
 #include "Xli/Window.h"
 
+extern Xli::WindowEventHandler* GlobalEventHandler;
+extern Xli::Window* GlobalWindow;
+
 namespace Xli
 {
 
     extern "C"
     {
-        void JNICALL XliJ_OnKey (JNIEnv *env , jobject obj, jint keyCode) 
-        {
-            LOGE("XliJ_OnKey: %d", XliJ::AndroidToXliKeyEvent((XliJ::AKeyEvent)keyCode));
-        }
+        // void JNICALL XliJ_OnKey (JNIEnv *env , jobject obj, jint keyCode) 
+        // {
+        //     Xli::Key key = XliJ::AndroidToXliKeyEvent((XliJ::AKeyEvent)keyCode);
+        //     LOGD("XliJ_OnKey: %d", key);
+        // }
+
         void JNICALL XliJ_OnKeyUp (JNIEnv *env , jobject obj, jint keyCode) 
         {
-            LOGE("XliJ_OnKeyUp: %d", XliJ::AndroidToXliKeyEvent((XliJ::AKeyEvent)keyCode));
+            Xli::Key key = XliJ::AndroidToXliKeyEvent((XliJ::AKeyEvent)keyCode);
+            GlobalEventHandler->OnKeyUp(GlobalWindow, key);
+            LOGD("XliJ_OnKeyUp: %d", key);
         }
+
         void JNICALL XliJ_OnKeyDown (JNIEnv *env , jobject obj, jint keyCode) 
         {
-            LOGE("XliJ_OnKeyDown: %d", XliJ::AndroidToXliKeyEvent((XliJ::AKeyEvent)keyCode));
+            Xli::Key key = XliJ::AndroidToXliKeyEvent((XliJ::AKeyEvent)keyCode);
+            GlobalEventHandler->OnKeyDown(GlobalWindow, key);
+            LOGD("XliJ_OnKeyDown: %d", key);
         }
-        void JNICALL XliJ_OnKeyMultiple (JNIEnv *env , jobject obj, jint keyCode, jint count) 
-        {
-            LOGE("XliJ_OnKeyMultiple: %d", XliJ::AndroidToXliKeyEvent((XliJ::AKeyEvent)keyCode));
-        }
-        void JNICALL XliJ_OnKeyLongPress (JNIEnv *env , jobject obj, jint keyCode)
-        {
-            LOGE("XliJ_OnKeyLongPress: %d", XliJ::AndroidToXliKeyEvent((XliJ::AKeyEvent)keyCode));
-        }
+
+        // void JNICALL XliJ_OnKeyMultiple (JNIEnv *env , jobject obj, jint keyCode, jint count) 
+        // {
+        //     LOGD("XliJ_OnKeyMultiple: %d", XliJ::AndroidToXliKeyEvent((XliJ::AKeyEvent)keyCode));
+        // }
+
+        // void JNICALL XliJ_OnKeyLongPress (JNIEnv *env , jobject obj, jint keyCode)
+        // {
+        //     LOGD("XliJ_OnKeyLongPress: %d", XliJ::AndroidToXliKeyEvent((XliJ::AKeyEvent)keyCode));
+        // }
 
         void AttachNativeCallbacks(jclass* shim_class, JNIEnv *l_env)
         {
             static JNINativeMethod native_funcs[] = {
-                {(char* const)"XliJ_OnKey", (char* const)"(I)V", (void *)&XliJ_OnKey},
+                // {(char* const)"XliJ_OnKey", (char* const)"(I)V", (void *)&XliJ_OnKey},
                 {(char* const)"XliJ_OnKeyUp", (char* const)"(I)V", (void *)&XliJ_OnKeyUp},
                 {(char* const)"XliJ_OnKeyDown", (char* const)"(I)V", (void *)&XliJ_OnKeyDown},
-                {(char* const)"XliJ_OnKeyMultiple", (char* const)"(II)V", (void *)&XliJ_OnKeyMultiple},
-                {(char* const)"XliJ_OnKeyLongPress", (char* const)"(I)V", (void *)&XliJ_OnKeyLongPress},
+                // {(char* const)"XliJ_OnKeyMultiple", (char* const)"(II)V", (void *)&XliJ_OnKeyMultiple},
+                // {(char* const)"XliJ_OnKeyLongPress", (char* const)"(I)V", (void *)&XliJ_OnKeyLongPress},
             };
             // the last argument is the number of native functions
-            jint attached = l_env->RegisterNatives(*shim_class, native_funcs, 5);
+            jint attached = l_env->RegisterNatives(*shim_class, native_funcs, 2);
             if (attached < 0) {
                 LOGE("COULD NOT REGISTER NATIVE FUNCTIONS");
             }
+        }
+
+        void AttachHiddenView(jclass* shim_class, JNIEnv* env, jobject activity) 
+        {
+            jmethodID mid = env->GetStaticMethodID(*shim_class, "AttachHiddenView", "(Landroid/app/NativeActivity;)I");
+            jint result = (jint)env->CallObjectMethod(*shim_class, mid, activity);
+            if (!result) LOGE("Could not AttachHidden View (c++ side)");
         }
     }
 
@@ -88,7 +107,7 @@ namespace Xli
         return result;
     }
 
-    int XliJ::AndroidToXliKeyEvent(XliJ::AKeyEvent androidKeyCode) 
+    Xli::Key XliJ::AndroidToXliKeyEvent(XliJ::AKeyEvent androidKeyCode) 
     {
         switch (androidKeyCode)
         {

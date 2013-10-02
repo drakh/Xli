@@ -6,6 +6,7 @@
 #include <android/log.h>
 #include <android/native_activity.h>
 #include <Xli/Exception.h>
+#include "Xli/Window.h"
 
 #define LOGD(...) ((void)__android_log_print(ANDROID_LOG_DEBUG, Xli::GetAppName(), __VA_ARGS__))
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, Xli::GetAppName(), __VA_ARGS__))
@@ -19,12 +20,13 @@
     {
         extern "C"
         {
-            void JNICALL XliJ_OnKey(JNIEnv *env , jobject obj, jint keyCode);
+            /* void JNICALL XliJ_OnKey(JNIEnv *env , jobject obj, jint keyCode); */
             void JNICALL XliJ_OnKeyUp(JNIEnv *env , jobject obj, jint keyCode);
             void JNICALL XliJ_OnKeyDown(JNIEnv *env , jobject obj, jint keyCode);
-            void JNICALL XliJ_OnKeyMultiple(JNIEnv *env , jobject obj, jint keyCode, jint count);
-            void JNICALL XliJ_OnKeyLongPress(JNIEnv *env , jobject obj, jint keyCode);
+            /* void JNICALL XliJ_OnKeyMultiple(JNIEnv *env , jobject obj, jint keyCode, jint count); */
+            /* void JNICALL XliJ_OnKeyLongPress(JNIEnv *env , jobject obj, jint keyCode); */
             void AttachNativeCallbacks(jclass* shim_class, JNIEnv *l_env);
+            void AttachHiddenView(jclass* shim_class, JNIEnv* env, jobject activity);
         }
 
         class XliJ
@@ -296,7 +298,7 @@
             static void RaiseSoftKeyboard();
             static void HideSoftKeyboard();
             static int ShowMessageBox(const String& message, const String& caption, int buttons, int hints);
-            static int AndroidToXliKeyEvent(XliJ::AKeyEvent keyEvent);
+            static Xli::Key AndroidToXliKeyEvent(XliJ::AKeyEvent keyEvent);
         };
     }
 

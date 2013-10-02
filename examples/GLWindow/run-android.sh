@@ -17,6 +17,6 @@ android update project --target "android-10" --name $CLASS --path .
 ant debug
 
 # Install and run
-adb -d uninstall $PACKAGE
-adb -d install -r bin/$CLASS-debug.apk
-adb -d shell "logcat -c && am start -a android.intent.action.MAIN -c [android.intent.category.LAUNCHER] -f 0x10200000 -n $PACKAGE/$PACKAGE.$CLASS && logcat -s XLI"
+adb uninstall $PACKAGE
+adb install -r bin/$CLASS-debug.apk
+adb shell "logcat -c && am start -a android.intent.action.MAIN -c [android.intent.category.LAUNCHER] -f 0x10200000 -n $PACKAGE/$PACKAGE.$CLASS && logcat -s XLI"

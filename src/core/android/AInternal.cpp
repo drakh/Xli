@@ -66,10 +66,11 @@ namespace Xli
                 jclass *shim_class = new jclass;
                 *shim_class = GetAssetClass("XliShimJ.apk","XliJ");
                 
-                AttachNativeCallbacks(shim_class, env);
-
                 pthread_setspecific(JniThreadKey, (void*)env);
                 pthread_setspecific(JniShimKey, (void*)shim_class);
+                
+                AttachNativeCallbacks(shim_class, env);
+                AttachHiddenView(shim_class, env, AndroidActivity->clazz);
             }
 		}
         jclass* shim_p = reinterpret_cast<jclass*>(pthread_getspecific(JniShimKey));
