@@ -6,14 +6,18 @@ import android.os.ConditionVariable;
 import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
+@SuppressWarnings("unused")
 public class XliJ extends android.app.NativeActivity {
 	static Hidden hidden_text;
     protected static ViewGroup hidden_layout;
@@ -33,7 +37,7 @@ public class XliJ extends android.app.NativeActivity {
 					hidden_text.setVisibility(View.VISIBLE);
 					hidden_text.requestFocus();
 				} catch (Exception e) {
-					Log.e("XLI","Unable to create Layout or View for input cpature.");
+					Log.e("XLI","Unable to create Layout or View for input capture.");
 					result[0] = 0;
 				}
 			}});
@@ -63,44 +67,56 @@ public class XliJ extends android.app.NativeActivity {
 		}});
 	}
 	
-	public static native void XliJ_OnKey(int keyCode);
 	public static native void XliJ_OnKeyUp(int keyCode);
 	public static native void XliJ_OnKeyDown(int keyCode);
-//	public static native void XliJ_OnKeyMultiple(int keyCode, int count);
-//	public static native void XliJ_OnKeyLongPress(int keyCode);
+	public static native void XliJ_OnTextInput(String keyCode);
 	
 	public static class Hidden extends View {
 	    public Hidden(Context context) {
 	        super(context);
-	        setFocusableInTouchMode(true); 
-//	        setOnKeyListener(new OnKeyListener() {
-//	            public boolean onKey(View v, int keyCode, KeyEvent event) {
-//	            	XliJ_OnKey(keyCode);
-//	                return false;
-//	            }
-//	        });
+	        setFocusable(true);
+	        setFocusableInTouchMode(true);	        
 	    }
-	  
+	    
 	    @Override
 	    public boolean onKeyUp(int keyCode, KeyEvent event) {
 	    	XliJ_OnKeyUp(keyCode);
-	    	return true;
+	    	String text = event.getCharacters();
+	    	char unicodeChar = (char)event.getUnicodeChar();
+	    	XliJ_OnTextInput(""+unicodeChar);
+	    	return false;
 	    };
 	    @Override
 	    public boolean onKeyDown(int keyCode, KeyEvent event) {
 	    	XliJ_OnKeyDown(keyCode);
-	    	return true;
+	    	return false;
 	    };
-//	    @Override
-//	    public boolean onKeyMultiple(int keyCode, int count, KeyEvent event) {
-//	    	XliJ_OnKeyMultiple(keyCode, count);
-//	    	return true;
-//	    };
-//	    @Override
-//	    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-//	    	XliJ_OnKeyLongPress(keyCode);
-//	    	return true;
-//	    };
+	    @Override
+	    public boolean onKeyMultiple(int keyCode, int count, KeyEvent event) {
+	    	String text = event.getCharacters();
+	    	if (text != null) 
+	    	{
+	    		XliJ_OnTextInput(text);
+	    	} else {
+	    		char unicodeChar = (char)event.getUnicodeChar();
+		    	XliJ_OnTextInput(""+unicodeChar);
+	    	}
+	    	return false;
+	    };
+	 
+	    @Override
+	    public boolean onKeyPreIme(int keyCode, KeyEvent event) {
+	    	if (keyCode == KeyEvent.KEYCODE_BACK)
+	    	{
+	    		if (event.getAction()==KeyEvent.ACTION_DOWN)
+	    		{
+	    			XliJ_OnKeyUp(keyCode);
+	    		} else if (event.getAction()==KeyEvent.ACTION_UP) {
+	    			XliJ_OnKeyDown(keyCode);
+	    		}
+	    	}
+	    	return super.onKeyPreIme(keyCode, event);
+	    }
 	    
 	    @Override
 	    public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
@@ -111,7 +127,7 @@ public class XliJ extends android.app.NativeActivity {
 	        return fic;
 	    }
 	    @Override
-	    public boolean onCheckIsTextEditor() { Log.d("XLI", "onCheckIsTextEditor"); return true; }
+	    public boolean onCheckIsTextEditor() { return true; }
 	}
 	
 	public static void hideKeyboard(final NativeActivity activity) {   

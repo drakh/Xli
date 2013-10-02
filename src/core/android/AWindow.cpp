@@ -164,6 +164,21 @@ namespace Xli
             XliJ::HideSoftKeyboard();
         }
 
+        virtual bool IsTextInputActive()
+        {
+            return XliJ::KeyboardVisible();
+        }
+
+        virtual bool HasOnscreenKeyboardSupport()
+        {
+            return true;
+        }
+
+        virtual bool IsOnscreenKeyboardVisible()
+        {
+            return XliJ::KeyboardVisible();
+        }
+
 		virtual bool GetKeyState(Key key)
 		{
 			return false;

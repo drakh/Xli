@@ -20,11 +20,9 @@
     {
         extern "C"
         {
-            /* void JNICALL XliJ_OnKey(JNIEnv *env , jobject obj, jint keyCode); */
             void JNICALL XliJ_OnKeyUp(JNIEnv *env , jobject obj, jint keyCode);
             void JNICALL XliJ_OnKeyDown(JNIEnv *env , jobject obj, jint keyCode);
-            /* void JNICALL XliJ_OnKeyMultiple(JNIEnv *env , jobject obj, jint keyCode, jint count); */
-            /* void JNICALL XliJ_OnKeyLongPress(JNIEnv *env , jobject obj, jint keyCode); */
+            void JNICALL XliJ_OnTextInput (JNIEnv *env , jobject obj, jstring keyChars);
             void AttachNativeCallbacks(jclass* shim_class, JNIEnv *l_env);
             void AttachHiddenView(jclass* shim_class, JNIEnv* env, jobject activity);
         }
@@ -33,6 +31,7 @@
         {
 
         public:
+            static int kbVisible;
             enum AKeyEvent
             {
                 ACTION_DOWN = 0,
@@ -297,8 +296,10 @@
             static void MakeNoise();
             static void RaiseSoftKeyboard();
             static void HideSoftKeyboard();
+            static bool KeyboardVisible();
             static int ShowMessageBox(const String& message, const String& caption, int buttons, int hints);
             static Xli::Key AndroidToXliKeyEvent(XliJ::AKeyEvent keyEvent);
+            void HandleSpecialAndroidKeyEvents(XliJ::AKeyEvent androidKeyCode);
         };
     }
 
