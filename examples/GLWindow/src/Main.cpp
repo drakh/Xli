@@ -204,6 +204,7 @@ public:
                 int bytesRead = 0;
                 if (c->IsValid() && c->Payload->CanRead())
                 {                    
+                    Err->WriteFormat("Response Code = %d\n\n", c->GetResponseCode());
                     while (!c->Payload->AtEnd())
                     {
                         bytesRead = c->Payload->Read(&d, 1, bufSize);

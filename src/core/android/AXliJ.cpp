@@ -230,11 +230,9 @@ namespace Xli
     int XliJ::GetResponseCode(jobject httpConnection)
     {
         JniHelper jni;
-        jclass shim_class = jni.GetShim();
-        jmethodID mid = jni->GetStaticMethodID(shim_class, "getResponseCode",
-                                               "(Ljava/net/HttpURLConnection;)I");
+        jmethodID mid = jni.GetInstanceMethod(httpConnection, "getResponseCode", "()I");
         if (!mid) LOGE("Unable to get GetResponseCode, cant get mid");
-        jobject jobj = jni->CallObjectMethod(shim_class, mid, httpConnection);
+        jobject jobj = jni->CallObjectMethod(httpConnection, mid);
         int result = (int)jobj;
         jni->DeleteLocalRef(jobj);
         return result;
