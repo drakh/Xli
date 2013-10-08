@@ -215,6 +215,7 @@ public:
                     Err->WriteLine("Response invalid");
                 }
                 Err->WriteLine("-^-^-^-^-^-^-");
+                wnd->BeginTextInput();
             }
             else if (wnd->IsTextInputActive())
             {

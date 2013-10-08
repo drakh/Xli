@@ -9,7 +9,6 @@ namespace Xli
 	{
 		JniHelper jni;
         int result = XliJ::ShowMessageBox(message, caption, (int)buttons, (int)hints);
-        LOGD("Message box returned %d", result);
         return (DialogResult)result;
 	}
 }

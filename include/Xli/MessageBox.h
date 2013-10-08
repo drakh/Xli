@@ -134,7 +134,6 @@ namespace Xli
 			Displays a message box.
 		*/
 		static DialogResult Show(Window* parent, const String& message, const String& caption, DialogButtons buttons = DialogButtonsOK, int hints = 0);
-
 		/**
 			Displays an error message box for an unhandled exception.
 		*/
