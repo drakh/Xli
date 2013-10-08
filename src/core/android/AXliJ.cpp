@@ -1,5 +1,6 @@
 #include "AInternal.h"
 #include "AXliJ.h"
+#include "AStream.h"
 #include "Xli/Window.h"
 
 extern Xli::WindowEventHandler* GlobalEventHandler;
@@ -115,6 +116,134 @@ namespace Xli
         //call
         int result = (int)jni->CallObjectMethod(shim_class, mid, activity, jmessage, jcaption, (jint)buttons, (jint)hints);
         return result;
+    }
+
+    bool XliJ::ConnectedToNetwork()
+    {
+        //setup for call
+        JniHelper jni;
+        jclass shim_class = jni.GetShim();
+        jmethodID mid = jni->GetStaticMethodID(shim_class, "ConnectedToNetwork", "(Landroid/app/NativeActivity;)Z");
+        jobject activity = jni.GetInstance();
+        jobject jresult = jni->CallObjectMethod(shim_class, mid, activity);
+        bool result = (bool)jresult;
+        jni->DeleteLocalRef(jresult);
+        jni->DeleteLocalRef(activity);
+        return (bool)result;
+    }
+
+    jobject XliJ::HttpNewConnection(const String& uri, const String& method, bool hasPayload)
+    {
+        JniHelper jni;
+        jclass shim_class = jni.GetShim();
+        jmethodID mid = jni->GetStaticMethodID(shim_class, "NewHttpConnection", "(Ljava/lang/String;Ljava/lang/String;Z)Ljava/net/HttpURLConnection;");
+        if (!mid) {
+            LOGE("Unable to get NewHttpConnection mid");
+            return NULL;
+        }
+        jstring uriString = jni->NewStringUTF(uri.Data());
+        jstring methodString = jni->NewStringUTF(method.Data());        
+        jobject result = jni->CallObjectMethod(shim_class, mid, uriString, methodString, (jboolean)hasPayload);
+        jni->DeleteLocalRef(uriString);
+        jni->DeleteLocalRef(methodString);
+        return result;        
+    }
+
+    void XliJ::HttpCloseConnection(jobject httpConnection)
+    {
+        JniHelper jni;
+        jmethodID mid = jni.GetInstanceMethod(httpConnection, "disconnect", "()V");
+        if (!mid) {
+            LOGE("Unable to disconnect, cant get mid");
+            return; 
+        }
+        jni->CallObjectMethod(httpConnection, mid);
+    }
+
+    AStream* XliJ::HttpGetOutputStream(jobject httpConnection)
+    {
+        JniHelper jni;
+        jclass shim_class = jni.GetShim();
+        jmethodID mid = jni->GetStaticMethodID(shim_class, "HttpGetOutputStream", "(Ljava/net/HttpURLConnection;)Ljava/io/OutputStream;");
+        if (!mid) {
+            LOGE("Unable to get HttpGetOutputStream mid");
+            return NULL;
+        }
+        jobject jStream = jni->CallObjectMethod(shim_class, mid, httpConnection);
+        if (jStream) {
+            jni->NewGlobalRef(jStream);
+            return new AStream(AStream::WRITE, jStream);
+        } else {
+            return new AStream();
+        }
+    }
+
+    AStream* XliJ::HttpGetInputStream(jobject httpConnection)
+    {
+        JniHelper jni;
+        jclass shim_class = jni.GetShim();
+        jmethodID mid = jni->GetStaticMethodID(shim_class, "HttpGetInputStream", "(Ljava/net/HttpURLConnection;)Ljava/io/InputStream;");
+        if (!mid) {
+            LOGE("Unable to get HttpGetInputStream mid");
+            return AStream();
+        }
+        jobject jStream = jni->CallObjectMethod(shim_class, mid, httpConnection);
+        if (jStream) {
+            jni->NewGlobalRef(jStream);
+            return new AStream(AStream::READ, jStream);
+        } else {
+            return new AStream();
+        }
+    }
+
+    void XliJ::HttpSetHeader(jobject httpConnection, const String& key, const String& val)
+    {
+        JniHelper jni;
+        jmethodID mid = jni.GetInstanceMethod(httpConnection, "addRequestProperty", "(Ljava/lang/String;Ljava/lang/String;)V");
+        if (!mid) {
+            LOGE("Unable to get add header, cant get mid");
+            return; 
+        }
+        jstring jKey = jni->NewStringUTF(key.Data());
+        jstring jVal = jni->NewStringUTF(val.Data());
+        jni->CallObjectMethod(httpConnection, mid, jKey, jVal);
+        jni->DeleteLocalRef(jKey);
+        jni->DeleteLocalRef(jVal);
+    }
+
+    String XliJ::HttpGetHeader(jobject httpConnection, const String& key)
+    {
+        JniHelper jni;
+        jmethodID mid = jni.GetInstanceMethod(httpConnection, "getHeaderField", "(Ljava/lang/String;)Ljava/lang/String;");
+        if (!mid) LOGE("Unable to get add header, cant get mid");
+        jstring jKey = jni->NewStringUTF(key.Data());
+        jobject val = jni->CallObjectMethod(httpConnection, mid, jKey);
+        if (val) {
+            jni->DeleteLocalRef(jKey);
+            String result = jni.GetString((jstring)val);
+            jni->DeleteLocalRef(val);
+            return result;
+        }
+        return String("<invalid>");
+    }
+
+    void XliJ::HttpShowHeaders(jobject httpConnection)
+    {
+        JniHelper jni;
+        jclass shim_class = jni.GetShim();
+        jmethodID mid = jni->GetStaticMethodID(shim_class, "HttpShowHeaders",
+                                               "(Ljava/net/HttpURLConnection;)V");
+        if (!mid) LOGE("Unable to get httpshowheaders, cant get mid");
+        jni->CallObjectMethod(shim_class, mid, httpConnection);
+    }
+
+    void XliJ::InitDefaultCookieManager()
+    {
+        JniHelper jni;
+        jclass shim_class = jni.GetShim();
+        jmethodID mid = jni->GetStaticMethodID(shim_class, "InitDefaultCookieManager", "()V");
+        if (!mid) LOGE("Unable to get InitDefaultCookieManager, cant get mid");
+        jni->CallObjectMethod(shim_class, mid);
     }
 
     Xli::Key XliJ::AndroidToXliKeyEvent(XliJ::AKeyEvent androidKeyCode) 

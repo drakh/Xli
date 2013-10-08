@@ -1,5 +1,6 @@
 #include <Xli.h>
 #include <XliGL.h>
+#include <XliHttp.h>
 #include <android/native_activity.h>
 
 using namespace Xli;
@@ -198,19 +199,32 @@ public:
         {
             if (GetTime() - tapTime < 0.3)
             {
-                // double tap
-                if ((dialogType++%2)){
-                    wnd->BeginTextInput();
+                //play
+                Err->WriteLine("-v-v-v-v-v-v-");
+                Managed<HttpClient> a = HttpClient::Create();
+                Managed<HttpRequest> b = HttpRequest::Create();
+                Managed<HttpResponse> c = a->Send("https://duckduckgo.com/", *b.Get());
+                int bufSize = 60;
+                char d[bufSize];
+                if (c->valid && c->payload->CanRead())
+                {
+                    int bytesRead = 0;
+                    String _host = c->GetHeader("Date");
+                    Err->WriteFormat("Date=%s\n", _host.Data());
+                    while (!c->payload->AtEnd())
+                    {
+                        bytesRead = c->payload->Read(&d, 1, bufSize);
+                        Err->WriteFormat("> %*.*s\n", bytesRead, bytesRead, d);
+                    }
                 } else {
-                    wnd->EndTextInput();
+                    Err->WriteLine("Response invalid");
                 }
-                //MessageBox::Show(wnd, "Double tap detected", "Hello", (DialogButtons)(dialogType++ % 5));
+                Err->WriteLine("-^-^-^-^-^-^-");
             }
             else if (wnd->IsTextInputActive())
             {
                 wnd->EndTextInput();
             }
-            
             tapTime = GetTime();
         }
         

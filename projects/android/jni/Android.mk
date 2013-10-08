@@ -16,6 +16,7 @@ LOCAL_SRC_FILES := \
 	../../../src/core/android/AXliJ.cpp \
 	../../../src/core/android/AMessageBox.cpp \
 	../../../src/core/android/AWindow.cpp \
+	../../../src/core/android/AStream.cpp \
 	../../../src/core/egl/EGLContext.cpp \
 	../../../src/core/generic/GenericDialogs.cpp \
 	../../../src/core/posix/PosixCond.cpp \
@@ -235,7 +236,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := XliHttp
 
 LOCAL_SRC_FILES := \
-	../../../src/http/dummy/DummyClient.cpp \
+	../../../src/core/android/AHttpClient.cpp \
 	
 LOCAL_C_INCLUDES := \
 	../../include \

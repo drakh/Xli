@@ -7,6 +7,8 @@
 #include <android/native_activity.h>
 #include <Xli/Exception.h>
 #include "Xli/Window.h"
+#include "AStream.h"
+#include "Xli/Managed.h"
 
 #define LOGD(...) ((void)__android_log_print(ANDROID_LOG_DEBUG, Xli::GetAppName(), __VA_ARGS__))
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, Xli::GetAppName(), __VA_ARGS__))
@@ -298,8 +300,19 @@
             static void HideSoftKeyboard();
             static bool KeyboardVisible();
             static int ShowMessageBox(const String& message, const String& caption, int buttons, int hints);
+            
+            static bool ConnectedToNetwork();
+            static jobject HttpNewConnection(const String& uri, const String& method, 
+                                             bool hasPayload);
+            static void HttpCloseConnection(jobject httpConnection);
+            static void HttpSetHeader(jobject httpConnection, const String& key, const String& val);
+            static String HttpGetHeader(jobject httpConnection, const String& key);
+            static void HttpShowHeaders(jobject httpConnection);
+            static AStream* HttpGetInputStream(jobject httpConnection);
+            static AStream* HttpGetOutputStream(jobject httpConnection);
             static Xli::Key AndroidToXliKeyEvent(XliJ::AKeyEvent keyEvent);
-            void HandleSpecialAndroidKeyEvents(XliJ::AKeyEvent androidKeyCode);
+            static void HandleSpecialAndroidKeyEvents(XliJ::AKeyEvent androidKeyCode);
+            static void InitDefaultCookieManager();
         };
     }
 
