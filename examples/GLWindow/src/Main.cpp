@@ -88,11 +88,6 @@ public:
 			wnd->SetFullscreen(!wnd->IsFullscreen());
 			return true;
 		}
-		else if (key == KeyEscape)
-		{
-			wnd->Close();
-			return true;
-		}
 		else if (key == KeyF4 || key == KeyAlt)
 		{
 			// Set as handled to disable default closing behaviour on Win32 (TODO: This does not work as expected)
@@ -238,6 +233,7 @@ public:
 		Application::OnSizeChanged(wnd, clientSize);
 	}
 
+    //[TODO] cant show message box when closing as shim is gone
 	virtual bool OnClosing(Window* wnd, bool& cancel)
 	{
 		Err->WriteLine("OnClosing");

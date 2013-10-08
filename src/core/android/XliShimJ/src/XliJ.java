@@ -105,6 +105,7 @@ public class XliJ extends android.app.NativeActivity {
 	    };
 	    @Override
 	    public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    	Log.e("XLI","keycode: "+keyCode+", event: "+event.toString());
 	    	XliJ_OnKeyDown(keyCode);
 	    	return false;
 	    };
@@ -123,14 +124,16 @@ public class XliJ extends android.app.NativeActivity {
 	 
 	    @Override
 	    public boolean onKeyPreIme(int keyCode, KeyEvent event) {
-	    	if (keyCode == KeyEvent.KEYCODE_BACK)
+	    	if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE)
 	    	{
 	    		if (event.getAction()==KeyEvent.ACTION_DOWN)
 	    		{
-	    			XliJ_OnKeyUp(keyCode);
-	    		} else if (event.getAction()==KeyEvent.ACTION_UP) {
+	    			Log.e("XLI","pre keycode: "+keyCode+", event: "+event.toString());
 	    			XliJ_OnKeyDown(keyCode);
+	    		} else if (event.getAction()==KeyEvent.ACTION_UP) {
+	    			XliJ_OnKeyUp(keyCode);
 	    		}
+	    		return true;
 	    	}
 	    	return super.onKeyPreIme(keyCode, event);
 	    }

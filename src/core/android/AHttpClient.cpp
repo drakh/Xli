@@ -159,6 +159,7 @@ namespace Xli
                 }
             }
             // return a response
+            //[TODO] set method of response
             Stream* result_payload = (Stream*)XliJ::HttpGetInputStream(connection);
 
             HttpResponse* response = new AHttpResponse(result_payload, connection);

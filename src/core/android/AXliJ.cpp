@@ -185,7 +185,7 @@ namespace Xli
         jmethodID mid = jni->GetStaticMethodID(shim_class, "HttpGetInputStream", "(Ljava/net/HttpURLConnection;)Ljava/io/InputStream;");
         if (!mid) {
             LOGE("Unable to get HttpGetInputStream mid");
-            return AStream();
+            return new AStream();
         }
         jobject jStream = jni->CallObjectMethod(shim_class, mid, httpConnection);
         if (jStream) {

@@ -25,20 +25,13 @@ namespace Xli
         {
             switch(method)
             {
-            case GET:
-                return String("GET");
-            case POST:
-                return String("POST");
-            case OPTIONS:
-                return String("OPTIONS");
-            case HEAD:
-                return String("HEAD");
-            case PUT:
-                return String("PUT");
-            case DELETE:
-                return String("DELETE");
-            case TRACE:
-                return String("TRACE");
+            case GET: return String("GET");
+            case POST: return String("POST");
+            case OPTIONS: return String("OPTIONS");
+            case HEAD: return String("HEAD");
+            case PUT: return String("PUT");
+            case DELETE: return String("DELETE");
+            case TRACE: return String("TRACE");
             };
         }
     }
