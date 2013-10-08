@@ -308,6 +308,7 @@
             static void HttpSetHeader(jobject httpConnection, const String& key, const String& val);
             static String HttpGetHeader(jobject httpConnection, const String& key);
             static void HttpShowHeaders(jobject httpConnection);
+            static int GetResponseCode(jobject httpConnection);
             static AStream* HttpGetInputStream(jobject httpConnection);
             static AStream* HttpGetOutputStream(jobject httpConnection);
             static Xli::Key AndroidToXliKeyEvent(XliJ::AKeyEvent keyEvent);

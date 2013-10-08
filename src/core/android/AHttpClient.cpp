@@ -14,15 +14,14 @@ namespace Xli
 {
     class AHttpResponse: public HttpResponse
     {
-    public:
-        HashMap<String,String> headers;
+    private:
         jobject httpConnection;
-
+    public:
         AHttpResponse(Stream* payload, jobject connection) 
         {
             if (payload && connection)
             {
-                this->payload = payload;
+                this->Payload = payload;
                 this->httpConnection = connection;
                 this->valid = true;
             } else {
@@ -30,6 +29,11 @@ namespace Xli
             }
         }
 
+        virtual int GetResponseCode() const
+        {
+            return XliJ::GetResponseCode(this->httpConnection);
+        }
+        
         AHttpResponse(bool valid)
         {
             this->valid = valid;
@@ -39,13 +43,15 @@ namespace Xli
         {
             if(this->valid)
             {
-                payload->Close();
-                delete payload;
+                Payload->Close();
+                delete Payload;
                 XliJ::HttpCloseConnection(this->httpConnection);
                 JniHelper jni;
                 jni->DeleteGlobalRef(httpConnection);
             }
         }
+
+        virtual bool IsValid() const { return this->valid; }
 
         virtual String GetHeader(const String& key)
         {
@@ -85,7 +91,7 @@ namespace Xli
             {
                 return this->payload;
             } else {
-                return 0;
+                return new AStream();
             }
         }
 
@@ -115,14 +121,9 @@ namespace Xli
     class AHttpClient: public HttpClient
     {
     public:
-        AHttpClient()
-        {
+        AHttpClient() {}
 
-        }
-
-        virtual ~AHttpClient()
-        {
-        }
+        virtual ~AHttpClient() {}
 
         virtual HttpResponse* Send(const String& uri, const HttpRequest& req)
         {

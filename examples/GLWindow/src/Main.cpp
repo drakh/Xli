@@ -201,21 +201,18 @@ public:
                 Managed<HttpResponse> c = a->Send("https://duckduckgo.com/", *b.Get());
                 int bufSize = 60;
                 char d[bufSize];
-                if (c->valid && c->payload->CanRead())
-                {
-                    int bytesRead = 0;
-                    String _host = c->GetHeader("Date");
-                    Err->WriteFormat("Date=%s\n", _host.Data());
-                    while (!c->payload->AtEnd())
+                int bytesRead = 0;
+                if (c->IsValid() && c->Payload->CanRead())
+                {                    
+                    while (!c->Payload->AtEnd())
                     {
-                        bytesRead = c->payload->Read(&d, 1, bufSize);
+                        bytesRead = c->Payload->Read(&d, 1, bufSize);
                         Err->WriteFormat("> %*.*s\n", bytesRead, bytesRead, d);
                     }
                 } else {
                     Err->WriteLine("Response invalid");
                 }
                 Err->WriteLine("-^-^-^-^-^-^-");
-                wnd->BeginTextInput();
             }
             else if (wnd->IsTextInputActive())
             {

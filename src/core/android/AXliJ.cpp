@@ -227,6 +227,19 @@ namespace Xli
         return String("<invalid>");
     }
 
+    int XliJ::GetResponseCode(jobject httpConnection)
+    {
+        JniHelper jni;
+        jclass shim_class = jni.GetShim();
+        jmethodID mid = jni->GetStaticMethodID(shim_class, "getResponseCode",
+                                               "(Ljava/net/HttpURLConnection;)I");
+        if (!mid) LOGE("Unable to get GetResponseCode, cant get mid");
+        jobject jobj = jni->CallObjectMethod(shim_class, mid, httpConnection);
+        int result = (int)jobj;
+        jni->DeleteLocalRef(jobj);
+        return result;
+    }
+
     void XliJ::HttpShowHeaders(jobject httpConnection)
     {
         JniHelper jni;

@@ -7,7 +7,6 @@
 
 namespace Xli
 {
-
     namespace HttpMethods
     {
         enum HttpMethodType
@@ -19,9 +18,10 @@ namespace Xli
             PUT = 4,
             DELETE = 5,
             TRACE = 6,
+            INVALID = 7,
         };
         inline
-        String MethodToString(HttpMethodType method) 
+        String MethodToString(HttpMethodType method)
         {
             switch(method)
             {
@@ -32,8 +32,30 @@ namespace Xli
             case PUT: return String("PUT");
             case DELETE: return String("DELETE");
             case TRACE: return String("TRACE");
+            default: return String("INVALID");
             };
         }
+        inline
+        String StringToMethod(String method)
+        {
+            if (method == "GET"){
+                return GET;
+            } else if (method == "POST") {
+                return POST;
+            } else if (method == "OPTIONS") {
+                return OPTIONS;
+            } else if (method == "HEAD") {
+                return HEAD;
+            } else if (method == "PUT") {
+                return PUT;
+            } else if (method == "DELETE") {
+                return DELETE;
+            } else if (method == "TRACE") {
+                return TRACE;
+            } else {
+                return INVALID;
+            }
+        }        
     }
 
 	class HttpRequest: public Object
@@ -50,18 +72,20 @@ namespace Xli
         inline
         void SetMethod(HttpMethods::HttpMethodType method) { this->method = method; }
         inline
-        HttpMethods::HttpMethodType GetMethod() { return this->method; }
+        HttpMethods::HttpMethodType GetMethod() const { return this->method; }
         inline
         String GetMethodAsString() const { return HttpMethods::MethodToString(this->method); }
 	};
 
 	class HttpResponse: public Object
 	{
-	public:
+    protected:
         bool valid;
+	public:
+        virtual bool IsValid() const = 0;
         virtual String GetHeader(const String& key) = 0;
-		Stream* payload;
-        String method;
+        virtual int GetResponseCode() const = 0;
+		Stream* Payload;
 	};
 
 	class HttpClient: public Object
