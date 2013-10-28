@@ -1,0 +1,459 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Xli">
+      <UniqueIdentifier>{e522fa18-ec1d-4549-bd61-1a49b0c221c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Xli\Math">
+      <UniqueIdentifier>{532b3f4d-8e45-43fc-b585-1d7db7443c18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Xli\Containers">
+      <UniqueIdentifier>{bc838c4d-5ec9-40e1-a6e5-b197d4a76ca6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty">
+      <UniqueIdentifier>{82e2b518-b1ee-4b96-ae2d-078fbf968ed4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Xli\Platform">
+      <UniqueIdentifier>{9b1cc0d7-4525-47d4-b6bd-dcf7fe7de220}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Xli\IO">
+      <UniqueIdentifier>{4d267497-5563-47e7-bb44-08e9c9a5d41b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Xli\Platform\win32">
+      <UniqueIdentifier>{c28fa18b-9b5b-43d8-8216-2b9350f96f9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Xli\Platform\android">
+      <UniqueIdentifier>{bae06d02-ad74-4f5d-b9a3-ec4372118ae8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Xli\Platform\sdl2">
+      <UniqueIdentifier>{d3386c9c-9694-400d-a9e6-286121fc49a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Xli\Platform\egl">
+      <UniqueIdentifier>{ea3562a7-5247-4e60-9be3-244dfc07185b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Xli\Platform\posix">
+      <UniqueIdentifier>{97287fd5-0070-4523-9c72-dfafebc0351b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Xli\Platform\generic">
+      <UniqueIdentifier>{25c16803-3b5d-4457-8934-7ff56dd63fe5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty\glew">
+      <UniqueIdentifier>{b253214b-e0ad-4f77-b98b-b209b33df0a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Xli\Utils">
+      <UniqueIdentifier>{5ecf6917-9e55-4b64-9630-9c1a521537cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XliGL">
+      <UniqueIdentifier>{70a173b5-a5c8-4025-893e-852ca9a6ab91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Xli\Platform\cocoa">
+      <UniqueIdentifier>{cb6102cd-412b-493a-bb1b-e52d068f36b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Xli\Platform\xdg">
+      <UniqueIdentifier>{3e47164f-a3a6-4ad2-b666-9d2f18f34c3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XliGL\3rdparty">
+      <UniqueIdentifier>{f42f31fe-ff72-49ef-b6c2-4cbcab667fd8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\Xli\Hash.h">
+      <Filter>Xli</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Math.h">
+      <Filter>Xli\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Matrix3.h">
+      <Filter>Xli\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Matrix4.h">
+      <Filter>Xli\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Quaternion.h">
+      <Filter>Xli\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Random.h">
+      <Filter>Xli\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Rectangle.h">
+      <Filter>Xli\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Vector2.h">
+      <Filter>Xli\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Vector3.h">
+      <Filter>Xli\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Vector4.h">
+      <Filter>Xli\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Array.h">
+      <Filter>Xli\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\HashMap.h">
+      <Filter>Xli\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Managed.h">
+      <Filter>Xli\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Queue.h">
+      <Filter>Xli\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli.h" />
+    <ClInclude Include="..\..\..\src\core\3rdparty\ConvertUTF.h">
+      <Filter>3rdparty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\DataType.h">
+      <Filter>Xli</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\BaseTypes.h">
+      <Filter>Xli</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Object.h">
+      <Filter>Xli</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Config.h">
+      <Filter>Xli</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Exception.h">
+      <Filter>Xli</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Path.h">
+      <Filter>Xli\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Buffer.h">
+      <Filter>Xli</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\DateTime.h">
+      <Filter>Xli</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\FileSystem.h">
+      <Filter>Xli\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\File.h">
+      <Filter>Xli\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Text.h">
+      <Filter>Xli\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\OrderedMap.h">
+      <Filter>Xli\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\core\posix\PosixFileSystemBase.h">
+      <Filter>Xli\Platform\posix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Dialogs.h">
+      <Filter>Xli\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Display.h">
+      <Filter>Xli\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\MessageBox.h">
+      <Filter>Xli\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Mutex.h">
+      <Filter>Xli\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\NativeFileSystem.h">
+      <Filter>Xli\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Thread.h">
+      <Filter>Xli\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Time.h">
+      <Filter>Xli\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Window.h">
+      <Filter>Xli\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\ConditionVariable.h">
+      <Filter>Xli\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\SDL2Window.h">
+      <Filter>Xli\Platform\sdl2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Win32Helpers.h">
+      <Filter>Xli\Platform\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Win32Window.h">
+      <Filter>Xli\Platform\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Win32Header.h">
+      <Filter>Xli\Platform\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Console.h">
+      <Filter>Xli\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\TextWriter.h">
+      <Filter>Xli\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\BinaryReader.h">
+      <Filter>Xli\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\BinaryWriter.h">
+      <Filter>Xli\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Stream.h">
+      <Filter>Xli\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\TextReader.h">
+      <Filter>Xli\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\String.h">
+      <Filter>Xli</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\StringBuilder.h">
+      <Filter>Xli</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Utf16String.h">
+      <Filter>Xli</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\ToString.h">
+      <Filter>Xli</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Unicode.h">
+      <Filter>Xli</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\core\3rdparty\glew\include\GL\glew.h">
+      <Filter>3rdparty\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\core\3rdparty\glew\include\GL\glxew.h">
+      <Filter>3rdparty\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\core\3rdparty\glew\include\GL\wglew.h">
+      <Filter>3rdparty\glew</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\ArrayStream.h">
+      <Filter>Xli\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\BufferStream.h">
+      <Filter>Xli\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\TextStream.h">
+      <Filter>Xli\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Utils.h">
+      <Filter>Xli\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Sort.h">
+      <Filter>Xli\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliGL.h" />
+    <ClInclude Include="..\..\..\src\core\android\AInternal.h">
+      <Filter>Xli\Platform\android</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Application.h">
+      <Filter>Xli\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliGL\GLContext.h">
+      <Filter>XliGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliGL\GL.h">
+      <Filter>XliGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliGL\3rdparty\glew.h">
+      <Filter>XliGL\3rdparty</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\core\Random.cpp">
+      <Filter>Xli\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\3rdparty\ConvertUTF.c">
+      <Filter>3rdparty</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\DataType.cpp">
+      <Filter>Xli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Path.cpp">
+      <Filter>Xli\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Buffer.cpp">
+      <Filter>Xli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\DateTime.cpp">
+      <Filter>Xli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\File.cpp">
+      <Filter>Xli\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\FileSystem.cpp">
+      <Filter>Xli\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Text.cpp">
+      <Filter>Xli\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Thread.cpp">
+      <Filter>Xli\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Window.cpp">
+      <Filter>Xli\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\MessageBox.cpp">
+      <Filter>Xli\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\NativeFileSystem.cpp">
+      <Filter>Xli\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\win32\Win32MessageBox.cpp">
+      <Filter>Xli\Platform\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\win32\Win32Mutex.cpp">
+      <Filter>Xli\Platform\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\win32\Win32Thread.cpp">
+      <Filter>Xli\Platform\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\win32\Win32Time.cpp">
+      <Filter>Xli\Platform\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\win32\Win32Window.cpp">
+      <Filter>Xli\Platform\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\win32\Win32Cond.cpp">
+      <Filter>Xli\Platform\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\win32\Win32Dialogs.cpp">
+      <Filter>Xli\Platform\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\win32\Win32Display.cpp">
+      <Filter>Xli\Platform\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\win32\Win32FileSystem.cpp">
+      <Filter>Xli\Platform\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\win32\Win32GLContext.cpp">
+      <Filter>Xli\Platform\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\win32\Win32Helpers.cpp">
+      <Filter>Xli\Platform\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\android\AFileSystem.cpp">
+      <Filter>Xli\Platform\android</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\android\AWindow.cpp">
+      <Filter>Xli\Platform\android</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\egl\EGLContext.cpp">
+      <Filter>Xli\Platform\egl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\generic\GenericAssetFileSystem.cpp">
+      <Filter>Xli\Platform\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\generic\GenericDialogs.cpp">
+      <Filter>Xli\Platform\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\generic\GenericMessageBox.cpp">
+      <Filter>Xli\Platform\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\posix\PosixCond.cpp">
+      <Filter>Xli\Platform\posix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\posix\PosixMutex.cpp">
+      <Filter>Xli\Platform\posix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\posix\PosixThread.cpp">
+      <Filter>Xli\Platform\posix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\posix\PosixTime.cpp">
+      <Filter>Xli\Platform\posix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\sdl2\SDL2Display.cpp">
+      <Filter>Xli\Platform\sdl2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\sdl2\SDL2GLContext.cpp">
+      <Filter>Xli\Platform\sdl2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\sdl2\SDL2Window.cpp">
+      <Filter>Xli\Platform\sdl2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Console.cpp">
+      <Filter>Xli\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\BinaryReader.cpp">
+      <Filter>Xli\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\BinaryWriter.cpp">
+      <Filter>Xli\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Stream.cpp">
+      <Filter>Xli\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\TextReader.cpp">
+      <Filter>Xli\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\TextWriter.cpp">
+      <Filter>Xli\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Matrix4.cpp">
+      <Filter>Xli\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Quaternion.cpp">
+      <Filter>Xli\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Matrix3.cpp">
+      <Filter>Xli\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\String.cpp">
+      <Filter>Xli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Utf16String.cpp">
+      <Filter>Xli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\StringBuilder.cpp">
+      <Filter>Xli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\ToString.cpp">
+      <Filter>Xli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Unicode.cpp">
+      <Filter>Xli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Hash.cpp">
+      <Filter>Xli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Object.cpp">
+      <Filter>Xli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Exception.cpp">
+      <Filter>Xli</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\3rdparty\glew\src\glew.c">
+      <Filter>3rdparty\glew</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\BufferStream.cpp">
+      <Filter>Xli\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\ArrayStream.cpp">
+      <Filter>Xli\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\TextStream.cpp">
+      <Filter>Xli\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\posix\PosixFileSystemBase.cpp">
+      <Filter>Xli\Platform\posix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\sdl2\SDL2MessageBox.cpp">
+      <Filter>Xli\Platform\sdl2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\android\AMessageBox.cpp">
+      <Filter>Xli\Platform\android</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\xdg\XdgFileSystem.cpp">
+      <Filter>Xli\Platform\xdg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\android\AInternal.cpp">
+      <Filter>Xli\Platform\android</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Application.cpp">
+      <Filter>Xli\Platform</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\core\CMakeLists.txt" />
+    <None Include="..\..\..\CMakeLists.txt" />
+    <None Include="..\..\..\src\core\cocoa\CocoaFileSystem.mm">
+      <Filter>Xli\Platform\cocoa</Filter>
+    </None>
+  </ItemGroup>
+</Project>
