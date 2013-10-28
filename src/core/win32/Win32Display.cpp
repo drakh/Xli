@@ -5,8 +5,8 @@
 
 namespace Xli
 {
-	static Array<HMONITOR>* monitors = 0;
-	static int initCount = 0;
+	static Array<HMONITOR>* Monitors = 0;
+	static int InitCount = 0;
 
 	static BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData)
 	{
@@ -16,25 +16,25 @@ namespace Xli
 
 	void DisplayInit()
 	{
-		if (!initCount)
+		if (!InitCount)
 		{
-			monitors = new Array<HMONITOR>();
-			EnumDisplayMonitors(NULL, NULL, MonitorEnumProc, (LPARAM)monitors);
+			Monitors = new Array<HMONITOR>();
+			EnumDisplayMonitors(NULL, NULL, MonitorEnumProc, (LPARAM)Monitors);
 		}
 
-		initCount++;
+		InitCount++;
 	}
 
 	void DisplayDone()
 	{
-		initCount--;
+		InitCount--;
 
-		if (initCount == 0)
+		if (InitCount == 0)
 		{
-			monitors->Release();
-			monitors = 0;
+			Monitors->Release();
+			Monitors = 0;
 		}
-		else if (initCount < 0)
+		else if (InitCount < 0)
 		{
 			XLI_THROW_BAD_DELETE;
 		}
@@ -42,7 +42,7 @@ namespace Xli
 
 	static void AssertInit()
 	{
-		if (!initCount)
+		if (!InitCount)
 		{
 			DisplayInit();
 			atexit(DisplayDone);
@@ -52,13 +52,13 @@ namespace Xli
 	int Display::GetCount()
 	{
 		AssertInit();
-		return monitors->Length();
+		return Monitors->Length();
 	}
 
 	Recti Display::GetRect(int index)
 	{
 		AssertInit();
-		HMONITOR hMonitor = monitors->Get(index);
+		HMONITOR hMonitor = Monitors->Get(index);
 
 		MONITORINFO info;
 		info.cbSize = sizeof(MONITORINFO);
@@ -67,10 +67,10 @@ namespace Xli
 		return Recti(info.rcMonitor.left, info.rcMonitor.top, info.rcMonitor.right, info.rcMonitor.bottom);
 	}
 
-	bool GetCurrentSettings(int index, DisplaySettings& settings)
+	bool Display::GetCurrentSettings(int index, DisplaySettings& settings)
 	{
 		AssertInit();
-		HMONITOR hMonitor = monitors->Get(index);
+		HMONITOR hMonitor = Monitors->Get(index);
 
 		MONITORINFOEX info;
 		info.cbSize = sizeof(MONITORINFOEX);
@@ -92,10 +92,10 @@ namespace Xli
 		return false;
 	}
 
-	void GetSupportedSettings(int index, Array<DisplaySettings>& settings)
+	void Display::GetSupportedSettings(int index, Array<DisplaySettings>& settings)
 	{
 		AssertInit();
-		HMONITOR hMonitor = monitors->Get(index);
+		HMONITOR hMonitor = Monitors->Get(index);
 
 		MONITORINFOEX info;
 		info.cbSize = sizeof(MONITORINFOEX);
@@ -115,10 +115,10 @@ namespace Xli
 		}
 	}
 	
-	bool ChangeSettings(int index, const DisplaySettings& settings)
+	bool Display::ChangeSettings(int index, const DisplaySettings& settings)
 	{
 		AssertInit();
-		HMONITOR hMonitor = monitors->Get(index);
+		HMONITOR hMonitor = Monitors->Get(index);
 
 		MONITORINFOEX info;
 		info.cbSize = sizeof(MONITORINFOEX);

@@ -5,7 +5,7 @@
 #include <Xli/Unicode.h>
 #include <cstdlib>
 
-// Windows XP look and feel.
+// Windows XP look and feel
 #pragma comment(linker, \
 	"\"/manifestdependency:type='Win32' " \
 	"name='Microsoft.Windows.Common-Controls' " \
@@ -21,7 +21,7 @@
 namespace Xli
 {
 	static int InitCount = 0;
-	static HINSTANCE HInstance;
+	static HINSTANCE HInstance = 0;
 	static LPCWSTR WindowClassName = L"XliWindow";
 	static PlatformSpecific::Win32Window* MainWindow = 0;
 	static SystemCursor CurrentCursor = SystemCursorArrow;
@@ -166,11 +166,13 @@ namespace Xli
 			RECT rect;
 			GetWindowRect(hWnd, &rect);
 
-			Vector2i p(rect.left + (rect.right - rect.left) / 2, rect.top + (rect.bottom - rect.top) / 2);
+			Vector2i p(
+				rect.left + (rect.right - rect.left) / 2, 
+				rect.top + (rect.bottom - rect.top) / 2);
 
 			for (int i = 0; i < Display::GetCount(); i++)
-			if (Display::GetRect(i).Intersects(p.X, p.Y))
-				return i;
+				if (Display::GetRect(i).Intersects(p.X, p.Y))
+					return i;
 
 			return 0;
 		}
