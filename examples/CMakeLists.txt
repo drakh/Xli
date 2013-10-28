@@ -23,8 +23,17 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
 elseif (MSVC)
 
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GR-")
-	set(CMAKE_CONFIGURATION_TYPES "Debug;Release" INTERNAL)
-	link_directories("${XLI_DIR}/lib/vs2012/$(PlatformShortName)")
+	set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Build Configurations (forced)" FORCE)
+
+	if (MSVC12)
+		link_directories("${XLI_DIR}/lib/vs2013/$(PlatformShortName)")
+	elseif (MSVC11)
+		link_directories("${XLI_DIR}/lib/vs2012/$(PlatformShortName)")
+	elseif (MSVC10)
+		link_directories("${XLI_DIR}/lib/vs2010/$(PlatformShortName)")
+	else()
+		error("Unsupported MSVC version")
+	endif()
 	
 else()
 
