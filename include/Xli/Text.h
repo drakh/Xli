@@ -10,7 +10,10 @@ namespace Xli
 	{
 	public:
 		static String Load(const String& filename);
+		static String Load(Stream* stream);
+		
 		static void Save(const String& filename, const String& content);
+		static void Save(Stream* stream, const String& content);
 	};
 }
 

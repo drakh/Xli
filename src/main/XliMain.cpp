@@ -36,7 +36,7 @@ extern "C" int main(int argc, char** argv)
 	}
 	catch (...)
 	{
-		Xli::Exception e("Unknown error");
+		Xli::Exception e("Unhandled non-Xli exception");
 		Xli::MessageBox::HandleException(e, "XliMain");
 	}
 

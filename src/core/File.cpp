@@ -76,7 +76,9 @@ namespace Xli
 
 	bool File::AtEnd() const
 	{
-		if (!fp) XLI_THROW_STREAM_CLOSED;
+		if (!fp) 
+			XLI_THROW_STREAM_CLOSED;
+		
 		return feof(fp) != 0;
 	}
 
@@ -102,13 +104,17 @@ namespace Xli
 
 	int File::GetPosition() const
 	{
-		if (!fp) XLI_THROW_STREAM_CLOSED;
+		if (!fp) 
+			XLI_THROW_STREAM_CLOSED;
+		
 		return (int)ftell(fp);
 	}
 
 	int File::GetLength() const
 	{
-		if (!fp) XLI_THROW_STREAM_CLOSED;
+		if (!fp) 
+			XLI_THROW_STREAM_CLOSED;
+		
 		long p = ftell(fp);
 		fseek(fp, 0, SEEK_END);
 		long l = ftell(fp);
@@ -118,22 +124,43 @@ namespace Xli
 
 	int File::Read(void* data, int elmSize, int elmCount)
 	{
-		if (!fp) XLI_THROW_STREAM_CLOSED;
-		if (!(flags & FileFlagsCanRead)) XLI_THROW_STREAM_CANT_READ;
-		return (int)fread(data, elmSize, elmCount, fp);
+		if (!fp) 
+			XLI_THROW_STREAM_CLOSED;
+
+		if (!(flags & FileFlagsCanRead)) 
+			XLI_THROW_STREAM_CANT_READ;
+		
+		int result = (int)fread(data, elmSize, elmCount, fp);
+		
+		if ((result != elmSize * elmCount) && (flags & FileFlagsIgnoreReadWriteErrors))
+			return elmSize * elmCount;
+		
+		return result;
 	}
 
 	int File::Write(const void* data, int elmSize, int elmCount)
 	{
-		if (!fp) XLI_THROW_STREAM_CLOSED;
-		if (!(flags & FileFlagsCanWrite)) XLI_THROW_STREAM_CANT_WRITE;
-		return (int)fwrite(data, elmSize, elmCount, fp);
+		if (!fp) 
+			XLI_THROW_STREAM_CLOSED;
+
+		if (!(flags & FileFlagsCanWrite)) 
+			XLI_THROW_STREAM_CANT_WRITE;
+
+		int result = (int)fwrite(data, elmSize, elmCount, fp);
+
+		if ((result != elmSize * elmCount) && (flags & FileFlagsIgnoreReadWriteErrors))
+			return elmSize * elmCount;
+
+		return result;
 	}
 
 	void File::Seek(SeekOrigin origin, int offset)
 	{
-		if (!fp) XLI_THROW_STREAM_CLOSED;
-		if (!(flags & FileFlagsCanSeek)) XLI_THROW_STREAM_CANT_SEEK;
+		if (!fp) 
+			XLI_THROW_STREAM_CLOSED;
+		
+		if (!(flags & FileFlagsCanSeek)) 
+			XLI_THROW_STREAM_CANT_SEEK;
 
 		switch (origin)
 		{

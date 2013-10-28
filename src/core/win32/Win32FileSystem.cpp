@@ -246,6 +246,14 @@ namespace Xli
 
 	FileSystem* CreateAssetFileSystem()
 	{
+		const char* possibleDataSuffixes[] =
+		{
+			"/data",
+			"/../data",
+			"/../../data",
+			"/../../../data",
+		};
+
 		const size_t BufSize = 4096;
 
 		WCHAR buf[BufSize];
@@ -254,16 +262,16 @@ namespace Xli
 		if (result > 0 && result < BufSize)
 		{
 			String exe = Unicode::Utf16To8(buf, (int)result);
+
+			for (int i = 0; i < exe.Length(); i++)
+				if (exe[i] == '\\')
+					exe[i] = '/';
+
 			String dir = Path::GetDirectoryName(exe);
 
-			for (int i = 0; i < dir.Length(); i++)
-				if (dir[i] == '\\')
-					dir[i] = '/';
-
-			dir += "/data";
-
-			if (Disk->IsDirectory(dir))
-				return Disk->CreateSubFileSystem(dir);
+			for (int i = 0; i < sizeof(possibleDataSuffixes); i++)
+				if (Disk->IsDirectory(dir + possibleDataSuffixes[i]))
+					return Disk->CreateSubFileSystem(dir + possibleDataSuffixes[i]);
 		}
 
 		return Disk->CreateSubFileSystem(Disk->GetCurrentDirectory() + "/data");

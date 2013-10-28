@@ -4,40 +4,40 @@
 
 namespace Xli
 {
-	static TextWriter* out = 0;
-	static TextWriter* err = 0;
-	static TextReader* in = 0;
+	static TextWriter* OutWriter = 0;
+	static TextWriter* ErrWriter = 0;
+	static TextReader* InReader = 0;
 
-	static int initCount = 0;
+	static int InitCount = 0;
 
 	void Console::Init()
 	{
-		if (!initCount)
+		if (!InitCount)
 		{
-			out = new TextWriter(ManagePtr(new File(stdout, FileFlagsCanWrite)));
-			err = new TextWriter(ManagePtr(new File(stderr, FileFlagsCanWrite)));
-			in = new TextReader(ManagePtr(new File(stdin, FileFlagsCanRead)));
+			OutWriter = new TextWriter(ManagePtr(new File(stdout, FileFlagsCanWrite | FileFlagsIgnoreReadWriteErrors)));
+			ErrWriter = new TextWriter(ManagePtr(new File(stderr, FileFlagsCanWrite | FileFlagsIgnoreReadWriteErrors)));
+			InReader = new TextReader(ManagePtr(new File(stdin, FileFlagsCanRead)));
 		}
 
-		initCount++;
+		InitCount++;
 	}
 
 	void Console::Done()
 	{
-		initCount--;
+		InitCount--;
 
-		if (!initCount)
+		if (!InitCount)
 		{
-            out->GetStream()->Flush();
-            err->GetStream()->Flush();
-			delete out;
-			delete err;
-			delete in;
-			out = 0;
-			err = 0;
-			in = 0;
+			OutWriter->GetStream()->Flush();
+			ErrWriter->GetStream()->Flush();
+			delete OutWriter;
+			delete ErrWriter;
+			delete InReader;
+			OutWriter = 0;
+			ErrWriter = 0;
+			InReader = 0;
 		}
-		else if (initCount < 0)
+		else if (InitCount < 0)
 		{
 			XLI_THROW_BAD_DELETE;
 		}
@@ -45,7 +45,7 @@ namespace Xli
 
 	static void AssertInit()
 	{
-		if (!initCount)
+		if (!InitCount)
 		{
 			Console::Init();
 			atexit(Console::Done);
@@ -55,37 +55,37 @@ namespace Xli
 	TextWriter* StdOutAccessor::operator ->()
 	{
 		AssertInit();
-		return out;
+		return OutWriter;
 	}
 
 	StdOutAccessor::operator TextWriter*()
 	{
 		AssertInit();
-		return out;
+		return OutWriter;
 	}
 
 	TextWriter* StdErrAccessor::operator ->()
 	{
 		AssertInit();
-		return err;
+		return ErrWriter;
 	}
 
 	StdErrAccessor::operator TextWriter*()
 	{
 		AssertInit();
-		return err;
+		return ErrWriter;
 	}
 
 	TextReader* StdInAccessor::operator ->()
 	{
 		AssertInit();
-		return in;
+		return InReader;
 	}
 
 	StdInAccessor::operator TextReader*()
 	{
 		AssertInit();
-		return in;
+		return InReader;
 	}
 
 	StdOutAccessor Out;
