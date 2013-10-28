@@ -172,15 +172,6 @@
     <ClInclude Include="..\..\..\include\Xli\SDL2Window.h">
       <Filter>Xli\Platform\sdl2</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\Xli\Win32Helpers.h">
-      <Filter>Xli\Platform\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Xli\Win32Window.h">
-      <Filter>Xli\Platform\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Xli\Win32Header.h">
-      <Filter>Xli\Platform\win32</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\Xli\Console.h">
       <Filter>Xli\IO</Filter>
     </ClInclude>
@@ -253,6 +244,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\XliGL\3rdparty\glew.h">
       <Filter>XliGL\3rdparty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\PlatformSpecific\Win32Header.h">
+      <Filter>Xli\Platform\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\PlatformSpecific\Win32Helpers.h">
+      <Filter>Xli\Platform\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\PlatformSpecific\Win32Window.h">
+      <Filter>Xli\Platform\win32</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

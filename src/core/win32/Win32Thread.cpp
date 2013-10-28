@@ -1,5 +1,5 @@
 #include <Xli/Thread.h>
-#include <Xli/Win32Header.h>
+#include <Xli/PlatformSpecific/Win32Header.h>
 
 namespace Xli
 {

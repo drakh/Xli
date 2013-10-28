@@ -1,7 +1,7 @@
 #include <Xli/MessageBox.h>
 #include <Xli/Window.h>
-#include <Xli/Win32Helpers.h>
-#include <Xli/Win32Header.h>
+#include <Xli/PlatformSpecific/Win32Helpers.h>
+#include <Xli/PlatformSpecific/Win32Header.h>
 #include <Xli/Unicode.h>
 
 namespace Xli
@@ -50,7 +50,7 @@ namespace Xli
 		case IDTRYAGAIN: return DialogResultTryAgain;
 		case IDYES: return DialogResultYes;
 		default:
-			XLI_THROW("MessageDialog failed: " + Xli::Win32Helpers::GetLastErrorString());
+			XLI_THROW("MessageDialog failed: " + PlatformSpecific::Win32Helpers::GetLastErrorString());
 		}
 	}
 }

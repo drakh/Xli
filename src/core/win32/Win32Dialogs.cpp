@@ -3,7 +3,7 @@
 #include <Xli/StringBuilder.h>
 #include <Xli/Path.h>
 #include <Xli/MessageBox.h>
-#include <Xli/Win32Header.h>
+#include <Xli/PlatformSpecific/Win32Header.h>
 #include <Xli/Unicode.h>
 #include <CommDlg.h>
 

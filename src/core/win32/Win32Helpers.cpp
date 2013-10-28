@@ -1,27 +1,30 @@
-#include <Xli/Win32Helpers.h>
-#include <Xli/Win32Header.h>
+#include <Xli/PlatformSpecific/Win32Helpers.h>
+#include <Xli/PlatformSpecific/Win32Header.h>
 #include <Xli/Unicode.h>
 
 namespace Xli
 {
-	String Win32Helpers::GetLastErrorString()
+	namespace PlatformSpecific
 	{
-		LPWSTR lpMsgBuf;
-		DWORD dw = GetLastError(); 
+		String Win32Helpers::GetLastErrorString()
+		{
+			LPWSTR lpMsgBuf;
+			DWORD dw = GetLastError();
 
-		FormatMessageW(
-			FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-			FORMAT_MESSAGE_FROM_SYSTEM |
-			FORMAT_MESSAGE_IGNORE_INSERTS,
-			NULL,
-			dw,
-			MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT),
-			(LPWSTR)&lpMsgBuf, // Cast because callee is allocating buffer
-			0, NULL );
+			FormatMessageW(
+				FORMAT_MESSAGE_ALLOCATE_BUFFER |
+				FORMAT_MESSAGE_FROM_SYSTEM |
+				FORMAT_MESSAGE_IGNORE_INSERTS,
+				NULL,
+				dw,
+				MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT),
+				(LPWSTR)&lpMsgBuf, // Cast because callee is allocating buffer
+				0, NULL);
 
-		String msg = Unicode::Utf16To8(lpMsgBuf);
-		LocalFree(lpMsgBuf);
+			String msg = Unicode::Utf16To8(lpMsgBuf);
+			LocalFree(lpMsgBuf);
 
-		return msg;
+			return msg;
+		}
 	}
 }
