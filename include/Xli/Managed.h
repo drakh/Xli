@@ -118,14 +118,18 @@ namespace Xli
 		{
 		}
 
-		Shared(T* ptr): Managed<T>(ptr)
+		Shared(T* ptr)
+			: Managed<T>(ptr)
 		{
-			if (this->object) this->object->AddRef();
+			if (this->object) 
+				this->object->AddRef();
 		}
 
-		Shared(const Shared& shared): Managed<T>(shared.object)
+		Shared(const Shared& shared)
+			: Managed<T>(shared.object)
 		{
-			if (this->object) this->object->AddRef();
+			if (this->object) 
+				this->object->AddRef();
 		}
 
 		Shared(const Managed<T>& managed): Managed<T>(managed)

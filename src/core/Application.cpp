@@ -10,7 +10,6 @@ namespace Xli
 
 		app->OnInit(wnd);
 		wnd->SetEventHandler(app);
-		
 		app->OnLoad(wnd);
 
 		while (!wnd->IsClosed())

@@ -39,7 +39,7 @@ namespace Xli
 		void Write(const void* data, int elmSize, int elmCount);
 		void WriteCStr(const char* str);
 
-		void Write7BitEncodedInt(int value);
+		void Write7BitEncodedInt32(Int32 value);
 		
 		/// .NET compatible string writer
 		void WriteString(const String& str);

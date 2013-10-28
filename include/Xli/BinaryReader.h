@@ -52,7 +52,7 @@ namespace Xli
 
 		Buffer* ReadAll();
 
-    	int Read7BitEncodedInt();
+    	Int32 Read7BitEncodedInt32();
 
 		/// .NET compatible string reader
 		String ReadString();

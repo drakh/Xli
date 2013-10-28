@@ -25,7 +25,10 @@ namespace Xli
 			String DefaultExtension;
 			Array<FileExtensionDesc> FileExtensions;
 
-			FileDialogOptions(const String& caption): Caption(caption) {}
+			FileDialogOptions(const String& caption)
+				: Caption(caption) 
+			{
+			}
 
 			void AddFileExtension(const String& ext, const String& desc)
 			{

@@ -101,9 +101,7 @@ namespace Xli
 			currentDir = currentDir + parts[i];
 
 			if (parts[i].Length() > 0 && parts[i] != "." && parts[i] != "..")
-			{
 				CreateDirectory(currentDir);
-			}
 
 			currentDir = currentDir + '/';
 		}
@@ -115,16 +113,10 @@ namespace Xli
 		GetFiles(path, files);
 
 		for (int i = 0; i < files.Length(); i++)
-		{
 			if (files[i].Flags & FileFlagDirectory)
-			{
 				DeleteDirectoryRecursive(files[i].Name);
-			}
 			else
-			{
 				DeleteFile(files[i].Name);
-			}
-		}
 
 		DeleteDirectory(path);
 	}
@@ -240,20 +232,18 @@ namespace Xli
 	{
 		int s = list.Length();
 		fs->GetFiles(this->path + path, list);
+
 		for (int i = s; i < list.Length(); i++)
-		{
 			list[i].Name = list[i].Name.Substring(this->path.Length(), list[i].Name.Length() - this->path.Length());
-		}
 	}
 
 	void SubFileSystem::GetFiles(Array<FileInfo>& list)
 	{
 		int s = list.Length();
 		fs->GetFiles(this->path + path, list);
+
 		for (int i = s; i < list.Length(); i++)
-		{
 			list[i].Name = list[i].Name.Substring(this->path.Length(), list[i].Name.Length() - this->path.Length());
-		}
 	}
 
 	void SubFileSystem::CreateDirectories(const String& path)

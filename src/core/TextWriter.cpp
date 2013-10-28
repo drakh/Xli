@@ -3,7 +3,8 @@
 
 namespace Xli
 {
-	TextWriter::TextWriter(Stream* stream): StreamWriter(stream)
+	TextWriter::TextWriter(Stream* stream)
+		: StreamWriter(stream)
 	{
 	}
 

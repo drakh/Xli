@@ -5,7 +5,8 @@ namespace Xli
 {
 	BufferStream::BufferStream(DataAccessor* buf, bool canRead, bool canWrite)
 	{
-		if (!buf) XLI_THROW_NULL_POINTER;
+		if (!buf) 
+			XLI_THROW_NULL_POINTER;
 		
 		this->buf = buf;
 		this->buf->AddRef();
@@ -32,7 +33,9 @@ namespace Xli
 
 	bool BufferStream::AtEnd() const
 	{
-		if (closed) XLI_THROW_STREAM_CLOSED;
+		if (closed) 
+			XLI_THROW_STREAM_CLOSED;
+		
 		return pos == buf->GetSizeInBytes();
 	}
 
@@ -53,20 +56,27 @@ namespace Xli
 
 	int BufferStream::GetLength() const
 	{
-		if (closed) XLI_THROW_STREAM_CLOSED;
+		if (closed) 
+			XLI_THROW_STREAM_CLOSED;
+		
 		return buf->GetSizeInBytes();
 	}
 
 	int BufferStream::GetPosition() const
 	{
-		if (closed) XLI_THROW_STREAM_CLOSED;
+		if (closed) 
+			XLI_THROW_STREAM_CLOSED;
+		
 		return pos;
 	}
 
 	int BufferStream::Read(void* data, int elementSize, int elementCount)
 	{
-		if (!read) XLI_THROW_STREAM_CANT_READ;
-		if (closed) XLI_THROW_STREAM_CLOSED;
+		if (!read) 
+			XLI_THROW_STREAM_CANT_READ;
+		
+		if (closed) 
+			XLI_THROW_STREAM_CLOSED;
 
 		int bytes = elementCount * elementSize;
 		int length = buf->GetSizeInBytes();
@@ -91,8 +101,11 @@ namespace Xli
 
 	int BufferStream::Write(const void* data, int elementSize, int elementCount)
 	{
-		if (!write) XLI_THROW_STREAM_CANT_READ;
-		if (closed) XLI_THROW_STREAM_CLOSED;
+		if (!write) 
+			XLI_THROW_STREAM_CANT_READ;
+
+		if (closed) 
+			XLI_THROW_STREAM_CLOSED;
 
 		int bytes = elementCount * elementSize;
 		int length = buf->GetSizeInBytes();
@@ -117,7 +130,8 @@ namespace Xli
 
 	void BufferStream::Seek(SeekOrigin origin, int offset)
 	{
-		if (closed) XLI_THROW_STREAM_CLOSED;
+		if (closed) 
+			XLI_THROW_STREAM_CLOSED;
 
 		int len = buf->GetSizeInBytes();
 

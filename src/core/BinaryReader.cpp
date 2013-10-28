@@ -2,7 +2,8 @@
 
 namespace Xli
 {
-	BinaryReader::BinaryReader(Stream* stream): StreamReader(stream)
+	BinaryReader::BinaryReader(Stream* stream)
+		: StreamReader(stream)
 	{
 	}
 
@@ -24,20 +25,22 @@ namespace Xli
 
 	String BinaryReader::ReadString()
 	{
-		return ReadCStr(Read7BitEncodedInt());
+		return ReadCStr(Read7BitEncodedInt32());
 	}
 
 	Buffer* BinaryReader::ReadAll()
 	{
 		stream->Seek(SeekOriginBegin, 0);
-		UInt32 size = stream->GetLength();
+		int size = stream->GetLength();
 		Buffer* buf = Buffer::Create(size);
 		stream->ReadSafe(buf->Data(), 1, size);
 		return buf;
 	}
 
-    int BinaryReader::Read7BitEncodedInt()
+	Int32 BinaryReader::Read7BitEncodedInt32()
 	{
+		// TODO: Protect against forever while loop (ref: .NET impl)
+
 		int count = 0;
 		int shift = 0;
 		int b;

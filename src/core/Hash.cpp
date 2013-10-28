@@ -6,10 +6,10 @@ namespace Xli
 	{
 		// djb2
 		UInt32 hash = 5381;
+
 		for (int i = 0; i < size; i++)
-		{
 			hash = ((hash << 5) + hash) ^ (UInt32)data[i];
-		}
+
 		return hash;
 	}
 

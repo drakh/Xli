@@ -3,7 +3,8 @@
 
 namespace Xli
 {
-	TextReader::TextReader(Stream* stream): StreamReader(stream)
+	TextReader::TextReader(Stream* stream)
+		: StreamReader(stream)
 	{
 	}
 
@@ -45,7 +46,9 @@ namespace Xli
 		while (stream->Read(&c, 1, 1) == 1)
 		{
 			s.Add(c);
-			if (c == terminal) break;
+			
+			if (c == terminal)
+				break;
 		}
 
 		return String(s.Data(), s.Length());

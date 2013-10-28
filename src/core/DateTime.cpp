@@ -15,7 +15,8 @@ namespace Xli
 		switch (month)
 		{
 		case 2:
-			return IsLeapYear(year)? 29: 28;
+			return IsLeapYear(year) ? 29 : 28;
+
 		case 1:
 		case 3:
 		case 5:
@@ -24,11 +25,13 @@ namespace Xli
 		case 10:
 		case 12:
 			return 31;
+
 		case 4:
 		case 6:
 		case 9:
 		case 11:
 			return 30;
+
 		default:
 			XLI_THROW("Invalid month");
 		};
@@ -54,6 +57,7 @@ namespace Xli
 	{
 		// Calculate year
 		Year = 1601;
+
 		while (true)
 		{
 			UInt64 YearLength = GetDaysInYear(Year) * PerDay;
@@ -63,11 +67,15 @@ namespace Xli
 				timestamp  -= YearLength;
 				Year++;
 			}
-			else break;
+			else
+			{
+				break;
+			}
 		}
 
 		// Calculate month
 		Month = 1;
+
 		while (true)
 		{
 			UInt64 MonthLength = GetDaysInMonth(Month, Year) * PerDay;
@@ -77,7 +85,10 @@ namespace Xli
 				timestamp -= MonthLength;
 				Month++;
 			}
-			else break;
+			else
+			{
+				break;
+			}
 		}
 
 		Day = (int)(timestamp / PerDay);

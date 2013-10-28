@@ -12,7 +12,6 @@ extern int Main(const Xli::Array<Xli::String>& args);
 
 extern "C" int main(int argc, char** argv)
 {
-	// Global inits goes here
 	Xli::Console::Init();
 	Xli::NativeFileSystem::Init();
 
@@ -36,11 +35,10 @@ extern "C" int main(int argc, char** argv)
 	}
 	catch (...)
 	{
-		Xli::Exception e("Unhandled non-Xli exception");
+		Xli::Exception e("Unhandled exception (Unknown C++ exception)");
 		Xli::MessageBox::HandleException(e, "XliMain");
 	}
 
-	// Global shutdowns goes here
 	Xli::NativeFileSystem::Done();
 	Xli::Console::Done();
     

@@ -296,9 +296,7 @@ namespace Xli
 		}
 
 		if (start < length)
-		{
 			parts.Add(Substring(start, length - start));
-		}
 	}
 
 	String String::Join(char c, const Array<String>& list)
@@ -515,25 +513,27 @@ namespace Xli
 
     void String::Append(const char* str, int len)
     {
-	if (!len) return;
-        String temp = Add(str, len);
+		if (!len) 
+			return;
+        
+		String temp = Add(str, len);
 
-	if (temp.data != temp.buf)
+		if (temp.data != temp.buf)
     	{	
-		// Hack: 
-		// 1. Swap data with temp 
-		// 2. Let temp free old data when it goes out of scope, as long as old data does not point to buf which is stack allocated
-		char* newData = temp.data;
-		temp.data = data != buf ? data : temp.buf;
-		data = newData;
-		length = temp.length;
+			// Hack:
+			// 1. Swap data with temp 
+			// 2. Let temp free old data when it goes out of scope, as long as old data does not point to buf which is stack allocated
+			char* newData = temp.data;
+			temp.data = data != buf ? data : temp.buf;
+			data = newData;
+			length = temp.length;
     	}
-	else
+		else
     	{
-		// If hack fails we must reallocate the data
-		deinit();
-		init(temp.data, temp.length);
-	}		
+			// If hack fails we must reallocate the data
+			deinit();
+			init(temp.data, temp.length);
+		}
     }
     
     void String::Append(const char* str)
@@ -630,7 +630,9 @@ namespace Xli
     
 	String& String::operator = (const String& str)
 	{
-		if (this == &str) return *this;
+		if (this == &str) 
+			return *this;
+
 		deinit();
 		init(str.data, str.length);
 		return *this;
@@ -638,7 +640,9 @@ namespace Xli
 
 	String& String::operator = (const char* str)
 	{
-		if (this->data == str) return *this;
+		if (this->data == str) 
+			return *this;
+
 		deinit();
 		init(str, (int)strlen(str));
 		return *this;
