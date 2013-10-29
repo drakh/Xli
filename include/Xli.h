@@ -25,10 +25,6 @@
 	\brief Windows and input devices
 	\ingroup Xli
 
-	\defgroup XliCorePlatformSpecific Specific
-	\brief Platform specific implementations
-	\ingroup XliCorePlatform
-
 	\defgroup XliCoreText Text
 	\brief Strings, string builders and unicode support
 	\ingroup Xli

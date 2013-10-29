@@ -1,5 +1,5 @@
 #include <XliGL.h>
-#include <Xli/SDL2Window.h>
+#include <Xli/PlatformSpecific/SDL2Window.h>
 #include <Xli/Unicode.h>
 
 #include <SDL.h>
@@ -7,491 +7,494 @@
 
 namespace Xli
 {
-	static SDL2Window* GlobalWindow = 0;
+	static PlatformSpecific::SDL2Window* GlobalWindow = 0;
 	static bool QuitRecieved = false;
 	static int CancelCount = 0;
 
-#ifdef XLI_PLATFORM_IOS
-
-    static int HandleAppEvents(void *userdata, SDL_Event *event)
-    {
-        switch (event->type)
-        {
-        case SDL_APP_TERMINATING:
-            if (GlobalWindow && GlobalWindow->GetEventHandler())
-                GlobalWindow->GetEventHandler()->OnAppTerminating(GlobalWindow);
-            
-            return 0;
-            
-        case SDL_APP_LOWMEMORY:
-            if (GlobalWindow && GlobalWindow->GetEventHandler())
-                GlobalWindow->GetEventHandler()->OnAppLowMemory(GlobalWindow);
-            
-            return 0;
-            
-        case SDL_APP_WILLENTERBACKGROUND:
-            if (GlobalWindow && GlobalWindow->GetEventHandler())
-                GlobalWindow->GetEventHandler()->OnAppWillEnterBackground(GlobalWindow);
-            
-            return 0;
-            
-        case SDL_APP_DIDENTERBACKGROUND:
-            if (GlobalWindow && GlobalWindow->GetEventHandler())
-                GlobalWindow->GetEventHandler()->OnAppDidEnterBackground(GlobalWindow);
-            
-            return 0;
-            
-        case SDL_APP_WILLENTERFOREGROUND:
-            if (GlobalWindow && GlobalWindow->GetEventHandler())
-                GlobalWindow->GetEventHandler()->OnAppWillEnterForeground(GlobalWindow);
-            
-            return 0;
-            
-        case SDL_APP_DIDENTERFOREGROUND:
-            if (GlobalWindow && GlobalWindow->GetEventHandler())
-                GlobalWindow->GetEventHandler()->OnAppDidEnterForeground(GlobalWindow);
-            
-            return 0;
-        }
-        
-        return 1;
-    }
-
-#endif
-    
-	SDL2Window::SDL2Window(int width, int height, const String& title, int flags)
+	namespace PlatformSpecific
 	{
-		if (GlobalWindow == 0) 
-			GlobalWindow = this;
-
-		closed = false;
-		fullscreen = false;
-
-		if ((flags & WindowFlagsFullscreen) == WindowFlagsFullscreen)
-		{
-			flags &= ~WindowFlagsFullscreen;
-			fullscreen = true;
-		}
-
-		x = SDL_WINDOWPOS_UNDEFINED;
-		y = SDL_WINDOWPOS_UNDEFINED;
-		w = width;
-		h = height;
-        buttons = 0;
-
-		Uint32 sdlFlags = SDL_WINDOW_OPENGL;
-		
-		if (flags & WindowFlagsBorderless)
-			sdlFlags |= SDL_WINDOW_BORDERLESS;
-        
-		if (flags & WindowFlagsResizeable)
-			sdlFlags |= SDL_WINDOW_RESIZABLE;
-        
-		this->eventHandler = eventHandler;
-
 #ifdef XLI_PLATFORM_IOS
-      /*
-        String orientations = "";
-        
-        if (flags & WindowFlagsOrientationLandscapeLeft)
-            orientations += "LandscapeLeft ";
-        
-        if (flags & WindowFlagsOrientationLandscapeRight)
-            orientations += "LandscapeRight ";
-        
-        if (flags & WindowFlagsOrientationPortrait)
-            orientations += "Portrait ";
-        
-        if (flags & WindowFlagsOrientationPortraitUpsideDown)
-            orientations += "PortraitUpsideDown";
 
-        if (orientations.Length() > 0 && !SDL_SetHint(SDL_HINT_ORIENTATIONS, orientations.Data()))
-            ErrorPrintLine("SDL WARNING: Failed to set window orientations");
-        */
-        
-        if (flags & WindowFlagsDisablePowerSaver && !SDL_SetHint(SDL_HINT_IDLE_TIMER_DISABLED, "1"))
-            ErrorPrintLine("SDL WARNING: Failed to disable idle timer");
-
-        if (fullscreen)
-            sdlFlags |= SDL_WINDOW_BORDERLESS;
-        
-        sdlFlags |= SDL_WINDOW_RESIZABLE;
-        
-        SDL_SetEventFilter(HandleAppEvents, NULL);
-        
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
-
-#else
-
-		sdlFlags |= SDL_WINDOW_OPENGL;
+	    static int HandleAppEvents(void *userdata, SDL_Event *event)
+	    {
+	        switch (event->type)
+	        {
+	        case SDL_APP_TERMINATING:
+	            if (GlobalWindow && GlobalWindow->GetEventHandler())
+	                GlobalWindow->GetEventHandler()->OnAppTerminating(GlobalWindow);
+	            
+	            return 0;
+	            
+	        case SDL_APP_LOWMEMORY:
+	            if (GlobalWindow && GlobalWindow->GetEventHandler())
+	                GlobalWindow->GetEventHandler()->OnAppLowMemory(GlobalWindow);
+	            
+	            return 0;
+	            
+	        case SDL_APP_WILLENTERBACKGROUND:
+	            if (GlobalWindow && GlobalWindow->GetEventHandler())
+	                GlobalWindow->GetEventHandler()->OnAppWillEnterBackground(GlobalWindow);
+	            
+	            return 0;
+	            
+	        case SDL_APP_DIDENTERBACKGROUND:
+	            if (GlobalWindow && GlobalWindow->GetEventHandler())
+	                GlobalWindow->GetEventHandler()->OnAppDidEnterBackground(GlobalWindow);
+	            
+	            return 0;
+	            
+	        case SDL_APP_WILLENTERFOREGROUND:
+	            if (GlobalWindow && GlobalWindow->GetEventHandler())
+	                GlobalWindow->GetEventHandler()->OnAppWillEnterForeground(GlobalWindow);
+	            
+	            return 0;
+	            
+	        case SDL_APP_DIDENTERFOREGROUND:
+	            if (GlobalWindow && GlobalWindow->GetEventHandler())
+	                GlobalWindow->GetEventHandler()->OnAppDidEnterForeground(GlobalWindow);
+	            
+	            return 0;
+	        }
+	        
+	        return 1;
+	    }
 
 #endif
-        
-		window = SDL_CreateWindow(title.Data(), x, y, width, height, sdlFlags);
-
-		SDL_SetWindowData(window, "SDL2Window", this);
-        
-#ifndef XLI_PLATFORM_IOS
-        
-		if (fullscreen)
+	    
+		SDL2Window::SDL2Window(int width, int height, const String& title, int flags)
 		{
+			if (GlobalWindow == 0) 
+				GlobalWindow = this;
+
+			closed = false;
 			fullscreen = false;
-			SetFullscreen(true);
-		}
 
-#endif
-	}
+			if ((flags & WindowFlagsFullscreen) == WindowFlagsFullscreen)
+			{
+				flags &= ~WindowFlagsFullscreen;
+				fullscreen = true;
+			}
 
-	SDL2Window::SDL2Window(const void* nativeHandle)
-	{
-		if (GlobalWindow == 0) GlobalWindow = this;
+			x = SDL_WINDOWPOS_UNDEFINED;
+			y = SDL_WINDOWPOS_UNDEFINED;
+			w = width;
+			h = height;
+	        buttons = 0;
 
-		window = SDL_CreateWindowFrom(nativeHandle);
-
-		SDL_GetWindowSize(window, &w, &h);
-		SDL_GetWindowPosition(window, &x, &y);
-
-		closed = false;
-		fullscreen = false;
-	}
-
-	SDL2Window::~SDL2Window()
-	{
-		if (GlobalWindow == this) GlobalWindow = 0;
-
-		SDL_DestroyWindow(window);
-	}
-
-	WindowImplementation SDL2Window::GetImplementation()
-	{
-		return WindowImplementationSDL2;
-	}
-
-	void SDL2Window::SetEventHandler(WindowEventHandler* handler)
-	{
-		eventHandler = handler;
-	}
-
-	WindowEventHandler* SDL2Window::GetEventHandler()
-	{
-		return eventHandler;
-	}
-
-	void SDL2Window::Close()
-	{
-        if (!closed)
-        {
-            if (eventHandler.IsSet())
-            {
-                bool cancel = false;
-                if (eventHandler->OnClosing(this, cancel) && cancel) return;
-            }
-
-            SDL_HideWindow(window);
-            closed = true;
-            eventHandler->OnClosed(this);
-        }
-	}
-
-	bool SDL2Window::IsClosed()
-	{
-		return closed || QuitRecieved;
-	}
-
-	bool SDL2Window::IsVisible()
-	{
-		return true;
-	}
-
-    bool SDL2Window::IsFullscreen()
-	{
-		return fullscreen;
-	}
-
-	bool SDL2Window::IsMinimized()
-	{
-		return (SDL_GetWindowFlags(window) & SDL_WINDOW_MINIMIZED) == SDL_WINDOW_MINIMIZED;
-	}
-
-	bool SDL2Window::IsMaximized()
-	{
-		return (SDL_GetWindowFlags(window) & SDL_WINDOW_MAXIMIZED) == SDL_WINDOW_MAXIMIZED;
-	}
-
-	int SDL2Window::GetDisplayIndex()
-	{
-		return SDL_GetWindowDisplayIndex(window);
-	}
-
-	String SDL2Window::GetTitle()
-	{
-		return SDL_GetWindowTitle(window);
-	}
-
-	Vector2i SDL2Window::GetPosition()
-	{
-		Vector2i pos;
-		SDL_GetWindowPosition(window, &pos.X, &pos.Y);
-		return pos;
-	}
-
-	Vector2i SDL2Window::GetClientSize()
-	{
-		Vector2i size;
-		SDL_GetWindowSize(window, &size.X, &size.Y);
-		return size;
-	}
-
-	void* SDL2Window::GetNativeHandle()
-	{
-		SDL_SysWMinfo info;
-		if (SDL_GetWindowWMInfo(window, &info))
-		{
-			// TODO: This may need to be changed for X11 platforms
-			return *(void**)&info.info;
-		}
-
-		return 0;
-	}
-
-	void SDL2Window::SetTitle(const String& title)
-	{
-		SDL_SetWindowTitle(window, title.Data());
-	}
-
-	void SDL2Window::SetFullscreen(bool fullscreen)
-	{
-		if (fullscreen != this->fullscreen)
-		{
-			this->fullscreen = fullscreen;
+			Uint32 sdlFlags = SDL_WINDOW_OPENGL;
+			
+			if (flags & WindowFlagsBorderless)
+				sdlFlags |= SDL_WINDOW_BORDERLESS;
+	        
+			if (flags & WindowFlagsResizeable)
+				sdlFlags |= SDL_WINDOW_RESIZABLE;
+	        
+			this->eventHandler = eventHandler;
 
 #ifdef XLI_PLATFORM_IOS
-            
-            SDL_SetWindowFullscreen(window, fullscreen ? SDL_TRUE : SDL_FALSE);
-            
+	      /*
+	        String orientations = "";
+	        
+	        if (flags & WindowFlagsOrientationLandscapeLeft)
+	            orientations += "LandscapeLeft ";
+	        
+	        if (flags & WindowFlagsOrientationLandscapeRight)
+	            orientations += "LandscapeRight ";
+	        
+	        if (flags & WindowFlagsOrientationPortrait)
+	            orientations += "Portrait ";
+	        
+	        if (flags & WindowFlagsOrientationPortraitUpsideDown)
+	            orientations += "PortraitUpsideDown";
+
+	        if (orientations.Length() > 0 && !SDL_SetHint(SDL_HINT_ORIENTATIONS, orientations.Data()))
+	            ErrorPrintLine("SDL WARNING: Failed to set window orientations");
+	        */
+	        
+	        if (flags & WindowFlagsDisablePowerSaver && !SDL_SetHint(SDL_HINT_IDLE_TIMER_DISABLED, "1"))
+	            ErrorPrintLine("SDL WARNING: Failed to disable idle timer");
+
+	        if (fullscreen)
+	            sdlFlags |= SDL_WINDOW_BORDERLESS;
+	        
+	        sdlFlags |= SDL_WINDOW_RESIZABLE;
+	        
+	        SDL_SetEventFilter(HandleAppEvents, NULL);
+	        
+	        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+	        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+
 #else
-            
+
+			sdlFlags |= SDL_WINDOW_OPENGL;
+
+#endif
+	        
+			window = SDL_CreateWindow(title.Data(), x, y, width, height, sdlFlags);
+
+			SDL_SetWindowData(window, "SDL2Window", this);
+	        
+#ifndef XLI_PLATFORM_IOS
+	        
 			if (fullscreen)
 			{
-				SDL_GetWindowPosition(window, &x, &y);
-				SDL_GetWindowSize(window, &w, &h);
-
-				int i = SDL_GetWindowDisplayIndex(window);
-				if (i == -1) i = 0;
-
-				SDL_Rect rect;
-				SDL_GetDisplayBounds(i, &rect);
-				SDL_SetWindowPosition(window, rect.x, rect.y);
-				SDL_SetWindowSize(window, rect.w, rect.h);
-
-				SDL_SetWindowFullscreen(window, SDL_TRUE);
+				fullscreen = false;
+				SetFullscreen(true);
 			}
-			else
-			{
-				SDL_SetWindowFullscreen(window, SDL_FALSE);
-				SDL_SetWindowPosition(window, x, y);
-				SDL_SetWindowSize(window, w, h);
-			}
-            
+
 #endif
+		}
+
+		SDL2Window::SDL2Window(const void* nativeHandle)
+		{
+			if (GlobalWindow == 0) GlobalWindow = this;
+
+			window = SDL_CreateWindowFrom(nativeHandle);
+
+			SDL_GetWindowSize(window, &w, &h);
+			SDL_GetWindowPosition(window, &x, &y);
+
+			closed = false;
+			fullscreen = false;
+		}
+
+		SDL2Window::~SDL2Window()
+		{
+			if (GlobalWindow == this) GlobalWindow = 0;
+
+			SDL_DestroyWindow(window);
+		}
+
+		WindowImplementation SDL2Window::GetImplementation()
+		{
+			return WindowImplementationSDL2;
+		}
+
+		void SDL2Window::SetEventHandler(WindowEventHandler* handler)
+		{
+			eventHandler = handler;
+		}
+
+		WindowEventHandler* SDL2Window::GetEventHandler()
+		{
+			return eventHandler;
+		}
+
+		void SDL2Window::Close()
+		{
+	        if (!closed)
+	        {
+	            if (eventHandler.IsSet())
+	            {
+	                bool cancel = false;
+	                if (eventHandler->OnClosing(this, cancel) && cancel) return;
+	            }
+
+	            SDL_HideWindow(window);
+	            closed = true;
+	            eventHandler->OnClosed(this);
+	        }
+		}
+
+		bool SDL2Window::IsClosed()
+		{
+			return closed || QuitRecieved;
+		}
+
+		bool SDL2Window::IsVisible()
+		{
+			return true;
+		}
+
+	    bool SDL2Window::IsFullscreen()
+		{
+			return fullscreen;
+		}
+
+		bool SDL2Window::IsMinimized()
+		{
+			return (SDL_GetWindowFlags(window) & SDL_WINDOW_MINIMIZED) == SDL_WINDOW_MINIMIZED;
+		}
+
+		bool SDL2Window::IsMaximized()
+		{
+			return (SDL_GetWindowFlags(window) & SDL_WINDOW_MAXIMIZED) == SDL_WINDOW_MAXIMIZED;
+		}
+
+		int SDL2Window::GetDisplayIndex()
+		{
+			return SDL_GetWindowDisplayIndex(window);
+		}
+
+		String SDL2Window::GetTitle()
+		{
+			return SDL_GetWindowTitle(window);
+		}
+
+		Vector2i SDL2Window::GetPosition()
+		{
+			Vector2i pos;
+			SDL_GetWindowPosition(window, &pos.X, &pos.Y);
+			return pos;
+		}
+
+		Vector2i SDL2Window::GetClientSize()
+		{
+			Vector2i size;
+			SDL_GetWindowSize(window, &size.X, &size.Y);
+			return size;
+		}
+
+		void* SDL2Window::GetNativeHandle()
+		{
+			SDL_SysWMinfo info;
+			if (SDL_GetWindowWMInfo(window, &info))
+			{
+				// TODO: This may need to be changed for X11 platforms
+				return *(void**)&info.info;
+			}
+
+			return 0;
+		}
+
+		void SDL2Window::SetTitle(const String& title)
+		{
+			SDL_SetWindowTitle(window, title.Data());
+		}
+
+		void SDL2Window::SetFullscreen(bool fullscreen)
+		{
+			if (fullscreen != this->fullscreen)
+			{
+				this->fullscreen = fullscreen;
+
+#ifdef XLI_PLATFORM_IOS
+	            
+	            SDL_SetWindowFullscreen(window, fullscreen ? SDL_TRUE : SDL_FALSE);
+	            
+#else
+	            
+				if (fullscreen)
+				{
+					SDL_GetWindowPosition(window, &x, &y);
+					SDL_GetWindowSize(window, &w, &h);
+
+					int i = SDL_GetWindowDisplayIndex(window);
+					if (i == -1) i = 0;
+
+					SDL_Rect rect;
+					SDL_GetDisplayBounds(i, &rect);
+					SDL_SetWindowPosition(window, rect.x, rect.y);
+					SDL_SetWindowSize(window, rect.w, rect.h);
+
+					SDL_SetWindowFullscreen(window, SDL_TRUE);
+				}
+				else
+				{
+					SDL_SetWindowFullscreen(window, SDL_FALSE);
+					SDL_SetWindowPosition(window, x, y);
+					SDL_SetWindowSize(window, w, h);
+				}
+	            
+#endif
+			}
+		}
+
+		void SDL2Window::SetPosition(Vector2i pos)
+		{
+			SDL_SetWindowPosition(window, pos.X, pos.Y);
+		}
+
+		void SDL2Window::SetClientSize(Vector2i size)
+		{
+			SDL_SetWindowSize(window, size.X, size.Y);
+		}
+
+		void SDL2Window::Minimize()
+		{
+			SDL_MinimizeWindow(window);
+		}
+
+		void SDL2Window::Maximize()
+		{
+			SDL_MinimizeWindow(window);
+		}
+
+		void SDL2Window::Restore()
+		{
+			SDL_RestoreWindow(window);
+		}
+
+		bool SDL2Window::GetKeyState(Key key)
+		{
+#ifndef XLI_PLATFORM_IOS
+
+	        const Uint8* keys = SDL_GetKeyboardState(0);
+	        
+	        switch (key)
+	        {
+	            case KeyBackspace: return keys[SDL_SCANCODE_BACKSPACE];
+	            case KeyTab: return keys[SDL_SCANCODE_TAB];
+	            case KeyEnter: return keys[SDL_SCANCODE_RETURN] || keys[SDL_SCANCODE_RETURN2];
+	            case KeyShift: return keys[SDL_SCANCODE_LSHIFT] || keys[SDL_SCANCODE_RSHIFT];
+	            case KeyCtrl: return keys[SDL_SCANCODE_LCTRL] || keys[SDL_SCANCODE_RCTRL];
+	            case KeyAlt: return keys[SDL_SCANCODE_LALT] || keys[SDL_SCANCODE_RALT];
+	            case KeyBreak: return keys[SDL_SCANCODE_PAUSE];
+	            case KeyCapsLock: return keys[SDL_SCANCODE_CAPSLOCK];
+	            case KeyEscape: return keys[SDL_SCANCODE_ESCAPE];
+	            case KeySpace: return keys[SDL_SCANCODE_SPACE];
+	            case KeyPageUp: return keys[SDL_SCANCODE_PAGEUP];
+	            case KeyPageDown: return keys[SDL_SCANCODE_PAGEDOWN];
+	            case KeyEnd: return keys[SDL_SCANCODE_END];
+	            case KeyHome: return keys[SDL_SCANCODE_HOME];
+	            case KeyLeft: return keys[SDL_SCANCODE_LEFT];
+	            case KeyUp: return keys[SDL_SCANCODE_UP];
+	            case KeyRight: return keys[SDL_SCANCODE_RIGHT];
+	            case KeyDown: return keys[SDL_SCANCODE_DOWN];
+	            case KeyInsert: return keys[SDL_SCANCODE_INSERT];
+	            case KeyDelete: return keys[SDL_SCANCODE_DELETE];
+	            case Key0: return keys[SDL_SCANCODE_0];
+	            case Key1: return keys[SDL_SCANCODE_1];
+	            case Key2: return keys[SDL_SCANCODE_2];
+	            case Key3: return keys[SDL_SCANCODE_3];
+	            case Key4: return keys[SDL_SCANCODE_4];
+	            case Key5: return keys[SDL_SCANCODE_5];
+	            case Key6: return keys[SDL_SCANCODE_6];
+	            case Key7: return keys[SDL_SCANCODE_7];
+	            case Key8: return keys[SDL_SCANCODE_8];
+	            case Key9: return keys[SDL_SCANCODE_9];
+	            case KeyA: return keys[SDL_SCANCODE_A];
+	            case KeyB: return keys[SDL_SCANCODE_B];
+	            case KeyC: return keys[SDL_SCANCODE_C];
+	            case KeyD: return keys[SDL_SCANCODE_D];
+	            case KeyE: return keys[SDL_SCANCODE_E];
+	            case KeyF: return keys[SDL_SCANCODE_F];
+	            case KeyG: return keys[SDL_SCANCODE_G];
+	            case KeyH: return keys[SDL_SCANCODE_H];
+	            case KeyI: return keys[SDL_SCANCODE_I];
+	            case KeyJ: return keys[SDL_SCANCODE_J];
+	            case KeyK: return keys[SDL_SCANCODE_K];
+	            case KeyL: return keys[SDL_SCANCODE_L];
+	            case KeyM: return keys[SDL_SCANCODE_M];
+	            case KeyN: return keys[SDL_SCANCODE_N];
+	            case KeyO: return keys[SDL_SCANCODE_O];
+	            case KeyP: return keys[SDL_SCANCODE_P];
+	            case KeyQ: return keys[SDL_SCANCODE_Q];
+	            case KeyR: return keys[SDL_SCANCODE_R];
+	            case KeyS: return keys[SDL_SCANCODE_S];
+	            case KeyT: return keys[SDL_SCANCODE_T];
+	            case KeyU: return keys[SDL_SCANCODE_U];
+	            case KeyV: return keys[SDL_SCANCODE_V];
+	            case KeyW: return keys[SDL_SCANCODE_W];
+	            case KeyX: return keys[SDL_SCANCODE_X];
+	            case KeyY: return keys[SDL_SCANCODE_Y];
+	            case KeyZ: return keys[SDL_SCANCODE_Z];
+	            case KeyNumPad0: return keys[SDL_SCANCODE_KP_0];
+	            case KeyNumPad1: return keys[SDL_SCANCODE_KP_1];
+	            case KeyNumPad2: return keys[SDL_SCANCODE_KP_2];
+	            case KeyNumPad3: return keys[SDL_SCANCODE_KP_3];
+	            case KeyNumPad4: return keys[SDL_SCANCODE_KP_4];
+	            case KeyNumPad5: return keys[SDL_SCANCODE_KP_5];
+	            case KeyNumPad6: return keys[SDL_SCANCODE_KP_6];
+	            case KeyNumPad7: return keys[SDL_SCANCODE_KP_7];
+	            case KeyNumPad8: return keys[SDL_SCANCODE_KP_8];
+	            case KeyNumPad9: return keys[SDL_SCANCODE_KP_9];
+	            case KeyF1: return keys[SDL_SCANCODE_F1];
+	            case KeyF2: return keys[SDL_SCANCODE_F2];
+	            case KeyF3: return keys[SDL_SCANCODE_F3];
+	            case KeyF4: return keys[SDL_SCANCODE_F4];
+	            case KeyF5: return keys[SDL_SCANCODE_F5];
+	            case KeyF6: return keys[SDL_SCANCODE_F6];
+	            case KeyF7: return keys[SDL_SCANCODE_F7];
+	            case KeyF8: return keys[SDL_SCANCODE_F8];
+	            case KeyF9: return keys[SDL_SCANCODE_F9];
+	            case KeyF10: return keys[SDL_SCANCODE_F10];
+	            case KeyF11: return keys[SDL_SCANCODE_F11];
+	            case KeyF12: return keys[SDL_SCANCODE_F12];
+	                
+	            case KeyMenu:
+	            case KeyUnknown: break;
+	        }
+
+#endif
+
+			return false;
+		}
+
+		bool SDL2Window::GetMouseButtonState(MouseButton button)
+		{
+	        return buttons & SDL_BUTTON((int)button);
+		}
+
+		Vector2i SDL2Window::GetMousePosition()
+		{
+			int x, y;
+	        SDL_GetMouseState(&x, &y);
+	        return Vector2i(x, y);
+		}
+
+		void SDL2Window::SetMousePosition(Vector2i position)
+		{
+	        SDL_WarpMouseInWindow(window, position.X, position.Y);
+		}
+
+		SystemCursor SDL2Window::GetSystemCursor()
+		{
+			return SystemCursorNone;
+		}
+
+		void SDL2Window::SetSystemCursor(SystemCursor cursor)
+		{
+#ifndef XLI_PLATFORM_IOS
+
+
+
+#endif
+		}
+
+		void SDL2Window::BeginTextInput() 
+		{
+			SDL_StartTextInput();
+		}
+
+		void SDL2Window::EndTextInput() 
+		{
+			SDL_StopTextInput();
+		}
+
+		bool SDL2Window::IsTextInputActive() 
+		{
+			return SDL_IsTextInputActive();
+		}
+
+		bool SDL2Window::HasOnscreenKeyboardSupport() 
+		{
+			return SDL_HasScreenKeyboardSupport();
+		}
+
+		bool SDL2Window::IsOnscreenKeyboardVisible() 
+		{
+			return SDL_IsScreenKeyboardShown(window);
 		}
 	}
 
-	void SDL2Window::SetPosition(Vector2i pos)
-	{
-		SDL_SetWindowPosition(window, pos.X, pos.Y);
-	}
-
-	void SDL2Window::SetClientSize(Vector2i size)
-	{
-		SDL_SetWindowSize(window, size.X, size.Y);
-	}
-
-	void SDL2Window::Minimize()
-	{
-		SDL_MinimizeWindow(window);
-	}
-
-	void SDL2Window::Maximize()
-	{
-		SDL_MinimizeWindow(window);
-	}
-
-	void SDL2Window::Restore()
-	{
-		SDL_RestoreWindow(window);
-	}
-
-	bool SDL2Window::GetKeyState(Key key)
-	{
-#ifndef XLI_PLATFORM_IOS
-
-        const Uint8* keys = SDL_GetKeyboardState(0);
-        
-        switch (key)
-        {
-            case KeyBackspace: return keys[SDL_SCANCODE_BACKSPACE];
-            case KeyTab: return keys[SDL_SCANCODE_TAB];
-            case KeyEnter: return keys[SDL_SCANCODE_RETURN] || keys[SDL_SCANCODE_RETURN2];
-            case KeyShift: return keys[SDL_SCANCODE_LSHIFT] || keys[SDL_SCANCODE_RSHIFT];
-            case KeyCtrl: return keys[SDL_SCANCODE_LCTRL] || keys[SDL_SCANCODE_RCTRL];
-            case KeyAlt: return keys[SDL_SCANCODE_LALT] || keys[SDL_SCANCODE_RALT];
-            case KeyBreak: return keys[SDL_SCANCODE_PAUSE];
-            case KeyCapsLock: return keys[SDL_SCANCODE_CAPSLOCK];
-            case KeyEscape: return keys[SDL_SCANCODE_ESCAPE];
-            case KeySpace: return keys[SDL_SCANCODE_SPACE];
-            case KeyPageUp: return keys[SDL_SCANCODE_PAGEUP];
-            case KeyPageDown: return keys[SDL_SCANCODE_PAGEDOWN];
-            case KeyEnd: return keys[SDL_SCANCODE_END];
-            case KeyHome: return keys[SDL_SCANCODE_HOME];
-            case KeyLeft: return keys[SDL_SCANCODE_LEFT];
-            case KeyUp: return keys[SDL_SCANCODE_UP];
-            case KeyRight: return keys[SDL_SCANCODE_RIGHT];
-            case KeyDown: return keys[SDL_SCANCODE_DOWN];
-            case KeyInsert: return keys[SDL_SCANCODE_INSERT];
-            case KeyDelete: return keys[SDL_SCANCODE_DELETE];
-            case Key0: return keys[SDL_SCANCODE_0];
-            case Key1: return keys[SDL_SCANCODE_1];
-            case Key2: return keys[SDL_SCANCODE_2];
-            case Key3: return keys[SDL_SCANCODE_3];
-            case Key4: return keys[SDL_SCANCODE_4];
-            case Key5: return keys[SDL_SCANCODE_5];
-            case Key6: return keys[SDL_SCANCODE_6];
-            case Key7: return keys[SDL_SCANCODE_7];
-            case Key8: return keys[SDL_SCANCODE_8];
-            case Key9: return keys[SDL_SCANCODE_9];
-            case KeyA: return keys[SDL_SCANCODE_A];
-            case KeyB: return keys[SDL_SCANCODE_B];
-            case KeyC: return keys[SDL_SCANCODE_C];
-            case KeyD: return keys[SDL_SCANCODE_D];
-            case KeyE: return keys[SDL_SCANCODE_E];
-            case KeyF: return keys[SDL_SCANCODE_F];
-            case KeyG: return keys[SDL_SCANCODE_G];
-            case KeyH: return keys[SDL_SCANCODE_H];
-            case KeyI: return keys[SDL_SCANCODE_I];
-            case KeyJ: return keys[SDL_SCANCODE_J];
-            case KeyK: return keys[SDL_SCANCODE_K];
-            case KeyL: return keys[SDL_SCANCODE_L];
-            case KeyM: return keys[SDL_SCANCODE_M];
-            case KeyN: return keys[SDL_SCANCODE_N];
-            case KeyO: return keys[SDL_SCANCODE_O];
-            case KeyP: return keys[SDL_SCANCODE_P];
-            case KeyQ: return keys[SDL_SCANCODE_Q];
-            case KeyR: return keys[SDL_SCANCODE_R];
-            case KeyS: return keys[SDL_SCANCODE_S];
-            case KeyT: return keys[SDL_SCANCODE_T];
-            case KeyU: return keys[SDL_SCANCODE_U];
-            case KeyV: return keys[SDL_SCANCODE_V];
-            case KeyW: return keys[SDL_SCANCODE_W];
-            case KeyX: return keys[SDL_SCANCODE_X];
-            case KeyY: return keys[SDL_SCANCODE_Y];
-            case KeyZ: return keys[SDL_SCANCODE_Z];
-            case KeyNumPad0: return keys[SDL_SCANCODE_KP_0];
-            case KeyNumPad1: return keys[SDL_SCANCODE_KP_1];
-            case KeyNumPad2: return keys[SDL_SCANCODE_KP_2];
-            case KeyNumPad3: return keys[SDL_SCANCODE_KP_3];
-            case KeyNumPad4: return keys[SDL_SCANCODE_KP_4];
-            case KeyNumPad5: return keys[SDL_SCANCODE_KP_5];
-            case KeyNumPad6: return keys[SDL_SCANCODE_KP_6];
-            case KeyNumPad7: return keys[SDL_SCANCODE_KP_7];
-            case KeyNumPad8: return keys[SDL_SCANCODE_KP_8];
-            case KeyNumPad9: return keys[SDL_SCANCODE_KP_9];
-            case KeyF1: return keys[SDL_SCANCODE_F1];
-            case KeyF2: return keys[SDL_SCANCODE_F2];
-            case KeyF3: return keys[SDL_SCANCODE_F3];
-            case KeyF4: return keys[SDL_SCANCODE_F4];
-            case KeyF5: return keys[SDL_SCANCODE_F5];
-            case KeyF6: return keys[SDL_SCANCODE_F6];
-            case KeyF7: return keys[SDL_SCANCODE_F7];
-            case KeyF8: return keys[SDL_SCANCODE_F8];
-            case KeyF9: return keys[SDL_SCANCODE_F9];
-            case KeyF10: return keys[SDL_SCANCODE_F10];
-            case KeyF11: return keys[SDL_SCANCODE_F11];
-            case KeyF12: return keys[SDL_SCANCODE_F12];
-                
-            case KeyMenu:
-            case KeyUnknown: break;
-        }
-
-#endif
-
-		return false;
-	}
-
-	bool SDL2Window::GetMouseButtonState(MouseButton button)
-	{
-        return buttons & SDL_BUTTON((int)button);
-	}
-
-	Vector2i SDL2Window::GetMousePosition()
-	{
-		int x, y;
-        SDL_GetMouseState(&x, &y);
-        return Vector2i(x, y);
-	}
-
-	void SDL2Window::SetMousePosition(Vector2i position)
-	{
-        SDL_WarpMouseInWindow(window, position.X, position.Y);
-	}
-
-	SystemCursor SDL2Window::GetSystemCursor()
-	{
-		return SystemCursorNone;
-	}
-
-	void SDL2Window::SetSystemCursor(SystemCursor cursor)
-	{
-#ifndef XLI_PLATFORM_IOS
-
-
-
-#endif
-	}
-
-	void SDL2Window::BeginTextInput() 
-	{
-		SDL_StartTextInput();
-	}
-
-	void SDL2Window::EndTextInput() 
-	{
-		SDL_StopTextInput();
-	}
-
-	bool SDL2Window::IsTextInputActive() 
-	{
-		return SDL_IsTextInputActive();
-	}
-
-	bool SDL2Window::HasOnscreenKeyboardSupport() 
-	{
-		return SDL_HasScreenKeyboardSupport();
-	}
-
-	bool SDL2Window::IsOnscreenKeyboardVisible() 
-	{
-		return SDL_IsScreenKeyboardShown(window);
-	}
-
-	static bool inited = false;
+	static bool Inited = false;
 
 	void Window::Init()
 	{
 		SDL_VideoInit(0);
-		inited = true;
+		Inited = true;
 	}
 
 	void Window::Done()
 	{
 		SDL_VideoQuit();
-		inited = false;
+		Inited = false;
 	}
 
 	static void AssertInit()
 	{
-		if (!inited)
+		if (!Inited)
 		{
 			Window::Init();
 			atexit(Window::Done);
@@ -500,7 +503,7 @@ namespace Xli
 
 	void Window::SetMainWindow(Window* wnd)
 	{
-		GlobalWindow = wnd && wnd->GetImplementation() == WindowImplementationSDL2 ? (SDL2Window*)wnd : NULL;
+		GlobalWindow = wnd && wnd->GetImplementation() == WindowImplementationSDL2 ? (PlatformSpecific::SDL2Window*)wnd : NULL;
 	}
 
 	Window* Window::GetMainWindow()
@@ -518,13 +521,13 @@ namespace Xli
 	Window* Window::Create(int width, int height, const String& title, int flags)
 	{
 		AssertInit();
-		return new SDL2Window(width, height, title, flags);
+		return new PlatformSpecific::SDL2Window(width, height, title, flags);
 	}
 
 	Window* Window::Adopt(void* nativeWindowHandle)
 	{
 		AssertInit();
-		return new SDL2Window(nativeWindowHandle);
+		return new PlatformSpecific::SDL2Window(nativeWindowHandle);
 	}
 
 	static Xli::Key SDLKeyToXliKey(const SDL_Keysym& key)
@@ -683,9 +686,9 @@ namespace Xli
 					continue;
             }
             
-            SDL2Window* wnd = 0;
+            PlatformSpecific::SDL2Window* wnd = 0;
             SDL_Window* sdlwnd = SDL_GetWindowFromID(e.window.windowID);
-            if (sdlwnd != 0) wnd = (SDL2Window*)SDL_GetWindowData(sdlwnd, "SDL2Window");
+            if (sdlwnd != 0) wnd = (PlatformSpecific::SDL2Window*)SDL_GetWindowData(sdlwnd, "SDL2Window");
             
 			if (wnd == 0)
 			{

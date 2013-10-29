@@ -114,7 +114,7 @@ namespace Xli
 		return new AAssetFileSystem();
 	}
 
-	class AFileSystem: public PosixFileSystemBase
+	class AFileSystem: public PlatformSpecific::PosixFileSystemBase
 	{
 		jmethodID Context_getCacheDir;
 		jmethodID File_getAbsolutePath;

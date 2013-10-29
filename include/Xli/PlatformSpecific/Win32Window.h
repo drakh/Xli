@@ -1,5 +1,5 @@
-#ifndef __XLI_WIN32_WINDOW_H__
-#define __XLI_WIN32_WINDOW_H__
+#ifndef __XLI_PLATFORM_SPECIFIC_WIN32_WINDOW_H__
+#define __XLI_PLATFORM_SPECIFIC_WIN32_WINDOW_H__
 
 #include <Xli/PlatformSpecific/Win32Header.h>
 #include <Xli/Window.h>
@@ -10,7 +10,7 @@ namespace Xli
 	{
 		/**
 			\ingroup XliCorePlatform
-			*/
+		*/
 		class Win32Window : public Window
 		{
 			HWND hWnd;
