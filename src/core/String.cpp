@@ -58,9 +58,9 @@ namespace Xli
 	void String::init(bool b)
 	{
 		if (b)
-			init("true", 4);
+			init("True", 4);
 		else
-			init("false", 5);
+			init("False", 5);
 	}
 
 	void String::deinit()

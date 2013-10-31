@@ -37,32 +37,32 @@ namespace Xli
 	}
 
 	UInt32 Hash(Int8 i)
-	{ 
+	{
 		return (UInt32)i; 
 	}
 	
 	UInt32 Hash(UInt8 i)
-	{ 
+	{
 		return (UInt32)i; 
 	}
 	
 	UInt32 Hash(Int16 i)
-	{ 
+	{
 		return (UInt32)i; 
 	}
 	
 	UInt32 Hash(UInt16 i)
-	{ 
+	{
 		return (UInt32)i; 
 	}
 	
 	UInt32 Hash(Int32 i)
-	{ 
+	{
 		return (UInt32)i; 
 	}
 	
 	UInt32 Hash(UInt32 i)
-	{ 
+	{
 		return i; 
 	}
 	
