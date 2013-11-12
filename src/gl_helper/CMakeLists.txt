@@ -3,4 +3,4 @@ if (APPLE)
 endif()
 
 add_library(XliGLHelper GLHelper.cpp)
-target_link_libraries(XliGLHelper Xli XliMedia)
+target_link_libraries(XliGLHelper Xli XliGL XliMedia)

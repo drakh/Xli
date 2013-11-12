@@ -61,21 +61,14 @@ elseif (UNIX)
         posix/PosixThread.cpp
         sdl2/SDL2Window.cpp
         sdl2/SDL2Display.cpp
-        sdl2/SDL2GLContext.cpp
         sdl2/SDL2MessageBox.cpp
         )
-
-	add_definitions(-DXLI_HAS_GLEW)
 
 	if (APPLE)
 
 	    set(Sources ${Sources} 
-	    	3rdparty/glew/src/glew.c
 	    	cocoa/CocoaFileSystem.mm
 	    	)
-
-	    add_definitions(-DGLEW_STATIC)
-	    include_directories(${PROJECT_SOURCE_DIR}/src/core/3rdparty/glew/include)
 
 	    include_directories(${PROJECT_SOURCE_DIR}/src/core/3rdparty/SDL2/include)
 	    link_directories(${PROJECT_SOURCE_DIR}/src/core/3rdparty/SDL2/lib)
@@ -97,7 +90,7 @@ endif()
 
 add_library(Xli ${Sources})
 
-if (UNIX AND NOT APPLE AND NOT WIN32)
-    target_link_libraries(Xli SDL2 pthread GL GLEW)
-endif()
 
+if (UNIX AND NOT APPLE AND NOT WIN32)
+    target_link_libraries(Xli SDL2 pthread)
+endif()
