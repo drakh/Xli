@@ -75,5 +75,7 @@
 # define XLI_DEBUG_PRINT(x)
 #endif
 
+#define XLI_INLINE inline
+
 
 #endif

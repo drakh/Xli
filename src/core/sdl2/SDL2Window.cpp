@@ -91,7 +91,8 @@ namespace Xli
 	        
 #ifdef XLI_PLATFORM_OSX
       
-            sdlFlags |= SDL_WINDOW_ALLOW_HIGHDPI;
+      		// TODO: Bug in SDL
+            //sdlFlags |= SDL_WINDOW_ALLOW_HIGHDPI;
             
 #endif
             

@@ -244,27 +244,27 @@ namespace Xli
 	typedef Vector2t<UInt16> Vector2u16;
 	typedef Vector2t<UInt8> Vector2u8;
 
-	static float Dot(const Vector2& v1, const Vector2& v2)
+	XLI_INLINE float Dot(const Vector2& v1, const Vector2& v2)
 	{
 		return v1.X * v2.X + v1.Y * v2.Y;
 	}
 
-	static float LengthSquared(const Vector2& v)
+	XLI_INLINE float LengthSquared(const Vector2& v)
 	{
 		return Dot(v, v);
 	}
 
-	static float Length(const Vector2& v)
+	XLI_INLINE float Length(const Vector2& v)
 	{
 		return Sqrt(Dot(v, v));
 	}
 
-	static Vector2 Normalize(const Vector2& v)
+	XLI_INLINE Vector2 Normalize(const Vector2& v)
 	{
 		return v * (1.0f / Length(v));
 	}
 
-	static Vector2 Rotate(const Vector2& v, float angleRadians)
+	XLI_INLINE Vector2 Rotate(const Vector2& v, float angleRadians)
 	{
 		float c = Cos(angleRadians);
 		float s = Sin(angleRadians);
@@ -276,18 +276,18 @@ namespace Xli
 		return Normalize(w) * Length(v);
 	}
 
-	static Vector2 Vector2FromAngle(float angleRadians)
+	XLI_INLINE Vector2 Vector2FromAngle(float angleRadians)
 	{
 		return Vector2(Cos(angleRadians), Sin(angleRadians));
 	}
 
-	static float Vector2ToAngle(const Vector2& v)
+	XLI_INLINE float Vector2ToAngle(const Vector2& v)
 	{
 		float linv = 1.0f / Length(v);
 		return v.Y > 0.0f ? ArcCos(v.X * linv) : 2.0f * PIf - ArcCos(v.X * linv);
 	}
 
-	static float AngleBetween(const Vector2& v1, const Vector2& v2)
+	XLI_INLINE float AngleBetween(const Vector2& v1, const Vector2& v2)
 	{
 		return ArcCos(Dot(Normalize(v1), Normalize(v2)));
 	}

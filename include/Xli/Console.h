@@ -55,32 +55,36 @@ namespace Xli
 	extern StdErrAccessor Err;
 	extern StdInAccessor In;
 
-	template <typename T> static void Print(const T& t)
+	template <typename T> 
+	XLI_INLINE void Print(const T& t)
 	{
 		Out->Write(t);
 	}
 
-	template <typename T> static void PrintLine(const T& t)
+	template <typename T> 
+	XLI_INLINE void PrintLine(const T& t)
 	{
 		Out->WriteLine(t);
 	}
 
-	static void PrintLine()
+	XLI_INLINE void PrintLine()
 	{
 		Out->Write('\n');
 	}
 
-	template <typename T> void ErrorPrint(const T& t)
+	template <typename T> 
+	void ErrorPrint(const T& t)
 	{
 		Err->Write(t);
 	}
 
-	template <typename T> void ErrorPrintLine(const T& t)
+	template <typename T> 
+	void ErrorPrintLine(const T& t)
 	{
 		Err->WriteLine(t);
 	}
 
-	static void ErrorPrintLine()
+	XLI_INLINE void ErrorPrintLine()
 	{
 		Err->Write('\n');
 	}

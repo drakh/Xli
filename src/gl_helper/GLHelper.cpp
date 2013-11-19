@@ -1,11 +1,13 @@
-#include <XliGLHelper.h>
-#include <XliMedia/Texture.h>
-#include <XliMedia/Bitmap.h>
-#include <XliMedia/Ktx.h>
-#include <XliMedia/Jpeg.h>
-#include <XliMedia/Png.h>
-#include <XliMedia/GZip.h>
+#include <Xli/Console.h>
+#include <Xli/Matrix4.h>
 #include <Xli/Path.h>
+#include <XliGLHelper.h>
+#include <XliMedia/Bitmap.h>
+#include <XliMedia/GZip.h>
+#include <XliMedia/Jpeg.h>
+#include <XliMedia/Ktx.h>
+#include <XliMedia/Png.h>
+#include <XliMedia/Texture.h>
 #include <cstring>
 
 namespace Xli
@@ -27,6 +29,14 @@ namespace Xli
 #endif
 		default: return "Unknown error";
 		}
+	}
+
+	void GLCheckErrorImpl(const char* func, int line)
+	{
+		GLint err = glGetError();
+		
+		if (err != GL_NO_ERROR)
+			ErrorPrintLine("GL ERROR: " + String::HexFromInt(err) + " - " + GLGetErrorString(err) + " (in " + func + ":" + line + ")");
 	}
 
 	GLuint GLCompileShader(GLenum shaderType, const String& source)

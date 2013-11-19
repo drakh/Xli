@@ -273,29 +273,29 @@ namespace Xli
 	typedef Vector3t<UInt16> Vector3u16;
 	typedef Vector3t<UInt8> Vector3u8;
 
-	static Vector3 Cross(const Vector3& v1, const Vector3& v2)
+	XLI_INLINE Vector3 Cross(const Vector3& v1, const Vector3& v2)
 	{
 		return Vector3(v1.Y * v2.Z - v1.Z * v2.Y,
 		               v1.Z * v2.X - v1.X * v2.Z,
 		               v1.X * v2.Y - v1.Y * v2.X);
 	}
 
-	static float Dot(const Vector3& v1, const Vector3& v2)
+	XLI_INLINE float Dot(const Vector3& v1, const Vector3& v2)
 	{
 		return v1.X * v2.X + v1.Y * v2.Y + v1.Z * v2.Z;
 	}
 
-	static float LengthSquared(const Vector3& v)
+	XLI_INLINE float LengthSquared(const Vector3& v)
 	{
 		return Dot(v, v);
 	}
 
-	static float Length(const Vector3& v)
+	XLI_INLINE float Length(const Vector3& v)
 	{
 		return Sqrt(Dot(v, v));
 	}
 
-	static Vector3 Normalize(const Vector3& v)
+	XLI_INLINE Vector3 Normalize(const Vector3& v)
 	{
 		return v / Length(v);
 	}
