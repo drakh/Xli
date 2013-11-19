@@ -89,6 +89,12 @@ namespace Xli
 			if (flags & WindowFlagsResizeable)
 				sdlFlags |= SDL_WINDOW_RESIZABLE;
 	        
+#ifdef XLI_PLATFORM_OSX
+      
+            sdlFlags |= SDL_WINDOW_ALLOW_HIGHDPI;
+            
+#endif
+            
 			this->eventHandler = eventHandler;
 
 #ifdef XLI_PLATFORM_IOS

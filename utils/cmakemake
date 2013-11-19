@@ -1,12 +1,15 @@
 #!/bin/bash
 
-while getopts ":hcdrit:p:-:" opt; do
+while getopts ":hcdrit:p:j:-:" opt; do
 
 	if [ "$opt" == "-" ]; then 
 		# FIXME: Hardcoded indices
 		if [ "${OPTARG:6:1}" == "=" ]; then  
 			opt=${OPTARG:0:6}
 			OPTARG=${OPTARG:7}
+		elif [ "${OPTARG:4:1}" == "=" ]; then  
+			opt=${OPTARG:0:4}
+			OPTARG=${OPTARG:5}
 		else
 			opt=$OPTARG
 			OPTARG=""
@@ -35,6 +38,12 @@ while getopts ":hcdrit:p:-:" opt; do
 	p|prefix)
 		INSTALL_PREFIX=$OPTARG
 		;;
+	j|jobs)
+		JOB_COUNT=$OPTARG
+		;;
+	no-build)
+		NO_BUILD=1
+		;;
 	*) 
 		echo "ERROR: Invalid option --$opt.\n\nType 'cmakemake --help' for usage." >&2
 		exit 1 
@@ -50,8 +59,8 @@ PROJECT="$@"
 
 if [[ "$HELP" == "1" || -z "$PROJECT" ]]; then
 	cat <<E0
-Usage: cmakemake [--debug|--release] [--install] [--prefix=<path>] <project-dir>
-   or: cmakemake --target=xcode <project-dir>
+Usage: cmakemake [--debug|--release] [--install] [--prefix=<path>] [--jobs=<cpu-cores>] <project-dir>
+   or: cmakemake --target=xcode [--no-build|--debug] <project-dir>
    or: cmakemake --clean <project-dir>
 
 Build script for CMake projects.
@@ -94,9 +103,15 @@ if [ -n "$TARGET" ]; then
 		mkdir -p build/cmake-xcode
 		cd build/cmake-xcode
 
-		cmake ../.. -GXcode $CMAKE_ARGS	
-		xcodebuild -alltargets -configuration Debug
-		xcodebuild -alltargets -configuration Release
+		cmake ../.. -GXcode $CMAKE_ARGS
+
+		if [ "$NO_BUILD" != "1" ]; then
+			xcodebuild -alltargets -configuration Debug
+
+			if [ -z "$DEBUG" ]; then
+				xcodebuild -alltargets -configuration Release
+			fi
+		fi
 
 		exit 0
 		;;
@@ -107,12 +122,14 @@ if [ -n "$TARGET" ]; then
 	esac
 fi
 
-if [ -f /proc/cpuinfo ]; then
-	CPU_COUNT=`grep processor /proc/cpuinfo | wc -l`
-elif [ `uname` = "Darwin" ]; then
-	CPU_COUNT=`sysctl hw.ncpu | cut -d " " -f 2`
-else
-	CPU_COUNT=1
+if [ -z "$JOB_COUNT" ]; then
+	if [ -f /proc/cpuinfo ]; then
+		JOB_COUNT=`grep processor /proc/cpuinfo | wc -l`
+	elif [ `uname` = "Darwin" ]; then
+		JOB_COUNT=`sysctl hw.ncpu | cut -d " " -f 2`
+	else
+		JOB_COUNT=1
+	fi
 fi
 
 if [ "$DEBUG" == "1" ]; then
@@ -133,7 +150,7 @@ cd $BUILD_DIR
 rm -f CMakeCache.txt
 
 cmake ../.. $CMAKE_ARGS
-make -j $CPU_COUNT
+make -j $JOB_COUNT
 
 if [ "$INSTALL" == "1" ]; then
 	make install
