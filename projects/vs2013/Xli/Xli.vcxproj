@@ -96,13 +96,13 @@
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\src\core\3rdparty\glew\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;GLEW_STATIC;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
-      <AdditionalDependencies>opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies></AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -115,13 +115,13 @@
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\src\core\3rdparty\glew\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;GLEW_STATIC;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
-      <AdditionalDependencies>opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies></AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -139,13 +139,13 @@
       <OpenMPSupport>false</OpenMPSupport>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\src\core\3rdparty\glew\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;GLEW_STATIC;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
-      <AdditionalDependencies>opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies></AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -163,13 +163,13 @@
       <OpenMPSupport>false</OpenMPSupport>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\src\core\3rdparty\glew\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;GLEW_STATIC;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
-      <AdditionalDependencies>opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies></AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release MD|Win32'">
@@ -183,10 +183,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\XliGL.h" />
-    <ClInclude Include="..\..\..\include\XliGL\3rdparty\glew.h" />
-    <ClInclude Include="..\..\..\include\XliGL\GL.h" />
-    <ClInclude Include="..\..\..\include\XliGL\GLContext.h" />
     <ClInclude Include="..\..\..\include\Xli\Application.h" />
     <ClInclude Include="..\..\..\include\Xli\ArrayStream.h" />
     <ClInclude Include="..\..\..\include\Xli\BaseTypes.h" />
@@ -250,9 +246,6 @@
     <ClInclude Include="..\..\..\include\Xli.h" />
     <ClInclude Include="..\..\..\include\Xli\Window.h" />
     <ClInclude Include="..\..\..\src\core\3rdparty\ConvertUTF.h" />
-    <ClInclude Include="..\..\..\src\core\3rdparty\glew\include\GL\glew.h" />
-    <ClInclude Include="..\..\..\src\core\3rdparty\glew\include\GL\glxew.h" />
-    <ClInclude Include="..\..\..\src\core\3rdparty\glew\include\GL\wglew.h" />
     <ClInclude Include="..\..\..\src\core\android\AInternal.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -268,7 +261,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\core\3rdparty\ConvertUTF.c" />
-    <ClCompile Include="..\..\..\src\core\3rdparty\glew\src\glew.c" />
     <ClCompile Include="..\..\..\src\core\android\AFileSystem.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -407,7 +399,6 @@
     <ClCompile Include="..\..\..\src\core\win32\Win32Dialogs.cpp" />
     <ClCompile Include="..\..\..\src\core\win32\Win32Display.cpp" />
     <ClCompile Include="..\..\..\src\core\win32\Win32FileSystem.cpp" />
-    <ClCompile Include="..\..\..\src\core\win32\Win32GLContext.cpp" />
     <ClCompile Include="..\..\..\src\core\win32\Win32Helpers.cpp" />
     <ClCompile Include="..\..\..\src\core\win32\Win32MessageBox.cpp" />
     <ClCompile Include="..\..\..\src\core\win32\Win32Mutex.cpp" />

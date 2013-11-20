@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="XliGL">
+      <UniqueIdentifier>{831ba3d7-22f6-461a-b46a-33e2a49e9bfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rdparty">
+      <UniqueIdentifier>{a7a795d9-6500-4ee4-b642-d0a4be727ce4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XliGL\wgl">
+      <UniqueIdentifier>{35cc5a52-5939-4c6c-8757-aeedb553d336}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XliGL\sdl2">
+      <UniqueIdentifier>{2a0f6fbb-1ec8-4cc2-87fc-1550fe829083}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\XliGL\GL.h">
+      <Filter>XliGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliGL\GLContext.h">
+      <Filter>XliGL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\XliGL.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\src\gl\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\gl\wgl\WGLContext.cpp">
+      <Filter>XliGL\wgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gl\sdl2\SDL2GLContext.cpp">
+      <Filter>XliGL\sdl2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gl\3rdparty\glew\src\glew.c">
+      <Filter>3rdparty</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
