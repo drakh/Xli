@@ -1,4 +1,5 @@
-#include <Xli.h>
+#include <Xli/FileSystem.h>
+#include <Xli/Path.h>
 
 namespace Xli
 {
@@ -164,59 +165,62 @@ namespace Xli
 	{
 		this->fs = fs;
 		this->path = path;
-		if (path.Length() > 0 && path.Last() != '/') this->path = this->path + '/';
+		
+		if (path.Length() > 0 && path.Last() != '/') 
+			this->path = this->path + '/';
 	}
 
 	Stream* SubFileSystem::OpenFile(const String& filename, FileMode mode)
 	{
-		return fs->OpenFile(path + filename, mode);
+		return fs->OpenFile(Path::Combine(path, filename), mode);
 	}
 
 	DataAccessor* SubFileSystem::OpenFileAsBuffer(const String& filename)
 	{
-		return fs->OpenFileAsBuffer(path + filename);
+		return fs->OpenFileAsBuffer(Path::Combine(path, filename));
 	}
 
 	void SubFileSystem::CreateDirectory(const String& name)
 	{
-		fs->CreateDirectory(path + name);
+		fs->CreateDirectory(Path::Combine(path, name));
 	}
 
 	void SubFileSystem::DeleteDirectory(const String& name)
 	{
-		fs->DeleteDirectory(path + name);
+		fs->DeleteDirectory(Path::Combine(path, name));
 	}
 
 	void SubFileSystem::DeleteFile(const String& name)
 	{
-		fs->DeleteFile(path + name);
+		fs->DeleteFile(Path::Combine(path, name));
 	}
 
 	void SubFileSystem::MoveDirectory(const String& oldName, const String& newName)
 	{
-		fs->MoveDirectory(path + oldName, path + newName);
+		fs->MoveDirectory(Path::Combine(path, oldName), Path::Combine(path, newName));
 	}
 
 	void SubFileSystem::MoveFile(const String& oldName, const String& newName)
 	{
-		fs->MoveFile(path + oldName, path + newName);
+		fs->MoveFile(Path::Combine(path, oldName), Path::Combine(path, newName));
 	}
 
-	bool SubFileSystem::Exists(const String& path)
+	bool SubFileSystem::Exists(const String& name)
 	{
-		return fs->Exists(this->path + path);
+		return fs->Exists(Path::Combine(path, name));
 	}
 
-	bool SubFileSystem::IsFile(const String& path)
+	bool SubFileSystem::IsFile(const String& name)
 	{
-		return fs->IsFile(this->path + path);
+		return fs->IsFile(Path::Combine(path, name));
 	}
 
-	bool SubFileSystem::IsDirectory(const String& path)
+	bool SubFileSystem::IsDirectory(const String& name)
 	{
-		return fs->IsDirectory(this->path + path);
+		return fs->IsDirectory(Path::Combine(path, name));
 	}
 	
+	// TODO: Path::Combine
 	bool SubFileSystem::GetFileInfo(const String& path, FileInfo& result)
 	{
 		FileInfo info;
@@ -225,9 +229,11 @@ namespace Xli
 			info.Name = info.Name.Substring(this->path.Length(), info.Name.Length() - this->path.Length());
 			return true;
 		}
+		
 		return false;
 	}
 
+	// TODO: Path::Combine
 	void SubFileSystem::GetFiles(const String& path, Array<FileInfo>& list)
 	{
 		int s = list.Length();
@@ -237,6 +243,7 @@ namespace Xli
 			list[i].Name = list[i].Name.Substring(this->path.Length(), list[i].Name.Length() - this->path.Length());
 	}
 
+	// TODO: Path::Combine
 	void SubFileSystem::GetFiles(Array<FileInfo>& list)
 	{
 		int s = list.Length();
@@ -248,16 +255,16 @@ namespace Xli
 
 	void SubFileSystem::CreateDirectories(const String& path)
 	{
-		fs->CreateDirectories(this->path + path);
+		fs->CreateDirectories(Path::Combine(this->path, path));
 	}
 
 	void SubFileSystem::DeleteDirectoryRecursive(const String& name)
 	{
-		fs->DeleteDirectoryRecursive(this->path + path);
+		fs->DeleteDirectoryRecursive(Path::Combine(this->path, path));
 	}
 
 	FileSystem* SubFileSystem::CreateSubFileSystem(const String& path)
 	{
-		return new SubFileSystem(fs.Get(), this->path + path);
+		return new SubFileSystem(fs.Get(), Path::Combine(this->path, path));
 	}
 }

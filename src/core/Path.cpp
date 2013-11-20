@@ -4,12 +4,21 @@
 
 namespace Xli
 {
+	static bool IsRooted(const String& path)
+	{
+		return 
+			path.Length() > 1 && path[0] == '/' || 
+			path.Length() > 2 && path[1] == ':';
+	}
+
 	String Path::Combine(const String& path1, const String& path2)
 	{
 		return 
-			path1.Length() && path1.Last() != '/' && path1.Last() != '\\' ?
-				path1 + "/" + path2 :
-				path1 + path2;
+			IsRooted(path2) ?
+				path2 :
+				path1.Length() && path1.Last() != '/' && path1.Last() != '\\' ?
+					path1 + "/" + path2 :
+					path1 + path2;
 	}
 
 	String Path::GetFilename(const String& path)
