@@ -15,6 +15,8 @@ namespace Xli
 		UInt32 width, height;
 		Format format;
 		int comps;
+		bool isInterlaced;
+		int interlacePasses;
 
 		static void read(png_structp png_ptr, png_bytep data, png_size_t length)
 		{
@@ -59,6 +61,8 @@ namespace Xli
 			if (bit_depth == 16) png_set_strip_16 (png_ptr);
 			else if (bit_depth < 8) png_set_packing (png_ptr);
 
+			isInterlaced = png_get_interlace_type (png_ptr, info_ptr) != 0;
+			interlacePasses = isInterlaced ? png_set_interlace_handling (png_ptr) : 0;
 			png_read_update_info (png_ptr, info_ptr);
 
 			png_get_IHDR (png_ptr, info_ptr,
@@ -130,13 +134,42 @@ namespace Xli
 			png_bytep row = (png_bytep)targetBuffer;
 			int pitch = width * comps;
 
-			for (unsigned int i = 0; i < height; ++i)
+			if (isInterlaced)
 			{
-				if (callback) callback->Update(i, height);
-				png_read_row(png_ptr, row, NULL);
-				row += pitch;
+				png_bytep *row_pointers = new png_bytep[height];
+				for (unsigned int y = 0; y < height; y++)
+					row_pointers[y] = new png_byte[png_get_rowbytes(png_ptr, info_ptr)];
+
+				for (int i = 0; i < interlacePasses; i++)
+				{
+					for (unsigned int y = 0; y < height; y++)
+					{
+						if (callback) callback->Update(i * height + y, interlacePasses * height);
+						png_read_row (png_ptr, row_pointers[y], NULL);
+					}
+				}
+
+				for (unsigned int y = 0; y < height; y++)
+				{
+					if (callback) callback->Update(y, height);
+					memcpy(row, row_pointers[y], pitch);
+					row += pitch;
+				}
+
+				for (unsigned int y = 0; y < height; y++)
+					delete [] row_pointers[y];
+				delete [] row_pointers;
 			}
-			
+			else
+			{
+				for (unsigned int i = 0; i < height; ++i)
+				{
+					if (callback) callback->Update(i, height);
+					png_read_row(png_ptr, row, NULL);
+					row += pitch;
+				}
+			}
+
 			png_read_end(png_ptr, NULL);
 			if (callback) callback->Update(height, height);
 		}
