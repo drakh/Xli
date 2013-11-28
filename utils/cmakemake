@@ -92,7 +92,7 @@ if [ "$CLEAN" == "1" ]; then
 	exit 0
 fi
 
-if [ !`which cmake` ]; then
+if [ -z "`which cmake`" ]; then
 	# This is sometimes needed when run from GUI applications on OS X
 	PATH=$PATH:/opt/local/bin
 fi
@@ -106,9 +106,11 @@ if [ -n "$TARGET" ]; then
 		cmake ../.. -GXcode $CMAKE_ARGS
 
 		if [ "$NO_BUILD" != "1" ]; then
-			xcodebuild -alltargets -configuration Debug
+			if [[ -z "$DEBUG" || "$DEBUG" == "0" ]]; then
+				xcodebuild -alltargets -configuration Debug
+			fi
 
-			if [ -z "$DEBUG" ]; then
+			if [[ -z "$DEBUG" || "$DEBUG" == "1" ]]; then
 				xcodebuild -alltargets -configuration Release
 			fi
 		fi

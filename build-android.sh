@@ -15,7 +15,7 @@ if [ "`uname -o 2> /dev/null`" = "Cygwin" ]; then
 fi
 
 cd projects/android
-ndk-build -j $CPU_COUNT
+ndk-build -j $CPU_COUNT $@ || true
 cd -
 
 SOURCE="projects/android/obj/local"
