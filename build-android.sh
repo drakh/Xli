@@ -2,20 +2,20 @@
 set -e
 cd "`dirname "$0"`"
 
-if [ -f /proc/cpuinfo ]; then
-	CPU_COUNT=`grep processor /proc/cpuinfo | wc -l`
-elif [ `uname` = "Darwin" ]; then
-	CPU_COUNT=`sysctl hw.ncpu | cut -d " " -f 2`
-else
-	CPU_COUNT=1	
-fi
-
-if [ "`uname -o 2> /dev/null`" = "Cygwin" ]; then
-	chmod -R 0777 src
+if [ -z "$JOB_COUNT" ]; then
+    if [ -f /proc/cpuinfo ]; then
+        JOB_COUNT=`grep processor /proc/cpuinfo | wc -l`
+    elif [ `uname` = "Darwin" ]; then
+        JOB_COUNT=`sysctl hw.ncpu | cut -d " " -f 2`
+    elif [ -n "$NUMBER_OF_PROCESSORS" ]; then
+        JOB_COUNT=$NUMBER_OF_PROCESSORS
+    else
+        JOB_COUNT=1 
+    fi
 fi
 
 cd projects/android
-ndk-build -j $CPU_COUNT $@ || true
+ndk-build -j $JOB_COUNT $@ || true
 cd -
 
 SOURCE="projects/android/obj/local"
