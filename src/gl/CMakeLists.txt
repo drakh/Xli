@@ -27,5 +27,5 @@ add_library(XliGL ${Sources})
 target_link_libraries(XliGL Xli)
 
 if (UNIX AND NOT APPLE AND NOT WIN32)
-    target_link_libraries(Xli SDL2 GL GLEW)
+    target_link_libraries(XliGL SDL2 GL GLEW)
 endif()

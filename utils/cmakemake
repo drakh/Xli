@@ -106,11 +106,11 @@ if [ -n "$TARGET" ]; then
 		cmake ../.. -GXcode $CMAKE_ARGS
 
 		if [ "$NO_BUILD" != "1" ]; then
-			if [[ -z "$DEBUG" || "$DEBUG" == "0" ]]; then
+			if [[ -z "$DEBUG" || "$DEBUG" == "1" ]]; then
 				xcodebuild -alltargets -configuration Debug
 			fi
 
-			if [[ -z "$DEBUG" || "$DEBUG" == "1" ]]; then
+			if [[ -z "$DEBUG" || "$DEBUG" == "0" ]]; then
 				xcodebuild -alltargets -configuration Release
 			fi
 		fi
@@ -125,13 +125,15 @@ if [ -n "$TARGET" ]; then
 fi
 
 if [ -z "$JOB_COUNT" ]; then
-	if [ -f /proc/cpuinfo ]; then
-		JOB_COUNT=`grep processor /proc/cpuinfo | wc -l`
-	elif [ `uname` = "Darwin" ]; then
-		JOB_COUNT=`sysctl hw.ncpu | cut -d " " -f 2`
-	else
-		JOB_COUNT=1
-	fi
+    if [ -f /proc/cpuinfo ]; then
+        JOB_COUNT=`grep processor /proc/cpuinfo | wc -l`
+    elif [ `uname` = "Darwin" ]; then
+        JOB_COUNT=`sysctl hw.ncpu | cut -d " " -f 2`
+    elif [ -n "$NUMBER_OF_PROCESSORS" ]; then
+        JOB_COUNT=$NUMBER_OF_PROCESSORS
+    else
+        JOB_COUNT=1 
+    fi
 fi
 
 if [ "$DEBUG" == "1" ]; then
