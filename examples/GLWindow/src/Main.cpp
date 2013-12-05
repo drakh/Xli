@@ -1,5 +1,7 @@
 #include <Xli.h>
 #include <XliGL.h>
+#include <XliHttp.h>
+#include <android/native_activity.h>
 
 using namespace Xli;
 
@@ -9,6 +11,7 @@ class GLApp: public Application
 
     double touchDownTime;
     double tapTime;
+    int dialogType;
 
 public:
 	GLApp()
@@ -24,7 +27,8 @@ public:
 	virtual void OnInit(Window* wnd)
 	{
 		Err->WriteLine("OnInit");
-
+        
+        dialogType = 0;
 
 		// Setup OpenGL
 
@@ -82,11 +86,6 @@ public:
 		if (key == KeyF11 || (key == KeyEnter && wnd->GetKeyState(KeyCtrl)))
 		{
 			wnd->SetFullscreen(!wnd->IsFullscreen());
-			return true;
-		}
-		else if (key == KeyEscape)
-		{
-			wnd->Close();
 			return true;
 		}
 		else if (key == KeyF4 || key == KeyAlt)
@@ -195,15 +194,31 @@ public:
         {
             if (GetTime() - tapTime < 0.3)
             {
-                // double tap
-                if (MessageBox::Show(wnd, "Double tap detected", "Hello", DialogButtonsOKCancel) == DialogResultOK)
-                    wnd->BeginTextInput();
+                //play
+                Err->WriteLine("-v-v-v-v-v-v-");
+                Managed<HttpClient> a = HttpClient::Create();
+                Managed<HttpRequest> b = HttpRequest::Create();
+                Managed<HttpResponse> c = a->Send("https://duckduckgo.com/", *b.Get());
+                int bufSize = 60;
+                char d[bufSize];
+                int bytesRead = 0;
+                if (c->IsValid() && c->Payload->CanRead())
+                {                    
+                    Err->WriteFormat("Response Code = %d\n\n", c->GetResponseCode());
+                    while (!c->Payload->AtEnd())
+                    {
+                        bytesRead = c->Payload->Read(&d, 1, bufSize);
+                        Err->WriteFormat("> %*.*s\n", bytesRead, bytesRead, d);
+                    }
+                } else {
+                    Err->WriteLine("Response invalid");
+                }
+                Err->WriteLine("-^-^-^-^-^-^-");
             }
             else if (wnd->IsTextInputActive())
             {
                 wnd->EndTextInput();
             }
-            
             tapTime = GetTime();
         }
         
@@ -217,6 +232,7 @@ public:
 		Application::OnSizeChanged(wnd, clientSize);
 	}
 
+    //[TODO] cant show message box when closing as shim is gone
 	virtual bool OnClosing(Window* wnd, bool& cancel)
 	{
 		Err->WriteLine("OnClosing");

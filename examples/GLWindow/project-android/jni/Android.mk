@@ -29,6 +29,15 @@ LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXliMedia.a
 include $(PREBUILT_STATIC_LIBRARY)	
 
 
+# libXliHttp.a
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := XliHttp
+
+LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXliHttp.a
+include $(PREBUILT_STATIC_LIBRARY)	
+
+
 # libGLWindow.so
 
 include $(CLEAR_VARS)
@@ -43,6 +52,6 @@ LOCAL_CPP_FEATURES := exceptions
 LOCAL_LDLIBS := -llog -landroid -lz -lm -lEGL -lGLESv2 -lOpenSLES
 
 LOCAL_WHOLE_STATIC_LIBRARIES := XliMain
-LOCAL_STATIC_LIBRARIES := Xli XliMedia
+LOCAL_STATIC_LIBRARIES := Xli XliMedia XliHttp
 
 include $(BUILD_SHARED_LIBRARY)
