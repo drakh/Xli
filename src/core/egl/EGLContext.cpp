@@ -1,9 +1,9 @@
 #include <XliGL.h>
 #include <EGL/egl.h>
 
-#ifdef ANDROID
-#include <android/native_window.h>
-#define NATIVE_HANDLE ANativeWindow*
+#ifdef XLI_PLATFORM_ANDROID
+# include <android/native_window.h>
+# define NATIVE_HANDLE ANativeWindow*
 #endif
 
 namespace Xli
@@ -39,9 +39,7 @@ namespace Xli
 			EGLConfig configs[64];
 
 			if (!eglChooseConfig(display, attribs, configs, 64, &numConfigs) || numConfigs == 0)
-			{
 				XLI_THROW("Unable to choose EGL config");
-			}
 		
 			EGLint cs = 0, cd = 0, cb = 0;
 			int cc = 0;
@@ -75,7 +73,7 @@ namespace Xli
 
 		virtual void SetWindow(Window* window)
 		{
-#ifdef ANDROID
+#ifdef XLI_PLATFORM_ANDROID
 			if (window->GetImplementation() == WindowImplementationAndroid)
 			{
 				EGLint format;
@@ -84,13 +82,13 @@ namespace Xli
 			}
 #endif
 
-			if (surface != EGL_NO_SURFACE) eglDestroySurface(display, surface);
+			if (surface != EGL_NO_SURFACE) 
+				eglDestroySurface(display, surface);
+			
 			surface = eglCreateWindowSurface(display, config, (NATIVE_HANDLE)window->GetNativeHandle(), NULL);
 
 			if (surface == EGL_NO_SURFACE)
-			{
 				XLI_THROW("Unable to create EGL Surface");
-			}
 
 			if (context == EGL_NO_CONTEXT)
 			{
@@ -103,9 +101,7 @@ namespace Xli
 				context = eglCreateContext(display, config, EGL_NO_CONTEXT, context_attribs);
 
 				if (context == EGL_NO_CONTEXT)
-				{
 					XLI_THROW("Unable to create EGL Context");
-				}
 			}
 	
 			MakeCurrent(true);
@@ -130,9 +126,7 @@ namespace Xli
         virtual void MakeCurrent(bool current)
         {
 			if (eglMakeCurrent(display, surface, surface, current ? context : 0) == EGL_FALSE)
-			{
 				XLI_THROW("Unable to make EGL context current");
-			}
         }
 
 		virtual void SwapBuffers()

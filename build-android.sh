@@ -10,10 +10,6 @@ else
 	CPU_COUNT=1	
 fi
 
-if [ "`uname -o 2> /dev/null`" = "Cygwin" ]; then
-	chmod -R 0777 src
-fi
-
 cd projects/android
 ndk-build -j $CPU_COUNT $@ || true
 cd -
@@ -23,9 +19,15 @@ TARGET="lib/android"
 
 mkdir -p "$TARGET"
 
+if [ -n "`which rsync`" ]; then
+	CP_CMD="rsync -vru"
+else
+	CP_CMD="cp -vru"
+fi
+
 for arch in armeabi armeabi-v7a x86; do
 	if [ -d "$SOURCE/$arch" ]; then
 		mkdir -p "$TARGET/$arch"
-		cp -v $SOURCE/$arch/libXli*.a "$TARGET/$arch"
+		$CP_CMD $SOURCE/$arch/libXli*.a "$TARGET/$arch"
 	fi
 done
