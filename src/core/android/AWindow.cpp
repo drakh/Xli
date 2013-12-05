@@ -1,6 +1,6 @@
 #include "3rdparty/android_native_app_glue.h"
 #include "AInternal.h"
-
+#include "AXliJ.h"
 #include <android/window.h>
 #include <EGL/egl.h>
 
@@ -14,8 +14,8 @@
 #include <XliGL/GLContext.h>
 
 static struct android_app* GlobalAndroidApp = 0;
-static Xli::WindowEventHandler* GlobalEventHandler = 0;
-static Xli::Window* GlobalWindow = 0;
+extern Xli::WindowEventHandler* GlobalEventHandler = 0;
+extern Xli::Window* GlobalWindow = 0;
 static int GlobalWidth = 0;
 static int GlobalHeight = 0;
 
@@ -153,6 +153,31 @@ namespace Xli
 		virtual void ShowCursor(bool show)
 		{
 		}
+
+        virtual void BeginTextInput()
+        {
+            XliJ::RaiseSoftKeyboard();
+        }
+
+        virtual void EndTextInput()
+        {
+            XliJ::HideSoftKeyboard();
+        }
+
+        virtual bool IsTextInputActive()
+        {
+            return XliJ::KeyboardVisible();
+        }
+
+        virtual bool HasOnscreenKeyboardSupport()
+        {
+            return true;
+        }
+
+        virtual bool IsOnscreenKeyboardVisible()
+        {
+            return XliJ::KeyboardVisible();
+        }
 
 		virtual bool GetKeyState(Key key)
 		{
