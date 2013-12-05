@@ -101,7 +101,8 @@ namespace Xli
 
 		}
 
-		virtual void Send(const String& uri, const HttpRequest& req, HttpResponse& res)
+		//virtual HttpResponse* Send(const String& uri, const HttpRequest& req) = 0;
+		virtual HttpResponse* Send(const String& uri, const HttpRequest& req)
 		{
 			CURL* curl = curl_easy_init();
 			if (!curl) 
@@ -116,6 +117,7 @@ namespace Xli
 
 			if (result != CURLE_OK)
 				XLI_THROW("CURL ERROR: Request failed with code " + CURLcodeToString(result));
+			return NULL;
 		}
 	};
 
