@@ -13,7 +13,7 @@ namespace Xli
 		{
 		}
 
-		virtual void Send(const String& uri, const HttpRequest& req, HttpResponse& res)
+		virtual HttpResponse* Send(const String& uri, const HttpRequest& req)
 		{
 		}
 	};
