@@ -19,7 +19,6 @@
 		CE20885616C84F9900667537 /* AudioBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6E3716C70D9A00390436 /* AudioBuffer.cpp */; };
 		CE20885716C84F9900667537 /* AudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6E3816C70D9A00390436 /* AudioStream.cpp */; };
 		CE20885816C84F9900667537 /* Wav.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6E5A16C70D9A00390436 /* Wav.cpp */; };
-		CE20885F16C8500000667537 /* Init_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6EC216C70DA600390436 /* Init_iOS.mm */; };
 		CE20886016C8500000667537 /* XliMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6EC416C70DA600390436 /* XliMain.cpp */; };
 		CE20886316C8502B00667537 /* CocoaFileSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE20886216C8502B00667537 /* CocoaFileSystem.mm */; };
 		CE2B2BDE16C72AC40036FFA0 /* SDL_atomic.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2B29BB16C72AC40036FFA0 /* SDL_atomic.c */; };
@@ -112,9 +111,6 @@
 		CE2B2C9716C72AC40036FFA0 /* SDL_assert.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2B2ABD16C72AC40036FFA0 /* SDL_assert.c */; };
 		CE2B2C9816C72AC40036FFA0 /* SDL_error_c.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2B2ABE16C72AC40036FFA0 /* SDL_error_c.h */; };
 		CE2B2C9916C72AC40036FFA0 /* SDL_error.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2B2ABF16C72AC40036FFA0 /* SDL_error.c */; };
-		CE2B2C9A16C72AC40036FFA0 /* SDL_fatal.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2B2AC016C72AC40036FFA0 /* SDL_fatal.c */; };
-		CE2B2C9B16C72AC40036FFA0 /* SDL_fatal.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2B2AC116C72AC40036FFA0 /* SDL_fatal.h */; };
-		CE2B2C9C16C72AC40036FFA0 /* SDL_hints_c.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2B2AC216C72AC40036FFA0 /* SDL_hints_c.h */; };
 		CE2B2C9D16C72AC40036FFA0 /* SDL_hints.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2B2AC316C72AC40036FFA0 /* SDL_hints.c */; };
 		CE2B2C9E16C72AC40036FFA0 /* SDL_log.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2B2AC416C72AC40036FFA0 /* SDL_log.c */; };
 		CE2B2C9F16C72AC40036FFA0 /* SDL.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2B2AC516C72AC40036FFA0 /* SDL.c */; };
@@ -169,8 +165,6 @@
 		CE2B2D4816C72AC40036FFA0 /* SDL_surface.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2B2B8416C72AC40036FFA0 /* SDL_surface.c */; };
 		CE2B2D4916C72AC40036FFA0 /* SDL_sysvideo.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2B2B8516C72AC40036FFA0 /* SDL_sysvideo.h */; };
 		CE2B2D4A16C72AC40036FFA0 /* SDL_video.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2B2B8616C72AC40036FFA0 /* SDL_video.c */; };
-		CE2B2D4B16C72AC40036FFA0 /* jumphack.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2B2B8916C72AC40036FFA0 /* jumphack.c */; };
-		CE2B2D4C16C72AC40036FFA0 /* jumphack.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2B2B8A16C72AC40036FFA0 /* jumphack.h */; };
 		CE2B2D4D16C72AC40036FFA0 /* keyinfotable.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2B2B8B16C72AC40036FFA0 /* keyinfotable.h */; };
 		CE2B2D4E16C72AC40036FFA0 /* SDL_uikitappdelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2B2B8C16C72AC40036FFA0 /* SDL_uikitappdelegate.h */; };
 		CE2B2D4F16C72AC40036FFA0 /* SDL_uikitappdelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CE2B2B8D16C72AC40036FFA0 /* SDL_uikitappdelegate.m */; };
@@ -222,7 +216,6 @@
 		CE2D6CA216C70D8500390436 /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D672216C70D8000390436 /* Quaternion.cpp */; };
 		CE2D6CA316C70D8500390436 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D672316C70D8000390436 /* Random.cpp */; };
 		CE2D6CA516C70D8500390436 /* SDL2Display.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D672616C70D8000390436 /* SDL2Display.cpp */; };
-		CE2D6CA916C70D8500390436 /* SDL2GLContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D672A16C70D8000390436 /* SDL2GLContext.cpp */; };
 		CE2D6CAA16C70D8500390436 /* SDL2MessageBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D672B16C70D8000390436 /* SDL2MessageBox.cpp */; };
 		CE2D6CAE16C70D8500390436 /* SDL2Window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D672F16C70D8000390436 /* SDL2Window.cpp */; };
 		CE2D6CAF16C70D8500390436 /* Stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D673016C70D8000390436 /* Stream.cpp */; };
@@ -293,6 +286,9 @@
 		CE9DEE3C175E22C30079B8E1 /* zlib.h in Headers */ = {isa = PBXBuildFile; fileRef = CE9DEE22175E22C30079B8E1 /* zlib.h */; };
 		CE9DEE3D175E22C30079B8E1 /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = CE9DEE23175E22C30079B8E1 /* zutil.c */; };
 		CE9DEE3E175E22C30079B8E1 /* zutil.h in Headers */ = {isa = PBXBuildFile; fileRef = CE9DEE24175E22C30079B8E1 /* zutil.h */; };
+		FC32E0EE1857739B003920E9 /* SDL_systls.c in Sources */ = {isa = PBXBuildFile; fileRef = FC32E0ED1857739B003920E9 /* SDL_systls.c */; };
+		FC45453218576C9900EE7560 /* iInit.mm in Sources */ = {isa = PBXBuildFile; fileRef = FC45453018576C1600EE7560 /* iInit.mm */; };
+		FC45454918576CF100EE7560 /* SDL2GLContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC45454118576CF100EE7560 /* SDL2GLContext.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -394,9 +390,6 @@
 		CE2B2ABD16C72AC40036FFA0 /* SDL_assert.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDL_assert.c; sourceTree = "<group>"; };
 		CE2B2ABE16C72AC40036FFA0 /* SDL_error_c.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDL_error_c.h; sourceTree = "<group>"; };
 		CE2B2ABF16C72AC40036FFA0 /* SDL_error.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDL_error.c; sourceTree = "<group>"; };
-		CE2B2AC016C72AC40036FFA0 /* SDL_fatal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDL_fatal.c; sourceTree = "<group>"; };
-		CE2B2AC116C72AC40036FFA0 /* SDL_fatal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDL_fatal.h; sourceTree = "<group>"; };
-		CE2B2AC216C72AC40036FFA0 /* SDL_hints_c.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDL_hints_c.h; sourceTree = "<group>"; };
 		CE2B2AC316C72AC40036FFA0 /* SDL_hints.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDL_hints.c; sourceTree = "<group>"; };
 		CE2B2AC416C72AC40036FFA0 /* SDL_log.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDL_log.c; sourceTree = "<group>"; };
 		CE2B2AC516C72AC40036FFA0 /* SDL.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDL.c; sourceTree = "<group>"; };
@@ -451,8 +444,6 @@
 		CE2B2B8416C72AC40036FFA0 /* SDL_surface.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDL_surface.c; sourceTree = "<group>"; };
 		CE2B2B8516C72AC40036FFA0 /* SDL_sysvideo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDL_sysvideo.h; sourceTree = "<group>"; };
 		CE2B2B8616C72AC40036FFA0 /* SDL_video.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDL_video.c; sourceTree = "<group>"; };
-		CE2B2B8916C72AC40036FFA0 /* jumphack.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jumphack.c; sourceTree = "<group>"; };
-		CE2B2B8A16C72AC40036FFA0 /* jumphack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jumphack.h; sourceTree = "<group>"; };
 		CE2B2B8B16C72AC40036FFA0 /* keyinfotable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = keyinfotable.h; sourceTree = "<group>"; };
 		CE2B2B8C16C72AC40036FFA0 /* SDL_uikitappdelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDL_uikitappdelegate.h; sourceTree = "<group>"; };
 		CE2B2B8D16C72AC40036FFA0 /* SDL_uikitappdelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDL_uikitappdelegate.m; sourceTree = "<group>"; };
@@ -506,7 +497,6 @@
 		CE2D672216C70D8000390436 /* Quaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Quaternion.cpp; sourceTree = "<group>"; };
 		CE2D672316C70D8000390436 /* Random.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Random.cpp; sourceTree = "<group>"; };
 		CE2D672616C70D8000390436 /* SDL2Display.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDL2Display.cpp; sourceTree = "<group>"; };
-		CE2D672A16C70D8000390436 /* SDL2GLContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDL2GLContext.cpp; sourceTree = "<group>"; };
 		CE2D672B16C70D8000390436 /* SDL2MessageBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDL2MessageBox.cpp; sourceTree = "<group>"; };
 		CE2D672F16C70D8000390436 /* SDL2Window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDL2Window.cpp; sourceTree = "<group>"; };
 		CE2D673016C70D8000390436 /* Stream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Stream.cpp; sourceTree = "<group>"; };
@@ -524,7 +514,6 @@
 		CE2D6E3716C70D9A00390436 /* AudioBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioBuffer.cpp; sourceTree = "<group>"; };
 		CE2D6E3816C70D9A00390436 /* AudioStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioStream.cpp; sourceTree = "<group>"; };
 		CE2D6E5A16C70D9A00390436 /* Wav.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Wav.cpp; sourceTree = "<group>"; };
-		CE2D6EC216C70DA600390436 /* Init_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Init_iOS.mm; sourceTree = "<group>"; };
 		CE2D6EC416C70DA600390436 /* XliMain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XliMain.cpp; sourceTree = "<group>"; };
 		CE2D70B616C70DB500390436 /* JSON_parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = JSON_parser.c; sourceTree = "<group>"; };
 		CE2D70B716C70DB500390436 /* JSON_parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON_parser.h; sourceTree = "<group>"; };
@@ -579,6 +568,9 @@
 		CE9DEE22175E22C30079B8E1 /* zlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zlib.h; sourceTree = "<group>"; };
 		CE9DEE23175E22C30079B8E1 /* zutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zutil.c; sourceTree = "<group>"; };
 		CE9DEE24175E22C30079B8E1 /* zutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zutil.h; sourceTree = "<group>"; };
+		FC32E0ED1857739B003920E9 /* SDL_systls.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SDL_systls.c; sourceTree = "<group>"; };
+		FC45453018576C1600EE7560 /* iInit.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = iInit.mm; path = ios/iInit.mm; sourceTree = "<group>"; };
+		FC45454118576CF100EE7560 /* SDL2GLContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDL2GLContext.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -630,6 +622,7 @@
 		5AA38E42151A00CC00979B55 = {
 			isa = PBXGroup;
 			children = (
+				FC45453318576CF100EE7560 /* gl */,
 				CE2D6DE416C70D9A00390436 /* audio */,
 				CE2D5E0A16C70D7D00390436 /* core */,
 				CE1537CF174CF316009C6275 /* gl_helper */,
@@ -705,10 +698,7 @@
 				CE2B2ABC16C72AC40036FFA0 /* SDL_assert_c.h */,
 				CE2B2ABF16C72AC40036FFA0 /* SDL_error.c */,
 				CE2B2ABE16C72AC40036FFA0 /* SDL_error_c.h */,
-				CE2B2AC016C72AC40036FFA0 /* SDL_fatal.c */,
-				CE2B2AC116C72AC40036FFA0 /* SDL_fatal.h */,
 				CE2B2AC316C72AC40036FFA0 /* SDL_hints.c */,
-				CE2B2AC216C72AC40036FFA0 /* SDL_hints_c.h */,
 				CE2B2AC416C72AC40036FFA0 /* SDL_log.c */,
 				CE2B2AC616C72AC40036FFA0 /* stdlib */,
 				CE2B2ADD16C72AC40036FFA0 /* thread */,
@@ -989,6 +979,7 @@
 		CE2B2AF216C72AC40036FFA0 /* pthread */ = {
 			isa = PBXGroup;
 			children = (
+				FC32E0ED1857739B003920E9 /* SDL_systls.c */,
 				CE2B2AF316C72AC40036FFA0 /* SDL_syscond.c */,
 				CE2B2AF416C72AC40036FFA0 /* SDL_sysmutex.c */,
 				CE2B2AF516C72AC40036FFA0 /* SDL_sysmutex_c.h */,
@@ -1069,8 +1060,6 @@
 		CE2B2B8816C72AC40036FFA0 /* uikit */ = {
 			isa = PBXGroup;
 			children = (
-				CE2B2B8916C72AC40036FFA0 /* jumphack.c */,
-				CE2B2B8A16C72AC40036FFA0 /* jumphack.h */,
 				CE2B2B8B16C72AC40036FFA0 /* keyinfotable.h */,
 				CE2B2B8C16C72AC40036FFA0 /* SDL_uikitappdelegate.h */,
 				CE2B2B8D16C72AC40036FFA0 /* SDL_uikitappdelegate.m */,
@@ -1185,7 +1174,6 @@
 			isa = PBXGroup;
 			children = (
 				CE2D672616C70D8000390436 /* SDL2Display.cpp */,
-				CE2D672A16C70D8000390436 /* SDL2GLContext.cpp */,
 				CE2D672B16C70D8000390436 /* SDL2MessageBox.cpp */,
 				CE2D672F16C70D8000390436 /* SDL2Window.cpp */,
 			);
@@ -1214,7 +1202,7 @@
 		CE2D6EB016C70DA600390436 /* main */ = {
 			isa = PBXGroup;
 			children = (
-				CE2D6EC216C70DA600390436 /* Init_iOS.mm */,
+				FC45453018576C1600EE7560 /* iInit.mm */,
 				CE2D6EC416C70DA600390436 /* XliMain.cpp */,
 			);
 			name = main;
@@ -1322,6 +1310,23 @@
 			path = zlib;
 			sourceTree = "<group>";
 		};
+		FC45453318576CF100EE7560 /* gl */ = {
+			isa = PBXGroup;
+			children = (
+				FC45454018576CF100EE7560 /* sdl2 */,
+			);
+			name = gl;
+			path = ../../src/gl;
+			sourceTree = "<group>";
+		};
+		FC45454018576CF100EE7560 /* sdl2 */ = {
+			isa = PBXGroup;
+			children = (
+				FC45454118576CF100EE7560 /* SDL2GLContext.cpp */,
+			);
+			path = sdl2;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1374,8 +1379,6 @@
 				CE2B2C9516C72AC40036FFA0 /* SDL_rotate.h in Headers */,
 				CE2B2C9616C72AC40036FFA0 /* SDL_assert_c.h in Headers */,
 				CE2B2C9816C72AC40036FFA0 /* SDL_error_c.h in Headers */,
-				CE2B2C9B16C72AC40036FFA0 /* SDL_fatal.h in Headers */,
-				CE2B2C9C16C72AC40036FFA0 /* SDL_hints_c.h in Headers */,
 				CE2B2CC816C72AC40036FFA0 /* SDL_sysmutex_c.h in Headers */,
 				CE2B2CCB16C72AC40036FFA0 /* SDL_systhread_c.h in Headers */,
 				CE2B2CCC16C72AC40036FFA0 /* SDL_systhread.h in Headers */,
@@ -1393,7 +1396,6 @@
 				CE2B2D4416C72AC40036FFA0 /* SDL_RLEaccel_c.h in Headers */,
 				CE2B2D4616C72AC40036FFA0 /* SDL_shape_internals.h in Headers */,
 				CE2B2D4916C72AC40036FFA0 /* SDL_sysvideo.h in Headers */,
-				CE2B2D4C16C72AC40036FFA0 /* jumphack.h in Headers */,
 				CE2B2D4D16C72AC40036FFA0 /* keyinfotable.h in Headers */,
 				CE2B2D4E16C72AC40036FFA0 /* SDL_uikitappdelegate.h in Headers */,
 				CE2B2D5016C72AC40036FFA0 /* SDL_uikitevents.h in Headers */,
@@ -1571,7 +1573,7 @@
 		5AA38E44151A00CC00979B55 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 			};
 			buildConfigurationList = 5AA38E47151A00CC00979B55 /* Build configuration list for PBXProject "Xli Library" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1629,8 +1631,8 @@
 				CE2D6CA216C70D8500390436 /* Quaternion.cpp in Sources */,
 				CE2D6CA316C70D8500390436 /* Random.cpp in Sources */,
 				CE2D6CA516C70D8500390436 /* SDL2Display.cpp in Sources */,
-				CE2D6CA916C70D8500390436 /* SDL2GLContext.cpp in Sources */,
 				CE2D6CAA16C70D8500390436 /* SDL2MessageBox.cpp in Sources */,
+				FC32E0EE1857739B003920E9 /* SDL_systls.c in Sources */,
 				CE2D6CAE16C70D8500390436 /* SDL2Window.cpp in Sources */,
 				CE2D6CAF16C70D8500390436 /* Stream.cpp in Sources */,
 				CE2D6CB016C70D8500390436 /* String.cpp in Sources */,
@@ -1691,7 +1693,6 @@
 				CE2B2C9416C72AC40036FFA0 /* SDL_rotate.c in Sources */,
 				CE2B2C9716C72AC40036FFA0 /* SDL_assert.c in Sources */,
 				CE2B2C9916C72AC40036FFA0 /* SDL_error.c in Sources */,
-				CE2B2C9A16C72AC40036FFA0 /* SDL_fatal.c in Sources */,
 				CE2B2C9D16C72AC40036FFA0 /* SDL_hints.c in Sources */,
 				CE2B2C9E16C72AC40036FFA0 /* SDL_log.c in Sources */,
 				CE2B2C9F16C72AC40036FFA0 /* SDL.c in Sources */,
@@ -1729,7 +1730,6 @@
 				CE2B2D4716C72AC40036FFA0 /* SDL_stretch.c in Sources */,
 				CE2B2D4816C72AC40036FFA0 /* SDL_surface.c in Sources */,
 				CE2B2D4A16C72AC40036FFA0 /* SDL_video.c in Sources */,
-				CE2B2D4B16C72AC40036FFA0 /* jumphack.c in Sources */,
 				CE2B2D4F16C72AC40036FFA0 /* SDL_uikitappdelegate.m in Sources */,
 				CE2B2D5116C72AC40036FFA0 /* SDL_uikitevents.m in Sources */,
 				CE2B2D5316C72AC40036FFA0 /* SDL_uikitmessagebox.m in Sources */,
@@ -1742,6 +1742,7 @@
 				CE2B2D6116C72AC40036FFA0 /* SDL_uikitwindow.m in Sources */,
 				CE20886316C8502B00667537 /* CocoaFileSystem.mm in Sources */,
 				CE0CD81C1768C90A00C02095 /* Application.cpp in Sources */,
+				FC45454918576CF100EE7560 /* SDL2GLContext.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1772,9 +1773,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE20885616C84F9900667537 /* AudioBuffer.cpp in Sources */,
+				FC45453218576C9900EE7560 /* iInit.mm in Sources */,
 				CE20885716C84F9900667537 /* AudioStream.cpp in Sources */,
 				CE20885816C84F9900667537 /* Wav.cpp in Sources */,
-				CE20885F16C8500000667537 /* Init_iOS.mm in Sources */,
 				CE20886016C8500000667537 /* XliMain.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1839,8 +1840,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -1854,11 +1856,16 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				VALID_ARCHS = "armv7 i386";
 			};
 			name = Debug;
 		};
@@ -1866,20 +1873,26 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "armv7 i386";
 			};
 			name = Release;
 		};

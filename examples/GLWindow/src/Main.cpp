@@ -1,7 +1,5 @@
 #include <Xli.h>
 #include <XliGL.h>
-#include <XliHttp.h>
-#include <android/native_activity.h>
 
 using namespace Xli;
 
@@ -195,25 +193,7 @@ public:
             if (GetTime() - tapTime < 0.3)
             {
                 //play
-                Err->WriteLine("-v-v-v-v-v-v-");
-                Managed<HttpClient> a = HttpClient::Create();
-                Managed<HttpRequest> b = HttpRequest::Create();
-                Managed<HttpResponse> c = a->Send("https://duckduckgo.com/", *b.Get());
-                int bufSize = 60;
-                char d[bufSize];
-                int bytesRead = 0;
-                if (c->IsValid() && c->Payload->CanRead())
-                {                    
-                    Err->WriteFormat("Response Code = %d\n\n", c->GetResponseCode());
-                    while (!c->Payload->AtEnd())
-                    {
-                        bytesRead = c->Payload->Read(&d, 1, bufSize);
-                        Err->WriteFormat("> %*.*s\n", bytesRead, bytesRead, d);
-                    }
-                } else {
-                    Err->WriteLine("Response invalid");
-                }
-                Err->WriteLine("-^-^-^-^-^-^-");
+                Err->WriteLine("Bang");
             }
             else if (wnd->IsTextInputActive())
             {

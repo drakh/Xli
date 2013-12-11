@@ -10,9 +10,8 @@ namespace Xli { namespace PlatformSpecific { void AInit(struct android_app* app)
 
 #elif defined(XLI_PLATFORM_IOS)
 
-#include <SDL.h>
+#include <SDL_main.h>
 namespace Xli { namespace PlatformSpecific { void iInit(); } }
-
 #endif
 
 extern int Main(const Xli::Array<Xli::String>& args);
