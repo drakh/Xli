@@ -92,7 +92,7 @@ namespace Xli
 #ifdef XLI_PLATFORM_OSX
       
       		// Enable support for Retina display
-            //sdlFlags |= SDL_WINDOW_ALLOW_HIGHDPI;
+            sdlFlags |= SDL_WINDOW_ALLOW_HIGHDPI;
             
 #endif
             
@@ -231,7 +231,11 @@ namespace Xli
 		Vector2i SDL2Window::GetClientSize()
 		{
 			Vector2i size;
+#ifdef XLI_PLATFORM_OSX
+			SDL_GL_GetDrawableSize(window, &size.X, &size.Y);
+#else
 			SDL_GetWindowSize(window, &size.X, &size.Y);
+#endif
 			return size;
 		}
 

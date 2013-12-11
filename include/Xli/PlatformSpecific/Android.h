@@ -31,7 +31,7 @@ namespace Xli
 		XLI_INLINE const char* AGetAppName()
 		{
 			const char* name = getenv("XLI_APP_NAME");
-			return name ? name : "XLI";
+			return name ? name : "XliApp";
 		}
 
 		class AJniHelper
