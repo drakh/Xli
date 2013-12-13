@@ -28,3 +28,4 @@ src/core/android/shim/local.properties
 src/core/android/shim/proguard-project.txt
 src/core/android/shim/project.properties
 Thumbs.db
+xcuserdata/
