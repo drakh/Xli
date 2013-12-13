@@ -31,15 +31,15 @@ namespace Xli
 		class WGLContext : public GLContext
 		{
 			HDC hDC;
-			HGLRC ctx;
-			Shared<Win32Window> wnd;
+			HGLRC hGLRC;
+            Shared<Win32Window> window;
 			int pf;
 
 			int TryEnableMultisample(int multiSamples)
 			{
 				if (!Inited)
 				{
-					HWND tmpW = CreateWindowEx(0, L"STATIC", L"", 0, 0, 0, 16, 16, wnd->GetHWND(), 0, GetModuleHandle(0), 0);
+					HWND tmpW = CreateWindowEx(0, L"STATIC", L"", 0, 0, 0, 16, 16, window->GetHWND(), 0, GetModuleHandle(0), 0);
 					HDC tmpDC = GetDC(tmpW);
 					int fmt = ChoosePixelFormat(tmpDC, &pfd);
 					SetPixelFormat(tmpDC, fmt, &pfd);
@@ -110,7 +110,7 @@ namespace Xli
 		public:
 			WGLContext(Win32Window* wnd, int multiSamples)
 			{
-				this->wnd = wnd;
+                this->window = wnd;
 				hDC = GetDC(wnd->GetHWND());
 
 				pf = TryEnableMultisample(multiSamples);
@@ -118,7 +118,7 @@ namespace Xli
 				if (pf == -1)
 					SetPixelFormat(hDC, ChoosePixelFormat(hDC, &pfd), &pfd);
 
-				ctx = wglCreateContext(hDC);
+				hGLRC = wglCreateContext(hDC);
 				MakeCurrent(true);
 
 				glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -133,15 +133,15 @@ namespace Xli
 				hDC = srcCtx->hDC;
 				pf = srcCtx->pf;
 
-				ctx = wglCreateContext(hDC);
+				hGLRC = wglCreateContext(hDC);
 
-				if (!ctx)
+				if (!hGLRC)
 					XLI_THROW("Unable to create shared OpenGL context: " + Win32Helpers::GetLastErrorString());
 
 				if (!wglMakeCurrent(hDC, 0))
 					XLI_THROW("Unable to make OpenGL context no longer current: " + Win32Helpers::GetLastErrorString());
 
-				if (!wglShareLists(srcCtx->ctx, ctx))
+				if (!wglShareLists(srcCtx->hGLRC, hGLRC))
 					XLI_THROW("Unable to share OpenGL contexts: " + Win32Helpers::GetLastErrorString());
 
 				srcCtx->MakeCurrent(true);
@@ -149,7 +149,7 @@ namespace Xli
 
 			virtual ~WGLContext()
 			{
-				wglDeleteContext(ctx);
+				wglDeleteContext(hGLRC);
 			}
 
 			virtual GLContext* CreateSharedContext()
@@ -170,11 +170,11 @@ namespace Xli
 				if (window->GetImplementation() != WindowImplementationWin32) 
 					XLI_THROW("Unsupported window");
 				
-				if (window->GetNativeHandle() == wnd->GetNativeHandle()) 
+                if (window->GetNativeHandle() == window->GetNativeHandle())
 					return;
 
-				this->wnd = (Win32Window*)window;
-				this->hDC = GetDC(wnd->GetHWND());
+                this->window = (Win32Window*)window;
+                this->hDC = GetDC(this->window->GetHWND());
 
 				if (pf != -1)
 					SetPixelFormat(hDC, pf, &pfd);
@@ -189,7 +189,7 @@ namespace Xli
 
 			virtual void MakeCurrent(bool current)
 			{
-				if (!wglMakeCurrent(hDC, current ? ctx : 0))
+				if (!wglMakeCurrent(hDC, current ? hGLRC : 0))
 					XLI_THROW("Unable to make OpenGL context current: " + Win32Helpers::GetLastErrorString());
 			}
 
@@ -215,7 +215,7 @@ namespace Xli
 
             virtual Vector2i GetBackbufferSize()
             {
-                return wnd->GetClientSize();
+                return window->GetClientSize();
             }
 		};
 	}

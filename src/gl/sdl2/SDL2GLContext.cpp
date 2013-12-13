@@ -93,7 +93,9 @@ namespace Xli
 
             virtual Vector2i GetBackbufferSize()
             {
-                return wnd->GetClientSize();
+                Vector2i size;
+                SDL_GL_GetDrawableSize(window->GetSDL_Window(), &size.X, &size.Y);
+                return size;
             }
 		};
 	}

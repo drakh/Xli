@@ -10,6 +10,7 @@ namespace Xli
 {
 	class EglContext: public GLContext
 	{
+        Shared<Window> window;
 		EGLDisplay display;
 		EGLSurface surface;
 		EGLContext context;
@@ -73,6 +74,8 @@ namespace Xli
 
 		virtual void SetWindow(Window* window)
 		{
+            this->window = window;
+
 #ifdef XLI_PLATFORM_ANDROID
 			if (window->GetImplementation() == WindowImplementationAndroid)
 			{
@@ -160,6 +163,11 @@ namespace Xli
 		{
 			return 0;
 		}
+
+        virtual Vector2i GetBackbufferSize()
+        {
+            return window->GetClientSize();
+        }
 	};
 
 	GLContext* GLContext::Create(Window* window, int multiSamples)

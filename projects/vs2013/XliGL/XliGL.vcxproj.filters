@@ -13,6 +13,9 @@
     <Filter Include="XliGL\sdl2">
       <UniqueIdentifier>{2a0f6fbb-1ec8-4cc2-87fc-1550fe829083}</UniqueIdentifier>
     </Filter>
+    <Filter Include="XliGL\egl">
+      <UniqueIdentifier>{6478c8e5-1dad-48ae-a7b7-cff7b44eb7b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\XliGL\GL.h">
@@ -35,6 +38,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\gl\3rdparty\glew\src\glew.c">
       <Filter>3rdparty</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\gl\egl\EGLContext.cpp">
+      <Filter>XliGL\egl</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

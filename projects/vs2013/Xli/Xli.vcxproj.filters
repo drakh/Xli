@@ -28,9 +28,6 @@
     <Filter Include="Xli\Platform\sdl2">
       <UniqueIdentifier>{d3386c9c-9694-400d-a9e6-286121fc49a3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Xli\Platform\egl">
-      <UniqueIdentifier>{ea3562a7-5247-4e60-9be3-244dfc07185b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Xli\Platform\posix">
       <UniqueIdentifier>{97287fd5-0070-4523-9c72-dfafebc0351b}</UniqueIdentifier>
     </Filter>
@@ -302,9 +299,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\core\android\AWindow.cpp">
       <Filter>Xli\Platform\android</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\core\egl\EGLContext.cpp">
-      <Filter>Xli\Platform\egl</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\core\generic\GenericAssetFileSystem.cpp">
       <Filter>Xli\Platform\generic</Filter>
