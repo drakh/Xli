@@ -9,6 +9,7 @@ class GLApp: public Application
 
     double touchDownTime;
     double tapTime;
+    int dialogType;
 
 public:
 	GLApp()
@@ -24,7 +25,8 @@ public:
 	virtual void OnInit(Window* wnd)
 	{
 		Err->WriteLine("OnInit");
-
+        
+        dialogType = 0;
 
 		// Setup OpenGL
 
@@ -82,11 +84,6 @@ public:
 		if (key == KeyF11 || (key == KeyEnter && wnd->GetKeyState(KeyCtrl)))
 		{
 			wnd->SetFullscreen(!wnd->IsFullscreen());
-			return true;
-		}
-		else if (key == KeyEscape)
-		{
-			wnd->Close();
 			return true;
 		}
 		else if (key == KeyF4 || key == KeyAlt)
@@ -195,15 +192,13 @@ public:
         {
             if (GetTime() - tapTime < 0.3)
             {
-                // double tap
-                if (MessageBox::Show(wnd, "Double tap detected", "Hello", DialogButtonsOKCancel) == DialogResultOK)
-                    wnd->BeginTextInput();
+                //play
+                Err->WriteLine("Bang");
             }
             else if (wnd->IsTextInputActive())
             {
                 wnd->EndTextInput();
             }
-            
             tapTime = GetTime();
         }
         
@@ -217,6 +212,7 @@ public:
 		Application::OnSizeChanged(wnd, clientSize);
 	}
 
+    //[TODO] cant show message box when closing as shim is gone
 	virtual bool OnClosing(Window* wnd, bool& cancel)
 	{
 		Err->WriteLine("OnClosing");

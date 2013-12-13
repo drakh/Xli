@@ -19,6 +19,7 @@ namespace Xli
 		Exception();
 		Exception(const String& message);
 		Exception(const String& message, const String& func, int line);
+		~Exception();
 
 		const String& GetMessage() const;
 		const String& GetFunction() const;
@@ -39,6 +40,7 @@ namespace Xli
 	public: \
 		ClassName(const Xli::String& msg) { _message = ::Xli::String(Message) + ": " + msg; } \
 		ClassName() { _message = Message; } \
+		~ClassName() { } \
 	}
 
 #define XLI_DECLARE_EXCEPTION(ClassName, Message)	XLI_DECLARE_EXCEPTION_SUB(Xli::Exception, ClassName, Message)

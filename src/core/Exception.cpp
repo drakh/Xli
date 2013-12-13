@@ -22,6 +22,11 @@ namespace Xli
 		this->_line = line;
 	}
 
+	Exception::~Exception()
+	{
+		// empty
+	}
+
 	const String& Exception::GetMessage() const
 	{
 		return _message;

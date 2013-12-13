@@ -1,8 +1,7 @@
 LOCAL_PATH := $(call my-dir)
 
-
 #
-# libXli.a
+# libXli.so
 #
 
 include $(CLEAR_VARS)
@@ -10,12 +9,12 @@ LOCAL_MODULE    := Xli
 
 LOCAL_SRC_FILES := \
 	../../../src/core/3rdparty/ConvertUTF.c \
-	../../../src/core/android/3rdparty/android_native_app_glue.c \
 	../../../src/core/android/AFileSystem.cpp \
-	../../../src/core/android/AInternal.cpp \
+	../../../src/core/android/AJniHelper.cpp \
 	../../../src/core/android/AMessageBox.cpp \
+	../../../src/core/android/AShim.cpp \
+	../../../src/core/android/AStream.cpp \
 	../../../src/core/android/AWindow.cpp \
-	../../../src/core/egl/EGLContext.cpp \
 	../../../src/core/generic/GenericDialogs.cpp \
 	../../../src/core/posix/PosixCond.cpp \
 	../../../src/core/posix/PosixFileSystemBase.cpp \
@@ -55,13 +54,14 @@ LOCAL_SRC_FILES := \
 	../../../src/core/Unicode.cpp \
 	../../../src/core/Utf16String.cpp \
 	../../../src/core/Window.cpp \
-	
+
 LOCAL_C_INCLUDES := \
 	../../include \
 
-LOCAL_CFLAGS   += -fexceptions -fPIC -DPIC -O3
+LOCAL_CFLAGS   := -fexceptions -fno-rtti -fPIC -DPIC -O3
+LOCAL_LDLIBS   := -lm -llog -landroid
 
-include $(BUILD_STATIC_LIBRARY)
+include $(BUILD_SHARED_LIBRARY)
 
 
 #
@@ -72,18 +72,33 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := XliMain
 
 LOCAL_SRC_FILES := \
-	../../../src/main/XliMain.cpp \
+	../../../src/core/android/3rdparty/android_native_app_glue.c \
+	../../../src/main/XliMain.cpp
 	
 LOCAL_C_INCLUDES := \
-	../../include \
+	../../include
 
-LOCAL_CFLAGS   += -fexceptions -fPIC -DPIC -O3
+LOCAL_CFLAGS   := -fexceptions -fno-rtti -fPIC -DPIC -O3
 
 include $(BUILD_STATIC_LIBRARY)
 
 
 #
-# libXliMedia.a
+# libXliDummy.so (dummy library)
+#
+
+include $(CLEAR_VARS)
+LOCAL_MODULE    := XliDummy
+
+LOCAL_STATIC_LIBRARIES := XliMain
+LOCAL_SRC_FILES := ../../../src/Dummy.cpp
+LOCAL_LDLIBS   := 
+
+include $(BUILD_SHARED_LIBRARY)
+
+
+#
+# libXliMedia.so
 #
 
 include $(CLEAR_VARS)
@@ -201,15 +216,39 @@ LOCAL_C_INCLUDES := \
 	../../src/media/3rdparty/png \
 	../../src/media/3rdparty/tinyxml \ 
 
-LOCAL_CFLAGS   += -fexceptions -fPIC -DPIC -O3
+LOCAL_CFLAGS   := -fexceptions -fno-rtti -fPIC -DPIC -O3
 LOCAL_CFLAGS   += "-DDARWIN_NO_CARBON"
 LOCAL_CFLAGS   += "-DFT2_BUILD_LIBRARY"
+LOCAL_LDLIBS   := -lz
 
-include $(BUILD_STATIC_LIBRARY)
+LOCAL_SHARED_LIBRARIES := Xli
+
+include $(BUILD_SHARED_LIBRARY)
 
 
 #
-# libXliGLHelper.a
+# libXliGL.so
+#
+
+include $(CLEAR_VARS)
+LOCAL_MODULE    := XliGL
+
+LOCAL_SRC_FILES := \
+	../../../src/gl/egl/EGLContext.cpp \
+	
+LOCAL_C_INCLUDES := \
+	../../include \
+
+LOCAL_CFLAGS   := -fexceptions -fno-rtti -fPIC -DPIC -O3
+LOCAL_LDLIBS   := -lEGL -lGLESv2 -landroid
+
+LOCAL_SHARED_LIBRARIES := Xli
+
+include $(BUILD_SHARED_LIBRARY)
+
+
+#
+# libXliGLHelper.so
 #
 
 include $(CLEAR_VARS)
@@ -221,39 +260,31 @@ LOCAL_SRC_FILES := \
 LOCAL_C_INCLUDES := \
 	../../include \
 
-LOCAL_CFLAGS   += -fexceptions -fPIC -DPIC -O3
+LOCAL_CFLAGS   := -fexceptions -fno-rtti -fPIC -DPIC -O3
+LOCAL_LDLIBS   := -lGLESv2
 
-include $(BUILD_STATIC_LIBRARY)
+LOCAL_SHARED_LIBRARIES := Xli XliMedia
+
+include $(BUILD_SHARED_LIBRARY)
 
 
 #
-# libXliHttp.a
+# libXliHttp.so
 #
 
 include $(CLEAR_VARS)
 LOCAL_MODULE    := XliHttp
 
 LOCAL_SRC_FILES := \
-	../../../src/http/dummy/DummyClient.cpp \
+	../../../src/http/android/AHttpClient.cpp \
 	
 LOCAL_C_INCLUDES := \
 	../../include \
 
-LOCAL_CFLAGS   += -fexceptions -fPIC -DPIC -O3
+LOCAL_CFLAGS   := -fexceptions -fno-rtti -fPIC -DPIC -O3
+LOCAL_LDLIBS   := -llog -landroid
 
-include $(BUILD_STATIC_LIBRARY)
-
-
-#
-# libXliDummy.so (dummy library)
-#
-
-include $(CLEAR_VARS)
-LOCAL_MODULE    := XliDummy
-
-LOCAL_STATIC_LIBRARIES := Xli XliMain XliMedia XliGLHelper XliHttp
-LOCAL_SRC_FILES := ../../../src/Dummy.cpp
-LOCAL_LDLIBS   := -lz -lm -llog -landroid -lEGL -lGLESv2
+LOCAL_SHARED_LIBRARIES := Xli
 
 include $(BUILD_SHARED_LIBRARY)
 

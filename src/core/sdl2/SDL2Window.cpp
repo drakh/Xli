@@ -91,32 +91,14 @@ namespace Xli
 	        
 #ifdef XLI_PLATFORM_OSX
       
-      		// TODO: Bug in SDL
-            //sdlFlags |= SDL_WINDOW_ALLOW_HIGHDPI;
+      		// Enable support for Retina display
+            sdlFlags |= SDL_WINDOW_ALLOW_HIGHDPI;
             
 #endif
             
 			this->eventHandler = eventHandler;
 
 #ifdef XLI_PLATFORM_IOS
-	      /*
-	        String orientations = "";
-	        
-	        if (flags & WindowFlagsOrientationLandscapeLeft)
-	            orientations += "LandscapeLeft ";
-	        
-	        if (flags & WindowFlagsOrientationLandscapeRight)
-	            orientations += "LandscapeRight ";
-	        
-	        if (flags & WindowFlagsOrientationPortrait)
-	            orientations += "Portrait ";
-	        
-	        if (flags & WindowFlagsOrientationPortraitUpsideDown)
-	            orientations += "PortraitUpsideDown";
-
-	        if (orientations.Length() > 0 && !SDL_SetHint(SDL_HINT_ORIENTATIONS, orientations.Data()))
-	            ErrorPrintLine("SDL WARNING: Failed to set window orientations");
-	        */
 	        
 	        if (flags & WindowFlagsDisablePowerSaver && !SDL_SetHint(SDL_HINT_IDLE_TIMER_DISABLED, "1"))
 	            ErrorPrintLine("SDL WARNING: Failed to disable idle timer");
@@ -154,7 +136,8 @@ namespace Xli
 
 		SDL2Window::SDL2Window(const void* nativeHandle)
 		{
-			if (GlobalWindow == 0) GlobalWindow = this;
+			if (GlobalWindow == 0) 
+				GlobalWindow = this;
 
 			window = SDL_CreateWindowFrom(nativeHandle);
 
@@ -248,7 +231,11 @@ namespace Xli
 		Vector2i SDL2Window::GetClientSize()
 		{
 			Vector2i size;
+#ifdef XLI_PLATFORM_OSX
+			SDL_GL_GetDrawableSize(window, &size.X, &size.Y);
+#else
 			SDL_GetWindowSize(window, &size.X, &size.Y);
+#endif
 			return size;
 		}
 
