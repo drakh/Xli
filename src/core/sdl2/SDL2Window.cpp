@@ -459,7 +459,7 @@ namespace Xli
 #endif
 		}
 
-		void SDL2Window::BeginTextInput() 
+        void SDL2Window::BeginTextInput(TextInputHint hint)
 		{
 			SDL_StartTextInput();
 		}

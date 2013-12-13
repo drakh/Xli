@@ -90,6 +90,11 @@ namespace Xli
 				return 0;
 #endif
 			}
+
+            virtual Vector2i GetBackbufferSize()
+            {
+                return wnd->GetClientSize();
+            }
 		};
 	}
 

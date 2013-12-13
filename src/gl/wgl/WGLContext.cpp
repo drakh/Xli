@@ -212,6 +212,11 @@ namespace Xli
 			{
 				return 0;
 			}
+
+            virtual Vector2i GetBackbufferSize()
+            {
+                return wnd->GetClientSize();
+            }
 		};
 	}
 

@@ -200,6 +200,18 @@ namespace Xli
 		SystemCursorHand = 12,
 	};
 
+    /**
+        \ingroup XliCorePlatform
+    */
+    enum TextInputHint
+    {
+        TextInputHintDefault,
+        TextInputHintEmail,
+        TextInputHintURL,
+        TextInputHintPhone,
+        TextInputHintNumber
+    };
+
 	/**
 		\ingroup XliCorePlatform
 	*/
@@ -377,9 +389,10 @@ namespace Xli
 
 
 		// TODO:
-		virtual void BeginTextInput() {}
-		virtual void EndTextInput() {}
+        virtual void BeginTextInput(TextInputHint hint) { }
+		virtual void EndTextInput() { }
 		virtual bool IsTextInputActive() { return false; }
+
 		virtual bool HasOnscreenKeyboardSupport() { return false; }
 		virtual bool IsOnscreenKeyboardVisible() { return false; }
 

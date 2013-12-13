@@ -58,7 +58,7 @@ namespace Xli
 		virtual SystemCursor GetSystemCursor();
 		virtual void SetSystemCursor(SystemCursor cursor);
 
-		virtual void BeginTextInput();
+		virtual void BeginTextInput(TextInputHint hint);
 		virtual void EndTextInput();
 		virtual bool IsTextInputActive();
 		virtual bool HasOnscreenKeyboardSupport();

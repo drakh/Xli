@@ -34,6 +34,8 @@ namespace Xli
 		virtual int GetMultiSamples() = 0;
 
 		virtual unsigned int GetBackbufferHandle() = 0;
+
+        virtual Vector2i GetBackbufferSize() = 0;
 	};
 }
 
