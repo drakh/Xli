@@ -192,7 +192,7 @@ namespace Xli
 		{
 #ifdef XLI_RANGE_CHECK
 			if (buckets[iterator].State != HashBucketStateUsed) 
-				XLI_BREAK_THROW("Invalid iterator");
+				XLI_THROW("Invalid iterator");
 #endif
 			
 			return buckets[iterator].Value;
@@ -208,7 +208,7 @@ namespace Xli
 		{
 #ifdef XLI_RANGE_CHECK
 			if (buckets[iterator].State != HashBucketStateUsed) 
-				XLI_BREAK_THROW("Invalid iterator");
+				XLI_THROW("Invalid iterator");
 #endif
 			
 			return buckets[iterator].Value;
@@ -223,7 +223,7 @@ namespace Xli
 		void SetValue(int iterator, const TValue& value)
 		{
 			if (buckets[iterator].State != HashBucketStateUsed) 
-				XLI_BREAK_THROW("Invalid iterator");
+				XLI_THROW("Invalid iterator");
 			
 			buckets[iterator].Value = value;
 		}
@@ -238,7 +238,7 @@ namespace Xli
 		{
 #ifdef XLI_RANGE_CHECK
 			if (buckets[iterator].State != HashBucketStateUsed) 
-				XLI_BREAK_THROW("Invalid iterator");
+				XLI_THROW("Invalid iterator");
 #endif
 			
 			return buckets[iterator].Key;
