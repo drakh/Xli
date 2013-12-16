@@ -159,8 +159,8 @@ namespace Xli
 	{
 		this->method = method;
 		this->url = url;
-		this->client = HttpClient::Create();
-		this->request = HttpRequest::Create();
+		//this->client = HttpClient::Create();
+		//this->request = HttpRequest::Create();
 		this->request->SetMethod(Xli::HttpMethods::StringToMethod(method));
 	}
 
