@@ -36,7 +36,7 @@ namespace Xli
             };
         }
         inline
-        String StringToMethod(String method)
+        HttpMethodType StringToMethod(String method)
         {
             if (method == "GET"){
                 return GET;
@@ -96,6 +96,29 @@ namespace Xli
 		static HttpClient* Create();
 		virtual HttpResponse* Send(const String& uri, const HttpRequest& req) = 0;
 	};
+
+
+    class HttpClientWrapper : public Object
+    {
+    public:
+        static HttpClientWrapper * Create();
+        void Open(String method, String url);
+        void Send(String data);
+        void SetRequestHeader(String header, String value);
+        unsigned short GetStatus();
+        String GetResponseText();
+        String GetResponseHeader(String header);
+        String GetAllResponseHeaders();
+        String GetStatusText();
+    
+    private:
+        String method;
+        String url;
+        HttpClient * client;
+        HttpRequest * request;
+        HttpResponse * response;
+    };
+
 }
 
 #endif
