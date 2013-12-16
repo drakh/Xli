@@ -5,6 +5,7 @@
 #include <Xli/Stream.h>
 #include <Xli/HashMap.h>
 
+
 namespace Xli
 {
     namespace HttpMethods
@@ -96,6 +97,7 @@ namespace Xli
 		static HttpClient* Create();
 		virtual HttpResponse* Send(const String& uri, const HttpRequest& req) = 0;
 	};
+
 
 
     class HttpClientWrapper : public Object

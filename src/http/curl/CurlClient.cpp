@@ -149,7 +149,9 @@ namespace Xli
 		if (!inited) Init();
 		return new CurlClient();
 	}
+	
 
+#if defined(XLI_PLATFORM_WIN32)
 	///
 	///	Wrapper for HttpClient/Request/Respons.
 	/// This is used together with HttpImpl.cpp.uxl
@@ -159,8 +161,8 @@ namespace Xli
 	{
 		this->method = method;
 		this->url = url;
-		//this->client = HttpClient::Create();
-		//this->request = HttpRequest::Create();
+		this->client = HttpClient::Create();
+		this->request = HttpRequest::Create();
 		this->request->SetMethod(Xli::HttpMethods::StringToMethod(method));
 	}
 
@@ -204,7 +206,7 @@ namespace Xli
 
 	HttpClientWrapper * HttpClientWrapper::Create()
 	{
-		return Xli::Managed<HttpClientWrapper>(new HttpClientWrapper());
+		return Xli::Managed<HttpClientWrapper>(new HttpClientWrapper);
 	}
-
+#endif
 }

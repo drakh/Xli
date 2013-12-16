@@ -2,8 +2,69 @@
 #include <Xli/PlatformSpecific/Android.h>
 #include <XliHttp/HttpClient.h>
 
+
 namespace Xli
 {
+
+    ///
+    /// Wrapper for HttpClient/Request/Respons.
+    /// This is used together with HttpImpl.cpp.uxl
+    /// in the Experimental.Http.Net package
+    ///
+    void HttpClientWrapper::Open(String method, String url)
+    {
+        this->method = method;
+        this->url = url;
+        this->client = HttpClient::Create();
+        this->request = HttpRequest::Create();
+        this->request->SetMethod(Xli::HttpMethods::StringToMethod(method));
+    }
+
+    void HttpClientWrapper::Send(String data)
+    {
+        if (response != NULL) response = client->Send(url, (*request));
+    }
+
+    void HttpClientWrapper::SetRequestHeader(String header, String value)
+    {
+        if (request != NULL) request->SetHeader(header, value);
+    }
+
+    String HttpClientWrapper::GetResponseText()
+    {
+        // return this->response->Paload
+        return "Not implemented";
+    }
+
+    unsigned short HttpClientWrapper::GetStatus()
+    {
+        if (response != NULL) return response->GetResponseCode();
+        else return 0;
+    }
+
+    String HttpClientWrapper::GetResponseHeader(String header)
+    {
+        if (response != NULL) return response->GetHeader(header);
+        else return "NULL";
+    }
+
+    String HttpClientWrapper::GetAllResponseHeaders()
+    {
+        return "Not implemented";
+    }
+
+    String HttpClientWrapper::GetStatusText()
+    {
+        return "Not implemented";
+    }
+
+    HttpClientWrapper * HttpClientWrapper::Create()
+    {
+        return Xli::Managed<HttpClientWrapper>(new HttpClientWrapper);
+    }
+
+    ///==================================================================\\\
+
     namespace PlatformSpecific
     {
         class AHttpResponse: public HttpResponse
@@ -178,5 +239,8 @@ namespace Xli
 	{
 		return new PlatformSpecific::AHttpClient();
 	}
+
+
+
 };
 
