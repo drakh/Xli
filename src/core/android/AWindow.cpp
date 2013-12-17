@@ -342,42 +342,42 @@ namespace Xli
 					switch (AKeyEvent_getAction(event))
 					{
 					case AKEY_EVENT_ACTION_DOWN:
-                        kcode = AKeyEvent_getKeyCode(event);
-						switch (kcode)
-						{
-						case AKEYCODE_BACK:
-							//if (GlobalWindow != 0) GlobalWindow->Close(); // TODO
-							return 1;
+                        // kcode = AKeyEvent_getKeyCode(event);
+						// switch (kcode)
+						// {
+						// case AKEYCODE_BACK:
+						// 	//if (GlobalWindow != 0) GlobalWindow->Close(); // TODO
+						// 	return 1;
 							
-						case AKEYCODE_MENU:
-							if (GlobalEventHandler->OnKeyDown(GlobalWindow, Xli::KeyMenu))
-								return 1;
-							break;
-                        default:
-                            if (GlobalEventHandler->OnKeyDown(GlobalWindow, AShim::AndroidToXliKeyEvent((AKeyEvent)kcode)))
-								return 1;
-                            break;
-						}
+						// case AKEYCODE_MENU:
+						// 	if (GlobalEventHandler->OnKeyDown(GlobalWindow, Xli::KeyMenu))
+						// 		return 1;
+						// 	break;
+                        // default:
+                        //     if (GlobalEventHandler->OnKeyDown(GlobalWindow, AShim::AndroidToXliKeyEvent((AKeyEvent)kcode)))
+						// 		return 1;
+                        //     break;
+						// }
 
 						break;
 
 					case AKEY_EVENT_ACTION_UP:
-                        kcode = AKeyEvent_getKeyCode(event);
-						switch (kcode)
-						{
-						case AKEYCODE_BACK:
-							return 1;
+                        // kcode = AKeyEvent_getKeyCode(event);
+						// switch (kcode)
+						// {
+						// case AKEYCODE_BACK:
+						// 	return 1;
 
-						case AKEYCODE_MENU:
-							if (GlobalEventHandler->OnKeyUp(GlobalWindow, Xli::KeyMenu))
-								return 1;
+						// case AKEYCODE_MENU:
+						// 	if (GlobalEventHandler->OnKeyUp(GlobalWindow, Xli::KeyMenu))
+						// 		return 1;
 
-							break;
-                        default:
-                            if (GlobalEventHandler->OnKeyUp(GlobalWindow, AShim::AndroidToXliKeyEvent((AKeyEvent)kcode)))
-								return 1;
-                            break;
-						}
+						// 	break;
+                        // default:
+                        //     if (GlobalEventHandler->OnKeyUp(GlobalWindow, AShim::AndroidToXliKeyEvent((AKeyEvent)kcode)))
+						// 		return 1;
+                        //     break;
+						// }
                         break;
 					}
 				}

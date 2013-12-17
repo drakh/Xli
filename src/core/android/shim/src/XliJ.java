@@ -42,7 +42,7 @@ public class XliJ extends android.app.NativeActivity {
     public static int AttachHiddenView(final NativeActivity activity) 
     {
     	final int[] result = {1};
-    	Log.d("XLI","Initialising shim on Java side");
+    	Log.d("XliApp","Initialising shim on Java side");
     	if (hidden_layout == null) 
 		{
 			hidden_layout = new FrameLayout(activity);
@@ -53,8 +53,9 @@ public class XliJ extends android.app.NativeActivity {
 					hidden_layout.addView(hidden_text);
 					hidden_text.setVisibility(View.VISIBLE);
 					hidden_text.requestFocus();
+                    Log.i("XliApp","Successfully created input capture View.");
 				} catch (Exception e) {
-					Log.e("XLI","Unable to create Layout or View for input capture.");
+					Log.e("XliApp","Unable to create Layout or View for input capture.");
 					result[0] = 0;
 				}
 			}});
@@ -64,22 +65,22 @@ public class XliJ extends android.app.NativeActivity {
     
 	//===========	
 	
-	public static void makeNoise() { Log.e("XLI", "************ Noise! ************"); }
+	public static void makeNoise() { Log.e("XliApp", "************ Noise! ************"); }
 	
 	//===========
 	
 	public static void raiseKeyboard(final NativeActivity activity) {
 		if (hidden_text == null) 
 		{ 
-			Log.e("XLI","Hidden View not available"); 
+			Log.e("XliApp","Hidden View not available"); 
 			return;
 		}
 		activity.runOnUiThread(new Runnable() { public void run() { 	
 			try {
 		        InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-		        imm.showSoftInput(hidden_text, 0);	    
+		        imm.showSoftInput(hidden_text, 0);
 			} catch (Exception e) {
-				Log.e("XLI","Unable to get get resources to raise keyboard");
+				Log.e("XliApp","Unable to get get resources to raise keyboard");
 			}
 		}});
 	}
@@ -89,37 +90,13 @@ public class XliJ extends android.app.NativeActivity {
 	public static native void XliJ_OnTextInput(String keyCode);
 	
 	public static class Hidden extends View {
+        InputConnection fic;
+
 	    public Hidden(Context context) {
 	        super(context);
+	        setFocusableInTouchMode(true);
 	        setFocusable(true);
-	        setFocusableInTouchMode(true);	        
 	    }
-	    
-	    @Override
-	    public boolean onKeyUp(int keyCode, KeyEvent event) {
-	    	XliJ_OnKeyUp(keyCode);
-	    	String text = event.getCharacters();
-	    	char unicodeChar = (char)event.getUnicodeChar();
-	    	XliJ_OnTextInput(""+unicodeChar);
-	    	return false;
-	    };
-	    @Override
-	    public boolean onKeyDown(int keyCode, KeyEvent event) {
-	    	XliJ_OnKeyDown(keyCode);
-	    	return false;
-	    };
-	    @Override
-	    public boolean onKeyMultiple(int keyCode, int count, KeyEvent event) {
-	    	String text = event.getCharacters();
-	    	if (text != null) 
-	    	{
-	    		XliJ_OnTextInput(text);
-	    	} else {
-	    		char unicodeChar = (char)event.getUnicodeChar();
-		    	XliJ_OnTextInput(""+unicodeChar);
-	    	}
-	    	return false;
-	    };
 	 
 	    @Override
 	    public boolean onKeyPreIme(int keyCode, KeyEvent event) {
@@ -138,15 +115,49 @@ public class XliJ extends android.app.NativeActivity {
 	    
 	    @Override
 	    public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
-	        BaseInputConnection fic = new BaseInputConnection(this, false);
+	        fic = new HiddenInputConnection(this, false);
 	        outAttrs.actionLabel = null;
 	        outAttrs.inputType = InputType.TYPE_NULL;
 	        outAttrs.imeOptions = EditorInfo.IME_ACTION_NEXT;
 	        return fic;
 	    }
+
 	    @Override
 	    public boolean onCheckIsTextEditor() { return true; }
 	}
+
+    static class HiddenInputConnection extends BaseInputConnection {
+
+        public HiddenInputConnection(View targetView, boolean fullEditor) {
+            super(targetView, fullEditor);
+        }
+
+        @Override
+        public boolean sendKeyEvent(KeyEvent event) {
+            int keyCode = event.getKeyCode();
+            if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                XliJ_OnKeyDown(keyCode);
+                return false;
+            } else if (event.getAction() == KeyEvent.ACTION_UP) {
+                XliJ_OnKeyUp(keyCode);
+                String text = event.getCharacters();
+                char unicodeChar = (char)event.getUnicodeChar();
+                XliJ_OnTextInput(""+unicodeChar);
+                return false;
+            } else if (event.getAction() == KeyEvent.ACTION_MULTIPLE){
+                String text = event.getCharacters();
+                if (text != null) 
+                {
+                    XliJ_OnTextInput(text);
+                } else {
+                    char unicodeChar = (char)event.getUnicodeChar();
+                    XliJ_OnTextInput(""+unicodeChar);
+                }
+                return false;
+            }
+            return false;
+        }
+    }
 	
 	public static void hideKeyboard(final NativeActivity activity) {   
 		activity.runOnUiThread(new Runnable() { public void run() { 		        
@@ -221,7 +232,7 @@ public class XliJ extends android.app.NativeActivity {
     		 activity.runOnUiThread(new Runnable() { public void run() { AlertDialog d = b.create(); d.setCanceledOnTouchOutside(false); d.show(); }});
     		bufferLock.block();
     	} catch (Exception e) {
-    		Log.e("XLI", e.getMessage());
+    		Log.e("XliApp", e.getMessage());
     	}
     	return result[0];
 	}
@@ -243,7 +254,7 @@ public class XliJ extends android.app.NativeActivity {
 		try {
 			j_url = new URL(url);
 		} catch (MalformedURLException e) {
-			Log.e("XLI","MalformedUrl: "+e.getLocalizedMessage());
+			Log.e("XliApp","MalformedUrl: "+e.getLocalizedMessage());
 			return null;
 		}
 		HttpURLConnection urlConnection = null;
@@ -257,7 +268,7 @@ public class XliJ extends android.app.NativeActivity {
 			}
 			urlConnection.setRequestMethod(method);
 		} catch (IOException e) {
-			Log.e("XLI","IOException: "+e.getLocalizedMessage());
+			Log.e("XliApp","IOException: "+e.getLocalizedMessage());
 			return null;
 		}	
 		return urlConnection;
@@ -268,7 +279,7 @@ public class XliJ extends android.app.NativeActivity {
 		try {
 			return new BufferedInputStream(connection.getInputStream());
 		} catch (IOException e) {
-			Log.e("XLI","HttpGetInputStream IOException: "+e.getLocalizedMessage());
+			Log.e("XliApp","HttpGetInputStream IOException: "+e.getLocalizedMessage());
 			return null;
 		}
 	}
@@ -278,7 +289,7 @@ public class XliJ extends android.app.NativeActivity {
 		try {
 			return new BufferedOutputStream(connection.getOutputStream());
 		} catch (IOException e) {
-			Log.e("XLI","HttpGetOutputStream IOException: "+e.getLocalizedMessage());
+			Log.e("XliApp","HttpGetOutputStream IOException: "+e.getLocalizedMessage());
 			return null;
 		}
 	}
@@ -288,7 +299,7 @@ public class XliJ extends android.app.NativeActivity {
 		Map<String, List<String>> a = connection.getHeaderFields();
 		for (String key : a.keySet()) {
 			for (String header : a.get(key)) {
-				Log.e("XLI", key + " : " + header);
+				Log.e("XliApp", key + " : " + header);
 			}
 		}
 	}
