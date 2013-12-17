@@ -157,7 +157,7 @@ namespace Xli
 			{
 			}
 
-	        virtual void BeginTextInput()
+			virtual void BeginTextInput(TextInputHint hint)
 	        {
 	            AShim::RaiseSoftKeyboard();
 	        }
