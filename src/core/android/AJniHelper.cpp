@@ -11,8 +11,8 @@ extern "C"
 {
     void JNICALL XliJ_OnKeyUp (JNIEnv *env , jobject obj, jint keyCode) 
     {
-        Xli::Key key = Xli::PlatformSpecific::AShim::AndroidToXliKeyEvent((Xli::PlatformSpecific::AKeyEvent)keyCode);
-        GlobalEventHandler->OnKeyUp(GlobalWindow, key);
+        // Xli::Key key = Xli::PlatformSpecific::AShim::AndroidToXliKeyEvent((Xli::PlatformSpecific::AKeyEvent)keyCode);
+        // GlobalEventHandler->OnKeyUp(GlobalWindow, key);
     }
 
     void JNICALL XliJ_OnTextInput (JNIEnv *env , jobject obj, jstring keyChars) 
@@ -25,8 +25,8 @@ extern "C"
 
     void JNICALL XliJ_OnKeyDown (JNIEnv *env , jobject obj, jint keyCode) 
     {
-        Xli::Key key = Xli::PlatformSpecific::AShim::AndroidToXliKeyEvent((Xli::PlatformSpecific::AKeyEvent)keyCode);
-        GlobalEventHandler->OnKeyDown(GlobalWindow, key);
+        // Xli::Key key = Xli::PlatformSpecific::AShim::AndroidToXliKeyEvent((Xli::PlatformSpecific::AKeyEvent)keyCode);
+        // GlobalEventHandler->OnKeyDown(GlobalWindow, key);
     }
 }
 

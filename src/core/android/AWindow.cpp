@@ -262,6 +262,7 @@ namespace Xli
 
 		static int32_t handle_input(struct android_app* app, AInputEvent* event)
 		{
+            int32_t kcode=0;
 			switch (AInputEvent_getType(event))
 			{
 			case AINPUT_EVENT_TYPE_MOTION:
@@ -341,7 +342,8 @@ namespace Xli
 					switch (AKeyEvent_getAction(event))
 					{
 					case AKEY_EVENT_ACTION_DOWN:
-						switch (AKeyEvent_getKeyCode(event))
+                        kcode = AKeyEvent_getKeyCode(event);
+						switch (kcode)
 						{
 						case AKEYCODE_BACK:
 							//if (GlobalWindow != 0) GlobalWindow->Close(); // TODO
@@ -350,14 +352,18 @@ namespace Xli
 						case AKEYCODE_MENU:
 							if (GlobalEventHandler->OnKeyDown(GlobalWindow, Xli::KeyMenu))
 								return 1;
-
 							break;
+                        default:
+                            if (GlobalEventHandler->OnKeyDown(GlobalWindow, AShim::AndroidToXliKeyEvent((AKeyEvent)kcode)))
+								return 1;
+                            break;
 						}
 
 						break;
 
 					case AKEY_EVENT_ACTION_UP:
-						switch (AKeyEvent_getKeyCode(event))
+                        kcode = AKeyEvent_getKeyCode(event);
+						switch (kcode)
 						{
 						case AKEYCODE_BACK:
 							return 1;
@@ -367,9 +373,12 @@ namespace Xli
 								return 1;
 
 							break;
+                        default:
+                            if (GlobalEventHandler->OnKeyUp(GlobalWindow, AShim::AndroidToXliKeyEvent((AKeyEvent)kcode)))
+								return 1;
+                            break;
 						}
-
-						break;
+                        break;
 					}
 				}
 
