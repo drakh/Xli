@@ -2,13 +2,12 @@ LOCAL_PATH := $(call my-dir)
 XLI_LIB_PATH := ../../../../lib/android/$(TARGET_ARCH_ABI)
 
 
-# libXli.a
+# libXli.so
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := Xli
-
-LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXli.a
-include $(PREBUILT_STATIC_LIBRARY)	
+LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXli.so
+include $(PREBUILT_SHARED_LIBRARY)	
 
 
 # libXliMain.a
@@ -20,22 +19,28 @@ LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXliMain.a
 include $(PREBUILT_STATIC_LIBRARY)	
 
 
-# libXliMedia.a
+# libXliMedia.so
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := XliMedia
 
-LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXliMedia.a
-include $(PREBUILT_STATIC_LIBRARY)	
+LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXliMedia.so
+include $(PREBUILT_SHARED_LIBRARY)	
 
-
-# libXliHttp.a
+# libXliGL.so
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := XliHttp
+LOCAL_MODULE := XliGL
+LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXliGL.so
+include $(PREBUILT_SHARED_LIBRARY)
 
-LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXliHttp.a
-include $(PREBUILT_STATIC_LIBRARY)	
+# libXliGLHelper.so
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := XliGLHelper
+
+LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXliGLHelper.so
+include $(PREBUILT_SHARED_LIBRARY)	
 
 
 # libGLWindow.so
@@ -47,11 +52,11 @@ LOCAL_SRC_FILES := \
 	../../src/Main.cpp \
 
 LOCAL_C_INCLUDES := ../../../include
-LOCAL_CPP_FEATURES := exceptions
 
-LOCAL_LDLIBS := -llog -landroid -lz -lm -lEGL -lGLESv2 -lOpenSLES
+LOCAL_CFLAGS   := -fexceptions -fno-rtti -fPIC -DPIC -O3 -Wno-invalid-offsetof
+LOCAL_LDLIBS   := -lm -lGLESv2 -landroid -llog
 
 LOCAL_WHOLE_STATIC_LIBRARIES := XliMain
-LOCAL_STATIC_LIBRARIES := Xli XliMedia XliHttp
+LOCAL_SHARED_LIBRARIES := Xli XliGL XliMedia XliGLHelper
 
 include $(BUILD_SHARED_LIBRARY)

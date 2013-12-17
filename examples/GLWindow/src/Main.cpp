@@ -194,6 +194,7 @@ public:
             {
                 //play
                 Err->WriteLine("Bang");
+                wnd->BeginTextInput((Xli::TextInputHint)0);
             }
             else if (wnd->IsTextInputActive())
             {
