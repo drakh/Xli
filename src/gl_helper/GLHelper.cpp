@@ -24,7 +24,7 @@ namespace Xli
 		case GL_INVALID_FRAMEBUFFER_OPERATION: return "Invalid framebuffer operation";
 #ifdef XLI_GL_DESKTOP
 		case GL_STACK_OVERFLOW: return "This command would cause a stack overflow";
-		case GL_STACK_UNDERFLOW: return " This command would cause a stack underflow";
+		case GL_STACK_UNDERFLOW: return "This command would cause a stack underflow";
 		case GL_TABLE_TOO_LARGE: return "The specified table exceeds the implementation's maximum supported table size";
 #endif
 		default: return "Unknown error";

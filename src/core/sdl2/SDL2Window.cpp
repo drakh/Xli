@@ -93,10 +93,11 @@ namespace Xli
       
       		// Enable support for Retina display
             sdlFlags |= SDL_WINDOW_ALLOW_HIGHDPI;
+
+            // Enable OS X Lion native fullscreen feature
+            SDL_SetHint(SDL_HINT_VIDEO_FULLSCREEN_SPACES, "1");
             
 #endif
-            
-			this->eventHandler = eventHandler;
 
 #ifdef XLI_PLATFORM_IOS
 	        
