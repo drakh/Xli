@@ -35,6 +35,13 @@ struct SDL_Cursor
 
 typedef struct
 {
+    int last_x, last_y;
+    Uint32 last_timestamp;
+    Uint8 click_count;
+} SDL_MouseClickState;
+
+typedef struct
+{
     /* Create a cursor from a surface */
     SDL_Cursor *(*CreateCursor) (SDL_Surface * surface, int hot_x, int hot_y);
 
@@ -66,8 +73,11 @@ typedef struct
     int last_x, last_y;         /* the last reported x and y coordinates */
     Uint32 buttonstate;
     SDL_bool relative_mode;
-    /* the x and y coordinates when relative mode was activated */
-    int original_x, original_y;
+    SDL_bool relative_mode_warp;
+
+    /* Data for double-click tracking */
+    int num_clickstates;
+    SDL_MouseClickState *clickstate;
 
     SDL_Cursor *cursors;
     SDL_Cursor *def_cursor;
@@ -84,6 +94,9 @@ extern int SDL_MouseInit(void);
 
 /* Get the mouse state structure */
 SDL_Mouse *SDL_GetMouse(void);
+
+/* Set the default double-click interval */
+extern void SDL_SetDoubleClickTime(Uint32 interval);
 
 /* Set the default mouse cursor */
 extern void SDL_SetDefaultCursor(SDL_Cursor * cursor);
