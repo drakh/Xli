@@ -151,7 +151,7 @@ fi
 mkdir -p $BUILD_DIR
 cd $BUILD_DIR
 
-rm -f CMakeCache.txt
+#rm -f CMakeCache.txt
 
 cmake ../.. $CMAKE_ARGS
 make -j $JOB_COUNT

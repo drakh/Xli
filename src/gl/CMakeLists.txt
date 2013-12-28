@@ -12,7 +12,7 @@ elseif (UNIX)
 	    set(Sources ${Sources} 3rdparty/glew/src/glew.c)
 	    add_definitions(-DGLEW_STATIC)
 	    include_directories(${PROJECT_SOURCE_DIR}/src/gl/3rdparty/glew/include)
-	    include_directories(${PROJECT_SOURCE_DIR}/src/core/3rdparty/SDL2/include)
+	    include_directories(${PROJECT_SOURCE_DIR}/src/core/sdl2/3rdparty/SDL2/include)
 	    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-framework,OpenGL")
 
 	else()

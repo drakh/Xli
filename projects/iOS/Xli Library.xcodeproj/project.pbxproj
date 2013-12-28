@@ -748,9 +748,9 @@
 		5AA38E42151A00CC00979B55 = {
 			isa = PBXGroup;
 			children = (
-				FC45453318576CF100EE7560 /* gl */,
 				CE2D6DE416C70D9A00390436 /* audio */,
 				CE2D5E0A16C70D7D00390436 /* core */,
+				FC45453318576CF100EE7560 /* gl */,
 				CE1537CF174CF316009C6275 /* gl_helper */,
 				CE1535D7174CF305009C6275 /* http */,
 				CE2D6EB016C70DA600390436 /* main */,
@@ -770,6 +770,14 @@
 				CE1535D6174CF171009C6275 /* libXliHttp.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		5AEA0329186F1105000530C7 /* 3rdparty */ = {
+			isa = PBXGroup;
+			children = (
+				CE2D5E1616C70D7D00390436 /* SDL2 */,
+			);
+			path = 3rdparty;
 			sourceTree = "<group>";
 		};
 		CE1535D7174CF305009C6275 /* http */ = {
@@ -1262,7 +1270,6 @@
 			children = (
 				CE2D5E0C16C70D7D00390436 /* ConvertUTF.c */,
 				CE2D5E0D16C70D7D00390436 /* ConvertUTF.h */,
-				CE2D5E1616C70D7D00390436 /* SDL2 */,
 			);
 			path = 3rdparty;
 			sourceTree = "<group>";
@@ -1299,6 +1306,7 @@
 		CE2D672416C70D8000390436 /* sdl2 */ = {
 			isa = PBXGroup;
 			children = (
+				5AEA0329186F1105000530C7 /* 3rdparty */,
 				CE2D672616C70D8000390436 /* SDL2Display.cpp */,
 				CE2D672B16C70D8000390436 /* SDL2MessageBox.cpp */,
 				CE2D672F16C70D8000390436 /* SDL2Window.cpp */,
@@ -2256,7 +2264,7 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					../../include,
-					../../src/core/3rdparty/SDL2/include,
+					../../src/core/sdl2/3rdparty/SDL2/include,
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				INSTALL_PATH = /usr/local/lib;
@@ -2278,7 +2286,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = __IPHONEOS__;
 				HEADER_SEARCH_PATHS = (
 					../../include,
-					../../src/core/3rdparty/SDL2/include,
+					../../src/core/sdl2/3rdparty/SDL2/include,
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				INSTALL_PATH = /usr/local/lib;
@@ -2381,7 +2389,7 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					../../include,
-					../../src/core/3rdparty/SDL2/include,
+					../../src/core/sdl2/3rdparty/SDL2/include,
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				INSTALL_PATH = /usr/local/lib;
@@ -2402,7 +2410,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = __IPHONEOS__;
 				HEADER_SEARCH_PATHS = (
 					../../include,
-					../../src/core/3rdparty/SDL2/include,
+					../../src/core/sdl2/3rdparty/SDL2/include,
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				INSTALL_PATH = /usr/local/lib;

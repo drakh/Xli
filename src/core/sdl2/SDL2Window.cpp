@@ -95,7 +95,7 @@ namespace Xli
             sdlFlags |= SDL_WINDOW_ALLOW_HIGHDPI;
 
             // Enable OS X Lion native fullscreen feature
-            SDL_SetHint(SDL_HINT_VIDEO_FULLSCREEN_SPACES, "1");
+            //SDL_SetHint(SDL_HINT_VIDEO_FULLSCREEN_SPACES, "1");
             
 #endif
 
