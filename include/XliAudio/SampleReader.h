@@ -6,26 +6,26 @@
 
 namespace Xli
 {
-	// TODO: Support more input sample formats
+    // TODO: Support more input sample formats
 
-	/**
-		\ingroup Audio
-	*/
-	class SampleReader
-	{
-		AudioStream* stream;
-		bool forceStereo;
-		int internalBufferSize;
-		Int16* internalBuffer;
+    /**
+        \ingroup Audio
+    */
+    class SampleReader
+    {
+        AudioStream* stream;
+        bool forceStereo;
+        int internalBufferSize;
+        Int16* internalBuffer;
 
-		static float convertSample(Int16 sample);
+        static float convertSample(Int16 sample);
 
-	public:
-		SampleReader(AudioStream* stream, bool forceStereo);
-		~SampleReader();
+    public:
+        SampleReader(AudioStream* stream, bool forceStereo);
+        ~SampleReader();
 
-		int Read(float* buffer, int expectedSamples);
-	};
+        int Read(float* buffer, int expectedSamples);
+    };
 }
 
 #endif

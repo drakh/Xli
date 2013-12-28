@@ -5,53 +5,53 @@
 
 namespace Xli
 {
-	/**
-		\addtogroup XliCoreThreading
-		@{
-	*/
-	typedef void* MutexHandle;
+    /**
+        \addtogroup XliCoreThreading
+        @{
+    */
+    typedef void* MutexHandle;
 
-	MutexHandle CreateMutex();
-	void DeleteMutex(MutexHandle mutex);
+    MutexHandle CreateMutex();
+    void DeleteMutex(MutexHandle mutex);
 
-	void LockMutex(MutexHandle mutex);
-	void UnlockMutex(MutexHandle mutex);
+    void LockMutex(MutexHandle mutex);
+    void UnlockMutex(MutexHandle mutex);
 
-	/** @} */
+    /** @} */
 
-	/**
-		\ingroup XliCoreThreading
-	*/
-	class Mutex
-	{
-		MutexHandle handle;
+    /**
+        \ingroup XliCoreThreading
+    */
+    class Mutex
+    {
+        MutexHandle handle;
 
-	public:
-		Mutex()
-		{
-			handle = CreateMutex();
-		}
+    public:
+        Mutex()
+        {
+            handle = CreateMutex();
+        }
 
-		~Mutex()
-		{
-			DeleteMutex(handle);
-		}
+        ~Mutex()
+        {
+            DeleteMutex(handle);
+        }
 
-		void Lock()
-		{
-			LockMutex(handle);
-		}
+        void Lock()
+        {
+            LockMutex(handle);
+        }
 
-		void Unlock()
-		{
-			UnlockMutex(handle);
-		}
+        void Unlock()
+        {
+            UnlockMutex(handle);
+        }
 
-		operator MutexHandle()
-		{
-			return handle;
-		}
-	};
+        operator MutexHandle()
+        {
+            return handle;
+        }
+    };
 }
 
 #endif

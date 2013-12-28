@@ -9,89 +9,89 @@
 
 namespace Xli
 {
-	class XmlElement;
-	class XmlText;
+    class XmlElement;
+    class XmlText;
 
-	/**
-		\ingroup XliMediaMarkup
-	*/
-	class XmlNode: public Object
-	{
-	public:
-		enum Type
-		{
-			TypeElement,
-			TypeText
-		};
+    /**
+        \ingroup XliMediaMarkup
+    */
+    class XmlNode: public Object
+    {
+    public:
+        enum Type
+        {
+            TypeElement,
+            TypeText
+        };
 
-		virtual Type GetType() = 0;
+        virtual Type GetType() = 0;
 
-		virtual XmlElement* ToElement() { return 0; } 
-		virtual XmlText* ToText() { return 0; }
-	};
+        virtual XmlElement* ToElement() { return 0; } 
+        virtual XmlText* ToText() { return 0; }
+    };
 
-	/**
-		\ingroup XliMediaMarkup
-	*/
-	class XmlText: public XmlNode
-	{
-	public:
-		virtual Type GetType() { return TypeText; }
-		virtual XmlText* ToText() { return this; }
+    /**
+        \ingroup XliMediaMarkup
+    */
+    class XmlText: public XmlNode
+    {
+    public:
+        virtual Type GetType() { return TypeText; }
+        virtual XmlText* ToText() { return this; }
 
-		String Value;
-	};
+        String Value;
+    };
 
-	/**
-		\ingroup XliMediaMarkup
-	*/
-	class XmlElement: public XmlNode
-	{
-	public:
-		virtual Type GetType() { return TypeElement; }
-		virtual XmlElement* ToElement() { return this; }
+    /**
+        \ingroup XliMediaMarkup
+    */
+    class XmlElement: public XmlNode
+    {
+    public:
+        virtual Type GetType() { return TypeElement; }
+        virtual XmlElement* ToElement() { return this; }
 
-		/**
-			If the first child is a Text object, then the value of that Text object is returned.
-			Else an Exception is thrown.
-		*/
-		String GetValue();
+        /**
+            If the first child is a Text object, then the value of that Text object is returned.
+            Else an Exception is thrown.
+        */
+        String GetValue();
 
-		/**
-			Returns the first child Element with this name or throws an Exception if none could be found.
-		*/
-		XmlElement* GetElement(const String& name);
+        /**
+            Returns the first child Element with this name or throws an Exception if none could be found.
+        */
+        XmlElement* GetElement(const String& name);
 
-		/**
-			If the specified attribute exists, then the value is returned.
-			Else an Exception is thrown.
-		*/
-		String GetAttribute(const String& name);
+        /**
+            If the specified attribute exists, then the value is returned.
+            Else an Exception is thrown.
+        */
+        String GetAttribute(const String& name);
 
-		String Name;
-		HashMap<String, String> Attributes;
-		Array<Managed<XmlNode> > Children;
-	};
+        String Name;
+        HashMap<String, String> Attributes;
+        Array<Managed<XmlNode> > Children;
+    };
 
-	/**
-		\ingroup XliMediaMarkup
-	*/
-	class Xml
-	{
-	public:
-		static XmlElement* Parse(const String& code);
+    /**
+        \ingroup XliMediaMarkup
+    */
+    class Xml
+    {
+    public:
+        static XmlElement* Parse(const String& code);
 
-		static XmlElement* Load(Stream* stream)
-		{
-			return Parse(TextReader(stream).ReadAll());
-		}
+        static XmlElement* Load(Stream* stream)
+        {
+            return Parse(TextReader(stream).ReadAll());
+        }
 
-		static XmlElement* Load(const String& filename)
-		{
-			File f(filename, FileModeRead);
-			return Load(&f);
-		}
-	};
+        static XmlElement* Load(const String& filename)
+        {
+            File f(filename, FileModeRead);
+            return Load(&f);
+        }
+    };
 }
 
 

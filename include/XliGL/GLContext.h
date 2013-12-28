@@ -5,38 +5,38 @@
 
 namespace Xli
 {
-	/**
-		\ingroup XliGL
-	 */
-	class GLContext: public Object
-	{
-	public:
-		static GLContext* Create(Window* window, int multiSamples);
+    /**
+        \ingroup XliGL
+     */
+    class GLContext: public Object
+    {
+    public:
+        static GLContext* Create(Window* window, int multiSamples);
 
-		virtual ~GLContext() {}
+        virtual ~GLContext() {}
 
-		virtual GLContext* CreateSharedContext() = 0;
+        virtual GLContext* CreateSharedContext() = 0;
 
-		virtual void SetWindow(Window* window) { XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION); }
+        virtual void SetWindow(Window* window) { XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION); }
 
         virtual void MakeCurrent(bool current) = 0;
-		virtual void SwapBuffers() = 0;
+        virtual void SwapBuffers() = 0;
 
-		/**
-			Sets the swap interval.
-			@param interval 1 enables VSync, 0 disables VSync
-			@return true on success, false on failure
-		*/
-		virtual bool SetSwapInterval(int interval) = 0;
+        /**
+            Sets the swap interval.
+            @param interval 1 enables VSync, 0 disables VSync
+            @return true on success, false on failure
+        */
+        virtual bool SetSwapInterval(int interval) = 0;
 
-		virtual int GetSwapInterval() = 0;
+        virtual int GetSwapInterval() = 0;
 
-		virtual int GetMultiSamples() = 0;
+        virtual int GetMultiSamples() = 0;
 
-		virtual unsigned int GetBackbufferHandle() = 0;
+        virtual unsigned int GetBackbufferHandle() = 0;
 
         virtual Vector2i GetBackbufferSize() = 0;
-	};
+    };
 }
 
 #endif

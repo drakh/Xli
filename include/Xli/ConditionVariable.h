@@ -5,55 +5,55 @@
 
 namespace Xli
 {
-	/**
-		\addtogroup XliCoreThreading
-		@{
-	*/
+    /**
+        \addtogroup XliCoreThreading
+        @{
+    */
 
-	typedef void* CondHandle;
+    typedef void* CondHandle;
 
-	CondHandle CreateCond();
-	void DeleteCond(CondHandle handle);
+    CondHandle CreateCond();
+    void DeleteCond(CondHandle handle);
 
-	void CondWait(CondHandle handle, MutexHandle mutex);
-	void CondSignal(CondHandle handle);
-	void CondBroadcast(CondHandle handle);
+    void CondWait(CondHandle handle, MutexHandle mutex);
+    void CondSignal(CondHandle handle);
+    void CondBroadcast(CondHandle handle);
 
-	/** @} */
+    /** @} */
 
-	/**
-		\ingroup XliCoreThreading
-	*/
-	class ConditionVariable
-	{
-		CondHandle handle;
+    /**
+        \ingroup XliCoreThreading
+    */
+    class ConditionVariable
+    {
+        CondHandle handle;
 
-	public:
-		ConditionVariable()
-		{
-			handle = CreateCond();
-		}
+    public:
+        ConditionVariable()
+        {
+            handle = CreateCond();
+        }
 
-		~ConditionVariable()
-		{
-			DeleteCond(handle);
-		}
+        ~ConditionVariable()
+        {
+            DeleteCond(handle);
+        }
 
-		void Wait(MutexHandle mutex)
-		{
-			CondWait(handle, mutex);
-		}
+        void Wait(MutexHandle mutex)
+        {
+            CondWait(handle, mutex);
+        }
 
-		void Signal()
-		{
-			CondSignal(handle);
-		}
+        void Signal()
+        {
+            CondSignal(handle);
+        }
 
-		void Broadcast()
-		{
-			CondBroadcast(handle);
-		}
-	};
+        void Broadcast()
+        {
+            CondBroadcast(handle);
+        }
+    };
 }
 
 

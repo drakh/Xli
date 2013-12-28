@@ -13,49 +13,49 @@
 
 namespace Xli
 {
-	/**
-		\ingroup XliCoreIO
-	*/
-	enum SeekOrigin
-	{
-		SeekOriginBegin,
-		SeekOriginCurrent,
-		SeekOriginEnd
-	};
+    /**
+        \ingroup XliCoreIO
+    */
+    enum SeekOrigin
+    {
+        SeekOriginBegin,
+        SeekOriginCurrent,
+        SeekOriginEnd
+    };
 
-	/**
-		\ingroup XliCoreIO
-	*/
-	class Stream: public Object
-	{
-	public:
-		virtual ~Stream();
+    /**
+        \ingroup XliCoreIO
+    */
+    class Stream: public Object
+    {
+    public:
+        virtual ~Stream();
 
-		virtual void Flush();
-		virtual void Close();
+        virtual void Flush();
+        virtual void Close();
 
-		virtual bool IsClosed() const;
-		virtual bool AtEnd() const;
+        virtual bool IsClosed() const;
+        virtual bool AtEnd() const;
 
-		virtual bool CanRead() const;
-		virtual bool CanWrite() const;
-		virtual bool CanSeek() const;
+        virtual bool CanRead() const;
+        virtual bool CanWrite() const;
+        virtual bool CanSeek() const;
 
-		virtual int GetPosition() const;
-		virtual int GetLength() const;
+        virtual int GetPosition() const;
+        virtual int GetLength() const;
 
-		virtual int Read(void* dst, int elmSize, int elmCount);
-		virtual int Write(const void* src, int elmSize, int elmCount);
-		virtual void Seek(SeekOrigin origin, int offset);
+        virtual int Read(void* dst, int elmSize, int elmCount);
+        virtual int Write(const void* src, int elmSize, int elmCount);
+        virtual void Seek(SeekOrigin origin, int offset);
 
-		void ReadSafe(void* dst, int elmSize, int elmCount);
-		void WriteSafe(const void* src, int elmSize, int elmCount);
+        void ReadSafe(void* dst, int elmSize, int elmCount);
+        void WriteSafe(const void* src, int elmSize, int elmCount);
 
-		/**
-			Write the entire contents of another stream into this stream.
-			@param source Stream to read from.
-		*/
-		void WriteStream(Stream* source);
+        /**
+            Write the entire contents of another stream into this stream.
+            @param source Stream to read from.
+        */
+        void WriteStream(Stream* source);
     
         virtual DataAccessor* CreateDataAccessor()
         {
@@ -63,39 +63,39 @@ namespace Xli
             ReadSafe(buf->Data(), 1, buf->Size());
             return buf;
         }
-	};
+    };
 
-	/**
-		\ingroup XliCoreIO
-	*/
-	class StreamWriter: public Object
-	{
-	protected:
-		Stream* stream;
+    /**
+        \ingroup XliCoreIO
+    */
+    class StreamWriter: public Object
+    {
+    protected:
+        Stream* stream;
 
-	public:
-		StreamWriter(Stream* stream);
-		virtual ~StreamWriter();
+    public:
+        StreamWriter(Stream* stream);
+        virtual ~StreamWriter();
 
-		void SwitchStream(Stream* stream);
-		Stream* GetStream();
-	};
+        void SwitchStream(Stream* stream);
+        Stream* GetStream();
+    };
 
-	/**
-		\ingroup XliCoreIO
-	*/
-	class StreamReader: public Object
-	{
-	protected:
-		Stream* stream;
+    /**
+        \ingroup XliCoreIO
+    */
+    class StreamReader: public Object
+    {
+    protected:
+        Stream* stream;
 
-	public:
-		StreamReader(Stream* stream);
-		virtual ~StreamReader();
-		
-		void SwitchStream(Stream* stream);
-		Stream* GetStream();
-	};
+    public:
+        StreamReader(Stream* stream);
+        virtual ~StreamReader();
+        
+        void SwitchStream(Stream* stream);
+        Stream* GetStream();
+    };
 }
 
 #endif

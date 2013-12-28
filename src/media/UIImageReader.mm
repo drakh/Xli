@@ -37,43 +37,43 @@ namespace Xli
             [image release];
         }
         
-		virtual int GetWidth()
-		{
-			return CGImageGetWidth(image.CGImage);
-		}
+        virtual int GetWidth()
+        {
+            return CGImageGetWidth(image.CGImage);
+        }
 
-		virtual int GetHeight()
-		{
-			return CGImageGetHeight(image.CGImage);
-		}
+        virtual int GetHeight()
+        {
+            return CGImageGetHeight(image.CGImage);
+        }
 
-		virtual int GetDepth()
-		{
-			return 0;
-		}
+        virtual int GetDepth()
+        {
+            return 0;
+        }
 
         int GetComponentCount()
         {
             return CGImageGetBitsPerPixel(image.CGImage) / CGImageGetBitsPerComponent(image.CGImage);
         }
 
-		virtual int GetBufferSize()
-		{
+        virtual int GetBufferSize()
+        {
             return GetWidth() * GetHeight() * FormatInfo::SizeOf(GetFormat());
-		}
+        }
 
-		virtual Format GetFormat()
-		{
+        virtual Format GetFormat()
+        {
             switch (GetComponentCount())
             {
                 case 1: return FormatL_8_UInt_Normalize;
                 case 3: return FormatRGB_8_8_8_UInt_Normalize;
                 default: return FormatRGBA_8_8_8_8_UInt_Normalize;
             }
-		}
+        }
         
-		virtual void Read(void* targetBuffer, ProgressCallback* callback)
-		{
+        virtual void Read(void* targetBuffer, ProgressCallback* callback)
+        {
             int width = CGImageGetWidth(image.CGImage);
             int height = CGImageGetHeight(image.CGImage);
                   
@@ -114,40 +114,40 @@ namespace Xli
                     }
                 }
             }
-		}        
+        }        
     };
     
-	ImageReader* Jpeg::CreateReader(Stream* input)
-	{
-		return new UIImageReader(input);
-	}
+    ImageReader* Jpeg::CreateReader(Stream* input)
+    {
+        return new UIImageReader(input);
+    }
     
-	Bitmap* Jpeg::Load(Stream* input)
-	{
-		Managed<ImageReader> r = CreateReader(input);
-		return r->ReadBitmap();
-	}
+    Bitmap* Jpeg::Load(Stream* input)
+    {
+        Managed<ImageReader> r = CreateReader(input);
+        return r->ReadBitmap();
+    }
 
-	Bitmap* Jpeg::Load(const String& filename)
-	{
-		Managed<File> f = new File(filename, FileModeRead);
-		return Load(f);
-	}
+    Bitmap* Jpeg::Load(const String& filename)
+    {
+        Managed<File> f = new File(filename, FileModeRead);
+        return Load(f);
+    }
     
-	ImageReader* Png::CreateReader(Stream* input)
-	{
-		return new UIImageReader(input);
-	}
+    ImageReader* Png::CreateReader(Stream* input)
+    {
+        return new UIImageReader(input);
+    }
     
-	Bitmap* Png::Load(Stream* input)
-	{
-		Managed<ImageReader> r = CreateReader(input);
-		return r->ReadBitmap();
-	}
+    Bitmap* Png::Load(Stream* input)
+    {
+        Managed<ImageReader> r = CreateReader(input);
+        return r->ReadBitmap();
+    }
 
-	Bitmap* Png::Load(const String& filename)
-	{
-		Managed<File> f = new File(filename, FileModeRead);
-		return Load(f);
-	}
+    Bitmap* Png::Load(const String& filename)
+    {
+        Managed<File> f = new File(filename, FileModeRead);
+        return Load(f);
+    }
 }

@@ -7,27 +7,27 @@
 
 namespace Xli
 {
-	/**
-		\ingroup XliMediaTextures
-	*/
-	class CompressedImage : public Image
-	{
-		int w, h, d;
-		Format format;
-		Shared<DataAccessor> data;
+    /**
+        \ingroup XliMediaTextures
+    */
+    class CompressedImage : public Image
+    {
+        int w, h, d;
+        Format format;
+        Shared<DataAccessor> data;
 
-	public:
-		CompressedImage(int width, int height, int depth, Format format, DataAccessor* data);
+    public:
+        CompressedImage(int width, int height, int depth, Format format, DataAccessor* data);
 
-		virtual int GetWidth() const;
-		virtual int GetHeight() const;
-		virtual int GetDepth() const;
-		virtual Format GetFormat() const;
-		virtual Bitmap* ToBitmap();
+        virtual int GetWidth() const;
+        virtual int GetHeight() const;
+        virtual int GetDepth() const;
+        virtual Format GetFormat() const;
+        virtual Bitmap* ToBitmap();
 
-		virtual int GetSizeInBytes() const;
-		virtual const UInt8* GetData() const;
-	};
+        virtual int GetSizeInBytes() const;
+        virtual const UInt8* GetData() const;
+    };
 }
 
 #endif

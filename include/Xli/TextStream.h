@@ -5,15 +5,15 @@
 
 namespace Xli
 {
-	/**
-		\ingroup XliCoreIO
-	*/
-	class TextStream: public ArrayStream
-	{
-	public:
-		TextStream(int initCapacity = 1024);
-		String GetText() const;
-	};
+    /**
+        \ingroup XliCoreIO
+    */
+    class TextStream: public ArrayStream
+    {
+    public:
+        TextStream(int initCapacity = 1024);
+        String GetText() const;
+    };
 }
 
 #endif

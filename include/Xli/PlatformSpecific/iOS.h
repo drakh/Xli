@@ -3,17 +3,17 @@
 
 namespace Xli
 {
-	namespace PlatformSpecific
-	{
+    namespace PlatformSpecific
+    {
         /**
             \addtogroup XliCorePlatform
             @{
         */
 
-		void iInit();
+        void iInit();
 
         /** @} */
-	}
+    }
 }
 
 #endif

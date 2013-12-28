@@ -7,36 +7,36 @@
 
 namespace Xli
 {
-	/**
-		\ingroup XliMediaCompression
-	*/
-	class Zip
-	{
-		static FileSystem* Open(Stream* file, const char* password);
+    /**
+        \ingroup XliMediaCompression
+    */
+    class Zip
+    {
+        static FileSystem* Open(Stream* file, const char* password);
 
-	public:
-		static XLI_INLINE FileSystem* Open(Stream* file) 
-		{ 
-			return Open(file, 0); 
-		}
-		
-		static XLI_INLINE FileSystem* Open(Stream* file, const String& password) 
-		{ 
-			return Open(file, password.Data()); 
-		}
-		
-		static XLI_INLINE FileSystem* Open(const String& filename) 
-		{ 
-			Managed<File> f = new File(filename, FileModeRead); 
-			return Open(f); 
-		}
-		
-		static XLI_INLINE FileSystem* Open(const String& filename, const String& password) 
-		{ 
-			Managed<File> f = new File(filename, FileModeRead); 
-			return Open(f, password.Data()); 
-		}
-	};
+    public:
+        static XLI_INLINE FileSystem* Open(Stream* file) 
+        { 
+            return Open(file, 0); 
+        }
+        
+        static XLI_INLINE FileSystem* Open(Stream* file, const String& password) 
+        { 
+            return Open(file, password.Data()); 
+        }
+        
+        static XLI_INLINE FileSystem* Open(const String& filename) 
+        { 
+            Managed<File> f = new File(filename, FileModeRead); 
+            return Open(f); 
+        }
+        
+        static XLI_INLINE FileSystem* Open(const String& filename, const String& password) 
+        { 
+            Managed<File> f = new File(filename, FileModeRead); 
+            return Open(f, password.Data()); 
+        }
+    };
 }
 
 #endif

@@ -1,7 +1,7 @@
 namespace Xli
 {
-	static void Dummy()
-	{
-	}
+    static void Dummy()
+    {
+    }
 }
 

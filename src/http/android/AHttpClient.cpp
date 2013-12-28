@@ -226,19 +226,19 @@ namespace Xli
         return new PlatformSpecific::AHttpRequest();
     }
 
-	void HttpClient::Init()
-	{
+    void HttpClient::Init()
+    {
         PlatformSpecific::AShim::InitDefaultCookieManager();
-	}
+    }
 
-	void HttpClient::Done()
-	{
-	}
+    void HttpClient::Done()
+    {
+    }
 
-	HttpClient* HttpClient::Create()
-	{
-		return new PlatformSpecific::AHttpClient();
-	}
+    HttpClient* HttpClient::Create()
+    {
+        return new PlatformSpecific::AHttpClient();
+    }
 
 
 

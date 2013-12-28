@@ -5,17 +5,17 @@
 
 namespace Xli
 {
-	/**
-		\ingroup XliMediaCompression
-	*/
-	class GZip
-	{
-		GZip();
+    /**
+        \ingroup XliMediaCompression
+    */
+    class GZip
+    {
+        GZip();
 
-	public:
-		static Stream* CreateReader(Stream* sourceStream);
-		static Stream* CreateWriter(Stream* targetStream, int level = 5, bool header = true);
-	};
+    public:
+        static Stream* CreateReader(Stream* sourceStream);
+        static Stream* CreateWriter(Stream* targetStream, int level = 5, bool header = true);
+    };
 }
 
 #endif

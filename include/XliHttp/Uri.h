@@ -5,15 +5,15 @@
 
 namespace Xli
 {
-	/**
-		\ingroup Http
-	*/
-	class Uri
-	{
-	public:
-		static String Encode(const String& uri);
-		static String Decode(const String& uri);
-	};
+    /**
+        \ingroup Http
+    */
+    class Uri
+    {
+    public:
+        static String Encode(const String& uri);
+        static String Decode(const String& uri);
+    };
 }
 
 #endif

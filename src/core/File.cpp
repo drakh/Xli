@@ -4,12 +4,12 @@
 
 namespace Xli
 {
-	File::File(const String& filename, FileMode mode)
-	{
-		const char* m = "rb";
+    File::File(const String& filename, FileMode mode)
+    {
+        const char* m = "rb";
         
-		switch (mode)
-		{
+        switch (mode)
+        {
             case FileModeRead: m = "rb"; break;
             case FileModeWrite: m = "wb"; break;
             case FileModeAppend: m = "ab"; break;
@@ -17,166 +17,166 @@ namespace Xli
             case FileModeReadWriteNew: m = "w+b"; break;
             case FileModeReadAppend: m = "a+b"; break;
             default: XLI_THROW(String("Invalid file mode: ") + FileModeToString(mode));
-		}
+        }
         
 #ifdef XLI_COMPILER_MSVC
-		
-		fp = 0;
-		
-		Utf16String filenameW = Unicode::Utf8To16(filename);
-		Utf16String mW = Unicode::Utf8To16(m);
-		
-		if (_wfopen_s(&fp, filenameW.Data(), mW.Data()) != 0)
-			XLI_THROW_CANT_OPEN_FILE(filename);
+        
+        fp = 0;
+        
+        Utf16String filenameW = Unicode::Utf8To16(filename);
+        Utf16String mW = Unicode::Utf8To16(m);
+        
+        if (_wfopen_s(&fp, filenameW.Data(), mW.Data()) != 0)
+            XLI_THROW_CANT_OPEN_FILE(filename);
 
 #else
-		
-		fp = fopen(filename.Data(), m);
-		if (!fp) XLI_THROW_CANT_OPEN_FILE(filename);
+        
+        fp = fopen(filename.Data(), m);
+        if (!fp) XLI_THROW_CANT_OPEN_FILE(filename);
 
 #endif
 
-		this->flags = FileFlagsCanClose | FileFlagsCanSeek;
+        this->flags = FileFlagsCanClose | FileFlagsCanSeek;
         
-		if (mode & FileModeRead)
-			this->flags |= FileFlagsCanRead;
+        if (mode & FileModeRead)
+            this->flags |= FileFlagsCanRead;
 
-		if ((mode & FileModeWrite) || (mode & FileModeAppend))
-			this->flags |= FileFlagsCanWrite;
-	}
-	
+        if ((mode & FileModeWrite) || (mode & FileModeAppend))
+            this->flags |= FileFlagsCanWrite;
+    }
+    
     File::File(FILE* fp, int flags)
-	{
-		this->fp = fp;
-		this->flags = flags;
-	}
+    {
+        this->fp = fp;
+        this->flags = flags;
+    }
 
-	File::~File()
-	{
-		if (fp && (flags & FileFlagsCanClose)) 
-			fclose(fp);
-	}
+    File::~File()
+    {
+        if (fp && (flags & FileFlagsCanClose)) 
+            fclose(fp);
+    }
 
-	void File::Flush()
-	{
-		if (!fp) XLI_THROW_STREAM_CLOSED;
-		fflush(fp);
-	}
+    void File::Flush()
+    {
+        if (!fp) XLI_THROW_STREAM_CLOSED;
+        fflush(fp);
+    }
 
-	void File::Close()
-	{
-		if (!fp) 
-			XLI_THROW_STREAM_CLOSED;
+    void File::Close()
+    {
+        if (!fp) 
+            XLI_THROW_STREAM_CLOSED;
 
-		if (flags & FileFlagsCanClose)
-			fclose(fp);
+        if (flags & FileFlagsCanClose)
+            fclose(fp);
 
-		fp = 0;
-	}
+        fp = 0;
+    }
 
-	bool File::AtEnd() const
-	{
-		if (!fp) 
-			XLI_THROW_STREAM_CLOSED;
-		
-		return feof(fp) != 0;
-	}
+    bool File::AtEnd() const
+    {
+        if (!fp) 
+            XLI_THROW_STREAM_CLOSED;
+        
+        return feof(fp) != 0;
+    }
 
-	bool File::IsClosed() const
-	{
-		return fp == 0;
-	}
+    bool File::IsClosed() const
+    {
+        return fp == 0;
+    }
 
-	bool File::CanRead() const
-	{
-		return fp != 0 && (flags & FileFlagsCanRead);
-	}
+    bool File::CanRead() const
+    {
+        return fp != 0 && (flags & FileFlagsCanRead);
+    }
 
-	bool File::CanWrite() const
-	{
-		return fp != 0 && (flags & FileFlagsCanWrite);
-	}
+    bool File::CanWrite() const
+    {
+        return fp != 0 && (flags & FileFlagsCanWrite);
+    }
 
-	bool File::CanSeek() const
-	{
-		return fp != 0 && (flags & FileFlagsCanSeek);
-	}
+    bool File::CanSeek() const
+    {
+        return fp != 0 && (flags & FileFlagsCanSeek);
+    }
 
-	int File::GetPosition() const
-	{
-		if (!fp) 
-			XLI_THROW_STREAM_CLOSED;
-		
-		return (int)ftell(fp);
-	}
+    int File::GetPosition() const
+    {
+        if (!fp) 
+            XLI_THROW_STREAM_CLOSED;
+        
+        return (int)ftell(fp);
+    }
 
-	int File::GetLength() const
-	{
-		if (!fp) 
-			XLI_THROW_STREAM_CLOSED;
-		
-		long p = ftell(fp);
-		fseek(fp, 0, SEEK_END);
-		long l = ftell(fp);
-		fseek(fp, p, SEEK_SET);
-		return (int)l;
-	}
+    int File::GetLength() const
+    {
+        if (!fp) 
+            XLI_THROW_STREAM_CLOSED;
+        
+        long p = ftell(fp);
+        fseek(fp, 0, SEEK_END);
+        long l = ftell(fp);
+        fseek(fp, p, SEEK_SET);
+        return (int)l;
+    }
 
-	int File::Read(void* data, int elmSize, int elmCount)
-	{
-		if (!fp) 
-			XLI_THROW_STREAM_CLOSED;
+    int File::Read(void* data, int elmSize, int elmCount)
+    {
+        if (!fp) 
+            XLI_THROW_STREAM_CLOSED;
 
-		if (!(flags & FileFlagsCanRead)) 
-			XLI_THROW_STREAM_CANT_READ;
-		
-		int result = (int)fread(data, elmSize, elmCount, fp);
-		
-		if ((result != elmSize * elmCount) && (flags & FileFlagsIgnoreReadWriteErrors))
-			return elmSize * elmCount;
-		
-		return result;
-	}
+        if (!(flags & FileFlagsCanRead)) 
+            XLI_THROW_STREAM_CANT_READ;
+        
+        int result = (int)fread(data, elmSize, elmCount, fp);
+        
+        if ((result != elmSize * elmCount) && (flags & FileFlagsIgnoreReadWriteErrors))
+            return elmSize * elmCount;
+        
+        return result;
+    }
 
-	int File::Write(const void* data, int elmSize, int elmCount)
-	{
-		if (!fp) 
-			XLI_THROW_STREAM_CLOSED;
+    int File::Write(const void* data, int elmSize, int elmCount)
+    {
+        if (!fp) 
+            XLI_THROW_STREAM_CLOSED;
 
-		if (!(flags & FileFlagsCanWrite)) 
-			XLI_THROW_STREAM_CANT_WRITE;
+        if (!(flags & FileFlagsCanWrite)) 
+            XLI_THROW_STREAM_CANT_WRITE;
 
-		int result = (int)fwrite(data, elmSize, elmCount, fp);
+        int result = (int)fwrite(data, elmSize, elmCount, fp);
 
-		if ((result != elmSize * elmCount) && (flags & FileFlagsIgnoreReadWriteErrors))
-			return elmSize * elmCount;
+        if ((result != elmSize * elmCount) && (flags & FileFlagsIgnoreReadWriteErrors))
+            return elmSize * elmCount;
 
-		return result;
-	}
+        return result;
+    }
 
-	void File::Seek(SeekOrigin origin, int offset)
-	{
-		if (!fp) 
-			XLI_THROW_STREAM_CLOSED;
-		
-		if (!(flags & FileFlagsCanSeek)) 
-			XLI_THROW_STREAM_CANT_SEEK;
+    void File::Seek(SeekOrigin origin, int offset)
+    {
+        if (!fp) 
+            XLI_THROW_STREAM_CLOSED;
+        
+        if (!(flags & FileFlagsCanSeek)) 
+            XLI_THROW_STREAM_CANT_SEEK;
 
-		switch (origin)
-		{
-		case SeekOriginBegin:
-			if (fseek(fp, offset, SEEK_SET) == 0) return;
-			break;
+        switch (origin)
+        {
+        case SeekOriginBegin:
+            if (fseek(fp, offset, SEEK_SET) == 0) return;
+            break;
 
-		case SeekOriginCurrent:
-			if (fseek(fp, offset, SEEK_CUR) == 0) return;
-			break;
+        case SeekOriginCurrent:
+            if (fseek(fp, offset, SEEK_CUR) == 0) return;
+            break;
 
-		case SeekOriginEnd:
-			if (fseek(fp, offset, SEEK_END) == 0) return;
-			break;
-		}
+        case SeekOriginEnd:
+            if (fseek(fp, offset, SEEK_END) == 0) return;
+            break;
+        }
 
-		XLI_THROW_STREAM_CANT_SEEK;
-	}
+        XLI_THROW_STREAM_CANT_SEEK;
+    }
 }

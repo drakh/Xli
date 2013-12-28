@@ -34,9 +34,9 @@ namespace Xli
 {
     namespace PlatformSpecific
     {
-    	struct ANativeActivity* AndroidActivity = 0;
-    	
-    	static pthread_key_t JniThreadKey;
+        struct ANativeActivity* AndroidActivity = 0;
+        
+        static pthread_key_t JniThreadKey;
         static pthread_key_t JniShimKey;
 
         static unsigned char shimApkData[] = 
@@ -44,25 +44,25 @@ namespace Xli
             #include "shim/apk.inc"
         };
 
-    	static void JniDestroyThread(void* value)
-    	{
-    		LOGD("JNI: Detaching current thread");
+        static void JniDestroyThread(void* value)
+        {
+            LOGD("JNI: Detaching current thread");
 
-    		JNIEnv* env = (JNIEnv*)value;
-    		AndroidActivity->vm->DetachCurrentThread();
-    		pthread_setspecific(JniThreadKey, NULL);
-    	}
+            JNIEnv* env = (JNIEnv*)value;
+            AndroidActivity->vm->DetachCurrentThread();
+            pthread_setspecific(JniThreadKey, NULL);
+        }
 
         int AJniHelper::shim_loaded = 0;
 
-    	static void JniDestroyShim(void* value)
-    	{
+        static void JniDestroyShim(void* value)
+        {
             // where can we DeleteGlobalRef(*shim) ?
-    		LOGD("JNI: Freeing Shim class");
-    		jclass* shim = (jclass*)value;
-    		delete shim;
-    		pthread_setspecific(JniShimKey, NULL);
-    	}
+            LOGD("JNI: Freeing Shim class");
+            jclass* shim = (jclass*)value;
+            delete shim;
+            pthread_setspecific(JniShimKey, NULL);
+        }
 
         static void AttachNativeCallbacks(jclass* shim_class, JNIEnv *l_env)
         {
@@ -88,21 +88,21 @@ namespace Xli
             if (!result) LOGE("Could not AttachHidden View (c++ side)");
         }
 
-    	void AJniHelper::Init()
-    	{
-    		if (pthread_key_create(&JniThreadKey, JniDestroyThread))
-    			LOGE("JNI ERROR: Unable to create pthread key"); // Not fatal
+        void AJniHelper::Init()
+        {
+            if (pthread_key_create(&JniThreadKey, JniDestroyThread))
+                LOGE("JNI ERROR: Unable to create pthread key"); // Not fatal
 
-    		if (pthread_key_create(&JniShimKey, JniDestroyShim))
-    			LOGE("JNI ERROR: Unable to Shim pthread key"); // Not fatal
-    	}
+            if (pthread_key_create(&JniShimKey, JniDestroyShim))
+                LOGE("JNI ERROR: Unable to Shim pthread key"); // Not fatal
+        }
 
-    	AJniHelper::AJniHelper()
-    	{
-    		if (AndroidActivity->vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK)
-    		{
-    			if (AndroidActivity->vm->AttachCurrentThread(&env, NULL) != JNI_OK)
-    				XLI_THROW("JNI ERROR: Failed to attach current thread");
+        AJniHelper::AJniHelper()
+        {
+            if (AndroidActivity->vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK)
+            {
+                if (AndroidActivity->vm->AttachCurrentThread(&env, NULL) != JNI_OK)
+                    XLI_THROW("JNI ERROR: Failed to attach current thread");
 
                 if (!shim_loaded) 
                 {
@@ -119,7 +119,7 @@ namespace Xli
                 
                 AttachNativeCallbacks(shim_class, env);
                 AttachHiddenView(shim_class, env, AndroidActivity->clazz);
-    		}
+            }
 
             jclass* shim_p = reinterpret_cast<jclass*>(pthread_getspecific(JniShimKey));
 
@@ -131,7 +131,7 @@ namespace Xli
             {
                 LOGE("could not get shim");
             }
-    	}
+        }
 
         jclass AJniHelper::GetShim()
         {
@@ -146,57 +146,57 @@ namespace Xli
             }
         }
 
-    	jmethodID AJniHelper::FindMethod(const char* className, const char* methodName, const char* methodSig)
-    	{
-    		jclass cls = env->FindClass(className);
-    		if (!cls) 
+        jmethodID AJniHelper::FindMethod(const char* className, const char* methodName, const char* methodSig)
+        {
+            jclass cls = env->FindClass(className);
+            if (!cls) 
                 XLI_THROW((String)"Failed to get JNI class '" + className + "'");
 
-    		jmethodID method = env->GetMethodID(cls, methodName, methodSig);
-    		if (!method) 
+            jmethodID method = env->GetMethodID(cls, methodName, methodSig);
+            if (!method) 
                 XLI_THROW((String)"Failed to get JNI method '" + className + "." + methodName + methodSig + "'");
 
-    		return method;
-    	}
+            return method;
+        }
 
-    	jobject AJniHelper::CallObjectMethod(jobject inst, const char* name, const char* sig)
-    	{
-    		jclass cls = env->GetObjectClass(inst);
+        jobject AJniHelper::CallObjectMethod(jobject inst, const char* name, const char* sig)
+        {
+            jclass cls = env->GetObjectClass(inst);
 
 #ifdef DEBUG_JNI
-    		if (!cls) 
+            if (!cls) 
                 XLI_THROW((String)"Failed to get JNI class for method '" + name + "'");
 #endif
 
-    		jmethodID method = env->GetMethodID(cls, name, sig);
+            jmethodID method = env->GetMethodID(cls, name, sig);
 
 #ifdef DEBUG_JNI
-    		if (!method) 
+            if (!method) 
                 XLI_THROW((String)"Failed to get JNI method '" + name + "'");
 #endif
 
-    		return env->CallObjectMethod(inst, method);
-    	}
+            return env->CallObjectMethod(inst, method);
+        }
 
-    	String AJniHelper::GetString(jobject str)
-    	{
-    		const char* utf8 = env->GetStringUTFChars((jstring)str, NULL);
-    		String result = utf8;
-    		env->ReleaseStringUTFChars((jstring)str, utf8);
-    		return result;
-    	}
+        String AJniHelper::GetString(jobject str)
+        {
+            const char* utf8 = env->GetStringUTFChars((jstring)str, NULL);
+            String result = utf8;
+            env->ReleaseStringUTFChars((jstring)str, utf8);
+            return result;
+        }
 
-    	JNIEnv* AJniHelper::GetEnv()
-    	{
-    		// TODO: Check jni exceptions
-    		return env;
-    	}
+        JNIEnv* AJniHelper::GetEnv()
+        {
+            // TODO: Check jni exceptions
+            return env;
+        }
 
-    	JNIEnv* AJniHelper::operator->()
-    	{
-    		// TODO: Check jni exceptions
-    		return env;
-    	}
+        JNIEnv* AJniHelper::operator->()
+        {
+            // TODO: Check jni exceptions
+            return env;
+        }
         
         jmethodID AJniHelper::GetInstanceMethod(const char* m_name, const char* m_sig)
         {

@@ -2,8 +2,8 @@
 #define __XLI_GL_H__
 
 /**
-	\defgroup XliGL
-	\brief OpenGL integration
+    \defgroup XliGL
+    \brief OpenGL integration
 */
 
 #include <XliGL/GL.h>

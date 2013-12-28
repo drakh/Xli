@@ -5,17 +5,17 @@
 
 namespace Xli
 {
-	/**
-		\addtogroup XliCoreTime
-		@{
-	*/
+    /**
+        \addtogroup XliCoreTime
+        @{
+    */
 
-	double GetTime();
+    double GetTime();
 
-	Timestamp GetTimestamp();
-	Timestamp GetTimestampUtc();
+    Timestamp GetTimestamp();
+    Timestamp GetTimestampUtc();
 
-	/** @} */
+    /** @} */
 }
 
 #endif

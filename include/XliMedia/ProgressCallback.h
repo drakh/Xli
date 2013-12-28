@@ -5,14 +5,14 @@
 
 namespace Xli
 {
-	/**
-		\ingroup XliMediaMedia
-	*/
-	class ProgressCallback: public Object
-	{
-	public:
-		virtual void Update(double current, double total) = 0;
-	};
+    /**
+        \ingroup XliMediaMedia
+    */
+    class ProgressCallback: public Object
+    {
+    public:
+        virtual void Update(double current, double total) = 0;
+    };
 }
 
 #endif

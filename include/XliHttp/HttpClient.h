@@ -59,11 +59,11 @@ namespace Xli
         }        
     }
 
-	class HttpRequest: public Object
-	{
+    class HttpRequest: public Object
+    {
     private:
         HttpMethods::HttpMethodType method;
-	public:
+    public:
         static HttpRequest* Create();
         virtual void SetHeader(const String& key, const String& val) = 0;
         virtual const HashMap<String,String>& GetHeaders() const = 0;
@@ -76,27 +76,27 @@ namespace Xli
         HttpMethods::HttpMethodType GetMethod() const { return this->method; }
         inline
         String GetMethodAsString() const { return HttpMethods::MethodToString(this->method); }
-	};
+    };
 
-	class HttpResponse: public Object
-	{
+    class HttpResponse: public Object
+    {
     protected:
         bool valid;
-	public:
+    public:
         virtual bool IsValid() const = 0;
         virtual String GetHeader(const String& key) = 0;
         virtual int GetResponseCode() const = 0;
-		Stream* Payload;
-	};
+        Stream* Payload;
+    };
 
-	class HttpClient: public Object
-	{
-	public:
-		static void Init();
-		static void Done();
-		static HttpClient* Create();
-		virtual HttpResponse* Send(const String& uri, const HttpRequest& req) = 0;
-	};
+    class HttpClient: public Object
+    {
+    public:
+        static void Init();
+        static void Done();
+        static HttpClient* Create();
+        virtual HttpResponse* Send(const String& uri, const HttpRequest& req) = 0;
+    };
 
 
 

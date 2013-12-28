@@ -2,53 +2,53 @@
 
 while getopts ":hcdrit:p:j:-:" opt; do
 
-	if [ "$opt" == "-" ]; then 
-		# FIXME: Hardcoded indices
-		if [ "${OPTARG:6:1}" == "=" ]; then  
-			opt=${OPTARG:0:6}
-			OPTARG=${OPTARG:7}
-		elif [ "${OPTARG:4:1}" == "=" ]; then  
-			opt=${OPTARG:0:4}
-			OPTARG=${OPTARG:5}
-		else
-			opt=$OPTARG
-			OPTARG=""
-		fi
-	fi
+    if [ "$opt" == "-" ]; then 
+        # FIXME: Hardcoded indices
+        if [ "${OPTARG:6:1}" == "=" ]; then  
+            opt=${OPTARG:0:6}
+            OPTARG=${OPTARG:7}
+        elif [ "${OPTARG:4:1}" == "=" ]; then  
+            opt=${OPTARG:0:4}
+            OPTARG=${OPTARG:5}
+        else
+            opt=$OPTARG
+            OPTARG=""
+        fi
+    fi
 
-	case $opt in 
-	h|help) 
-		HELP=1
-		;;
-	c|clean)
-		CLEAN=1
-		;;
-	d|debug)
-		DEBUG=1
-		;;
-	r|release)
-		DEBUG=0
-		;;
-	i|install)
-		INSTALL=1
-		;;
-	t|target)
-		TARGET=$OPTARG
-		;;
-	p|prefix)
-		INSTALL_PREFIX=$OPTARG
-		;;
-	j|jobs)
-		JOB_COUNT=$OPTARG
-		;;
-	no-build)
-		NO_BUILD=1
-		;;
-	*) 
-		echo "ERROR: Invalid option --$opt.\n\nType 'cmakemake --help' for usage." >&2
-		exit 1 
-		;;
-	esac
+    case $opt in 
+    h|help) 
+        HELP=1
+        ;;
+    c|clean)
+        CLEAN=1
+        ;;
+    d|debug)
+        DEBUG=1
+        ;;
+    r|release)
+        DEBUG=0
+        ;;
+    i|install)
+        INSTALL=1
+        ;;
+    t|target)
+        TARGET=$OPTARG
+        ;;
+    p|prefix)
+        INSTALL_PREFIX=$OPTARG
+        ;;
+    j|jobs)
+        JOB_COUNT=$OPTARG
+        ;;
+    no-build)
+        NO_BUILD=1
+        ;;
+    *) 
+        echo "ERROR: Invalid option --$opt.\n\nType 'cmakemake --help' for usage." >&2
+        exit 1 
+        ;;
+    esac
 done
 
 shift $((OPTIND-1))
@@ -58,7 +58,7 @@ PROJECT="$@"
 #echo "'$DEBUG' '$INSTALL' '$TARGET' '$INSTALL_PREFIX' '$PROJECT'" && exit 0
 
 if [[ "$HELP" == "1" || -z "$PROJECT" ]]; then
-	cat <<E0
+    cat <<E0
 Usage: cmakemake [--debug|--release] [--install] [--prefix=<path>] [--jobs=<cpu-cores>] <project-dir>
    or: cmakemake --target=xcode [--no-build|--debug] <project-dir>
    or: cmakemake --clean <project-dir>
@@ -73,55 +73,55 @@ This command wraps 'cmake && make', but with some additional features:
 
 Additional arguments to cmake can be passed using environment variable CMAKE_ARGS.
 E0
-	exit 0
+    exit 0
 fi
 
 set -e
 cd "$PROJECT"
 
 if [ "$CLEAN" == "1" ]; then
-	for dir in "build/cmake-release" "build/cmake-debug"; do
-		if [ -f "$dir/Makefile" ]; then
-			cd "$dir"
-			make clean
-			cd -
-		fi
-	done
+    for dir in "build/cmake-release" "build/cmake-debug"; do
+        if [ -f "$dir/Makefile" ]; then
+            cd "$dir"
+            make clean
+            cd -
+        fi
+    done
 
-	rm -rf build/cmake-*
-	exit 0
+    rm -rf build/cmake-*
+    exit 0
 fi
 
 if [ -z "`which cmake`" ]; then
-	# This is sometimes needed when run from GUI applications on OS X
-	PATH=$PATH:/opt/local/bin
+    # This is sometimes needed when run from GUI applications on OS X
+    PATH=$PATH:/opt/local/bin
 fi
 
 if [ -n "$TARGET" ]; then
-	case $TARGET in
-	xcode)
-		mkdir -p build/cmake-xcode
-		cd build/cmake-xcode
+    case $TARGET in
+    xcode)
+        mkdir -p build/cmake-xcode
+        cd build/cmake-xcode
 
-		cmake ../.. -GXcode $CMAKE_ARGS
+        cmake ../.. -GXcode $CMAKE_ARGS
 
-		if [ "$NO_BUILD" != "1" ]; then
-			if [[ -z "$DEBUG" || "$DEBUG" == "1" ]]; then
-				xcodebuild -alltargets -configuration Debug
-			fi
+        if [ "$NO_BUILD" != "1" ]; then
+            if [[ -z "$DEBUG" || "$DEBUG" == "1" ]]; then
+                xcodebuild -alltargets -configuration Debug
+            fi
 
-			if [[ -z "$DEBUG" || "$DEBUG" == "0" ]]; then
-				xcodebuild -alltargets -configuration Release
-			fi
-		fi
+            if [[ -z "$DEBUG" || "$DEBUG" == "0" ]]; then
+                xcodebuild -alltargets -configuration Release
+            fi
+        fi
 
-		exit 0
-		;;
-	*)
-		echo "ERROR: Invalid target '$TARGET'.\n\nType 'cmakemake --help' for usage." >&2
-		exit 1
-		;;
-	esac
+        exit 0
+        ;;
+    *)
+        echo "ERROR: Invalid target '$TARGET'.\n\nType 'cmakemake --help' for usage." >&2
+        exit 1
+        ;;
+    esac
 fi
 
 if [ -z "$JOB_COUNT" ]; then
@@ -137,15 +137,15 @@ if [ -z "$JOB_COUNT" ]; then
 fi
 
 if [ "$DEBUG" == "1" ]; then
-	BUILD_DIR="build/cmake-debug"
-	CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_BUILD_TYPE:STRING=Debug"
+    BUILD_DIR="build/cmake-debug"
+    CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_BUILD_TYPE:STRING=Debug"
 else
-	BUILD_DIR="build/cmake-release"
-	CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_BUILD_TYPE:STRING=Release"
+    BUILD_DIR="build/cmake-release"
+    CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_BUILD_TYPE:STRING=Release"
 fi
 
 if [ -n "$INSTALL_PREFIX" ]; then
-	CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=$INSTALL_PREFIX"
+    CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=$INSTALL_PREFIX"
 fi
 
 mkdir -p $BUILD_DIR
@@ -157,5 +157,5 @@ cmake ../.. $CMAKE_ARGS
 make -j $JOB_COUNT
 
 if [ "$INSTALL" == "1" ]; then
-	make install
+    make install
 fi
