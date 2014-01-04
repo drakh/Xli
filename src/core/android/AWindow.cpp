@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 #include <Xli/PlatformSpecific/Android.h>
+#include <Xli/MutexQueue.h>
 #include <Xli/Console.h>
 #include <Xli/Display.h>
 #include <Xli/Window.h>
@@ -26,11 +27,13 @@ namespace Xli
 	{
 		class AWindow: public Window
 		{
+            Managed<MutexQueue<CTEvent*> > ctEventQueue;
 		public:
 			AWindow()
 			{
 				if (GlobalEventHandler != 0)
 					GlobalEventHandler->AddRef();
+                ctEventQueue = new MutexQueue<CTEvent*>();
 			}
 
 			virtual ~AWindow()
@@ -209,6 +212,34 @@ namespace Xli
 			virtual void SetSystemCursor(SystemCursor cursor)
 			{
 			}
+            
+            virtual void EnqueueCrossThreadEvent(CTEvent* event)
+            {
+                ctEventQueue->Enqueue(event);
+            }
+
+            virtual void ProcessCrossThreadEvents()
+            {
+                while ((ctEventQueue->Count() > 0))
+                {
+                    CTEvent* event = ctEventQueue->Dequeue();
+                    switch (event->CTType)
+                    {
+                    case Xli::CTTextEvent:
+                        GlobalEventHandler->OnTextInput(GlobalWindow, *((Xli::String*)event->Payload));
+                        delete ((Xli::String*)event->Payload);
+                        break;
+                    case Xli::CTKeyUpEvent:
+                        GlobalEventHandler->OnKeyUp(GlobalWindow, Xli::PlatformSpecific::AShim::AndroidToXliKeyEvent((Xli::PlatformSpecific::AKeyEvent)event->Code));
+                    case Xli::CTKeyDownEvent:
+                        GlobalEventHandler->OnKeyDown(GlobalWindow, Xli::PlatformSpecific::AShim::AndroidToXliKeyEvent((Xli::PlatformSpecific::AKeyEvent)event->Code));
+                    default:
+                        break;
+                    }
+                    
+                    delete event;
+                }                
+            }
 		};
 
 		class ALogStream: public Stream
@@ -547,7 +578,7 @@ namespace Xli
 
 		while ((ident = ALooper_pollAll(0, NULL, &events, (void**)&source)) >= 0) 
 			if (source != NULL)
-				source->process(GlobalAndroidApp, source);
+				source->process(GlobalAndroidApp, source);        
 
 		if (inited && !GlobalAndroidApp->destroyRequested)
 		{
@@ -563,6 +594,8 @@ namespace Xli
 				if (GlobalEventHandler)
 					GlobalEventHandler->OnSizeChanged(GlobalWindow, Vector2i(w, h));
 			}
+            if (GlobalWindow)
+                GlobalWindow->ProcessCrossThreadEvents();
 		}
 	}
 

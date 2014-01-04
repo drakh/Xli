@@ -11,22 +11,32 @@ extern "C"
 {
     void JNICALL XliJ_OnKeyUp (JNIEnv *env , jobject obj, jint keyCode) 
     {
-        Xli::Key key = Xli::PlatformSpecific::AShim::AndroidToXliKeyEvent((Xli::PlatformSpecific::AKeyEvent)keyCode);
-        GlobalEventHandler->OnKeyUp(GlobalWindow, key);
+        Xli::CTEvent* event = new Xli::CTEvent();
+        event->CTType = Xli::CTKeyUpEvent;
+        event->Code = (int)keyCode;
+        event->Payload = NULL;
+        GlobalWindow->EnqueueCrossThreadEvent(event);
     }
 
     void JNICALL XliJ_OnTextInput (JNIEnv *env , jobject obj, jstring keyChars) 
     {
         const char* jChars = env->GetStringUTFChars((jstring)keyChars, NULL);
-        Xli::String xliChars = jChars;
-        GlobalEventHandler->OnTextInput(GlobalWindow, xliChars);
+        Xli::String* xliChars = new Xli::String(jChars);
+        Xli::CTEvent* event = new Xli::CTEvent();
+        event->CTType = Xli::CTTextEvent;
+        event->Code = -1;
+        event->Payload = xliChars;
+        GlobalWindow->EnqueueCrossThreadEvent(event);
         env->ReleaseStringUTFChars((jstring)keyChars, jChars);
     }
 
     void JNICALL XliJ_OnKeyDown (JNIEnv *env , jobject obj, jint keyCode) 
     {
-        Xli::Key key = Xli::PlatformSpecific::AShim::AndroidToXliKeyEvent((Xli::PlatformSpecific::AKeyEvent)keyCode);
-        GlobalEventHandler->OnKeyDown(GlobalWindow, key);
+        Xli::CTEvent* event = new Xli::CTEvent();
+        event->CTType = Xli::CTKeyDownEvent;
+        event->Code = (int)keyCode;
+        event->Payload = NULL;
+        GlobalWindow->EnqueueCrossThreadEvent(event);
     }
 }
 

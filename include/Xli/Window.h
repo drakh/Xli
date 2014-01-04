@@ -18,6 +18,19 @@ namespace Xli
 	/**
 		\ingroup XliCorePlatform
 	*/
+    enum CTEventType
+    {
+        CTKeyUpEvent = 0,
+        CTKeyDownEvent = 1,
+        CTTextEvent = 2,
+        CTMotionEvent = 3
+    };
+    struct CTEvent 
+    {
+        CTEventType CTType;
+        int Code;
+        void* Payload;
+    };
 	enum Key
 	{
 		KeyUnknown = 0,
@@ -177,7 +190,7 @@ namespace Xli
 		virtual void OnAppWillEnterForeground(Window* wnd);
 		virtual void OnAppDidEnterForeground(Window* wnd);
 		virtual void OnAppWillEnterBackground(Window* wnd);
-		virtual void OnAppDidEnterBackground(Window* wnd);
+		virtual void OnAppDidEnterBackground(Window* wnd);       
 	};
 
 	/**
@@ -396,6 +409,8 @@ namespace Xli
 		virtual bool HasOnscreenKeyboardSupport() { return false; }
 		virtual bool IsOnscreenKeyboardVisible() { return false; }
 
+        virtual void EnqueueCrossThreadEvent(CTEvent* event) {};
+        virtual void ProcessCrossThreadEvents() {};
 
 		/**
 			Initializes the Window implementation.
