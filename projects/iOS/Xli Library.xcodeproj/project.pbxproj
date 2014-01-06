@@ -334,7 +334,6 @@
 		FC42678B185E510700079544 /* bdflib.c in Sources */ = {isa = PBXBuildFile; fileRef = FC426785185E510700079544 /* bdflib.c */; };
 		FC42679B185E515500079544 /* afmparse.c in Sources */ = {isa = PBXBuildFile; fileRef = FC42678D185E515500079544 /* afmparse.c */; };
 		FC42679D185E515500079544 /* psaux.c in Sources */ = {isa = PBXBuildFile; fileRef = FC42678F185E515500079544 /* psaux.c */; };
-		FC42679F185E515500079544 /* psauxmod.c in Sources */ = {isa = PBXBuildFile; fileRef = FC426791185E515500079544 /* psauxmod.c */; };
 		FC4267A1185E515500079544 /* psconv.c in Sources */ = {isa = PBXBuildFile; fileRef = FC426793185E515500079544 /* psconv.c */; };
 		FC4267A3185E515500079544 /* psobjs.c in Sources */ = {isa = PBXBuildFile; fileRef = FC426795185E515500079544 /* psobjs.c */; };
 		FC4267A5185E515500079544 /* t1cmap.c in Sources */ = {isa = PBXBuildFile; fileRef = FC426797185E515500079544 /* t1cmap.c */; };
@@ -694,7 +693,6 @@
 		FC426785185E510700079544 /* bdflib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bdflib.c; sourceTree = "<group>"; };
 		FC42678D185E515500079544 /* afmparse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = afmparse.c; sourceTree = "<group>"; };
 		FC42678F185E515500079544 /* psaux.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = psaux.c; sourceTree = "<group>"; };
-		FC426791185E515500079544 /* psauxmod.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = psauxmod.c; sourceTree = "<group>"; };
 		FC426793185E515500079544 /* psconv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = psconv.c; sourceTree = "<group>"; };
 		FC426795185E515500079544 /* psobjs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = psobjs.c; sourceTree = "<group>"; };
 		FC426797185E515500079544 /* t1cmap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = t1cmap.c; sourceTree = "<group>"; };
@@ -1578,7 +1576,6 @@
 			children = (
 				FC42678D185E515500079544 /* afmparse.c */,
 				FC42678F185E515500079544 /* psaux.c */,
-				FC426791185E515500079544 /* psauxmod.c */,
 				FC426793185E515500079544 /* psconv.c */,
 				FC426795185E515500079544 /* psobjs.c */,
 				FC426797185E515500079544 /* t1cmap.c */,
@@ -2162,7 +2159,6 @@
 				FC426715185E468000079544 /* ftsystem.c in Sources */,
 				FC42675D185E4FDB00079544 /* type1cid.c in Sources */,
 				FC426718185E468800079544 /* sfnt.c in Sources */,
-				FC42679F185E515500079544 /* psauxmod.c in Sources */,
 				FC426788185E510700079544 /* bdfdrivr.c in Sources */,
 				FC4263DD185E3E9900079544 /* FontFace.cpp in Sources */,
 				CE2D733416C70DB600390436 /* tinystr.cpp in Sources */,

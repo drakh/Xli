@@ -133,6 +133,22 @@ public class XliJ extends android.app.NativeActivity {
         }
 
         @Override
+        public String getTextBeforeCursor(int n, int flags) {
+            //http://code.google.com/p/android/issues/detail?id=62306
+            return "_";
+        }
+
+        @Override
+        public boolean deleteSurroundingText (int beforeLength, int afterLength) {
+            if (beforeLength == 1 && afterLength == 0) {
+                XliJ_OnKeyDown(KeyEvent.KEYCODE_DEL);
+                XliJ_OnKeyUp(KeyEvent.KEYCODE_DEL);
+                return true;
+            }
+            return false;
+        }
+
+        @Override
         public boolean sendKeyEvent(KeyEvent event) {
             int keyCode = event.getKeyCode();
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
