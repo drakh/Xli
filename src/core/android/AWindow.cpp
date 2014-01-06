@@ -231,14 +231,16 @@ namespace Xli
                         break;
                     case Xli::CTKeyUpEvent:
                         GlobalEventHandler->OnKeyUp(GlobalWindow, Xli::PlatformSpecific::AShim::AndroidToXliKeyEvent((Xli::PlatformSpecific::AKeyEvent)event->Code));
+                        break;
                     case Xli::CTKeyDownEvent:
                         GlobalEventHandler->OnKeyDown(GlobalWindow, Xli::PlatformSpecific::AShim::AndroidToXliKeyEvent((Xli::PlatformSpecific::AKeyEvent)event->Code));
+                        break;
                     default:
                         break;
                     }
                     
                     delete event;
-                }                
+                }
             }
 		};
 

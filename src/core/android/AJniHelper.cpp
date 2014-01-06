@@ -104,7 +104,7 @@ namespace Xli
     			LOGE("JNI ERROR: Unable to create pthread key"); // Not fatal
 
     		if (pthread_key_create(&JniShimKey, JniDestroyShim))
-    			LOGE("JNI ERROR: Unable to Shim pthread key"); // Not fatal
+    			LOGE("JNI ERROR: Unable to create shim pthread key"); // Not fatal
     	}
 
     	AJniHelper::AJniHelper()
