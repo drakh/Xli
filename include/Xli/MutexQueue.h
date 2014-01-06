@@ -6,121 +6,121 @@
 
 namespace Xli
 {
-	/**
-		\ingroup XliCoreContainers
-	*/
-	template <typename T> class MutexQueue: public Object
-	{
-		struct Node
-		{
-			Node* Next;
-			T Value;
-		};
+    /**
+        \ingroup XliCoreContainers
+    */
+    template <typename T> class MutexQueue: public Object
+    {
+        struct Node
+        {
+            Node* Next;
+            T Value;
+        };
 
-		Node* head;
-		Node* tail;
+        Node* head;
+        Node* tail;
 
-		Array<Node*> freeNodes;
-		int len;
+        Array<Node*> freeNodes;
+        int len;
 
         MutexHandle mutex;
 
-	public:
-		MutexQueue()
-		{
+    public:
+        MutexQueue()
+        {
             mutex = CreateMutex();
-			head = 0;
-			tail = 0;
-			len = 0;
-		}
+            head = 0;
+            tail = 0;
+            len = 0;
+        }
 
-		virtual ~MutexQueue()
-		{
-			Clear();
-			Trim();
-		}
+        virtual ~MutexQueue()
+        {
+            Clear();
+            Trim();
+        }
 
-		void Trim()
-		{
+        void Trim()
+        {
             LockMutex(mutex);
-			for (int i = 0; i < freeNodes.Length(); i++)
-				delete freeNodes[i];
+            for (int i = 0; i < freeNodes.Length(); i++)
+                delete freeNodes[i];
 
-			freeNodes.Clear();
-			freeNodes.Trim();
+            freeNodes.Clear();
+            freeNodes.Trim();
             UnlockMutex(mutex);
-		}
+        }
 
-		void Clear()
-		{
+        void Clear()
+        {
             LockMutex(mutex);
-			while (head)
-			{
-				Node* temp = head;
-				head = head->Next;
-				freeNodes.Add(temp);
-			}
+            while (head)
+            {
+                Node* temp = head;
+                head = head->Next;
+                freeNodes.Add(temp);
+            }
 
-			tail = 0;
-			len = 0;
+            tail = 0;
+            len = 0;
             UnlockMutex(mutex);
-		}
+        }
 
-		void Enqueue(const T& value)
-		{
+        void Enqueue(const T& value)
+        {
             LockMutex(mutex);
-			Node* n = freeNodes.Length() ? freeNodes.RemoveLast() : new Node();
+            Node* n = freeNodes.Length() ? freeNodes.RemoveLast() : new Node();
 
-			n->Next = 0;
-			n->Value = value;
+            n->Next = 0;
+            n->Value = value;
 
-			if (tail)
-			{
-				tail->Next = n;
-				tail = n;
-			}
-			else
-			{
-				head = n;
-				tail = n;
-			}
+            if (tail)
+            {
+                tail->Next = n;
+                tail = n;
+            }
+            else
+            {
+                head = n;
+                tail = n;
+            }
 
-			len++;
+            len++;
             UnlockMutex(mutex);
-		}
+        }
 
-		T Dequeue()
-		{
+        T Dequeue()
+        {
             LockMutex(mutex);
 #ifdef XLI_RANGE_CHECK
-			if (!head) XLI_THROW_INDEX_OUT_OF_BOUNDS;
+            if (!head) XLI_THROW_INDEX_OUT_OF_BOUNDS;
 #endif
-			Node* oldHead = head;
-			head = head->Next;
-			if (!head) tail = 0;
-			T value = oldHead->Value;
-			freeNodes.Add(oldHead);
-			len--;
+            Node* oldHead = head;
+            head = head->Next;
+            if (!head) tail = 0;
+            T value = oldHead->Value;
+            freeNodes.Add(oldHead);
+            len--;
             UnlockMutex(mutex);
-			return value;
-		}
+            return value;
+        }
 
-		int Count() const
-		{
+        int Count() const
+        {
             LockMutex(mutex);
             int length = len;
             UnlockMutex(mutex);
-			return len;
-		}
+            return len;
+        }
 
-		bool IsEmpty() const
-		{
+        bool IsEmpty() const
+        {
             LockMutex(mutex);
             bool empty = len == 0;
             UnlockMutex(mutex);
-			return empty;
-		}
-	};
+            return empty;
+        }
+    };
 }
 
 
