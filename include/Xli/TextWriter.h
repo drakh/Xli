@@ -8,31 +8,31 @@
 
 namespace Xli
 {
-	/**
-		\ingroup XliCoreIO
-	*/
-	class TextWriter: public StreamWriter
-	{
-	public:
-		TextWriter(Stream* stream);
+    /**
+        \ingroup XliCoreIO
+    */
+    class TextWriter: public StreamWriter
+    {
+    public:
+        TextWriter(Stream* stream);
 
-		void Write(const char* str, int len);
-		void WriteFormat(const char* format, ...);
-		void Write(const char* str);
-		void Write(const String& str);
-		void WriteLine();
+        void Write(const char* str, int len);
+        void WriteFormat(const char* format, ...);
+        void Write(const char* str);
+        void Write(const String& str);
+        void WriteLine();
 
-		template <typename T> void Write(const T& t)
-		{
-			Write(Xli::ToString(t));
-		}
+        template <typename T> void Write(const T& t)
+        {
+            Write(Xli::ToString(t));
+        }
 
-		template <typename T> void WriteLine(const T& t)
-		{
-			Write(t);
-			WriteLine();
-		}
-	};
+        template <typename T> void WriteLine(const T& t)
+        {
+            Write(t);
+            WriteLine();
+        }
+    };
 }
 
 #endif

@@ -158,8 +158,8 @@ namespace Xli
 
         int AStream::Read(void* dst, int elmSize, int elmCount)
         {
-    		if (!CanRead()) XLI_THROW_STREAM_CANT_READ;
-    		if (IsClosed()) XLI_THROW_STREAM_CLOSED;
+            if (!CanRead()) XLI_THROW_STREAM_CANT_READ;
+            if (IsClosed()) XLI_THROW_STREAM_CLOSED;
 
             AJniHelper jni;
             
@@ -192,8 +192,8 @@ namespace Xli
     //[TODO] memoverflow?
         int AStream::Write(const void* data, int elmSize, int elmCount)
         {
-    		if (!CanWrite()) XLI_THROW_STREAM_CANT_WRITE;
-    		if (IsClosed()) XLI_THROW_STREAM_CLOSED;
+            if (!CanWrite()) XLI_THROW_STREAM_CANT_WRITE;
+            if (IsClosed()) XLI_THROW_STREAM_CLOSED;
 
             AJniHelper jni;
 

@@ -2,24 +2,24 @@
 #define __XLI_MEDIA_H__
 
 /**
-	\defgroup XliMedia 
-	\brief Media features and file formats
+    \defgroup XliMedia 
+    \brief Media features and file formats
 
-	\defgroup XliMediaFonts Fonts
-	\brief TrueType font parsing and rasterization (TTF)
-	\ingroup XliMedia
+    \defgroup XliMediaFonts Fonts
+    \brief TrueType font parsing and rasterization (TTF)
+    \ingroup XliMedia
 
-	\defgroup XliMediaTextures Textures
-	\brief Loading/saving of images, bitmaps and textures (2D, 3D, Cube) (JPEG, PNG, KTX)
-	\ingroup XliMedia
+    \defgroup XliMediaTextures Textures
+    \brief Loading/saving of images, bitmaps and textures (2D, 3D, Cube) (JPEG, PNG, KTX)
+    \ingroup XliMedia
 
-	\defgroup XliMediaCompression Compression
-	\brief File and file system compression (GZ, ZIP)
-	\ingroup XliMedia
+    \defgroup XliMediaCompression Compression
+    \brief File and file system compression (GZ, ZIP)
+    \ingroup XliMedia
 
-	\defgroup XliMediaMarkup Markup
-	\brief Markup parsing and serialization (JSON, XML)
-	\ingroup XliMedia
+    \defgroup XliMediaMarkup Markup
+    \brief Markup parsing and serialization (JSON, XML)
+    \ingroup XliMedia
 */
 
 #include <XliMedia/Bitmap.h>

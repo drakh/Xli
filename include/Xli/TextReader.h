@@ -5,21 +5,21 @@
 
 namespace Xli
 {
-	/**
-		\ingroup XliCoreIO
-	*/
-	class TextReader: public StreamReader
-	{
-	public:
-		TextReader(Stream* stream);
+    /**
+        \ingroup XliCoreIO
+    */
+    class TextReader: public StreamReader
+    {
+    public:
+        TextReader(Stream* stream);
 
-		String Read(int len);
-		String ReadAll();
-		char ReadChar();
-		String ReadTo(char terminal);
-		String ReadLine();
-		bool AtEndOfFile();
-	};
+        String Read(int len);
+        String ReadAll();
+        char ReadChar();
+        String ReadTo(char terminal);
+        String ReadLine();
+        bool AtEndOfFile();
+    };
 }
 
 #endif

@@ -2,44 +2,44 @@
 #define __XLI_H__
 
 /**
-	\defgroup Xli
-	\brief Core features
+    \defgroup Xli
+    \brief Core features
 
-	\defgroup XliCoreBuffers Buffers
-	\brief Buffers and buffer references
-	\ingroup Xli
+    \defgroup XliCoreBuffers Buffers
+    \brief Buffers and buffer references
+    \ingroup Xli
 
-	\defgroup XliCoreContainers Containers
-	\brief Container templates
-	\ingroup Xli
+    \defgroup XliCoreContainers Containers
+    \brief Container templates
+    \ingroup Xli
 
-	\defgroup XliCoreIO I/O
-	\brief Console, streams, file systems, memory mapping
-	\ingroup Xli
+    \defgroup XliCoreIO I/O
+    \brief Console, streams, file systems, memory mapping
+    \ingroup Xli
 
-	\defgroup XliCoreMath Math
-	\brief Vectors, matrices and random numbers
-	\ingroup Xli
+    \defgroup XliCoreMath Math
+    \brief Vectors, matrices and random numbers
+    \ingroup Xli
 
-	\defgroup XliCorePlatform Platform
-	\brief Windows and input devices
-	\ingroup Xli
+    \defgroup XliCorePlatform Platform
+    \brief Windows and input devices
+    \ingroup Xli
 
-	\defgroup XliCoreText Text
-	\brief Strings, string builders and unicode support
-	\ingroup Xli
+    \defgroup XliCoreText Text
+    \brief Strings, string builders and unicode support
+    \ingroup Xli
 
-	\defgroup XliCoreThreading Threading 
-	\brief Threading and concurrency
-	\ingroup Xli
+    \defgroup XliCoreThreading Threading 
+    \brief Threading and concurrency
+    \ingroup Xli
 
-	\defgroup XliCoreTime Time
-	\brief Date, time and timers 
-	\ingroup Xli
+    \defgroup XliCoreTime Time
+    \brief Date, time and timers 
+    \ingroup Xli
 
-	\defgroup XliCoreUtils Utils
-	\brief Utility functions
-	\ingroup Xli
+    \defgroup XliCoreUtils Utils
+    \brief Utility functions
+    \ingroup Xli
 */
 
 #include <Xli/Application.h>

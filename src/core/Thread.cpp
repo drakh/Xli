@@ -5,84 +5,84 @@
 
 namespace Xli
 {
-	void Thread::thread_func(void* arg)
-	{
-		Thread* thread = (Thread*)arg;
-		Task* task = thread->task;
-		
-		task->stopped = false;
+    void Thread::thread_func(void* arg)
+    {
+        Thread* thread = (Thread*)arg;
+        Task* task = thread->task;
+        
+        task->stopped = false;
 
-		try
-		{
-			task->Run();
-		}
-		catch (const Exception& e)
-		{
-			MessageBox::HandleException(e, "Thread: " + task->ToString());
-		}
+        try
+        {
+            task->Run();
+        }
+        catch (const Exception& e)
+        {
+            MessageBox::HandleException(e, "Thread: " + task->ToString());
+        }
 
-		task->stopped = true;
-	}
+        task->stopped = true;
+    }
 
-	Thread::Thread(Task* task)
-	{
-		this->handle = 0;
+    Thread::Thread(Task* task)
+    {
+        this->handle = 0;
 
-		if (task)
-			Start(task);
-	}
+        if (task)
+            Start(task);
+    }
 
-	Thread::~Thread()
-	{
-		if (handle)
-			Wait();
-	}
+    Thread::~Thread()
+    {
+        if (handle)
+            Wait();
+    }
 
-	bool Thread::IsDone()
-	{
-		return !handle || !task || task->stopped;
-	}
+    bool Thread::IsDone()
+    {
+        return !handle || !task || task->stopped;
+    }
 
-	bool Thread::HasStarted()
-	{
-		return handle != 0;
-	}
+    bool Thread::HasStarted()
+    {
+        return handle != 0;
+    }
 
-	void Thread::Start(Task* task)
-	{
-		if (!task)
-			XLI_THROW_NULL_POINTER;
+    void Thread::Start(Task* task)
+    {
+        if (!task)
+            XLI_THROW_NULL_POINTER;
 
-		if (handle)
-			XLI_THROW("Thread is already started");
+        if (handle)
+            XLI_THROW("Thread is already started");
 
-		this->task = task;
-		this->handle = CreateThread(thread_func, (void*)this);
-	}
+        this->task = task;
+        this->handle = CreateThread(thread_func, (void*)this);
+    }
 
-	void Thread::Wait()
-	{
-		if (!handle)
-			return;
+    void Thread::Wait()
+    {
+        if (!handle)
+            return;
 
-		task->stopped = true;
-		WaitForThread(handle);
-		handle = 0;
-		task = 0;
-	}
+        task->stopped = true;
+        WaitForThread(handle);
+        handle = 0;
+        task = 0;
+    }
 
-	Task::Task()
-	{
-		stopped = true;
-	}
+    Task::Task()
+    {
+        stopped = true;
+    }
 
-	bool Task::IsStopped()
-	{
-		return stopped;
-	}
+    bool Task::IsStopped()
+    {
+        return stopped;
+    }
 
-	String Task::ToString() const
-	{
-		return "<Task " + Xli::ToString((void*)this) + ">";
-	}
+    String Task::ToString() const
+    {
+        return "<Task " + Xli::ToString((void*)this) + ">";
+    }
 }

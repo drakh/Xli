@@ -3,25 +3,25 @@
 
 namespace Xli
 {
-	class String;
+    class String;
 
-	class Object
-	{
-		int refCount;
+    class Object
+    {
+        int refCount;
 
-	public:
-		Object();
-		virtual ~Object();
+    public:
+        Object();
+        virtual ~Object();
 
-		int GetRefCount() const;
+        int GetRefCount() const;
 
-		void AddRef();
-		void Release();
+        void AddRef();
+        void Release();
 
-		virtual void Delete();
-		
+        virtual void Delete();
+        
         virtual String ToString() const;
-	};
+    };
 }
 
 

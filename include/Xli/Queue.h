@@ -5,112 +5,112 @@
 
 namespace Xli
 {
-	/**
-		\ingroup XliCoreContainers
-	*/
-	template <typename T> class Queue: public Object
-	{
-		struct Node
-		{
-			Node* Next;
-			T Value;
-		};
+    /**
+        \ingroup XliCoreContainers
+    */
+    template <typename T> class Queue: public Object
+    {
+        struct Node
+        {
+            Node* Next;
+            T Value;
+        };
 
-		Node* head;
-		Node* tail;
+        Node* head;
+        Node* tail;
 
-		Array<Node*> freeNodes;
-		int len;
+        Array<Node*> freeNodes;
+        int len;
 
-	public:
-		Queue()
-		{
-			head = 0;
-			tail = 0;
-			len = 0;
-		}
+    public:
+        Queue()
+        {
+            head = 0;
+            tail = 0;
+            len = 0;
+        }
 
-		virtual ~Queue()
-		{
-			Clear();
-			Trim();
-		}
+        virtual ~Queue()
+        {
+            Clear();
+            Trim();
+        }
 
-		void Trim()
-		{
-			for (int i = 0; i < freeNodes.Length(); i++)
-				delete freeNodes[i];
+        void Trim()
+        {
+            for (int i = 0; i < freeNodes.Length(); i++)
+                delete freeNodes[i];
 
-			freeNodes.Clear();
-			freeNodes.Trim();
-		}
+            freeNodes.Clear();
+            freeNodes.Trim();
+        }
 
-		void Clear()
-		{
-			while (head)
-			{
-				Node* temp = head;
-				head = head->Next;
-				freeNodes.Add(temp);
-			}
+        void Clear()
+        {
+            while (head)
+            {
+                Node* temp = head;
+                head = head->Next;
+                freeNodes.Add(temp);
+            }
 
-			tail = 0;
-			len = 0;
-		}
+            tail = 0;
+            len = 0;
+        }
 
-		void Enqueue(const T& value)
-		{
-			Node* n = freeNodes.Length() ? freeNodes.RemoveLast() : new Node();
+        void Enqueue(const T& value)
+        {
+            Node* n = freeNodes.Length() ? freeNodes.RemoveLast() : new Node();
 
-			n->Next = 0;
-			n->Value = value;
+            n->Next = 0;
+            n->Value = value;
 
-			if (tail)
-			{
-				tail->Next = n;
-				tail = n;
-			}
-			else
-			{
-				head = n;
-				tail = n;
-			}
+            if (tail)
+            {
+                tail->Next = n;
+                tail = n;
+            }
+            else
+            {
+                head = n;
+                tail = n;
+            }
 
-			len++;
-		}
+            len++;
+        }
 
-		const T& Peek() const
-		{
+        const T& Peek() const
+        {
 #ifdef XLI_RANGE_CHECK
-			if (!head) XLI_THROW_INDEX_OUT_OF_BOUNDS;
+            if (!head) XLI_THROW_INDEX_OUT_OF_BOUNDS;
 #endif
-			return head->Value;
-		}
+            return head->Value;
+        }
 
-		T Dequeue()
-		{
+        T Dequeue()
+        {
 #ifdef XLI_RANGE_CHECK
-			if (!head) XLI_THROW_INDEX_OUT_OF_BOUNDS;
+            if (!head) XLI_THROW_INDEX_OUT_OF_BOUNDS;
 #endif
-			Node* oldHead = head;
-			head = head->Next;
-			if (!head) tail = 0;
-			T value = oldHead->Value;
-			freeNodes.Add(oldHead);
-			len--;
-			return value;
-		}
+            Node* oldHead = head;
+            head = head->Next;
+            if (!head) tail = 0;
+            T value = oldHead->Value;
+            freeNodes.Add(oldHead);
+            len--;
+            return value;
+        }
 
-		int Count() const
-		{
-			return len;
-		}
+        int Count() const
+        {
+            return len;
+        }
 
-		bool IsEmpty() const
-		{
-			return len == 0;
-		}
-	};
+        bool IsEmpty() const
+        {
+            return len == 0;
+        }
+    };
 }
 
 

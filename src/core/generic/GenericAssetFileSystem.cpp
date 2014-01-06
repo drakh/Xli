@@ -8,8 +8,8 @@
 
 namespace Xli
 {
-	FileSystem* CreateAssetFileSystem()
-	{
-		return Disk->CreateSubFileSystem("data");
-	}
+    FileSystem* CreateAssetFileSystem()
+    {
+        return Disk->CreateSubFileSystem("data");
+    }
 }

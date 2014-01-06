@@ -6,23 +6,23 @@
 
 namespace Xli
 {
-	class Bitmap;
+    class Bitmap;
 
-	/**
-		\ingroup XliMediaTextures
-	*/
-	class Image: public DataAccessor
-	{
-	public:
-		virtual int GetWidth() const = 0;
-		virtual int GetHeight() const = 0;
-		virtual int GetDepth() const = 0;
-		virtual Format GetFormat() const = 0;
-		virtual Bitmap* ToBitmap() = 0;
+    /**
+        \ingroup XliMediaTextures
+    */
+    class Image: public DataAccessor
+    {
+    public:
+        virtual int GetWidth() const = 0;
+        virtual int GetHeight() const = 0;
+        virtual int GetDepth() const = 0;
+        virtual Format GetFormat() const = 0;
+        virtual Bitmap* ToBitmap() = 0;
 
-		virtual int GetSizeInBytes() const = 0;
-		virtual const UInt8* GetData() const = 0;
-	};
+        virtual int GetSizeInBytes() const = 0;
+        virtual const UInt8* GetData() const = 0;
+    };
 }
 
 #endif

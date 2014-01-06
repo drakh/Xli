@@ -2,8 +2,8 @@
 
 namespace Xli
 {
-	AudioBuffer* AudioBuffer::Create(AudioStream* source)
-	{
-		return Create(source, source->GetDataType(), source->GetChannelCount(), source->GetSampleRate());
-	}
+    AudioBuffer* AudioBuffer::Create(AudioStream* source)
+    {
+        return Create(source, source->GetDataType(), source->GetChannelCount(), source->GetSampleRate());
+    }
 }

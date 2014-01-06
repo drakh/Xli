@@ -22,97 +22,113 @@ struct android_app;
 
 namespace Xli
 {
-	namespace PlatformSpecific
-	{
-		// TODO: Too much stuff in this header
+    namespace PlatformSpecific
+    {
+        // TODO: Too much stuff in this header
 
-		extern ANativeActivity* AndroidActivity;
+        /**
+            \addtogroup XliCorePlatform
+            @{
+        */
 
-		XLI_INLINE const char* AGetAppName()
-		{
-			const char* name = getenv("XLI_APP_NAME");
-			return name ? name : "XliApp";
-		}
+        extern ANativeActivity* AndroidActivity;
 
-		class AJniHelper
-		{
-			JNIEnv* env;
-	        jclass shim;
-	        static int shim_loaded;
+        XLI_INLINE const char* AGetAppName()
+        {
+            const char* name = getenv("XLI_APP_NAME");
+            return name ? name : "XliApp";
+        }
 
-		public:
-			static void Init();
+        /** @} */
 
-			AJniHelper();
+        /**
+            \ingroup XliCorePlatform
+        */
+        class AJniHelper
+        {
+            JNIEnv* env;
+            jclass shim;
+            static int shim_loaded;
 
-	        jclass GetShim();
+        public:
+            static void Init();
 
-			jmethodID FindMethod(const char* className, const char* methodName, const char* methodSig);
+            AJniHelper();
 
-			jobject CallObjectMethod(jobject inst, const char* name, const char* sig);
+            jclass GetShim();
 
-			String GetString(jobject str);
-			JNIEnv* GetEnv();
+            jmethodID FindMethod(const char* className, const char* methodName, const char* methodSig);
 
-			JNIEnv* operator->();
+            jobject CallObjectMethod(jobject inst, const char* name, const char* sig);
 
-	        jmethodID GetInstanceMethod(const char* m_name, const char* m_sig);
-	        jmethodID GetInstanceMethod(jobject inst, const char* m_name, const char* m_sig);
-	        jobject GetInstance();
-	        jobject GetInstance(const char* class_name, const char* constructor_sig, ...);
-	        jobject GetInstance(jclass cls, const char* constructor_sig, ...);
-	        jclass GetCustomClass(const char* class_path);
-	        int PrepareAssetJar(const char* file_name, const char* class_name);
-	        int PrepareAssetJar(const char* file_name, const char* class_name, int package);
-	        jclass GetAssetClass(const char* file_name, const char* class_name);
-		};
+            String GetString(jobject str);
+            JNIEnv* GetEnv();
 
-		class AStream: public Stream
-	    {
-	    public:
-	        enum AStreamType 
-	        {
-	            INVALID = 0,
-	            READ = 1,
-	            WRITE = 2
-	        };
+            JNIEnv* operator->();
 
-	        static bool midsCached;
-	        static jmethodID closeReadMid;
-	        static jmethodID closeWriteMid;
-	        static jmethodID readByteMid;
-	        static jmethodID readBufferMid;
-	        static jmethodID resetMid;
-	        static jmethodID flushMid;
-	        static jmethodID writeBufferMid;
-	        static jmethodID writeBufferDetailedMid;
-	        static bool CacheMids();
+            jmethodID GetInstanceMethod(const char* m_name, const char* m_sig);
+            jmethodID GetInstanceMethod(jobject inst, const char* m_name, const char* m_sig);
+            jobject GetInstance();
+            jobject GetInstance(const char* class_name, const char* constructor_sig, ...);
+            jobject GetInstance(jclass cls, const char* constructor_sig, ...);
+            jclass GetCustomClass(const char* class_path);
+            int PrepareAssetJar(const char* file_name, const char* class_name);
+            int PrepareAssetJar(const char* file_name, const char* class_name, int package);
+            jclass GetAssetClass(const char* file_name, const char* class_name);
+        };
 
-	        AStream();
-	        AStream(AStreamType streamType);
-	        AStream(AStreamType streamType, jobject javaStream);
-	        AStream(jobject javaStream);
-	        virtual ~AStream();
-	    
-	        virtual void Flush();
-	        virtual void Close();
-	        virtual bool IsClosed() const;
-	        virtual bool CanRead() const;
-	        virtual bool CanWrite() const;
-	        virtual bool AtEnd() const;
-	        virtual int Read(void* dst, int elmSize, int elmCount);
-	        virtual int Write(const void* dst, int elmSize, int elmCount);
+        /**
+            \ingroup XliCorePlatform
+        */
+        class AStream: public Stream
+        {
+        public:
+            enum AStreamType 
+            {
+                INVALID = 0,
+                READ = 1,
+                WRITE = 2
+            };
 
-	    private:
-	        jobject javaStream;
-	        bool atEnd;
-	        bool closed;
-	        bool canRead;
-	        bool canWrite;
-	        AStreamType streamType;
-	        virtual bool Init(AStreamType streamType, jobject javaStream);
-	    };
+            static bool midsCached;
+            static jmethodID closeReadMid;
+            static jmethodID closeWriteMid;
+            static jmethodID readByteMid;
+            static jmethodID readBufferMid;
+            static jmethodID resetMid;
+            static jmethodID flushMid;
+            static jmethodID writeBufferMid;
+            static jmethodID writeBufferDetailedMid;
+            static bool CacheMids();
 
+            AStream();
+            AStream(AStreamType streamType);
+            AStream(AStreamType streamType, jobject javaStream);
+            AStream(jobject javaStream);
+            virtual ~AStream();
+        
+            virtual void Flush();
+            virtual void Close();
+            virtual bool IsClosed() const;
+            virtual bool CanRead() const;
+            virtual bool CanWrite() const;
+            virtual bool AtEnd() const;
+            virtual int Read(void* dst, int elmSize, int elmCount);
+            virtual int Write(const void* dst, int elmSize, int elmCount);
+
+        private:
+            jobject javaStream;
+            bool atEnd;
+            bool closed;
+            bool canRead;
+            bool canWrite;
+            AStreamType streamType;
+            virtual bool Init(AStreamType streamType, jobject javaStream);
+        };
+
+        /**
+            \ingroup XliCorePlatform
+        */
         enum AKeyEvent
         {
             ACTION_DOWN = 0,
@@ -375,31 +391,34 @@ namespace Xli
             META_SYM_ON = 4
         };
 
-	    class AShim
-	    {
-	    public:
-	        static int kbVisible;
+        /**
+            \ingroup XliCorePlatform
+        */
+        class AShim
+        {
+        public:
+            static int kbVisible;
 
-	        static void MakeNoise();
-	        static void RaiseSoftKeyboard();
-	        static void HideSoftKeyboard();
-	        static bool KeyboardVisible();
-	        static int ShowMessageBox(const String& message, const String& caption, int buttons, int hints);
-	        
-	        static bool ConnectedToNetwork();
-	        static jobject HttpNewConnection(const String& uri, const String& method, bool hasPayload);
-	        static void HttpCloseConnection(jobject httpConnection);
-	        static void HttpSetHeader(jobject httpConnection, const String& key, const String& val);
-	        static String HttpGetHeader(jobject httpConnection, const String& key);
-	        static void HttpShowHeaders(jobject httpConnection);
-	        static int GetResponseCode(jobject httpConnection);
-	        static AStream* HttpGetInputStream(jobject httpConnection);
-	        static AStream* HttpGetOutputStream(jobject httpConnection);
-	        static Key AndroidToXliKeyEvent(AKeyEvent keyEvent);
-	        static void HandleSpecialAndroidKeyEvents(AKeyEvent androidKeyCode);
-	        static void InitDefaultCookieManager();
-	    };
-	}
+            static void MakeNoise();
+            static void RaiseSoftKeyboard();
+            static void HideSoftKeyboard();
+            static bool KeyboardVisible();
+            static int ShowMessageBox(const String& message, const String& caption, int buttons, int hints);
+            
+            static bool ConnectedToNetwork();
+            static jobject HttpNewConnection(const String& uri, const String& method, bool hasPayload);
+            static void HttpCloseConnection(jobject httpConnection);
+            static void HttpSetHeader(jobject httpConnection, const String& key, const String& val);
+            static String HttpGetHeader(jobject httpConnection, const String& key);
+            static void HttpShowHeaders(jobject httpConnection);
+            static int GetResponseCode(jobject httpConnection);
+            static AStream* HttpGetInputStream(jobject httpConnection);
+            static AStream* HttpGetOutputStream(jobject httpConnection);
+            static Key AndroidToXliKeyEvent(AKeyEvent keyEvent);
+            static void HandleSpecialAndroidKeyEvents(AKeyEvent androidKeyCode);
+            static void InitDefaultCookieManager();
+        };
+    }
 }
 
 

@@ -9,118 +9,118 @@
 
 namespace Xli
 {
-	static String FixExtension(const String& str)
-	{
-		return str.Trim('.').Trim('*');
-	}
+    static String FixExtension(const String& str)
+    {
+        return str.Trim('.').Trim('*');
+    }
 
-	static void InitOptions(Window* parent, const Dialogs::FileDialogOptions& options, bool mustExist, OPENFILENAMEW& ofn, WCHAR fnbufW[4096], Utf16String& filterW, Utf16String& defW, Utf16String& dirW, Utf16String& captionW)
-	{
-		fnbufW[0] = '\0';
+    static void InitOptions(Window* parent, const Dialogs::FileDialogOptions& options, bool mustExist, OPENFILENAMEW& ofn, WCHAR fnbufW[4096], Utf16String& filterW, Utf16String& defW, Utf16String& dirW, Utf16String& captionW)
+    {
+        fnbufW[0] = '\0';
 
-		ZeroMemory(&ofn, sizeof(OPENFILENAMEW));
-		ofn.lStructSize = sizeof(OPENFILENAMEW);
+        ZeroMemory(&ofn, sizeof(OPENFILENAMEW));
+        ofn.lStructSize = sizeof(OPENFILENAMEW);
 
-		defW = Unicode::Utf8To16(FixExtension(options.DefaultExtension));
-		dirW = Unicode::Utf8To16(options.DefaultFolder);
-		captionW = Unicode::Utf8To16(options.Caption);
+        defW = Unicode::Utf8To16(FixExtension(options.DefaultExtension));
+        dirW = Unicode::Utf8To16(options.DefaultFolder);
+        captionW = Unicode::Utf8To16(options.Caption);
 
-		for (int i = 0; i < dirW.Length(); i++)
-		{
-			if (dirW[i] == '/') dirW[i] = '\\';
-		}
+        for (int i = 0; i < dirW.Length(); i++)
+        {
+            if (dirW[i] == '/') dirW[i] = '\\';
+        }
 
-		if (options.FileExtensions.Length())
-		{
-			ofn.nFilterIndex = 1;
+        if (options.FileExtensions.Length())
+        {
+            ofn.nFilterIndex = 1;
 
-			StringBuilder fb;
-			for (int i = 0; i < options.FileExtensions.Length(); i++)
-			{
-				String ext = FixExtension(options.FileExtensions[i].Extension);
+            StringBuilder fb;
+            for (int i = 0; i < options.FileExtensions.Length(); i++)
+            {
+                String ext = FixExtension(options.FileExtensions[i].Extension);
 
-				if (ext.Length()) ext = "*." + ext;
-				else ext = "*.*";
+                if (ext.Length()) ext = "*." + ext;
+                else ext = "*.*";
 
-				fb.Append(options.FileExtensions[i].Description);
-				fb.Append(" (" + ext + ")");
-				fb.Append('\0');
-				fb.Append(ext);
-				fb.Append('\0');
+                fb.Append(options.FileExtensions[i].Description);
+                fb.Append(" (" + ext + ")");
+                fb.Append('\0');
+                fb.Append(ext);
+                fb.Append('\0');
 
-				if (options.FileExtensions[i].Extension == options.DefaultExtension)
-				{
-					ofn.nFilterIndex = i + 1;
-				}
-			}
+                if (options.FileExtensions[i].Extension == options.DefaultExtension)
+                {
+                    ofn.nFilterIndex = i + 1;
+                }
+            }
 
-			fb.Append('\0');
-			filterW = Unicode::Utf8To16(fb.GetString());
-		}
-		else
-		{
-			ofn.nFilterIndex = 1;
-			filterW = Unicode::Utf8To16("All files (*.*)\0*.*\0\0");
-		}
-		
-		if (options.DefaultFile.Length())
-		{
-			Utf16String defaultFileW = Unicode::Utf8To16(options.DefaultFile);
-			memcpy(fnbufW, defaultFileW.Data(), defaultFileW.Length() * 2 + 2);
-		}
-		
-		if (parent)
-		{
-			ofn.hwndOwner = (HWND)parent->GetNativeHandle();
-		}
+            fb.Append('\0');
+            filterW = Unicode::Utf8To16(fb.GetString());
+        }
+        else
+        {
+            ofn.nFilterIndex = 1;
+            filterW = Unicode::Utf8To16("All files (*.*)\0*.*\0\0");
+        }
+        
+        if (options.DefaultFile.Length())
+        {
+            Utf16String defaultFileW = Unicode::Utf8To16(options.DefaultFile);
+            memcpy(fnbufW, defaultFileW.Data(), defaultFileW.Length() * 2 + 2);
+        }
+        
+        if (parent)
+        {
+            ofn.hwndOwner = (HWND)parent->GetNativeHandle();
+        }
 
-		ofn.hInstance = GetModuleHandle(NULL);
-		ofn.lpstrFilter = filterW.Data();
-		ofn.lpstrFile = fnbufW;
-		ofn.nMaxFile = 4096;
-		ofn.lpstrInitialDir = dirW.Data();
-		ofn.lpstrTitle = captionW.Data();
+        ofn.hInstance = GetModuleHandle(NULL);
+        ofn.lpstrFilter = filterW.Data();
+        ofn.lpstrFile = fnbufW;
+        ofn.nMaxFile = 4096;
+        ofn.lpstrInitialDir = dirW.Data();
+        ofn.lpstrTitle = captionW.Data();
 
-		if (mustExist)
-			ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_ENABLESIZING;
-		else
-			ofn.Flags = OFN_OVERWRITEPROMPT | OFN_ENABLESIZING;
+        if (mustExist)
+            ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_ENABLESIZING;
+        else
+            ofn.Flags = OFN_OVERWRITEPROMPT | OFN_ENABLESIZING;
 
-		ofn.lpstrDefExt = defW.Data();
-	}
+        ofn.lpstrDefExt = defW.Data();
+    }
 
-	static bool EndFileDialog(bool ret, WCHAR* fnbufW, const String& cd, String& result)
-	{
-		if (ret)
-		{
-			result = Unicode::Utf16To8(fnbufW);
+    static bool EndFileDialog(bool ret, WCHAR* fnbufW, const String& cd, String& result)
+    {
+        if (ret)
+        {
+            result = Unicode::Utf16To8(fnbufW);
 
-			for (int i = 0; i < result.Length(); i++)
-				if (result[i] == '\\') 
-					result[i] = '/';
-		}
+            for (int i = 0; i < result.Length(); i++)
+                if (result[i] == '\\') 
+                    result[i] = '/';
+        }
 
-		Disk->ChangeDirectory(cd);
-		return ret;
-	}
+        Disk->ChangeDirectory(cd);
+        return ret;
+    }
 
-	bool Dialogs::OpenFile(Window* parent, const FileDialogOptions& options, String& result)
-	{
-		WCHAR fnbufW[4096];
-		OPENFILENAMEW ofn;
-		Utf16String filterW, defW, dirW, captionW;
-		String cd = Disk->GetCurrentDirectory();
-		InitOptions(parent, options, true, ofn, fnbufW, filterW, defW, dirW, captionW);
-		return EndFileDialog(GetOpenFileNameW(&ofn) == TRUE, fnbufW, cd, result);
-	}
+    bool Dialogs::OpenFile(Window* parent, const FileDialogOptions& options, String& result)
+    {
+        WCHAR fnbufW[4096];
+        OPENFILENAMEW ofn;
+        Utf16String filterW, defW, dirW, captionW;
+        String cd = Disk->GetCurrentDirectory();
+        InitOptions(parent, options, true, ofn, fnbufW, filterW, defW, dirW, captionW);
+        return EndFileDialog(GetOpenFileNameW(&ofn) == TRUE, fnbufW, cd, result);
+    }
 
-	bool Dialogs::SaveFile(Window* parent, const FileDialogOptions& options, String& result)
-	{
-		WCHAR fnbufW[4096];
-		OPENFILENAMEW ofn;
-		Utf16String filterW, defW, dirW, captionW;
-		String cd = Disk->GetCurrentDirectory();
-		InitOptions(parent, options, false, ofn, fnbufW, filterW, defW, dirW, captionW);
-		return EndFileDialog(GetSaveFileNameW(&ofn) == TRUE, fnbufW, cd, result);
-	}
+    bool Dialogs::SaveFile(Window* parent, const FileDialogOptions& options, String& result)
+    {
+        WCHAR fnbufW[4096];
+        OPENFILENAMEW ofn;
+        Utf16String filterW, defW, dirW, captionW;
+        String cd = Disk->GetCurrentDirectory();
+        InitOptions(parent, options, false, ofn, fnbufW, filterW, defW, dirW, captionW);
+        return EndFileDialog(GetSaveFileNameW(&ofn) == TRUE, fnbufW, cd, result);
+    }
 }

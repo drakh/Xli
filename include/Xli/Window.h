@@ -18,6 +18,7 @@ namespace Xli
     /**
         \ingroup XliCorePlatform
     */
+
     enum CTEventType
     {
         CTKeyUpEvent = 0,
@@ -31,6 +32,7 @@ namespace Xli
         int Code;
         void* Payload;
     };
+
     enum Key
     {
         KeyUnknown = 0,
@@ -190,7 +192,7 @@ namespace Xli
         virtual void OnAppWillEnterForeground(Window* wnd);
         virtual void OnAppDidEnterForeground(Window* wnd);
         virtual void OnAppWillEnterBackground(Window* wnd);
-        virtual void OnAppDidEnterBackground(Window* wnd);       
+        virtual void OnAppDidEnterBackground(Window* wnd);
     };
 
     /**

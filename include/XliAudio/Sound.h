@@ -7,29 +7,29 @@
 
 namespace Xli
 {
-	/**
-		\ingroup Audio
-	*/
-	enum SoundPlayHint
-	{
-		SoundPlayHintDefault,
-		SoundPlayHintStream,
-		SoundPlayHintBuffer,
-	};
+    /**
+        \ingroup Audio
+    */
+    enum SoundPlayHint
+    {
+        SoundPlayHintDefault,
+        SoundPlayHintStream,
+        SoundPlayHintBuffer,
+    };
 
-	/**
-		\ingroup Audio
-	*/
-	class Sound: public Object
-	{
-	public:
-		virtual double GetDuration() = 0;
+    /**
+        \ingroup Audio
+    */
+    class Sound: public Object
+    {
+    public:
+        virtual double GetDuration() = 0;
 
-		virtual SoundChannel* Play() = 0;
-		virtual SoundChannel* PlayLoop() = 0;
+        virtual SoundChannel* Play() = 0;
+        virtual SoundChannel* PlayLoop() = 0;
 
-		static Sound* Create(const String& filename, SoundPlayHint hint = SoundPlayHintDefault);
-	};
+        static Sound* Create(const String& filename, SoundPlayHint hint = SoundPlayHintDefault);
+    };
 }
 
 #endif

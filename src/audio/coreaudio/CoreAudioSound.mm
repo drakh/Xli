@@ -10,8 +10,8 @@
 
 namespace Uno
 {
-	namespace Audio
-	{
+    namespace Audio
+    {
         class AudioPacketBuffer
         {
             Xli::Array<UInt32> buffersSizeBytes;
@@ -348,86 +348,86 @@ namespace Uno
                     player.numberOfLoops = -1;
                 }
                 
-				if (play)
-				{
-					[player play];
-				}
+                if (play)
+                {
+                    [player play];
+                }
             }
             
-			virtual ~CoreAudioChannel()
+            virtual ~CoreAudioChannel()
             {
                 if (player == nil) return;
                 [player release];
             }
             
-			double GetDuration()
-			{
-				if (player == nil) return 0.0;
-				return player.duration;
-			}
+            double GetDuration()
+            {
+                if (player == nil) return 0.0;
+                return player.duration;
+            }
             
-			virtual double GetPosition()
+            virtual double GetPosition()
             {   
-				if (player == nil) return 0.0;
+                if (player == nil) return 0.0;
                 return player.currentTime;
             }
-			virtual void SetPosition(double value)
+            virtual void SetPosition(double value)
             {
-				if (player == nil) return;
+                if (player == nil) return;
                 player.currentTime = value;
             }
             
-			virtual float GetPan()
+            virtual float GetPan()
             {
-				if (player == nil) return 0.0f;
+                if (player == nil) return 0.0f;
                 return player.pan;
             }
-			virtual void SetPan(float value)
+            virtual void SetPan(float value)
             {
-				if (player == nil) return;
+                if (player == nil) return;
                 player.pan = value;
             }
-			
-			virtual float GetVolume()
+            
+            virtual float GetVolume()
             {
-				if (player == nil) return 0.0f;
+                if (player == nil) return 0.0f;
                 return player.volume;
             }
-			virtual void SetVolume(float value)
+            virtual void SetVolume(float value)
             {
-				if (player == nil) return;
+                if (player == nil) return;
                 player.volume = value;
             }
             
-			virtual bool GetPause()
+            virtual bool GetPause()
             {
-				if (player == nil) return true;
+                if (player == nil) return true;
                 return !player.playing;
             }
-			virtual void SetPause(bool value)
+            virtual void SetPause(bool value)
             {
-				if (player == nil) return;
+                if (player == nil) return;
                 if (value) [player play];
                 else [player pause];
             }
             
-			virtual bool GetIsPlaying()
+            virtual bool GetIsPlaying()
             {
-				if (player == nil) return false;
+                if (player == nil) return false;
                 return player.playing;
             }
-			virtual bool GetIsFinished()
+            virtual bool GetIsFinished()
             {
-				if (player == nil) return true;
+                if (player == nil) return true;
                 return false;
             }
             
-			virtual void Stop()
+            virtual void Stop()
             {
-				if (player == nil) return;
+                if (player == nil) return;
                 [player stop];
-				[player release];
-				player = nil;
+                [player release];
+                player = nil;
             }
         };
         
@@ -438,89 +438,89 @@ namespace Uno
             {
             }
             
-			virtual ~DummyChannel()
+            virtual ~DummyChannel()
             {
             }
             
-			virtual double GetPosition()
+            virtual double GetPosition()
             {
                 return 0.0;
             }
-			virtual void SetPosition(double value)
+            virtual void SetPosition(double value)
             {
             }
             
-			virtual float GetPan()
+            virtual float GetPan()
             {
                 return 0.0f;
             }
-			virtual void SetPan(float value)
+            virtual void SetPan(float value)
             {
             }
-			
-			virtual float GetVolume()
+            
+            virtual float GetVolume()
             {
                 return 0.0f;
             }
-			virtual void SetVolume(float value)
+            virtual void SetVolume(float value)
             {
             }
             
-			virtual bool GetPause()
+            virtual bool GetPause()
             {
                 return false;
             }
-			virtual void SetPause(bool value)
+            virtual void SetPause(bool value)
             {
             }
             
-			virtual bool GetIsPlaying()
+            virtual bool GetIsPlaying()
             {
                 return false;
             }
-			virtual bool GetIsFinished()
+            virtual bool GetIsFinished()
             {
                 return true;
             }
             
-			virtual void Stop()
+            virtual void Stop()
             {
             }
         };
         
-		Sound::Sound(const char* filename, PlayMode mode)
-		{
+        Sound::Sound(const char* filename, PlayMode mode)
+        {
             this->filename = filename;
             this->mode = mode;
             
-			CoreAudioChannel* c = new CoreAudioChannel(this->filename.Data(), mode, false, false);
-			this->duration = c->GetDuration();
-			delete c;
+            CoreAudioChannel* c = new CoreAudioChannel(this->filename.Data(), mode, false, false);
+            this->duration = c->GetDuration();
+            delete c;
             
             if (mode != PlayModeStream) this->bufferedData = new AudioPacketBuffer(filename);
             else this->bufferedData = 0;
-		}
+        }
         
-		Sound::~Sound()
-		{
+        Sound::~Sound()
+        {
             if (bufferedData) delete (AudioPacketBuffer*)bufferedData;
-		}
+        }
         
-		double Sound::GetDuration()
-		{
-			return duration;
-		}
+        double Sound::GetDuration()
+        {
+            return duration;
+        }
         
-		Channel* Sound::Play()
-		{
+        Channel* Sound::Play()
+        {
             if (mode != PlayModeStream) return new (uno_gc) AudioQueueChannel((AudioPacketBuffer*)bufferedData, false);
             return new CoreAudioChannel(filename.Data(), mode, false, true);
-		}
+        }
         
-		Channel* Sound::PlayLoop()
-		{
+        Channel* Sound::PlayLoop()
+        {
             if (mode != PlayModeStream) return new (uno_gc) AudioQueueChannel((AudioPacketBuffer*)bufferedData, true);
             return new (uno_gc) CoreAudioChannel(filename.Data(), mode, true, true);
-		}
-	}
+        }
+    }
 }

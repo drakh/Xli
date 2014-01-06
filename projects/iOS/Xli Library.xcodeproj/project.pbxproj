@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5AAE58C0186F28100038835A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AAE58BF186F28100038835A /* Foundation.framework */; };
+		5AAE58E3186F28960038835A /* SDL2GLContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC45454118576CF100EE7560 /* SDL2GLContext.cpp */; };
+		5AAE58E6186F2B9B0038835A /* iInit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AAE58E5186F2B9B0038835A /* iInit.mm */; };
 		CE0CD81C1768C90A00C02095 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0CD81B1768C90A00C02095 /* Application.cpp */; };
 		CE1535BF174CF162009C6275 /* AudioBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6E3716C70D9A00390436 /* AudioBuffer.cpp */; };
 		CE1535C0174CF162009C6275 /* AudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6E3816C70D9A00390436 /* AudioStream.cpp */; };
@@ -349,12 +352,27 @@
 		FC4267EF185E530500079544 /* ftgzip.c in Sources */ = {isa = PBXBuildFile; fileRef = FC4267DF185E530500079544 /* ftgzip.c */; };
 		FC42680E185E538F00079544 /* pfr.c in Sources */ = {isa = PBXBuildFile; fileRef = FC4267FF185E538F00079544 /* pfr.c */; };
 		FC426811185E538F00079544 /* pfrdrivr.c in Sources */ = {isa = PBXBuildFile; fileRef = FC426802185E538F00079544 /* pfrdrivr.c */; };
-		FC45453218576C9900EE7560 /* iInit.mm in Sources */ = {isa = PBXBuildFile; fileRef = FC45453018576C1600EE7560 /* iInit.mm */; };
-		FC45454918576CF100EE7560 /* SDL2GLContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC45454118576CF100EE7560 /* SDL2GLContext.cpp */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5AAE58BB186F280F0038835A /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		5AA38E4D151A00CC00979B55 /* libXli.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXli.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		5AAE58BD186F280F0038835A /* libXliGL.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXliGL.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		5AAE58BF186F28100038835A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		5AAE58CD186F28100038835A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		5AAE58D0186F28100038835A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		5AAE58E5186F2B9B0038835A /* iInit.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = iInit.mm; sourceTree = "<group>"; };
 		CE0CD81B1768C90A00C02095 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
 		CE1535C9174CF162009C6275 /* libXliGLHelper.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXliGLHelper.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE1535D6174CF171009C6275 /* libXliHttp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXliHttp.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -693,7 +711,6 @@
 		FC4267DF185E530500079544 /* ftgzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ftgzip.c; sourceTree = "<group>"; };
 		FC4267FF185E538F00079544 /* pfr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pfr.c; sourceTree = "<group>"; };
 		FC426802185E538F00079544 /* pfrdrivr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pfrdrivr.c; sourceTree = "<group>"; };
-		FC45453018576C1600EE7560 /* iInit.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = iInit.mm; path = ios/iInit.mm; sourceTree = "<group>"; };
 		FC45454118576CF100EE7560 /* SDL2GLContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDL2GLContext.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -702,6 +719,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5AAE58BA186F280F0038835A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5AAE58C0186F28100038835A /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -746,13 +771,14 @@
 		5AA38E42151A00CC00979B55 = {
 			isa = PBXGroup;
 			children = (
-				FC45453318576CF100EE7560 /* gl */,
 				CE2D6DE416C70D9A00390436 /* audio */,
 				CE2D5E0A16C70D7D00390436 /* core */,
+				FC45453318576CF100EE7560 /* gl */,
 				CE1537CF174CF316009C6275 /* gl_helper */,
 				CE1535D7174CF305009C6275 /* http */,
 				CE2D6EB016C70DA600390436 /* main */,
 				CE2D6EC916C70DB500390436 /* media */,
+				5AAE58BE186F28100038835A /* Frameworks */,
 				5AA38E4E151A00CC00979B55 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -766,8 +792,35 @@
 				CE20885E16C84F9900667537 /* libXliMain.a */,
 				CE1535C9174CF162009C6275 /* libXliGLHelper.a */,
 				CE1535D6174CF171009C6275 /* libXliHttp.a */,
+				5AAE58BD186F280F0038835A /* libXliGL.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		5AAE58BE186F28100038835A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5AAE58BF186F28100038835A /* Foundation.framework */,
+				5AAE58CD186F28100038835A /* XCTest.framework */,
+				5AAE58D0186F28100038835A /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5AAE58E4186F2B9B0038835A /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				5AAE58E5186F2B9B0038835A /* iInit.mm */,
+			);
+			path = ios;
+			sourceTree = "<group>";
+		};
+		5AEA0329186F1105000530C7 /* 3rdparty */ = {
+			isa = PBXGroup;
+			children = (
+				CE2D5E1616C70D7D00390436 /* SDL2 */,
+			);
+			path = 3rdparty;
 			sourceTree = "<group>";
 		};
 		CE1535D7174CF305009C6275 /* http */ = {
@@ -1228,6 +1281,7 @@
 				CE2D670C16C70D8000390436 /* FileSystem.cpp */,
 				CE2D670D16C70D8000390436 /* generic */,
 				CE2D671216C70D8000390436 /* Hash.cpp */,
+				5AAE58E4186F2B9B0038835A /* ios */,
 				CE2D671416C70D8000390436 /* Matrix3.cpp */,
 				CE2D671516C70D8000390436 /* Matrix4.cpp */,
 				CE2D671616C70D8000390436 /* MessageBox.cpp */,
@@ -1260,7 +1314,6 @@
 			children = (
 				CE2D5E0C16C70D7D00390436 /* ConvertUTF.c */,
 				CE2D5E0D16C70D7D00390436 /* ConvertUTF.h */,
-				CE2D5E1616C70D7D00390436 /* SDL2 */,
 			);
 			path = 3rdparty;
 			sourceTree = "<group>";
@@ -1297,6 +1350,7 @@
 		CE2D672416C70D8000390436 /* sdl2 */ = {
 			isa = PBXGroup;
 			children = (
+				5AEA0329186F1105000530C7 /* 3rdparty */,
 				CE2D672616C70D8000390436 /* SDL2Display.cpp */,
 				CE2D672B16C70D8000390436 /* SDL2MessageBox.cpp */,
 				CE2D672F16C70D8000390436 /* SDL2Window.cpp */,
@@ -1326,7 +1380,6 @@
 		CE2D6EB016C70DA600390436 /* main */ = {
 			isa = PBXGroup;
 			children = (
-				FC45453018576C1600EE7560 /* iInit.mm */,
 				CE2D6EC416C70DA600390436 /* XliMain.cpp */,
 			);
 			name = main;
@@ -1774,6 +1827,23 @@
 			productReference = 5AA38E4D151A00CC00979B55 /* libXli.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		5AAE58BC186F280F0038835A /* XliGL */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5AAE58E1186F28100038835A /* Build configuration list for PBXNativeTarget "XliGL" */;
+			buildPhases = (
+				5AAE58B9186F280F0038835A /* Sources */,
+				5AAE58BA186F280F0038835A /* Frameworks */,
+				5AAE58BB186F280F0038835A /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = XliGL;
+			productName = XliGL;
+			productReference = 5AAE58BD186F280F0038835A /* libXliGL.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		CE1535BD174CF162009C6275 /* XliGLHelper */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = CE1535C6174CF162009C6275 /* Build configuration list for PBXNativeTarget "XliGLHelper" */;
@@ -1886,6 +1956,7 @@
 				CE20885416C84F9900667537 /* XliMain */,
 				CE1535BD174CF162009C6275 /* XliGLHelper */,
 				CE1535CA174CF171009C6275 /* XliHttp */,
+				5AAE58BC186F280F0038835A /* XliGL */,
 			);
 		};
 /* End PBXProject section */
@@ -1896,6 +1967,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE2D67D116C70D8400390436 /* ConvertUTF.c in Sources */,
+				5AAE58E6186F2B9B0038835A /* iInit.mm in Sources */,
 				CE2D6C5416C70D8500390436 /* ArrayStream.cpp in Sources */,
 				CE2D6C5516C70D8500390436 /* BinaryReader.cpp in Sources */,
 				CE2D6C5616C70D8500390436 /* BinaryWriter.cpp in Sources */,
@@ -2034,7 +2106,14 @@
 				CE2B2D6116C72AC40036FFA0 /* SDL_uikitwindow.m in Sources */,
 				CE20886316C8502B00667537 /* CocoaFileSystem.mm in Sources */,
 				CE0CD81C1768C90A00C02095 /* Application.cpp in Sources */,
-				FC45454918576CF100EE7560 /* SDL2GLContext.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5AAE58B9186F280F0038835A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5AAE58E3186F28960038835A /* SDL2GLContext.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2065,7 +2144,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE20885616C84F9900667537 /* AudioBuffer.cpp in Sources */,
-				FC45453218576C9900EE7560 /* iInit.mm in Sources */,
 				CE20885716C84F9900667537 /* AudioStream.cpp in Sources */,
 				CE20885816C84F9900667537 /* Wav.cpp in Sources */,
 				CE20886016C8500000667537 /* XliMain.cpp in Sources */,
@@ -2252,7 +2330,7 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					../../include,
-					../../src/core/3rdparty/SDL2/include,
+					../../src/core/sdl2/3rdparty/SDL2/include,
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				INSTALL_PATH = /usr/local/lib;
@@ -2274,7 +2352,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = __IPHONEOS__;
 				HEADER_SEARCH_PATHS = (
 					../../include,
-					../../src/core/3rdparty/SDL2/include,
+					../../src/core/sdl2/3rdparty/SDL2/include,
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				INSTALL_PATH = /usr/local/lib;
@@ -2282,6 +2360,53 @@
 				OBJROOT = build;
 				OTHER_CFLAGS = "-D__IPHONEOS__";
 				PRODUCT_NAME = Xli;
+				SKIP_INSTALL = YES;
+				SYMROOT = ../../lib/iOS;
+			};
+			name = Release;
+		};
+		5AAE58DD186F28100038835A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/Xli_Library.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Xli Library/Xli Library-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					__IPHONEOS__,
+					"DEBUG=1",
+				);
+				HEADER_SEARCH_PATHS = (
+					../../include,
+					../../src/core/sdl2/3rdparty/SDL2/include,
+				);
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = "";
+				OBJROOT = build;
+				OTHER_CFLAGS = "-D__IPHONEOS__";
+				PRODUCT_NAME = XliGL;
+				SKIP_INSTALL = YES;
+				SYMROOT = ../../lib/iOS;
+			};
+			name = Debug;
+		};
+		5AAE58DE186F28100038835A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/Xli_Library.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Xli Library/Xli Library-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = __IPHONEOS__;
+				HEADER_SEARCH_PATHS = (
+					../../include,
+					../../src/core/sdl2/3rdparty/SDL2/include,
+				);
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = "";
+				OBJROOT = build;
+				OTHER_CFLAGS = "-D__IPHONEOS__";
+				PRODUCT_NAME = XliGL;
 				SKIP_INSTALL = YES;
 				SYMROOT = ../../lib/iOS;
 			};
@@ -2377,7 +2502,7 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					../../include,
-					../../src/core/3rdparty/SDL2/include,
+					../../src/core/sdl2/3rdparty/SDL2/include,
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				INSTALL_PATH = /usr/local/lib;
@@ -2398,7 +2523,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = __IPHONEOS__;
 				HEADER_SEARCH_PATHS = (
 					../../include,
-					../../src/core/3rdparty/SDL2/include,
+					../../src/core/sdl2/3rdparty/SDL2/include,
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				INSTALL_PATH = /usr/local/lib;
@@ -2517,6 +2642,15 @@
 			buildConfigurations = (
 				5AA38E5B151A00CC00979B55 /* Debug */,
 				5AA38E5C151A00CC00979B55 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5AAE58E1186F28100038835A /* Build configuration list for PBXNativeTarget "XliGL" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5AAE58DD186F28100038835A /* Debug */,
+				5AAE58DE186F28100038835A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

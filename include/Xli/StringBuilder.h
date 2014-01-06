@@ -6,37 +6,37 @@
 
 namespace Xli
 {
-	/**
-		\ingroup XliCoreText
-	*/
-	class StringBuilder
-	{
-		Array<char> buffer;
+    /**
+        \ingroup XliCoreText
+    */
+    class StringBuilder
+    {
+        Array<char> buffer;
 
-	public:
-		StringBuilder(int cap = 1024);
+    public:
+        StringBuilder(int cap = 1024);
 
-		StringBuilder& operator += (const String& text);
-		StringBuilder& operator += (const char* str);
-		StringBuilder& operator += (char c);
+        StringBuilder& operator += (const String& text);
+        StringBuilder& operator += (const char* str);
+        StringBuilder& operator += (char c);
 
-		int GetLength() const;
+        int GetLength() const;
 
-		void Append(const char* str);
-		void Append(const String& text);
-		void Append(char c);
+        void Append(const char* str);
+        void Append(const String& text);
+        void Append(char c);
 
-		void AppendLine(const char* str);
-		void AppendLine(const String& text);
-		void AppendLine();
+        void AppendLine(const char* str);
+        void AppendLine(const String& text);
+        void AppendLine();
 
-		void AppendFormat(const char* format, ...);
+        void AppendFormat(const char* format, ...);
 
-		void Clear();
+        void Clear();
 
-		String GetString() const;
-		operator String() const;
-	};
+        String GetString() const;
+        operator String() const;
+    };
 }
 
 #endif

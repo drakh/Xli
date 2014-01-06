@@ -2,8 +2,8 @@
 #define __XLI_SOUND_H__
 
 /**
-	\defgroup XliAudio
-	\brief Audio decoding and playback (MP3, OGG, WAV)
+    \defgroup XliAudio
+    \brief Audio decoding and playback (MP3, OGG, WAV)
 */
 
 #include <XliAudio/AudioBuffer.h>

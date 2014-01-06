@@ -6,12 +6,12 @@
 
 namespace Xli
 {
-	/**
-		\ingroup XliMediaTextures
-	*/
-	enum Format
-	{
-		FormatUnspecified = 0,
+    /**
+        \ingroup XliMediaTextures
+    */
+    enum Format
+    {
+        FormatUnspecified = 0,
 
         FormatR_8_Int = 1,
         FormatRG_8_8_Int = 2,
@@ -81,8 +81,8 @@ namespace Xli
         FormatRG_32_32_UInt = 53,
         FormatRGB_32_32_32_UInt = 54,
         FormatRGBA_32_32_32_32_UInt = 55,
-		
-		FormatR_32_Float = 56,
+        
+        FormatR_32_Float = 56,
         FormatRG_32_32_Float = 57,
         FormatRGB_32_32_32_Float = 58,
         FormatRGBA_32_32_32_32_Float = 59,
@@ -92,37 +92,37 @@ namespace Xli
         FormatRGB_32_32_32_Typeless = 62,
         FormatRGBA_32_32_32_32_Typeless = 63,
 
-		// Compressed formats
+        // Compressed formats
         FormatCompressedRGB_BC1 = 200,
         FormatCompressedRGB_BC2 = 201,
         FormatCompressedRGB_BC3 = 202,
         FormatCompressedRGB_BC4 = 203,
         FormatCompressedRGB_BC5 = 204,
         FormatCompressedRGB_ETC1 = 205,
-		FormatCompressedRGB_PVRTC_4BPP = 206,
-		FormatCompressedRGB_PVRTC_2BPP = 207,
-		FormatCompressedRGBA_PVRTC_4BPP = 208,
-		FormatCompressedRGBA_PVRTC_2BPP = 209,
+        FormatCompressedRGB_PVRTC_4BPP = 206,
+        FormatCompressedRGB_PVRTC_2BPP = 207,
+        FormatCompressedRGBA_PVRTC_4BPP = 208,
+        FormatCompressedRGBA_PVRTC_2BPP = 209,
 
         // Depth/Stencil formats
         FormatD_32_Float = 500,
         FormatDSX_32_8_24_Float_UInt_Typeless = 501,
         FormatDS_24_8_UInt_Normalize_UInt = 502,
 
-		FormatD_16_UNorm = 503,
+        FormatD_16_UNorm = 503,
         FormatR_16_UNorm = 504
-	};
+    };
 
-	/**
-		\ingroup XliMediaTextures
-	*/
-	class FormatInfo
-	{
-	public:
-		static int ComponentCount(Format format);
-		static String ToString(Format format);
-		static int SizeOf(Format format);
-	};
+    /**
+        \ingroup XliMediaTextures
+    */
+    class FormatInfo
+    {
+    public:
+        static int ComponentCount(Format format);
+        static String ToString(Format format);
+        static int SizeOf(Format format);
+    };
 }
 
 #endif

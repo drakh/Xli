@@ -6,17 +6,17 @@
 
 namespace Xli
 {
-	/**
-		\ingroup XliMediaTextures
-	*/
-	class Ktx
-	{
-	public:
-		static void Save(Stream* output, Texture* tex);
-		static void Save(const String& filename, Texture* tex);
-		static Texture* Load(Stream* input);
-		static Texture* Load(const String& filename);
-	};
+    /**
+        \ingroup XliMediaTextures
+    */
+    class Ktx
+    {
+    public:
+        static void Save(Stream* output, Texture* tex);
+        static void Save(const String& filename, Texture* tex);
+        static Texture* Load(Stream* input);
+        static Texture* Load(const String& filename);
+    };
 }
 
 
