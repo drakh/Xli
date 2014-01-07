@@ -39,7 +39,7 @@ if (WIN32)
 
     SET(Sources ${Sources}
         win32/Win32Cond.cpp
-    win32/Win32Dialogs.cpp
+        win32/Win32Dialogs.cpp
         win32/Win32FileSystem.cpp
         win32/Win32Helpers.cpp
         win32/Win32MessageBox.cpp
@@ -50,7 +50,7 @@ if (WIN32)
         win32/Win32Helpers.cpp
         )
 
-elseif (UNIX)
+else()
 
     set(Sources ${Sources}
         generic/GenericDialogs.cpp

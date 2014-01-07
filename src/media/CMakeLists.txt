@@ -211,7 +211,7 @@ target_link_libraries(XliMedia Xli)
 
 if (APPLE)
     target_link_libraries(XliMedia z)
-elseif (UNIX)
+elseif (UNIX AND NOT WIN32)
     target_link_libraries(XliMedia freetype jpeg png z)
 endif()
 

@@ -1,7 +1,7 @@
 if (WIN32)
 
  
-elseif (UNIX)
+else()
 
     set(Sources sdl2/SDL2GLContext.cpp)
 
