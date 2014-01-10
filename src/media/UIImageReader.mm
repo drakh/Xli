@@ -1,8 +1,8 @@
+#include <Xli/File.h>
+#include <Xli/Shared.h>
 #include <XliMedia/ImageReader.h>
 #include <XliMedia/Jpeg.h>
 #include <XliMedia/Png.h>
-#include <Xli/File.h>
-
 #import <UIKit/UIImage.h>
 
 namespace Xli
