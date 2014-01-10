@@ -82,6 +82,7 @@ else()
             ${SDL2_DIR}/src/audio/SDL_mixer.c
             ${SDL2_DIR}/src/audio/SDL_wave.c
             ${SDL2_DIR}/src/cpuinfo/SDL_cpuinfo.c
+            ${SDL2_DIR}/src/dynapi/SDL_dynapi.c
             ${SDL2_DIR}/src/events/SDL_clipboardevents.c
             ${SDL2_DIR}/src/events/SDL_dropevents.c
             ${SDL2_DIR}/src/events/SDL_events.c

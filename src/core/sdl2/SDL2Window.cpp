@@ -151,7 +151,8 @@ namespace Xli
 
         SDL2Window::~SDL2Window()
         {
-            if (GlobalWindow == this) GlobalWindow = 0;
+            if (GlobalWindow == this) 
+                GlobalWindow = 0;
 
             SDL_DestroyWindow(window);
         }
@@ -178,7 +179,8 @@ namespace Xli
                 if (eventHandler.IsSet())
                 {
                     bool cancel = false;
-                    if (eventHandler->OnClosing(this, cancel) && cancel) return;
+                    if (eventHandler->OnClosing(this, cancel) && cancel) 
+                        return;
                 }
 
                 SDL_HideWindow(window);
@@ -679,7 +681,8 @@ namespace Xli
             
             PlatformSpecific::SDL2Window* wnd = 0;
             SDL_Window* sdlwnd = SDL_GetWindowFromID(e.window.windowID);
-            if (sdlwnd != 0) wnd = (PlatformSpecific::SDL2Window*)SDL_GetWindowData(sdlwnd, "SDL2Window");
+            if (sdlwnd != 0) 
+                wnd = (PlatformSpecific::SDL2Window*)SDL_GetWindowData(sdlwnd, "SDL2Window");
             
             if (wnd == 0)
             {
@@ -713,14 +716,13 @@ namespace Xli
                                 wnd->eventHandler->OnClosed(wnd);
                             }
                             break;
-                            /*
+
                         case SDL_WINDOWEVENT_RESIZED:
                             if (wnd->GetEventHandler() != 0)
-                            {
                                 wnd->GetEventHandler()->OnSizeChanged(wnd, Vector2i(e.window.data1, e.window.data2));
-                            }
+
                             break;
-                            */
+
                         case SDL_WINDOWEVENT_SIZE_CHANGED:
                             if (wnd->GetEventHandler() != 0)
                                 wnd->GetEventHandler()->OnSizeChanged(wnd, Vector2i(e.window.data1, e.window.data2));

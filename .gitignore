@@ -9,8 +9,8 @@
 .DS_Store
 /examples/*
 /src/core/sdl2/3rdparty/SDL2/*
-!/src/core/sdl2/3rdparty/SDL2/include/*
-!/src/core/sdl2/3rdparty/SDL2/src/*
+!/src/core/sdl2/3rdparty/SDL2/include
+!/src/core/sdl2/3rdparty/SDL2/src
 bin/
 build/
 cmake_install.cmake
