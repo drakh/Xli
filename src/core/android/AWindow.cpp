@@ -567,7 +567,7 @@ namespace Xli
         return GlobalWindow;
     }
 
-    Window* Window::Adopt(void* nativeWindowHandle)
+    Window* Window::CreateFrom(void* nativeWindowHandle)
     {
         XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
     }

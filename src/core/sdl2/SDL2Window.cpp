@@ -515,7 +515,7 @@ namespace Xli
         return new PlatformSpecific::SDL2Window(width, height, title, flags);
     }
 
-    Window* Window::Adopt(void* nativeWindowHandle)
+    Window* Window::CreateFrom(void* nativeWindowHandle)
     {
         AssertInit();
         return new PlatformSpecific::SDL2Window(nativeWindowHandle);
