@@ -1,6 +1,7 @@
 #include <XliMedia/GZip.h>
 #include <Xli/Console.h>
 #include <Xli/BufferStream.h>
+#include <Xli/Shared.h>
 #include <cstring>
 #include <zlib.h>
 

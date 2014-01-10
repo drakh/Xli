@@ -1,3 +1,4 @@
+#include <Xli/Shared.h>
 #include <XliAudio/AudioStream.h>
 
 namespace Xli

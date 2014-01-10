@@ -10,7 +10,10 @@ namespace Xli
         @{
     */
 
-    double GetTime();
+    double GetSeconds();
+
+    /// TODO: Deprecated function, use GetSeconds()
+    XLI_INLINE double GetTime() { return GetSeconds(); }
 
     Timestamp GetTimestamp();
     Timestamp GetTimestampUtc();

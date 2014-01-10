@@ -223,6 +223,18 @@
     <ClInclude Include="..\..\..\include\Xli\PlatformSpecific\Win32Window.h">
       <Filter>Xli\Platform\win32</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Bundle.h">
+      <Filter>Xli\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Disk.h">
+      <Filter>Xli\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\MutexQueue.h">
+      <Filter>Xli\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Shared.h">
+      <Filter>Xli\Containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\core\Random.cpp">
@@ -261,9 +273,6 @@
     <ClCompile Include="..\..\..\src\core\MessageBox.cpp">
       <Filter>Xli\Platform</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\core\NativeFileSystem.cpp">
-      <Filter>Xli\Platform</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\core\win32\Win32MessageBox.cpp">
       <Filter>Xli\Platform\win32</Filter>
     </ClCompile>
@@ -299,9 +308,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\core\android\AWindow.cpp">
       <Filter>Xli\Platform\android</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\core\generic\GenericAssetFileSystem.cpp">
-      <Filter>Xli\Platform\generic</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\core\generic\GenericDialogs.cpp">
       <Filter>Xli\Platform\generic</Filter>
@@ -407,6 +413,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\core\Application.cpp">
       <Filter>Xli\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Disk.cpp">
+      <Filter>Xli\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Bundle.cpp">
+      <Filter>Xli\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\generic\GenericBundle.cpp">
+      <Filter>Xli\Platform\generic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

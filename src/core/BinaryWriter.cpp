@@ -4,7 +4,7 @@
 namespace Xli
 {
     BinaryWriter::BinaryWriter(Stream* stream)
-        : StreamWriter(stream)
+        : StreamWriterBase(stream)
     {
     }
 
@@ -14,12 +14,12 @@ namespace Xli
 
     void BinaryWriter::Write(const void* data, int elmSize, int elmCount)
     {
-        stream->WriteSafe(data, elmSize, elmCount);
+        _stream->WriteSafe(data, elmSize, elmCount);
     }
 
     void BinaryWriter::WriteCStr(const char* str)
     {
-        stream->WriteSafe((const void*)str, 1, (int)strlen(str));
+        _stream->WriteSafe((const void*)str, 1, (int)strlen(str));
     }
 
     void BinaryWriter::Write7BitEncodedInt32(Int32 value)
@@ -36,6 +36,6 @@ namespace Xli
     void BinaryWriter::WriteString(const String& str)
     {
         Write7BitEncodedInt32(str.Length());
-        stream->WriteSafe(str.Data(), 1, str.Length());
+        _stream->WriteSafe(str.Data(), 1, str.Length());
     }
 }

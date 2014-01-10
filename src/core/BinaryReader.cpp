@@ -3,7 +3,7 @@
 namespace Xli
 {
     BinaryReader::BinaryReader(Stream* stream)
-        : StreamReader(stream)
+        : StreamReaderBase(stream)
     {
     }
 
@@ -13,13 +13,13 @@ namespace Xli
 
     void BinaryReader::Read(void* dst, int elmSize, int elmCount)
     {
-        stream->ReadSafe(dst, elmSize, elmCount);
+        _stream->ReadSafe(dst, elmSize, elmCount);
     }
 
     String BinaryReader::ReadCStr(int len)
     {
         String str = String::Create(len);
-        stream->ReadSafe((void*)str.Data(), 1, len);
+        _stream->ReadSafe((void*)str.Data(), 1, len);
         return str;
     }
 
@@ -30,10 +30,10 @@ namespace Xli
 
     Buffer* BinaryReader::ReadAll()
     {
-        stream->Seek(SeekOriginBegin, 0);
-        int size = stream->GetLength();
+        _stream->Seek(SeekOriginBegin, 0);
+        int size = _stream->GetLength();
         Buffer* buf = Buffer::Create(size);
-        stream->ReadSafe(buf->Data(), 1, size);
+        _stream->ReadSafe(buf->Data(), 1, size);
         return buf;
     }
 

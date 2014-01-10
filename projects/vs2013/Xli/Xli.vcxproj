@@ -192,16 +192,19 @@
     <ClInclude Include="..\..\..\include\Xli\BaseTypes.h" />
     <ClInclude Include="..\..\..\include\Xli\Buffer.h" />
     <ClInclude Include="..\..\..\include\Xli\BufferStream.h" />
+    <ClInclude Include="..\..\..\include\Xli\Bundle.h" />
     <ClInclude Include="..\..\..\include\Xli\ConditionVariable.h" />
     <ClInclude Include="..\..\..\include\Xli\Config.h" />
     <ClInclude Include="..\..\..\include\Xli\DataType.h" />
     <ClInclude Include="..\..\..\include\Xli\DateTime.h" />
     <ClInclude Include="..\..\..\include\Xli\Dialogs.h" />
+    <ClInclude Include="..\..\..\include\Xli\Disk.h" />
     <ClInclude Include="..\..\..\include\Xli\Display.h" />
     <ClInclude Include="..\..\..\include\Xli\Exception.h" />
     <ClInclude Include="..\..\..\include\Xli\Hash.h" />
     <ClInclude Include="..\..\..\include\Xli\MessageBox.h" />
     <ClInclude Include="..\..\..\include\Xli\Mutex.h" />
+    <ClInclude Include="..\..\..\include\Xli\MutexQueue.h" />
     <ClInclude Include="..\..\..\include\Xli\NativeFileSystem.h" />
     <ClInclude Include="..\..\..\include\Xli\Object.h" />
     <ClInclude Include="..\..\..\include\Xli\OrderedMap.h" />
@@ -215,6 +218,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Shared.h" />
     <ClInclude Include="..\..\..\include\Xli\Sort.h" />
     <ClInclude Include="..\..\..\include\Xli\String.h" />
     <ClInclude Include="..\..\..\include\Xli\StringBuilder.h" />
@@ -293,10 +297,12 @@
     <ClCompile Include="..\..\..\src\core\ArrayStream.cpp" />
     <ClCompile Include="..\..\..\src\core\Buffer.cpp" />
     <ClCompile Include="..\..\..\src\core\BufferStream.cpp" />
+    <ClCompile Include="..\..\..\src\core\Bundle.cpp" />
     <ClCompile Include="..\..\..\src\core\DataType.cpp" />
     <ClCompile Include="..\..\..\src\core\DateTime.cpp" />
+    <ClCompile Include="..\..\..\src\core\Disk.cpp" />
     <ClCompile Include="..\..\..\src\core\Exception.cpp" />
-    <ClCompile Include="..\..\..\src\core\generic\GenericAssetFileSystem.cpp">
+    <ClCompile Include="..\..\..\src\core\generic\GenericBundle.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -318,7 +324,6 @@
     <ClCompile Include="..\..\..\src\core\Matrix3.cpp" />
     <ClCompile Include="..\..\..\src\core\Matrix4.cpp" />
     <ClCompile Include="..\..\..\src\core\MessageBox.cpp" />
-    <ClCompile Include="..\..\..\src\core\NativeFileSystem.cpp" />
     <ClCompile Include="..\..\..\src\core\Object.cpp" />
     <ClCompile Include="..\..\..\src\core\Path.cpp" />
     <ClCompile Include="..\..\..\src\core\posix\PosixCond.cpp">

@@ -4,13 +4,13 @@
 namespace Xli
 {
     TextWriter::TextWriter(Stream* stream)
-        : StreamWriter(stream)
+        : StreamWriterBase(stream)
     {
     }
 
     void TextWriter::Write(const char* str, int len)
     {
-        stream->WriteSafe(str, 1, len);
+        _stream->WriteSafe(str, 1, len);
     }
 
     void TextWriter::WriteFormat(const char* format, ...)
@@ -33,6 +33,6 @@ namespace Xli
     
     void TextWriter::WriteLine()
     {
-        stream->WriteSafe("\n", 1, 1);
+        _stream->WriteSafe("\n", 1, 1);
     }
 }

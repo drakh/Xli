@@ -1,5 +1,4 @@
 #import <Foundation/Foundation.h>
-#include <Xli/File.h>
 #include "../posix/PosixFileSystemBase.h"
 
 namespace Xli
@@ -54,7 +53,7 @@ namespace Xli
         return new PlatformSpecific::CocoaFileSystem();
     }
 
-    FileSystem* CreateAssetFileSystem()
+    FileSystem* CreateBundleFileSystem()
     {
         return Disk->CreateSubFileSystem("data");
     }

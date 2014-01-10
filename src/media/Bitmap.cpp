@@ -1,5 +1,5 @@
 #include <XliMedia/Bitmap.h>
-#include <Xli/Managed.h>
+#include <Xli/Shared.h>
 #include <Xli/Array.h>
 #include <cstring>
 

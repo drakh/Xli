@@ -2,6 +2,7 @@
 #define __XLI_PLATFORM_SPECIFIC_WIN32_WINDOW_H__
 
 #include <Xli/PlatformSpecific/Win32Header.h>
+#include <Xli/Shared.h>
 #include <Xli/Window.h>
 
 namespace Xli

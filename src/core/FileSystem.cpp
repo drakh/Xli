@@ -1,5 +1,6 @@
 #include <Xli/FileSystem.h>
 #include <Xli/Path.h>
+#include <Xli/Shared.h>
 
 namespace Xli
 {

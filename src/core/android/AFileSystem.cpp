@@ -155,7 +155,7 @@ namespace Xli
         };
     }
 
-    FileSystem* CreateAssetFileSystem()
+    FileSystem* CreateBundleFileSystem()
     {
         return new PlatformSpecific::AAssetFileSystem();
     }

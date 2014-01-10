@@ -1,4 +1,5 @@
 #include <XliGL.h>
+#include <Xli/Shared.h>
 #include <EGL/egl.h>
 
 #ifdef XLI_PLATFORM_ANDROID

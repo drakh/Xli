@@ -1,5 +1,4 @@
-#include <Xli/NativeFileSystem.h>
-#include <Xli/File.h>
+#include <Xli/Disk.h>
 #include <Xli/Path.h>
 #include <Xli/Random.h>
 #include <Xli/Unicode.h>
@@ -244,7 +243,7 @@ namespace Xli
         return new PlatformSpecific::Win32FileSystem();
     }
 
-    FileSystem* CreateAssetFileSystem()
+    FileSystem* CreateBundleFileSystem()
     {
         const char* possibleDataSuffixes[] =
         {

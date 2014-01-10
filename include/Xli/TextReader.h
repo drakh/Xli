@@ -8,7 +8,7 @@ namespace Xli
     /**
         \ingroup XliCoreIO
     */
-    class TextReader: public StreamReader
+    class TextReader: public StreamReaderBase
     {
     public:
         TextReader(Stream* stream);

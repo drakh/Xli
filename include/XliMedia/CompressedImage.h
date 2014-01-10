@@ -2,7 +2,7 @@
 #define __XLI_GRAPHICS_COMPRESSED_IMAGE_H__
 
 #include <XliMedia/Image.h>
-#include <Xli/Managed.h>
+#include <Xli/Shared.h>
 #include <Xli/Buffer.h>
 
 namespace Xli

@@ -3,7 +3,7 @@
 
 namespace Xli
 {
-    double GetTime()
+    double GetSeconds()
     {
         LARGE_INTEGER frequency;
         QueryPerformanceFrequency(&frequency);

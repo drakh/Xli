@@ -21,9 +21,11 @@ LOCAL_SRC_FILES := \
 	../../../src/core/BinaryWriter.cpp \
 	../../../src/core/Buffer.cpp \
 	../../../src/core/BufferStream.cpp \
+    ../../../src/core/Bundle.cpp \
 	../../../src/core/Console.cpp \
 	../../../src/core/DataType.cpp \
 	../../../src/core/DateTime.cpp \
+    ../../../src/core/Disk.cpp \
 	../../../src/core/Exception.cpp \
 	../../../src/core/File.cpp \
 	../../../src/core/FileSystem.cpp \
@@ -31,7 +33,6 @@ LOCAL_SRC_FILES := \
 	../../../src/core/Matrix3.cpp \
 	../../../src/core/Matrix4.cpp \
 	../../../src/core/MessageBox.cpp \
-	../../../src/core/NativeFileSystem.cpp \
 	../../../src/core/Object.cpp \
 	../../../src/core/Path.cpp \
 	../../../src/core/Quaternion.cpp \

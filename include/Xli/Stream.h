@@ -68,14 +68,14 @@ namespace Xli
     /**
         \ingroup XliCoreIO
     */
-    class StreamWriter: public Object
+    class StreamWriterBase: public Object
     {
     protected:
-        Stream* stream;
+        Stream* _stream;
 
     public:
-        StreamWriter(Stream* stream);
-        virtual ~StreamWriter();
+        StreamWriterBase(Stream* stream);
+        virtual ~StreamWriterBase();
 
         void SwitchStream(Stream* stream);
         Stream* GetStream();
@@ -84,14 +84,14 @@ namespace Xli
     /**
         \ingroup XliCoreIO
     */
-    class StreamReader: public Object
+    class StreamReaderBase: public Object
     {
     protected:
-        Stream* stream;
+        Stream* _stream;
 
     public:
-        StreamReader(Stream* stream);
-        virtual ~StreamReader();
+        StreamReaderBase(Stream* stream);
+        virtual ~StreamReaderBase();
         
         void SwitchStream(Stream* stream);
         Stream* GetStream();
