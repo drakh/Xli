@@ -6,9 +6,11 @@ set(Sources
     BinaryWriter.cpp
     Buffer.cpp
     BufferStream.cpp
+	Bundle.cpp
     Console.cpp
     DataType.cpp
     DateTime.cpp
+	Disk.cpp
     Exception.cpp
     File.cpp
     FileSystem.cpp
@@ -16,7 +18,6 @@ set(Sources
     Matrix3.cpp
     Matrix4.cpp
     MessageBox.cpp
-    NativeFileSystem.cpp
     Object.cpp
     Path.cpp
     Quaternion.cpp
@@ -194,7 +195,7 @@ else()
     else()
 
         set(Sources ${Sources}
-            generic/GenericAssetFileSystem.cpp
+            generic/GenericBundle.cpp
             xdg/XdgFileSystem.cpp
             )
 
@@ -205,7 +206,6 @@ else()
 endif()
 
 add_library(Xli ${Sources})
-
 
 if (UNIX AND NOT APPLE AND NOT WIN32)
     target_link_libraries(Xli SDL2 pthread)

@@ -9,7 +9,7 @@ namespace Xli
     /**
         \ingroup XliCoreIO
     */
-    class BinaryWriter: public StreamWriter
+    class BinaryWriter : public StreamWriterBase
     {
     public:
         BinaryWriter(Stream* stream);
@@ -17,12 +17,12 @@ namespace Xli
 
         template <typename T> void Write(const T& elm)
         {
-            stream->WriteSafe((const void*)&elm, sizeof(T), 1);
+            _stream->WriteSafe((const void*)&elm, sizeof(T), 1);
         }
 
-        template <typename T> void Write(const Vector2t<T>& vec) { stream->WriteSafe(vec.Data(), sizeof(T), 2); }
-        template <typename T> void Write(const Vector3t<T>& vec) { stream->WriteSafe(vec.Data(), sizeof(T), 3); }
-        template <typename T> void Write(const Vector4t<T>& vec) { stream->WriteSafe(vec.Data(), sizeof(T), 4); }
+        template <typename T> void Write(const Vector2t<T>& vec) { _stream->WriteSafe(vec.Data(), sizeof(T), 2); }
+        template <typename T> void Write(const Vector3t<T>& vec) { _stream->WriteSafe(vec.Data(), sizeof(T), 3); }
+        template <typename T> void Write(const Vector4t<T>& vec) { _stream->WriteSafe(vec.Data(), sizeof(T), 4); }
 
         void WriteFloat(const float& elm) { Write<float>(elm); }
         void WriteDouble(const double& elm) { Write<double>(elm); }

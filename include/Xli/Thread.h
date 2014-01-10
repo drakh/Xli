@@ -2,6 +2,7 @@
 #define __XLI_THREAD_H__
 
 #include "Window.h"
+#include "Shared.h"
 
 namespace Xli
 {

@@ -1,5 +1,6 @@
 #include <XliAudio/AudioBuffer.h>
 #include <Xli/MessageBox.h>
+#include <Xli/Shared.h>
 #include <portaudio.h>
 #include <cstdlib>
 #include <cstring>

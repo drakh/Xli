@@ -1,5 +1,6 @@
 #include <XliAudio/Wav.h>
 #include <Xli/BinaryReader.h>
+#include <Xli/Shared.h>
 
 namespace Xli
 {

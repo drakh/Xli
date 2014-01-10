@@ -5,7 +5,7 @@
 
 namespace Xli
 {
-    double GetTime()
+    double GetSeconds()
     {
         struct timeval t;
         gettimeofday(&t, 0);

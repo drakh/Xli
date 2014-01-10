@@ -34,7 +34,7 @@ namespace Xli
 
     Buffer* ArrayStream::CopyData() const
     {
-        return Buffer::Copy(buf.Data(), buf.Length());
+        return Buffer::CopyFrom(buf.Data(), buf.Length());
     }
 
     void ArrayStream::Clear()

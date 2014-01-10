@@ -98,18 +98,18 @@ namespace Xli
         Write(buf->Data(), 1, buf->Size());
     }
 
-    StreamWriter::StreamWriter(Stream* stream)
+    StreamWriterBase::StreamWriterBase(Stream* stream)
     {
-        this->stream = 0;
+        _stream = 0;
         SwitchStream(stream);
     }
 
-    StreamWriter::~StreamWriter()
+    StreamWriterBase::~StreamWriterBase()
     {
-        stream->Release();
+        _stream->Release();
     }
 
-    void StreamWriter::SwitchStream(Stream* stream)
+    void StreamWriterBase::SwitchStream(Stream* stream)
     {
         if (!stream)
             XLI_THROW_NULL_POINTER;
@@ -119,29 +119,29 @@ namespace Xli
 
         stream->AddRef();
         
-        if (this->stream) 
-            this->stream->Release();
+        if (_stream) 
+            _stream->Release();
 
-        this->stream = stream;
+        _stream = stream;
     }
 
-    Stream* StreamWriter::GetStream()
+    Stream* StreamWriterBase::GetStream()
     {
-        return stream;
+        return _stream;
     }
 
-    StreamReader::StreamReader(Stream* stream)
+    StreamReaderBase::StreamReaderBase(Stream* stream)
     {
-        this->stream = 0;
+        _stream = 0;
         SwitchStream(stream);
     }
 
-    StreamReader::~StreamReader()
+    StreamReaderBase::~StreamReaderBase()
     {
-        stream->Release();
+        _stream->Release();
     }
 
-    void StreamReader::SwitchStream(Stream* stream)
+    void StreamReaderBase::SwitchStream(Stream* stream)
     {
         if (!stream)
             XLI_THROW_NULL_POINTER;
@@ -151,14 +151,14 @@ namespace Xli
 
         stream->AddRef();
         
-        if (this->stream) 
-            this->stream->Release();
+        if (_stream) 
+            _stream->Release();
         
-        this->stream = stream;
+        _stream = stream;
     }
 
-    Stream* StreamReader::GetStream()
+    Stream* StreamReaderBase::GetStream()
     {
-        return stream;
+        return _stream;
     }
 }

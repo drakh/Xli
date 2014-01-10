@@ -458,7 +458,7 @@ namespace Xli
         /**
             Adopts a native window
         */
-        static Window* Adopt(void* nativeWindowHandle);
+        static Window* CreateFrom(void* nativeWindowHandle);
 
         /**
             Process messages for the application to keep user interface responsive.

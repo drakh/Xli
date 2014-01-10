@@ -9,7 +9,7 @@ namespace Xli
     /**
         \ingroup XliMediaMarkup
     */
-    class FormattedTextWriter: public StreamWriter
+    class FormattedTextWriter: public StreamWriterBase
     {
         int lineCount, indent;
         bool skipLine, disableSkip;

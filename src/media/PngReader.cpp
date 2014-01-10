@@ -1,4 +1,5 @@
 #include <Xli/File.h>
+#include <Xli/Shared.h>
 #include <XliMedia/Png.h>
 #include <XliMedia/ImageReader.h>
 #include <png.h>

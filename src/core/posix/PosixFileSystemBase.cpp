@@ -1,6 +1,5 @@
 #include "PosixFileSystemBase.h"
 
-#include <Xli/File.h>
 #include <Xli/Time.h>
 #include <Xli/Random.h>
 #include <Xli/Hash.h>

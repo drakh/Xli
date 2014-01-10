@@ -36,7 +36,7 @@ namespace Xli
 
     public:
         static Buffer* Create(int size);
-        static Buffer* Copy(const void* data, int size);
+        static Buffer* CopyFrom(const void* data, int size);
 
         virtual void Delete();
 

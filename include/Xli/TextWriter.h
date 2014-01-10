@@ -11,7 +11,7 @@ namespace Xli
     /**
         \ingroup XliCoreIO
     */
-    class TextWriter: public StreamWriter
+    class TextWriter: public StreamWriterBase
     {
     public:
         TextWriter(Stream* stream);

@@ -1,5 +1,6 @@
 #include <XliMedia/Texture.h>
 #include <XliMedia/Bitmap.h>
+#include <Xli/Shared.h>
 
 namespace Xli
 {

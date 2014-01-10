@@ -2,6 +2,7 @@
 #define __XLI_PLATFORM_SPECIFIC_SDL2_WINDOW_H__
 
 #include <Xli/Window.h>
+#include <Xli/Shared.h>
 #include <SDL.h>
 
 namespace Xli
