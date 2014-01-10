@@ -36,7 +36,7 @@ namespace Xli
         free(this);
     }
 
-    Buffer* Buffer::Copy(const void* data, int size)
+    Buffer* Buffer::CopyFrom(const void* data, int size)
     {
         Buffer* b = Buffer::Create(size);
         memcpy(b->Data(), data, size);

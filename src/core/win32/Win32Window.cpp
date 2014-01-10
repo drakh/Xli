@@ -699,7 +699,7 @@ namespace Xli
         return new PlatformSpecific::Win32Window(width, height, title, flags);
     }
 
-    Window* Window::Adopt(void* nativeWindowHandle)
+    Window* Window::CreateFrom(void* nativeWindowHandle)
     {
         AssertInit();
         return new PlatformSpecific::Win32Window((HWND)nativeWindowHandle);
