@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.6)
 
 include(cmake/setup_build.cmake)
 
-setup_build()
+#setup_build()
 
 if (APPLE)
 

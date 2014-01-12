@@ -1,4 +1,4 @@
-function(setup_build)
+#function(setup_build)
 
     if (UNIX AND NOT WIN32)
         set(BUILD_SHARED_LIBS TRUE CACHE BOOL "Build shared or static libs")
@@ -88,4 +88,4 @@ function(setup_build)
     include_directories(${PROJECT_SOURCE_DIR}/include)
     link_directories(${LIBRARY_OUTPUT_PATH})
 
-endfunction()
+#endfunction()
