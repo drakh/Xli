@@ -94,7 +94,11 @@ namespace Xli
             virtual Vector2i GetBackbufferSize()
             {
                 Vector2i size;
+#ifdef XLI_PLATFORM_LINUX
+                SDL_GetWindowSize(window->GetSDL_Window(), &size.X, &size.Y);
+#else
                 SDL_GL_GetDrawableSize(window->GetSDL_Window(), &size.X, &size.Y);
+#endif
                 return size;
             }
         };
