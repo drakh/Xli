@@ -4,7 +4,7 @@ cd "`dirname "$0"`"
 
 if which apt-get; then
 
-	apt-get install libpng12-dev libjpeg-dev libfreetype6-dev libglew-dev portaudio19-dev libcurl4-openssl-dev cmake g++
+	apt-get install libsdl2-dev libpng12-dev libjpeg-dev libfreetype6-dev libglew-dev portaudio19-dev libcurl4-openssl-dev cmake g++
 
 elif which port; then
 
