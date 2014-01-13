@@ -70,6 +70,7 @@ This command wraps 'cmake && make', but with some additional features:
   - Out of source builds with debug and release built to separate folders
   - Paralell builds out of the box
   - Xcode batch builds (OS X only)
+  - MSYS builds (Windows only)
 
 Additional arguments to cmake can be passed using environment variable CMAKE_ARGS.
 E0
@@ -153,7 +154,13 @@ cd $BUILD_DIR
 
 #rm -f CMakeCache.txt
 
-cmake ../.. $CMAKE_ARGS
+if [ $OSTYPE = "msys"  ]; then
+    export CMAKE_ARGS="$CMAKE_ARGS -G\"MSYS Makefiles"
+    cmd "/C cmake ../.. %CMAKE_ARGS%"
+else
+    cmake ../.. $CMAKE_ARGS
+fi
+
 make -j $JOB_COUNT
 
 if [ "$INSTALL" == "1" ]; then

@@ -23,7 +23,7 @@
 
     elseif (MSVC)
 
-        error("FIXME: Visual Studio builds are broken.")
+        message(FATAL_ERROR "FIXME: Visual Studio builds are broken.")
 
         set(CMAKE_BUILD_SHARED_LIBS FALSE INTERNAL)
         set(CMAKE_CONFIGURATION_TYPES "Debug;Release" INTERNAL)
@@ -64,9 +64,17 @@
         set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${LIBRARY_OUTPUT_PATH})
         set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${LIBRARY_OUTPUT_PATH})
 
+    elseif (WIN32)
+
+        if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+            set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/mingw/x86_64)
+        else()
+            set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/mingw/x86_32)
+        endif()
+
     else()
 
-        error("Unsupported system")
+        message(FATAL_ERROR "Unsupported system")
 
     endif()
 

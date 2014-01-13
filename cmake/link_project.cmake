@@ -23,12 +23,20 @@ function(link_project PROJECT_DIR)
 		elseif (MSVC10)
 			link_directories("${PROJECT_DIR}/lib/vs2010/$(PlatformShortName)")
 		else()
-			error("Unsupported MSVC version")
+			message(FATAL_ERROR "Unsupported MSVC version")
 		endif()
 		
+    elseif (WIN32)
+
+        if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+            set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/mingw/x86_64)
+        else()
+            set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/mingw/x86_32)
+        endif()
+        
 	else()
 
-		error("Unsupported system")
+		message(FATAL_ERROR "Unsupported system")
 
 	endif()
 
