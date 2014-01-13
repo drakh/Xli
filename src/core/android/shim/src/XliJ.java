@@ -17,6 +17,7 @@ import android.app.NativeActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.ConnectivityManager;
+import android.content.res.AssetManager;
 import android.net.NetworkInfo;
 import android.os.ConditionVariable;
 import android.text.InputType;
@@ -324,6 +325,11 @@ public class XliJ extends android.app.NativeActivity {
     {
         CookieManager cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
         CookieHandler.setDefault(cookieManager);
+    }
+
+    public static AssetManager GetAssetManager(NativeActivity activity)
+    {
+        return activity.getAssets();
     }
 }
 

@@ -1,3 +1,5 @@
+#include <android/asset_manager.h>
+#include <android/asset_manager_jni.h>
 #include <Xli/PlatformSpecific/Android.h>
 #include <Xli/Window.h>
 
@@ -204,6 +206,20 @@ namespace Xli
             jmethodID mid = jni->GetStaticMethodID(shim_class, "InitDefaultCookieManager", "()V");
             if (!mid) LOGE("Unable to get InitDefaultCookieManager, cant get mid");
             jni->CallObjectMethod(shim_class, mid);
+        }
+
+
+        AAssetManager* AShim::GetAssetManager()
+        {
+            AJniHelper jni;
+            jclass shim_class = jni.GetShim();
+            jmethodID mid = jni->GetStaticMethodID(shim_class, "GetAssetManager", "(Landroid/app/NativeActivity;)Landroid/content/res/AssetManager;");
+            if (!mid) LOGE("Unable to GetAssetManager, cant get mid");
+            jobject activity = jni.GetInstance();
+            jobject assetManager = jni->CallObjectMethod(shim_class, mid, activity);
+            jni->NewGlobalRef(assetManager);
+            AAssetManager* result = AAssetManager_fromJava(jni.GetEnv(), assetManager);
+            return result;
         }
 
         Xli::Key AShim::AndroidToXliKeyEvent(AKeyEvent androidKeyCode) 
