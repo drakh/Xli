@@ -65,7 +65,7 @@ Usage: cmakemake [--debug|--release] [--install] [--prefix=<path>] [--jobs=<cpu-
 
 Build script for CMake projects.
 
-This command wraps 'cmake && make', but with some additional features:
+This command wraps 'cmake && make' with some additional features:
   - Optimized release build by default, unless --debug or DEBUG=1
   - Out of source builds with debug and release built to separate folders
   - Paralell builds out of the box
@@ -85,15 +85,15 @@ if [ "$CLEAN" == "1" ]; then
         if [ -f "$dir/Makefile" ]; then
             cd "$dir"
             make clean
-            cd -
+            cd "$OLDPWD"
         fi
     done
 
-    rm -rf build/cmake-*
+    rm -rfv build/cmake-*
     exit 0
 fi
 
-if [ -z "`which cmake`" ]; then
+if [ !`which cmake` ]; then
     # This is sometimes needed when run from GUI applications on OS X
     PATH=$PATH:/opt/local/bin
 fi
