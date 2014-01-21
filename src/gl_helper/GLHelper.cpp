@@ -46,7 +46,7 @@ namespace Xli
         const char* code[] =
         {
 #ifdef XLI_GL_ES2
-            "precision mediump float;\n",
+            "precision highp float;\n",
 #else
             "",
 #endif
