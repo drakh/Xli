@@ -8,6 +8,8 @@
 
 extern Xli::PlatformSpecific::SlesAudioEngine* GlobalAAudioEngine = 0;
 
+//{TODO} share the player obj
+
 namespace Xli
 {
 
@@ -21,20 +23,14 @@ namespace Xli
         bool Closed;
         
     public:
-        String Path;
-        bool Asset;
-        
-        SlesSimpleSoundChannel(const String& path, bool androidAsset)
+        SlesSimpleSoundChannel(const SimpleSound& sound)
         {
-            this->Path = path;
-            this->Asset = androidAsset;
- 
             playerObject = NULL;
             playerPlayItf = NULL;
             playerSeekItf = NULL;
             playerVolumeItf = NULL;
-            Closed = !PrepareSlesPlayer(path, androidAsset);                       
-        }
+            Closed = !PrepareSlesPlayer(sound.Path, sound.Asset);            
+        }    
 
         virtual ~SlesSimpleSoundChannel()
         {
@@ -45,38 +41,16 @@ namespace Xli
             Closed=true;
         }
 
-        virtual int GetDuration() const
+		virtual void Pause()
         {
-            SLmillisecond duration = -1;
-            SLresult result = (*playerPlayItf)->GetPosition(playerPlayItf, &duration);
-            assert(SL_RESULT_SUCCESS == result);
-            return (int)duration;
+            (*playerPlayItf)->SetPlayState(playerPlayItf, SL_PLAYSTATE_PAUSED);
         }
-        
-        virtual void Play()
+        virtual void UnPause()
         {
-            (*playerPlayItf)->SetPlayState(playerPlayItf, SL_PLAYSTATE_PLAYING);
+            if (this->IsPaused())
+                (*playerPlayItf)->SetPlayState(playerPlayItf, SL_PLAYSTATE_PLAYING);
         }
 
-        virtual void SetLoop(double milli_start, double milli_end)
-        {                     
-            SLresult result = (*playerSeekItf)->SetLoop(playerSeekItf, SL_BOOLEAN_TRUE,
-                                                        (SLmillisecond)milli_start,
-                                                        (SLmillisecond)milli_end);
-            assert(SL_RESULT_SUCCESS == result);
-        }
-
-        virtual bool GetLoop()
-        {
-            SLboolean looping;
-            SLmillisecond milli_start;
-            SLmillisecond milli_end;
-            SLresult result = (*playerSeekItf)->GetLoop(playerSeekItf, &looping,
-                                                        &milli_start, &milli_end);
-            assert(SL_RESULT_SUCCESS == result);
-            return (bool)looping;
-        }
-        
         virtual int GetPosition() const
         {
             SLmillisecond pos = -1;
@@ -84,33 +58,12 @@ namespace Xli
             assert(SL_RESULT_SUCCESS == result);
             return (int)pos;
         }
-
         virtual void SetPosition(int position)
         {
             SLresult result = (*playerSeekItf)->SetPosition(playerSeekItf, position, SL_SEEKMODE_FAST);
             assert(SL_RESULT_SUCCESS == result);
         }
 
-		virtual float GetPan() const
-        {
-            SLpermille pos;
-            SLresult result = (*playerVolumeItf)->GetStereoPosition(playerVolumeItf, &pos);
-            assert(SL_RESULT_SUCCESS == result);
-            float pan = pos / 1000.0f;
-            if (pan < -1.0f) pan = -1.0f;
-            if (pan > 1.0f) pan = 1.0f;
-            return pan;
-        }
-
-		virtual void SetPan(float pan) const
-        {
-            if (pan < -1.0f) pan = -1.0f;
-            if (pan > 1.0f) pan = 1.0f;
-            SLpermille pos = pan * 1000.0f;
-            SLresult result = (*playerVolumeItf)->SetStereoPosition(playerVolumeItf, pos);
-            assert(SL_RESULT_SUCCESS == result);
-        }
-        
 		virtual float GetVolume() const
         {
             SLmillibel max;
@@ -120,7 +73,6 @@ namespace Xli
             assert(SL_RESULT_SUCCESS == result);
             return (100.0f / (max - SL_MILLIBEL_MIN)) * vol;
         }
-
 		virtual void SetVolume(float volume) const
         {
             SLmillibel max;
@@ -128,21 +80,9 @@ namespace Xli
             SLmillibel vol = SL_MILLIBEL_MIN + (((max - SL_MILLIBEL_MIN) / 100.0f) * volume);
             if (vol > max) vol = max;
             if (vol < SL_MILLIBEL_MIN) vol = SL_MILLIBEL_MIN;
+            LOGDBG("min: %d max: %d vol-in: %f vol: %d", SL_MILLIBEL_MIN, max, volume, vol);
             SLresult result = (*playerVolumeItf)->SetVolumeLevel(playerVolumeItf, vol);
             assert(SL_RESULT_SUCCESS == result);
-        }
-
-		virtual void Pause()
-        {
-            (*playerPlayItf)->SetPlayState(playerPlayItf, SL_PLAYSTATE_PAUSED);
-        }
-
-		virtual bool IsPaused()
-        {
-            SLuint32 pState;
-            SLresult result = (*playerPlayItf)->GetPlayState(playerPlayItf, &pState);
-            assert(SL_RESULT_SUCCESS == result);
-            return (pState == SL_PLAYSTATE_PAUSED);
         }
 
 		virtual bool IsPlaying()
@@ -157,10 +97,67 @@ namespace Xli
             return ((!IsPlaying()) && AtEnd());
         }
 
+        virtual int GetDuration() const
+        {
+            SLmillisecond duration = -1;
+            SLresult result = (*playerPlayItf)->GetPosition(playerPlayItf, &duration);
+            assert(SL_RESULT_SUCCESS == result);
+            return (int)duration;
+        }
+ 
+        virtual void Play()
+        {
+            (*playerPlayItf)->SetPlayState(playerPlayItf, SL_PLAYSTATE_PLAYING);
+        }
 		virtual void Stop()
         {
             SLresult result=(*playerPlayItf)->SetPlayState(playerPlayItf, SL_PLAYSTATE_STOPPED);
             assert(SL_RESULT_SUCCESS == result);
+        }
+
+        virtual bool GetLoop()
+        {
+            SLboolean looping;
+            SLmillisecond milli_start;
+            SLmillisecond milli_end;
+            SLresult result = (*playerSeekItf)->GetLoop(playerSeekItf, &looping,
+                                                        &milli_start, &milli_end);
+            assert(SL_RESULT_SUCCESS == result);
+            return (bool)looping;
+        }
+        virtual void SetLoop(double milli_start, double milli_end)
+        {                     
+            SLresult result = (*playerSeekItf)->SetLoop(playerSeekItf, SL_BOOLEAN_TRUE,
+                                                        (SLmillisecond)milli_start,
+                                                        (SLmillisecond)milli_end);
+            assert(SL_RESULT_SUCCESS == result);
+        }
+
+		virtual float GetPan() const
+        {
+            SLpermille pos;
+            SLresult result = (*playerVolumeItf)->GetStereoPosition(playerVolumeItf, &pos);
+            assert(SL_RESULT_SUCCESS == result);
+            float pan = pos / 1000.0f;
+            if (pan < -1.0f) pan = -1.0f;
+            if (pan > 1.0f) pan = 1.0f;
+            return pan;
+        }
+		virtual void SetPan(float pan) const
+            {
+                if (pan < -1.0f) pan = -1.0f;
+                if (pan > 1.0f) pan = 1.0f;
+                SLpermille pos = pan * 1000.0f;
+                SLresult result = (*playerVolumeItf)->SetStereoPosition(playerVolumeItf, pos);
+                assert(SL_RESULT_SUCCESS == result);
+            }
+
+		virtual bool IsPaused()
+        {
+            SLuint32 pState;
+            SLresult result = (*playerPlayItf)->GetPlayState(playerPlayItf, &pState);
+            assert(SL_RESULT_SUCCESS == result);
+            return (pState == SL_PLAYSTATE_PAUSED);
         }
 
         virtual bool IsClosed() const
@@ -170,7 +167,6 @@ namespace Xli
 
         virtual bool AtEnd() const
         {
-            //{TODO} this should probably come from the flag, test this more
             int dur = GetDuration();
             int pos = GetPosition();
             return (dur == pos);
@@ -183,8 +179,8 @@ namespace Xli
             const SLboolean req[2] = {SL_BOOLEAN_FALSE, SL_BOOLEAN_TRUE};
             // configure audio source
             if (asset) {
-                Xli::PlatformSpecific::AJniHelper jni;
-                AAssetManager* mgr = Xli::PlatformSpecific::AShim::GetAssetManager();
+
+                AAssetManager* mgr = XliJ::GetAssetManager();
                 assert(NULL != mgr);
                 AAsset* assetp = AAssetManager_open(mgr, path.Data(), AASSET_MODE_UNKNOWN);
                 if (NULL == assetp) {
@@ -243,53 +239,46 @@ namespace Xli
         }
     };
 
-    class SimpleAudioEngine
+    //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    class SlesSimpleSound : public SimpleSound
     {
+    private:
+        double duration;
     public:
-        static void Startup()
+        SlesSimpleSound(const String& path, bool androidAsset)
         {
-            SLresult result;
-            Xli::PlatformSpecific::SlesAudioEngine* newAudioEngine = new Xli::PlatformSpecific::SlesAudioEngine();
-        
-            SLEngineOption options[] = { SL_ENGINEOPTION_THREADSAFE, SL_BOOLEAN_TRUE };
-            result = slCreateEngine(&newAudioEngine->EngineObject, 1, options, 0, NULL, NULL);
-            assert(SL_RESULT_SUCCESS == result);
-            (void)result;
-
-            // realize the engine
-            result = (*newAudioEngine->EngineObject)->Realize(newAudioEngine->EngineObject,SL_BOOLEAN_FALSE);
-            assert(SL_RESULT_SUCCESS == result);
-            (void)result;
-
-            // get the engine interface, which is needed in order to create other objects
-            result = (*newAudioEngine->EngineObject)->GetInterface(newAudioEngine->EngineObject, SL_IID_ENGINE, &newAudioEngine->EngineEngine);
-            assert(SL_RESULT_SUCCESS == result);
-            (void)result;
-
-            // create output mix
-            result = (*newAudioEngine->EngineEngine)->CreateOutputMix(newAudioEngine->EngineEngine, &newAudioEngine->OutputMixObject, 0, NULL, NULL);
-            assert(SL_RESULT_SUCCESS == result);
-            (void)result;
-
-            // realize the output mix
-            // [TODO] What does that FALSE do?
-            result = (*newAudioEngine->OutputMixObject)->Realize(newAudioEngine->OutputMixObject, SL_BOOLEAN_FALSE);
-            assert(SL_RESULT_SUCCESS == result);
-            (void)result;
-            if (GlobalAAudioEngine != 0) GlobalAAudioEngine->Release();
-            GlobalAAudioEngine = newAudioEngine;        
-        
-            LOGD("Engine Created");
+            duration = -1;
+            this->Path = path;
+            this->Asset = androidAsset;
+            PopulateMetadata();
         }
 
-        static void Shutdown()
+        virtual double GetDuration()
         {
-            // destroy engine object and interfaces
-            if (GlobalAAudioEngine->EngineObject != NULL) {
-                (*GlobalAAudioEngine->EngineObject)->Destroy(GlobalAAudioEngine->EngineObject);
-                GlobalAAudioEngine->EngineObject = NULL;
-                GlobalAAudioEngine->EngineEngine = NULL;
-            }
+            return duration;
+        }
+        
+        virtual void PopulateMetadata()
+        {
+            SlesSimpleSoundChannel* channel = new SlesSimpleSoundChannel(sound);
+            duration = channel.GetDuration();
+            delete(channel);
+        }
+        
+        virtual SimpleSoundChannel* Play(bool paused)
+        {
+            SlesSimpleSoundChannel* result = new SlesSimpleSoundChannel(this);
+            if (!paused) result->Play();
+            return (SimpleSoundChannel*)result;
+        }
+
+		virtual SimpleSoundChannel* PlayLoop(bool paused)
+        {
+            SlesSimpleSoundChannel* result = new SlesSimpleSoundChannel(this);
+            if (paused) result->Pause();
+            result.SetLoop(0, duration);
+            return (SimpleSoundChannel*)result;
         }
     };
 
@@ -302,10 +291,20 @@ namespace Xli
 			atexit(SimpleAudioEngine::Shutdown);
 		}
 	}
-
-    SimpleSoundChannel* SimpleSoundChannel::Create(const String& path, bool androidAsset)
+    SimpleSound* SimpleSound::Create(const String& path, bool asset)
     {
         AssertInit();
-        return new SlesSimpleSoundChannel(path, androidAsset);
+        return new SlesSimpleSound(path, androidAsset);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
