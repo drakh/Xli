@@ -1,8 +1,6 @@
 #ifndef __XLI_AUDIO_SIMPLE_AUDIO_PLAYER_H__
 #define __XLI_AUDIO_SIMPLE_AUDIO_PLAYER_H__
 
-#include <SLES/OpenSLES.h>
-#include <SLES/OpenSLES_Android.h>
 #include <Xli/Object.h>
 
 namespace Xli
@@ -29,11 +27,14 @@ namespace Xli
 
     class SimpleSound : public Object
     {
-        virtual int GetDuration() const = 0;
-        virtual int Play() = 0;
-        virtual int PlayLoop() = 0;
+    public:
+        virtual double GetDuration() const = 0;
+        virtual SimpleSoundChannel* Play(bool paused) = 0;
+        virtual SimpleSoundChannel* PlayLoop(bool paused) = 0;
+        virtual String GetPath() const = 0;
+        virtual bool IsAsset() const = 0;
         static SimpleSound* Create(const String& path, bool asset);
-    }
+    };
 }
 
 #endif

@@ -2,24 +2,26 @@
 #import <AVFoundation/AVFoundation.h>
 #include <Xli/PlatformSpecific/iOS.h>
 #include <XliAudio/SimpleAudio.h>
+#include <Xli/Array.h>
+#include <Xli/Console.h>
 #include <assert.h>
 
 namespace Xli
 {
     class AudioPacketBuffer
     {
-        Xli::Array<UInt32> buffersSizeBytes;
-        Xli::Array<Byte*> buffers;
-        Xli::Array<UInt32> bufferPacketNums;
-        Xli::Array<AudioStreamPacketDescription*> bufferPacketDescs;
+        Array<unsigned long> buffersSizeBytes;
+        Array<Byte*> buffers;
+        Array<unsigned long> bufferPacketNums;
+        Array<AudioStreamPacketDescription*> bufferPacketDescs;
             
     public:
         AudioStreamBasicDescription DataFormat;
-        UInt32 BufferSizeBytes;
-        UInt32 NumPacketsToRead;
-        UInt32 CookieSize;
+        unsigned long BufferSizeBytes;
+        unsigned long NumPacketsToRead;
+        unsigned long CookieSize;
         char* Cookie;
-        UInt32 AudioChannelLayoutSize;
+        unsigned long AudioChannelLayoutSize;
         AudioChannelLayout* AudioChannelLayout;
             
         AudioPacketBuffer(const char* filename)
@@ -32,20 +34,20 @@ namespace Xli
             AudioFileID file;
             if (AudioFileOpenURL((CFURLRef)url, kAudioFileReadPermission, 0, &file) != noErr)
             {
-                Xli::ErrorPrintLine("ERROR: Failed to open audio file.");
+                ErrorPrintLine("ERROR: Failed to open audio file.");
                 //[url release];
                 return;
             }
             //[url release];
                 
-            UInt32 size = sizeof(DataFormat);
+            unsigned long size = sizeof(DataFormat);
             if (AudioFileGetProperty(file, kAudioFilePropertyDataFormat, &size, &DataFormat) != noErr)
             {
-                Xli::ErrorPrintLine("ERROR: Failed to get audio file properties.");
+                ErrorPrintLine("ERROR: Failed to get audio file properties.");
                 return;
             }
                 
-            UInt32 maxPacketSize;
+            unsigned long maxPacketSize;
             size = sizeof(maxPacketSize);
             if (AudioFileGetProperty(file, kAudioFilePropertyPacketSizeUpperBound, &size, &maxPacketSize) != noErr)
             {
@@ -64,7 +66,7 @@ namespace Xli
             }
             NumPacketsToRead = BufferSizeBytes / maxPacketSize;
                 
-            CookieSize = sizeof(UInt32);
+            CookieSize = sizeof(unsigned long);
             OSStatus result = AudioFileGetPropertyInfo(file, kAudioFilePropertyMagicCookieData, &CookieSize, NULL);
             if (!result && CookieSize)
             {
@@ -102,8 +104,8 @@ namespace Xli
             SInt64 currentPacket = 0;
             while (true)
             {
-                UInt32 numBytes;
-                UInt32 numPackets = NumPacketsToRead;
+                unsigned long numBytes;
+                unsigned long numPackets = NumPacketsToRead;
                 if (AudioFileReadPackets(file, false, &numBytes, tempPacketDescs, currentPacket, &numPackets, tempBuffer) != noErr)
                 {
                     Xli::ErrorPrintLine("ERROR: Failed to read audio packets.");
@@ -136,7 +138,7 @@ namespace Xli
             if (AudioChannelLayout) delete AudioChannelLayout;
         }
             
-        void ReadBuffer(UInt32 bufferIndex, UInt32* numBytes, AudioStreamPacketDescription* descs, UInt32* numPackets, void* output)
+        void ReadBuffer(unsigned long bufferIndex, unsigned long* numBytes, AudioStreamPacketDescription* descs, unsigned long* numPackets, void* output)
         {
             if (bufferIndex >= buffers.Length())
             {
@@ -151,7 +153,7 @@ namespace Xli
         }
     };
         
-    class AudioQueueChannel : public Channel
+    class AudioQueueChannel : public SimpleSoundChannel
     {
         const static int numBuffers = 3;
             
@@ -161,7 +163,7 @@ namespace Xli
         bool playing;
         bool finished;
         bool looping;
-        UInt32 currentBuffer;
+        unsigned long currentBuffer;
             
         static void bufferCallback(void* userData, AudioQueueRef aq, AudioQueueBufferRef aqb)
         {
@@ -202,7 +204,7 @@ namespace Xli
                 return;
             }
                 
-            UInt32 barf = kAudioQueueHardwareCodecPolicy_PreferSoftware;
+            unsigned long barf = kAudioQueueHardwareCodecPolicy_PreferSoftware;
             AudioQueueSetProperty(queue, kAudioQueueProperty_HardwareCodecPolicy, &barf, sizeof(barf));
                 
             if (packetBuffer->CookieSize)
@@ -253,58 +255,72 @@ namespace Xli
             if (playing) AudioQueueStop(queue, true);
             AudioQueueDispose(queue, true);
         }
-            
-        virtual double GetPosition()
+        
+        virtual void Pause()
         {
-            AudioTimeStamp timeStamp;
-            AudioQueueGetCurrentTime(queue, NULL, &timeStamp, NULL);
-            return (double)timeStamp.mSampleTime / packetBuffer->DataFormat.mSampleRate;
+            //{TODO}
         }
-        virtual void SetPosition(double value)
+        virtual void UnPause()
         {
             // TODO
         }
-            
-        virtual float GetPan()
+        
+        virtual int GetPosition() const //{TODO} should be double
         {
-            float res;
-            AudioQueueGetParameter(queue, kAudioQueueParam_Pan, &res);
-            return res;
+            AudioTimeStamp timeStamp;
+            AudioQueueGetCurrentTime(queue, NULL, &timeStamp, NULL);
+            return (int)(timeStamp.mSampleTime / packetBuffer->DataFormat.mSampleRate);
         }
-        virtual void SetPan(float value)
+        virtual void SetPosition(int value) //{TODO} should be double
         {
-            AudioQueueSetParameter(queue, kAudioQueueParam_Pan, value);
+            // TODO
         }
-            
-        virtual float GetVolume()
+        
+        virtual float GetVolume() const
         {
             float res;
             AudioQueueGetParameter(queue, kAudioQueueParam_Volume, &res);
             return res;
         }
-        virtual void SetVolume(float value)
+        virtual void SetVolume(float value) const
         {
             AudioQueueSetParameter(queue, kAudioQueueParam_Volume, value);
         }
-            
-        virtual bool GetPause()
-        {
-            return false; // TODO
-        }
-        virtual void SetPause(bool value)
-        {
-            // TODO
-        }
-            
-        virtual bool GetIsPlaying()
+        
+        virtual bool IsPlaying()
         {
             return playing;
         }
-        virtual bool GetIsFinished()
+        virtual bool IsFinished()
         {
             return finished;
         }
-            
+        
+        virtual int GetDuration() const
+        {
+            //{TODO}
+            return 0;
+        }
+        
+        virtual float GetPan() const
+        {
+            float res;
+            AudioQueueGetParameter(queue, kAudioQueueParam_Pan, &res);
+            return res;
+        }
+        virtual void SetPan(float value) const
+        {
+            AudioQueueSetParameter(queue, kAudioQueueParam_Pan, value);
+        }
+        
+        virtual void Play()
+        {
+            if (!playing)
+            {
+                playing = true;
+                AudioQueueStart(queue, NULL); //{TODO} fix
+            }
+        }
         virtual void Stop()
         {
             if (playing)
@@ -313,5 +329,262 @@ namespace Xli
                 AudioQueueStop(queue, true);
             }
         }
+        
+        virtual bool IsPaused()
+        {
+            return false;
+        }
     }; 
+
+    class CoreAudioChannel : public SimpleSoundChannel
+    {
+        AVAudioPlayer* player;
+            
+    public:
+        //CoreAudioChannel(const char* filename, PlayMode mode, bool loop, bool play)
+        CoreAudioChannel(const char* filename, bool loop, bool play)
+        {
+            NSString* string = [NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], [NSString stringWithUTF8String:filename]];
+                
+            NSURL* url = [NSURL fileURLWithPath:string];
+            //[string release];
+                
+            NSError* error;
+            
+            BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:string];
+            //NSArray * directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[[NSBundle mainBundle] resourcePath] error:&error];
+            
+            if (!fileExists) {
+                Xli::ErrorPrintLine("audio file not found");
+                return;
+            }
+            
+            player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+            //player = [[AVAudioPlayer alloc] initWithData:[NSData dataWithContentsOfURL:url] error:&error];
+            //[url release];
+            
+            if (player == nil)
+            {
+                Xli::ErrorPrintLine("ERROR: Failed to create AVAudioPlayer: " + (String)([[error description] UTF8String]));
+                return;
+            }
+                
+            if (loop)
+            {
+                player.numberOfLoops = -1;
+            }
+                
+            if (play)
+            {
+                [player play];
+            }
+        }
+            
+        virtual ~CoreAudioChannel()
+        {
+            if (player == nil) return;
+            [player release];
+        }
+        
+        virtual void Pause()
+        {
+            if (player == nil) return;
+            [player pause];
+        }
+        virtual void UnPause()
+        {
+            if (player == nil) return;
+            [player play];
+        }
+        
+        virtual int GetPosition() const // this should be double
+        {
+            if (player == nil) return 0.0;
+            return (int)player.currentTime;
+        }
+        virtual void SetPosition(int value) // this shouldbe double, fix the headers
+        {
+            if (player == nil) return;
+            player.currentTime = (double)value;
+        }
+
+        virtual float GetVolume() const
+        {
+            if (player == nil) return 0.0f;
+            return player.volume;
+        }
+        virtual void SetVolume(float value) const
+        {
+            if (player == nil) return;
+            player.volume = value;
+        }
+        virtual bool IsPlaying()
+        {
+            if (player == nil) return false;
+            return player.playing;
+        }
+        virtual bool IsFinished()
+        {
+            if (player == nil) return true;
+            return false;
+        }
+   
+        int GetDuration() const // this should be double
+        {
+            if (player == nil) return 0.0;
+            return (int)player.duration;
+        }
+        virtual float GetPan() const
+        {
+            if (player == nil) return 0.0f;
+            return player.pan;
+        }
+        virtual void SetPan(float value) const
+        {
+            if (player == nil) return;
+            player.pan = value;
+        }
+        
+        virtual void Play()
+        {
+            if (player == nil) return;
+            [player play];
+        }
+        virtual void Stop()
+        {
+            if (player == nil) return;
+            [player stop];
+        }
+        
+        virtual bool IsPaused()
+        {
+            if (player == nil) return true;
+            return !player.playing;
+        }
+    };
+        
+    class DummyChannel : public SimpleSoundChannel
+    {
+    public:
+        DummyChannel()
+        {
+        }
+        
+        virtual ~DummyChannel()
+        {
+        }
+        
+        virtual double GetPosition()
+        {
+            return 0.0;
+        }
+        virtual void SetPosition(double value)
+        {
+        }
+        
+        virtual float GetPan()
+        {
+            return 0.0f;
+        }
+        virtual void SetPan(float value)
+        {
+        }
+        
+        virtual float GetVolume()
+        {
+            return 0.0f;
+        }
+        virtual void SetVolume(float value)
+        {
+        }
+        
+        virtual bool GetPause()
+        {
+            return false;
+        }
+        virtual void SetPause(bool value)
+        {
+        }
+        
+        virtual bool GetIsPlaying()
+        {
+            return false;
+        }
+        virtual bool GetIsFinished()
+        {
+            return true;
+        }
+        
+        virtual void Stop()
+        {
+        }
+    };
+
+            
+    class CoreSimpleSound : public SimpleSound 
+    {
+    private:
+        double duration;
+        bool isasset;
+        String path;
+        AudioPacketBuffer* bufferedData;
+    public:
+        CoreSimpleSound(const String& path, bool asset)
+        {
+            this->path = path;
+            //this->mode = ?????????????????????;
+            this->isasset = asset;
+            
+            //CoreAudioChannel* c = new CoreAudioChannel(this->path.Data(), mode, false, false);
+            CoreAudioChannel* c = new CoreAudioChannel(path.Data(), false, false);
+            this->duration = c->GetDuration();
+            delete c;
+            
+            //if (mode != PlayModeStream) {
+            //bufferedData = new AudioPacketBuffer(path.Data());
+            //} else {
+            this->bufferedData = 0;
+            //}
+        }
+        virtual double GetDuration() const
+        {
+            return duration;
+        }
+        virtual SimpleSoundChannel* Play(bool paused)
+        {
+            SimpleSoundChannel* result;
+            //if (mode != PlayModeStream)
+            //{
+            //    result = new AudioQueueChannel((AudioPacketBuffer*)bufferedData, false);
+            //} else {
+            result = new CoreAudioChannel(path.Data(), false, true); // {TODO} originally took 'mode'
+            //}
+            //if (!paused) result->Play();
+            return result;
+        }
+        virtual SimpleSoundChannel* PlayLoop(bool paused)
+        {
+            SimpleSoundChannel* result;
+            //if (mode != PlayModeStream)
+            //{
+            //    result = new AudioQueueChannel((AudioPacketBuffer*)bufferedData, true);
+            //} else {
+            result = new CoreAudioChannel(path.Data(), true, true); // {TODO} originally took 'mode'
+            //}
+            return result;
+        }
+        virtual String GetPath() const
+        {
+            return path;
+        }
+        virtual bool IsAsset() const
+        {
+            return isasset;
+        }
+    };
+    
+    SimpleSound* SimpleSound::Create(const String& path, bool asset)
+    {
+        return new CoreSimpleSound(path, asset);
+    }
 }

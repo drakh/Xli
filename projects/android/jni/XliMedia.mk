@@ -2,7 +2,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := XliMedia
 
 LOCAL_SRC_FILES := \
-    ../../../src/audio/opensles/SimpleAudio.cpp \
+    ../../../src/audio/opensles/SlesSimpleAudio.cpp \
 	../../../src/media/3rdparty/tinyxml/tinystr.cpp \
 	../../../src/media/3rdparty/tinyxml/tinyxml.cpp \
 	../../../src/media/3rdparty/tinyxml/tinyxmlerror.cpp \

@@ -8,7 +8,7 @@ class GLApp: public Application
 {
 	Managed<GLContext> gl;
 
-    Managed<SimpleSoundChannel> sound;
+    Managed<SimpleSound> sound;
 
     double touchDownTime;
     double tapTime;
@@ -58,7 +58,7 @@ public:
 		PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
 
         // Load some sounds
-        sound = SimpleSoundChannel::Create("test.wav", true);
+        sound = SimpleSound::Create("test2.mp3", true);
 	}
 
 	virtual void OnLoad(Window* wnd)
@@ -201,7 +201,7 @@ public:
                 //play
                 Err->WriteLine("Bang");
                 wnd->BeginTextInput((Xli::TextInputHint)0);
-                sound->Play();
+                sound->Play(false);
             }
             else if (wnd->IsTextInputActive())
             {
