@@ -1890,12 +1890,17 @@ D3D_DestroyRenderer(SDL_Renderer * renderer)
     }
     SDL_free(renderer);
 }
+#endif /* SDL_VIDEO_RENDER_D3D && !SDL_RENDER_DISABLED */
 
+#ifdef __WIN32__
+/* This function needs to always exist on Windows, for the Dynamic API. */
 IDirect3DDevice9 *
 SDL_RenderGetD3D9Device(SDL_Renderer * renderer)
 {
+    IDirect3DDevice9 *device = NULL;
+
+#if SDL_VIDEO_RENDER_D3D && !SDL_RENDER_DISABLED
     D3D_RenderData *data = (D3D_RenderData *) renderer->driverdata;
-    IDirect3DDevice9 *device;
 
     // Make sure that this is a D3D renderer
     if (renderer->DestroyRenderer != D3D_DestroyRenderer) {
@@ -1907,9 +1912,10 @@ SDL_RenderGetD3D9Device(SDL_Renderer * renderer)
     if (device) {
         IDirect3DDevice9_AddRef( device );
     }
+#endif /* SDL_VIDEO_RENDER_D3D && !SDL_RENDER_DISABLED */
+
     return device;
 }
-
-#endif /* SDL_VIDEO_RENDER_D3D && !SDL_RENDER_DISABLED */
+#endif
 
 /* vi: set ts=4 sw=4 expandtab: */

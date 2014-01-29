@@ -295,6 +295,8 @@ namespace Xli
 
         static int32_t handle_input(struct android_app* app, AInputEvent* event)
         {
+            // NDK - The NDK exposes only incomplete key data so all of that has 
+            //       to come from the shim callbacks.
             int32_t kcode=0;
             switch (AInputEvent_getType(event))
             {
@@ -363,54 +365,6 @@ namespace Xli
                                 //LOGD("TOUCH CANCEL: %d  %d  %d  %d  %d", a, i, id, x, y);
                             }
                         }
-                        break;
-                    }
-                }
-
-                break;
-        
-            case AINPUT_EVENT_TYPE_KEY:
-                if (GlobalEventHandler)
-                {
-                    switch (AKeyEvent_getAction(event))
-                    {
-                    case AKEY_EVENT_ACTION_DOWN:
-                        // kcode = AKeyEvent_getKeyCode(event);
-                        // switch (kcode)
-                        // {
-                        // case AKEYCODE_BACK:
-                        //     //if (GlobalWindow != 0) GlobalWindow->Close(); // TODO
-                        //     return 1;
-                            
-                        // case AKEYCODE_MENU:
-                        //     if (GlobalEventHandler->OnKeyDown(GlobalWindow, Xli::KeyMenu))
-                        //         return 1;
-                        //     break;
-                        // default:
-                        //     if (GlobalEventHandler->OnKeyDown(GlobalWindow, AShim::AndroidToXliKeyEvent((AKeyEvent)kcode)))
-                        //         return 1;
-                        //     break;
-                        // }
-
-                        break;
-
-                    case AKEY_EVENT_ACTION_UP:
-                        // kcode = AKeyEvent_getKeyCode(event);
-                        // switch (kcode)
-                        // {
-                        // case AKEYCODE_BACK:
-                        //     return 1;
-
-                        // case AKEYCODE_MENU:
-                        //     if (GlobalEventHandler->OnKeyUp(GlobalWindow, Xli::KeyMenu))
-                        //         return 1;
-
-                        //     break;
-                        // default:
-                        //     if (GlobalEventHandler->OnKeyUp(GlobalWindow, AShim::AndroidToXliKeyEvent((AKeyEvent)kcode)))
-                        //         return 1;
-                        //     break;
-                        // }
                         break;
                     }
                 }

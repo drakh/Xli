@@ -1,11 +1,14 @@
 #include <Xli.h>
 #include <XliGL.h>
+#include <XliAudio.h>
 
 using namespace Xli;
 
 class GLApp: public Application
 {
 	Managed<GLContext> gl;
+
+    Managed<SimpleSound> sound;
 
     double touchDownTime;
     double tapTime;
@@ -53,6 +56,9 @@ public:
 		PrintLine((String)"FileSystem Local AppData: " + Disk->GetSystemDirectory(SystemDirectoryLocalAppData));
 		PrintLine((String)"FileSystem Roaming AppData: " + Disk->GetSystemDirectory(SystemDirectoryRoamingAppData));
 		PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
+
+        // Load some sounds
+        sound = SimpleSound::Create("test2.mp3", true);
 	}
 
 	virtual void OnLoad(Window* wnd)
@@ -195,6 +201,7 @@ public:
                 //play
                 Err->WriteLine("Bang");
                 wnd->BeginTextInput((Xli::TextInputHint)0);
+                sound->Play(false);
             }
             else if (wnd->IsTextInputActive())
             {

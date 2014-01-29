@@ -2,6 +2,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := XliMedia
 
 LOCAL_SRC_FILES := \
+    ../../../src/audio/opensles/SlesSimpleAudio.cpp \
 	../../../src/media/3rdparty/tinyxml/tinystr.cpp \
 	../../../src/media/3rdparty/tinyxml/tinyxml.cpp \
 	../../../src/media/3rdparty/tinyxml/tinyxmlerror.cpp \
@@ -105,7 +106,7 @@ LOCAL_SRC_FILES := \
 	../../../src/media/Value.cpp \
 	../../../src/media/Xml.cpp \
 	../../../src/media/Zip.cpp \
-	
+
 LOCAL_C_INCLUDES := \
 	../../include \
 	../../src/media/3rdparty/freetype/include \
@@ -116,7 +117,7 @@ LOCAL_C_INCLUDES := \
 LOCAL_CFLAGS   := -fexceptions -fno-rtti -fPIC -DPIC -O3
 LOCAL_CFLAGS   += "-DDARWIN_NO_CARBON"
 LOCAL_CFLAGS   += "-DFT2_BUILD_LIBRARY"
-LOCAL_LDLIBS   := -lz
+LOCAL_LDLIBS   := -lz -llog -lOpenSLES -landroid
 
 LOCAL_SHARED_LIBRARIES := Xli
 

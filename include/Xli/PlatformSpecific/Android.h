@@ -7,10 +7,15 @@
 #include <cstdlib>
 #include <jni.h>
 
+// TODO: Correct place for these?
+#include <SLES/OpenSLES.h>
+#include <SLES/OpenSLES_Android.h>
+
 // TODO: Get rid of these includes
 #include <Xli/String.h>
 #include <Xli/Stream.h>
 #include <Xli/Window.h>
+#include <XliAudio/SimpleAudio.h>
 
 #define LOGD(...) ((void)__android_log_print(ANDROID_LOG_DEBUG, Xli::PlatformSpecific::AGetAppName(), __VA_ARGS__))
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, Xli::PlatformSpecific::AGetAppName(), __VA_ARGS__))
@@ -414,9 +419,23 @@ namespace Xli
             static int GetResponseCode(jobject httpConnection);
             static AStream* HttpGetInputStream(jobject httpConnection);
             static AStream* HttpGetOutputStream(jobject httpConnection);
+            static AAssetManager* GetAssetManager();
             static Key AndroidToXliKeyEvent(AKeyEvent keyEvent);
             static void HandleSpecialAndroidKeyEvents(AKeyEvent androidKeyCode);
             static void InitDefaultCookieManager();
+        };
+
+        /**
+            \ingroup XliAudio
+        */        
+        class SlesAudioEngine : public Object
+        {
+        public:
+            SLObjectItf EngineObject;
+            SLEngineItf EngineEngine;
+            SLObjectItf OutputMixObject;
+            SLObjectItf LedObject;
+            SLLEDArrayItf LedArray;
         };
     }
 }

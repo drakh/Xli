@@ -16,6 +16,10 @@
 		CE2B2DA216C72C7A0036FFA0 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B2DA116C72C7A0036FFA0 /* AudioToolbox.framework */; };
 		CE2B2DA416C72C890036FFA0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B2DA316C72C890036FFA0 /* QuartzCore.framework */; };
 		CE52CC3316C74B2000C6AAC7 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE52CC3216C74B2000C6AAC7 /* Main.cpp */; };
+		FC7C328A189681E800ECDF0D /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FC7C3289189681E800ECDF0D /* Default-568h@2x.png */; };
+		FC7C328E1896944300ECDF0D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC7C328D1896944300ECDF0D /* AVFoundation.framework */; };
+		FC7C32921896A05F00ECDF0D /* test.wav in Resources */ = {isa = PBXBuildFile; fileRef = FC7C32911896A05F00ECDF0D /* test.wav */; };
+		FC7C32941896A63400ECDF0D /* test2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FC7C32931896A63400ECDF0D /* test2.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +35,10 @@
 		CE2B2DA116C72C7A0036FFA0 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		CE2B2DA316C72C890036FFA0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		CE52CC3216C74B2000C6AAC7 /* Main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Main.cpp; path = ../../src/Main.cpp; sourceTree = "<group>"; };
+		FC7C3289189681E800ECDF0D /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		FC7C328D1896944300ECDF0D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		FC7C32911896A05F00ECDF0D /* test.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = test.wav; sourceTree = "<group>"; };
+		FC7C32931896A63400ECDF0D /* test2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = test2.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC7C328E1896944300ECDF0D /* AVFoundation.framework in Frameworks */,
 				CE2B2DA416C72C890036FFA0 /* QuartzCore.framework in Frameworks */,
 				CE2B2DA216C72C7A0036FFA0 /* AudioToolbox.framework in Frameworks */,
 				CE2B2D9F16C72C330036FFA0 /* CoreAudio.framework in Frameworks */,
@@ -55,6 +64,8 @@
 		CE2B21C316C7263A0036FFA0 = {
 			isa = PBXGroup;
 			children = (
+				FC7C32901896A05F00ECDF0D /* data */,
+				FC7C3289189681E800ECDF0D /* Default-568h@2x.png */,
 				CE2B21DC16C7263A0036FFA0 /* GLWindow */,
 				CE2B21D116C7263A0036FFA0 /* Frameworks */,
 				CE2B21CF16C7263A0036FFA0 /* Products */,
@@ -72,6 +83,7 @@
 		CE2B21D116C7263A0036FFA0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FC7C328D1896944300ECDF0D /* AVFoundation.framework */,
 				CE2B2DA316C72C890036FFA0 /* QuartzCore.framework */,
 				CE2B2DA116C72C7A0036FFA0 /* AudioToolbox.framework */,
 				CE2B2D9E16C72C330036FFA0 /* CoreAudio.framework */,
@@ -102,6 +114,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		FC7C32901896A05F00ECDF0D /* data */ = {
+			isa = PBXGroup;
+			children = (
+				FC7C32931896A63400ECDF0D /* test2.mp3 */,
+				FC7C32911896A05F00ECDF0D /* test.wav */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -129,6 +150,11 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0460;
+				TargetAttributes = {
+					CE2B21CD16C7263A0036FFA0 = {
+						DevelopmentTeam = K3P9TEQ2M4;
+					};
+				};
 			};
 			buildConfigurationList = CE2B21C816C7263A0036FFA0 /* Build configuration list for PBXProject "GLWindow" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -152,6 +178,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC7C32921896A05F00ECDF0D /* test.wav in Resources */,
+				FC7C328A189681E800ECDF0D /* Default-568h@2x.png in Resources */,
+				FC7C32941896A63400ECDF0D /* test2.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,6 +226,7 @@
 					"-lXli",
 					"-lXliMain",
 					"-lXliMedia",
+					"-lXliGL",
 				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -226,6 +256,7 @@
 					"-lXli",
 					"-lXliMain",
 					"-lXliMedia",
+					"-lXliGL",
 				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -237,6 +268,8 @@
 		CE2B21F816C7263A0036FFA0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GLWindow/GLWindow-Prefix.pch";
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
@@ -245,6 +278,7 @@
 				LIBRARY_SEARCH_PATHS = ../../../lib/iOS/$CONFIGURATION$EFFECTIVE_PLATFORM_NAME;
 				LINK_WITH_STANDARD_LIBRARIES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -253,6 +287,8 @@
 		CE2B21F916C7263A0036FFA0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GLWindow/GLWindow-Prefix.pch";
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
@@ -261,6 +297,7 @@
 				LIBRARY_SEARCH_PATHS = ../../../lib/iOS/$CONFIGURATION$EFFECTIVE_PLATFORM_NAME;
 				LINK_WITH_STANDARD_LIBRARIES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};

@@ -353,6 +353,11 @@
 		FC4267EF185E530500079544 /* ftgzip.c in Sources */ = {isa = PBXBuildFile; fileRef = FC4267DF185E530500079544 /* ftgzip.c */; };
 		FC42680E185E538F00079544 /* pfr.c in Sources */ = {isa = PBXBuildFile; fileRef = FC4267FF185E538F00079544 /* pfr.c */; };
 		FC426811185E538F00079544 /* pfrdrivr.c in Sources */ = {isa = PBXBuildFile; fileRef = FC426802185E538F00079544 /* pfrdrivr.c */; };
+		FC7C328418954DA800ECDF0D /* CoreSimpleAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = FCE4298818903642002361B3 /* CoreSimpleAudio.mm */; };
+		FC7C328518954DAA00ECDF0D /* CoreSimpleAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = FCE4298818903642002361B3 /* CoreSimpleAudio.mm */; };
+		FC7C328618954DB500ECDF0D /* CoreSimpleAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = FCE4298818903642002361B3 /* CoreSimpleAudio.mm */; };
+		FC7C328C18968A7C00ECDF0D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC7C328B18968A7C00ECDF0D /* AVFoundation.framework */; };
+		FCE4298A18903642002361B3 /* CoreSimpleAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = FCE4298818903642002361B3 /* CoreSimpleAudio.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -714,6 +719,8 @@
 		FC4267FF185E538F00079544 /* pfr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pfr.c; sourceTree = "<group>"; };
 		FC426802185E538F00079544 /* pfrdrivr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pfrdrivr.c; sourceTree = "<group>"; };
 		FC45454118576CF100EE7560 /* SDL2GLContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDL2GLContext.cpp; sourceTree = "<group>"; };
+		FC7C328B18968A7C00ECDF0D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		FCE4298818903642002361B3 /* CoreSimpleAudio.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CoreSimpleAudio.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -764,6 +771,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC7C328C18968A7C00ECDF0D /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -802,6 +810,7 @@
 		5AAE58BE186F28100038835A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FC7C328B18968A7C00ECDF0D /* AVFoundation.framework */,
 				5AAE58BF186F28100038835A /* Foundation.framework */,
 				5AAE58CD186F28100038835A /* XCTest.framework */,
 				5AAE58D0186F28100038835A /* UIKit.framework */,
@@ -1376,6 +1385,7 @@
 		CE2D6E4F16C70D9A00390436 /* coreaudio */ = {
 			isa = PBXGroup;
 			children = (
+				FCE4298818903642002361B3 /* CoreSimpleAudio.mm */,
 			);
 			path = coreaudio;
 			sourceTree = "<group>";
@@ -2126,6 +2136,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE1535BF174CF162009C6275 /* AudioBuffer.cpp in Sources */,
+				FC7C328518954DAA00ECDF0D /* CoreSimpleAudio.mm in Sources */,
 				CE1535C0174CF162009C6275 /* AudioStream.cpp in Sources */,
 				CE1535C1174CF162009C6275 /* Wav.cpp in Sources */,
 				CE1537DF174CF316009C6275 /* GLHelper.cpp in Sources */,
@@ -2137,6 +2148,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE1535CC174CF171009C6275 /* AudioBuffer.cpp in Sources */,
+				FC7C328618954DB500ECDF0D /* CoreSimpleAudio.mm in Sources */,
 				CE1535CD174CF171009C6275 /* AudioStream.cpp in Sources */,
 				CE1535CE174CF171009C6275 /* Wav.cpp in Sources */,
 				CE1537CD174CF306009C6275 /* DummyClient.cpp in Sources */,
@@ -2148,6 +2160,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE20885616C84F9900667537 /* AudioBuffer.cpp in Sources */,
+				FC7C328418954DA800ECDF0D /* CoreSimpleAudio.mm in Sources */,
 				CE20885716C84F9900667537 /* AudioStream.cpp in Sources */,
 				CE20885816C84F9900667537 /* Wav.cpp in Sources */,
 				CE20886016C8500000667537 /* XliMain.cpp in Sources */,
@@ -2258,6 +2271,7 @@
 				CE2D6E9F16C70D9B00390436 /* AudioBuffer.cpp in Sources */,
 				CE2D6EA016C70D9B00390436 /* AudioStream.cpp in Sources */,
 				CE2D6EAF16C70D9B00390436 /* Wav.cpp in Sources */,
+				FCE4298A18903642002361B3 /* CoreSimpleAudio.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
