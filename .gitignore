@@ -31,3 +31,5 @@ src/core/android/shim/proguard-project.txt
 src/core/android/shim/project.properties
 Thumbs.db
 xcuserdata/
+/src/core/android/shim/.classpath
+/src/core/android/shim/.project
