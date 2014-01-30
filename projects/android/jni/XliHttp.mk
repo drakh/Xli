@@ -3,7 +3,7 @@ LOCAL_MODULE    := XliHttp
 
 LOCAL_SRC_FILES := \
 	../../../src/http/android/AHttpClient.cpp \
-	
+
 LOCAL_C_INCLUDES := \
 	../../include \
 

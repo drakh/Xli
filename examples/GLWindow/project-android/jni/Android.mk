@@ -42,6 +42,13 @@ LOCAL_MODULE := XliGLHelper
 LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXliGLHelper.so
 include $(PREBUILT_SHARED_LIBRARY)	
 
+# libXliHttp.so
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := XliHttp
+
+LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXliHttp.so
+include $(PREBUILT_SHARED_LIBRARY)
 
 # libGLWindow.so
 
@@ -57,6 +64,6 @@ LOCAL_CFLAGS   := -fexceptions -fno-rtti -fPIC -DPIC -O3 -Wno-invalid-offsetof
 LOCAL_LDLIBS   := -lm -lGLESv2 -landroid -llog
 
 LOCAL_WHOLE_STATIC_LIBRARIES := XliMain
-LOCAL_SHARED_LIBRARIES := Xli XliGL XliMedia XliGLHelper
+LOCAL_SHARED_LIBRARIES := Xli XliGL XliMedia XliGLHelper XliHttp
 
 include $(BUILD_SHARED_LIBRARY)

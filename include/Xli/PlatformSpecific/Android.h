@@ -16,6 +16,7 @@
 #include <Xli/Stream.h>
 #include <Xli/Window.h>
 #include <XliAudio/SimpleAudio.h>
+#include <XliHttp/HttpClient.h>
 
 #define LOGD(...) ((void)__android_log_print(ANDROID_LOG_DEBUG, Xli::PlatformSpecific::AGetAppName(), __VA_ARGS__))
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, Xli::PlatformSpecific::AGetAppName(), __VA_ARGS__))
@@ -411,6 +412,7 @@ namespace Xli
             static int ShowMessageBox(const String& message, const String& caption, int buttons, int hints);
             
             static bool ConnectedToNetwork();
+            static void SendHttpAsync(const HttpRequest& req);
             static jobject HttpNewConnection(const String& uri, const String& method, bool hasPayload);
             static void HttpCloseConnection(jobject httpConnection);
             static void HttpSetHeader(jobject httpConnection, const String& key, const String& val);

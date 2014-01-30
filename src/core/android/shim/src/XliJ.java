@@ -19,6 +19,7 @@ import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.content.res.AssetManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.ConditionVariable;
 import android.text.InputType;
 import android.util.Log;
@@ -31,6 +32,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import java.net.CookieManager;
+
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -89,6 +91,7 @@ public class XliJ extends android.app.NativeActivity {
     public static native void XliJ_OnKeyUp(int keyCode);
     public static native void XliJ_OnKeyDown(int keyCode);
     public static native void XliJ_OnTextInput(String keyCode);
+    //public static native void XliJ_HttpCallback(long funcPointer);
     
     public static class Hidden extends View {
         InputConnection fic;
@@ -255,6 +258,17 @@ public class XliJ extends android.app.NativeActivity {
     }
     
     //===========
+
+    // class HttpWrappedResponse {
+    //     public BufferedInputStream Stream;
+    //     public long functionPointer;
+        
+    //     HttpWrappedResponse(BufferedInputStream stream, long fpointer)
+    //     {
+    //     	Stream = stream;
+    //     	functionPointer = fpointer;
+    //     }
+    // }
     
     public static boolean ConnectedToNetwork(NativeActivity activity)
     {
@@ -263,6 +277,32 @@ public class XliJ extends android.app.NativeActivity {
         if(networkInfo == null) { return false; } 
         return networkInfo.isConnected();
     }
+    
+    // public static void SendHttpAsync(NativeActivity activity, String url, String method, String[] headers, long callbackPointer)
+    // {
+    	
+    // }
+    
+    // private class ASyncHttpRequest extends AsyncTask<Object, Void, HttpWrappedResponse> {
+    //     @Override
+    //     protected HttpWrappedResponse doInBackground(Object... params) {
+    //     	try {
+    //     		HttpURLConnection connection = (HttpURLConnection)params[0];
+    //     		long callbackPointer = (Long)params[1];
+    //     		BufferedInputStream stream = new BufferedInputStream(connection.getInputStream());            
+	// 			return new HttpWrappedResponse(stream,callbackPointer);
+	// 		} catch (IOException e) {
+	//             Log.e("XliApp","IOException: "+e.getLocalizedMessage());
+	//             return null; //What type of message do we send back?
+	// 		}
+    //     }
+    //     @Override
+    //     protected void onPostExecute(HttpWrappedResponse result) 
+    //     { 
+    //     	Log.e("XliApp","Got the callbakc but not doing anything with it.");
+    //     	//httpCallback(result); 
+    //     }
+    // }
     
     //[TODO] Could optimize by changing chunk mode if length known
     public static HttpURLConnection NewHttpConnection(String url, String method , boolean hasPayload) 
@@ -332,17 +372,3 @@ public class XliJ extends android.app.NativeActivity {
         return activity.getAssets();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -19,4 +19,4 @@ ant debug
 # Install and run
 adb uninstall $PACKAGE
 adb install -r bin/$CLASS-debug.apk
-adb shell "logcat -c && am start -a android.intent.action.MAIN -c [android.intent.category.LAUNCHER] -f 0x10200000 -n $PACKAGE/$PACKAGE.$CLASS && logcat -s XliApp"
+adb shell "logcat -c && am start -a android.intent.action.MAIN -c [android.intent.category.LAUNCHER] -f 0x10200000 -n $PACKAGE/$PACKAGE.$CLASS && logcat"

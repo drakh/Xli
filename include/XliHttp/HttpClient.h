@@ -59,68 +59,34 @@ namespace Xli
         }        
     }
 
-    class HttpRequest: public Object
-    {
-    private:
-        HttpMethods::HttpMethodType method;
-    public:
-        static HttpRequest* Create();
-        virtual void SetHeader(const String& key, const String& val) = 0;
-        virtual const HashMap<String,String>& GetHeaders() const = 0;
-        virtual void SetPayload(Stream* payload) = 0;
-        virtual bool HasPayload() const = 0;
-        virtual Stream* GetPayload() const = 0;
-        inline
-        void SetMethod(HttpMethods::HttpMethodType method) { this->method = method; }
-        inline
-        HttpMethods::HttpMethodType GetMethod() const { return this->method; }
-        inline
-        String GetMethodAsString() const { return HttpMethods::MethodToString(this->method); }
-    };
-
     class HttpResponse: public Object
     {
-    protected:
-        bool valid;
     public:
-        virtual bool IsValid() const = 0;
-        virtual String GetHeader(const String& key) = 0;
-        virtual int GetResponseCode() const = 0;
-        Stream* Payload;
+        HashMap<String,String> Headers;
+        int Status;
+        String ReasonPhrase;
+        // String GetContentString(HttpResponseHandle handle);
+        // byte* GetContentBuffer(HttpResponseHandle handle);
+    };
+
+    class HttpRequest : public Object
+    {
+    public:
+        String Url;
+        HttpMethods::HttpMethodType Method;
+        HashMap<String,String> Headers;
+        String Mime;
+        //-----------------
+        static HttpRequest* Create(String url, HttpMethods::HttpMethodType method);
     };
 
     class HttpClient: public Object
     {
     public:
-        static void Init();
-        static void Done();
+        //-----------------
         static HttpClient* Create();
-        virtual HttpResponse* Send(const String& uri, const HttpRequest& req) = 0;
+        virtual void Send(const HttpRequest& req) = 0;
     };
-
-
-
-    class HttpClientWrapper : public Object
-    {
-    public:
-        static HttpClientWrapper * Create();
-        void Open(String method, String url);
-        void Send(String data);
-        void SetRequestHeader(String header, String value);
-        unsigned short GetStatus();
-        String GetResponseText();
-        String GetResponseHeader(String header);
-        String GetAllResponseHeaders();
-        String GetStatusText();
-    
-    private:
-        String method;
-        String url;
-        HttpClient * client;
-        HttpRequest * request;
-        HttpResponse * response;
-    };
-
 }
 
 #endif

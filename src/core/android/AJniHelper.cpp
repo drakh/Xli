@@ -38,6 +38,10 @@ extern "C"
         event->Payload = NULL;
         GlobalWindow->EnqueueCrossThreadEvent(event);
     }
+
+    // void JNICALL XliJ_HttpCallback (JNIEnv *env , jobject obj, jlong funcPointer) 
+    // {
+    // }
 }
 
 namespace Xli
