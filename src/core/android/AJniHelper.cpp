@@ -1,4 +1,5 @@
 #include <Xli/PlatformSpecific/Android.h>
+#include <XliHttp/HttpClient.h>
 #include <pthread.h>
 #include <stdarg.h>
 
@@ -39,9 +40,33 @@ extern "C"
         GlobalWindow->EnqueueCrossThreadEvent(event);
     }
 
-    // void JNICALL XliJ_HttpCallback (JNIEnv *env , jobject obj, jlong funcPointer) 
-    // {
-    // }
+
+    void JNICALL XliJ_HttpCallback (JNIEnv *env , jobject obj, jint responseType, 
+                                    jobject body, jlong handlerPointer) 
+    {
+        switch ((Xli::HttpMethods::PayloadType)(int)responseType)
+        {
+        case Xli::HttpMethods::STRING:
+            if (body) {
+                const char* bodyChars = env->GetStringUTFChars((jstring)body, NULL);
+                Xli::String* bodyString = new Xli::String(bodyChars);
+                env->ReleaseStringUTFChars((jstring)body, bodyChars);
+
+                //{TODO} Fill this out in shim
+                Xli::HttpResponse* response = new Xli::HttpResponse();
+                if (handlerPointer)
+                    ((Xli::HttpResponseHandler*)((void*)handlerPointer))->OnResponse(response);
+            }        
+            break;
+        case Xli::HttpMethods::BYTE_ARRAY:
+            LOGD("Not Implemented Yet");
+            break;
+        default:
+            LOGD("Invalid Payload Type '%i'", responseType);
+            //{TODO} messages here
+            break;
+        }        
+    }
 }
 
 namespace Xli
@@ -85,9 +110,10 @@ namespace Xli
                 {(char* const)"XliJ_OnKeyUp", (char* const)"(I)V", (void *)&XliJ_OnKeyUp},
                 {(char* const)"XliJ_OnKeyDown", (char* const)"(I)V", (void *)&XliJ_OnKeyDown},
                 {(char* const)"XliJ_OnTextInput", (char* const)"(Ljava/lang/String;)V", (void *)&XliJ_OnTextInput},
+                {(char* const)"XliJ_HttpCallback", (char* const)"(ILjava/lang/Object;J)V", (void *)&XliJ_HttpCallback},
             };
             // the last argument is the number of native functions
-            jint attached = l_env->RegisterNatives(*shim_class, native_funcs, 3);
+            jint attached = l_env->RegisterNatives(*shim_class, native_funcs, 4);
             if (attached < 0) {
                 LOGE("COULD NOT REGISTER NATIVE FUNCTIONS");
             } else {
@@ -127,10 +153,10 @@ namespace Xli
 
                 jclass *shim_class = new jclass;
                 *shim_class = GetAssetClass("XliShimJ.apk","XliJ");
-                
+
                 pthread_setspecific(JniThreadKey, (void*)env);
                 pthread_setspecific(JniShimKey, (void*)shim_class);
-                
+
                 AttachNativeCallbacks(shim_class, env);
                 AttachHiddenView(shim_class, env, AndroidActivity->clazz);
             }

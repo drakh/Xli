@@ -133,6 +133,21 @@ namespace Xli
         };
 
         /**
+            \ingroup XliHttp
+        */
+        class AHttpRequest : public HttpRequest
+        {
+        public:
+            HttpMethods::PayloadType OutboundPayloadType;
+            HttpMethods::PayloadType ReturnPayloadType;
+
+            AHttpRequest(String url, HttpMethods::HttpMethodType method, 
+                         HttpResponseHandler* callback);
+
+            virtual ~AHttpRequest();
+        };
+
+        /**
             \ingroup XliCorePlatform
         */
         enum AKeyEvent
@@ -412,7 +427,7 @@ namespace Xli
             static int ShowMessageBox(const String& message, const String& caption, int buttons, int hints);
             
             static bool ConnectedToNetwork();
-            /* static void SendHttpAsync(const HttpRequest& req); */
+            static void SendHttpAsync(const AHttpRequest& req);
             static jobject HttpNewConnection(const String& uri, const String& method, bool hasPayload);
             static void HttpCloseConnection(jobject httpConnection);
             static void HttpSetHeader(jobject httpConnection, const String& key, const String& val);

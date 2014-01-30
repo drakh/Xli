@@ -5,12 +5,23 @@
 
 using namespace Xli;
 
+class Shouty : public HttpResponseHandler
+{
+    virtual void OnResponse(HttpResponse* response)
+    {
+        Err->WriteLine("-------------------------------------");
+        Err->WriteLine("WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO!!!!");
+        Err->WriteLine("-------------------------------------");
+    }
+};
+
 class GLApp: public Application
 {
 	Managed<GLContext> gl;
 
     // Managed<SimpleSound> sound;
     Managed<HttpClient> httpClient;
+    Managed<HttpResponseHandler> httpCallback;
 
     double touchDownTime;
     double tapTime;
@@ -64,6 +75,7 @@ public:
 
         // 
         httpClient = HttpClient::Create();
+        
 	}
 
 	virtual void OnLoad(Window* wnd)
@@ -206,7 +218,9 @@ public:
                 Err->WriteLine("Bang");
                 wnd->BeginTextInput((Xli::TextInputHint)0);
                 // sound->Play(false);
-                
+                Shouty* callback = new Shouty();
+                HttpRequest* req = HttpRequest::Create("http://bbc.co.uk", HttpMethods::GET, callback);
+                httpClient->Send(*req);
             }
             else if (wnd->IsTextInputActive())
             {

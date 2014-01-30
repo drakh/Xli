@@ -10,6 +10,11 @@ namespace Xli
 {
    namespace HttpMethods
    {
+       enum PayloadType
+       {
+           STRING = 0,
+           BYTE_ARRAY = 1,
+       };
        enum HttpMethodType
        {
            GET = 0,
@@ -61,12 +66,18 @@ namespace Xli
 
    class HttpResponse : public Object
    {
-   public:
-       HashMap<String,String> Headers;
+   public:       
        int Status;
        String ReasonPhrase;
-       // String GetContentString(HttpResponseHandle handle);
-       // byte* GetContentBuffer(HttpResponseHandle handle);
+       HashMap<String,String> Headers;
+       String Body;
+       /* static HttpResponse* Create(); */
+   };
+
+   class HttpResponseHandler : public Object
+   {
+   public:
+       virtual void OnResponse(HttpResponse* response) = 0;
    };
 
    class HttpRequest : public Object
@@ -76,8 +87,9 @@ namespace Xli
        HttpMethods::HttpMethodType Method;
        HashMap<String,String> Headers;
        String Mime;
+       HttpResponseHandler* Callback;
        //-----------------
-       static HttpRequest* Create(String url, HttpMethods::HttpMethodType method);
+       static HttpRequest* Create(String url, HttpMethods::HttpMethodType method, HttpResponseHandler* callback);
    };
 
    class HttpClient : public Object

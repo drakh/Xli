@@ -3,8 +3,10 @@
 #include <Xli/PlatformSpecific/Android.h>
 #include <Xli/Window.h>
 
+//{TODO} All these mids should be cacheable
+
 namespace Xli
-{
+{    
     namespace PlatformSpecific
     {
         int AShim::kbVisible = 0;
@@ -83,42 +85,27 @@ namespace Xli
             return (bool)result;
         }
 
-        // void AShim::SendHttpAsync(const HttpRequest& req)
-        // {
-        //     AJniHelper jni;
-        //     jclass shim_class = jni.GetShim();
-        //     jmethodID mid = jni->GetStaticMethodID(shim_class, "SendHttpAsync", "(Landroid/app/NativeActivity;Ljava/lang/String;L[java/lang/String;J)Z");
-        //     jobject activity = jni.GetInstance();
-        //     if (!mid) LOGE("Cant find async");
-        //     //jobject jresult = jni->CallObjectMethod(shim_class, mid, activity);
-        // }
-
-        jobject AShim::HttpNewConnection(const String& uri, const String& method, bool hasPayload)
+        void AShim::SendHttpAsync(const AHttpRequest& req)
         {
             AJniHelper jni;
             jclass shim_class = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shim_class, "NewHttpConnection", "(Ljava/lang/String;Ljava/lang/String;Z)Ljava/net/HttpURLConnection;");
-            if (!mid) {
-                LOGE("Unable to get NewHttpConnection mid");
-                return NULL;
-            }
-            jstring uriString = jni->NewStringUTF(uri.Data());
-            jstring methodString = jni->NewStringUTF(method.Data());        
-            jobject result = jni->CallObjectMethod(shim_class, mid, uriString, methodString, (jboolean)hasPayload);
-            jni->DeleteLocalRef(uriString);
-            jni->DeleteLocalRef(methodString);
-            return result;        
-        }
+            jmethodID mid = jni->GetStaticMethodID(shim_class, "SendHttpAsync", "(Landroid/app/NativeActivity;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/Object;IJ)V");
+            if (mid)
+            {
+                jobject activity = jni.GetInstance();
 
-        void AShim::HttpCloseConnection(jobject httpConnection)
-        {
-            AJniHelper jni;
-            jmethodID mid = jni.GetInstanceMethod(httpConnection, "disconnect", "()V");
-            if (!mid) {
-                LOGE("Unable to disconnect, cant get mid");
-                return; 
+                jstring jurl = jni->NewStringUTF(req.Url.Data());            
+                jstring jmethod = jni->NewStringUTF(HttpMethods::MethodToString(req.Method).Data());
+            
+                jobject jresult = jni->CallObjectMethod(shim_class, mid, activity, 
+                                                        jurl, jmethod, NULL, NULL,
+                                                        (int)req.OutboundPayloadType,
+                                                        (jlong)req.Callback);
+                jni->DeleteLocalRef(jurl);
+                jni->DeleteLocalRef(jmethod);
+            } else {
+                LOGE("Couldn't find SendHttpAsync");
             }
-            jni->CallObjectMethod(httpConnection, mid);
         }
 
         AStream* AShim::HttpGetOutputStream(jobject httpConnection)
@@ -155,58 +142,6 @@ namespace Xli
             } else {
                 return new AStream();
             }
-        }
-
-        void AShim::HttpSetHeader(jobject httpConnection, const String& key, const String& val)
-        {
-            AJniHelper jni;
-            jmethodID mid = jni.GetInstanceMethod(httpConnection, "addRequestProperty", "(Ljava/lang/String;Ljava/lang/String;)V");
-            if (!mid) {
-                LOGE("Unable to get add header, cant get mid");
-                return; 
-            }
-            jstring jKey = jni->NewStringUTF(key.Data());
-            jstring jVal = jni->NewStringUTF(val.Data());
-            jni->CallObjectMethod(httpConnection, mid, jKey, jVal);
-            jni->DeleteLocalRef(jKey);
-            jni->DeleteLocalRef(jVal);
-        }
-
-        String AShim::HttpGetHeader(jobject httpConnection, const String& key)
-        {
-            AJniHelper jni;
-            jmethodID mid = jni.GetInstanceMethod(httpConnection, "getHeaderField", "(Ljava/lang/String;)Ljava/lang/String;");
-            if (!mid) LOGE("Unable to get add header, cant get mid");
-            jstring jKey = jni->NewStringUTF(key.Data());
-            jobject val = jni->CallObjectMethod(httpConnection, mid, jKey);
-            if (val) {
-                jni->DeleteLocalRef(jKey);
-                String result = jni.GetString((jstring)val);
-                jni->DeleteLocalRef(val);
-                return result;
-            }
-            return String("<invalid>");
-        }
-
-        int AShim::GetResponseCode(jobject httpConnection)
-        {
-            AJniHelper jni;
-            jmethodID mid = jni.GetInstanceMethod(httpConnection, "getResponseCode", "()I");
-            if (!mid) LOGE("Unable to get GetResponseCode, cant get mid");
-            jobject jobj = jni->CallObjectMethod(httpConnection, mid);
-            int result = (int)jobj;
-            jni->DeleteLocalRef(jobj);
-            return result;
-        }
-
-        void AShim::HttpShowHeaders(jobject httpConnection)
-        {
-            AJniHelper jni;
-            jclass shim_class = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shim_class, "HttpShowHeaders",
-                                                   "(Ljava/net/HttpURLConnection;)V");
-            if (!mid) LOGE("Unable to get httpshowheaders, cant get mid");
-            jni->CallObjectMethod(shim_class, mid, httpConnection);
         }
 
         void AShim::InitDefaultCookieManager()

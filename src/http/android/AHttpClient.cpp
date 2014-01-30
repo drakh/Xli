@@ -8,28 +8,52 @@ namespace Xli
 
     //--------------------------------------------------
 
-    class AHttpRequest : public HttpRequest
+    // class AHttpResponse : public HttpResponse
+    // {
+    // public:
+    //     AHttpResponse() 
+    //     {
+    //     }
+
+    //     virtual ~AHttpResponse() 
+    //     {
+    //     }
+    // };
+
+    // HttpResponse* HttpResponse::Create()
+    // {
+    //     if (!HttpInitialized)
+    //     {
+    //         PlatformSpecific::AShim::InitDefaultCookieManager();
+    //         HttpInitialized = 1;
+    //     }
+    //     return new AHttpResponse();
+    // }
+
+    //--------------------------------------------------
+
+    PlatformSpecific::AHttpRequest::AHttpRequest(String url, HttpMethods::HttpMethodType method, HttpResponseHandler* callback) 
     {
-    public:
-        AHttpRequest(String url, HttpMethods::HttpMethodType method) 
-        {
-            this->Url = url;
-            this->Method = method;
-        }
+        this->Url = url;
+        this->Method = method;
+        this->OutboundPayloadType = HttpMethods::STRING;
+        this->ReturnPayloadType = HttpMethods::STRING;
+        this->Callback = callback;
+    }
 
-        virtual ~AHttpRequest() 
-        {
-        }
-    };
+    PlatformSpecific::AHttpRequest::~AHttpRequest() 
+    {
+    }
 
-    HttpRequest* HttpRequest::Create(String url, HttpMethods::HttpMethodType method)
+    HttpRequest* HttpRequest::Create(String url, HttpMethods::HttpMethodType method,
+                                     HttpResponseHandler* callback)
     {
         if (!HttpInitialized)
         {
             PlatformSpecific::AShim::InitDefaultCookieManager();
             HttpInitialized = 1;
         }
-        return new AHttpRequest(url, method);
+        return new PlatformSpecific::AHttpRequest(url, method, callback);
     }
     
     //--------------------------------------------------
@@ -42,7 +66,7 @@ namespace Xli
 
         virtual void Send(const HttpRequest& req)
         {
-            // PlatformSpecific::AShim::SendHttpAsync(req);
+            PlatformSpecific::AShim::SendHttpAsync((PlatformSpecific::AHttpRequest&)req);
         }
     };
 
