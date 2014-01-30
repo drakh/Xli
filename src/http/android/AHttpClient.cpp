@@ -1,6 +1,7 @@
 #include <Xli/HashMap.h>
-#include <Xli/PlatformSpecific/Android.h>
 #include <XliHttp/HttpClient.h>
+#include <Xli/PlatformSpecific/Android.h>
+
 namespace Xli
 {
 	static int HttpInitialized = 0;

@@ -1,4 +1,5 @@
 #include <Xli.h>
+#include <XliHttp.h>
 #include <XliGL.h>
 #include <XliAudio.h>
 
@@ -8,7 +9,8 @@ class GLApp: public Application
 {
 	Managed<GLContext> gl;
 
-    Managed<SimpleSound> sound;
+    // Managed<SimpleSound> sound;
+    Managed<HttpClient> httpClient;
 
     double touchDownTime;
     double tapTime;
@@ -58,7 +60,10 @@ public:
 		PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
 
         // Load some sounds
-        sound = SimpleSound::Create("test2.mp3", true);
+        // sound = SimpleSound::Create("test2.mp3", true);
+
+        // 
+        httpClient = HttpClient::Create();
 	}
 
 	virtual void OnLoad(Window* wnd)
@@ -198,10 +203,10 @@ public:
         {
             if (GetTime() - tapTime < 0.3)
             {
-                //play
                 Err->WriteLine("Bang");
                 wnd->BeginTextInput((Xli::TextInputHint)0);
-                sound->Play(false);
+                // sound->Play(false);
+                
             }
             else if (wnd->IsTextInputActive())
             {

@@ -83,15 +83,15 @@ namespace Xli
             return (bool)result;
         }
 
-        void AShim::SendHttpAsync(const HttpRequest& req)
-        {
-            AJniHelper jni;
-            jclass shim_class = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shim_class, "SendHttpAsync", "(Landroid/app/NativeActivity;Ljava/lang/String;L[java/lang/String;J)Z");
-            jobject activity = jni.GetInstance();
-            if (!mid) LOGE("Cant find async");
-            //jobject jresult = jni->CallObjectMethod(shim_class, mid, activity);
-        }
+        // void AShim::SendHttpAsync(const HttpRequest& req)
+        // {
+        //     AJniHelper jni;
+        //     jclass shim_class = jni.GetShim();
+        //     jmethodID mid = jni->GetStaticMethodID(shim_class, "SendHttpAsync", "(Landroid/app/NativeActivity;Ljava/lang/String;L[java/lang/String;J)Z");
+        //     jobject activity = jni.GetInstance();
+        //     if (!mid) LOGE("Cant find async");
+        //     //jobject jresult = jni->CallObjectMethod(shim_class, mid, activity);
+        // }
 
         jobject AShim::HttpNewConnection(const String& uri, const String& method, bool hasPayload)
         {
