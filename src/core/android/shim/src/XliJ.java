@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -92,7 +93,7 @@ public class XliJ extends android.app.NativeActivity {
     public static native void XliJ_OnKeyUp(int keyCode);
     public static native void XliJ_OnKeyDown(int keyCode);
     public static native void XliJ_OnTextInput(String keyCode);
-    public static native void XliJ_HttpCallback(int responseType, Object body, long functionPointer);
+    public static native void XliJ_HttpCallback(Object body, long functionPointer);
     
     public static class Hidden extends View {
         InputConnection fic;
@@ -277,17 +278,24 @@ public class XliJ extends android.app.NativeActivity {
         return (String[])headers.toArray();
     }
     
+    public static HashMap<String,String> GetEmptyHeaderHash()
+    {
+    	return new HashMap<String,String>();
+    }
+    public static void StringHashPut(HashMap<String,String> hashmap, String key, String val)
+    {
+    	hashmap.put(key, val);
+    }    
+    
     static class HttpWrappedResponse {
     	public Object body;
         public long functionPointer;
-        public int responseType;
         public String[] headers;
         
-        HttpWrappedResponse(Object body, String[] headers, int responseType, long fpointer)
+        HttpWrappedResponse(Object body, String[] headers, long fpointer)
         {
         	this.body = body;
         	this.functionPointer = fpointer;
-        	this.responseType = responseType;
         	this.headers = headers;
         }
     }
@@ -305,56 +313,56 @@ public class XliJ extends android.app.NativeActivity {
         protected HttpWrappedResponse doInBackground(Object... params) {
             String url = (String)params[0];
             String method = (String)params[1];
-            String[] headers = (String[])params[2];
-            int responseType = (Integer)params[3];
-            long callbackPointer = (Long)params[4];
+            @SuppressWarnings("unchecked")
+			HashMap<String,String> headers = (HashMap<String,String>)params[2];
+            long callbackPointer = (Long)params[3];
             String[] responseHeaders;
         	try {
         		HttpURLConnection connection = NewHttpConnection(url,method,false);        		
-        		switch (responseType)
-        		{
-        		case 0:
-        			InputStream stream_a = connection.getInputStream();   
-        			responseHeaders = HeadersToStringArray(connection);
-        			return new HttpWrappedResponse(convertStreamToString(stream_a), responseHeaders,
-        										   responseType, callbackPointer);
-        		case 1:
-        			BufferedInputStream stream_b = new BufferedInputStream(connection.getInputStream());
-        			responseHeaders = HeadersToStringArray(connection);
-        			return new HttpWrappedResponse(stream_b, responseHeaders, responseType, 
-        										   callbackPointer);
-        		default:
-        			return null; //ugh this needs to be better
-        		}
-				
+        		BufferedInputStream stream_b = new BufferedInputStream(connection.getInputStream());
+        		responseHeaders = null; //HeadersToStringArray(connection);
+        		return new HttpWrappedResponse(stream_b, responseHeaders, callbackPointer);
 			} catch (IOException e) {
-	            Log.e("XliApp","IOException: "+e.getLocalizedMessage());
+				Log.e("XliApp","IOException: "+e.getLocalizedMessage());
 	            return null; //What type of message do we send back?
 			}
         }
         @Override
         protected void onPostExecute(HttpWrappedResponse result) 
-        { 
-        	
-        	XliJ_HttpCallback(result.responseType, result.body, result.functionPointer);
+        {        	
+        	XliJ_HttpCallback(result.body, result.functionPointer);
         }
     }
     
     //{TODO} Fix all these crap messages
     public static void SendHttpAsync(NativeActivity activity, String url, String method, 
-    								 String[] headers, Object body, int responseBodyType,
-    								 long callbackPointer) {
+    								 HashMap<String,String> headers, Object body, long callbackPointer) {
+    	try 
+		{
+//    		for (String i : headers.keySet())
+//    		{
+//    			Log.d("XliApp","Header Key: "+i);
+//    		}
+//    		for (String i : headers.values())
+//    		{
+//    			Log.d("XliApp","Header Value: "+i);
+//    		}
+    		Log.e("XliApp",headers.toString());
+    	} catch (Exception e) {
+    		Log.d("XliApp","oh...: "+e.getLocalizedMessage());
+    	}
+    	Log.d("XliApp","Umm...Hello?");
     	try
     	{
-    		new ASyncHttpRequest().execute(url, method, headers, (Integer)responseBodyType,
-    									   (Long)callbackPointer);
+    		Log.e("XliApp", url+", "+method+", "+headers+", "+body+", "+callbackPointer);
+    		new ASyncHttpRequest().execute(url, method, headers, (Long)callbackPointer);
     	} catch (Exception e) {
     		Log.e("XliApp","Unable to build Async Http Request: "+e.getLocalizedMessage());
     	}
     }
     
     //[TODO] Could optimize by changing chunk mode if length known
-    public static HttpURLConnection NewHttpConnection(String url, String method , boolean hasPayload) 
+    public static HttpURLConnection NewHttpConnection(String url, String method, boolean hasPayload) 
     {
         URL j_url = null;
         try {

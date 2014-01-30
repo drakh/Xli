@@ -10,7 +10,7 @@ class Shouty : public HttpResponseHandler
     virtual void OnResponse(HttpResponse* response)
     {
         Err->WriteLine("-------------------------------------");
-        Err->WriteLine("WOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO!!!!");
+        Err->WriteLine("Im back baby!");
         Err->WriteLine("-------------------------------------");
     }
 };

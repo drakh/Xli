@@ -85,27 +85,71 @@ namespace Xli
             return (bool)result;
         }
 
-        void AShim::SendHttpAsync(const AHttpRequest& req)
+        void AShim::SendHttpAsync(const HttpRequest& req)
         {
             AJniHelper jni;
             jclass shim_class = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shim_class, "SendHttpAsync", "(Landroid/app/NativeActivity;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/Object;IJ)V");
+            jmethodID mid = jni->GetStaticMethodID(shim_class, "SendHttpAsync", "(Landroid/app/NativeActivity;Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/lang/Object;J)V");
             if (mid)
             {
                 jobject activity = jni.GetInstance();
 
                 jstring jurl = jni->NewStringUTF(req.Url.Data());            
                 jstring jmethod = jni->NewStringUTF(HttpMethods::MethodToString(req.Method).Data());
+                jobject headers = AShim::GetEmptyHeaderHash();;//XliToJavaHeaders(req.Headers);
             
                 jobject jresult = jni->CallObjectMethod(shim_class, mid, activity, 
-                                                        jurl, jmethod, NULL, NULL,
-                                                        (int)req.OutboundPayloadType,
+                                                        jurl, jmethod, headers, NULL,
                                                         (jlong)req.Callback);
                 jni->DeleteLocalRef(jurl);
                 jni->DeleteLocalRef(jmethod);
+                jni->DeleteGlobalRef(headers);
             } else {
                 LOGE("Couldn't find SendHttpAsync");
             }
+        }
+
+        jobject AShim::GetEmptyHeaderHash()
+        {
+            //setup for call
+            AJniHelper jni;
+            jclass shim_class = jni.GetShim();
+            jmethodID mid = jni->GetStaticMethodID(shim_class, "GetEmptyHeaderHash", "()Ljava/util/HashMap;");
+            jobject jresult = jni->CallObjectMethod(shim_class, mid);
+            if (!jresult) { LOGE("ARGHHHHHHH 1"); return NULL; }
+            jni->NewGlobalRef(jresult);
+            return jresult;
+        }
+        void AShim::StringHashPut(jobject hashmap, String key, String val)
+        {
+            //setup for call
+            AJniHelper jni;
+            jclass shim_class = jni.GetShim();
+            jmethodID mid = jni->GetStaticMethodID(shim_class, "StringHashPut", "(Ljava/util/HashMap;Ljava/lang/String;Ljava/lang/String;)V");
+            if (!mid) { LOGE("ARGHHHHHHH 2"); return; }
+            jstring jkey = jni->NewStringUTF(key.Data());
+            jstring jval = jni->NewStringUTF(val.Data());
+            
+            jni->CallObjectMethod(shim_class, mid, jkey, jval);
+            
+            jni->DeleteLocalRef(jkey);
+            jni->DeleteLocalRef(jval);
+        }
+
+        jobject AShim::XliToJavaHeaders(HashMap<String,String> src)
+        {
+            AJniHelper jni;
+            jobject hashmap = AShim::GetEmptyHeaderHash();
+
+            // if (src.Count() > 0)
+            // {
+            //     int i = src.Begin();
+            //     while (src.End() != (i = src.Next(i)))
+            //     {
+            //         StringHashPut(hashmap, src.GetKey(i), src.GetValue(i));
+            //     }
+            // }
+            return hashmap;
         }
 
         AStream* AShim::HttpGetOutputStream(jobject httpConnection)
@@ -165,6 +209,14 @@ namespace Xli
             jni->NewGlobalRef(assetManager);
             AAssetManager* result = AAssetManager_fromJava(jni.GetEnv(), assetManager);
             return result;
+        }
+
+        bool AShim::RegisterNativeFunctions(JNINativeMethod native_funcs[], int funcCount)
+        {
+            AJniHelper jni;            
+            jclass shim_class = jni.GetShim();
+            jint attached = jni->RegisterNatives(shim_class, native_funcs, (jint)funcCount);
+            return (attached >= 0);
         }
 
         Xli::Key AShim::AndroidToXliKeyEvent(AKeyEvent androidKeyCode) 

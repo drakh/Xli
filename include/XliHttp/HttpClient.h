@@ -10,11 +10,6 @@ namespace Xli
 {
    namespace HttpMethods
    {
-       enum PayloadType
-       {
-           STRING = 0,
-           BYTE_ARRAY = 1,
-       };
        enum HttpMethodType
        {
            GET = 0,
@@ -70,8 +65,8 @@ namespace Xli
        int Status;
        String ReasonPhrase;
        HashMap<String,String> Headers;
-       String Body;
-       /* static HttpResponse* Create(); */
+       Stream* Body;
+       static HttpResponse* Create();
    };
 
    class HttpResponseHandler : public Object

@@ -133,21 +133,6 @@ namespace Xli
         };
 
         /**
-            \ingroup XliHttp
-        */
-        class AHttpRequest : public HttpRequest
-        {
-        public:
-            HttpMethods::PayloadType OutboundPayloadType;
-            HttpMethods::PayloadType ReturnPayloadType;
-
-            AHttpRequest(String url, HttpMethods::HttpMethodType method, 
-                         HttpResponseHandler* callback);
-
-            virtual ~AHttpRequest();
-        };
-
-        /**
             \ingroup XliCorePlatform
         */
         enum AKeyEvent
@@ -427,16 +412,15 @@ namespace Xli
             static int ShowMessageBox(const String& message, const String& caption, int buttons, int hints);
             
             static bool ConnectedToNetwork();
-            static void SendHttpAsync(const AHttpRequest& req);
+            static jobject XliToJavaHeaders(HashMap<String,String> src);
+            static jobject GetEmptyHeaderHash();
+            static void StringHashPut(jobject hashmap, String key, String val);
+            static void SendHttpAsync(const HttpRequest& req);
             static jobject HttpNewConnection(const String& uri, const String& method, bool hasPayload);
-            static void HttpCloseConnection(jobject httpConnection);
-            static void HttpSetHeader(jobject httpConnection, const String& key, const String& val);
-            static String HttpGetHeader(jobject httpConnection, const String& key);
-            static void HttpShowHeaders(jobject httpConnection);
-            static int GetResponseCode(jobject httpConnection);
             static AStream* HttpGetInputStream(jobject httpConnection);
             static AStream* HttpGetOutputStream(jobject httpConnection);
             static AAssetManager* GetAssetManager();
+            static bool RegisterNativeFunctions(JNINativeMethod native_funcs[], int funcCount);
             static Key AndroidToXliKeyEvent(AKeyEvent keyEvent);
             static void HandleSpecialAndroidKeyEvents(AKeyEvent androidKeyCode);
             static void InitDefaultCookieManager();
