@@ -11,7 +11,7 @@ namespace Xli
         @{
     */
 
-    typedef void* CondHandle;
+    typedef struct {} *CondHandle;
 
     CondHandle CreateCond();
     void DeleteCond(CondHandle handle);

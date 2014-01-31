@@ -10,10 +10,13 @@ namespace Xli
         \addtogroup XliCoreThreading
         @{
     */
-    typedef void* ThreadHandle;
+    typedef struct {} *ThreadHandle;
 
     ThreadHandle CreateThread(void (entrypoint(void*)), void* arg);
-    void WaitForThread(ThreadHandle h);
+    void WaitForThread(ThreadHandle thread);
+
+    void* GetCurrentThread();
+
     void Sleep(int ms);
 
     /** @} */
@@ -52,10 +55,10 @@ namespace Xli
             Creates a new Thread.
             @param task Task to be executed by thread. If specified, the thread will start immediately without having to call Start() explicitly.
         */
-        Thread(Task* task = 0);
+        Thread(Managed<Task> task = 0);
         ~Thread();
 
-        void Start(Task* task);
+        void Start(Managed<Task> task);
         void Wait();
 
         bool HasStarted();

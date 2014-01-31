@@ -10,7 +10,7 @@ namespace Xli
         \addtogroup XliCoreThreading
         @{
     */
-    typedef void* MutexHandle;
+    typedef struct {} *MutexHandle;
 
     MutexHandle CreateMutex();
     void DeleteMutex(MutexHandle mutex);

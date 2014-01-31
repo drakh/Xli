@@ -11,19 +11,26 @@ namespace Xli
         pthread_attr_init(&attr);
         pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
-        pthread_t thread;
-        if (pthread_create(&thread, &attr, (void *(*)(void *))entrypoint, arg))    
+        pthread_t result;
+        if (pthread_create(&result, &attr, (void *(*)(void *))entrypoint, arg))    
             XLI_THROW("Failed to create thread");
 
         pthread_attr_destroy(&attr);
-        return (ThreadHandle)thread;
+        return (ThreadHandle)result;
     }
 
     void WaitForThread(ThreadHandle handle)
     {
         pthread_t thread = (pthread_t)handle;
-        int rc = pthread_join(thread, NULL);
-        if (rc) ErrorPrintLine("XLI ERROR: pthread_join failed: " + String::HexFromInt(rc));
+        int result = pthread_join(thread, NULL);
+        
+        if (result) 
+            ErrorPrintLine("XLI ERROR: pthread_join failed: " + String::HexFromInt(result));
+    }
+
+    void* GetCurrentThread()
+    {
+        return (void*)pthread_self();
     }
 
     void Sleep(int ms)
@@ -31,8 +38,10 @@ namespace Xli
         struct timespec t, r;
         t.tv_sec = ms / 1000;
         t.tv_nsec = (ms % 1000) * 1000 * 1000;
-
-        int rc = nanosleep(&t, &r);
-        if (rc)    ErrorPrintLine("XLI ERROR: nanosleep failed: " + String::HexFromInt(rc));
+        
+        int result = nanosleep(&t, &r);
+        
+        if (result)
+            ErrorPrintLine("XLI ERROR: nanosleep failed: " + String::HexFromInt(result));
     }
 }
