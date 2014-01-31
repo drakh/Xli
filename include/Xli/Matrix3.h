@@ -1,9 +1,9 @@
 #ifndef __XLI_MATRIX3_H__
 #define __XLI_MATRIX3_H__
 
-#include "Math.h"
-#include "Vector3.h"
-#include "Quaternion.h"
+#include <Xli/Math.h>
+#include <Xli/Vector3.h>
+#include <Xli/Quaternion.h>
 
 namespace Xli
 {

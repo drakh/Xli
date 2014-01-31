@@ -19,6 +19,7 @@ namespace Xli
 
     public:
         Random(UInt32 seed = 1);
+        
         void SetSeed(UInt32 seed);
 
         /**

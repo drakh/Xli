@@ -1,7 +1,7 @@
 #ifndef __XLI_MATH_H__
 #define __XLI_MATH_H__
 
-#include "BaseTypes.h"
+#include <Xli/BaseTypes.h>
 #include <cmath>
 #include <cfloat>
 #include <climits>

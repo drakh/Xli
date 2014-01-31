@@ -18,18 +18,19 @@ namespace Xli
         Shared(T* ptr)
             : Managed<T>(ptr)
         {
-                if (this->object)
-                    this->object->AddRef();
-            }
+            if (this->object)
+                this->object->AddRef();
+        }
 
         Shared(const Shared& shared)
             : Managed<T>(shared.object)
         {
-                if (this->object)
-                    this->object->AddRef();
-            }
+            if (this->object)
+                this->object->AddRef();
+        }
 
-        Shared(const Managed<T>& managed) : Managed<T>(managed)
+        Shared(const Managed<T>& managed) 
+            : Managed<T>(managed)
         {
         }
 
@@ -39,8 +40,12 @@ namespace Xli
 
         Shared& operator = (T* ptr)
         {
-            if (ptr) ptr->AddRef();
-            if (this->object) this->object->Release();
+            if (ptr) 
+                ptr->AddRef();
+            
+            if (this->object) 
+                this->object->Release();
+            
             this->object = ptr;
             return *this;
         }
@@ -48,16 +53,25 @@ namespace Xli
         Shared& operator = (const Managed<T>& managed)
         {
             T* ptr = const_cast<T*>(managed.Pointer());
-            if (ptr) ptr->AddRef();
-            if (this->object) this->object->Release();
+            
+            if (ptr) 
+                ptr->AddRef();
+            
+            if (this->object) 
+                this->object->Release();
+            
             this->object = ptr;
             return *this;
         }
 
         Shared& operator = (const Shared& shared)
         {
-            if (shared.object) shared.object->AddRef();
-            if (this->object) this->object->Release();
+            if (shared.object) 
+                shared.object->AddRef();
+            
+            if (this->object) 
+                this->object->Release();
+            
             this->object = shared.object;
             return *this;
         }
@@ -74,11 +88,14 @@ namespace Xli
     };
 
     /**
-    \ingroup XliCoreContainers
+        \ingroup XliCoreContainers
     */
-    template <class T> T* SharePtr(T* object)
+    template <class T> 
+    T* SharePtr(T* object)
     {
-        if (object) object->AddRef();
+        if (object) 
+            object->AddRef();
+
         return object;
     }
 }

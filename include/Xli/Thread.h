@@ -1,8 +1,8 @@
 #ifndef __XLI_THREAD_H__
 #define __XLI_THREAD_H__
 
-#include "Window.h"
-#include "Shared.h"
+#include <Xli/Window.h>
+#include <Xli/Shared.h>
 
 namespace Xli
 {

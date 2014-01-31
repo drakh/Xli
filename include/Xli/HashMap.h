@@ -48,7 +48,7 @@ namespace Xli
         functions used. This is useful i.e. when using pointers to objects as keys and you want to
         compare the value of the objects and not the pointers.
     */
-    template <typename TKey, typename TValue, typename TTraits = HashMapDefaultTraits<TKey, TValue>, int TBufSize = 8> class HashMap: public Object
+    template <typename TKey, typename TValue, typename TTraits = HashMapDefaultTraits<TKey, TValue>, int TBufSize = 8> class HashMap
     {
     private:
         typedef HashBucket<TKey, TValue> Bucket;
@@ -84,8 +84,13 @@ namespace Xli
             rehash(bucketCount * 2);
         }
 
+        HashMap(const HashMap& copy)
+        {
+            XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
+        }
+
     public:
-        explicit HashMap(int initialSizeLog2 = 0, void* memPool = 0)
+        HashMap(int initialSizeLog2 = 0, void* memPool = 0)
         {
             this->memPool = memPool;
 
@@ -109,19 +114,7 @@ namespace Xli
         ~HashMap()
         {
             if (buckets != internalBuckets)
-            {
                 TTraits::DeleteBuckets(buckets, memPool);
-            }
-        }
-
-        HashMap& operator = (const HashMap& map)
-        {
-            Clear();
-
-            for (int it = map.Begin(); it != map.End(); it = map.Next(it))
-                Add(map.GetKey(it), map.GetValue(it));
-
-            return *this;
         }
 
         Bucket* GetBucketBuffer() 

@@ -1,7 +1,7 @@
 #ifndef __XLI_VECTOR4_H__
 #define __XLI_VECTOR4_H__
 
-#include "Vector3.h"
+#include <Xli/Vector3.h>
 
 namespace Xli
 {

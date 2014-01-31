@@ -1,7 +1,7 @@
 #ifndef __XLI_QUATERNION_H__
 #define __XLI_QUATERNION_H__
 
-#include "Vector4.h"
+#include <Xli/Vector4.h>
 
 namespace Xli
 {
@@ -52,7 +52,6 @@ namespace Xli
         float Dot(const Quaternion& q) const;
         float LengthSquared() const;
         float Length() const;
-
 
         void Normalize();
         Quaternion Normalized() const;

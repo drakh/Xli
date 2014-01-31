@@ -1,7 +1,8 @@
 #ifndef __XLI_CONDITION_VARIABLE_H__
 #define __XLI_CONDITION_VARIABLE_H__
 
-#include "Mutex.h"
+#include <Xli/Mutex.h>
+#include <Xli/Exception.h>
 
 namespace Xli
 {
@@ -27,6 +28,11 @@ namespace Xli
     class ConditionVariable
     {
         CondHandle handle;
+
+        ConditionVariable(const ConditionVariable& copy)
+        {
+            XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
+        }
 
     public:
         ConditionVariable()

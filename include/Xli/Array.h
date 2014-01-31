@@ -4,19 +4,24 @@
 #include <Xli/Config.h>
 #include <Xli/Object.h>
 #include <Xli/Exception.h>
-#include "Sort.h"
+#include <Xli/Sort.h>
 
 namespace Xli
 {
     /**
         \ingroup XliCoreContainers
     */
-    template <typename T, int TBufSize> class Array: public Object
+    template <typename T, int TBufSize> class Array
     {
         T* data;
         T buf[TBufSize];
         int used;
         int capacity;
+
+        Array(const Array& copy)
+        {
+            XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
+        }
 
     public:
         Array()
@@ -26,7 +31,7 @@ namespace Xli
             data = buf;
         }
 
-        Array(int size)
+        explicit Array(int size)
         {
             used = 0;
             capacity = TBufSize;
@@ -34,7 +39,7 @@ namespace Xli
             Resize(size);
         }
 
-        Array(int count, const T* initItems)
+        explicit Array(int count, const T* initItems)
         {
             used = 0;
             capacity = TBufSize;
@@ -45,18 +50,13 @@ namespace Xli
                 data[i] = initItems[i];
         }
 
-        Array(const Array& a)
+        ~Array()
         {
-            used = 0;
-            capacity = TBufSize;
-            data = buf;
-            Resize(a.used);
-
-            for (int i = 0; i < used; i++)
-                data[i] = a.data[i];
+            if (data != buf) 
+                delete [] data;
         }
 
-        Array& operator = (Array& a)
+        void Copy(const Array& a)
         {
             Resize(a.used);
 
@@ -64,12 +64,6 @@ namespace Xli
                 data[i] = a.data[i];
 
             return *this;
-        }
-
-        ~Array()
-        {
-            if (data != buf) 
-                delete [] data;
         }
 
         void Reserve(int newCapacity)

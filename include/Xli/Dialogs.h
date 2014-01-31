@@ -1,7 +1,7 @@
 #ifndef __XLI_PLATFORM_DIALOGS_H__
 #define __XLI_PLATFORM_DIALOGS_H__
 
-#include "Window.h"
+#include <Xli/Window.h>
 
 namespace Xli
 {

@@ -1,7 +1,7 @@
 #ifndef __XLI_PATH_H__
 #define __XLI_PATH_H__
 
-#include "String.h"
+#include <Xli/String.h>
 
 namespace Xli
 {

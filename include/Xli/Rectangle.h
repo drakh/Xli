@@ -1,8 +1,8 @@
 #ifndef __XLI_RECTANGLE_H__
 #define __XLI_RECTANGLE_H__
 
-#include "Vector2.h"
-#include "Exception.h"
+#include <Xli/Vector2.h>
+#include <Xli/Exception.h>
 
 namespace Xli
 {
@@ -35,12 +35,12 @@ namespace Xli
                 T Bottom;
             };
 
-            T data[4];
+            T Corners[4];
         };
 
         operator T*()
         {
-            return data;
+            return Corners;
         }
         
         T& operator [] (int i)
@@ -49,7 +49,7 @@ namespace Xli
             if (i >= 4 || i < 0)
                 XLI_THROW_INDEX_OUT_OF_BOUNDS;
 #endif
-            return data[i];
+            return Corners[i];
         }
         
         String ToString() const

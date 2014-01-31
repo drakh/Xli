@@ -2,6 +2,7 @@
 #define __XLI_MUTEX_H__
 
 #include <Xli/Object.h>
+#include <Xli/Exception.h>
 
 namespace Xli
 {
@@ -25,6 +26,11 @@ namespace Xli
     class Mutex
     {
         MutexHandle handle;
+
+        Mutex(const Mutex& copy)
+        {
+            XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
+        }
 
     public:
         Mutex()
@@ -50,6 +56,24 @@ namespace Xli
         operator MutexHandle()
         {
             return handle;
+        }
+    };
+
+    class MutexLock
+    {
+        MutexHandle handle;
+    
+        MutexLock(const MutexLock& copy) { }
+
+    public:
+        MutexLock(MutexHandle handle)
+        {
+            LockMutex(this->handle = handle);
+        }
+
+        ~MutexLock()
+        {
+            UnlockMutex(this->handle);
         }
     };
 }

@@ -19,6 +19,7 @@ namespace Xli
         \ingroup XliCorePlatform
     */
 
+    // TODO: Move away from public interface
     enum CTEventType
     {
         CTKeyUpEvent = 0,

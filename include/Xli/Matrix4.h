@@ -1,7 +1,7 @@
 #ifndef __XLI_MATRIX4_H__
 #define __XLI_MATRIX4_H__
 
-#include "Matrix3.h"
+#include <Xli/Matrix3.h>
 
 namespace Xli
 {

@@ -1,8 +1,8 @@
 #ifndef __XLI_DATA_TYPE_H__
 #define __XLI_DATA_TYPE_H__
 
-#include "BaseTypes.h"
-#include "String.h"
+#include <Xli/BaseTypes.h>
+#include <Xli/String.h>
 
 namespace Xli
 {

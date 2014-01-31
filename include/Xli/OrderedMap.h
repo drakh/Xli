@@ -10,27 +10,12 @@ namespace Xli
 
         HashMap clone which preserves the order of the keys. This implementation has slower look up than HashMap and is not meant to be used in performance critical code.
     */
-    template <typename TKey, typename TValue, int TBufSize = 4> class OrderedMap: public Object
+    template <typename TKey, typename TValue, int TBufSize = 4> class OrderedMap
     {
         Array<TKey, TBufSize> keys;
         Array<TValue, TBufSize> values;
 
     public:
-        OrderedMap()
-        {
-        }
-
-        ~OrderedMap()
-        {
-        }
-
-        OrderedMap& operator = (const OrderedMap& map)
-        {
-            keys = map.keys;
-            values = map.values;
-            return *this;
-        }
-
         /**
             Gives an integer iterator to the beginning of the map.
         */
@@ -135,10 +120,8 @@ namespace Xli
         void GetKeysFromValue(const TValue& value, Array<TKey>& keys) const
         {
             for (int i = Begin(); i != End(); i = Next(i))
-            {
                 if (GetValue(i) == value) 
                     keys.Add(GetKey(i));
-            }
         }
 
         void Clear()
@@ -150,7 +133,10 @@ namespace Xli
         TValue& operator [] (const TKey& key)
         {
             int i = keys.IndexOf(key);
-            if (i == -1) XLI_THROW("Map does not contain the given key");
+            
+            if (i == -1) 
+                XLI_THROW("Map does not contain the given key");
+            
             return values[i];
         }
 
@@ -166,7 +152,10 @@ namespace Xli
         bool Remove(const TKey& key)
         {
             int i = keys.IndexOf(key);
-            if (i == -1) return false;
+            
+            if (i == -1) 
+                return false;
+            
             TValue value = values[i];
             keys.RemoveAt(i);
             values.RemoveAt(i);
@@ -181,7 +170,10 @@ namespace Xli
         bool TryGetValue(const TKey& key, TValue& value) const
         {
             int i = keys.IndexOf(key);
-            if (i == -1) return false;
+            
+            if (i == -1) 
+                return false;
+            
             value = values[i];
             return true;
         }

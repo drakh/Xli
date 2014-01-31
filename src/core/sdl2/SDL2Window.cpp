@@ -176,7 +176,7 @@ namespace Xli
         {
             if (!closed)
             {
-                if (eventHandler.IsSet())
+                if (!eventHandler.IsNull())
                 {
                     bool cancel = false;
                     if (eventHandler->OnClosing(this, cancel) && cancel) 
@@ -701,7 +701,7 @@ namespace Xli
                         case SDL_WINDOWEVENT_CLOSE:
                             if (!wnd->closed)
                             {
-                                if (wnd->eventHandler.IsSet())
+                                if (!wnd->eventHandler.IsNull())
                                 {
                                     bool cancel = false;
                                     if (wnd->eventHandler->OnClosing(wnd, cancel) && cancel) 
@@ -744,8 +744,11 @@ namespace Xli
                     if (wnd->GetEventHandler() != 0)
                     {
                         Key key = SDLKeyToXliKey(e.key.keysym);
-                        if (key) wnd->GetEventHandler()->OnKeyDown(wnd, key);
-                        else Err->WriteLine("SDL_KEYDOWN: " + (String)*(int*)&e.key.keysym);
+                        
+                        if (key) 
+                            wnd->GetEventHandler()->OnKeyDown(wnd, key);
+                        else 
+                            Err->WriteLine("SDL_KEYDOWN: " + (String)*(int*)&e.key.keysym);
                     }
                     break;
                 
@@ -753,8 +756,11 @@ namespace Xli
                     if (wnd->GetEventHandler() != 0)
                     {
                         Key key = SDLKeyToXliKey(e.key.keysym);
-                        if (key) wnd->GetEventHandler()->OnKeyUp(wnd, key);
-                        else Err->WriteLine("SDL_KEYUP: " + (String)*(int*)&e.key.keysym);
+                        
+                        if (key) 
+                            wnd->GetEventHandler()->OnKeyUp(wnd, key);
+                        else 
+                            Err->WriteLine("SDL_KEYUP: " + (String)*(int*)&e.key.keysym);
                     }
                     break;
 
