@@ -22,6 +22,7 @@ namespace Xli
                         NSString* ns_string_file_component = [file_manager stringWithFileSystemRepresentation:filename.Data() length:filename.Length()];
                         
                         NSString* full_path_with_file_to_try = [resource_path stringByAppendingPathComponent:ns_string_file_component];
+                        
                         if ([file_manager fileExistsAtPath:full_path_with_file_to_try])
                             result = new File([full_path_with_file_to_try fileSystemRepresentation], mode);
                     }

@@ -6,7 +6,10 @@ namespace Xli
     ThreadHandle CreateThread(void (entrypoint(void*)), void* arg)
     {
         ThreadHandle thread = (ThreadHandle)::CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)entrypoint, arg, 0, 0);
-        if (!thread) XLI_THROW("Failed to create thread");
+        
+        if (!thread) 
+            XLI_THROW("Failed to create thread");
+        
         return thread;
     }
 

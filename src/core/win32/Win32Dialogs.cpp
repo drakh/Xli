@@ -26,9 +26,8 @@ namespace Xli
         captionW = Unicode::Utf8To16(options.Caption);
 
         for (int i = 0; i < dirW.Length(); i++)
-        {
-            if (dirW[i] == '/') dirW[i] = '\\';
-        }
+            if (dirW[i] == '/') 
+                dirW[i] = '\\';
 
         if (options.FileExtensions.Length())
         {
@@ -39,8 +38,10 @@ namespace Xli
             {
                 String ext = FixExtension(options.FileExtensions[i].Extension);
 
-                if (ext.Length()) ext = "*." + ext;
-                else ext = "*.*";
+                if (ext.Length()) 
+                    ext = "*." + ext;
+                else 
+                    ext = "*.*";
 
                 fb.Append(options.FileExtensions[i].Description);
                 fb.Append(" (" + ext + ")");
@@ -49,9 +50,7 @@ namespace Xli
                 fb.Append('\0');
 
                 if (options.FileExtensions[i].Extension == options.DefaultExtension)
-                {
                     ofn.nFilterIndex = i + 1;
-                }
             }
 
             fb.Append('\0');
@@ -70,9 +69,7 @@ namespace Xli
         }
         
         if (parent)
-        {
             ofn.hwndOwner = (HWND)parent->GetNativeHandle();
-        }
 
         ofn.hInstance = GetModuleHandle(NULL);
         ofn.lpstrFilter = filterW.Data();

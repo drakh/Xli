@@ -31,7 +31,7 @@ namespace Xli
 
         if (InitCount == 0)
         {
-            Monitors->Release();
+            delete Monitors;
             Monitors = 0;
         }
         else if (InitCount < 0)

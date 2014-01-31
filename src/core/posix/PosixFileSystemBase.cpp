@@ -57,13 +57,17 @@ namespace Xli
         {
             char buf[1024];
             const char* ptr = getcwd(buf, 1024);
-            if (ptr != buf) return ".";
+            
+            if (ptr != buf) 
+                return ".";
+            
             return buf;
         }
             
         void PosixFileSystemBase::ChangeDirectory(const String& path)
         {
-            if (!path.Length()) return;
+            if (!path.Length()) 
+                return;
 
             if (chdir(path.Data()) != 0)
                 XLI_THROW("Unable to change directory to '" + path + "'");
@@ -71,15 +75,18 @@ namespace Xli
 
         void PosixFileSystemBase::CreateDirectory(const String& path)
         {
-            if (!path.Length()) return;
-            if (path == "~") return;
-
             struct stat st;
-            if (stat(path.Data(), &st) == 0) return;
+
+            if (!path.Length() || 
+                path == "~" ||
+                stat(path.Data(), &st) == 0) 
+                return;
 
             if (mkdir(path.Data(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
             {
-                if (errno == EEXIST) return;
+                if (errno == EEXIST) 
+                    return;
+
                 XLI_THROW("Unable to create directory '" + path + "'");
             }
         }
@@ -152,7 +159,10 @@ namespace Xli
             while ((ep = readdir(dp)) != NULL)
             {
                 String fn = ep->d_name;
-                if (fn == "." || fn == "..") continue;
+                
+                if (fn == "." || fn == "..") 
+                    continue;
+
                 FileInfo info;
                 if (GetFileInfo(prefix + fn, info))
                     list.Add(info);

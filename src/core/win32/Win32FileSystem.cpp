@@ -50,8 +50,8 @@ namespace Xli
                 String result = Unicode::Utf16To8(fnW);
 
                 for (int i = 0; i < result.Length(); i++)
-                if (result[i] == '\\')
-                    result[i] = '/';
+                    if (result[i] == '\\')
+                        result[i] = '/';
 
                 return result;
             }
@@ -68,8 +68,8 @@ namespace Xli
                 }
 
                 for (int i = 0; i < result.Length(); i++)
-                if (result[i] == '\\')
-                    result[i] = '/';
+                    if (result[i] == '\\')
+                        result[i] = '/';
 
                 return result;
             }
@@ -99,8 +99,8 @@ namespace Xli
                 String result = Unicode::Utf16To8(bufW);
 
                 for (int i = 0; i < result.Length(); i++)
-                if (result[i] == '\\')
-                    result[i] = '/';
+                    if (result[i] == '\\')
+                        result[i] = '/';
 
                 return result;
             }
@@ -114,7 +114,8 @@ namespace Xli
             virtual void CreateDirectory(const String& path)
             {
                 // silent ignore on disk roots
-                if (path.EndsWith(":")) return;
+                if (path.EndsWith(":")) 
+                    return;
 
                 Utf16String pathW = Unicode::Utf8To16(path);
 
@@ -183,8 +184,13 @@ namespace Xli
                     info.LastWriteTime = ConvertToTimestamp(data.ftLastWriteTime);
                     info.CreationTime = ConvertToTimestamp(data.ftCreationTime);
                     info.Size = ConvertToUInt64(data.nFileSizeHigh, data.nFileSizeLow);
-                    if (data.dwFileAttributes & FILE_ATTRIBUTE_READONLY) info.Flags |= FileFlagReadOnly;
-                    if (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) info.Flags |= FileFlagDirectory;
+                    
+                    if (data.dwFileAttributes & FILE_ATTRIBUTE_READONLY) 
+                        info.Flags |= FileFlagReadOnly;
+                    
+                    if (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) 
+                        info.Flags |= FileFlagDirectory;
+                    
                     return true;
                 }
 
@@ -225,12 +231,17 @@ namespace Xli
                         info.LastWriteTime = ConvertToTimestamp(findData.ftLastWriteTime);
                         info.CreationTime = ConvertToTimestamp(findData.ftCreationTime);
                         info.Size = ConvertToUInt64(findData.nFileSizeHigh, findData.nFileSizeLow);
-                        if (findData.dwFileAttributes & FILE_ATTRIBUTE_READONLY) info.Flags |= FileFlagReadOnly;
-                        if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) info.Flags |= FileFlagDirectory;
+                        
+                        if (findData.dwFileAttributes & FILE_ATTRIBUTE_READONLY) 
+                            info.Flags |= FileFlagReadOnly;
+                        
+                        if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) 
+                            info.Flags |= FileFlagDirectory;
 
                         list.Add(info);
 
-                    } while (FindNextFile(h, &findData) != 0);
+                    } 
+                    while (FindNextFile(h, &findData) != 0);
                 }
 
                 FindClose(h);
