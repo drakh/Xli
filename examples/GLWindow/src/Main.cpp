@@ -15,10 +15,13 @@ class Shouty : public HttpResponseHandler
         
         Err->WriteLine("-------------------------------------");
         Err->WriteLine("Im back baby!");
-        while (!response->Body->AtEnd())
+        if (response->Body != 0)
         {
-            bytesRead = response->Body->Read(&d, 1, bufSize);
-            Err->WriteFormat("> %*.*s\n", bytesRead, bytesRead, d);
+            while (!response->Body->AtEnd())
+            {
+                bytesRead = response->Body->Read(&d, 1, bufSize);
+                Err->WriteFormat("> %*.*s\n", bytesRead, bytesRead, d);
+            }
         }
         Err->WriteLine("-------------------------------------");
     }

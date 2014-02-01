@@ -63,7 +63,8 @@ namespace Xli
    {
    public:
        //-----------------
-       static Htw
+       static HttpClient* Create();       
+   };
 
    class HttpResponse : public Object
    {

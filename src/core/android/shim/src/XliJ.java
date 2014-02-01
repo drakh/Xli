@@ -336,7 +336,7 @@ public class XliJ extends android.app.NativeActivity {
         		return new HttpWrappedResponse(stream_b, responseHeaders, callbackPointer);
 			} catch (IOException e) {
 				Log.e("XliApp","IOException: "+e.getLocalizedMessage());
-	            return null; //What type of message do we send back?
+	            return new HttpWrappedResponse(null, new String[0], callbackPointer);
 			}
         }
         @Override

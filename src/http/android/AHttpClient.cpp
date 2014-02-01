@@ -43,6 +43,8 @@ extern "C"
                 env->NewGlobalRef(body);
                 Xli::PlatformSpecific::AStream* stream = new Xli::PlatformSpecific::AStream(Xli::PlatformSpecific::AStream::READ, body);            
                 response->Body = stream;
+            } else {
+                response->Body = 0;
             }
 
             if (headers)
@@ -75,6 +77,8 @@ extern "C"
                     response->Headers.Add(ckey,cval);
                     env->ReleaseStringUTFChars(jkey, ckey);
                     env->ReleaseStringUTFChars(jval, cval);
+                } else {
+                    headers = 0;
                 }
                 env->DeleteLocalRef(headers);
             }
