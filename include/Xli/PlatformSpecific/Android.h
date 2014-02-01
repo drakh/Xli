@@ -132,6 +132,12 @@ namespace Xli
             virtual bool Init(AStreamType streamType, jobject javaStream);
         };
 
+        class AWindowAction : public Object
+        {
+        public:
+            virtual void Execute() = 0;
+        };
+
         /**
             \ingroup XliCorePlatform
         */
@@ -413,9 +419,7 @@ namespace Xli
             
             static bool ConnectedToNetwork();
             static jobject XliToJavaHeaders(HashMap<String,String> src);
-            static jobject GetEmptyHeaderHash();
-            static void StringHashPut(jobject hashmap, String key, String val);
-            static void SendHttpAsync(const HttpRequest& req);
+            static void SendHttpAsync(const HttpRequest* req);
             static jobject HttpNewConnection(const String& uri, const String& method, bool hasPayload);
             static AStream* HttpGetInputStream(jobject httpConnection);
             static AStream* HttpGetOutputStream(jobject httpConnection);

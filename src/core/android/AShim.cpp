@@ -85,7 +85,7 @@ namespace Xli
             return (bool)result;
         }
 
-        void AShim::SendHttpAsync(const HttpRequest& req)
+        void AShim::SendHttpAsync(const HttpRequest* req)
         {
             AJniHelper jni;
             jclass shim_class = jni.GetShim();
@@ -94,13 +94,13 @@ namespace Xli
             {
                 jobject activity = jni.GetInstance();
 
-                jstring jurl = jni->NewStringUTF(req.Url.Data());            
-                jstring jmethod = jni->NewStringUTF(HttpMethods::MethodToString(req.Method).Data());
-                jobject headers = AShim::GetEmptyHeaderHash();;//XliToJavaHeaders(req.Headers);
+                jstring jurl = jni->NewStringUTF(req->Url.Data());            
+                jstring jmethod = jni->NewStringUTF(HttpMethods::MethodToString(req->Method).Data());
+                jobject headers = XliToJavaHeaders(req->Headers);
             
                 jobject jresult = jni->CallObjectMethod(shim_class, mid, activity, 
                                                         jurl, jmethod, headers, NULL,
-                                                        (jlong)req.Callback);
+                                                        (jlong)req->Callback);
                 jni->DeleteLocalRef(jurl);
                 jni->DeleteLocalRef(jmethod);
                 jni->DeleteGlobalRef(headers);
@@ -109,46 +109,25 @@ namespace Xli
             }
         }
 
-        jobject AShim::GetEmptyHeaderHash()
-        {
-            //setup for call
-            AJniHelper jni;
-            jclass shim_class = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shim_class, "GetEmptyHeaderHash", "()Ljava/util/HashMap;");
-            jobject jresult = jni->CallObjectMethod(shim_class, mid);
-            if (!jresult) { LOGE("ARGHHHHHHH 1"); return NULL; }
-            jni->NewGlobalRef(jresult);
-            return jresult;
-        }
-        void AShim::StringHashPut(jobject hashmap, String key, String val)
-        {
-            //setup for call
-            AJniHelper jni;
-            jclass shim_class = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shim_class, "StringHashPut", "(Ljava/util/HashMap;Ljava/lang/String;Ljava/lang/String;)V");
-            if (!mid) { LOGE("ARGHHHHHHH 2"); return; }
-            jstring jkey = jni->NewStringUTF(key.Data());
-            jstring jval = jni->NewStringUTF(val.Data());
-            
-            jni->CallObjectMethod(shim_class, mid, jkey, jval);
-            
-            jni->DeleteLocalRef(jkey);
-            jni->DeleteLocalRef(jval);
-        }
-
         jobject AShim::XliToJavaHeaders(HashMap<String,String> src)
         {
-            AJniHelper jni;
-            jobject hashmap = AShim::GetEmptyHeaderHash();
+            AJniHelper jni;            
+            jobject hashmap = jni.GetInstance("java/util/HashMap","()V");
+            jmethodID put = jni.GetInstanceMethod(hashmap, "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
 
-            // if (src.Count() > 0)
-            // {
-            //     int i = src.Begin();
-            //     while (src.End() != (i = src.Next(i)))
-            //     {
-            //         StringHashPut(hashmap, src.GetKey(i), src.GetValue(i));
-            //     }
-            // }
+            int i = src.Begin();
+            while (i != src.End())
+            {
+                jstring jkey = jni->NewStringUTF(src.GetKey(i).Data());
+                jstring jval = jni->NewStringUTF(src.GetValue(i).Data());
+            
+                jni->CallObjectMethod(hashmap, put, jkey, jval);
+            
+                jni->DeleteLocalRef(jkey);
+                jni->DeleteLocalRef(jval);
+                i = src.Next(i);
+            }
+
             return hashmap;
         }
 

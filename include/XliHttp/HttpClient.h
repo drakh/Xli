@@ -59,13 +59,19 @@ namespace Xli
        }        
    }
 
+   class HttpClient : public Object
+   {
+   public:
+       //-----------------
+       static Htw
+
    class HttpResponse : public Object
    {
-   public:       
-       int Status;
-       String ReasonPhrase;
+   public:
+       int Status; //implement me
+       String ReasonPhrase; //implement me
        HashMap<String,String> Headers;
-       Stream* Body;
+       Stream* Body; // test me
        static HttpResponse* Create();
    };
 
@@ -78,21 +84,15 @@ namespace Xli
    class HttpRequest : public Object
    {
    public:
-       String Url;
-       HttpMethods::HttpMethodType Method;
-       HashMap<String,String> Headers;
-       String Mime;
        HttpResponseHandler* Callback;
-       //-----------------
-       static HttpRequest* Create(String url, HttpMethods::HttpMethodType method, HttpResponseHandler* callback);
-   };
-
-   class HttpClient : public Object
-   {
-   public:
-       //-----------------
-       static HttpClient* Create();
-       virtual void Send(const HttpRequest& req) = 0;
+       String Url;
+       String Mime; //implement me
+       int Timeout; //implement me
+       Stream* Body; //implement me
+       HashMap<String,String> Headers;
+       HttpMethods::HttpMethodType Method;
+       static HttpRequest* Create(String url, HttpMethods::HttpMethodType method, HttpResponseHandler* callback, const HttpClient* client=NULL);
+       virtual void Send() = 0;
    };
 }
 

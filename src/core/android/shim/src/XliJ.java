@@ -11,6 +11,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -93,7 +94,7 @@ public class XliJ extends android.app.NativeActivity {
     public static native void XliJ_OnKeyUp(int keyCode);
     public static native void XliJ_OnKeyDown(int keyCode);
     public static native void XliJ_OnTextInput(String keyCode);
-    public static native void XliJ_HttpCallback(Object body, long functionPointer);
+    public static native void XliJ_HttpCallback(Object body, String[] headers, long functionPointer);
     
     public static class Hidden extends View {
         InputConnection fic;
@@ -261,31 +262,35 @@ public class XliJ extends android.app.NativeActivity {
     
     //===========
 
-    static String convertStreamToString(InputStream is) {
-        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
-        return s.hasNext() ? s.next() : "";
-    }
     public static String[] HeadersToStringArray(HttpURLConnection connection)
     {
-        Map<String, List<String>> a = connection.getHeaderFields();
-        ArrayList<String> headers = new ArrayList<String>();
-        for (String key : a.keySet()) {
-            for (String header : a.get(key)) {
-            	headers.add(key);
-            	headers.add(header);
-            }
-        }
-        return (String[])headers.toArray();
+    	ArrayList<String> headers = new ArrayList<String>();
+    	try {
+	    	String separator = ",";
+	        Map<String, List<String>> a = connection.getHeaderFields();
+	        
+	        for (String key : a.keySet()) {
+	        	if (key != null) {
+	        		headers.add(key);
+	        	} else {
+	        		headers.add("-null-"); //{TODO} I need to work out what to do here.
+	        	}
+	        	StringBuilder sb = new StringBuilder();
+	            String sep = "";
+	            for(String s: a.get(key)) {
+	                sb.append(sep).append(s);
+	                sep = separator;
+	            }
+	            headers.add(sb.toString());
+	            
+	            String[] result = headers.toArray(new String[headers.size()]);	         
+	            return result;
+	        }
+    	} catch (Exception e) {
+    		Log.e("XliApp","Error in HeadersToStringArray: "+e.getLocalizedMessage());
+    	}
+        return null;
     }
-    
-    public static HashMap<String,String> GetEmptyHeaderHash()
-    {
-    	return new HashMap<String,String>();
-    }
-    public static void StringHashPut(HashMap<String,String> hashmap, String key, String val)
-    {
-    	hashmap.put(key, val);
-    }    
     
     static class HttpWrappedResponse {
     	public Object body;
@@ -318,9 +323,16 @@ public class XliJ extends android.app.NativeActivity {
             long callbackPointer = (Long)params[3];
             String[] responseHeaders;
         	try {
-        		HttpURLConnection connection = NewHttpConnection(url,method,false);        		
+        		HttpURLConnection connection = NewHttpConnection(url,method,false);
+        		//set headers
+        		Iterator<Map.Entry<String, String>> it = headers.entrySet().iterator();
+        		while (it.hasNext()) {
+        			Map.Entry<String, String>pair = (Map.Entry<String, String>)it.next();
+        			connection.addRequestProperty(pair.getKey(), pair.getValue());
+        		}
+        		//get result payload
         		BufferedInputStream stream_b = new BufferedInputStream(connection.getInputStream());
-        		responseHeaders = null; //HeadersToStringArray(connection);
+        		responseHeaders = HeadersToStringArray(connection);
         		return new HttpWrappedResponse(stream_b, responseHeaders, callbackPointer);
 			} catch (IOException e) {
 				Log.e("XliApp","IOException: "+e.getLocalizedMessage());
@@ -329,29 +341,14 @@ public class XliJ extends android.app.NativeActivity {
         }
         @Override
         protected void onPostExecute(HttpWrappedResponse result) 
-        {        	
-        	XliJ_HttpCallback(result.body, result.functionPointer);
+        {
+    		XliJ_HttpCallback(result.body, result.headers, result.functionPointer);
         }
     }
     
     //{TODO} Fix all these crap messages
     public static void SendHttpAsync(NativeActivity activity, String url, String method, 
     								 HashMap<String,String> headers, Object body, long callbackPointer) {
-    	try 
-		{
-//    		for (String i : headers.keySet())
-//    		{
-//    			Log.d("XliApp","Header Key: "+i);
-//    		}
-//    		for (String i : headers.values())
-//    		{
-//    			Log.d("XliApp","Header Value: "+i);
-//    		}
-    		Log.e("XliApp",headers.toString());
-    	} catch (Exception e) {
-    		Log.d("XliApp","oh...: "+e.getLocalizedMessage());
-    	}
-    	Log.d("XliApp","Umm...Hello?");
     	try
     	{
     		Log.e("XliApp", url+", "+method+", "+headers+", "+body+", "+callbackPointer);

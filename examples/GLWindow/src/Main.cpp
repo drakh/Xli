@@ -9,8 +9,17 @@ class Shouty : public HttpResponseHandler
 {
     virtual void OnResponse(HttpResponse* response)
     {
+        int bufSize = 60;
+        char d[bufSize];
+        int bytesRead = 0;
+        
         Err->WriteLine("-------------------------------------");
         Err->WriteLine("Im back baby!");
+        while (!response->Body->AtEnd())
+        {
+            bytesRead = response->Body->Read(&d, 1, bufSize);
+            Err->WriteFormat("> %*.*s\n", bytesRead, bytesRead, d);
+        }
         Err->WriteLine("-------------------------------------");
     }
 };
@@ -20,7 +29,6 @@ class GLApp: public Application
 	Managed<GLContext> gl;
 
     // Managed<SimpleSound> sound;
-    Managed<HttpClient> httpClient;
     Managed<HttpResponseHandler> httpCallback;
 
     double touchDownTime;
@@ -74,8 +82,6 @@ public:
         // sound = SimpleSound::Create("test2.mp3", true);
 
         // 
-        httpClient = HttpClient::Create();
-        
 	}
 
 	virtual void OnLoad(Window* wnd)
@@ -220,7 +226,8 @@ public:
                 // sound->Play(false);
                 Shouty* callback = new Shouty();
                 HttpRequest* req = HttpRequest::Create("http://bbc.co.uk", HttpMethods::GET, callback);
-                httpClient->Send(*req);
+                req->Headers.Add("test","some more");
+                req->Send();
             }
             else if (wnd->IsTextInputActive())
             {

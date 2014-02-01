@@ -24,14 +24,15 @@ namespace Xli
         CTKeyUpEvent = 0,
         CTKeyDownEvent = 1,
         CTTextEvent = 2,
-        CTMotionEvent = 3
-    };
+        CTMotionEvent = 3,
+        CTActionEvent = 4
+    }; // {TODO} this can be removed once we go pure action based
     struct CTEvent 
     {
         CTEventType CTType;
         int Code;
         void* Payload;
-    };
+    }; // {TODO} this could also be removed but actions would have to live here
 
     enum Key
     {

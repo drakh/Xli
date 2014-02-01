@@ -24,7 +24,8 @@ static volatile int visible = 1;
 namespace Xli
 {
     namespace PlatformSpecific
-    {
+    {        
+        
         class AWindow: public Window
         {
             Managed<MutexQueue<CTEvent*> > ctEventQueue;
@@ -234,6 +235,9 @@ namespace Xli
                         break;
                     case Xli::CTKeyDownEvent:
                         GlobalEventHandler->OnKeyDown(GlobalWindow, Xli::PlatformSpecific::AShim::AndroidToXliKeyEvent((Xli::PlatformSpecific::AKeyEvent)event->Code));
+                        break;
+                    case Xli::CTActionEvent:
+                        ((AWindowAction*)event->Payload)->Execute();
                         break;
                     default:
                         break;

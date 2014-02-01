@@ -2,32 +2,98 @@
 #include <XliHttp/HttpClient.h>
 #include <Xli/PlatformSpecific/Android.h>
 
+extern Xli::Window* GlobalWindow;
+
+namespace Xli
+{
+
+    namespace PlatformSpecific
+    {
+        class AHttpResponseHandlerAction : public AWindowAction
+        {    
+        public:
+            Managed<HttpResponseHandler> Handler;
+            Managed<HttpResponse> Response;
+
+            AHttpResponseHandlerAction(HttpResponseHandler* handler, HttpResponse* response)
+            {
+                this->Handler = handler;
+                this->Response = response;
+            }
+            virtual ~AHttpResponseHandlerAction() {}
+            virtual void Execute()
+            {
+                this->Handler.Get()->OnResponse(this->Response.Get());
+            }
+        };
+    }
+}
+
 extern "C"
 {
     void JNICALL XliJ_HttpCallback (JNIEnv *env , jobject obj, jobject body,
-                                    jlong handlerPointer) 
-    {        
-        if (body) //this shouldnt stop response 
+                                    jobjectArray headers, jlong handlerPointer) 
+    {       
+        if (handlerPointer)
         {
-            env->NewGlobalRef(body);
-            Xli::PlatformSpecific::AStream* stream = new Xli::PlatformSpecific::AStream(Xli::PlatformSpecific::AStream::READ, body);
-
             Xli::HttpResponse* response = Xli::HttpResponse::Create();
-            response->Body = stream;
 
-            if (handlerPointer)
+            if (body)
             {
-                ((Xli::HttpResponseHandler*)((void*)handlerPointer))->OnResponse(response);
-            } else {
-                LOGE("No callback pointer error");
+                env->NewGlobalRef(body);
+                Xli::PlatformSpecific::AStream* stream = new Xli::PlatformSpecific::AStream(Xli::PlatformSpecific::AStream::READ, body);            
+                response->Body = stream;
             }
-        }                
+
+            if (headers)
+            {
+                int headerCount = (env->GetArrayLength(headers) / 2);
+                int index = 0;
+                jstring jkey;
+                jstring jval;
+                char const* ckey;
+                char const * cval;
+                for (int i=0; i<headerCount; i++)
+                {
+                    index = i * 2;
+
+                    jkey = (jstring) env->GetObjectArrayElement(headers, index);
+                    jval = (jstring) env->GetObjectArrayElement(headers, (index + 1));
+
+                    //{TODO} again -null- is an issue
+                    if (!jkey) { 
+                        ckey = "-null-"; 
+                    } else { 
+                        ckey = env->GetStringUTFChars(jkey, NULL); 
+                    }
+                    if (!jval) { 
+                        cval = "-null-"; 
+                    } else { 
+                        cval = env->GetStringUTFChars(jval, NULL); 
+                    }
+
+                    response->Headers.Add(ckey,cval);
+                    env->ReleaseStringUTFChars(jkey, ckey);
+                    env->ReleaseStringUTFChars(jval, cval);
+                }
+                env->DeleteLocalRef(headers);
+            }
+                     
+            Xli::CTEvent* event = new Xli::CTEvent();
+            event->CTType = Xli::CTActionEvent;
+            event->Code = -1;
+            event->Payload = (void*)(new Xli::PlatformSpecific::AHttpResponseHandlerAction(((Xli::HttpResponseHandler*)((void*)handlerPointer)), response));
+            GlobalWindow->EnqueueCrossThreadEvent(event);
+            //((Xli::HttpResponseHandler*)((void*)handlerPointer))->OnResponse(response);
+        } else {
+            LOGE("No callback pointer error");
+        }
     }
 }
 
 namespace Xli
 {
-	static int HttpInitialized = 0;
+    static int HttpInitialized = 0;
 
     static void InitAndroidHttp()
     {
@@ -35,11 +101,11 @@ namespace Xli
         {
             PlatformSpecific::AShim::InitDefaultCookieManager();            
             static JNINativeMethod nativeFuncs[] = {
-                {(char* const)"XliJ_HttpCallback", (char* const)"(Ljava/lang/Object;J)V",
+                {(char* const)"XliJ_HttpCallback", (char* const)"(Ljava/lang/Object;[Ljava/lang/String;J)V",
                  (void *)&XliJ_HttpCallback},
             };
             bool result = PlatformSpecific::AShim::RegisterNativeFunctions(nativeFuncs, 1);
-            if (!result) LOGE("Could not register http callbacks");
+            if (!result) LOGE("*** Could not register http callbacks");
             HttpInitialized = 1;
         }
     }
@@ -75,10 +141,15 @@ namespace Xli
         virtual ~AHttpRequest() 
         {
         }
+
+        virtual void Send()
+        {
+            PlatformSpecific::AShim::SendHttpAsync(this);
+        }
     };
 
     HttpRequest* HttpRequest::Create(String url, HttpMethods::HttpMethodType method,
-                                     HttpResponseHandler* callback)
+                                     HttpResponseHandler* callback, const HttpClient* client)
     {
         if (!HttpInitialized) InitAndroidHttp();
         return new AHttpRequest(url, method, callback);
@@ -91,16 +162,11 @@ namespace Xli
     public:
         AHttpClient() {}
         virtual ~AHttpClient() {}
-
-        virtual void Send(const HttpRequest& req)
-        {
-            PlatformSpecific::AShim::SendHttpAsync(req);
-        }
     };
 
     HttpClient* HttpClient::Create()
     {
         if (!HttpInitialized) InitAndroidHttp();
         return new AHttpClient();
-    }    
+    }
 };
