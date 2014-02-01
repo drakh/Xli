@@ -142,8 +142,10 @@ namespace Xli
         {
             this->Url = url;
             this->Method = method;
-            this->Callback = callback;            
-            javaConnectionHandle = 0;
+            this->Mime = NULL;
+            this->Timeout = 0;
+            this->Callback = callback;
+            this->javaConnectionHandle = 0;
         }
 
         virtual ~AHttpRequest() 

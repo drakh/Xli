@@ -94,9 +94,12 @@ namespace Xli
             {
                 jobject activity = jni.GetInstance();
 
-                jstring jurl = jni->NewStringUTF(req->Url.Data());            
+                jstring jurl = jni->NewStringUTF(req->Url.Data());
                 jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->Method).Data());
-                jstring jmime = jni->NewStringUTF(req->Mime.Data());
+                jstring jmime = NULL;
+                // if (req->Mime != NULL)
+                //     jmime = jni->NewStringUTF(req->Mime.Data());
+                
                 jint jtimeout = (jint)req->Timeout;
                 jobject headers = XliToJavaHeaders(&(req->Headers));
             
@@ -106,7 +109,7 @@ namespace Xli
                                                         (jlong)req->Callback);
                 jni->DeleteLocalRef(jurl);
                 jni->DeleteLocalRef(jmethod);
-                jni->DeleteLocalRef(jmime);
+                // if (req->Mime != NULL) jni->DeleteLocalRef(jmime);
                 jni->DeleteGlobalRef(headers);
                 jni->NewGlobalRef(jresult);
                 return jresult;

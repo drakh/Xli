@@ -320,10 +320,12 @@ public class XliJ extends android.app.NativeActivity {
             String method = (String)params[1];
             @SuppressWarnings("unchecked")
 			HashMap<String,String> headers = (HashMap<String,String>)params[2];
-            long callbackPointer = (Long)params[3];
+            String mime = (String)params[3];
+            int timeout = (Integer)params[4];
+            long callbackPointer = (Long)params[5];
             String[] responseHeaders;
         	try {
-        		HttpURLConnection connection = NewHttpConnection(url,method,false);
+        		HttpURLConnection connection = NewHttpConnection(url,method,false,mime,timeout);
         		//set headers
         		Iterator<Map.Entry<String, String>> it = headers.entrySet().iterator();
         		while (it.hasNext()) {
@@ -355,7 +357,7 @@ public class XliJ extends android.app.NativeActivity {
     	{
     		Log.e("XliApp", url+", "+method+", "+headers+", "+body+", "+callbackPointer);
     		AsyncTask task = new ASyncHttpRequest();
-    		((AsyncTask<Object, Void, HttpWrappedResponse>)(task)).execute(url, method, headers, (Long)callbackPointer);
+    		((AsyncTask<Object, Void, HttpWrappedResponse>)(task)).execute(url, method, headers, "", (Integer)timeout, (Long)callbackPointer);
     		return task;
     	} catch (Exception e) {
     		Log.e("XliApp","Unable to build Async Http Request: "+e.getLocalizedMessage());
@@ -370,7 +372,7 @@ public class XliJ extends android.app.NativeActivity {
     }
     
     //[TODO] Could optimize by changing chunk mode if length known
-    public static HttpURLConnection NewHttpConnection(String url, String method, boolean hasPayload) 
+    public static HttpURLConnection NewHttpConnection(String url, String method, boolean hasPayload, String mime, int timeout) 
     {
         URL j_url = null;
         try {
@@ -383,6 +385,8 @@ public class XliJ extends android.app.NativeActivity {
         
         try {
             urlConnection = (HttpURLConnection)j_url.openConnection();
+            //urlConnection.  {TODO} hmm need mimetype here 
+            urlConnection.setConnectTimeout(timeout);
             if (hasPayload) 
             {
                 urlConnection.setDoOutput(true);
