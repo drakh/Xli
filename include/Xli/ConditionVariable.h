@@ -6,12 +6,14 @@
 
 namespace Xli
 {
+    struct __CondImpl;
+
     /**
         \addtogroup XliCoreThreading
         @{
     */
 
-    typedef struct {} *CondHandle;
+    typedef __CondImpl* CondHandle;
 
     CondHandle CreateCond();
     void DeleteCond(CondHandle handle);

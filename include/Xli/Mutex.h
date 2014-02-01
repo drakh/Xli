@@ -6,11 +6,13 @@
 
 namespace Xli
 {
+    struct __MutexImpl;
+
     /**
         \addtogroup XliCoreThreading
         @{
     */
-    typedef struct {} *MutexHandle;
+    typedef __MutexImpl* MutexHandle;
 
     MutexHandle CreateMutex();
     void DeleteMutex(MutexHandle mutex);
@@ -59,6 +61,9 @@ namespace Xli
         }
     };
 
+    /**
+        \ingroup XliCoreThreading
+    */
     class MutexLock
     {
         MutexHandle handle;

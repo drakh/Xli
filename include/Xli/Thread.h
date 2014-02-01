@@ -6,11 +6,13 @@
 
 namespace Xli
 {
+    struct __ThreadImpl;
+
     /**
         \addtogroup XliCoreThreading
         @{
     */
-    typedef struct {} *ThreadHandle;
+    typedef __ThreadImpl* ThreadHandle;
 
     ThreadHandle CreateThread(void (entrypoint(void*)), void* arg);
     void WaitForThread(ThreadHandle thread);
