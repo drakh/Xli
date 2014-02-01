@@ -347,15 +347,26 @@ public class XliJ extends android.app.NativeActivity {
     }
     
     //{TODO} Fix all these crap messages
-    public static void SendHttpAsync(NativeActivity activity, String url, String method, 
-    								 HashMap<String,String> headers, Object body, long callbackPointer) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public static AsyncTask SendHttpAsync(NativeActivity activity, String url, String method, 
+    								 HashMap<String,String> headers, Object body, 
+    								 String mime, int timeout, long callbackPointer) {
     	try
     	{
     		Log.e("XliApp", url+", "+method+", "+headers+", "+body+", "+callbackPointer);
-    		new ASyncHttpRequest().execute(url, method, headers, (Long)callbackPointer);
+    		AsyncTask task = new ASyncHttpRequest();
+    		((AsyncTask<Object, Void, HttpWrappedResponse>)(task)).execute(url, method, headers, (Long)callbackPointer);
+    		return task;
     	} catch (Exception e) {
     		Log.e("XliApp","Unable to build Async Http Request: "+e.getLocalizedMessage());
+    		return null;
     	}
+    }
+    
+    @SuppressWarnings("rawtypes")
+	public static void AbortAsyncTask(AsyncTask task)
+    {
+    	task.cancel(true);
     }
     
     //[TODO] Could optimize by changing chunk mode if length known

@@ -17,11 +17,13 @@ class Shouty : public HttpResponseHandler
         Err->WriteLine("Im back baby!");
         if (response->Body != 0)
         {
-            while (!response->Body->AtEnd())
-            {
-                bytesRead = response->Body->Read(&d, 1, bufSize);
-                Err->WriteFormat("> %*.*s\n", bytesRead, bytesRead, d);
-            }
+            Err->WriteLine("got a body");
+            response->Body->AtEnd();
+            // while (!response->Body->AtEnd())
+            // {
+            //     bytesRead = response->Body->Read(&d, 1, bufSize);
+            //     Err->WriteFormat("> %*.*s\n", bytesRead, bytesRead, d);
+            // }
         }
         Err->WriteLine("-------------------------------------");
     }
@@ -225,11 +227,11 @@ public:
             if (GetTime() - tapTime < 0.3)
             {
                 Err->WriteLine("Bang");
-                wnd->BeginTextInput((Xli::TextInputHint)0);
+                //wnd->BeginTextInput((Xli::TextInputHint)0);
                 // sound->Play(false);
                 Shouty* callback = new Shouty();
-                HttpRequest* req = HttpRequest::Create("http://bbc.co.uk", HttpMethods::GET, callback);
-                req->Headers.Add("test","some more");
+                HttpRequest* req = HttpRequest::Create("http://bbc.co.uk", HttpGetMethod, callback);
+                //req->Headers.Add("test","some more");
                 req->Send();
             }
             else if (wnd->IsTextInputActive())

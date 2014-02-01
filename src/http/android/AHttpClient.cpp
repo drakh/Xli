@@ -77,11 +77,11 @@ extern "C"
                     response->Headers.Add(ckey,cval);
                     env->ReleaseStringUTFChars(jkey, ckey);
                     env->ReleaseStringUTFChars(jval, cval);
-                } else {
-                    headers = 0;
                 }
-                env->DeleteLocalRef(headers);
+            } else {
+                headers = 0;
             }
+            env->DeleteLocalRef(headers);
                      
             Xli::CTEvent* event = new Xli::CTEvent();
             event->CTType = Xli::CTActionEvent;
@@ -94,6 +94,7 @@ extern "C"
         }
     }
 }
+
 
 namespace Xli
 {
@@ -133,13 +134,16 @@ namespace Xli
 
     class AHttpRequest : public HttpRequest
     {
+    private:
+        jobject javaConnectionHandle;
     public:
-        AHttpRequest(String url, HttpMethods::HttpMethodType method, 
+        AHttpRequest(String url, HttpMethodType method, 
                      HttpResponseHandler* callback) 
         {
             this->Url = url;
             this->Method = method;
-            this->Callback = callback;
+            this->Callback = callback;            
+            javaConnectionHandle = 0;
         }
 
         virtual ~AHttpRequest() 
@@ -148,11 +152,18 @@ namespace Xli
 
         virtual void Send()
         {
-            PlatformSpecific::AShim::SendHttpAsync(this);
+            javaConnectionHandle = PlatformSpecific::AShim::SendHttpAsync(this);
+        }
+        
+        virtual void Abort()
+        {
+            if (javaConnectionHandle != 0)
+                PlatformSpecific::AShim::AbortAsyncConnection(javaConnectionHandle);
+            javaConnectionHandle = 0;
         }
     };
 
-    HttpRequest* HttpRequest::Create(String url, HttpMethods::HttpMethodType method,
+    HttpRequest* HttpRequest::Create(String url, HttpMethodType method,
                                      HttpResponseHandler* callback, const HttpClient* client)
     {
         if (!HttpInitialized) InitAndroidHttp();

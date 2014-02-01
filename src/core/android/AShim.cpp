@@ -85,47 +85,66 @@ namespace Xli
             return (bool)result;
         }
 
-        void AShim::SendHttpAsync(const HttpRequest* req)
+        jobject AShim::SendHttpAsync(const HttpRequest* req)
         {
             AJniHelper jni;
             jclass shim_class = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shim_class, "SendHttpAsync", "(Landroid/app/NativeActivity;Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/lang/Object;J)V");
+            jmethodID mid = jni->GetStaticMethodID(shim_class, "SendHttpAsync", "(Landroid/app/NativeActivity;Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/lang/Object;Ljava/lang/String;IJ)Landroid/os/AsyncTask;");
             if (mid)
             {
                 jobject activity = jni.GetInstance();
 
                 jstring jurl = jni->NewStringUTF(req->Url.Data());            
-                jstring jmethod = jni->NewStringUTF(HttpMethods::MethodToString(req->Method).Data());
-                jobject headers = XliToJavaHeaders(req->Headers);
+                jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->Method).Data());
+                jstring jmime = jni->NewStringUTF(req->Mime.Data());
+                jint jtimeout = (jint)req->Timeout;
+                jobject headers = XliToJavaHeaders(&(req->Headers));
             
                 jobject jresult = jni->CallObjectMethod(shim_class, mid, activity, 
                                                         jurl, jmethod, headers, NULL,
+                                                        jmime, jtimeout,
                                                         (jlong)req->Callback);
                 jni->DeleteLocalRef(jurl);
                 jni->DeleteLocalRef(jmethod);
+                jni->DeleteLocalRef(jmime);
                 jni->DeleteGlobalRef(headers);
+                jni->NewGlobalRef(jresult);
+                return jresult;
             } else {
                 LOGE("Couldn't find SendHttpAsync");
+                return 0;
             }
         }
 
-        jobject AShim::XliToJavaHeaders(HashMap<String,String> src)
+        void AShim::AbortAsyncConnection(jobject connection)
+        {
+            AJniHelper jni;            
+            jclass shim_class = jni.GetShim();
+            jmethodID mid = jni->GetStaticMethodID(shim_class, "AbortAsyncConnection", "(Landroid/os/AsyncTask;)V");
+            if (!mid) {
+                LOGE("Unable to get AbortAsyncConnection mid");
+                return;
+            }
+            jni->CallObjectMethod(shim_class, mid, connection);
+        }
+
+        jobject AShim::XliToJavaHeaders(const HashMap<String,String>* src)
         {
             AJniHelper jni;            
             jobject hashmap = jni.GetInstance("java/util/HashMap","()V");
             jmethodID put = jni.GetInstanceMethod(hashmap, "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
 
-            int i = src.Begin();
-            while (i != src.End())
+            int i = src->Begin();
+            while (i != src->End())
             {
-                jstring jkey = jni->NewStringUTF(src.GetKey(i).Data());
-                jstring jval = jni->NewStringUTF(src.GetValue(i).Data());
+                jstring jkey = jni->NewStringUTF(src->GetKey(i).Data());
+                jstring jval = jni->NewStringUTF(src->GetValue(i).Data());
             
                 jni->CallObjectMethod(hashmap, put, jkey, jval);
             
                 jni->DeleteLocalRef(jkey);
                 jni->DeleteLocalRef(jval);
-                i = src.Next(i);
+                i = src->Next(i);
             }
 
             return hashmap;
