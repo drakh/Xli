@@ -7,7 +7,7 @@ namespace Xli
     {
         CRITICAL_SECTION* cs = new CRITICAL_SECTION;
         InitializeCriticalSection(cs);
-        return cs;
+        return (MutexHandle)cs;
     }
 
     void DeleteMutex(MutexHandle mutex)
