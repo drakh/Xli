@@ -171,7 +171,7 @@ namespace Xli
         {
             this->Url = url;
             this->Method = method;
-            this->Mime; // = something here
+            this->Mime;
             this->Timeout = 0;
             this->Callback = callback;
             this->javaConnectionHandle = 0;
@@ -185,6 +185,7 @@ namespace Xli
 
         virtual void Send()
         {            
+            if (this->Mime.Length()>0) this->Headers.Add("Content-Type", this->Mime);
             javaConnectionHandle = PlatformSpecific::AShim::SendHttpAsync(this);
         }
         

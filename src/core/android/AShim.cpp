@@ -89,17 +89,13 @@ namespace Xli
         {
             AJniHelper jni;
             jclass shim_class = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shim_class, "SendHttpAsync", "(Landroid/app/NativeActivity;Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/nio/ByteBuffer;Ljava/lang/String;IJ)Landroid/os/AsyncTask;");
+            jmethodID mid = jni->GetStaticMethodID(shim_class, "SendHttpAsync", "(Landroid/app/NativeActivity;Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/nio/ByteBuffer;IJ)Landroid/os/AsyncTask;");
             if (mid)
             {
                 jobject activity = jni.GetInstance();
 
                 jstring jurl = jni->NewStringUTF(req->Url.Data());
                 jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->Method).Data());
-                jstring jmime = NULL;
-                // if (req->Mime != NULL)
-                //     jmime = jni->NewStringUTF(req->Mime.Data());
-
                 jint jtimeout = (jint)req->Timeout;
                 jobject headers = XliToJavaHeaders(&(req->Headers));
 
@@ -112,11 +108,9 @@ namespace Xli
             
                 jobject jresult = jni->CallObjectMethod(shim_class, mid, activity, 
                                                         jurl, jmethod, headers, arrayHandle,
-                                                        jmime, jtimeout,
-                                                        (jlong)req->Callback);
+                                                        jtimeout, (jlong)req->Callback);
                 jni->DeleteLocalRef(jurl);
                 jni->DeleteLocalRef(jmethod);
-                // if (req->Mime != NULL) jni->DeleteLocalRef(jmime);
                 jni->DeleteLocalRef(headers);
                 return reinterpret_cast<jobject>(jni->NewGlobalRef(jresult));
             } else {

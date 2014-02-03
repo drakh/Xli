@@ -330,13 +330,12 @@ public class XliJ extends android.app.NativeActivity {
             String method = (String)params[1];
             @SuppressWarnings("unchecked")
 			HashMap<String,String> headers = (HashMap<String,String>)params[2];
-            String mime = (String)params[3];
-            int timeout = (Integer)params[4];
-            ByteBuffer body = (ByteBuffer)params[5];
-            long callbackPointer = (Long)params[6];
+            int timeout = (Integer)params[3];
+            ByteBuffer body = (ByteBuffer)params[4];
+            long callbackPointer = (Long)params[5];
             String[] responseHeaders;
             boolean hasUploadContent = (body != null);
-            HttpURLConnection connection = NewHttpConnection(url,method,hasUploadContent,mime,timeout);
+            HttpURLConnection connection = NewHttpConnection(url,method,hasUploadContent,timeout);
             if (connection==null) {
             	return new HttpWrappedResponse(null, new String[0], -1, "JavaError (NewHttpConnection): Could not make connection", callbackPointer);
             }
@@ -393,12 +392,12 @@ public class XliJ extends android.app.NativeActivity {
     @SuppressWarnings({ "rawtypes", "unchecked" })
 	public static AsyncTask SendHttpAsync(NativeActivity activity, String url, String method, 
     								 HashMap<String,String> headers, ByteBuffer body, 
-    								 String mime, int timeout, long callbackPointer) {
+    								 int timeout, long callbackPointer) {
     	try
     	{
     		Log.e("XliApp", url+", "+method+", "+headers+", "+body+", "+callbackPointer);
     		AsyncTask task = new ASyncHttpRequest();
-    		((AsyncTask<Object, Void, HttpWrappedResponse>)(task)).execute(url, method, headers, "", (Integer)timeout, body, (Long)callbackPointer);
+    		((AsyncTask<Object, Void, HttpWrappedResponse>)(task)).execute(url, method, headers, (Integer)timeout, body, (Long)callbackPointer);
     		return task;
     	} catch (Exception e) {
     		Log.e("XliApp","Unable to build Async Http Request: "+e.getLocalizedMessage());
@@ -413,7 +412,7 @@ public class XliJ extends android.app.NativeActivity {
     }
     
     //[TODO] Could optimize by changing chunk mode if length known
-    public static HttpURLConnection NewHttpConnection(String url, String method, boolean hasPayload, String mime, int timeout) 
+    public static HttpURLConnection NewHttpConnection(String url, String method, boolean hasPayload, int timeout) 
     {
         URL j_url = null;
         try {
@@ -425,8 +424,7 @@ public class XliJ extends android.app.NativeActivity {
         HttpURLConnection urlConnection = null;
         
         try {
-            urlConnection = (HttpURLConnection)j_url.openConnection();
-            //urlConnection.  {TODO} hmm need mimetype here 
+            urlConnection = (HttpURLConnection)j_url.openConnection(); 
             urlConnection.setConnectTimeout(timeout);
             urlConnection.setDoOutput(hasPayload);            
             urlConnection.setRequestMethod(method);
@@ -443,19 +441,7 @@ public class XliJ extends android.app.NativeActivity {
 		java.util.Scanner s = new java.util.Scanner(stream).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
-    
-//    public static String TestStreamChunkToString(InputStream stream, int size)
-//    {
-//    	byte[] buffer = new byte[size];
-//    	try {
-//			int readBytes = stream.read(buffer);
-//			return buffer;
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			Log.e("XliApp","TestStreamChunkToString Error: " + e.getLocalizedMessage());			
-//			return null;
-//		}
-//    }
+
     
     public static byte[] ReadBytesFromInputStream(BufferedInputStream stream, int bytesToRead)
     {    	

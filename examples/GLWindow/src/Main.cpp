@@ -91,7 +91,7 @@ public:
         // sound = SimpleSound::Create("test2.mp3", true);
 
         // 
-        someContent = "FOO=Oh hai!;\n";
+        someContent = "FOO=Oh hai!";
 	}
 
 	virtual void OnLoad(Window* wnd)
@@ -235,12 +235,11 @@ public:
                 //wnd->BeginTextInput((Xli::TextInputHint)0);
                 // sound->Play(false);
                 Shouty* callback = new Shouty();
-                HttpRequest* req = HttpRequest::Create("http://httpbin.org/post", HttpPostMethod, callback);
+                HttpRequest* req = HttpRequest::Create("http://requestb.in/1ik1p5e1", HttpPostMethod, callback);
                 req->Headers.Add("Accept", "*/*");
-                String* ohdear = new String("Foo=this is annoying;\n");
-                char* text = ohdear->Data();
+                char* text = someContent.Data();
                 req->Body = text;
-                req->BodySizeBytes = ohdear->Length();
+                req->BodySizeBytes = someContent.Length();
                 req->Send();
             }
             else if (wnd->IsTextInputActive())
