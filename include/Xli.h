@@ -69,7 +69,6 @@
 #include <Xli/Matrix4.h>
 #include <Xli/MessageBox.h>
 #include <Xli/Mutex.h>
-#include <Xli/NativeFileSystem.h>
 #include <Xli/Object.h>
 #include <Xli/OrderedMap.h>
 #include <Xli/Path.h>

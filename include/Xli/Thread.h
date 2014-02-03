@@ -14,7 +14,7 @@ namespace Xli
     */
     typedef __ThreadImpl* ThreadHandle;
 
-    ThreadHandle CreateThread(void (entrypoint(void*)), void* arg);
+    ThreadHandle CreateThread(void (*entrypoint)(void*), void* arg);
     void WaitForThread(ThreadHandle thread);
 
     void* GetCurrentThread();
