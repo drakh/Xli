@@ -51,12 +51,14 @@
 #include <Xli/BinaryWriter.h>
 #include <Xli/Buffer.h>
 #include <Xli/BufferStream.h>
+#include <Xli/Bundle.h>
 #include <Xli/ConditionVariable.h>
 #include <Xli/Config.h>
 #include <Xli/Console.h>
 #include <Xli/DataType.h>
 #include <Xli/DateTime.h>
 #include <Xli/Dialogs.h>
+#include <Xli/Disk.h>
 #include <Xli/Display.h>
 #include <Xli/Exception.h>
 #include <Xli/File.h>
