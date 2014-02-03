@@ -372,6 +372,12 @@ namespace Xli
             Sort<ComparatorPointerGreaterThan<T> >();
         }
     };
+
+    template <typename T> class ArrayRef: public Object
+    {
+    public:
+        Array<T> Data;
+    };
 }
 
 
