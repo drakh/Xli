@@ -1,5 +1,5 @@
 #include <Xli/Dialogs.h>
-#include <Xli/NativeFileSystem.h>
+#include <Xli/Disk.h>
 #include <Xli/StringBuilder.h>
 #include <Xli/Path.h>
 #include <Xli/MessageBox.h>

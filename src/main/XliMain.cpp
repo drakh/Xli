@@ -1,5 +1,5 @@
 #include <Xli/Console.h>
-#include <Xli/NativeFileSystem.h>
+#include <Xli/Disk.h>
 #include <Xli/MessageBox.h>
 #include <cstdlib>
 
