@@ -235,6 +235,9 @@
     <ClInclude Include="..\..\..\include\Xli\Shared.h">
       <Filter>Xli\Containers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Atomic.h">
+      <Filter>Xli\Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\core\Random.cpp">

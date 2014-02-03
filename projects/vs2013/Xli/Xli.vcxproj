@@ -189,6 +189,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Xli\Application.h" />
     <ClInclude Include="..\..\..\include\Xli\ArrayStream.h" />
+    <ClInclude Include="..\..\..\include\Xli\Atomic.h" />
     <ClInclude Include="..\..\..\include\Xli\BaseTypes.h" />
     <ClInclude Include="..\..\..\include\Xli\Buffer.h" />
     <ClInclude Include="..\..\..\include\Xli\BufferStream.h" />
