@@ -165,45 +165,15 @@ namespace Xli
 
         int AStream::Read(void* dst, int elmSize, int elmCount)
         {
-            LOGE("-&&&-");
+
             if (!CanRead()) XLI_THROW_STREAM_CANT_READ;
             if (IsClosed()) XLI_THROW_STREAM_CLOSED;
-            LOGE("-a-");
-            AJniHelper jni;
-            LOGE("-b-");
             int fetchBytes = elmCount * elmSize;
-            LOGE("-c-");
-            jbyteArray arr = jni->NewByteArray(fetchBytes);
-            //arr = reinterpret_cast<jbyteArray>(jni->NewGlobalRef(arr));
-
-            LOGE("-d-");
-            jobject jrecievedBytes = jni->CallObjectMethod(javaStream, readBufferMid, arr, 0, fetchBytes);            
-            LOGE("-e-");
-            if (jni->ExceptionCheck()) {
-                LOGE("Index out of bounds for dst");
-                jni->DeleteLocalRef(arr);
-                return -1;
-            }
-            int recievedBytes = (int)jrecievedBytes;
-            if (recievedBytes >= 0)
-            {
-                LOGE("-f-");
-                if (recievedBytes > 0) jni->GetByteArrayRegion(arr, 0, recievedBytes, (jbyte*)dst);
-                LOGE("-g-");
-                if (jni->ExceptionCheck()) LOGE("Error Reading AStream Data");
-            } else {
-                LOGE("Hit End");
+            int recievedBytes = PlatformSpecific::AShim::ReadBytesFromInputStream(this->javaStream, fetchBytes, dst);
+            if (recievedBytes < 0) {
                 atEnd = true;
-                jni->DeleteLocalRef(jrecievedBytes);
-                jni->DeleteLocalRef(arr);
                 return -1;
             }
-
-            LOGE("-h-");
-            jni->DeleteLocalRef(arr);
-            LOGE("-i-");
-            jni->DeleteLocalRef(jrecievedBytes);
-            LOGE("-j-");
             return (recievedBytes / elmSize);
         }
 

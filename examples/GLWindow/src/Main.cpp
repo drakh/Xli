@@ -19,15 +19,15 @@ class Shouty : public HttpResponseHandler
         // String Body = response->GetContentString();
         // Err->WriteLine(Body);
 
-        //Stream* Body = response->GetContentStream();
-        bytesRead = response->ReadContentBytes(bufSize, &d);
-        while (bytesRead>0)
+        Stream* Body = response->GetContentStream();
+        //bytesRead = response->ReadContentBytes(bufSize, &d); REMOVE THIS METHOD
+        while (!Body->AtEnd())
         {
-            //bytesRead = Body->Read(&d, 1, bufSize);
+            bytesRead = Body->Read(&d, 1, bufSize);
             if (bytesRead>0) Err->WriteFormat("> %*.*s\n", bytesRead, bytesRead, d);
-            bytesRead = response->ReadContentBytes(bufSize, &d);
+            // bytesRead = response->ReadContentBytes(bufSize, &d);
         }
-        //Body->Close();
+        Body->Close();
         Err->WriteLine("-------------------------------------");
         delete response;
     }
