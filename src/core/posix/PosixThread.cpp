@@ -2,17 +2,36 @@
 #include <Xli/Console.h>
 #include <pthread.h>
 #include <time.h>
+#include <cstdlib>
 
 namespace Xli
 {
-    ThreadHandle CreateThread(void (entrypoint(void*)), void* arg)
+    struct PosixThreadData
+    {
+        void (*Entrypoint)(void*);
+        void* Arg;
+    };
+
+    void* PosixThreadFunc(void* data)
+    {
+        PosixThreadData* pdata = (PosixThreadData*)data;
+        pdata->Entrypoint(pdata->Arg);
+        free(data);
+        return NULL;
+    }
+
+    ThreadHandle CreateThread(void (*entrypoint)(void*), void* arg)
     {
         pthread_attr_t attr;
         pthread_attr_init(&attr);
         pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
+        PosixThreadData* data = (PosixThreadData*)malloc(sizeof(PosixThreadData));
+        data->Entrypoint = entrypoint;
+        data->Arg = arg;
+
         pthread_t result;
-        if (pthread_create(&result, &attr, (void *(*)(void *))entrypoint, arg))    
+        if (pthread_create(&result, &attr, PosixThreadFunc, data))    
             XLI_THROW("Failed to create thread");
 
         pthread_attr_destroy(&attr);
