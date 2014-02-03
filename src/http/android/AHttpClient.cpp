@@ -24,7 +24,12 @@ namespace Xli
         }
         virtual Stream* GetContentStream()
         {
-            return new Xli::PlatformSpecific::AStream(Xli::PlatformSpecific::AStream::READ, this->body);
+            if (this->body!=0)
+            {
+                return new Xli::PlatformSpecific::AStream(Xli::PlatformSpecific::AStream::READ, this->body);
+            } else {
+                return 0;
+            }
         }
     };
 
@@ -55,7 +60,8 @@ namespace Xli
 extern "C"
 {
     void JNICALL XliJ_HttpCallback (JNIEnv *env , jobject obj, jobject body,
-                                    jobjectArray headers, jlong handlerPointer) 
+                                    jobjectArray headers, jint responseCode,
+                                    jstring responseMessage, jlong handlerPointer)
     {       
         if (handlerPointer)
         {
@@ -96,6 +102,14 @@ extern "C"
                     }
 
                     response->Headers.Add(ckey,cval);
+                    response->Status = (int)responseCode;
+                    if (responseMessage!=0)
+                    {
+                        char const* rmess = env->GetStringUTFChars(responseMessage, NULL);
+                        response->ReasonPhrase = rmess;
+                        env->ReleaseStringUTFChars(responseMessage, rmess);
+                    }
+                    
                     env->ReleaseStringUTFChars(jkey, ckey);
                     env->ReleaseStringUTFChars(jval, cval);
                 }
@@ -127,7 +141,7 @@ namespace Xli
         {
             PlatformSpecific::AShim::InitDefaultCookieManager();            
             static JNINativeMethod nativeFuncs[] = {
-                {(char* const)"XliJ_HttpCallback", (char* const)"(Ljava/lang/Object;[Ljava/lang/String;J)V",
+                {(char* const)"XliJ_HttpCallback", (char* const)"(Ljava/lang/Object;[Ljava/lang/String;ILjava/lang/String;J)V",
                  (void *)&XliJ_HttpCallback},
             };
             bool result = PlatformSpecific::AShim::RegisterNativeFunctions(nativeFuncs, 1);

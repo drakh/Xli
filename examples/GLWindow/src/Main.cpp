@@ -16,12 +16,17 @@ class Shouty : public HttpResponseHandler
         Err->WriteLine("-------------------------------------");
         Err->WriteLine("Im back!");
         Stream* Body = response->GetContentStream();
-        while (!Body->AtEnd())
+        if (Body!=0)
         {
-            bytesRead = Body->Read(&d, 1, bufSize);
-            if (bytesRead>0) Err->WriteFormat("> %*.*s\n", bytesRead, bytesRead, d);
-        }
-        Body->Close();
+            while (!Body->AtEnd())
+            {
+                bytesRead = Body->Read(&d, 1, bufSize);
+                if (bytesRead>0) Err->WriteFormat("> %*.*s\n", bytesRead, bytesRead, d);
+            }
+            Body->Close();
+        } 
+        Err->WriteFormat("statusCode: %i\n", response->Status); 
+        Err->WriteFormat("ReasonPhrase: %s\n", response->ReasonPhrase.Data());
         Err->WriteLine("-------------------------------------");
         delete response;
     }
@@ -30,6 +35,7 @@ class Shouty : public HttpResponseHandler
 class GLApp: public Application
 {
 	Managed<GLContext> gl;
+    String someContent;
 
     // Managed<SimpleSound> sound;
     Managed<HttpResponseHandler> httpCallback;
@@ -85,6 +91,7 @@ public:
         // sound = SimpleSound::Create("test2.mp3", true);
 
         // 
+        someContent = "FOO=Oh hai!;\n";
 	}
 
 	virtual void OnLoad(Window* wnd)
@@ -228,8 +235,12 @@ public:
                 //wnd->BeginTextInput((Xli::TextInputHint)0);
                 // sound->Play(false);
                 Shouty* callback = new Shouty();
-                HttpRequest* req = HttpRequest::Create("http://bbc.co.uk", HttpGetMethod, callback);
-                //req->Headers.Add("test","some more");
+                HttpRequest* req = HttpRequest::Create("http://httpbin.org/post", HttpPostMethod, callback);
+                req->Headers.Add("Accept", "*/*");
+                String* ohdear = new String("Foo=this is annoying;\n");
+                char* text = ohdear->Data();
+                req->Body = text;
+                req->BodySizeBytes = ohdear->Length();
                 req->Send();
             }
             else if (wnd->IsTextInputActive())

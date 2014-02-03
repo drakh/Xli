@@ -64,8 +64,8 @@ namespace Xli
    class HttpResponse : public Object
    {
    public:
-       int Status; //implement me
-       String ReasonPhrase; //implement me
+       int Status;
+       String ReasonPhrase;
        HashMap<String,String> Headers;
        virtual String GetContentString() = 0;
        virtual Stream* GetContentStream() = 0;
@@ -81,11 +81,11 @@ namespace Xli
    class HttpRequest : public Object
    {
    public:
-       HttpResponseHandler* Callback;       
+       HttpResponseHandler* Callback; // managed?
        String Url;
-       String Mime; //implement me
+       String Mime;
        int Timeout;
-       void* Body; //implement me
+       void* Body;
        long BodySizeBytes;
        HashMap<String,String> Headers; // managed?
        HttpMethodType Method;

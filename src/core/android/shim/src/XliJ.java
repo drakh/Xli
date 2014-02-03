@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.CookieHandler;
@@ -99,7 +100,7 @@ public class XliJ extends android.app.NativeActivity {
     public static native void XliJ_OnKeyUp(int keyCode);
     public static native void XliJ_OnKeyDown(int keyCode);
     public static native void XliJ_OnTextInput(String keyCode);
-    public static native void XliJ_HttpCallback(Object body, String[] headers, long functionPointer);
+    public static native void XliJ_HttpCallback(Object body, String[] headers, int responseCode, String responseMessage, long functionPointer);
     
     public static class Hidden extends View {
         InputConnection fic;
@@ -301,12 +302,16 @@ public class XliJ extends android.app.NativeActivity {
     	public Object body;
         public long functionPointer;
         public String[] headers;
+        public int responseCode;
+        public String responseMessage;
         
-        HttpWrappedResponse(Object body, String[] headers, long fpointer)
+        HttpWrappedResponse(Object body, String[] headers, int responseCode, String responseMessage, long fpointer)
         {
         	this.body = body;
         	this.functionPointer = fpointer;
         	this.headers = headers;
+        	this.responseCode = responseCode;
+        	this.responseMessage = responseMessage;
         }
     }
     
@@ -331,8 +336,11 @@ public class XliJ extends android.app.NativeActivity {
             long callbackPointer = (Long)params[6];
             String[] responseHeaders;
             boolean hasUploadContent = (body != null);
-        	try {
-        		HttpURLConnection connection = NewHttpConnection(url,method,hasUploadContent,mime,timeout);
+            HttpURLConnection connection = NewHttpConnection(url,method,hasUploadContent,mime,timeout);
+            if (connection==null) {
+            	return new HttpWrappedResponse(null, new String[0], -1, "JavaError (NewHttpConnection): Could not make connection", callbackPointer);
+            }
+        	try {        		
         		//set headers
         		Iterator<Map.Entry<String, String>> it = headers.entrySet().iterator();
         		while (it.hasNext()) {
@@ -343,23 +351,41 @@ public class XliJ extends android.app.NativeActivity {
         		if (hasUploadContent)
         		{
         			Log.d("XliApp","uploading content");
-        			OutputStream out = new BufferedOutputStream(connection.getOutputStream());
-        			out.write(body.array());
+        			byte[] data = null;
+        			boolean converted = false;
+        			try {        				
+        				data = new byte[body.capacity()];
+        				body.get(data);
+        				converted = true;
+        			} catch (Exception e) {
+        				Log.e("XliApp","Bugger me: "+e.getLocalizedMessage());
+        			}
+        			if (converted && (data!=null))
+        			{
+        				try {        				
+        					connection.setFixedLengthStreamingMode(data.length);
+        					BufferedOutputStream out = new BufferedOutputStream(connection.getOutputStream());        				
+        					out.write(data);
+        					out.flush();
+        				} catch(Exception e) {
+        					Log.e("XliApp","Couldnt make output: "+e.getLocalizedMessage());
+        				}
+        			}
         		}
         		
         		//get result payload
         		BufferedInputStream stream_b = new BufferedInputStream(connection.getInputStream());
-        		responseHeaders = HeadersToStringArray(connection);
-        		return new HttpWrappedResponse(stream_b, responseHeaders, callbackPointer);
+        		responseHeaders = HeadersToStringArray(connection);        		
+        		return new HttpWrappedResponse(stream_b, responseHeaders, connection.getResponseCode(), connection.getResponseMessage(), callbackPointer);
 			} catch (IOException e) {
 				Log.e("XliApp","IOException: "+e.getLocalizedMessage());
-	            return new HttpWrappedResponse(null, new String[0], callbackPointer);
+				return new HttpWrappedResponse(null, new String[0], -1, "JavaError:"+e.getLocalizedMessage(), callbackPointer);	
 			}
         }
         @Override
         protected void onPostExecute(HttpWrappedResponse result) 
         {
-    		XliJ_HttpCallback(result.body, result.headers, result.functionPointer);
+    		XliJ_HttpCallback(result.body, result.headers, result.responseCode, result.responseMessage, result.functionPointer);
         }
     }
     
@@ -402,14 +428,10 @@ public class XliJ extends android.app.NativeActivity {
             urlConnection = (HttpURLConnection)j_url.openConnection();
             //urlConnection.  {TODO} hmm need mimetype here 
             urlConnection.setConnectTimeout(timeout);
-            if (hasPayload) 
-            {
-                urlConnection.setDoOutput(true);
-                urlConnection.setChunkedStreamingMode(0);
-            }
+            urlConnection.setDoOutput(hasPayload);            
             urlConnection.setRequestMethod(method);
         } catch (IOException e) {
-            Log.e("XliApp","IOException: "+e.getLocalizedMessage());
+            Log.e("XliApp","IOException (NewHttpConnection): "+e.getLocalizedMessage());
             return null;
         }    
         return urlConnection;

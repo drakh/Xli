@@ -106,6 +106,7 @@ namespace Xli
                 jobject arrayHandle = 0;
                 if ((req->Body!=0) && (req->BodySizeBytes>0))
                 {
+                    LOGE("Adding content in c++");
                     arrayHandle = jni->NewDirectByteBuffer(req->Body, req->BodySizeBytes);
                 }
             
