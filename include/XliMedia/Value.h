@@ -4,7 +4,7 @@
 #include <Xli/String.h>
 #include <Xli/Managed.h>
 #include <Xli/HashMap.h>
-#include <Xli/OrderedMap.h>
+#include <Xli/Map.h>
 #include <Xli/TextWriter.h>
 #include <Xli/Matrix4.h>
 #include <Xli/ToString.h>
@@ -443,7 +443,7 @@ namespace Xli
     class OrderedObjectValue: public IValue
     {
     public:
-        OrderedMap<Value, Value> Values;
+        Map<Value, Value> Values;
 
         virtual ValueType GetType() const { return ValueTypeOrderedObject; }
 

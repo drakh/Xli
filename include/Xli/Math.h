@@ -255,7 +255,7 @@ namespace Xli
 
 
     template <typename T> 
-    float Map(const T& a, const T& b, const T& t)
+    float MapRange(const T& a, const T& b, const T& t)
     {
         return float(t - a) / float(b - a);
     }

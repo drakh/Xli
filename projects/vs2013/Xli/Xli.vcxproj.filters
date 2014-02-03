@@ -124,9 +124,6 @@
     <ClInclude Include="..\..\..\include\Xli\Text.h">
       <Filter>Xli\IO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\Xli\OrderedMap.h">
-      <Filter>Xli\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\core\posix\PosixFileSystemBase.h">
       <Filter>Xli\Platform\posix</Filter>
     </ClInclude>
@@ -237,6 +234,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\Xli\Atomic.h">
       <Filter>Xli\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Map.h">
+      <Filter>Xli\Containers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

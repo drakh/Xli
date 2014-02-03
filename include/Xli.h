@@ -70,7 +70,7 @@
 #include <Xli/MessageBox.h>
 #include <Xli/Mutex.h>
 #include <Xli/Object.h>
-#include <Xli/OrderedMap.h>
+#include <Xli/Map.h>
 #include <Xli/Path.h>
 #include <Xli/Quaternion.h>
 #include <Xli/Queue.h>
