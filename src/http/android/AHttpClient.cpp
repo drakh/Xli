@@ -7,22 +7,54 @@ extern Xli::Window* GlobalWindow;
 namespace Xli
 {
 
+    class AHttpResponse: public HttpResponse
+    {
+    public:
+        jobject body;
+        AHttpResponse() {}
+        virtual ~AHttpResponse() {}
+        virtual String GetContentString()
+        {
+            if (this->body != NULL)
+            {
+                return Xli::PlatformSpecific::AShim::InputStreamToString(this->body);
+            } else {
+                return 0;
+            }
+        }
+        virtual Stream* GetContentStream()
+        {
+            return new Xli::PlatformSpecific::AStream(Xli::PlatformSpecific::AStream::READ, this->body);
+        }
+        virtual int ReadContentBytes(int bytesToRead, void* dst)
+        {
+            if (this->body != 0)
+            {
+                return Xli::PlatformSpecific::AShim::ReadBytesFromInputStream(this->body, bytesToRead, dst);
+            } else {
+                return 0;
+            }
+        }
+    };
+
     namespace PlatformSpecific
     {
         class AHttpResponseHandlerAction : public AWindowAction
         {    
         public:
             Managed<HttpResponseHandler> Handler;
-            Managed<HttpResponse> Response;
+            Managed<AHttpResponse> Response;
 
-            AHttpResponseHandlerAction(HttpResponseHandler* handler, HttpResponse* response)
+            AHttpResponseHandlerAction(HttpResponseHandler* handler, AHttpResponse* response)
             {
                 this->Handler = handler;
                 this->Response = response;
             }
             virtual ~AHttpResponseHandlerAction() {}
             virtual void Execute()
-            {
+            {                
+                AJniHelper jni;
+                //jni->NewGlobalRef(this->Response->body);
                 this->Handler.Get()->OnResponse(this->Response.Get());
             }
         };
@@ -36,15 +68,13 @@ extern "C"
     {       
         if (handlerPointer)
         {
-            Xli::HttpResponse* response = Xli::HttpResponse::Create();
+            Xli::AHttpResponse* response = new Xli::AHttpResponse();
 
             if (body)
             {
-                env->NewGlobalRef(body);
-                Xli::PlatformSpecific::AStream* stream = new Xli::PlatformSpecific::AStream(Xli::PlatformSpecific::AStream::READ, body);            
-                response->Body = stream;
+                response->body = reinterpret_cast<jobject>(env->NewGlobalRef(body));
             } else {
-                response->Body = 0;
+                response->body = 0;
             }
 
             if (headers)
@@ -117,12 +147,6 @@ namespace Xli
 
     //--------------------------------------------------
 
-    class AHttpResponse: public HttpResponse
-    {
-    public:
-        AHttpResponse() {}
-        virtual ~AHttpResponse() {}
-    };
 
     HttpResponse* HttpResponse::Create()
     {
@@ -142,7 +166,7 @@ namespace Xli
         {
             this->Url = url;
             this->Method = method;
-            this->Mime = NULL;
+            this->Mime; // = something here
             this->Timeout = 0;
             this->Callback = callback;
             this->javaConnectionHandle = 0;

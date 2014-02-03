@@ -110,9 +110,8 @@ namespace Xli
                 jni->DeleteLocalRef(jurl);
                 jni->DeleteLocalRef(jmethod);
                 // if (req->Mime != NULL) jni->DeleteLocalRef(jmime);
-                jni->DeleteGlobalRef(headers);
-                jni->NewGlobalRef(jresult);
-                return jresult;
+                jni->DeleteLocalRef(headers);
+                return reinterpret_cast<jobject>(jni->NewGlobalRef(jresult));
             } else {
                 LOGE("Couldn't find SendHttpAsync");
                 return 0;
@@ -153,6 +152,43 @@ namespace Xli
             return hashmap;
         }
 
+        String AShim::InputStreamToString(jobject bufferedInputStream)
+        {
+            AJniHelper jni;
+            jclass shim_class = jni.GetShim();
+            jmethodID mid = jni->GetStaticMethodID(shim_class, "InputStreamToString", "(Ljava/io/InputStream;)Ljava/lang/String;");
+            if (!mid) {
+                LOGE("Unable to get InputStreamToString mid");
+                return "";
+            }
+            jstring jresult = (jstring)jni->CallObjectMethod(shim_class, mid, bufferedInputStream,(jint)1024);
+            String result = jni.GetString(jresult);
+            jni->DeleteLocalRef(jresult);
+            return result;
+        }
+
+        int AShim::ReadBytesFromInputStream(jobject bufferedInputStream, int bytesToRead, void* dst)
+        {
+            AJniHelper jni;
+            jclass shim_class = jni.GetShim();
+            jmethodID mid = jni->GetStaticMethodID(shim_class, "ReadBytesFromInputStream", "(Ljava/io/BufferedInputStream;I)[B");
+            if (!mid) {
+                LOGE("Unable to get ReadBytesFromInputStream mid");
+                return 0;
+            }
+            jbyteArray jbytes = (jbyteArray)jni->CallObjectMethod(shim_class, mid, bufferedInputStream, (jint)bytesToRead);
+            if (jbytes != 0) {
+                jsize len = jni->GetArrayLength(jbytes);
+                jni->GetByteArrayRegion(jbytes, 0, len, (jbyte*)dst);
+                int result = (int)len;
+                jni->DeleteLocalRef(jbytes);
+                //jni->DeleteLocalRef((jobject)len);
+                return result;
+            } else {
+                return -1;
+            }
+        }
+
         AStream* AShim::HttpGetOutputStream(jobject httpConnection)
         {
             AJniHelper jni;
@@ -164,8 +200,7 @@ namespace Xli
             }
             jobject jStream = jni->CallObjectMethod(shim_class, mid, httpConnection);
             if (jStream) {
-                jni->NewGlobalRef(jStream);
-                return new AStream(AStream::WRITE, jStream);
+                return new AStream(AStream::WRITE, reinterpret_cast<jobject>(jni->NewGlobalRef(jStream)));
             } else {
                 return new AStream();
             }
@@ -182,8 +217,7 @@ namespace Xli
             }
             jobject jStream = jni->CallObjectMethod(shim_class, mid, httpConnection);
             if (jStream) {
-                jni->NewGlobalRef(jStream);
-                return new AStream(AStream::READ, jStream);
+                return new AStream(AStream::READ, reinterpret_cast<jobject>(jni->NewGlobalRef(jStream)));
             } else {
                 return new AStream();
             }
@@ -207,7 +241,7 @@ namespace Xli
             if (!mid) LOGE("Unable to GetAssetManager, cant get mid");
             jobject activity = jni.GetInstance();
             jobject assetManager = jni->CallObjectMethod(shim_class, mid, activity);
-            jni->NewGlobalRef(assetManager);
+            assetManager = reinterpret_cast<jobject>(jni->NewGlobalRef(assetManager));
             AAssetManager* result = AAssetManager_fromJava(jni.GetEnv(), assetManager);
             return result;
         }

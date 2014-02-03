@@ -406,6 +406,7 @@ namespace Xli
         /**
             \ingroup XliCorePlatform
         */
+
         class AShim
         {
         public:
@@ -424,6 +425,8 @@ namespace Xli
             static jobject HttpNewConnection(const String& uri, const String& method, bool hasPayload);
             static AStream* HttpGetInputStream(jobject httpConnection);
             static AStream* HttpGetOutputStream(jobject httpConnection);
+            static String InputStreamToString(jobject bufferedInputStream);
+            static int ReadBytesFromInputStream(jobject bufferedInputStream, int bytesToRead, void* dst);
             static AAssetManager* GetAssetManager();
             static bool RegisterNativeFunctions(JNINativeMethod native_funcs[], int funcCount);
             static Key AndroidToXliKeyEvent(AKeyEvent keyEvent);

@@ -14,18 +14,22 @@ class Shouty : public HttpResponseHandler
         int bytesRead = 0;
         
         Err->WriteLine("-------------------------------------");
-        Err->WriteLine("Im back baby!");
-        if (response->Body != 0)
+        Err->WriteLine("Im back!");
+
+        // String Body = response->GetContentString();
+        // Err->WriteLine(Body);
+
+        //Stream* Body = response->GetContentStream();
+        bytesRead = response->ReadContentBytes(bufSize, &d);
+        while (bytesRead>0)
         {
-            Err->WriteLine("got a body");
-            response->Body->AtEnd();
-            // while (!response->Body->AtEnd())
-            // {
-            //     bytesRead = response->Body->Read(&d, 1, bufSize);
-            //     Err->WriteFormat("> %*.*s\n", bytesRead, bytesRead, d);
-            // }
+            //bytesRead = Body->Read(&d, 1, bufSize);
+            if (bytesRead>0) Err->WriteFormat("> %*.*s\n", bytesRead, bytesRead, d);
+            bytesRead = response->ReadContentBytes(bufSize, &d);
         }
+        //Body->Close();
         Err->WriteLine("-------------------------------------");
+        delete response;
     }
 };
 

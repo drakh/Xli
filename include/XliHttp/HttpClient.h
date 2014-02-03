@@ -67,7 +67,9 @@ namespace Xli
        int Status; //implement me
        String ReasonPhrase; //implement me
        HashMap<String,String> Headers;
-       Stream* Body; // test me
+       virtual String GetContentString() = 0;
+       virtual Stream* GetContentStream() = 0;
+       virtual int ReadContentBytes(int bytesToRead, void* dst) = 0;
        static HttpResponse* Create();
    };
 

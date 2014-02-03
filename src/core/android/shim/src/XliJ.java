@@ -2,7 +2,10 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.net.CookieHandler;
 import java.net.CookiePolicy;
 import java.net.HttpURLConnection;
@@ -10,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -400,6 +404,44 @@ public class XliJ extends android.app.NativeActivity {
         return urlConnection;
     }
     
+    public static String InputStreamToString(InputStream stream) throws IOException, UnsupportedEncodingException 
+    {
+        @SuppressWarnings("resource")
+		java.util.Scanner s = new java.util.Scanner(stream).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
+    }
+    
+//    public static String TestStreamChunkToString(InputStream stream, int size)
+//    {
+//    	byte[] buffer = new byte[size];
+//    	try {
+//			int readBytes = stream.read(buffer);
+//			return buffer;
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			Log.e("XliApp","TestStreamChunkToString Error: " + e.getLocalizedMessage());			
+//			return null;
+//		}
+//    }
+    
+    public static byte[] ReadBytesFromInputStream(BufferedInputStream stream, int bytesToRead)
+    {    	
+    	byte[] buffer = new byte[bytesToRead];
+    	try {
+			int bytesRead = stream.read(buffer);
+			if (bytesRead>-1)
+			{
+				return Arrays.copyOf(buffer, bytesRead);
+			} else { 
+				return null;
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			Log.e("XliApp", "read from stream crashed: "+e.getLocalizedMessage());
+			return null;
+		}
+    }
+    		
     public static InputStream HttpGetInputStream(HttpURLConnection connection)
     {
         try {
