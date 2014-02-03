@@ -15,17 +15,11 @@ class Shouty : public HttpResponseHandler
         
         Err->WriteLine("-------------------------------------");
         Err->WriteLine("Im back!");
-
-        // String Body = response->GetContentString();
-        // Err->WriteLine(Body);
-
         Stream* Body = response->GetContentStream();
-        //bytesRead = response->ReadContentBytes(bufSize, &d); REMOVE THIS METHOD
         while (!Body->AtEnd())
         {
             bytesRead = Body->Read(&d, 1, bufSize);
             if (bytesRead>0) Err->WriteFormat("> %*.*s\n", bytesRead, bytesRead, d);
-            // bytesRead = response->ReadContentBytes(bufSize, &d);
         }
         Body->Close();
         Err->WriteLine("-------------------------------------");

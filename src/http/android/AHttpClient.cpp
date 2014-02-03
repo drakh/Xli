@@ -26,15 +26,6 @@ namespace Xli
         {
             return new Xli::PlatformSpecific::AStream(Xli::PlatformSpecific::AStream::READ, this->body);
         }
-        virtual int ReadContentBytes(int bytesToRead, void* dst)
-        {
-            if (this->body != 0)
-            {
-                return Xli::PlatformSpecific::AShim::ReadBytesFromInputStream(this->body, bytesToRead, dst);
-            } else {
-                return 0;
-            }
-        }
     };
 
     namespace PlatformSpecific
@@ -170,6 +161,8 @@ namespace Xli
             this->Timeout = 0;
             this->Callback = callback;
             this->javaConnectionHandle = 0;
+            this->Body = 0;
+            this->BodySizeBytes = 0;
         }
 
         virtual ~AHttpRequest() 
@@ -177,7 +170,7 @@ namespace Xli
         }
 
         virtual void Send()
-        {
+        {            
             javaConnectionHandle = PlatformSpecific::AShim::SendHttpAsync(this);
         }
         

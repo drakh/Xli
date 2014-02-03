@@ -69,7 +69,6 @@ namespace Xli
        HashMap<String,String> Headers;
        virtual String GetContentString() = 0;
        virtual Stream* GetContentStream() = 0;
-       virtual int ReadContentBytes(int bytesToRead, void* dst) = 0;
        static HttpResponse* Create();
    };
 
@@ -85,8 +84,9 @@ namespace Xli
        HttpResponseHandler* Callback;       
        String Url;
        String Mime; //implement me
-       int Timeout; //implement me
-       Stream* Body; //implement me
+       int Timeout;
+       void* Body; //implement me
+       long BodySizeBytes;
        HashMap<String,String> Headers; // managed?
        HttpMethodType Method;
        static HttpRequest* Create(String url, HttpMethodType method, HttpResponseHandler* callback, const HttpClient* client=NULL);       

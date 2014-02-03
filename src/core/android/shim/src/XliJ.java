@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.nio.ByteBuffer;
 
 import android.app.AlertDialog;
 import android.app.NativeActivity;
@@ -326,16 +327,26 @@ public class XliJ extends android.app.NativeActivity {
 			HashMap<String,String> headers = (HashMap<String,String>)params[2];
             String mime = (String)params[3];
             int timeout = (Integer)params[4];
-            long callbackPointer = (Long)params[5];
+            ByteBuffer body = (ByteBuffer)params[5];
+            long callbackPointer = (Long)params[6];
             String[] responseHeaders;
+            boolean hasUploadContent = (body != null);
         	try {
-        		HttpURLConnection connection = NewHttpConnection(url,method,false,mime,timeout);
+        		HttpURLConnection connection = NewHttpConnection(url,method,hasUploadContent,mime,timeout);
         		//set headers
         		Iterator<Map.Entry<String, String>> it = headers.entrySet().iterator();
         		while (it.hasNext()) {
         			Map.Entry<String, String>pair = (Map.Entry<String, String>)it.next();
         			connection.addRequestProperty(pair.getKey(), pair.getValue());
         		}
+        		//set content payload
+        		if (hasUploadContent)
+        		{
+        			Log.d("XliApp","uploading content");
+        			OutputStream out = new BufferedOutputStream(connection.getOutputStream());
+        			out.write(body.array());
+        		}
+        		
         		//get result payload
         		BufferedInputStream stream_b = new BufferedInputStream(connection.getInputStream());
         		responseHeaders = HeadersToStringArray(connection);
@@ -355,13 +366,13 @@ public class XliJ extends android.app.NativeActivity {
     //{TODO} Fix all these crap messages
     @SuppressWarnings({ "rawtypes", "unchecked" })
 	public static AsyncTask SendHttpAsync(NativeActivity activity, String url, String method, 
-    								 HashMap<String,String> headers, Object body, 
+    								 HashMap<String,String> headers, ByteBuffer body, 
     								 String mime, int timeout, long callbackPointer) {
     	try
     	{
     		Log.e("XliApp", url+", "+method+", "+headers+", "+body+", "+callbackPointer);
     		AsyncTask task = new ASyncHttpRequest();
-    		((AsyncTask<Object, Void, HttpWrappedResponse>)(task)).execute(url, method, headers, "", (Integer)timeout, (Long)callbackPointer);
+    		((AsyncTask<Object, Void, HttpWrappedResponse>)(task)).execute(url, method, headers, "", (Integer)timeout, body, (Long)callbackPointer);
     		return task;
     	} catch (Exception e) {
     		Log.e("XliApp","Unable to build Async Http Request: "+e.getLocalizedMessage());
