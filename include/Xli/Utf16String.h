@@ -38,8 +38,8 @@ namespace Xli
         Utf16& operator[] (int index);
         const Utf16& operator[] (int index) const;
 
-        Utf16* Data();
-        const Utf16* Data() const;
+        Utf16* DataPtr();
+        const Utf16* DataPtr() const;
 
         Utf16String& operator = (const Utf16String& copy);
 

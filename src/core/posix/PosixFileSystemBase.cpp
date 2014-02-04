@@ -48,7 +48,7 @@ namespace Xli
                 String result = prefix + tmp;
 
                 struct stat attributes;
-                if (stat(result.Data(), &attributes) == -1)
+                if (stat(result.DataPtr(), &attributes) == -1)
                     return result;
             }
         }
@@ -69,7 +69,7 @@ namespace Xli
             if (!path.Length()) 
                 return;
 
-            if (chdir(path.Data()) != 0)
+            if (chdir(path.DataPtr()) != 0)
                 XLI_THROW("Unable to change directory to '" + path + "'");
         }
 
@@ -79,10 +79,10 @@ namespace Xli
 
             if (!path.Length() || 
                 path == "~" ||
-                stat(path.Data(), &st) == 0) 
+                stat(path.DataPtr(), &st) == 0) 
                 return;
 
-            if (mkdir(path.Data(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
+            if (mkdir(path.DataPtr(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
             {
                 if (errno == EEXIST) 
                     return;
@@ -93,25 +93,25 @@ namespace Xli
 
         void PosixFileSystemBase::DeleteDirectory(const String& path)
         { 
-            if (!rmdir(path.Data()) != 0)
+            if (!rmdir(path.DataPtr()) != 0)
                 XLI_THROW("Unable to delete directory '" + path + "'");
         }
 
         void PosixFileSystemBase::DeleteFile(const String& path)
         { 
-            if (!unlink(path.Data()) != 0)
+            if (!unlink(path.DataPtr()) != 0)
                 XLI_THROW("Unable to delete file '" + path + "'");
         }
 
         void PosixFileSystemBase::MoveDirectory(const String& oldPath, const String& newPath)
         { 
-            if (rename(oldPath.Data(), newPath.Data()) != 0)
+            if (rename(oldPath.DataPtr(), newPath.DataPtr()) != 0)
                 XLI_THROW("Unable to move directory '" + oldPath + "' to '" + newPath + "'");
         }
             
         void PosixFileSystemBase::MoveFile(const String& oldPath, const String& newPath)
         { 
-            if (rename(oldPath.Data(), newPath.Data()) != 0)
+            if (rename(oldPath.DataPtr(), newPath.DataPtr()) != 0)
                 XLI_THROW("Unable to move file '" + oldPath + "' to '" + newPath + "'");
         }
 
@@ -119,7 +119,7 @@ namespace Xli
         {
             struct stat attributes;
 
-            if (stat(path.Data(), &attributes) == -1)
+            if (stat(path.DataPtr(), &attributes) == -1)
                 return false;
 
             f.Name = path;
@@ -150,7 +150,7 @@ namespace Xli
             DIR *dp;
             struct dirent *ep;
 
-            if ((dp = opendir(prefix.Data())) == NULL)
+            if ((dp = opendir(prefix.DataPtr())) == NULL)
                 XLI_THROW_FILE_NOT_FOUND(prefix);
 
             if (prefix == "./")

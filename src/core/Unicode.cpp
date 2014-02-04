@@ -35,7 +35,7 @@ namespace Xli
     
     Utf16String Unicode::Utf8To16(const String& str)
     {
-        return Utf8To16(str.Data(), str.Length());
+        return Utf8To16(str.DataPtr(), str.Length());
     }
 
     String Unicode::Utf16To8(const Utf16* str, int len)
@@ -66,6 +66,6 @@ namespace Xli
     
     String Unicode::Utf16To8(const Utf16String& str)
     {
-        return Utf16To8(str.Data(), str.Length());
+        return Utf16To8(str.DataPtr(), str.Length());
     }
 }

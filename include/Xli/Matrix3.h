@@ -37,8 +37,8 @@ namespace Xli
         static Matrix3 Scaling(const Vector3& v);
         static Matrix3 Scaling(float s);
 
-        float* Data();
-        const float* Data() const;
+        float* DataPtr();
+        const float* DataPtr() const;
 
         operator float* ();
         operator const float* () const;

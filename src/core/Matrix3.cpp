@@ -3,12 +3,12 @@
 
 namespace Xli
 {
-    float* Matrix3::Data()
+    float* Matrix3::DataPtr()
     {
         return data;
     }
 
-    const float* Matrix3::Data() const
+    const float* Matrix3::DataPtr() const
     {
         return data;
     }

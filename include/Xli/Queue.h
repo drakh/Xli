@@ -22,10 +22,8 @@ namespace Xli
         Array<Node*> freeNodes;
         int len;
 
-        Queue(const Queue& copy)
-        {
-            XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
-        }
+        Queue(const Queue& copy);
+        Queue& operator = (const Queue& copy);
 
     public:
         Queue()

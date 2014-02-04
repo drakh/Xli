@@ -120,7 +120,7 @@ namespace Xli
 
 #endif
             
-            window = SDL_CreateWindow(title.Data(), x, y, width, height, sdlFlags);
+            window = SDL_CreateWindow(title.DataPtr(), x, y, width, height, sdlFlags);
 
             SDL_SetWindowData(window, "SDL2Window", this);
             
@@ -252,7 +252,7 @@ namespace Xli
 
         void SDL2Window::SetTitle(const String& title)
         {
-            SDL_SetWindowTitle(window, title.Data());
+            SDL_SetWindowTitle(window, title.DataPtr());
         }
 
         void SDL2Window::SetFullscreen(bool fullscreen)

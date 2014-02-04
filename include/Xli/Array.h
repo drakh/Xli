@@ -18,10 +18,8 @@ namespace Xli
         int used;
         int capacity;
 
-        Array(const Array& copy)
-        {
-            XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
-        }
+        Array(const Array& copy);
+        Array& operator = (const Array& copy);
 
     public:
         Array()
@@ -154,7 +152,7 @@ namespace Xli
             return used++;
         }
 
-        int Add(const T* items, int count)
+        int AddRange(const T* items, int count)
         {
             int res = used;
             
@@ -164,9 +162,9 @@ namespace Xli
             return res;
         }
 
-        int Add(const Array<T>& values)
+        int AddRange(const Array<T>& values)
         {
-            return Add(values.data, values.used);
+            return AddRange(values.data, values.used);
         }
 
         int Insert(int index, const T& item)
@@ -311,12 +309,12 @@ namespace Xli
             return Get(index);
         }
 
-        T* Data()
+        T* DataPtr()
         {
             return data;
         }
 
-        const T* Data() const
+        const T* DataPtr() const
         {
             return data;
         }

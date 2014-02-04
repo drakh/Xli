@@ -19,7 +19,7 @@ namespace Xli
                         NSFileManager* file_manager = [NSFileManager defaultManager];
                         NSString* resource_path = [[NSBundle mainBundle] resourcePath];
                         
-                        NSString* ns_string_file_component = [file_manager stringWithFileSystemRepresentation:filename.Data() length:filename.Length()];
+                        NSString* ns_string_file_component = [file_manager stringWithFileSystemRepresentation:filename.DataPtr() length:filename.Length()];
                         
                         NSString* full_path_with_file_to_try = [resource_path stringByAppendingPathComponent:ns_string_file_component];
                         

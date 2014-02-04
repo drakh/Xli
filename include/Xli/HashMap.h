@@ -75,7 +75,7 @@ namespace Xli
                 if (oldBuckets[i].State == HashBucketStateUsed) 
                     (*this)[oldBuckets[i].Key] = oldBuckets[i].Value;
 
-            if (oldBuckets != internalBuckets) 
+            if (oldBuckets != internalBuckets)
                 TTraits::DeleteBuckets(oldBuckets, memPool);
         }
 
@@ -84,10 +84,8 @@ namespace Xli
             rehash(bucketCount * 2);
         }
 
-        HashMap(const HashMap& copy)
-        {
-            XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
-        }
+        HashMap(const HashMap& copy);
+        HashMap& operator = (const HashMap& copy);
 
     public:
         HashMap(int initialSizeLog2 = 0, void* memPool = 0)
@@ -115,33 +113,6 @@ namespace Xli
         {
             if (buckets != internalBuckets)
                 TTraits::DeleteBuckets(buckets, memPool);
-        }
-
-        Bucket* GetBucketBuffer() 
-        { 
-            return buckets; 
-        }
-        
-        void SetBucketBuffer(Bucket* buf) 
-        { 
-            TTraits::DeleteBuckets(buckets, memPool); 
-            buckets = buf;
-        }
-
-        /**
-            Returns the number of hash buckets currently in use in the map.
-        */
-        int GetBucketCount() const
-        {
-            return bucketCount;
-        }
-
-        /**
-            Returns a hash bucket with a given index.
-        */
-        const Bucket& GetBucket(int index) const
-        {
-            return buckets[index];
         }
 
         /**

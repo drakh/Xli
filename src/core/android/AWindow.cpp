@@ -260,7 +260,7 @@ namespace Xli
                 if (buf.Length())
                 {
                     buf.Add(0);
-                    __android_log_write(prio, AGetAppName(), buf.Data());
+                    __android_log_write(prio, AGetAppName(), buf.DataPtr());
                     buf.Clear();
                 }
             }
@@ -279,7 +279,7 @@ namespace Xli
                     if (c == '\n')
                     {
                         buf.Add(0);
-                        __android_log_write(prio, AGetAppName(), buf.Data());
+                        __android_log_write(prio, AGetAppName(), buf.DataPtr());
                         buf.Clear();
                         continue;
                     }

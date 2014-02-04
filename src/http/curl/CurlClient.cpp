@@ -109,7 +109,7 @@ namespace Xli
                 XLI_THROW("CURL ERROR: Failed to create handle");
 
             CURLcode result = CURLE_OK;
-            if (result == CURLE_OK) result = curl_easy_setopt(curl, CURLOPT_URL, uri.Data());
+            if (result == CURLE_OK) result = curl_easy_setopt(curl, CURLOPT_URL, uri.DataPtr());
             if (result == CURLE_OK) result = curl_easy_setopt(curl, CURLOPT_HTTPGET, 1);
             if (result == CURLE_OK) result = curl_easy_perform(curl);
 

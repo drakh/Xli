@@ -18,12 +18,12 @@ namespace Xli
             T Comps[3];
         };
 
-        T* Data()
+        T* DataPtr()
         {
             return Comps;
         }
 
-        const T* Data() const
+        const T* DataPtr() const
         {
             return Comps;
         }

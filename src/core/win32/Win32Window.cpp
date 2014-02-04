@@ -64,7 +64,7 @@ namespace Xli
             AdjustWindowRect(&rect, dwStyle, 0);
 
             Utf16String titleW = Unicode::Utf8To16(title);
-            hWnd = CreateWindowW(WindowClassName, titleW.Data(), dwStyle, CW_USEDEFAULT, CW_USEDEFAULT, rect.right - rect.left, rect.bottom - rect.top, 0, 0, HInstance, 0);
+            hWnd = CreateWindowW(WindowClassName, titleW.DataPtr(), dwStyle, CW_USEDEFAULT, CW_USEDEFAULT, rect.right - rect.left, rect.bottom - rect.top, 0, 0, HInstance, 0);
 
             if (!hWnd)
                 XLI_THROW("Failed to create window: " + Win32Helpers::GetLastErrorString());
@@ -194,7 +194,7 @@ namespace Xli
         void Win32Window::SetTitle(const String& title)
         {
             Utf16String titleW = Unicode::Utf8To16(title);
-            SetWindowTextW(hWnd, titleW.Data());
+            SetWindowTextW(hWnd, titleW.DataPtr());
         }
 
         String Win32Window::GetTitle()
@@ -203,7 +203,7 @@ namespace Xli
             if (l == 0) return String();
 
             Utf16String titleW = Utf16String::Create(l);
-            l = GetWindowText(hWnd, titleW.Data(), l);
+            l = GetWindowText(hWnd, titleW.DataPtr(), l);
 
             return Unicode::Utf16To8(titleW);
         }

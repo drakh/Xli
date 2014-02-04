@@ -164,7 +164,7 @@ namespace Uno
                 uno_gc_register_static_region(&dummyChannel, sizeof(Channel*)); // XXX: we need to set it to 0 somewhere (atexit)
             }
 
-            AAsset* asset = AAssetManager_open(XliAAssetManager, (const char*)filename.Data(), AASSET_MODE_UNKNOWN);
+            AAsset* asset = AAssetManager_open(XliAAssetManager, (const char*)filename.DataPtr(), AASSET_MODE_UNKNOWN);
 
             if (!asset)
             {

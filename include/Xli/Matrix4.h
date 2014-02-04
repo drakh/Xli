@@ -43,8 +43,8 @@ namespace Xli
         static bool Invert(const Matrix4& m, Matrix4& outResult);
         static bool Decompose(const Matrix4& m, Quaternion& outRotation, Vector3& outScale, Vector3& outTranslation); 
 
-        float* Data();
-        const float* Data() const;
+        float* DataPtr();
+        const float* DataPtr() const;
 
         operator float* ();
         operator const float* () const;

@@ -26,12 +26,12 @@ namespace Xli
         Utf16String filenameW = Unicode::Utf8To16(filename);
         Utf16String mW = Unicode::Utf8To16(m);
         
-        if (_wfopen_s(&fp, filenameW.Data(), mW.Data()) != 0)
+        if (_wfopen_s(&fp, filenameW.DataPtr(), mW.DataPtr()) != 0)
             XLI_THROW_CANT_OPEN_FILE(filename);
 
 #else
         
-        fp = fopen(filename.Data(), m);
+        fp = fopen(filename.DataPtr(), m);
         if (!fp) XLI_THROW_CANT_OPEN_FILE(filename);
 
 #endif

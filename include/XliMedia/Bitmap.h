@@ -64,8 +64,8 @@ namespace Xli
 
         virtual int GetSizeInBytes() const;
         
-        UInt8* GetData();
-        virtual const UInt8* GetData() const;
+        UInt8* GetDataPtr();
+        virtual const UInt8* GetDataPtr() const;
 
         UInt8* GetScanlinePtr(int y);
         const UInt8* GetScanlinePtr(int y) const;

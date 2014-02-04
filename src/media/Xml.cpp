@@ -68,7 +68,7 @@ namespace Xli
                         cstr++;
                     }
 
-                    text->Value = strb.Data();
+                    text->Value = strb.DataPtr();
                     elm->Children.Add(text);
                 }
                 break;
@@ -90,7 +90,7 @@ namespace Xli
         TiXmlDocument doc;
         doc.SetCondenseWhiteSpace(false); // TiXml has buggy whitespace condensing
 
-        if (!doc.Parse(code.Data()))
+        if (!doc.Parse(code.DataPtr()))
         {
             //XLI_THROW("Couldn't parse Xml");
             ErrorPrintLine("XML WARNING: Errors found in Xml document. May not be displayed correctly.");

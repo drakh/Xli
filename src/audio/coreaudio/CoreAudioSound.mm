@@ -493,7 +493,7 @@ namespace Uno
             this->filename = filename;
             this->mode = mode;
             
-            CoreAudioChannel* c = new CoreAudioChannel(this->filename.Data(), mode, false, false);
+            CoreAudioChannel* c = new CoreAudioChannel(this->filename.DataPtr(), mode, false, false);
             this->duration = c->GetDuration();
             delete c;
             
@@ -514,13 +514,13 @@ namespace Uno
         Channel* Sound::Play()
         {
             if (mode != PlayModeStream) return new (uno_gc) AudioQueueChannel((AudioPacketBuffer*)bufferedData, false);
-            return new CoreAudioChannel(filename.Data(), mode, false, true);
+            return new CoreAudioChannel(filename.DataPtr(), mode, false, true);
         }
         
         Channel* Sound::PlayLoop()
         {
             if (mode != PlayModeStream) return new (uno_gc) AudioQueueChannel((AudioPacketBuffer*)bufferedData, true);
-            return new (uno_gc) CoreAudioChannel(filename.Data(), mode, true, true);
+            return new (uno_gc) CoreAudioChannel(filename.DataPtr(), mode, true, true);
         }
     }
 }

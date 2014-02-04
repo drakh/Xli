@@ -50,7 +50,7 @@ namespace Xli
 #else
             "",
 #endif
-            source.Data(),
+            source.DataPtr(),
         };
 
         GLint len[] =
@@ -246,7 +246,7 @@ namespace Xli
                         if (!TryGetGLFormat(bmp->GetFormat(), glFormat, glType))
                             XLI_THROW("Unsupported texture format: " + FormatInfo::ToString(bmp->GetFormat()));
 
-                        glTexImage2D(texFace, j, glFormat, bmp->GetWidth(), bmp->GetHeight(), 0, glFormat, glType, bmp->GetData());
+                        glTexImage2D(texFace, j, glFormat, bmp->GetWidth(), bmp->GetHeight(), 0, glFormat, glType, bmp->GetDataPtr());
                     }
 
                     break;
