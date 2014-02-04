@@ -188,7 +188,7 @@ namespace Xli
                 jobject connection = AShim::HttpNewConnection(uri, req.GetMethodAsString(), 
                                                              req.HasPayload());
                 if (!connection) {
-                    LOGE("Could not make connection to %s", uri.Data());
+                    LOGE("Could not make connection to %s", uri.DataPtr());
                     return new AHttpResponse(false);
                 }
                 jni->NewGlobalRef(connection);

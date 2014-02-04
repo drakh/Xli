@@ -20,7 +20,7 @@ namespace Xli
             this->stream = stream;
             buf = stream->CreateDataAccessor();
             
-            NSData* data = [[NSData alloc] initWithBytesNoCopy:(void*)buf->GetData() length:buf->GetSizeInBytes() freeWhenDone:NO];
+            NSData* data = [[NSData alloc] initWithBytesNoCopy:(void*)buf->GetDataPtr() length:buf->GetSizeInBytes() freeWhenDone:NO];
             
             if (data == nil)
                 XLI_THROW("Failed to open image: Unable to create NSData object");

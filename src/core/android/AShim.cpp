@@ -59,8 +59,8 @@ namespace Xli
 
             //vars for call
             jobject activity = jni.GetInstance();
-            jstring jcaption = jni->NewStringUTF(caption.Data());
-            jstring jmessage = jni->NewStringUTF(message.Data());
+            jstring jcaption = jni->NewStringUTF(caption.DataPtr());
+            jstring jmessage = jni->NewStringUTF(message.DataPtr());
 
             //call
             int result = (int)jni->CallObjectMethod(shim_class, mid, activity, jmessage, jcaption, (jint)buttons, (jint)hints);
@@ -90,8 +90,8 @@ namespace Xli
                 LOGE("Unable to get NewHttpConnection mid");
                 return NULL;
             }
-            jstring uriString = jni->NewStringUTF(uri.Data());
-            jstring methodString = jni->NewStringUTF(method.Data());        
+            jstring uriString = jni->NewStringUTF(uri.DataPtr());
+            jstring methodString = jni->NewStringUTF(method.DataPtr());        
             jobject result = jni->CallObjectMethod(shim_class, mid, uriString, methodString, (jboolean)hasPayload);
             jni->DeleteLocalRef(uriString);
             jni->DeleteLocalRef(methodString);
@@ -153,8 +153,8 @@ namespace Xli
                 LOGE("Unable to get add header, cant get mid");
                 return; 
             }
-            jstring jKey = jni->NewStringUTF(key.Data());
-            jstring jVal = jni->NewStringUTF(val.Data());
+            jstring jKey = jni->NewStringUTF(key.DataPtr());
+            jstring jVal = jni->NewStringUTF(val.DataPtr());
             jni->CallObjectMethod(httpConnection, mid, jKey, jVal);
             jni->DeleteLocalRef(jKey);
             jni->DeleteLocalRef(jVal);
@@ -165,7 +165,7 @@ namespace Xli
             AJniHelper jni;
             jmethodID mid = jni.GetInstanceMethod(httpConnection, "getHeaderField", "(Ljava/lang/String;)Ljava/lang/String;");
             if (!mid) LOGE("Unable to get add header, cant get mid");
-            jstring jKey = jni->NewStringUTF(key.Data());
+            jstring jKey = jni->NewStringUTF(key.DataPtr());
             jobject val = jni->CallObjectMethod(httpConnection, mid, jKey);
             if (val) {
                 jni->DeleteLocalRef(jKey);
