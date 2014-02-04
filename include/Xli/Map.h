@@ -149,6 +149,12 @@ namespace Xli
             values.Add(value);
         }
 
+        void AddRange(const Map& map)
+        {
+            for (int it = map.Begin(); it != map.End(); it = map.Next(it))
+                Add(map.GetKey(it), map.GetValue(it));
+        }
+
         bool Remove(const TKey& key)
         {
             int i = keys.IndexOf(key);

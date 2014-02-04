@@ -264,7 +264,9 @@ namespace Xli
 
         TValue& operator [] (const TKey& key)
         {
-            if (count > (bucketCount/8)*5) expand();
+            if (count > (bucketCount / 8) * 5) 
+                expand();
+            
             int x = TTraits::Hash(key) & (bucketCount - 1);
             int firstX = x;
 
@@ -299,7 +301,9 @@ namespace Xli
 
         void Add(const TKey& key, const TValue& value)
         {
-            if (count > (bucketCount/8)*5) expand();
+            if (count > (bucketCount / 8) * 5) 
+                expand();
+
             int x = TTraits::Hash(key) & (bucketCount - 1);
             int firstX = x;
 
@@ -331,6 +335,12 @@ namespace Xli
                     continue;
                 }
             }
+        }
+
+        void AddRange(const HashMap& map)
+        {
+            for (int it = map.Begin(); it != map.End(); it = map.Next(it))
+                Add(map.GetKey(it), map.GetValue(it));
         }
 
         bool Remove(const TKey& key)
