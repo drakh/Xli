@@ -1,12 +1,16 @@
 #!/bin/bash
 
-while getopts ":hcdrit:p:j:-:" opt; do
+# TODO: Get rid of getopts, does not work very well
+while getopts ":h?j:D:U:-:" opt; do
 
     if [ "$opt" == "-" ]; then 
         # FIXME: Hardcoded indices
         if [ "${OPTARG:6:1}" == "=" ]; then  
             opt=${OPTARG:0:6}
             OPTARG=${OPTARG:7}
+        elif [ "${OPTARG:5:1}" == "=" ]; then  
+            opt=${OPTARG:0:5}
+            OPTARG=${OPTARG:6}
         elif [ "${OPTARG:4:1}" == "=" ]; then  
             opt=${OPTARG:0:4}
             OPTARG=${OPTARG:5}
@@ -17,35 +21,41 @@ while getopts ":hcdrit:p:j:-:" opt; do
     fi
 
     case $opt in 
-    h|help) 
+    h|?|help) 
         HELP=1
         ;;
-    c|clean)
+    clean)
         CLEAN=1
         ;;
-    d|debug)
+    debug)
         DEBUG=1
         ;;
-    r|release)
+    release)
         DEBUG=0
         ;;
-    i|install)
+    install)
         INSTALL=1
         ;;
-    t|target)
+    target)
         TARGET=$OPTARG
         ;;
-    p|prefix)
+    prefix)
         INSTALL_PREFIX=$OPTARG
         ;;
     j|jobs)
         JOB_COUNT=$OPTARG
         ;;
+    D|define)
+        DEFINES="$DEFINES -D$OPTARG"
+        ;;
+    U|undef)
+        DEFINES="$DEFINES -U$OPTARG"
+        ;;
     no-build)
         NO_BUILD=1
         ;;
     *) 
-        echo "ERROR: Invalid option --$opt.\n\nType 'cmakemake --help' for usage." >&2
+        echo -e "ERROR: Invalid option --$opt.\n\nType 'cmakemake --help' for usage." >&2
         exit 1 
         ;;
     esac
@@ -55,7 +65,7 @@ shift $((OPTIND-1))
 
 PROJECT="$@"
 
-#echo "'$DEBUG' '$INSTALL' '$TARGET' '$INSTALL_PREFIX' '$PROJECT'" && exit 0
+#echo "'$DEBUG' '$INSTALL' '$TARGET' '$INSTALL_PREFIX' '$JOB_COUNT' '$DEFINES' '$NO_BUILD' '$PROJECT'" && exit 1
 
 if [[ "$HELP" == "1" || -z "$PROJECT" ]]; then
     cat <<E0
@@ -93,9 +103,14 @@ if [ "$CLEAN" == "1" ]; then
     exit 0
 fi
 
-if [ !`which cmake` ]; then
+if [ ! `which cmake` ]; then
     # This is sometimes needed when run from GUI applications on OS X
     PATH=$PATH:/opt/local/bin
+
+    if [ ! `which cmake` ]; then
+        echo "ERROR: Unable to find the 'cmake' command. Make sure cmake is installed and added to \$PATH."
+        exit 1
+    fi
 fi
 
 if [ -n "$TARGET" ]; then
@@ -119,7 +134,7 @@ if [ -n "$TARGET" ]; then
         exit 0
         ;;
     *)
-        echo "ERROR: Invalid target '$TARGET'.\n\nType 'cmakemake --help' for usage." >&2
+        echo -e "ERROR: Invalid target '$TARGET'.\n\nType 'cmakemake --help' for usage." >&2
         exit 1
         ;;
     esac
@@ -147,6 +162,10 @@ fi
 
 if [ -n "$INSTALL_PREFIX" ]; then
     CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=$INSTALL_PREFIX"
+fi
+
+if [ -n "$DEFINES" ]; then
+    CMAKE_ARGS="$CMAKE_ARGS $DEFINES"
 fi
 
 mkdir -p $BUILD_DIR
