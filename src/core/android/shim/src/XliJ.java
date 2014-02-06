@@ -323,6 +323,43 @@ public class XliJ extends android.app.NativeActivity {
         return networkInfo.isConnected();
     }
     
+    //{TODO} Fix all these crap messages
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public static AsyncTask SendHttpAsync(NativeActivity activity, String url, String method, 
+    								 HashMap<String,String> headers, ByteBuffer body, 
+    								 int timeout, long callbackPointer) {
+    	try
+    	{
+    		Log.e("XliApp", url+", "+method+", "+headers+", "+body+", "+callbackPointer);
+    		AsyncTask task = new ASyncHttpRequest();
+    		((AsyncTask<Object, Void, HttpWrappedResponse>)(task)).execute(url, method, headers, (Integer)timeout, body, (Long)callbackPointer);
+    		return task;
+    	} catch (Exception e) {
+    		Log.e("XliApp","Unable to build Async Http Request: "+e.getLocalizedMessage());
+    		return null;
+    	}
+    }
+    
+    //{TODO} Fix all these crap messages
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public static AsyncTask SendHttpStringAsync(NativeActivity activity, String url, String method, 
+    								 			HashMap<String,String> headers, String body, 
+    								 			int timeout, long callbackPointer) {
+    	try
+    	{
+    		Log.e("XliApp", url+", "+method+", "+headers+", "+body+", "+callbackPointer);
+    		AsyncTask task = new ASyncHttpRequest();
+    		byte[] data = null;
+    		if (body!=null) data = body.getBytes();
+    		((AsyncTask<Object, Void, HttpWrappedResponse>)(task)).execute(url, method, headers, (Integer)timeout, data, (Long)callbackPointer);
+    		return task;
+    	} catch (Exception e) {
+    		Log.e("XliApp","Unable to build Async Http Request: "+e.getLocalizedMessage());
+    		return null;
+    	}
+    }
+    
+    
     public static class ASyncHttpRequest extends AsyncTask<Object, Void, HttpWrappedResponse> {
         @Override
         protected HttpWrappedResponse doInBackground(Object... params) {
@@ -386,23 +423,6 @@ public class XliJ extends android.app.NativeActivity {
         {
     		XliJ_HttpCallback(result.body, result.headers, result.responseCode, result.responseMessage, result.functionPointer);
         }
-    }
-    
-    //{TODO} Fix all these crap messages
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-	public static AsyncTask SendHttpAsync(NativeActivity activity, String url, String method, 
-    								 HashMap<String,String> headers, ByteBuffer body, 
-    								 int timeout, long callbackPointer) {
-    	try
-    	{
-    		Log.e("XliApp", url+", "+method+", "+headers+", "+body+", "+callbackPointer);
-    		AsyncTask task = new ASyncHttpRequest();
-    		((AsyncTask<Object, Void, HttpWrappedResponse>)(task)).execute(url, method, headers, (Integer)timeout, body, (Long)callbackPointer);
-    		return task;
-    	} catch (Exception e) {
-    		Log.e("XliApp","Unable to build Async Http Request: "+e.getLocalizedMessage());
-    		return null;
-    	}
     }
     
     @SuppressWarnings("rawtypes")

@@ -18,11 +18,12 @@ class Shouty : public HttpResponseHandler
         Stream* Body = response->GetContentStream();
         if (Body!=0)
         {
-            while (!Body->AtEnd())
-            {
-                bytesRead = Body->Read(&d, 1, bufSize);
-                if (bytesRead>0) Err->WriteFormat("> %*.*s\n", bytesRead, bytesRead, d);
-            }
+            Err->WriteLine("We have the body I'm just not showing it right now'");
+            // while (!Body->AtEnd())
+            // {
+            //     bytesRead = Body->Read(&d, 1, bufSize);
+            //     if (bytesRead>0) Err->WriteFormat("> %*.*s\n", bytesRead, bytesRead, d);
+            // }
             Body->Close();
         } 
         Err->WriteFormat("statusCode: %i\n", response->Status); 
@@ -38,6 +39,7 @@ class GLApp: public Application
     String someContent;
 
     // Managed<SimpleSound> sound;
+    Managed<HttpClient> httpClient;
     Managed<HttpResponseHandler> httpCallback;
 
     double touchDownTime;
@@ -92,6 +94,7 @@ public:
 
         // 
         someContent = "FOO=Oh hai!";
+        httpClient = HttpClient::Create();
 	}
 
 	virtual void OnLoad(Window* wnd)
@@ -235,11 +238,11 @@ public:
                 //wnd->BeginTextInput((Xli::TextInputHint)0);
                 // sound->Play(false);
                 Shouty* callback = new Shouty();
-                HttpRequest* req = HttpRequest::Create("http://requestb.in/1ik1p5e1", HttpPostMethod, callback);
-                req->Headers.Add("Accept", "*/*");
-                char* text = someContent.Data();
-                req->Body = text;
-                req->BodySizeBytes = someContent.Length();
+                HttpRequest* req = HttpRequest::Create("http://youtube.com", HttpGetMethod, callback);
+                // req->Headers.Add("Accept", "*/*");
+                // char* text = someContent.Data();
+                // req->Body = text;
+                // req->BodySizeBytes = someContent.Length();
                 req->Send();
             }
             else if (wnd->IsTextInputActive())

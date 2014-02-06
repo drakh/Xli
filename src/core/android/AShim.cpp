@@ -85,7 +85,7 @@ namespace Xli
             return (bool)result;
         }
 
-        jobject AShim::SendHttpAsync(const HttpRequest* req)
+        jobject AShim::SendHttpAsync(const HttpRequest* req, void* content, long byteLength)
         {
             AJniHelper jni;
             jclass shim_class = jni.GetShim();
@@ -100,10 +100,10 @@ namespace Xli
                 jobject headers = XliToJavaHeaders(&(req->Headers));
 
                 jobject arrayHandle = 0;
-                if ((req->Body!=0) && (req->BodySizeBytes>0))
+                if ((content!=0) && (byteLength>0))
                 {
                     LOGE("Adding content in c++");
-                    arrayHandle = jni->NewDirectByteBuffer(req->Body, req->BodySizeBytes);
+                    arrayHandle = jni->NewDirectByteBuffer(content, byteLength);
                 }
             
                 jobject jresult = jni->CallObjectMethod(shim_class, mid, activity, 
@@ -112,6 +112,42 @@ namespace Xli
                 jni->DeleteLocalRef(jurl);
                 jni->DeleteLocalRef(jmethod);
                 jni->DeleteLocalRef(headers);
+                return reinterpret_cast<jobject>(jni->NewGlobalRef(jresult));
+            } else {
+                LOGE("Couldn't find SendHttpAsync");
+                return 0;
+            }
+        }
+
+        jobject AShim::SendHttpAsync(const HttpRequest* req, String content)
+        {
+            AJniHelper jni;
+            jclass shim_class = jni.GetShim();
+            jmethodID mid = jni->GetStaticMethodID(shim_class, "SendHttpAsync", "(Landroid/app/NativeActivity;Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/nio/ByteBuffer;IJ)Landroid/os/AsyncTask;");
+            if (mid)
+            {
+                jobject activity = jni.GetInstance();
+
+                jstring jurl = jni->NewStringUTF(req->Url.Data());
+                jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->Method).Data());
+                jint jtimeout = (jint)req->Timeout;
+                jobject headers = XliToJavaHeaders(&(req->Headers));
+                jobject body = 0;
+
+                jobject arrayHandle = 0;                
+                if ((content.Length()>0))
+                {
+                    LOGE("Adding content in c++");
+                    body = jni->NewStringUTF(content.Data());
+                }
+            
+                jobject jresult = jni->CallObjectMethod(shim_class, mid, activity, 
+                                                        jurl, jmethod, headers, arrayHandle,
+                                                        jtimeout, (jlong)req->Callback);
+                jni->DeleteLocalRef(jurl);
+                jni->DeleteLocalRef(jmethod);
+                jni->DeleteLocalRef(headers);
+                if (body!=0) jni->DeleteLocalRef(body);
                 return reinterpret_cast<jobject>(jni->NewGlobalRef(jresult));
             } else {
                 LOGE("Couldn't find SendHttpAsync");

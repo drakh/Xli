@@ -420,7 +420,8 @@ namespace Xli
             
             static bool ConnectedToNetwork();
             static jobject XliToJavaHeaders(const HashMap<String,String>* src);
-            static jobject SendHttpAsync(const HttpRequest* reqb
+            static jobject SendHttpAsync(const HttpRequest* req, void* content, long byteLength);
+            static jobject SendHttpAsync(const HttpRequest* req, String content);
             static void AbortAsyncConnection(jobject connection);
             static jobject HttpNewConnection(const String& uri, const String& method, bool hasPayload);
             static AStream* HttpGetInputStream(jobject httpConnection);

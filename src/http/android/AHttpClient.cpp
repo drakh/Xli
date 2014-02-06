@@ -7,50 +7,23 @@ extern Xli::Window* GlobalWindow;
 namespace Xli
 {
 
-    class AHttpResponse: public HttpResponse
-    {
-    public:
-        jobject body;
-        AHttpResponse() {}
-        virtual ~AHttpResponse() {}
-        virtual String GetContentString()
-        {
-            if (this->body != NULL)
-            {
-                return Xli::PlatformSpecific::AShim::InputStreamToString(this->body);
-            } else {
-                return 0;
-            }
-        }
-        virtual Stream* GetContentStream()
-        {
-            if (this->body!=0)
-            {
-                return new Xli::PlatformSpecific::AStream(Xli::PlatformSpecific::AStream::READ, this->body);
-            } else {
-                return 0;
-            }
-        }
-    };
-
     namespace PlatformSpecific
     {
         class AHttpResponseHandlerAction : public AWindowAction
         {    
         public:
             Managed<HttpResponseHandler> Handler;
-            Managed<AHttpResponse> Response;
+            AHttpRequest* Response;
 
-            AHttpResponseHandlerAction(HttpResponseHandler* handler, AHttpResponse* response)
+            AHttpResponseHandlerAction(HttpResponseHandler* handler, AHttpRequest* request)
             {
                 this->Handler = handler;
-                this->Response = response;
+                this->Response = request;
             }
             virtual ~AHttpResponseHandlerAction() {}
             virtual void Execute()
             {                
                 AJniHelper jni;
-                //jni->NewGlobalRef(this->Response->body);
                 this->Handler.Get()->OnResponse(this->Response.Get());
             }
         };
@@ -61,69 +34,69 @@ extern "C"
 {
     void JNICALL XliJ_HttpCallback (JNIEnv *env , jobject obj, jobject body,
                                     jobjectArray headers, jint responseCode,
-                                    jstring responseMessage, jlong handlerPointer)
+                                    jstring responseMessage, jlong requestPointer)
     {       
-        if (handlerPointer)
+        if (requestPointer)
         {
-            Xli::AHttpResponse* response = new Xli::AHttpResponse();
+            Xli::AHttpRequest* response = ((Xli::HttpRequest*)((void*)requestPointer));
+            
+            // if (body)
+            // {
+            //     response->body = reinterpret_cast<jobject>(env->NewGlobalRef(body));
+            // } else {
+            //     response->body = 0;
+            // }
 
-            if (body)
-            {
-                response->body = reinterpret_cast<jobject>(env->NewGlobalRef(body));
-            } else {
-                response->body = 0;
-            }
+            // if (headers)
+            // {
+            //     int headerCount = (env->GetArrayLength(headers) / 2);
+            //     int index = 0;
+            //     jstring jkey;
+            //     jstring jval;
+            //     char const* ckey;
+            //     char const * cval;
+            //     for (int i=0; i<headerCount; i++)
+            //     {
+            //         index = i * 2;
 
-            if (headers)
-            {
-                int headerCount = (env->GetArrayLength(headers) / 2);
-                int index = 0;
-                jstring jkey;
-                jstring jval;
-                char const* ckey;
-                char const * cval;
-                for (int i=0; i<headerCount; i++)
-                {
-                    index = i * 2;
+            //         jkey = (jstring) env->GetObjectArrayElement(headers, index);
+            //         jval = (jstring) env->GetObjectArrayElement(headers, (index + 1));
 
-                    jkey = (jstring) env->GetObjectArrayElement(headers, index);
-                    jval = (jstring) env->GetObjectArrayElement(headers, (index + 1));
+            //         //{TODO} again -null- is an issue
+            //         if (!jkey) { 
+            //             ckey = "-null-"; 
+            //         } else { 
+            //             ckey = env->GetStringUTFChars(jkey, NULL); 
+            //         }
+            //         if (!jval) { 
+            //             cval = "-null-"; 
+            //         } else { 
+            //             cval = env->GetStringUTFChars(jval, NULL); 
+            //         }
 
-                    //{TODO} again -null- is an issue
-                    if (!jkey) { 
-                        ckey = "-null-"; 
-                    } else { 
-                        ckey = env->GetStringUTFChars(jkey, NULL); 
-                    }
-                    if (!jval) { 
-                        cval = "-null-"; 
-                    } else { 
-                        cval = env->GetStringUTFChars(jval, NULL); 
-                    }
-
-                    response->Headers.Add(ckey,cval);
-                    response->Status = (int)responseCode;
-                    if (responseMessage!=0)
-                    {
-                        char const* rmess = env->GetStringUTFChars(responseMessage, NULL);
-                        response->ReasonPhrase = rmess;
-                        env->ReleaseStringUTFChars(responseMessage, rmess);
-                    }
+            //         response->Headers.Add(ckey,cval);
+            //         response->Status = (int)responseCode;
+            //         if (responseMessage!=0)
+            //         {
+            //             char const* rmess = env->GetStringUTFChars(responseMessage, NULL);
+            //             response->ReasonPhrase = rmess;
+            //             env->ReleaseStringUTFChars(responseMessage, rmess);
+            //         }
                     
-                    env->ReleaseStringUTFChars(jkey, ckey);
-                    env->ReleaseStringUTFChars(jval, cval);
-                }
-            } else {
-                headers = 0;
-            }
-            env->DeleteLocalRef(headers);
+            //         env->ReleaseStringUTFChars(jkey, ckey);
+            //         env->ReleaseStringUTFChars(jval, cval);
+            //     }
+            // } else {
+            //     headers = 0;
+            // }
+            // env->DeleteLocalRef(headers);
                      
-            Xli::CTEvent* event = new Xli::CTEvent();
-            event->CTType = Xli::CTActionEvent;
-            event->Code = -1;
-            event->Payload = (void*)(new Xli::PlatformSpecific::AHttpResponseHandlerAction(((Xli::HttpResponseHandler*)((void*)handlerPointer)), response));
-            GlobalWindow->EnqueueCrossThreadEvent(event);
-            //((Xli::HttpResponseHandler*)((void*)handlerPointer))->OnResponse(response);
+            // Xli::CTEvent* event = new Xli::CTEvent();
+            // event->CTType = Xli::CTActionEvent;
+            // event->Code = -1;
+            // event->Payload = (void*)(new Xli::PlatformSpecific::AHttpResponseHandlerAction(((Xli::HttpResponseHandler*)((void*)requestPointer)), response));
+            // GlobalWindow->EnqueueCrossThreadEvent(event);
+            // //((Xli::HttpResponseHandler*)((void*)requestPointer))->OnResponse(response);
         } else {
             LOGE("No callback pointer error");
         }
@@ -164,46 +137,52 @@ namespace Xli
     class AHttpRequest : public HttpRequest
     {
     private:
-        jobject javaConnectionHandle;
+        jobject javaAsyncHandle;
+        jobject javaContent;
     public:
         AHttpRequest(String url, HttpMethodType method, 
                      HttpResponseHandler* callback) 
         {
             this->Url = url;
             this->Method = method;
-            this->Mime;
             this->Timeout = 0;
             this->Callback = callback;
-            this->javaConnectionHandle = 0;
-            this->Body = 0;
-            this->BodySizeBytes = 0;
+            this->javaAsyncHandle = 0;
         }
 
-        virtual ~AHttpRequest() 
+        virtual ~AHttpRequest()
         {
         }
 
-        virtual void Send()
-        {            
-            if (this->Mime.Length()>0) this->Headers.Add("Content-Type", this->Mime);
-            javaConnectionHandle = PlatformSpecific::AShim::SendHttpAsync(this);
+        virtual void Send(void* content, long byteLength)
+        {
+            javaAsyncHandle = PlatformSpecific::AShim::SendHttpAsync(this, content, byteLength);
+        }
+
+        virtual void Send(String content)
+        {
+            javaAsyncHandle = PlatformSpecific::AShim::SendHttpAsync(this, content);
         }
         
         virtual void Abort()
         {
-            if (javaConnectionHandle != 0)
-                PlatformSpecific::AShim::AbortAsyncConnection(javaConnectionHandle);
-            javaConnectionHandle = 0;
+            if (javaAsyncHandle != 0)
+                PlatformSpecific::AShim::AbortAsyncConnection(javaAsyncHandle);
+            javaAsyncHandle = 0;
         }
+
+        virtual String GetContentString()
+        {
+            return Xli::PlatformSpecific::AShim::InputStreamToString(this->body);
+        }
+
+        virtual Stream* GetContentStream() // {TODO} this needs to be a byte array async
+        {            
+            return new Xli::PlatformSpecific::AStream(Xli::PlatformSpecific::AStream::READ, this->body);
+        }
+
     };
 
-    HttpRequest* HttpRequest::Create(String url, HttpMethodType method,
-                                     HttpResponseHandler* callback, const HttpClient* client)
-    {
-        if (!HttpInitialized) InitAndroidHttp();
-        return new AHttpRequest(url, method, callback);
-    }
-    
     //--------------------------------------------------
 
     class AHttpClient : public HttpClient
