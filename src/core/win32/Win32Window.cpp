@@ -461,13 +461,14 @@ namespace Xli
                     return 0;
 
                 break;
-
+                // http://msdn.microsoft.com/en-us/library/windows/desktop/ms646265(v=vs.85).aspx
+                /*
             case WM_MOUSELEAVE:
-                if (wnd->eventHandler && wnd->eventHandler->OnMouseLeave(wnd, Vector2i(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))))
+                if (wnd->eventHandler && wnd->eventHandler->OnMouseMove(wnd, Vector2i(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))))
                     return 0;
 
                 break;
-
+                */
             case WM_MBUTTONDOWN:
                 if (wnd->eventHandler && wnd->eventHandler->OnMouseDown(wnd, Vector2i(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)), MouseButtonMiddle))
                     return 0;
