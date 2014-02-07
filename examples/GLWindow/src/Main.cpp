@@ -20,7 +20,7 @@ class Shouty : public HttpStateChangedHandler
         } else if (state == HttpDone) {
             Err->WriteFormat("state changed: %i\n", state);            
             Err->WriteLine("Got the body");
-            //Err->WriteLine(request->GetContentString());
+            Err->WriteLine(request->GetContentString());
         } else {
             Err->WriteFormat("state changed: %i\n", state);
         }
