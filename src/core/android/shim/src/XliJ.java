@@ -371,8 +371,8 @@ public class XliJ extends android.app.NativeActivity {
     	}
     }
     
-    
-    public static class ASyncHttpRequest extends AsyncTask<Object, Long, HttpWrappedResponse> {
+    //{TODO} the longs should be ints really
+    public static class ASyncHttpRequest extends AsyncTask<Object, Integer, HttpWrappedResponse> {
     	long requestPointer;
         @Override        
         protected HttpWrappedResponse doInBackground(Object... params) {
@@ -402,11 +402,24 @@ public class XliJ extends android.app.NativeActivity {
         			Log.d("XliApp","uploading content");
         			if (body!=null)
         			{
-        				try {        				
+        				int progressThreshold = Math.max((body.length / 100), 2048);
+        				int steps = 1;
+        				int runningTotal=0;
+        				int bufferSize = 2048;
+        				try {
         					connection.setFixedLengthStreamingMode(body.length);
-        					BufferedOutputStream out = new BufferedOutputStream(connection.getOutputStream());        				
-        					out.write(body);
-        					publishProgress((long)0);
+        					BufferedOutputStream out = new BufferedOutputStream(connection.getOutputStream());
+        					
+        					byte[] data = new byte[bufferSize];
+        					while (runningTotal<body.length) {
+        						out.write(body, (int)runningTotal, (int)Math.min(bufferSize, (body.length-runningTotal)));
+        						if ((runningTotal / progressThreshold) > steps) {
+        							steps = (runningTotal / progressThreshold);
+        							publishProgress(runningTotal,body.length);
+        						}        							
+        						runningTotal+=bufferSize;
+        					}
+        					publishProgress(body.length,body.length);
         					out.flush();
         				} catch(Exception e) {
         					XliJ_HttpErrorCallback(requestPointer, -1, "Unable to upload data: "+e.getLocalizedMessage()); 
@@ -427,8 +440,8 @@ public class XliJ extends android.app.NativeActivity {
 			} 
         }
         @Override
-        protected void onProgressUpdate(Long... progress) {
-            XliJ_HttpProgressCallback(requestPointer, progress[0], 0, false);
+        protected void onProgressUpdate(Integer... progress) {
+        	XliJ_HttpProgressCallback(requestPointer, progress[0], progress[1], true);
         }
         @Override
         protected void onPostExecute(HttpWrappedResponse result) 
@@ -488,6 +501,7 @@ public class XliJ extends android.app.NativeActivity {
         protected String doInBackground(Object... params) {
         	requestPointer = (long)((Long)params[1]);
             try {
+            	//XliJ_HttpProgressCallback(requestPointer, progress[0], progress[1], true);
 				return InputStreamToString((InputStream)params[0]);
 			} catch (UnsupportedEncodingException e) {
 				XliJ_HttpErrorCallback(requestPointer, -1, "UnsupportedEncodingException: "+e.getLocalizedMessage()); 
@@ -518,7 +532,7 @@ public class XliJ extends android.app.NativeActivity {
         protected byte[] doInBackground(Object... params) {
         	requestPointer = (long)((Long)params[1]);
             try {
-				return ReadAllBytesFromInputStream((InputStream)params[0]);
+				return ReadAllBytesFromHttpInputStream((InputStream)params[0], requestPointer);
 			} catch (IOException e) {				
 				XliJ_HttpErrorCallback(requestPointer, -1, "IOException: "+e.getLocalizedMessage()); 
 				return null;
@@ -530,6 +544,27 @@ public class XliJ extends android.app.NativeActivity {
         	XliJ_HttpContentByteArrayCallback(result, requestPointer);
         }
     }    
+    
+    public static byte[] ReadAllBytesFromHttpInputStream(InputStream stream, long requestPointer) throws IOException
+    {    	
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		int nRead;
+		int runningTotal = 0;
+		int progressThreshold = 8000;
+		int steps = 1;
+		byte[] data = new byte[16384];
+		while ((nRead = stream.read(data, 0, data.length)) != -1) {
+		  buffer.write(data, 0, nRead);
+		  runningTotal+=nRead;
+		  if (runningTotal/progressThreshold > steps)
+		  {
+			  steps = runningTotal/progressThreshold;
+			  XliJ_HttpProgressCallback(requestPointer, runningTotal, 0, false);  
+		  }
+		}
+		buffer.flush();
+		return buffer.toByteArray();
+    }
     
     public static byte[] ReadAllBytesFromInputStream(InputStream stream) throws IOException
     {    	

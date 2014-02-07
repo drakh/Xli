@@ -409,9 +409,34 @@ namespace Xli
 
         class AShim
         {
+        private:
+            bool midsCached;
+            jmethodID makeNoiseMid;
+            jmethodID raiseSoftKeyboardMid;
+            jmethodID hideSoftKeyboardMid;
+            jmethodID keyboardVisibleMid;
+            jmethodID showMessageBoxMid;
+            jmethodID connectedToNetworkMid;
+            jmethodID xliToJavaHeadersMid;
+            jmethodID sendHttpAsyncMid;
+            jmethodID sendHttpAsyncMid;
+            jmethodID sendHttpAsyncMid;
+            jmethodID abortAsyncConnectionMid;
+            jmethodID httpNewConnectionMid;
+            jmethodID inputStreamToStringMid;
+            jmethodID asyncInputStreamToStringMid;
+            jmethodID asyncInputStreamToByteArrayMid;
+            jmethodID readBytesFromInputStreamMid;
+            jmethodID getAssetManagerMid;
+            jmethodID registerNativeFunctionsMid;
+            jmethodID androidToXliKeyEventMid;
+            jmethodID handleSpecialAndroidKeyEventsMid;
+            jmethodID initDefaultCookieManagerMid;
         public:
             static int kbVisible;
 
+            static void CacheMids();
+            
             static void MakeNoise();
             static void RaiseSoftKeyboard();
             static void HideSoftKeyboard();

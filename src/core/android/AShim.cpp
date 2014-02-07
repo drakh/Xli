@@ -10,6 +10,35 @@ namespace Xli
     namespace PlatformSpecific
     {
         int AShim::kbVisible = 0;
+        int AShim::midsCached = false;
+
+        void AShim::CachedMids()
+        {
+            // if (!midsCached)
+            // {
+            //     makeNoiseMid = ;
+            //     raiseSoftKeyboardMid = ;
+            //     hideSoftKeyboardMid = ;
+            //     keyboardVisibleMid = ;
+            //     showMessageBoxMid = ;
+            //     connectedToNetworkMid = ;
+            //     xliToJavaHeadersMid = ;
+            //     sendHttpAsyncMid = ;
+            //     sendHttpAsyncMid = ;
+            //     sendHttpAsyncMid = ;
+            //     abortAsyncConnectionMid = ;
+            //     httpNewConnectionMid = ;
+            //     inputStreamToStringMid = ;
+            //     asyncInputStreamToStringMid = ;
+            //     asyncInputStreamToByteArrayMid = ;
+            //     readBytesFromInputStreamMid = ;
+            //     getAssetManagerMid = ;
+            //     registerNativeFunctionsMid = ;
+            //     androidToXliKeyEventMid = ;
+            //     handleSpecialAndroidKeyEventsMid = ;
+            //     initDefaultCookieManagerMid = ;
+            // }
+        }
 
         void AShim::HandleSpecialAndroidKeyEvents(AKeyEvent androidKeyCode) 
         {
@@ -102,7 +131,6 @@ namespace Xli
                 jobject arrayHandle = 0;
                 if ((content!=0) && (byteLength>0))
                 {
-                    LOGE("Adding content in c++");
                     arrayHandle = jni->NewDirectByteBuffer(content, byteLength);
                 }
             
@@ -136,7 +164,6 @@ namespace Xli
 
                 if ((content.Length()>0))
                 {
-                    LOGE("Adding content in c++");
                     body = jni->NewStringUTF(content.Data());
                 }
             

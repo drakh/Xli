@@ -101,7 +101,7 @@ namespace Xli
                 if (this->StateChangedCallback!=0) this->StateChangedCallback->OnResponse(this, this->Status);
                 this-> javaAsyncHandle = Xli::PlatformSpecific::AShim::AsyncInputStreamToByteArray(this->javaContentHandle, this);
             } else {
-                LOGE("Cant pull content stream"); //{TODO} proper error here
+                LOGE("Cant pull content array"); //{TODO} proper error here
             }
         }
         virtual void* GetContentArray() // {TODO} this needs to be a byte array async

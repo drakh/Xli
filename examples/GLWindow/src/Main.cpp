@@ -8,9 +8,7 @@ using namespace Xli;
 class Shouty : public HttpStateChangedHandler
 {
     virtual void OnResponse(HttpRequest* request, HttpRequestState state)
-    {
-        Err->WriteLine("-------------------------------------");
-        Err->WriteLine("in statechangedcallback");
+    {        
         if (state == HttpHeadersReceived)
         {
             Err->WriteFormat("statusCode: %i\n", state);
@@ -30,10 +28,13 @@ class Shouty : public HttpStateChangedHandler
 class ProgressShout : public HttpProgressHandler
 {
     virtual void OnResponse(HttpRequest* request, long position, long totalLength, bool lengthKnown)
-    {
-        Err->WriteLine("-------------------------------------");
-        Err->WriteFormat("progress: %lu, %lu\n", position, totalLength);
-        if (!lengthKnown) Err->WriteLine("Total length not known");
+    {        
+        if (lengthKnown) {
+            Err->WriteFormat("progress (percentage): %i\n", (int)(100*((1.0*position)/totalLength)));
+        } else {
+            Err->WriteFormat("progress: %lu, %lu\n", position, totalLength);
+            Err->WriteLine("Total length not known");
+        }
         Err->WriteLine("-------------------------------------");
     }
 };
@@ -41,7 +42,6 @@ class TimeoutShout : public HttpTimeoutHandler
 {
     virtual void OnResponse(HttpRequest* request)
     {
-        Err->WriteLine("-------------------------------------");
         Err->WriteLine("timed out");
         Err->WriteLine("-------------------------------------");
     }
@@ -50,7 +50,6 @@ class ErrorShout : public HttpErrorHandler
 {
     virtual void OnResponse(HttpRequest* request, int errorCode, String errorMessage)
     {
-        Err->WriteLine("-------------------------------------");
         Err->WriteLine("Had and error:");
         Err->WriteFormat("> %i: %s\n",errorCode, errorMessage.Data());
         Err->WriteLine("-------------------------------------");
@@ -60,7 +59,6 @@ class ErrorShout : public HttpErrorHandler
 class GLApp: public Application
 {
 	Managed<GLContext> gl;
-    String someContent;
 
     // Managed<SimpleSound> sound;
     Managed<HttpClient> httpClient;
@@ -119,13 +117,12 @@ public:
         // Load some sounds
         // sound = SimpleSound::Create("test2.mp3", true);
 
-        // 
-        someContent = "FOO=Oh hai!";
         httpClient = HttpClient::Create();
         stateChangedCallback = new Shouty();
         timeoutCallback = new TimeoutShout();
         progressCallback = new ProgressShout();
         errorCallback = new ErrorShout();
+        Err->WriteLine("-------------------------------------");
 	}
 
 	virtual void OnLoad(Window* wnd)
@@ -277,7 +274,7 @@ public:
                 req->ProgressCallback = progressCallback;
                 req->ErrorCallback = errorCallback;
                 // req->Headers.Add("Accept", "*/*");
-                req->Send("Well hello there");
+                req->Send("BLAH=Why hello there!");
             }
             else if (wnd->IsTextInputActive())
             {
