@@ -410,28 +410,26 @@ namespace Xli
         class AShim
         {
         private:
-            bool midsCached;
-            jmethodID makeNoiseMid;
-            jmethodID raiseSoftKeyboardMid;
-            jmethodID hideSoftKeyboardMid;
-            jmethodID keyboardVisibleMid;
-            jmethodID showMessageBoxMid;
-            jmethodID connectedToNetworkMid;
-            jmethodID xliToJavaHeadersMid;
-            jmethodID sendHttpAsyncMid;
-            jmethodID sendHttpAsyncMid;
-            jmethodID sendHttpAsyncMid;
-            jmethodID abortAsyncConnectionMid;
-            jmethodID httpNewConnectionMid;
-            jmethodID inputStreamToStringMid;
-            jmethodID asyncInputStreamToStringMid;
-            jmethodID asyncInputStreamToByteArrayMid;
-            jmethodID readBytesFromInputStreamMid;
-            jmethodID getAssetManagerMid;
-            jmethodID registerNativeFunctionsMid;
-            jmethodID androidToXliKeyEventMid;
-            jmethodID handleSpecialAndroidKeyEventsMid;
-            jmethodID initDefaultCookieManagerMid;
+            static bool midsCached;
+            static jmethodID makeNoiseMid;
+            static jmethodID raiseSoftKeyboardMid;
+            static jmethodID hideSoftKeyboardMid;
+            static jmethodID keyboardVisibleMid;
+            static jmethodID showMessageBoxMid;
+            static jmethodID connectedToNetworkMid;
+            static jmethodID xliToJavaHeadersMid;
+            static jmethodID sendHttpAsyncMid;
+            static jmethodID abortAsyncConnectionMid;
+            static jmethodID httpNewConnectionMid;
+            static jmethodID inputStreamToStringMid;
+            static jmethodID asyncInputStreamToStringMid;
+            static jmethodID asyncInputStreamToByteArrayMid;
+            static jmethodID readBytesFromInputStreamMid;
+            static jmethodID getAssetManagerMid;
+            static jmethodID registerNativeFunctionsMid;
+            static jmethodID androidToXliKeyEventMid;
+            static jmethodID handleSpecialAndroidKeyEventsMid;
+            static jmethodID initDefaultCookieManagerMid;
         public:
             static int kbVisible;
 

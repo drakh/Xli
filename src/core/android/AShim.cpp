@@ -10,9 +10,9 @@ namespace Xli
     namespace PlatformSpecific
     {
         int AShim::kbVisible = 0;
-        int AShim::midsCached = false;
+        bool AShim::midsCached = false;
 
-        void AShim::CachedMids()
+        void AShim::CacheMids()
         {
             // if (!midsCached)
             // {
