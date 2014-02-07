@@ -9,7 +9,7 @@ static void LoadFontFace(const String& filename, float size)
 	PrintLine("Loading Font Face: " + filename + ", size = " + size);
 	PrintLine("------------------------------------------------");
 
-	Managed<Stream> stream = Assets->OpenFile(filename);
+	Managed<Stream> stream = Bundle->OpenFile(filename);
 	Managed<FontFace> font = FreeType::LoadFontFace(stream);
 
 	PrintLine((String)"FamilyName: " + font->GetFamilyName());

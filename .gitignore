@@ -1,3 +1,4 @@
+*.*~
 *.exe
 *.ilk
 *.opensdf
@@ -31,3 +32,6 @@ src/core/android/shim/proguard-project.txt
 src/core/android/shim/project.properties
 Thumbs.db
 xcuserdata/
+/src/core/android/shim/.classpath
+/src/core/android/shim/.project
+/src/core/android/shim/.settings/org.eclipse.jdt.core.prefs

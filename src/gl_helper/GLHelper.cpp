@@ -46,11 +46,11 @@ namespace Xli
         const char* code[] =
         {
 #ifdef XLI_GL_ES2
-            "precision mediump float;\n",
+            "precision highp float;\n",
 #else
             "",
 #endif
-            source.Data(),
+            source.DataPtr(),
         };
 
         GLint len[] =
@@ -200,7 +200,7 @@ namespace Xli
 #ifdef GL_ETC1_RGB8_OES
 
                 case FormatCompressedRGB_ETC1:
-                    glCompressedTexImage2D(texFace, j, GL_ETC1_RGB8_OES, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetData());
+                    glCompressedTexImage2D(texFace, j, GL_ETC1_RGB8_OES, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetDataPtr());
                     compressed = true;
                     break;
 
@@ -208,7 +208,7 @@ namespace Xli
 #ifdef GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG
 
                 case FormatCompressedRGB_PVRTC_4BPP:
-                    glCompressedTexImage2D(texFace, j, GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetData());
+                    glCompressedTexImage2D(texFace, j, GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetDataPtr());
                     compressed = true;
                     break;
 
@@ -216,7 +216,7 @@ namespace Xli
 #ifdef GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG
                         
                 case FormatCompressedRGB_PVRTC_2BPP:
-                    glCompressedTexImage2D(texFace, j, GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetData());
+                    glCompressedTexImage2D(texFace, j, GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetDataPtr());
                     compressed = true;
                     break;
 
@@ -224,7 +224,7 @@ namespace Xli
 #ifdef GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG
                         
                 case FormatCompressedRGBA_PVRTC_4BPP:
-                    glCompressedTexImage2D(texFace, j, GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetData());
+                    glCompressedTexImage2D(texFace, j, GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetDataPtr());
                     compressed = true;
                     break;
                         
@@ -232,7 +232,7 @@ namespace Xli
 #ifdef GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG
 
                 case FormatCompressedRGBA_PVRTC_2BPP:
-                    glCompressedTexImage2D(texFace, j, GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetData());
+                    glCompressedTexImage2D(texFace, j, GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG, mip->GetWidth(), mip->GetHeight(), 0, mip->GetSizeInBytes(), mip->GetDataPtr());
                     compressed = true;
                     break;
 
@@ -246,7 +246,7 @@ namespace Xli
                         if (!TryGetGLFormat(bmp->GetFormat(), glFormat, glType))
                             XLI_THROW("Unsupported texture format: " + FormatInfo::ToString(bmp->GetFormat()));
 
-                        glTexImage2D(texFace, j, glFormat, bmp->GetWidth(), bmp->GetHeight(), 0, glFormat, glType, bmp->GetData());
+                        glTexImage2D(texFace, j, glFormat, bmp->GetWidth(), bmp->GetHeight(), 0, glFormat, glType, bmp->GetDataPtr());
                     }
 
                     break;

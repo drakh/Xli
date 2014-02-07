@@ -93,7 +93,7 @@ namespace Xli
             elementCount = 0;
         }
         
-        memcpy(data, buf->GetData() + pos, bytes);
+        memcpy(data, buf->GetDataPtr() + pos, bytes);
         pos += bytes;
 
         return elementCount;
@@ -122,7 +122,7 @@ namespace Xli
             elementCount = 0;
         }
         
-        memcpy(const_cast<UInt8*>(buf->GetData()) + pos, data, bytes);
+        memcpy(const_cast<UInt8*>(buf->GetDataPtr()) + pos, data, bytes);
         pos += bytes;
 
         return elementCount;

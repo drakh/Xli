@@ -4,19 +4,22 @@
 #include <Xli/Config.h>
 #include <Xli/Object.h>
 #include <Xli/Exception.h>
-#include "Sort.h"
+#include <Xli/Sort.h>
 
 namespace Xli
 {
     /**
         \ingroup XliCoreContainers
     */
-    template <typename T, int TBufSize> class Array: public Object
+    template <typename T, int TBufSize> class Array
     {
         T* data;
         T buf[TBufSize];
         int used;
         int capacity;
+
+        Array(const Array& copy);
+        Array& operator = (const Array& copy);
 
     public:
         Array()
@@ -26,7 +29,7 @@ namespace Xli
             data = buf;
         }
 
-        Array(int size)
+        explicit Array(int size)
         {
             used = 0;
             capacity = TBufSize;
@@ -34,7 +37,7 @@ namespace Xli
             Resize(size);
         }
 
-        Array(int count, const T* initItems)
+        explicit Array(int count, const T* initItems)
         {
             used = 0;
             capacity = TBufSize;
@@ -45,18 +48,13 @@ namespace Xli
                 data[i] = initItems[i];
         }
 
-        Array(const Array& a)
+        ~Array()
         {
-            used = 0;
-            capacity = TBufSize;
-            data = buf;
-            Resize(a.used);
-
-            for (int i = 0; i < used; i++)
-                data[i] = a.data[i];
+            if (data != buf) 
+                delete [] data;
         }
 
-        Array& operator = (Array& a)
+        void Copy(const Array& a)
         {
             Resize(a.used);
 
@@ -64,12 +62,6 @@ namespace Xli
                 data[i] = a.data[i];
 
             return *this;
-        }
-
-        ~Array()
-        {
-            if (data != buf) 
-                delete [] data;
         }
 
         void Reserve(int newCapacity)
@@ -160,7 +152,7 @@ namespace Xli
             return used++;
         }
 
-        int Add(const T* items, int count)
+        int AddRange(const T* items, int count)
         {
             int res = used;
             
@@ -170,9 +162,9 @@ namespace Xli
             return res;
         }
 
-        int Add(const Array<T>& values)
+        int AddRange(const Array<T>& values)
         {
-            return Add(values.data, values.used);
+            return AddRange(values.data, values.used);
         }
 
         int Insert(int index, const T& item)
@@ -317,12 +309,12 @@ namespace Xli
             return Get(index);
         }
 
-        T* Data()
+        T* DataPtr()
         {
             return data;
         }
 
-        const T* Data() const
+        const T* DataPtr() const
         {
             return data;
         }
@@ -377,6 +369,12 @@ namespace Xli
         {
             Sort<ComparatorPointerGreaterThan<T> >();
         }
+    };
+
+    template <typename T> class ArrayRef: public Object
+    {
+    public:
+        Array<T> Data;
     };
 }
 

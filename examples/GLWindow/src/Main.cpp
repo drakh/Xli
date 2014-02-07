@@ -79,7 +79,7 @@ public:
 		if (wnd->GetKeyState(KeySpace))
 		{
 			Vector2i mousePos = wnd->GetMousePosition();
-			wnd->SetTitle(String::Format("%.2lf %d %d", GetTime(), mousePos.X, mousePos.Y));
+			wnd->SetTitle(String::Format("%.2lf %d %d", GetSeconds(), mousePos.X, mousePos.Y));
 		}
 	}
 
@@ -178,7 +178,7 @@ public:
 	virtual bool OnTouchDown(Window* wnd, Vector2 pos, int id)
 	{
 		Err->WriteLine("OnTouchDown: " + pos.ToString() + ", " + id);
-        touchDownTime = GetTime();
+        touchDownTime = GetSeconds();
 		return false;
 	}
 
@@ -194,9 +194,11 @@ public:
 	{
 		Err->WriteLine("OnTouchUp: " + pos.ToString() + ", " + id);
         
-        if (GetTime() - touchDownTime < 0.15)
+		double currentTime = GetSeconds();
+
+        if (currentTime - touchDownTime < 0.15)
         {
-            if (GetTime() - tapTime < 0.3)
+            if (currentTime - tapTime < 0.3)
             {
                 //play
                 Err->WriteLine("Bang");
@@ -207,7 +209,8 @@ public:
             {
                 wnd->EndTextInput();
             }
-            tapTime = GetTime();
+
+            tapTime = currentTime;
         }
         
 		return false;

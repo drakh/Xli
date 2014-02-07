@@ -551,20 +551,8 @@ WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_UNICHAR:
-        {
-            if (wParam == UNICODE_NOCHAR) {
-                returnCode = 1;
-                break;
-            }
-        }
-        /* no break */
     case WM_CHAR:
-        {
-            char text[5];
-
-            WIN_ConvertUTF32toUTF8(wParam, text);
-            SDL_SendKeyboardText(text);
-        }
+        /* Ignore WM_CHAR messages that come from TranslateMessage(), since we handle WM_KEY* messages directly */
         returnCode = 0;
         break;
 
@@ -866,6 +854,8 @@ WIN_PumpEvents(_THIS)
     const Uint8 *keystate;
     MSG msg;
     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+        /* Always translate the message in case it's a non-SDL window (e.g. with Qt integration) */
+        TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
 

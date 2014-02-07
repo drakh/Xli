@@ -1,7 +1,7 @@
 #ifndef __XLI_VECTOR4_H__
 #define __XLI_VECTOR4_H__
 
-#include "Vector3.h"
+#include <Xli/Vector3.h>
 
 namespace Xli
 {
@@ -18,12 +18,12 @@ namespace Xli
             T Comps[4];
         }; 
 
-        T* Data()
+        T* DataPtr()
         {
             return Comps;
         }
 
-        const T* Data() const
+        const T* DataPtr() const
         {
             return Comps;
         }

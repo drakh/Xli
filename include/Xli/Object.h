@@ -1,6 +1,8 @@
 #ifndef __XLI_OBJECT_H__
 #define __XLI_OBJECT_H__
 
+#include <Xli/Config.h>
+
 namespace Xli
 {
     class String;

@@ -1,7 +1,7 @@
 #ifndef __XLI_SORT_H__
 #define __XLI_SORT_H__
 
-#include "Utils.h"
+#include <Xli/Utils.h>
 
 namespace Xli
 {

@@ -34,6 +34,9 @@
 # include <GL/gl.h>
 # define XLI_GL_DESKTOP
 
+#else
+#error "Unsupported platform"
+
 #endif
 
 

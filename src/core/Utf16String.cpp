@@ -83,12 +83,12 @@ namespace Xli
         return data[index];
     }
 
-    Utf16* Utf16String::Data()
+    Utf16* Utf16String::DataPtr()
     {
         return data;
     }
     
-    const Utf16* Utf16String::Data() const
+    const Utf16* Utf16String::DataPtr() const
     {
         return data;
     }

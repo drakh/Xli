@@ -6,7 +6,7 @@ namespace Xli
     Buffer* ImageReader::ReadBuffer(ProgressCallback* callback)
     {
         Buffer* buf = Buffer::Create(GetBufferSize());
-        Read(buf->Data(), callback);
+        Read(buf->DataPtr(), callback);
         return buf;
     }
 

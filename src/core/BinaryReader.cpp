@@ -19,7 +19,7 @@ namespace Xli
     String BinaryReader::ReadCStr(int len)
     {
         String str = String::Create(len);
-        _stream->ReadSafe((void*)str.Data(), 1, len);
+        _stream->ReadSafe((void*)str.DataPtr(), 1, len);
         return str;
     }
 
@@ -33,7 +33,7 @@ namespace Xli
         _stream->Seek(SeekOriginBegin, 0);
         int size = _stream->GetLength();
         Buffer* buf = Buffer::Create(size);
-        _stream->ReadSafe(buf->Data(), 1, size);
+        _stream->ReadSafe(buf->DataPtr(), 1, size);
         return buf;
     }
 

@@ -1,8 +1,8 @@
 #ifndef __XLI_TEXT_H__
 #define __XLI_TEXT_H__
 
-#include "TextReader.h"
-#include "TextWriter.h"
+#include <Xli/TextReader.h>
+#include <Xli/TextWriter.h>
 
 namespace Xli
 {

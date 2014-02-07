@@ -2,12 +2,12 @@
 
 namespace Xli
 {
-    float* Matrix4::Data()
+    float* Matrix4::DataPtr()
     {
         return data;
     }
 
-    const float* Matrix4::Data() const
+    const float* Matrix4::DataPtr() const
     {
         return data;
     }

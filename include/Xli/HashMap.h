@@ -48,7 +48,7 @@ namespace Xli
         functions used. This is useful i.e. when using pointers to objects as keys and you want to
         compare the value of the objects and not the pointers.
     */
-    template <typename TKey, typename TValue, typename TTraits = HashMapDefaultTraits<TKey, TValue>, int TBufSize = 8> class HashMap: public Object
+    template <typename TKey, typename TValue, typename TTraits = HashMapDefaultTraits<TKey, TValue>, int TBufSize = 8> class HashMap
     {
     private:
         typedef HashBucket<TKey, TValue> Bucket;
@@ -75,7 +75,7 @@ namespace Xli
                 if (oldBuckets[i].State == HashBucketStateUsed) 
                     (*this)[oldBuckets[i].Key] = oldBuckets[i].Value;
 
-            if (oldBuckets != internalBuckets) 
+            if (oldBuckets != internalBuckets)
                 TTraits::DeleteBuckets(oldBuckets, memPool);
         }
 
@@ -84,8 +84,11 @@ namespace Xli
             rehash(bucketCount * 2);
         }
 
+        HashMap(const HashMap& copy);
+        HashMap& operator = (const HashMap& copy);
+
     public:
-        explicit HashMap(int initialSizeLog2 = 0, void* memPool = 0)
+        HashMap(int initialSizeLog2 = 0, void* memPool = 0)
         {
             this->memPool = memPool;
 
@@ -109,46 +112,7 @@ namespace Xli
         ~HashMap()
         {
             if (buckets != internalBuckets)
-            {
                 TTraits::DeleteBuckets(buckets, memPool);
-            }
-        }
-
-        HashMap& operator = (const HashMap& map)
-        {
-            Clear();
-
-            for (int it = map.Begin(); it != map.End(); it = map.Next(it))
-                Add(map.GetKey(it), map.GetValue(it));
-
-            return *this;
-        }
-
-        Bucket* GetBucketBuffer() 
-        { 
-            return buckets; 
-        }
-        
-        void SetBucketBuffer(Bucket* buf) 
-        { 
-            TTraits::DeleteBuckets(buckets, memPool); 
-            buckets = buf;
-        }
-
-        /**
-            Returns the number of hash buckets currently in use in the map.
-        */
-        int GetBucketCount() const
-        {
-            return bucketCount;
-        }
-
-        /**
-            Returns a hash bucket with a given index.
-        */
-        const Bucket& GetBucket(int index) const
-        {
-            return buckets[index];
         }
 
         /**
@@ -300,7 +264,9 @@ namespace Xli
 
         TValue& operator [] (const TKey& key)
         {
-            if (count > (bucketCount/8)*5) expand();
+            if (count > (bucketCount / 8) * 5) 
+                expand();
+            
             int x = TTraits::Hash(key) & (bucketCount - 1);
             int firstX = x;
 
@@ -335,7 +301,9 @@ namespace Xli
 
         void Add(const TKey& key, const TValue& value)
         {
-            if (count > (bucketCount/8)*5) expand();
+            if (count > (bucketCount / 8) * 5) 
+                expand();
+
             int x = TTraits::Hash(key) & (bucketCount - 1);
             int firstX = x;
 
@@ -367,6 +335,12 @@ namespace Xli
                     continue;
                 }
             }
+        }
+
+        void AddRange(const HashMap& map)
+        {
+            for (int it = map.Begin(); it != map.End(); it = map.Next(it))
+                Add(map.GetKey(it), map.GetValue(it));
         }
 
         bool Remove(const TKey& key)

@@ -7,7 +7,7 @@ namespace Xli
     {
         CONDITION_VARIABLE* cv = new CONDITION_VARIABLE;
         InitializeConditionVariable(cv);
-        return cv;
+        return (CondHandle)cv;
     }
 
     void DeleteCond(CondHandle handle)

@@ -1,3 +1,4 @@
+#include <Xli/Atomic.h>
 #include <Xli/Object.h>
 #include <Xli/Exception.h>
 #include <Xli/ToString.h>
@@ -22,14 +23,12 @@ namespace Xli
 
     void Object::AddRef() 
     {
-        refCount++;
+        AtomicIncrement(&refCount);
     }
 
     void Object::Release()
     {
-        refCount--;
-
-        if (!refCount) 
+        if (AtomicDecrement(&refCount) == 0)
             Delete();
     }
 

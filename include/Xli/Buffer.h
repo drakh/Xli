@@ -14,7 +14,7 @@ namespace Xli
     class DataAccessor: public Object
     {
     public:
-        virtual const UInt8* GetData() const = 0;
+        virtual const UInt8* GetDataPtr() const = 0;
         virtual int GetSizeInBytes() const = 0;
     };
 
@@ -51,10 +51,10 @@ namespace Xli
             This pointer will never change or become invalid during the lifetime of the buffer.
             @returns A pointer to the data in the buffer.
         */
-        UInt8* Data();
-        const UInt8* Data() const;
+        UInt8* DataPtr();
+        const UInt8* DataPtr() const;
 
-        virtual const UInt8* GetData() const;
+        virtual const UInt8* GetDataPtr() const;
         virtual int GetSizeInBytes() const;
     };
 
@@ -73,10 +73,10 @@ namespace Xli
 
         int Size() const;
 
-        UInt8* Data();
-        const UInt8* Data() const;
+        UInt8* DataPtr();
+        const UInt8* DataPtr() const;
 
-        virtual const UInt8* GetData() const;
+        virtual const UInt8* GetDataPtr() const;
         virtual int GetSizeInBytes() const;
     };
 
@@ -93,7 +93,7 @@ namespace Xli
         BufferReference(void* data, int size, Object* owner);
         virtual ~BufferReference();
 
-        virtual const UInt8* GetData() const;
+        virtual const UInt8* GetDataPtr() const;
         virtual int GetSizeInBytes() const;
     };
 }

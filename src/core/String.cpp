@@ -124,12 +124,12 @@ namespace Xli
         return buf;
     }
 
-    char* String::Data()
+    char* String::DataPtr()
     {
         return data;
     }
 
-    const char* String::Data() const
+    const char* String::DataPtr() const
     {
         return data;
     }
@@ -141,7 +141,7 @@ namespace Xli
 
     UInt32 Hash(const String& str)
     {
-        return Xli::Hash((const UInt8*)str.Data(), str.Length());
+        return Xli::Hash((const UInt8*)str.DataPtr(), str.Length());
     }
 
     char& String::operator [] (int index)
@@ -315,7 +315,7 @@ namespace Xli
 
         for (int i = 0; i < list.Length(); i++)
         {
-            memcpy(r.data + p, list[i].Data(), list[i].Length());
+            memcpy(r.data + p, list[i].DataPtr(), list[i].Length());
             p += list[i].Length();
             r.data[p++] = c;
         }
@@ -681,7 +681,7 @@ Xli::String operator + (const char* a, const Xli::String& b)
 {
     int len = (int)strlen(a);
     Xli::String r = Xli::String::Create(len + b.Length());
-    memcpy(r.Data(), a, len);
-    memcpy(r.Data() + len, b.Data(), b.Length());
+    memcpy(r.DataPtr(), a, len);
+    memcpy(r.DataPtr() + len, b.DataPtr(), b.Length());
     return r;
 }

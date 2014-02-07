@@ -19,6 +19,7 @@ namespace Xli
         \ingroup XliCorePlatform
     */
 
+    // TODO: Move away from public interface
     enum CTEventType
     {
         CTKeyUpEvent = 0,
@@ -175,7 +176,6 @@ namespace Xli
         virtual bool OnMouseDown(Window* wnd, Vector2i pos, MouseButton button);
         virtual bool OnMouseUp(Window* wnd, Vector2i pos, MouseButton button);
         virtual bool OnMouseMove(Window* wnd, Vector2i pos);
-        virtual bool OnMouseLeave(Window* wnd, Vector2i pos);
         virtual bool OnMouseWheel(Window* wnd, Vector2i delta);
         
         virtual bool OnTouchDown(Window* wnd, Vector2 pos, int id);

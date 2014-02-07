@@ -20,20 +20,21 @@ namespace Xli
             this->object = 0;
         }
 
-        Managed(T* object)
-        {
-            this->object = object;
-        }
-
         Managed(const Managed& managed)
         {
             this->object = managed.object;
             if (object) object->AddRef();
         }
 
+        Managed(T* object)
+        {
+            this->object = object;
+        }
+
         ~Managed()
         {
-            if (object) object->Release();
+            if (object) 
+                object->Release();
         }
 
         bool IsNull() const
@@ -41,30 +42,33 @@ namespace Xli
             return !object;
         }
 
-        bool IsSet() const
-        {
-            return object != 0;
-        }
-
         Managed& operator = (T* ptr)
         {
-            if (object) object->Release();
+            if (object) 
+                object->Release();
+
             object = ptr;
             return *this;
         }
 
         Managed& operator = (const Managed& managed)
         {
-            if (object) object->Release();
+            if (object) 
+                object->Release();
+
             object = managed.object;
-            if (object) object->AddRef();
+
+            if (object) 
+                object->AddRef();
+
             return *this;
         }
 
         T* Get()
         {
 #ifdef XLI_NULL_POINTER_CHECK
-            if (IsNull()) XLI_THROW_NULL_POINTER;
+            if (!object) 
+                XLI_THROW_NULL_POINTER;
 #endif
             return object;
         }
@@ -72,7 +76,8 @@ namespace Xli
         const T* Get() const
         {
 #ifdef XLI_NULL_POINTER_CHECK
-            if (IsNull()) XLI_THROW_NULL_POINTER;
+            if (!object) 
+                XLI_THROW_NULL_POINTER;
 #endif
             return object;
         }
@@ -111,7 +116,8 @@ namespace Xli
     /**
         \ingroup XliCoreContainers
     */
-    template <class T> Managed<T> ManagePtr(T* object)
+    template <class T> 
+    Managed<T> ManagePtr(T* object)
     {
         return object;
     }

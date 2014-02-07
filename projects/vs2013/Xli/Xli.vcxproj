@@ -189,6 +189,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Xli\Application.h" />
     <ClInclude Include="..\..\..\include\Xli\ArrayStream.h" />
+    <ClInclude Include="..\..\..\include\Xli\Atomic.h" />
     <ClInclude Include="..\..\..\include\Xli\BaseTypes.h" />
     <ClInclude Include="..\..\..\include\Xli\Buffer.h" />
     <ClInclude Include="..\..\..\include\Xli\BufferStream.h" />
@@ -207,7 +208,7 @@
     <ClInclude Include="..\..\..\include\Xli\MutexQueue.h" />
     <ClInclude Include="..\..\..\include\Xli\NativeFileSystem.h" />
     <ClInclude Include="..\..\..\include\Xli\Object.h" />
-    <ClInclude Include="..\..\..\include\Xli\OrderedMap.h" />
+    <ClInclude Include="..\..\..\include\Xli\Map.h" />
     <ClInclude Include="..\..\..\include\Xli\Path.h" />
     <ClInclude Include="..\..\..\include\Xli\PlatformSpecific\Win32Header.h" />
     <ClInclude Include="..\..\..\include\Xli\PlatformSpecific\Win32Helpers.h" />

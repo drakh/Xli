@@ -44,8 +44,8 @@ namespace Xli
 
         char* DataCopy();
 
-        char* Data();
-        const char* Data() const;
+        char* DataPtr();
+        const char* DataPtr() const;
 
         int Length() const;
 
