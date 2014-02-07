@@ -39,6 +39,14 @@ extern "C"
         event->Payload = NULL;
         GlobalWindow->EnqueueCrossThreadEvent(event);
     }
+
+    void JNICALL XliJ_JavaError (JNIEnv *env , jobject obj, jint errorCode, jstring errorMessage) 
+    {
+        //{TODO} Hook all this up
+        char const* cerrorMessage = env->GetStringUTFChars(errorMessage, NULL);
+        LOGE("UNHANDLED JAVA EXCEPTION (%i): %s", (int)errorCode, cerrorMessage);
+        env->ReleaseStringUTFChars(errorMessage, cerrorMessage);
+    }
 }
 
 namespace Xli

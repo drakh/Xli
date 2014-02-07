@@ -5,31 +5,55 @@
 
 using namespace Xli;
 
-class Shouty : public HttpResponseHandler
+class Shouty : public HttpStateChangedHandler
 {
-    virtual void OnResponse(HttpResponse* response)
+    virtual void OnResponse(HttpRequest* request, HttpRequestState state)
     {
-        int bufSize = 60;
-        char d[bufSize];
-        int bytesRead = 0;
-        
         Err->WriteLine("-------------------------------------");
-        Err->WriteLine("Im back!");
-        Stream* Body = response->GetContentStream();
-        if (Body!=0)
+        Err->WriteLine("in statechangedcallback");
+        if (state == HttpHeadersReceived)
         {
-            Err->WriteLine("We have the body I'm just not showing it right now'");
-            // while (!Body->AtEnd())
-            // {
-            //     bytesRead = Body->Read(&d, 1, bufSize);
-            //     if (bytesRead>0) Err->WriteFormat("> %*.*s\n", bytesRead, bytesRead, d);
-            // }
-            Body->Close();
-        } 
-        Err->WriteFormat("statusCode: %i\n", response->Status); 
-        Err->WriteFormat("ReasonPhrase: %s\n", response->ReasonPhrase.Data());
+            Err->WriteFormat("statusCode: %i\n", state);
+            Err->WriteFormat("ReasonPhrase: %s\n", request->ReasonPhrase.Data());
+            request->PullContentString();
+
+        } else if (state == HttpDone) {
+            Err->WriteFormat("state changed: %i\n", state);            
+            Err->WriteLine("Got the body");
+            //Err->WriteLine(request->GetContentString());
+        } else {
+            Err->WriteFormat("state changed: %i\n", state);
+        }
         Err->WriteLine("-------------------------------------");
-        delete response;
+    }
+};
+class ProgressShout : public HttpProgressHandler
+{
+    virtual void OnResponse(HttpRequest* request, long position, long totalLength, bool lengthKnown)
+    {
+        Err->WriteLine("-------------------------------------");
+        Err->WriteFormat("progress: %lu, %lu\n", position, totalLength);
+        if (!lengthKnown) Err->WriteLine("Total length not known");
+        Err->WriteLine("-------------------------------------");
+    }
+};
+class TimeoutShout : public HttpTimeoutHandler
+{
+    virtual void OnResponse(HttpRequest* request)
+    {
+        Err->WriteLine("-------------------------------------");
+        Err->WriteLine("timed out");
+        Err->WriteLine("-------------------------------------");
+    }
+};
+class ErrorShout : public HttpErrorHandler
+{
+    virtual void OnResponse(HttpRequest* request, int errorCode, String errorMessage)
+    {
+        Err->WriteLine("-------------------------------------");
+        Err->WriteLine("Had and error:");
+        Err->WriteFormat("> %i: %s\n",errorCode, errorMessage.Data());
+        Err->WriteLine("-------------------------------------");
     }
 };
 
@@ -40,7 +64,10 @@ class GLApp: public Application
 
     // Managed<SimpleSound> sound;
     Managed<HttpClient> httpClient;
-    Managed<HttpResponseHandler> httpCallback;
+    Managed<Shouty> stateChangedCallback;
+    Managed<TimeoutShout> timeoutCallback;
+    Managed<ProgressShout> progressCallback;
+    Managed<ErrorShout> errorCallback;
 
     double touchDownTime;
     double tapTime;
@@ -95,6 +122,10 @@ public:
         // 
         someContent = "FOO=Oh hai!";
         httpClient = HttpClient::Create();
+        stateChangedCallback = new Shouty();
+        timeoutCallback = new TimeoutShout();
+        progressCallback = new ProgressShout();
+        errorCallback = new ErrorShout();
 	}
 
 	virtual void OnLoad(Window* wnd)
@@ -237,21 +268,23 @@ public:
                 Err->WriteLine("Bang");
                 //wnd->BeginTextInput((Xli::TextInputHint)0);
                 // sound->Play(false);
-                Shouty* callback = new Shouty();
-                HttpRequest* req = HttpRequest::Create("http://youtube.com", HttpGetMethod, callback);
+
+                HttpRequest* req = httpClient->NewRequest();
+                req->Url = "http://httpbin.org/post ";
+                req->Method = HttpPostMethod;
+                req->StateChangedCallback = stateChangedCallback;
+                req->TimeoutCallback = timeoutCallback;
+                req->ProgressCallback = progressCallback;
+                req->ErrorCallback = errorCallback;
                 // req->Headers.Add("Accept", "*/*");
-                // char* text = someContent.Data();
-                // req->Body = text;
-                // req->BodySizeBytes = someContent.Length();
-                req->Send();
+                req->Send("Well hello there");
             }
             else if (wnd->IsTextInputActive())
             {
                 wnd->EndTextInput();
             }
             tapTime = GetTime();
-        }
-        
+        }        
 		return false;
 	}
 

@@ -1,5 +1,6 @@
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -11,6 +12,7 @@ import java.net.CookieHandler;
 import java.net.CookiePolicy;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -48,6 +50,19 @@ import android.widget.TextView;
 
 @SuppressWarnings("unused")
 public class XliJ extends android.app.NativeActivity {
+	
+	// Callbacks to C++ code
+    public static native void XliJ_OnKeyUp(int keyCode);
+    public static native void XliJ_OnKeyDown(int keyCode);
+    public static native void XliJ_OnTextInput(String keyCode);
+    public static native void XliJ_HttpCallback(Object body, String[] headers, int responseCode, String responseMessage, long requestPointer);
+    public static native void XliJ_HttpContentStringCallback(String content, long requestPointer);
+    public static native void XliJ_HttpContentByteArrayCallback(byte[] result, long requestPointer);
+    public static native void XliJ_HttpTimeoutCallback(long requestPointer);
+    public static native void XliJ_HttpProgressCallback(long requestPointer, long position, long totalLength, boolean lengthKnown);
+    public static native void XliJ_HttpErrorCallback(long requestPointer, int errorCode, String errorMessage);
+	
+    // The shim's state. Try to not any more than the two UI related fields below
     static Hidden hidden_text;
     protected static ViewGroup hidden_layout;
     
@@ -96,11 +111,6 @@ public class XliJ extends android.app.NativeActivity {
             }
         }});
     }
-    
-    public static native void XliJ_OnKeyUp(int keyCode);
-    public static native void XliJ_OnKeyDown(int keyCode);
-    public static native void XliJ_OnTextInput(String keyCode);
-    public static native void XliJ_HttpCallback(Object body, String[] headers, int responseCode, String responseMessage, long functionPointer);
     
     public static class Hidden extends View {
         InputConnection fic;
@@ -326,16 +336,18 @@ public class XliJ extends android.app.NativeActivity {
     //{TODO} Fix all these crap messages
     @SuppressWarnings({ "rawtypes", "unchecked" })
 	public static AsyncTask SendHttpAsync(NativeActivity activity, String url, String method, 
-    								 HashMap<String,String> headers, ByteBuffer body, 
-    								 int timeout, long callbackPointer) {
+    								 	HashMap<String,String> headers, ByteBuffer body, 
+    								 	int timeout, long requestPointer) {
     	try
     	{
-    		Log.e("XliApp", url+", "+method+", "+headers+", "+body+", "+callbackPointer);
+    		Log.e("XliApp", url+", "+method+", "+headers+", "+body+", "+requestPointer);
     		AsyncTask task = new ASyncHttpRequest();
-    		((AsyncTask<Object, Void, HttpWrappedResponse>)(task)).execute(url, method, headers, (Integer)timeout, body, (Long)callbackPointer);
+    		byte[] data = null;
+    		if (body!=null) data = body.array();
+    		((AsyncTask<Object, Void, HttpWrappedResponse>)(task)).execute(url, method, headers, (Integer)timeout, data, (Long)requestPointer);
     		return task;
     	} catch (Exception e) {
-    		Log.e("XliApp","Unable to build Async Http Request: "+e.getLocalizedMessage());
+    		XliJ_HttpErrorCallback(requestPointer, -1, "Unable to build Async Http Request: "+e.getLocalizedMessage()); 
     		return null;
     	}
     }
@@ -344,37 +356,38 @@ public class XliJ extends android.app.NativeActivity {
     @SuppressWarnings({ "rawtypes", "unchecked" })
 	public static AsyncTask SendHttpStringAsync(NativeActivity activity, String url, String method, 
     								 			HashMap<String,String> headers, String body, 
-    								 			int timeout, long callbackPointer) {
+    								 			int timeout, long requestPointer) {
     	try
     	{
-    		Log.e("XliApp", url+", "+method+", "+headers+", "+body+", "+callbackPointer);
+    		Log.e("XliApp", url+", "+method+", "+headers+", "+body+", "+requestPointer);
     		AsyncTask task = new ASyncHttpRequest();
     		byte[] data = null;
     		if (body!=null) data = body.getBytes();
-    		((AsyncTask<Object, Void, HttpWrappedResponse>)(task)).execute(url, method, headers, (Integer)timeout, data, (Long)callbackPointer);
+    		((AsyncTask<Object, Void, HttpWrappedResponse>)(task)).execute(url, method, headers, (Integer)timeout, data, (Long)requestPointer);
     		return task;
     	} catch (Exception e) {
-    		Log.e("XliApp","Unable to build Async Http Request: "+e.getLocalizedMessage());
+    		XliJ_HttpErrorCallback(requestPointer, -1, "Unable to build Async Http Request: "+e.getLocalizedMessage()); 
     		return null;
     	}
     }
     
     
-    public static class ASyncHttpRequest extends AsyncTask<Object, Void, HttpWrappedResponse> {
-        @Override
+    public static class ASyncHttpRequest extends AsyncTask<Object, Long, HttpWrappedResponse> {
+    	long requestPointer;
+        @Override        
         protected HttpWrappedResponse doInBackground(Object... params) {
             String url = (String)params[0];
             String method = (String)params[1];
             @SuppressWarnings("unchecked")
 			HashMap<String,String> headers = (HashMap<String,String>)params[2];
             int timeout = (Integer)params[3];
-            ByteBuffer body = (ByteBuffer)params[4];
-            long callbackPointer = (Long)params[5];
+            byte[] body = (byte[])params[4];
+            requestPointer = (Long)params[5];
             String[] responseHeaders;
             boolean hasUploadContent = (body != null);
-            HttpURLConnection connection = NewHttpConnection(url,method,hasUploadContent,timeout);
+            HttpURLConnection connection = NewHttpConnection(url,method,hasUploadContent,timeout,requestPointer);
             if (connection==null) {
-            	return new HttpWrappedResponse(null, new String[0], -1, "JavaError (NewHttpConnection): Could not make connection", callbackPointer);
+            	return new HttpWrappedResponse(null, new String[0], -1, "JavaError (NewHttpConnection): Could not make connection", requestPointer);
             }
         	try {        		
         		//set headers
@@ -387,24 +400,16 @@ public class XliJ extends android.app.NativeActivity {
         		if (hasUploadContent)
         		{
         			Log.d("XliApp","uploading content");
-        			byte[] data = null;
-        			boolean converted = false;
-        			try {        				
-        				data = new byte[body.capacity()];
-        				body.get(data);
-        				converted = true;
-        			} catch (Exception e) {
-        				Log.e("XliApp","Bugger me: "+e.getLocalizedMessage());
-        			}
-        			if (converted && (data!=null))
+        			if (body!=null)
         			{
         				try {        				
-        					connection.setFixedLengthStreamingMode(data.length);
+        					connection.setFixedLengthStreamingMode(body.length);
         					BufferedOutputStream out = new BufferedOutputStream(connection.getOutputStream());        				
-        					out.write(data);
+        					out.write(body);
+        					publishProgress((long)0);
         					out.flush();
         				} catch(Exception e) {
-        					Log.e("XliApp","Couldnt make output: "+e.getLocalizedMessage());
+        					XliJ_HttpErrorCallback(requestPointer, -1, "Unable to upload data: "+e.getLocalizedMessage()); 
         				}
         			}
         		}
@@ -412,16 +417,24 @@ public class XliJ extends android.app.NativeActivity {
         		//get result payload
         		BufferedInputStream stream_b = new BufferedInputStream(connection.getInputStream());
         		responseHeaders = HeadersToStringArray(connection);        		
-        		return new HttpWrappedResponse(stream_b, responseHeaders, connection.getResponseCode(), connection.getResponseMessage(), callbackPointer);
+        		return new HttpWrappedResponse(stream_b, responseHeaders, connection.getResponseCode(), connection.getResponseMessage(), requestPointer);
+			} catch (SocketTimeoutException e) {
+				XliJ_HttpTimeoutCallback(requestPointer);
+				return null;
 			} catch (IOException e) {
-				Log.e("XliApp","IOException: "+e.getLocalizedMessage());
-				return new HttpWrappedResponse(null, new String[0], -1, "JavaError:"+e.getLocalizedMessage(), callbackPointer);	
-			}
+				XliJ_HttpErrorCallback(requestPointer, -1, "IOException: "+e.getLocalizedMessage()); 
+				return null;
+			} 
+        }
+        @Override
+        protected void onProgressUpdate(Long... progress) {
+            XliJ_HttpProgressCallback(requestPointer, progress[0], 0, false);
         }
         @Override
         protected void onPostExecute(HttpWrappedResponse result) 
         {
-    		XliJ_HttpCallback(result.body, result.headers, result.responseCode, result.responseMessage, result.functionPointer);
+        	if (result!=null)
+        		XliJ_HttpCallback(result.body, result.headers, result.responseCode, result.responseMessage, result.functionPointer);
         }
     }
     
@@ -432,13 +445,13 @@ public class XliJ extends android.app.NativeActivity {
     }
     
     //[TODO] Could optimize by changing chunk mode if length known
-    public static HttpURLConnection NewHttpConnection(String url, String method, boolean hasPayload, int timeout) 
+    public static HttpURLConnection NewHttpConnection(String url, String method, boolean hasPayload, int timeout, long requestPointer) 
     {
         URL j_url = null;
         try {
             j_url = new URL(url);
         } catch (MalformedURLException e) {
-            Log.e("XliApp","MalformedUrl: "+e.getLocalizedMessage());
+        	XliJ_HttpErrorCallback(requestPointer, -1, "Malformed URL: "+e.getLocalizedMessage()); 
             return null;
         }
         HttpURLConnection urlConnection = null;
@@ -449,19 +462,87 @@ public class XliJ extends android.app.NativeActivity {
             urlConnection.setDoOutput(hasPayload);            
             urlConnection.setRequestMethod(method);
         } catch (IOException e) {
-            Log.e("XliApp","IOException (NewHttpConnection): "+e.getLocalizedMessage());
+        	XliJ_HttpErrorCallback(requestPointer, -1, "IOException: "+e.getLocalizedMessage()); 
             return null;
         }    
         return urlConnection;
     }
     
     public static String InputStreamToString(InputStream stream) throws IOException, UnsupportedEncodingException 
-    {
-        @SuppressWarnings("resource")
+    {        
+		@SuppressWarnings("resource")
 		java.util.Scanner s = new java.util.Scanner(stream).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
-
+    
+    @SuppressWarnings("rawtypes")
+	public static AsyncTask AsyncInputStreamToString(InputStream stream, long requestPointer) throws IOException, UnsupportedEncodingException 
+    {
+        AsyncTask<Object, Void, String> a = new ASyncInputStreamToStringTask();
+        a.execute(stream, requestPointer);
+        return a;
+    }
+    public static class ASyncInputStreamToStringTask extends AsyncTask<Object, Void, String> {
+    	public long requestPointer;  
+        @Override
+        protected String doInBackground(Object... params) {
+        	requestPointer = (long)((Long)params[1]);
+            try {
+				return InputStreamToString((InputStream)params[0]);
+			} catch (UnsupportedEncodingException e) {
+				XliJ_HttpErrorCallback(requestPointer, -1, "UnsupportedEncodingException: "+e.getLocalizedMessage()); 
+				return null;
+			} catch (IOException e) {
+				XliJ_HttpErrorCallback(requestPointer, -1, "IOException: "+e.getLocalizedMessage()); 
+				return null;
+			}
+        }
+        @Override
+        protected void onPostExecute(String result) 
+        {    		
+        	if (result!=null)
+        		XliJ_HttpContentStringCallback(result, requestPointer);
+        }
+    }
+    
+    @SuppressWarnings("rawtypes")
+	public static AsyncTask AsyncInputStreamToByteArray(InputStream stream, long requestPointer)
+    {
+        AsyncTask<Object, Void, byte[]> a = new ASyncInputStreamToBytesTask();
+        a.execute(stream, requestPointer);
+        return a;
+    }
+    public static class ASyncInputStreamToBytesTask extends AsyncTask<Object, Void, byte[]> {
+    	public long requestPointer;  
+        @Override
+        protected byte[] doInBackground(Object... params) {
+        	requestPointer = (long)((Long)params[1]);
+            try {
+				return ReadAllBytesFromInputStream((InputStream)params[0]);
+			} catch (IOException e) {				
+				XliJ_HttpErrorCallback(requestPointer, -1, "IOException: "+e.getLocalizedMessage()); 
+				return null;
+			}
+        }
+        @Override
+        protected void onPostExecute(byte[] result) 
+        {    		
+        	XliJ_HttpContentByteArrayCallback(result, requestPointer);
+        }
+    }    
+    
+    public static byte[] ReadAllBytesFromInputStream(InputStream stream) throws IOException
+    {    	
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		int nRead;
+		byte[] data = new byte[16384];
+		while ((nRead = stream.read(data, 0, data.length)) != -1) {
+		  buffer.write(data, 0, nRead);
+		}
+		buffer.flush();
+		return buffer.toByteArray();
+    }
+    
     
     public static byte[] ReadBytesFromInputStream(BufferedInputStream stream, int bytesToRead)
     {    	
@@ -470,45 +551,14 @@ public class XliJ extends android.app.NativeActivity {
 			int bytesRead = stream.read(buffer);
 			if (bytesRead>-1)
 			{
-				return Arrays.copyOf(buffer, bytesRead);
+				return Arrays.copyOf(buffer, bytesRead); //{TODO} only copy in c++?
 			} else { 
 				return null;
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			Log.e("XliApp", "read from stream crashed: "+e.getLocalizedMessage());
+			Log.e("XliApp", "read from stream crashed: "+e.getLocalizedMessage());			
 			return null;
 		}
-    }
-    		
-    public static InputStream HttpGetInputStream(HttpURLConnection connection)
-    {
-        try {
-            return new BufferedInputStream(connection.getInputStream());
-        } catch (IOException e) {
-            Log.e("XliApp","HttpGetInputStream IOException: "+e.getLocalizedMessage());
-            return null;
-        }
-    }
-    
-    public static OutputStream HttpGetOutputStream(HttpURLConnection connection)
-    {
-        try {
-            return new BufferedOutputStream(connection.getOutputStream());
-        } catch (IOException e) {
-            Log.e("XliApp","HttpGetOutputStream IOException: "+e.getLocalizedMessage());
-            return null;
-        }
-    }
-    
-    public static void HttpShowHeaders(HttpURLConnection connection)
-    {
-        Map<String, List<String>> a = connection.getHeaderFields();
-        for (String key : a.keySet()) {
-            for (String header : a.get(key)) {
-                Log.e("XliApp", key + " : " + header);
-            }
-        }
     }
     
     public static void InitDefaultCookieManager()

@@ -422,11 +422,12 @@ namespace Xli
             static jobject XliToJavaHeaders(const HashMap<String,String>* src);
             static jobject SendHttpAsync(const HttpRequest* req, void* content, long byteLength);
             static jobject SendHttpAsync(const HttpRequest* req, String content);
+            static jobject SendHttpAsync(const HttpRequest* req);
             static void AbortAsyncConnection(jobject connection);
             static jobject HttpNewConnection(const String& uri, const String& method, bool hasPayload);
-            static AStream* HttpGetInputStream(jobject httpConnection);
-            static AStream* HttpGetOutputStream(jobject httpConnection);
             static String InputStreamToString(jobject bufferedInputStream);
+            static jobject AsyncInputStreamToString(jobject bufferedInputStream, HttpRequest* request);
+            static jobject AsyncInputStreamToByteArray(jobject bufferedInputStream, HttpRequest* request);
             static int ReadBytesFromInputStream(jobject bufferedInputStream, int bytesToRead, void* dst);
             static AAssetManager* GetAssetManager();
             static bool RegisterNativeFunctions(JNINativeMethod native_funcs[], int funcCount);

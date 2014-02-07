@@ -108,7 +108,7 @@ namespace Xli
             
                 jobject jresult = jni->CallObjectMethod(shim_class, mid, activity, 
                                                         jurl, jmethod, headers, arrayHandle,
-                                                        jtimeout, (jlong)req->Callback);
+                                                        jtimeout, (jlong)req);
                 jni->DeleteLocalRef(jurl);
                 jni->DeleteLocalRef(jmethod);
                 jni->DeleteLocalRef(headers);
@@ -123,7 +123,7 @@ namespace Xli
         {
             AJniHelper jni;
             jclass shim_class = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shim_class, "SendHttpAsync", "(Landroid/app/NativeActivity;Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/nio/ByteBuffer;IJ)Landroid/os/AsyncTask;");
+            jmethodID mid = jni->GetStaticMethodID(shim_class, "SendHttpStringAsync", "(Landroid/app/NativeActivity;Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/lang/String;IJ)Landroid/os/AsyncTask;");
             if (mid)
             {
                 jobject activity = jni.GetInstance();
@@ -134,7 +134,6 @@ namespace Xli
                 jobject headers = XliToJavaHeaders(&(req->Headers));
                 jobject body = 0;
 
-                jobject arrayHandle = 0;                
                 if ((content.Length()>0))
                 {
                     LOGE("Adding content in c++");
@@ -142,12 +141,40 @@ namespace Xli
                 }
             
                 jobject jresult = jni->CallObjectMethod(shim_class, mid, activity, 
-                                                        jurl, jmethod, headers, arrayHandle,
-                                                        jtimeout, (jlong)req->Callback);
+                                                        jurl, jmethod, headers, body,
+                                                        jtimeout, (jlong)req);
                 jni->DeleteLocalRef(jurl);
                 jni->DeleteLocalRef(jmethod);
                 jni->DeleteLocalRef(headers);
                 if (body!=0) jni->DeleteLocalRef(body);
+                return reinterpret_cast<jobject>(jni->NewGlobalRef(jresult));
+            } else {
+                LOGE("Couldn't find SendHttpAsync");
+                return 0;
+            }
+        }
+
+        jobject AShim::SendHttpAsync(const HttpRequest* req)
+        {
+            AJniHelper jni;
+            jclass shim_class = jni.GetShim();
+            jmethodID mid = jni->GetStaticMethodID(shim_class, "SendHttpAsync", "(Landroid/app/NativeActivity;Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/nio/ByteBuffer;IJ)Landroid/os/AsyncTask;");
+            if (mid)
+            {
+                jobject activity = jni.GetInstance();
+
+                jstring jurl = jni->NewStringUTF(req->Url.Data());
+                jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->Method).Data());
+                jint jtimeout = (jint)req->Timeout;
+                jobject headers = XliToJavaHeaders(&(req->Headers));
+                jobject arrayHandle = 0;                
+            
+                jobject jresult = jni->CallObjectMethod(shim_class, mid, activity, 
+                                                        jurl, jmethod, headers, arrayHandle,
+                                                        jtimeout, (jlong)req);
+                jni->DeleteLocalRef(jurl);
+                jni->DeleteLocalRef(jmethod);
+                jni->DeleteLocalRef(headers);
                 return reinterpret_cast<jobject>(jni->NewGlobalRef(jresult));
             } else {
                 LOGE("Couldn't find SendHttpAsync");
@@ -204,6 +231,30 @@ namespace Xli
             return result;
         }
 
+        jobject AShim::AsyncInputStreamToString(jobject bufferedInputStream, HttpRequest* request)
+        {
+            AJniHelper jni;
+            jclass shim_class = jni.GetShim();
+            jmethodID mid = jni->GetStaticMethodID(shim_class, "AsyncInputStreamToString", "(Ljava/io/InputStream;J)Landroid/os/AsyncTask;");
+            if (!mid) {
+                LOGE("Unable to get AsyncInputStreamToString mid");
+                return 0;
+            }
+            return jni->CallObjectMethod(shim_class, mid, bufferedInputStream, (long)request);
+        }
+
+        jobject AShim::AsyncInputStreamToByteArray(jobject bufferedInputStream, HttpRequest* request)
+        {
+            AJniHelper jni;
+            jclass shim_class = jni.GetShim();
+            jmethodID mid = jni->GetStaticMethodID(shim_class, "AsyncInputStreamToByteArray", "(Ljava/io/InputStream;J)Landroid/os/AsyncTask;");
+            if (!mid) {
+                LOGE("Unable to get AsyncInputStreamToStringByteArray mid");
+                return 0;
+            }
+            return jni->CallObjectMethod(shim_class, mid, bufferedInputStream, (long)request);
+        }
+
         int AShim::ReadBytesFromInputStream(jobject bufferedInputStream, int bytesToRead, void* dst)
         {
             AJniHelper jni;
@@ -223,40 +274,6 @@ namespace Xli
                 return result;
             } else {
                 return -1;
-            }
-        }
-
-        AStream* AShim::HttpGetOutputStream(jobject httpConnection)
-        {
-            AJniHelper jni;
-            jclass shim_class = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shim_class, "HttpGetOutputStream", "(Ljava/net/HttpURLConnection;)Ljava/io/OutputStream;");
-            if (!mid) {
-                LOGE("Unable to get HttpGetOutputStream mid");
-                return NULL;
-            }
-            jobject jStream = jni->CallObjectMethod(shim_class, mid, httpConnection);
-            if (jStream) {
-                return new AStream(AStream::WRITE, reinterpret_cast<jobject>(jni->NewGlobalRef(jStream)));
-            } else {
-                return new AStream();
-            }
-        }
-
-        AStream* AShim::HttpGetInputStream(jobject httpConnection)
-        {
-            AJniHelper jni;
-            jclass shim_class = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shim_class, "HttpGetInputStream", "(Ljava/net/HttpURLConnection;)Ljava/io/InputStream;");
-            if (!mid) {
-                LOGE("Unable to get HttpGetInputStream mid");
-                return new AStream();
-            }
-            jobject jStream = jni->CallObjectMethod(shim_class, mid, httpConnection);
-            if (jStream) {
-                return new AStream(AStream::READ, reinterpret_cast<jobject>(jni->NewGlobalRef(jStream)));
-            } else {
-                return new AStream();
             }
         }
 
