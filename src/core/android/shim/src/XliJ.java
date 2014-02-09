@@ -293,7 +293,7 @@ public class XliJ extends android.app.NativeActivity {
 	        	if (key != null) {
 	        		headers.add(key);
 	        	} else {
-	        		headers.add("-null-"); //{TODO} I need to work out what to do here.
+	        		headers.add("NULL");
 	        	}
 	        	StringBuilder sb = new StringBuilder();
 	            String sep = "";
@@ -337,7 +337,6 @@ public class XliJ extends android.app.NativeActivity {
         return networkInfo.isConnected();
     }
 
-    //{TODO} Fix all these crap messages
     @SuppressWarnings({ "rawtypes", "unchecked" })
 	public static AsyncTask SendHttpAsync(NativeActivity activity, String url, String method,
     								 	HashMap<String,String> headers, ByteBuffer body,
@@ -355,7 +354,6 @@ public class XliJ extends android.app.NativeActivity {
     	}
     }
 
-    //{TODO} Fix all these crap messages
     @SuppressWarnings({ "rawtypes", "unchecked" })
 	public static AsyncTask SendHttpStringAsync(NativeActivity activity, String url, String method,
     								 			HashMap<String,String> headers, String body,
