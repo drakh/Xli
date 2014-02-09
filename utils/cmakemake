@@ -1,77 +1,50 @@
-#!/bin/bash
+#!/bin/sh
+set -e
 
-# TODO: Get rid of getopts, does not work very well
-while getopts ":h?j:D:U:-:" opt; do
+if [ $OSTYPE = linux* ]; then
+    alias echo="echo -e"
+fi
 
-    if [ "$opt" == "-" ]; then 
-        # FIXME: Hardcoded indices
-        if [ "${OPTARG:6:1}" == "=" ]; then  
-            opt=${OPTARG:0:6}
-            OPTARG=${OPTARG:7}
-        elif [ "${OPTARG:5:1}" == "=" ]; then  
-            opt=${OPTARG:0:5}
-            OPTARG=${OPTARG:6}
-        elif [ "${OPTARG:4:1}" == "=" ]; then  
-            opt=${OPTARG:0:4}
-            OPTARG=${OPTARG:5}
-        else
-            opt=$OPTARG
-            OPTARG=""
+case $1 in 
+clean)
+    DO_CLEAN=1
+    shift
+    ;;
+install)
+    DO_INSTALL=1
+    shift
+    ;;
+esac
+
+while [ $# -gt 0 ]; do
+    OPT=$1
+
+    case $OPT in
+    -j*|-D*|-U*)
+        if [ -z ${OPT:2} ]; then
+            shift
+            OPT="$OPT$1"
         fi
-    fi
-
-    case $opt in 
-    h|?|help) 
-        HELP=1
-        ;;
-    clean)
-        CLEAN=1
-        ;;
-    debug)
-        DEBUG=1
-        ;;
-    release)
-        DEBUG=0
-        ;;
-    install)
-        INSTALL=1
-        ;;
-    target)
-        TARGET=$OPTARG
-        ;;
-    prefix)
-        INSTALL_PREFIX=$OPTARG
-        ;;
-    j|jobs)
-        JOB_COUNT=$OPTARG
-        ;;
-    D|define)
-        DEFINES="$DEFINES -D$OPTARG"
-        ;;
-    U|undef)
-        DEFINES="$DEFINES -U$OPTARG"
-        ;;
-    no-build)
-        NO_BUILD=1
-        ;;
-    *) 
-        echo -e "ERROR: Invalid option --$opt.\n\nType 'cmakemake --help' for usage." >&2
-        exit 1 
-        ;;
+        ;;        
     esac
-done
 
-shift $((OPTIND-1))
+    case $OPT in 
+    -h|-\?|--help)
+        cat <<E0
+Usage: cmakemake [<build-options>] <project-dir>
+  or   cmakemake install [--debug] <project-dir>
+  or   cmakemake clean <project-dir>
 
-PROJECT="$@"
+Build options:
 
-#echo "'$DEBUG' '$INSTALL' '$TARGET' '$INSTALL_PREFIX' '$JOB_COUNT' '$DEFINES' '$NO_BUILD' '$PROJECT'" && exit 1
-
-if [[ "$HELP" == "1" || -z "$PROJECT" ]]; then
-    cat <<E0
-Usage: cmakemake [--debug|--release] [--install] [--prefix=<path>] [--jobs=<cpu-cores>] <project-dir>
-   or: cmakemake --target=xcode [--no-build|--debug] <project-dir>
-   or: cmakemake --clean <project-dir>
+  --debug             Debug build
+  --release           Release build (default)
+  --target="xcode"    Generate and build Xcode project
+  --no-build          Generate project, but don't build
+  --prefix=<path>     Set install prefix
+  -j<cpu-count>       Set compiler job count
+  -D<variable=value>  Define a cmake variable
+  -U<variable>        Undefine a cmake variable
 
 Build script for CMake projects.
 
@@ -84,13 +57,61 @@ This command wraps 'cmake && make' with some additional features:
 
 Additional arguments to cmake can be passed using environment variable CMAKE_ARGS.
 E0
-    exit 0
+        exit 1
+        ;;
+    --debug)
+        DEBUG=1
+        ;;
+    --release)
+        DEBUG=0
+        ;;
+    --no-build)
+        DO_BUILD=0
+        ;;
+    --target=*)
+        TARGET="${OPT:9}"
+        ;;
+    --prefix=*)
+        CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${OPT:9}"
+        ;;
+    -j*)
+        JOB_COUNT="${OPT:2}"
+        ;;
+    -D*)
+        CMAKE_ARGS="$CMAKE_ARGS -D${OPT:2}"
+        ;;
+    -U*)
+        CMAKE_ARGS="$CMAKE_ARGS -U${OPT:2}"
+        ;;
+    --)
+        shift
+        break
+        ;;
+    *)
+        if [ $# -eq 1 ]; then
+            break
+        else
+            echo "ERROR: Unable to parse arguments '$@'\n\nType \`cmakemake --help\` for usage." >&2
+            exit 1
+        fi
+        ;;
+    esac
+
+    shift
+done
+
+PROJECT_DIR="$@"
+
+#echo "'$DO_INSTALL' '$DO_CLEAN' '$DO_BUILD' '$DEBUG' '$TARGET' '$JOB_COUNT' '$CMAKE_ARGS' '$PROJECT_DIR'" && exit 1
+
+if [ -z "$PROJECT_DIR" ]; then
+    echo "ERROR: No project directory specified.\n\nType \`cmakemake --help\` for usage." >&2
+    exit 1
 fi
 
-set -e
-cd "$PROJECT"
+cd "$PROJECT_DIR"
 
-if [ "$CLEAN" == "1" ]; then
+if [ "$DO_CLEAN" == "1" ]; then
     for dir in "build/cmake-release" "build/cmake-debug"; do
         if [ -f "$dir/Makefile" ]; then
             cd "$dir"
@@ -103,12 +124,26 @@ if [ "$CLEAN" == "1" ]; then
     exit 0
 fi
 
+if [ "$DEBUG" == "1" ]; then
+    BUILD_DIR="build/cmake-debug"
+    CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_BUILD_TYPE:STRING=Debug"
+else
+    BUILD_DIR="build/cmake-release"
+    CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_BUILD_TYPE:STRING=Release"
+fi
+
+if [ "$DO_INSTALL" == "1" ]; then
+    cd "$BUILD_DIR"
+    make install
+    exit 0
+fi
+
 if [ ! `which cmake` ]; then
     # This is sometimes needed when run from GUI applications on OS X
     PATH=$PATH:/opt/local/bin
 
     if [ ! `which cmake` ]; then
-        echo "ERROR: Unable to find the 'cmake' command. Make sure cmake is installed and added to \$PATH."
+        echo "ERROR: Unable to find the \`cmake\` command. Make sure cmake is installed and added to \$PATH." >&2
         exit 1
     fi
 fi
@@ -121,12 +156,12 @@ if [ -n "$TARGET" ]; then
 
         cmake ../.. -GXcode $CMAKE_ARGS
 
-        if [ "$NO_BUILD" != "1" ]; then
-            if [[ -z "$DEBUG" || "$DEBUG" == "1" ]]; then
+        if [ "$DO_BUILD" != "0" ]; then
+            if [ -z "$DEBUG" ] || [ "$DEBUG" == "1" ]; then
                 xcodebuild -alltargets -configuration Debug
             fi
 
-            if [[ -z "$DEBUG" || "$DEBUG" == "0" ]]; then
+            if [ -z "$DEBUG" ] || [ "$DEBUG" == "0" ]; then
                 xcodebuild -alltargets -configuration Release
             fi
         fi
@@ -134,7 +169,7 @@ if [ -n "$TARGET" ]; then
         exit 0
         ;;
     *)
-        echo -e "ERROR: Invalid target '$TARGET'.\n\nType 'cmakemake --help' for usage." >&2
+        echo "ERROR: Invalid target '$TARGET'.\n\nType \`cmakemake --help\` for usage." >&2
         exit 1
         ;;
     esac
@@ -143,7 +178,7 @@ fi
 if [ -z "$JOB_COUNT" ]; then
     if [ -f /proc/cpuinfo ]; then
         JOB_COUNT=`grep processor /proc/cpuinfo | wc -l`
-    elif [ `uname` = "Darwin" ]; then
+    elif [ $OSTYPE = darwin* ]; then
         JOB_COUNT=`sysctl hw.ncpu | cut -d " " -f 2`
     elif [ -n "$NUMBER_OF_PROCESSORS" ]; then
         JOB_COUNT=$NUMBER_OF_PROCESSORS
@@ -152,24 +187,8 @@ if [ -z "$JOB_COUNT" ]; then
     fi
 fi
 
-if [ "$DEBUG" == "1" ]; then
-    BUILD_DIR="build/cmake-debug"
-    CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_BUILD_TYPE:STRING=Debug"
-else
-    BUILD_DIR="build/cmake-release"
-    CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_BUILD_TYPE:STRING=Release"
-fi
-
-if [ -n "$INSTALL_PREFIX" ]; then
-    CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=$INSTALL_PREFIX"
-fi
-
-if [ -n "$DEFINES" ]; then
-    CMAKE_ARGS="$CMAKE_ARGS $DEFINES"
-fi
-
-mkdir -p $BUILD_DIR
-cd $BUILD_DIR
+mkdir -p "$BUILD_DIR"
+cd "$BUILD_DIR"
 
 #rm -f CMakeCache.txt
 
@@ -180,8 +199,6 @@ else
     cmake ../.. $CMAKE_ARGS
 fi
 
-make -j $JOB_COUNT
-
-if [ "$INSTALL" == "1" ]; then
-    make install
+if [ "$DO_BUILD" != "0" ]; then
+    make -j "$JOB_COUNT"
 fi
