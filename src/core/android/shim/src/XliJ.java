@@ -69,26 +69,6 @@ public class XliJ extends android.app.NativeActivity {
     // The shim's state. Try to not any more than the two UI related fields below
     static Hidden hidden_text;
     protected static ViewGroup hidden_layout;
-
-    
-//	public static class JNI_ExceptionHandler implements Thread.UncaughtExceptionHandler {
-//		@Override  public void uncaughtException(Thread aThread, Throwable aThrowable) {			
-//			Log.e("XliApp","UNCAUGHT JAVA EXCEPTION: STACK TRACE:\n"+getStackTrace(aThrowable));
-//			XliJ_JavaThrowError(-1, aThrowable.getLocalizedMessage());
-//		}
-//		private String getStackTrace(Throwable aThrowable) {
-//			final Writer result = new StringWriter();
-//			final PrintWriter printWriter = new PrintWriter(result);
-//			aThrowable.printStackTrace(printWriter);
-//			return result.toString();
-//		}
-//	}    
-//    public static void Init()
-//    {
-//    	//Attach uncaught exception handler
-//    	Thread current = Thread.currentThread();
-//    	current.setUncaughtExceptionHandler(new JNI_ExceptionHandler());
-//    }
     
     public static int AttachHiddenView(final NativeActivity activity)
     {
@@ -629,3 +609,24 @@ public class XliJ extends android.app.NativeActivity {
         return activity.getAssets();
     }
 }
+
+// Haven't got this working yet but will make development so much easier when errors are forwarded to c++
+
+//public static class JNI_ExceptionHandler implements Thread.UncaughtExceptionHandler {
+//	@Override  public void uncaughtException(Thread aThread, Throwable aThrowable) {			
+//		Log.e("XliApp","UNCAUGHT JAVA EXCEPTION: STACK TRACE:\n"+getStackTrace(aThrowable));
+//		XliJ_JavaThrowError(-1, aThrowable.getLocalizedMessage());
+//	}
+//	private String getStackTrace(Throwable aThrowable) {
+//		final Writer result = new StringWriter();
+//		final PrintWriter printWriter = new PrintWriter(result);
+//		aThrowable.printStackTrace(printWriter);
+//		return result.toString();
+//	}
+//}    
+//public static void Init()
+//{
+//	//Attach uncaught exception handler
+//	Thread current = Thread.currentThread();
+//	current.setUncaughtExceptionHandler(new JNI_ExceptionHandler());
+//}
