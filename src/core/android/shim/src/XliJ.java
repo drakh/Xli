@@ -65,15 +65,15 @@ public class XliJ extends android.app.NativeActivity {
     // The shim's state. Try to not any more than the two UI related fields below
     static Hidden hidden_text;
     protected static ViewGroup hidden_layout;
-    
-    public static int AttachHiddenView(final NativeActivity activity) 
+
+    public static int AttachHiddenView(final NativeActivity activity)
     {
         final int[] result = {1};
         Log.d("XliApp","Initialising shim on Java side");
-        if (hidden_layout == null) 
+        if (hidden_layout == null)
         {
             hidden_layout = new FrameLayout(activity);
-            activity.runOnUiThread(new Runnable() { public void run() {     
+            activity.runOnUiThread(new Runnable() { public void run() {
                 try {
                     activity.setContentView(hidden_layout);
                     hidden_text = new Hidden(activity);
@@ -89,20 +89,20 @@ public class XliJ extends android.app.NativeActivity {
         }
         return result[0];
     }
-    
-    //===========    
-    
-    public static void makeNoise() { Log.e("XliApp", "************ Noise! ************"); }
-    
+
     //===========
-    
+
+    public static void makeNoise() { Log.e("XliApp", "************ Noise! ************"); }
+
+    //===========
+
     public static void raiseKeyboard(final NativeActivity activity) {
-        if (hidden_text == null) 
-        { 
-            Log.e("XliApp","Hidden View not available"); 
+        if (hidden_text == null)
+        {
+            Log.e("XliApp","Hidden View not available");
             return;
         }
-        activity.runOnUiThread(new Runnable() { public void run() {     
+        activity.runOnUiThread(new Runnable() { public void run() {
             try {
                 InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(hidden_text, 0);
@@ -111,7 +111,7 @@ public class XliJ extends android.app.NativeActivity {
             }
         }});
     }
-    
+
     public static class Hidden extends View {
         InputConnection fic;
 
@@ -120,7 +120,7 @@ public class XliJ extends android.app.NativeActivity {
             setFocusableInTouchMode(true);
             setFocusable(true);
         }
-     
+
         @Override
         public boolean onKeyPreIme(int keyCode, KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE)
@@ -135,7 +135,7 @@ public class XliJ extends android.app.NativeActivity {
             }
             return super.onKeyPreIme(keyCode, event);
         }
-        
+
         @Override
         public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
             fic = new HiddenInputConnection(this, false);
@@ -185,7 +185,7 @@ public class XliJ extends android.app.NativeActivity {
                 return false;
             } else if (event.getAction() == KeyEvent.ACTION_MULTIPLE){
                 String text = event.getCharacters();
-                if (text != null) 
+                if (text != null)
                 {
                     XliJ_OnTextInput(text);
                 } else {
@@ -197,26 +197,26 @@ public class XliJ extends android.app.NativeActivity {
             return false;
         }
     }
-    
-    public static void hideKeyboard(final NativeActivity activity) {   
-        activity.runOnUiThread(new Runnable() { public void run() {                 
+
+    public static void hideKeyboard(final NativeActivity activity) {
+        activity.runOnUiThread(new Runnable() { public void run() {
             InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
         }});
     }
-    
+
     //===========
-    
+
     public static int ShowMessageBox(NativeActivity activity, CharSequence caption, CharSequence message, int buttons, int hints)
     {
         final ConditionVariable bufferLock = new ConditionVariable();
         final AlertDialog.Builder b = new AlertDialog.Builder(activity);
         final int result[] = {-1};
-        
+
         b.setTitle(caption);
         b.setMessage(message);
         b.setCancelable(false);
-        
+
         switch (hints) {
         case 0:
             b.setIcon(android.R.drawable.stat_notify_error);
@@ -226,31 +226,31 @@ public class XliJ extends android.app.NativeActivity {
             break;
         case 2:
             b.setIcon(android.R.drawable.stat_sys_warning);
-            break;           
+            break;
         }
-        
-        
+
+
         switch (buttons) {
         case 1:
             b.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) { result[0] = 1; bufferLock.open(); }
-            });          
+            });
         case 0:
             b.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) { result[0] = 0; bufferLock.open(); }
-            });        
+            });
             break;
         case 3:
             b.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) { result[0] = 1; bufferLock.open(); }
-            });            
+            });
         case 2:
             b.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) { result[0] = 2; bufferLock.open(); }
             });
             b.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) { result[0] = 3; bufferLock.open(); }
-            });  
+            });
             break;
         case 4:
             b.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
@@ -262,7 +262,7 @@ public class XliJ extends android.app.NativeActivity {
             b.setNeutralButton("Try Again", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) { result[0] = 4; bufferLock.open(); }
             });
-            break;            
+            break;
         default:
             break;
         }
@@ -275,7 +275,7 @@ public class XliJ extends android.app.NativeActivity {
         }
         return result[0];
     }
-    
+
     //===========
 
     public static String[] HeadersToStringArray(HttpURLConnection connection)
@@ -284,7 +284,7 @@ public class XliJ extends android.app.NativeActivity {
     	try {
 	    	String separator = ",";
 	        Map<String, List<String>> a = connection.getHeaderFields();
-	        
+	
 	        for (String key : a.keySet()) {
 	        	if (key != null) {
 	        		headers.add(key);
@@ -298,8 +298,8 @@ public class XliJ extends android.app.NativeActivity {
 	                sep = separator;
 	            }
 	            headers.add(sb.toString());
-	            
-	            String[] result = headers.toArray(new String[headers.size()]);	         
+	
+	            String[] result = headers.toArray(new String[headers.size()]);	
 	            return result;
 	        }
     	} catch (Exception e) {
@@ -307,14 +307,14 @@ public class XliJ extends android.app.NativeActivity {
     	}
         return null;
     }
-    
+
     static class HttpWrappedResponse {
     	public Object body;
         public long functionPointer;
         public String[] headers;
         public int responseCode;
         public String responseMessage;
-        
+
         HttpWrappedResponse(Object body, String[] headers, int responseCode, String responseMessage, long fpointer)
         {
         	this.body = body;
@@ -324,19 +324,19 @@ public class XliJ extends android.app.NativeActivity {
         	this.responseMessage = responseMessage;
         }
     }
-    
+
     public static boolean ConnectedToNetwork(NativeActivity activity)
     {
         ConnectivityManager connMgr = (ConnectivityManager)activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if(networkInfo == null) { return false; } 
+        if(networkInfo == null) { return false; }
         return networkInfo.isConnected();
     }
-    
+
     //{TODO} Fix all these crap messages
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	public static AsyncTask SendHttpAsync(NativeActivity activity, String url, String method, 
-    								 	HashMap<String,String> headers, ByteBuffer body, 
+	public static AsyncTask SendHttpAsync(NativeActivity activity, String url, String method,
+    								 	HashMap<String,String> headers, ByteBuffer body,
     								 	int timeout, long requestPointer) {
     	try
     	{
@@ -347,15 +347,15 @@ public class XliJ extends android.app.NativeActivity {
     		((AsyncTask<Object, Void, HttpWrappedResponse>)(task)).execute(url, method, headers, (Integer)timeout, data, (Long)requestPointer);
     		return task;
     	} catch (Exception e) {
-    		XliJ_HttpErrorCallback(requestPointer, -1, "Unable to build Async Http Request: "+e.getLocalizedMessage()); 
+    		XliJ_HttpErrorCallback(requestPointer, -1, "Unable to build Async Http Request: "+e.getLocalizedMessage());
     		return null;
     	}
     }
-    
+
     //{TODO} Fix all these crap messages
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	public static AsyncTask SendHttpStringAsync(NativeActivity activity, String url, String method, 
-    								 			HashMap<String,String> headers, String body, 
+	public static AsyncTask SendHttpStringAsync(NativeActivity activity, String url, String method,
+    								 			HashMap<String,String> headers, String body,
     								 			int timeout, long requestPointer) {
     	try
     	{
@@ -366,15 +366,15 @@ public class XliJ extends android.app.NativeActivity {
     		((AsyncTask<Object, Void, HttpWrappedResponse>)(task)).execute(url, method, headers, (Integer)timeout, data, (Long)requestPointer);
     		return task;
     	} catch (Exception e) {
-    		XliJ_HttpErrorCallback(requestPointer, -1, "Unable to build Async Http Request: "+e.getLocalizedMessage()); 
+    		XliJ_HttpErrorCallback(requestPointer, -1, "Unable to build Async Http Request: "+e.getLocalizedMessage());
     		return null;
     	}
     }
-    
+
     //{TODO} the longs should be ints really
     public static class ASyncHttpRequest extends AsyncTask<Object, Integer, HttpWrappedResponse> {
     	long requestPointer;
-        @Override        
+        @Override
         protected HttpWrappedResponse doInBackground(Object... params) {
             String url = (String)params[0];
             String method = (String)params[1];
@@ -422,7 +422,7 @@ public class XliJ extends android.app.NativeActivity {
         					publishProgress(body.length,body.length);
         					out.flush();
         				} catch(Exception e) {
-        					XliJ_HttpErrorCallback(requestPointer, -1, "Unable to upload data: "+e.getLocalizedMessage()); 
+        					XliJ_HttpErrorCallback(requestPointer, -1, "Unable to upload data: "+e.getLocalizedMessage());
         				}
         			}
         		}
@@ -435,68 +435,68 @@ public class XliJ extends android.app.NativeActivity {
 				XliJ_HttpTimeoutCallback(requestPointer);
 				return null;
 			} catch (IOException e) {
-				XliJ_HttpErrorCallback(requestPointer, -1, "IOException: "+e.getLocalizedMessage()); 
+				XliJ_HttpErrorCallback(requestPointer, -1, "IOException: "+e.getLocalizedMessage());
 				return null;
-			} 
+			}
         }
         @Override
         protected void onProgressUpdate(Integer... progress) {
         	XliJ_HttpProgressCallback(requestPointer, progress[0], progress[1], true);
         }
         @Override
-        protected void onPostExecute(HttpWrappedResponse result) 
+        protected void onPostExecute(HttpWrappedResponse result)
         {
         	if (result!=null)
         		XliJ_HttpCallback(result.body, result.headers, result.responseCode, result.responseMessage, result.functionPointer);
         }
     }
-    
+
     @SuppressWarnings("rawtypes")
 	public static void AbortAsyncTask(AsyncTask task)
     {
     	task.cancel(true);
     }
-    
+
     //[TODO] Could optimize by changing chunk mode if length known
-    public static HttpURLConnection NewHttpConnection(String url, String method, boolean hasPayload, int timeout, long requestPointer) 
+    public static HttpURLConnection NewHttpConnection(String url, String method, boolean hasPayload, int timeout, long requestPointer)
     {
         URL j_url = null;
         try {
             j_url = new URL(url);
         } catch (MalformedURLException e) {
-        	XliJ_HttpErrorCallback(requestPointer, -1, "Malformed URL: "+e.getLocalizedMessage()); 
+        	XliJ_HttpErrorCallback(requestPointer, -1, "Malformed URL: "+e.getLocalizedMessage());
             return null;
         }
         HttpURLConnection urlConnection = null;
-        
+
         try {
-            urlConnection = (HttpURLConnection)j_url.openConnection(); 
+            urlConnection = (HttpURLConnection)j_url.openConnection();
             urlConnection.setConnectTimeout(timeout);
-            urlConnection.setDoOutput(hasPayload);            
+            urlConnection.setDoOutput(hasPayload);
             urlConnection.setRequestMethod(method);
         } catch (IOException e) {
-        	XliJ_HttpErrorCallback(requestPointer, -1, "IOException: "+e.getLocalizedMessage()); 
+        	XliJ_HttpErrorCallback(requestPointer, -1, "IOException: "+e.getLocalizedMessage());
             return null;
-        }    
+        }
         return urlConnection;
     }
-    
-    public static String InputStreamToString(InputStream stream) throws IOException, UnsupportedEncodingException 
-    {        
+
+    public static String InputStreamToString(InputStream stream) throws IOException, UnsupportedEncodingException
+    {
 		@SuppressWarnings("resource")
 		java.util.Scanner s = new java.util.Scanner(stream).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
-    
+
     @SuppressWarnings("rawtypes")
-	public static AsyncTask AsyncInputStreamToString(InputStream stream, long requestPointer) throws IOException, UnsupportedEncodingException 
+	public static AsyncTask AsyncInputStreamToString(InputStream stream, long requestPointer) throws IOException, UnsupportedEncodingException
     {
         AsyncTask<Object, Void, String> a = new ASyncInputStreamToStringTask();
         a.execute(stream, requestPointer);
         return a;
     }
     public static class ASyncInputStreamToStringTask extends AsyncTask<Object, Void, String> {
-    	public long requestPointer;  
+    	public long requestPointer;
         @Override
         protected String doInBackground(Object... params) {
         	requestPointer = (long)((Long)params[1]);
@@ -504,21 +504,21 @@ public class XliJ extends android.app.NativeActivity {
             	//XliJ_HttpProgressCallback(requestPointer, progress[0], progress[1], true);
 				return InputStreamToString((InputStream)params[0]);
 			} catch (UnsupportedEncodingException e) {
-				XliJ_HttpErrorCallback(requestPointer, -1, "UnsupportedEncodingException: "+e.getLocalizedMessage()); 
+				XliJ_HttpErrorCallback(requestPointer, -1, "UnsupportedEncodingException: "+e.getLocalizedMessage());
 				return null;
 			} catch (IOException e) {
-				XliJ_HttpErrorCallback(requestPointer, -1, "IOException: "+e.getLocalizedMessage()); 
+				XliJ_HttpErrorCallback(requestPointer, -1, "IOException: "+e.getLocalizedMessage());
 				return null;
 			}
         }
         @Override
-        protected void onPostExecute(String result) 
+        protected void onPostExecute(String result)
         {    		
         	if (result!=null)
         		XliJ_HttpContentStringCallback(result, requestPointer);
         }
     }
-    
+
     @SuppressWarnings("rawtypes")
 	public static AsyncTask AsyncInputStreamToByteArray(InputStream stream, long requestPointer)
     {
@@ -527,24 +527,24 @@ public class XliJ extends android.app.NativeActivity {
         return a;
     }
     public static class ASyncInputStreamToBytesTask extends AsyncTask<Object, Void, byte[]> {
-    	public long requestPointer;  
+    	public long requestPointer;
         @Override
         protected byte[] doInBackground(Object... params) {
         	requestPointer = (long)((Long)params[1]);
             try {
 				return ReadAllBytesFromHttpInputStream((InputStream)params[0], requestPointer);
 			} catch (IOException e) {				
-				XliJ_HttpErrorCallback(requestPointer, -1, "IOException: "+e.getLocalizedMessage()); 
+				XliJ_HttpErrorCallback(requestPointer, -1, "IOException: "+e.getLocalizedMessage());
 				return null;
 			}
         }
         @Override
-        protected void onPostExecute(byte[] result) 
+        protected void onPostExecute(byte[] result)
         {    		
         	XliJ_HttpContentByteArrayCallback(result, requestPointer);
         }
-    }    
-    
+    }
+
     public static byte[] ReadAllBytesFromHttpInputStream(InputStream stream, long requestPointer) throws IOException
     {    	
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -559,13 +559,13 @@ public class XliJ extends android.app.NativeActivity {
 		  if (runningTotal/progressThreshold > steps)
 		  {
 			  steps = runningTotal/progressThreshold;
-			  XliJ_HttpProgressCallback(requestPointer, runningTotal, 0, false);  
+			  XliJ_HttpProgressCallback(requestPointer, runningTotal, 0, false);
 		  }
 		}
 		buffer.flush();
 		return buffer.toByteArray();
     }
-    
+
     public static byte[] ReadAllBytesFromInputStream(InputStream stream) throws IOException
     {    	
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -577,8 +577,8 @@ public class XliJ extends android.app.NativeActivity {
 		buffer.flush();
 		return buffer.toByteArray();
     }
-    
-    
+
+
     public static byte[] ReadBytesFromInputStream(BufferedInputStream stream, int bytesToRead)
     {    	
     	byte[] buffer = new byte[bytesToRead];
@@ -587,7 +587,7 @@ public class XliJ extends android.app.NativeActivity {
 			if (bytesRead>-1)
 			{
 				return Arrays.copyOf(buffer, bytesRead); //{TODO} only copy in c++?
-			} else { 
+			} else {
 				return null;
 			}
 		} catch (IOException e) {
@@ -595,7 +595,7 @@ public class XliJ extends android.app.NativeActivity {
 			return null;
 		}
     }
-    
+
     public static void InitDefaultCookieManager()
     {
         CookieManager cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);

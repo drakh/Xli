@@ -13,8 +13,8 @@ class Shouty : public HttpStateChangedHandler
         {
             Err->WriteFormat("statusCode: %i\n", state);
             Err->WriteFormat("ReasonPhrase: %s\n", request->ReasonPhrase.Data());
+            //request->PullContentArray();
             request->PullContentString();
-
         } else if (state == HttpDone) {
             Err->WriteFormat("state changed: %i\n", state);            
             Err->WriteLine("Got the body");
@@ -50,7 +50,7 @@ class ErrorShout : public HttpErrorHandler
 {
     virtual void OnResponse(HttpRequest* request, int errorCode, String errorMessage)
     {
-        Err->WriteLine("Had and error:");
+        Err->WriteLine("Had an error:");
         Err->WriteFormat("> %i: %s\n",errorCode, errorMessage.Data());
         Err->WriteLine("-------------------------------------");
     }
@@ -267,14 +267,17 @@ public:
                 // sound->Play(false);
 
                 HttpRequest* req = httpClient->NewRequest();
-                req->Url = "http://httpbin.org/post ";
-                req->Method = HttpPostMethod;
+                req->Url = "http://httpbin.org/get";
+                //req->Url = "http://youtube.com";
+                req->Method = HttpGetMethod;
                 req->StateChangedCallback = stateChangedCallback;
                 req->TimeoutCallback = timeoutCallback;
                 req->ProgressCallback = progressCallback;
                 req->ErrorCallback = errorCallback;
-                // req->Headers.Add("Accept", "*/*");
-                req->Send("BLAH=Why hello there!");
+                req->Headers.Add("Accept", "*/*");
+                req->Headers.Add("ohhai","canhazdata");
+                //req->Send("test=and here is some data");
+                req->Send();
             }
             else if (wnd->IsTextInputActive())
             {

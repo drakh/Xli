@@ -20,6 +20,7 @@
 		FC7C328E1896944300ECDF0D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC7C328D1896944300ECDF0D /* AVFoundation.framework */; };
 		FC7C32921896A05F00ECDF0D /* test.wav in Resources */ = {isa = PBXBuildFile; fileRef = FC7C32911896A05F00ECDF0D /* test.wav */; };
 		FC7C32941896A63400ECDF0D /* test2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FC7C32931896A63400ECDF0D /* test2.mp3 */; };
+		FCF1627818A65AFA00F1F160 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FCF1627718A65AFA00F1F160 /* CFNetwork.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		FC7C328D1896944300ECDF0D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		FC7C32911896A05F00ECDF0D /* test.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = test.wav; sourceTree = "<group>"; };
 		FC7C32931896A63400ECDF0D /* test2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = test2.mp3; sourceTree = "<group>"; };
+		FCF1627718A65AFA00F1F160 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCF1627818A65AFA00F1F160 /* CFNetwork.framework in Frameworks */,
 				FC7C328E1896944300ECDF0D /* AVFoundation.framework in Frameworks */,
 				CE2B2DA416C72C890036FFA0 /* QuartzCore.framework in Frameworks */,
 				CE2B2DA216C72C7A0036FFA0 /* AudioToolbox.framework in Frameworks */,
@@ -83,6 +86,7 @@
 		CE2B21D116C7263A0036FFA0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FCF1627718A65AFA00F1F160 /* CFNetwork.framework */,
 				FC7C328D1896944300ECDF0D /* AVFoundation.framework */,
 				CE2B2DA316C72C890036FFA0 /* QuartzCore.framework */,
 				CE2B2DA116C72C7A0036FFA0 /* AudioToolbox.framework */,
@@ -149,7 +153,7 @@
 		CE2B21C516C7263A0036FFA0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 				TargetAttributes = {
 					CE2B21CD16C7263A0036FFA0 = {
 						DevelopmentTeam = K3P9TEQ2M4;
@@ -202,8 +206,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -218,13 +223,18 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lXli",
 					"-lXliMain",
+					"-lXliHttp",
 					"-lXliMedia",
 					"-lXliGL",
 				);
@@ -238,8 +248,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -247,14 +258,18 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = (
 					"-lXli",
 					"-lXliMain",
+					"-lXliHttp",
 					"-lXliMedia",
 					"-lXliGL",
 				);
