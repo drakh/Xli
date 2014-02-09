@@ -40,11 +40,17 @@ extern "C"
         GlobalWindow->EnqueueCrossThreadEvent(event);
     }
 
-    void JNICALL XliJ_JavaError (JNIEnv *env , jobject obj, jint errorCode, jstring errorMessage) 
+    void JNICALL XliJ_JavaThrowError (JNIEnv *env , jobject obj, jint errorCode, jstring errorMessage) 
     {
-        //{TODO} Hook all this up
         char const* cerrorMessage = env->GetStringUTFChars(errorMessage, NULL);
-        LOGE("UNHANDLED JAVA EXCEPTION (%i): %s", (int)errorCode, cerrorMessage);
+
+        Xli::CTEvent* event = new Xli::CTEvent();
+        event->CTType = Xli::CTThrowEvent;
+        event->Code = -1;
+        Xli::String finalMessage = Xli::String("JavaThrown:(")+Xli::String(errorCode)+Xli::String("): ")+Xli::String(cerrorMessage); 
+        event->Payload = new Xli::String(cerrorMessage);
+        GlobalWindow->EnqueueCrossThreadEvent(event);
+
         env->ReleaseStringUTFChars(errorMessage, cerrorMessage);
     }
 }
@@ -89,12 +95,14 @@ namespace Xli
             static JNINativeMethod native_funcs[] = {
                 {(char* const)"XliJ_OnKeyUp", (char* const)"(I)V", (void *)&XliJ_OnKeyUp},
                 {(char* const)"XliJ_OnKeyDown", (char* const)"(I)V", (void *)&XliJ_OnKeyDown},
-                {(char* const)"XliJ_OnTextInput", (char* const)"(Ljava/lang/String;)V", (void *)&XliJ_OnTextInput},                
+                {(char* const)"XliJ_OnTextInput", (char* const)"(Ljava/lang/String;)V", (void *)&XliJ_OnTextInput},
+                {(char* const)"XliJ_JavaThrowError", (char* const)"(ILjava/lang/String;)V", (void *)&XliJ_JavaThrowError},
             };
             // the last argument is the number of native functions
-            jint attached = l_env->RegisterNatives(*shim_class, native_funcs, 3);
+            jint attached = l_env->RegisterNatives(*shim_class, native_funcs, 4);
             if (attached < 0) {
                 LOGE("COULD NOT REGISTER NATIVE FUNCTIONS");
+                XLI_THROW("COULD NOT REGISTER NATIVE FUNCTIONS");
             } else {
                 LOGD("Native functions registered");
             }

@@ -104,10 +104,10 @@ namespace Xli
     class HttpRequest : public Object
     {
     public:
-        HttpStateChangedHandler* StateChangedCallback; // managed?
-        HttpProgressHandler* ProgressCallback; // managed?
-        HttpTimeoutHandler* TimeoutCallback; // managed?
-        HttpErrorHandler* ErrorCallback; // managed?
+        Managed< HttpStateChangedHandler > StateChangedCallback;
+        Managed< HttpProgressHandler > ProgressCallback;
+        Managed< HttpTimeoutHandler > TimeoutCallback;
+        Managed< HttpErrorHandler > ErrorCallback;
 
         String Url;
         int Timeout;

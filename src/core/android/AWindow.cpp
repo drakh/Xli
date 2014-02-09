@@ -239,6 +239,10 @@ namespace Xli
                     case Xli::CTActionEvent:
                         ((AWindowAction*)event->Payload)->Execute();
                         break;
+                    case Xli::CTThrowEvent:
+                        LOGE("XLI: JAVA THROWN ERROR: %s", ((String*)event->Payload)->Data());
+                        XLI_THROW(((String*)event->Payload)->Data());
+                        break;
                     default:
                         break;
                     }

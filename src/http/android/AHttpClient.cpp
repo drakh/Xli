@@ -12,9 +12,10 @@ namespace Xli
     public:
         jobject javaAsyncHandle;
         jobject javaContentHandle;
-        String cachedContentString; //Error when make managed: 'class Xli::String' has no member named 'Release'
+        String cachedContentString;
         void* cachedContentArray;
         long cachedContentArrayLength;
+        bool completedSuccessfully;
 
         AHttpRequest() 
         {
@@ -40,7 +41,15 @@ namespace Xli
 
         virtual ~AHttpRequest()
         {
-            //{TODO} Oooo ME ME!
+            PlatformSpecific::AJniHelper jni;
+            if (javaAsyncHandle!=0) 
+            {
+                jni->DeleteGlobalRef(javaAsyncHandle);
+            }
+            if (javaContentHandle!=0)
+            {
+                jni->DeleteGlobalRef(javaContentHandle);
+            }
         }
 
         virtual void Send(void* content, long byteLength)
@@ -66,7 +75,7 @@ namespace Xli
         
         virtual void Abort()
         {
-            this->Status = HttpDone; //{TODO} how does statechanged know if it was successful?
+            this->Status = HttpDone;
             if (this->StateChangedCallback!=0) this->StateChangedCallback->OnResponse(this, this->Status);
             if (javaAsyncHandle != 0)
                 PlatformSpecific::AShim::AbortAsyncConnection(javaAsyncHandle);
@@ -82,18 +91,17 @@ namespace Xli
                 if (this->StateChangedCallback!=0) this->StateChangedCallback->OnResponse(this, this->Status);
                 this-> javaAsyncHandle = Xli::PlatformSpecific::AShim::AsyncInputStreamToString(this->javaContentHandle, this);
             } else {
-                LOGE("Cant pull content string"); //{TODO} proper error here
+                XLI_THROW("HttpRequest->PullContentString(): Not in a valid state to pull the content string");
             }
         }
         virtual String GetContentString()
         {
             if (this->Status == HttpDone)
                 return this->cachedContentString;
-            LOGE("Cant get content string");
-            return ""; // {TODO} throw error?
+            XLI_THROW("HttpRequest->GetContentString(): Request must be completed before retrieving the content string");
         }        
 
-        virtual void PullContentArray() // {TODO} this needs to be a byte array async
+        virtual void PullContentArray()
         {    
             if ((this->Status==HttpHeadersReceived) && (this->javaContentHandle))
             {
@@ -101,21 +109,21 @@ namespace Xli
                 if (this->StateChangedCallback!=0) this->StateChangedCallback->OnResponse(this, this->Status);
                 this-> javaAsyncHandle = Xli::PlatformSpecific::AShim::AsyncInputStreamToByteArray(this->javaContentHandle, this);
             } else {
-                LOGE("Cant pull content array"); //{TODO} proper error here
+                XLI_THROW("HttpRequest->PullContentArray(): Not in valid state for pulling the content array");
             }
         }
-        virtual void* GetContentArray() // {TODO} this needs to be a byte array async
+        virtual void* GetContentArray()
         {            
             if (this->Status == HttpDone)
                 return this->cachedContentArray;
-            LOGE("Cant get content array");
+
+            XLI_THROW("HttpRequest->GetContentArray(): Request must be complete before getting the content array");
         }
         virtual long GetContentArrayLength()
         {
             if ((this->Status == HttpDone) && (this->cachedContentArray!=0))
                 return this->cachedContentArrayLength;
-            LOGE("Cant get content array length");
-            return -1; // {TODO} throw error?
+            XLI_THROW("HttpRequest->GetContentArrayLength(): Not in valid state for pulling the content array");
         }
     };
 
@@ -213,6 +221,15 @@ namespace Xli
 
 extern "C"
 {
+    void XliJ_CrossHttpThreadThrow(Xli::String message)
+    {
+        Xli::CTEvent* event = new Xli::CTEvent();
+        event->CTType = Xli::CTThrowEvent;
+        event->Code = -1;
+        event->Payload = new Xli::String(message);
+        GlobalWindow->EnqueueCrossThreadEvent(event);
+    }
+
     void JNICALL XliJ_HttpCallback (JNIEnv *env , jobject obj, jobject body,
                                     jobjectArray headers, jint responseCode,
                                     jstring responseMessage, jlong requestPointer)
@@ -241,14 +258,14 @@ extern "C"
                     jkey = (jstring) env->GetObjectArrayElement(headers, index);
                     jval = (jstring) env->GetObjectArrayElement(headers, (index + 1));
 
-                    //{TODO} again -null- is an issue
+                    //{TODO} NULL is an issue.. why is this being returned in the java?
                     if (!jkey) { 
-                        ckey = "-null-"; 
+                        ckey = "NULL"; 
                     } else { 
                         ckey = env->GetStringUTFChars(jkey, NULL); 
                     }
                     if (!jval) { 
-                        cval = "-null-"; 
+                        cval = "NULL"; 
                     } else { 
                         cval = env->GetStringUTFChars(jval, NULL); 
                     }
@@ -278,7 +295,7 @@ extern "C"
             GlobalWindow->EnqueueCrossThreadEvent(event);
 
         } else {
-            LOGE("No callback pointer error");
+            XliJ_CrossHttpThreadThrow("XliJ_HttpCallback: Request pointer was not given to callback");
         }
     }
     void JNICALL XliJ_HttpContentStringCallback (JNIEnv *env , jclass clazz, jstring content, jlong requestPointer)
@@ -296,6 +313,7 @@ extern "C"
             GlobalWindow->EnqueueCrossThreadEvent(event);
         } else {
             LOGE("No callback pointer error");
+            XliJ_CrossHttpThreadThrow("XliJ_HttpContentStringCallback: Request pointer was not given to callback");
         }
     }
     void JNICALL XliJ_HttpContentByteArrayCallback (JNIEnv *env , jclass clazz, jbyteArray content, jlong requestPointer)
@@ -311,7 +329,7 @@ extern "C"
                 env->GetByteArrayRegion(content, 0, len, (jbyte*)request->cachedContentArray);
                 request->cachedContentArrayLength = (long)len;
                 env->DeleteLocalRef(content);
-                //env->DeleteLocalRef((jobject)len); {TODO} test this, is in neccessary
+                env->DeleteLocalRef((jobject)len);
             }
 
             Xli::CTEvent* event = new Xli::CTEvent();
@@ -320,7 +338,7 @@ extern "C"
             event->Payload = (void*)(new Xli::PlatformSpecific::AHttpResponseHandlerAction(request, Xli::HttpDone, true));
             GlobalWindow->EnqueueCrossThreadEvent(event);
         } else {
-            LOGE("No callback pointer error");
+            XliJ_CrossHttpThreadThrow("XliJ_HttpContentByteArrayCallback: Request pointer was not given to callback");
         }
     }
     
@@ -336,7 +354,7 @@ extern "C"
             event->Payload = (void*)(new Xli::PlatformSpecific::AHttpTimeoutAction(request));
             GlobalWindow->EnqueueCrossThreadEvent(event);
         } else {
-            LOGE("No callback pointer error");
+            XliJ_CrossHttpThreadThrow("XliJ_HttpTimeoutCallback: Request pointer was not given to callback");
         }
     }
 
@@ -356,7 +374,7 @@ extern "C"
 
             GlobalWindow->EnqueueCrossThreadEvent(event);
         } else {
-            LOGE("No callback pointer error");
+            XliJ_CrossHttpThreadThrow("XliJ_HttpErrorCallback: Request pointer was not given to callback");
         }
     }
 
@@ -372,7 +390,7 @@ extern "C"
             event->Payload = (void*)(new Xli::PlatformSpecific::AHttpProgressAction(request, position, totalLength, lengthKnown));
             GlobalWindow->EnqueueCrossThreadEvent(event);
         } else {
-            LOGE("No callback pointer error");
+            XliJ_CrossHttpThreadThrow("XliJ_HttpProgressCallback: Request pointer was not given to callback");
         }
     }
 }
@@ -386,7 +404,7 @@ namespace Xli
     {
         if (!HttpInitialized)
         {
-            PlatformSpecific::AShim::InitDefaultCookieManager();            
+            PlatformSpecific::AShim::InitDefaultCookieManager();
             static JNINativeMethod nativeFuncs[] = {
                 {(char* const)"XliJ_HttpCallback", (char* const)"(Ljava/lang/Object;[Ljava/lang/String;ILjava/lang/String;J)V", (void *)&XliJ_HttpCallback},
                 {(char* const)"XliJ_HttpContentStringCallback", (char* const)"(Ljava/lang/String;J)V", (void *)&XliJ_HttpContentStringCallback},
@@ -396,7 +414,7 @@ namespace Xli
                 {(char* const)"XliJ_HttpProgressCallback", (char* const)"(JJJZ)V", (void *)&XliJ_HttpProgressCallback}, 
             };
             bool result = PlatformSpecific::AShim::RegisterNativeFunctions(nativeFuncs, 6);
-            if (!result) LOGE("*** Could not register http callbacks");
+            if (!result) XLI_THROW("XliHttp: Could not register the java->c++ callbacks");
             HttpInitialized = 1;
         }
     }

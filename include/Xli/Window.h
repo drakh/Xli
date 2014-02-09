@@ -25,7 +25,8 @@ namespace Xli
         CTKeyDownEvent = 1,
         CTTextEvent = 2,
         CTMotionEvent = 3,
-        CTActionEvent = 4
+        CTActionEvent = 4,
+        CTThrowEvent = 5,
     }; // {TODO} this can be removed once we go pure action based
     struct CTEvent 
     {

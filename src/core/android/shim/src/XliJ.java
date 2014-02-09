@@ -61,6 +61,7 @@ public class XliJ extends android.app.NativeActivity {
     public static native void XliJ_HttpTimeoutCallback(long requestPointer);
     public static native void XliJ_HttpProgressCallback(long requestPointer, long position, long totalLength, boolean lengthKnown);
     public static native void XliJ_HttpErrorCallback(long requestPointer, int errorCode, String errorMessage);
+    public static native void XliJ_JavaThrowError(int code, String throwMessage);
 	
     // The shim's state. Try to not any more than the two UI related fields below
     static Hidden hidden_text;
@@ -303,7 +304,7 @@ public class XliJ extends android.app.NativeActivity {
 	            return result;
 	        }
     	} catch (Exception e) {
-    		Log.e("XliApp","Error in HeadersToStringArray: "+e.getLocalizedMessage());
+            XliJ_JavaThrowError(-1,"Error in HeadersToStringArray: "+e.getLocalizedMessage());
     	}
         return null;
     }
@@ -338,9 +339,8 @@ public class XliJ extends android.app.NativeActivity {
 	public static AsyncTask SendHttpAsync(NativeActivity activity, String url, String method,
     								 	HashMap<String,String> headers, ByteBuffer body,
     								 	int timeout, long requestPointer) {
-    	try
+        try
     	{
-    		Log.e("XliApp", url+", "+method+", "+headers+", "+body+", "+requestPointer);
     		AsyncTask task = new ASyncHttpRequest();
     		byte[] data = null;
     		if (body!=null) data = body.array();
@@ -359,7 +359,6 @@ public class XliJ extends android.app.NativeActivity {
     								 			int timeout, long requestPointer) {
     	try
     	{
-    		Log.e("XliApp", url+", "+method+", "+headers+", "+body+", "+requestPointer);
     		AsyncTask task = new ASyncHttpRequest();
     		byte[] data = null;
     		if (body!=null) data = body.getBytes();
@@ -591,7 +590,7 @@ public class XliJ extends android.app.NativeActivity {
 				return null;
 			}
 		} catch (IOException e) {
-			Log.e("XliApp", "read from stream crashed: "+e.getLocalizedMessage());			
+			Log.e("XliApp", "read from stream crashed: "+e.getLocalizedMessage());
 			return null;
 		}
     }
