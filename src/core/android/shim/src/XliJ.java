@@ -6,8 +6,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.net.CookieHandler;
 import java.net.CookiePolicy;
 import java.net.HttpURLConnection;
@@ -21,6 +24,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.nio.ByteBuffer;
 
 import android.app.AlertDialog;
@@ -50,7 +54,6 @@ import android.widget.TextView;
 
 @SuppressWarnings("unused")
 public class XliJ extends android.app.NativeActivity {
-	
 	// Callbacks to C++ code
     public static native void XliJ_OnKeyUp(int keyCode);
     public static native void XliJ_OnKeyDown(int keyCode);
@@ -67,6 +70,26 @@ public class XliJ extends android.app.NativeActivity {
     static Hidden hidden_text;
     protected static ViewGroup hidden_layout;
 
+    
+//	public static class JNI_ExceptionHandler implements Thread.UncaughtExceptionHandler {
+//		@Override  public void uncaughtException(Thread aThread, Throwable aThrowable) {			
+//			Log.e("XliApp","UNCAUGHT JAVA EXCEPTION: STACK TRACE:\n"+getStackTrace(aThrowable));
+//			XliJ_JavaThrowError(-1, aThrowable.getLocalizedMessage());
+//		}
+//		private String getStackTrace(Throwable aThrowable) {
+//			final Writer result = new StringWriter();
+//			final PrintWriter printWriter = new PrintWriter(result);
+//			aThrowable.printStackTrace(printWriter);
+//			return result.toString();
+//		}
+//	}    
+//    public static void Init()
+//    {
+//    	//Attach uncaught exception handler
+//    	Thread current = Thread.currentThread();
+//    	current.setUncaughtExceptionHandler(new JNI_ExceptionHandler());
+//    }
+    
     public static int AttachHiddenView(final NativeActivity activity)
     {
         final int[] result = {1};
@@ -339,7 +362,7 @@ public class XliJ extends android.app.NativeActivity {
 	public static AsyncTask SendHttpAsync(NativeActivity activity, String url, String method,
     								 	HashMap<String,String> headers, ByteBuffer body,
     								 	int timeout, long requestPointer) {
-        try
+    	try
     	{
     		AsyncTask task = new ASyncHttpRequest();
     		byte[] data = null;
