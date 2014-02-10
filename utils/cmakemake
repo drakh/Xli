@@ -1,10 +1,6 @@
 #!/bin/sh
 set -e
 
-if [ $OSTYPE = linux* ]; then
-    alias echo="echo -e"
-fi
-
 case $1 in 
 clean)
     DO_CLEAN=1
@@ -25,7 +21,7 @@ while [ $# -gt 0 ]; do
             shift
             OPT="$OPT$1"
         fi
-        ;;        
+        ;;
     esac
 
     case $OPT in 
@@ -111,7 +107,7 @@ fi
 
 cd "$PROJECT_DIR"
 
-if [ "$DO_CLEAN" == "1" ]; then
+if [ "$DO_CLEAN" = "1" ]; then
     for dir in "build/cmake-release" "build/cmake-debug"; do
         if [ -f "$dir/Makefile" ]; then
             cd "$dir"
@@ -124,7 +120,7 @@ if [ "$DO_CLEAN" == "1" ]; then
     exit 0
 fi
 
-if [ "$DEBUG" == "1" ]; then
+if [ "$DEBUG" = "1" ]; then
     BUILD_DIR="build/cmake-debug"
     CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_BUILD_TYPE:STRING=Debug"
 else
@@ -132,7 +128,7 @@ else
     CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_BUILD_TYPE:STRING=Release"
 fi
 
-if [ "$DO_INSTALL" == "1" ]; then
+if [ "$DO_INSTALL" = "1" ]; then
     cd "$BUILD_DIR"
     make install
     exit 0
@@ -178,7 +174,7 @@ fi
 if [ -z "$JOB_COUNT" ]; then
     if [ -f /proc/cpuinfo ]; then
         JOB_COUNT=`grep processor /proc/cpuinfo | wc -l`
-    elif [ $OSTYPE = darwin* ]; then
+    elif [ "$OSTYPE" = darwin* ]; then
         JOB_COUNT=`sysctl hw.ncpu | cut -d " " -f 2`
     elif [ -n "$NUMBER_OF_PROCESSORS" ]; then
         JOB_COUNT=$NUMBER_OF_PROCESSORS
@@ -192,7 +188,7 @@ cd "$BUILD_DIR"
 
 #rm -f CMakeCache.txt
 
-if [ $OSTYPE = "msys"  ]; then
+if [ "$OSTYPE" = "msys" ]; then
     export CMAKE_ARGS="$CMAKE_ARGS -G\"MSYS Makefiles"
     cmd "/C cmake ../.. %CMAKE_ARGS%"
 else
