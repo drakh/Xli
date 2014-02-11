@@ -39,7 +39,7 @@ cd "$SOURCE"
 ndk-build -j $JOB_COUNT "$@"
 cd "$OLDPWD"
 
-if [ which rsync ]; then
+if which rsync > /dev/null 2>&1; then
 	CP_CMD="rsync -vru"
 else
 	CP_CMD="cp -vru"

@@ -134,11 +134,11 @@ if [ "$DO_INSTALL" = "1" ]; then
     exit 0
 fi
 
-if [ ! which cmake ]; then
+if ! which cmake > /dev/null 2>&1; then
     # This is sometimes needed when run from GUI applications on OS X
     PATH=$PATH:/opt/local/bin
 
-    if [ ! which cmake ]; then
+    if ! which cmake > /dev/null 2>&1; then
         echo "ERROR: Unable to find the \`cmake\` command. Make sure cmake is installed and added to \$PATH." >&2
         exit 1
     fi
