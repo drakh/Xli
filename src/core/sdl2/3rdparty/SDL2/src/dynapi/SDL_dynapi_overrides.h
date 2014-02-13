@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2013 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -571,3 +571,6 @@
 #define SDL_vsscanf SDL_vsscanf_REAL
 #define SDL_GameControllerAddMappingsFromRW SDL_GameControllerAddMappingsFromRW_REAL
 #define SDL_GL_ResetAttributes SDL_GL_ResetAttributes_REAL
+#define SDL_HasAVX SDL_HasAVX_REAL
+#define SDL_GetDefaultAssertionHandler SDL_GetDefaultAssertionHandler_REAL
+#define SDL_GetAssertionHandler SDL_GetAssertionHandler_REAL
