@@ -65,7 +65,11 @@
 # endif
 #endif
 
+#define XLI_FILE __FILE__
 #define XLI_LINE __LINE__
+
+#define XLI_INLINE inline
+#define XLI_NOEXCEPT throw()
 
 #ifndef XLI_DEBUG_BREAK
 # define XLI_DEBUG_BREAK
@@ -74,8 +78,5 @@
 #ifndef XLI_DEBUG_PRINT
 # define XLI_DEBUG_PRINT(x)
 #endif
-
-#define XLI_INLINE inline
-
 
 #endif
