@@ -24,7 +24,7 @@ esac
 
 if [ -f /proc/cpuinfo ]; then
     JOB_COUNT=`grep processor /proc/cpuinfo | wc -l`
-elif [ "$OSTYPE" = darwin* ]; then
+elif [ "`uname`" = "Darwin" ]; then
     JOB_COUNT=`sysctl hw.ncpu | cut -d " " -f 2`
 elif [ -n "$NUMBER_OF_PROCESSORS" ]; then
     JOB_COUNT=$NUMBER_OF_PROCESSORS
