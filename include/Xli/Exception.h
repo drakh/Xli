@@ -58,7 +58,7 @@ namespace Xli
     /** \ingroup Xli */
     XLI_DECLARE_EXCEPTION(NullPointerException, "Null pointer access attempt");
     /** \ingroup Xli */
-    XLI_DECLARE_EXCEPTION(BadDeleteException, "Attemt to delete object with refcount > 1");
+    XLI_DECLARE_EXCEPTION(BadDeleteException, "Attemt to delete object with refcount != 1");
     /** \ingroup Xli */
     XLI_DECLARE_EXCEPTION(FormatException, "Invalid format");
     /** \ingroup Xli */
@@ -67,24 +67,22 @@ namespace Xli
     XLI_DECLARE_EXCEPTION(NotSupportedException, "Not supported");
 
     /** \ingroup XliCoreIO */
-    class FileException: public Exception {};
-    /** \ingroup XliCoreIO */
-    class StreamException: public Exception {};
+    class IOException: public Exception {};
 
     /** \ingroup XliCoreIO */
-    XLI_DECLARE_EXCEPTION_SUB(StreamException, StreamClosedException, "Stream has closed");
+    XLI_DECLARE_EXCEPTION_SUB(IOException, StreamClosedException, "Stream has closed");
     /** \ingroup XliCoreIO */
-    XLI_DECLARE_EXCEPTION_SUB(StreamException, StreamCantReadException, "Stream not readable");
+    XLI_DECLARE_EXCEPTION_SUB(IOException, StreamCantReadException, "Stream not readable");
     /** \ingroup XliCoreIO */
-    XLI_DECLARE_EXCEPTION_SUB(StreamException, StreamCantWriteException, "Stream not writeable");
+    XLI_DECLARE_EXCEPTION_SUB(IOException, StreamCantWriteException, "Stream not writeable");
     /** \ingroup XliCoreIO */
-    XLI_DECLARE_EXCEPTION_SUB(StreamException, StreamCantSeekException, "Stream not seekable");
+    XLI_DECLARE_EXCEPTION_SUB(IOException, StreamCantSeekException, "Stream not seekable");
     /** \ingroup XliCoreIO */
-    XLI_DECLARE_EXCEPTION_SUB(StreamException, EndOfStreamException, "End of Stream reached");
+    XLI_DECLARE_EXCEPTION_SUB(IOException, EndOfStreamException, "End of Stream reached");
     /** \ingroup XliCoreIO */
-    XLI_DECLARE_EXCEPTION_SUB(FileException, FileCantOpenException, "Couldn't open file");
+    XLI_DECLARE_EXCEPTION_SUB(IOException, FileCantOpenException, "Couldn't open file");
     /** \ingroup XliCoreIO */
-    XLI_DECLARE_EXCEPTION_SUB(FileException, FileNotFoundException, "File not found");
+    XLI_DECLARE_EXCEPTION_SUB(IOException, FileNotFoundException, "File not found");
 }
 
 /**

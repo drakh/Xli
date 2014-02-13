@@ -11,6 +11,9 @@ namespace Xli
     {
         int refCount;
 
+        Object(const Object& copy);
+        Object& operator = (const Object& copy);
+
     public:
         Object();
         virtual ~Object();
@@ -21,7 +24,6 @@ namespace Xli
         void Release();
 
         virtual void Delete();
-        
         virtual String ToString() const;
     };
 }
