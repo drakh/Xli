@@ -22,12 +22,14 @@ namespace Xli
         void Write(const String& str);
         void WriteLine();
 
-        template <typename T> void Write(const T& t)
+        template <typename T> 
+        void Write(const T& t)
         {
             Write(Xli::ToString(t));
         }
 
-        template <typename T> void WriteLine(const T& t)
+        template <typename T> 
+        void WriteLine(const T& t)
         {
             Write(t);
             WriteLine();

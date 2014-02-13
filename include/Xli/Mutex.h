@@ -29,10 +29,8 @@ namespace Xli
     {
         MutexHandle handle;
 
-        Mutex(const Mutex& copy)
-        {
-            XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
-        }
+        Mutex(const Mutex& copy);
+        Mutex& operator = (const Mutex& copy);
 
     public:
         Mutex()
@@ -68,7 +66,8 @@ namespace Xli
     {
         MutexHandle handle;
     
-        MutexLock(const MutexLock& copy) { }
+        MutexLock(const MutexLock& copy);
+        MutexLock& operator = (const MutexLock& copy);
 
     public:
         MutexLock(MutexHandle handle)

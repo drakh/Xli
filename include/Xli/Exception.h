@@ -107,10 +107,6 @@ namespace Xli
 #define XLI_THROW_CANT_OPEN_FILE(msg)       XLI_THROW_EX(::Xli::FileCantOpenException, msg)
 #define XLI_THROW_FILE_NOT_FOUND(msg)       XLI_THROW_EX(::Xli::FileNotFoundException, msg)
 
-// TODO: Remove these
-#define XLI_IGNORE_EXCEPTION(x)             do { try { x; } catch (const ::Xli::Exception&) { } } while(0)
-#define XLI_WARN_ON_EXCEPTION(x)            do { try { x; } catch (const ::Xli::Exception& e) { ::Xli::ErrorPrintLine((::Xli::String)"WARNING: " + XLI_FUNCTION + "(" + XLI_LINE + "): " + e.ToString()); } } while (0)
-
 /** @} */
 
 #endif

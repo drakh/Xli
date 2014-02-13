@@ -31,10 +31,8 @@ namespace Xli
     {
         CondHandle handle;
 
-        ConditionVariable(const ConditionVariable& copy)
-        {
-            XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
-        }
+        ConditionVariable(const ConditionVariable& copy);
+        ConditionVariable& operator = (const ConditionVariable& copy);
 
     public:
         ConditionVariable()

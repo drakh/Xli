@@ -3,7 +3,7 @@
 
 #include <Xli/BaseTypes.h>
 
-#ifdef ANDROID 
+#ifdef XLI_PLATFORM_ANDROID 
 # include <stdarg.h>
 #else
 # include <cstdarg>

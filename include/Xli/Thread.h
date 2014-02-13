@@ -52,6 +52,9 @@ namespace Xli
 
         static void thread_func(void* arg);
 
+        Thread(const Thread& copy);
+        Thread& operator = (const Thread& copy);
+
     public:
         /**
             Creates a new Thread.
