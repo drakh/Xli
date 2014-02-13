@@ -46,20 +46,12 @@
 
 #ifdef XLI_COMPILER_MSVC // Visual C++ specific
 # define XLI_FUNCTION __FUNCTION__ //__FUNCSIG__
-# ifdef XLI_DEBUG
-#   define XLI_DEBUG_BREAK __debugbreak()
-# endif
 #else
 # define sscanf_s(str, ...) sscanf(str, __VA_ARGS__)
 # define sprintf_s(buf, bufSize, format, ...) sprintf(buf, format, __VA_ARGS__)
 # define vsnprintf_s(buf, bufSize, maxCount, format, argList) vsprintf(buf, format, argList)
 # if 1 // GCC specific (TODO: Add GCC check)
 #    define XLI_FUNCTION __PRETTY_FUNCTION__
-#    ifdef XLI_DEBUG
-#       if !defined(XLI_PLATFORM_IOS) && !defined(XLI_PLATFORM_ANDROID)
-#           define XLI_DEBUG_BREAK __builtin_trap()
-#       endif
-#    endif
 # else
 #    define XLI_FUNCTION __FUNCTION__
 # endif
@@ -70,10 +62,6 @@
 
 #define XLI_INLINE inline
 #define XLI_NOEXCEPT throw()
-
-#ifndef XLI_DEBUG_BREAK
-# define XLI_DEBUG_BREAK
-#endif
 
 #ifndef XLI_DEBUG_PRINT
 # define XLI_DEBUG_PRINT(x)
