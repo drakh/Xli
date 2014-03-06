@@ -9,33 +9,18 @@ namespace Xli
     /**
         \ingroup XliCoreContainers
     */
-    enum HashBucketState
-    {
-        HashBucketStateEmpty = 0,
-        HashBucketStateUsed = 1,
-        HashBucketStateDummy = 2
-    };
-
-    /**
-        \ingroup XliCoreContainers
-    */
-    template <typename TKey, typename TValue> struct HashBucket
-    {
-        TKey Key;
-        TValue Value;
-        HashBucketState State;
-    };
-
-    /**
-        \ingroup XliCoreContainers
-    */
-    template <typename TKey, typename TValue> class HashMapDefaultTraits
+    template <typename TKey, typename TValue> class HashMapTraits
     {
     public:
-        static UInt32 Hash(const TKey& key) { return Xli::Hash(key); }
-        static bool Equals(const TKey& a, const TKey& b) { return a == b; }
-        static HashBucket<TKey, TValue>* NewBuckets(int buckets, void* memPool) { return new HashBucket<TKey, TValue>[buckets]; }
-        static void DeleteBuckets(HashBucket<TKey, TValue>* ptr, void* memPool) { delete [] ptr; }
+        static UInt32 Hash(const TKey& key) 
+        {
+            return Xli::Hash(key); 
+        }
+        
+        static bool Equals(const TKey& a, const TKey& b) 
+        {
+            return a == b; 
+        }
     };
 
     /**
@@ -48,13 +33,26 @@ namespace Xli
         functions used. This is useful i.e. when using pointers to objects as keys and you want to
         compare the value of the objects and not the pointers.
     */
-    template <typename TKey, typename TValue, typename TTraits = HashMapDefaultTraits<TKey, TValue>, int TBufSize = 8> class HashMap
+    template <typename TKey, typename TValue, typename TTraits = HashMapTraits<TKey, TValue> > class HashMap
     {
-    private:
-        typedef HashBucket<TKey, TValue> Bucket;
-        Bucket internalBuckets[TBufSize];
+        static const int BufSize = 4;
+
+        enum BucketState
+        {
+            BucketStateEmpty = 0,
+            BucketStateUsed = 1,
+            BucketStateDummy = 2
+        };
+
+        struct Bucket
+        {
+            TKey Key;
+            TValue Value;
+            BucketState State;
+        };
+        
+        Bucket internalBuckets[BufSize];
         Bucket* buckets;
-        void* memPool;
 
         int bucketCount;
         int count;
@@ -63,20 +61,20 @@ namespace Xli
         {
             Bucket* oldBuckets = buckets;
 
-            buckets = TTraits::NewBuckets(newSize, memPool);
+            buckets = new Bucket[newSize];
             int oldSize = bucketCount;
             bucketCount = newSize;
             count = 0;
 
             for (int i = 0; i < bucketCount; i++) 
-                buckets[i].State = HashBucketStateEmpty;
+                buckets[i].State = BucketStateEmpty;
 
             for (int i = 0; i < oldSize; i++)
-                if (oldBuckets[i].State == HashBucketStateUsed) 
+                if (oldBuckets[i].State == BucketStateUsed) 
                     (*this)[oldBuckets[i].Key] = oldBuckets[i].Value;
 
             if (oldBuckets != internalBuckets)
-                TTraits::DeleteBuckets(oldBuckets, memPool);
+                delete [] oldBuckets;
         }
 
         void expand()
@@ -88,23 +86,21 @@ namespace Xli
         HashMap& operator = (const HashMap& copy);
 
     public:
-        HashMap(int initialSizeLog2 = 0, void* memPool = 0)
+        HashMap(int initialSizeLog2 = 0)
         {
-            this->memPool = memPool;
-
             if (initialSizeLog2 == 0)
             {
-                bucketCount = TBufSize;
+                bucketCount = BufSize;
                 buckets = internalBuckets;
             }
             else
             {
                 bucketCount = 1 << initialSizeLog2;
-                buckets = TTraits::NewBuckets(bucketCount, memPool);
+                buckets = new Bucket[bucketCount];
             }
 
             for (int i = 0; i < bucketCount; i++) 
-                buckets[i].State = HashBucketStateEmpty;
+                buckets[i].State = BucketStateEmpty;
 
             count = 0;
         }
@@ -112,7 +108,7 @@ namespace Xli
         ~HashMap()
         {
             if (buckets != internalBuckets)
-                TTraits::DeleteBuckets(buckets, memPool);
+                delete [] buckets;
         }
 
         /**
@@ -140,7 +136,7 @@ namespace Xli
         int Next(int iterator) const
         {
             for (int i = iterator + 1; i < bucketCount; i++)
-                if (buckets[i].State == HashBucketStateUsed) 
+                if (buckets[i].State == BucketStateUsed) 
                     return i;
 
             return End();
@@ -155,7 +151,7 @@ namespace Xli
         const TValue& GetValue(int iterator) const
         {
 #ifdef XLI_RANGE_CHECK
-            if (buckets[iterator].State != HashBucketStateUsed) 
+            if (buckets[iterator].State != BucketStateUsed) 
                 XLI_THROW("Invalid iterator");
 #endif
             
@@ -171,7 +167,7 @@ namespace Xli
         TValue& GetValue(int iterator)
         {
 #ifdef XLI_RANGE_CHECK
-            if (buckets[iterator].State != HashBucketStateUsed) 
+            if (buckets[iterator].State != BucketStateUsed) 
                 XLI_THROW("Invalid iterator");
 #endif
             
@@ -186,7 +182,7 @@ namespace Xli
         */
         void SetValue(int iterator, const TValue& value)
         {
-            if (buckets[iterator].State != HashBucketStateUsed) 
+            if (buckets[iterator].State != BucketStateUsed) 
                 XLI_THROW("Invalid iterator");
             
             buckets[iterator].Value = value;
@@ -201,7 +197,7 @@ namespace Xli
         const TKey& GetKey(int iterator) const
         {
 #ifdef XLI_RANGE_CHECK
-            if (buckets[iterator].State != HashBucketStateUsed) 
+            if (buckets[iterator].State != BucketStateUsed) 
                 XLI_THROW("Invalid iterator");
 #endif
             
@@ -257,7 +253,7 @@ namespace Xli
         void Clear()
         {
             for (int i = 0; i < bucketCount; i++) 
-                buckets[i].State = HashBucketStateEmpty;
+                buckets[i].State = BucketStateEmpty;
 
             count = 0;
         }
@@ -272,14 +268,14 @@ namespace Xli
 
             while (true)
             {
-                if (buckets[x].State == HashBucketStateUsed)
+                if (buckets[x].State == BucketStateUsed)
                 {
                     if (TTraits::Equals(buckets[x].Key, key)) 
                         return buckets[x].Value;
                 }
-                else if (buckets[x].State == HashBucketStateEmpty)
+                else if (buckets[x].State == BucketStateEmpty)
                 {
-                    buckets[x].State = HashBucketStateUsed;
+                    buckets[x].State = BucketStateUsed;
                     buckets[x].Key = key;
                     count++;
                     return buckets[x].Value;
@@ -309,14 +305,14 @@ namespace Xli
 
             while (true)
             {
-                if (buckets[x].State == HashBucketStateUsed)
+                if (buckets[x].State == BucketStateUsed)
                 {
                     if (TTraits::Equals(buckets[x].Key, key)) 
                         XLI_THROW("Map already contains the given key");
                 }
-                else if (buckets[x].State == HashBucketStateEmpty)
+                else if (buckets[x].State == BucketStateEmpty)
                 {
-                    buckets[x].State = HashBucketStateUsed;
+                    buckets[x].State = BucketStateUsed;
                     buckets[x].Key = key;
                     buckets[x].Value = value;
                     count++;
@@ -349,16 +345,16 @@ namespace Xli
 
             while (true)
             {
-                if (buckets[x].State == HashBucketStateUsed)
+                if (buckets[x].State == BucketStateUsed)
                 {
                     if (TTraits::Equals(buckets[x].Key, key))
                     {
-                        buckets[x].State = HashBucketStateDummy;
+                        buckets[x].State = BucketStateDummy;
                         count--;
                         return true;
                     }
                 }
-                else if (buckets[x].State == HashBucketStateEmpty)
+                else if (buckets[x].State == BucketStateEmpty)
                 {
                     return false;
                 }
@@ -377,12 +373,12 @@ namespace Xli
 
             while (true)
             {
-                if (buckets[x].State == HashBucketStateUsed)
+                if (buckets[x].State == BucketStateUsed)
                 {
                     if (TTraits::Equals(buckets[x].Key, key)) 
                         return true;
                 }
-                else if (buckets[x].State == HashBucketStateEmpty)
+                else if (buckets[x].State == BucketStateEmpty)
                 {
                     return false;
                 }
@@ -404,7 +400,7 @@ namespace Xli
 
             while (true)
             {
-                if (buckets[x].State == HashBucketStateUsed)
+                if (buckets[x].State == BucketStateUsed)
                 {
                     if (TTraits::Equals(buckets[x].Key, key))
                     {
@@ -412,7 +408,7 @@ namespace Xli
                         return true;
                     }
                 }
-                else if (buckets[x].State == HashBucketStateEmpty)
+                else if (buckets[x].State == BucketStateEmpty)
                 {
                     return false;
                 }
@@ -422,7 +418,7 @@ namespace Xli
                 if (x >= bucketCount) 
                     x -= bucketCount;
                 
-                if (x == firstX) 
+                if (x == firstX)
                     return false;
             }
         }
