@@ -15,7 +15,7 @@ namespace Xli
         case ValueTypeArray: return "Array";
         case ValueTypeObject: return "Object";
         case ValueTypeOrderedObject: return "Object (ordered)";
-        default: return "<Unknown Value Type>";
+        default: return "<unknown>";
         }
     }
 

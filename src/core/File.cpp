@@ -4,6 +4,25 @@
 
 namespace Xli
 {
+    String FileModeInfo::ToString(FileMode mode)
+    {
+        switch (mode)
+        {
+#define FORMAT(x) case x: return #x
+        FORMAT(FileModeRead);
+        FORMAT(FileModeWrite);
+        FORMAT(FileModeAppend);
+        FORMAT(FileModeNew);
+        FORMAT(FileModeRandom);
+        FORMAT(FileModeReadWrite);
+        FORMAT(FileModeReadWriteNew);
+        FORMAT(FileModeReadAppend);
+        FORMAT(FileModeReadRandom);
+        default: return "<unknown>";
+#undef FORMAT
+        }
+    }
+
     File::File(const String& filename, FileMode mode)
     {
         const char* m = "rb";
@@ -16,7 +35,7 @@ namespace Xli
             case FileModeReadWrite: m = "r+b"; break;
             case FileModeReadWriteNew: m = "w+b"; break;
             case FileModeReadAppend: m = "a+b"; break;
-            default: XLI_THROW(String("Invalid file mode: ") + FileModeToString(mode));
+            default: XLI_THROW("Invalid file mode: " + FileModeInfo::ToString(mode));
         }
         
 #ifdef XLI_COMPILER_MSVC
