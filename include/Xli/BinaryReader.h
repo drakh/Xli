@@ -15,7 +15,8 @@ namespace Xli
         BinaryReader(Stream* stream);
         virtual ~BinaryReader();
 
-        template <typename T> void Read(T& elm)
+        template <typename T> 
+        void Read(T& elm)
         {
             _stream->ReadSafe((void*)&elm, sizeof(T), 1);
         }

@@ -25,7 +25,8 @@ namespace Xli
     String ToString(unsigned char c);
     String ToString(bool b);
 
-    template <class T> String ToString(const T& t)
+    template <typename T> 
+    String ToString(const T& t)
     {
         return t.ToString();
     }

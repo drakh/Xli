@@ -15,7 +15,8 @@ namespace Xli
         BinaryWriter(Stream* stream);
         virtual ~BinaryWriter();
 
-        template <typename T> void Write(const T& elm)
+        template <typename T> 
+        void Write(const T& elm)
         {
             _stream->WriteSafe((const void*)&elm, sizeof(T), 1);
         }

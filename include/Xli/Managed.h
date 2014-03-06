@@ -9,7 +9,7 @@ namespace Xli
     /**
         \ingroup XliCoreContainers
     */
-    template <class T> class Managed
+    template <typename T> class Managed
     {
     protected:
         T* object;
@@ -116,7 +116,7 @@ namespace Xli
     /**
         \ingroup XliCoreContainers
     */
-    template <class T> 
+    template <typename T> 
     Managed<T> ManagePtr(T* object)
     {
         return object;

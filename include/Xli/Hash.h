@@ -26,10 +26,23 @@ namespace Xli
     UInt32 Hash(Int64 i);
     UInt32 Hash(UInt64 i);
 
-    template <class T> UInt32 Hash(const T* t) { return Hash((const void*)t); }
-    template <class T> UInt32 Hash(T* t) { return Hash((const void*)t); }
+    template <typename T> 
+    UInt32 Hash(const T* t) 
+    { 
+        return Hash((const void*)t); 
+    }
+    
+    template <typename T> 
+    UInt32 Hash(T* t) 
+    { 
+        return Hash((const void*)t); 
+    }
 
-    template <class T> UInt32 Hash(const T& t) { return Hash((const UInt8*)&t, (int)sizeof(T)); }
+    template <typename T> 
+    UInt32 Hash(const T& t) 
+    { 
+        return Hash((const UInt8*)&t, (int)sizeof(T)); 
+    }
 
     /** @} */
 }
