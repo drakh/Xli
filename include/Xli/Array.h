@@ -11,10 +11,12 @@ namespace Xli
     /**
         \ingroup XliCoreContainers
     */
-    template <typename T, int TBufSize> class Array
+    template <typename T> class Array
     {
+        static const int BufSize = 4;
+
         T* data;
-        T buf[TBufSize];
+        T buf[BufSize];
         int used;
         int capacity;
 
@@ -25,14 +27,14 @@ namespace Xli
         Array()
         {
             used = 0;
-            capacity = TBufSize;
+            capacity = BufSize;
             data = buf;
         }
 
         explicit Array(int size)
         {
             used = 0;
-            capacity = TBufSize;
+            capacity = BufSize;
             data = buf;
             Resize(size);
         }
@@ -40,7 +42,7 @@ namespace Xli
         explicit Array(int count, const T* initItems)
         {
             used = 0;
-            capacity = TBufSize;
+            capacity = BufSize;
             data = buf;
             Resize(count);
 
@@ -85,14 +87,14 @@ namespace Xli
         {
             if (data != buf)
             {
-                if (used <= (int)TBufSize)
+                if (used <= BufSize)
                 {
                     for (int i = 0; i < used; i++)
                         buf[i] = data[i];
 
                     delete [] data;
                     data = buf;
-                    capacity = TBufSize;
+                    capacity = BufSize;
                 }
                 else if (used < capacity)
                 {

@@ -36,7 +36,7 @@ namespace Xli
         @{
     */
 
-    template <typename T, int TBufSize = 4> class Array;
+    template <typename T> class Array;
 
     /** @} */
 

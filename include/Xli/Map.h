@@ -10,10 +10,10 @@ namespace Xli
 
         Map which preserves the order of the keys. This implementation has slower look up than HashMap and is not meant to be used in performance critical code.
     */
-    template <typename TKey, typename TValue, int TBufSize = 4> class Map
+    template <typename TKey, typename TValue> class Map
     {
-        Array<TKey, TBufSize> keys;
-        Array<TValue, TBufSize> values;
+        Array<TKey> keys;
+        Array<TValue> values;
 
     public:
         /**
