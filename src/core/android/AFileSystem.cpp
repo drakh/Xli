@@ -13,7 +13,7 @@ namespace Xli
             AAssetStream(String filename, FileMode mode)
             {
                 if (mode != FileModeRead && mode != FileModeReadRandom) 
-                    XLI_THROW("Unsupported asset file mode: " + (String)FileModeToString(mode));
+                    XLI_THROW("Unsupported asset file mode: " + FileModeInfo::ToString(mode));
                 
                 asset = AAssetManager_open(AndroidActivity->assetManager, filename.DataPtr(), ((mode & FileModeRandom) != 0) ? AASSET_MODE_RANDOM : AASSET_MODE_STREAMING);
                 

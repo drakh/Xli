@@ -108,7 +108,8 @@ namespace Xli
         return Value(new OrderedObjectValue());
     }
 
-    template <typename T> static void SetToArray(Value& v, const T* values, int count)
+    template <typename T> 
+    static void SetToArray(Value& v, const T* values, int count)
     {
         ArrayValue* a = new ArrayValue();
         a->Values.Resize(count);
