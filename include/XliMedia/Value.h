@@ -57,6 +57,7 @@ namespace Xli
         virtual ValueType GetType() const = 0;
 
         virtual UInt32 Hash() const;
+        virtual bool Equals(const Value& v) const;
 
         virtual String ToString() const;
         virtual Int32 ToInt32() const;
@@ -78,27 +79,6 @@ namespace Xli
         virtual void Append(const Value& value);
         virtual Value& Get(const Value& key);
         virtual int Count() const;
-
-        virtual Value Add(const Value& v) const;
-        virtual Value Sub(const Value& v) const;
-        virtual Value Mul(const Value& v) const;
-        virtual Value Div(const Value& v) const;
-        virtual Value Mod(const Value& v) const;
-
-        virtual bool And(const Value& v) const;
-        virtual bool Or(const Value& v) const;
-        virtual bool Not() const;
-
-        virtual bool Equals(const Value& v) const;
-        virtual bool LessThan(const Value& v) const;
-        virtual bool LessThanOrEquals(const Value& v) const;
-        virtual bool GreaterThan(const Value& v) const;
-        virtual bool GreaterThanOrEquals(const Value& v) const;
-
-        virtual Value BitwiseAnd(const Value& v) const;
-        virtual Value BitwiseOr(const Value& v) const;
-        virtual Value BitwiseNot() const;
-        virtual Value BitwiseXor(const Value& v) const;
     };
 
     /**
@@ -196,27 +176,8 @@ namespace Xli
 
         int Count() const { return object->Count(); }
 
-        Value operator + (const Value& v) const { return object->Add(v); }
-        Value operator - (const Value& v) const { return object->Sub(v); }
-        Value operator * (const Value& v) const { return object->Mul(v); }
-        Value operator / (const Value& v) const { return object->Div(v); }
-        Value operator % (const Value& v) const { return object->Mod(v); }
-
-        bool operator && (const Value& v) const { return object->And(v); }
-        bool operator || (const Value& v) const { return object->Or(v); }
-        bool operator ! () const { return object->Not(); }
-
         bool operator == (const Value& v) const { return object->Equals(v); }
         bool operator != (const Value& v) const { return !object->Equals(v); }
-        bool operator < (const Value& v) const { return object->LessThan(v); }
-        bool operator <= (const Value& v) const { return object->LessThanOrEquals(v); }
-        bool operator > (const Value& v) const { return object->GreaterThan(v); }
-        bool operator >= (const Value& v) const { return object->GreaterThanOrEquals(v); }
-
-        Value operator & (const Value& v) const { return object->BitwiseAnd(v); }
-        Value operator | (const Value& v) const { return object->BitwiseAnd(v); }
-        Value operator ~ () const { return object->BitwiseNot(); }
-        Value operator ^ (const Value& v) const { return object->BitwiseXor(v); }
     };
 
     /**
@@ -245,15 +206,10 @@ namespace Xli
         virtual double ToDouble() const { return value? 1.0 : 0.0; } 
 
         virtual UInt32 Hash() const { return DefaultTraits::Hash(value); }
-        
-        BoolValue(bool val) { value = val; }
-        operator bool() { return value; }
-
         virtual bool Equals(const Value& v) const {  try { return value == v->ToBool(); } catch(const Exception&) { return false; } }
 
-        virtual bool And(const Value& v) const { return value && v->ToBool(); }
-        virtual bool Or(const Value& v) const { return value || v->ToBool(); }
-        virtual bool Not() const { return !value; }
+        BoolValue(bool val) { value = val; }
+        operator bool() { return value; }
     };
 
     /**
@@ -270,13 +226,10 @@ namespace Xli
         virtual bool ToBool() const { if (value=="true") return true; if (value=="false") return false; XLI_THROW("Could not convert string to bool"); }
 
         virtual UInt32 Hash() const { return DefaultTraits::Hash(value); }
-        
+        virtual bool Equals(const Value& v) const { try {return value == v->ToString(); } catch(const Exception&) { return false; } }
+
         StringValue(const String& str) { value = str; }
         operator const String&() { return value; }
-
-        virtual Value Add(const Value& v) const { return new StringValue(value + v->ToString()); }
-
-        virtual bool Equals(const Value& v) const { try {return value == v->ToString(); } catch(const Exception&) { return false; } }
     };
 
     /**
@@ -295,26 +248,9 @@ namespace Xli
         virtual bool ToBool() const { return value != 0; }
 
         virtual UInt32 Hash() const { return DefaultTraits::Hash(value); }
-        
-        IntegerValue(int val) { value = val; }
-        
-        virtual Value Add(const Value& v) const { return new IntegerValue(value + v->ToInt32()); }
-        virtual Value Sub(const Value& v) const { return new IntegerValue(value - v->ToInt32()); }
-        virtual Value Mul(const Value& v) const { return new IntegerValue(value * v->ToInt32()); }
-        virtual Value Div(const Value& v) const { return new IntegerValue(value / v->ToInt32()); }
-        virtual Value Mod(const Value& v) const { return new IntegerValue(value % v->ToInt32()); }
-
         virtual bool Equals(const Value& v) const {  try { return value == v->ToInt32(); } catch(const Exception&) { return false; } }
 
-        virtual bool LessThan(const Value& v) const { return value < v->ToInt32(); }
-        virtual bool LessThanOrEquals(const Value& v) const { return value <= v->ToInt32(); }
-        virtual bool GreaterThan(const Value& v) const { return value > v->ToInt32(); }
-        virtual bool GreaterThanOrEquals(const Value& v) const { return value >= v->ToInt32(); }
-
-        virtual Value BitwiseAnd(const Value& v) const { return new IntegerValue(value & v->ToInt32()); }
-        virtual Value BitwiseOr(const Value& v) const { return new IntegerValue(value | v->ToInt32()); }
-        virtual Value BitwiseNot() const { return new IntegerValue(~value); } 
-        virtual Value BitwiseXor(const Value& v) const { return new IntegerValue(value ^ v->ToInt32()); }
+        IntegerValue(int val) { value = val; }
     };
 
     /**
@@ -333,26 +269,9 @@ namespace Xli
         virtual bool ToBool() const { return value != 0; }
         
         virtual UInt32 Hash() const { return DefaultTraits::Hash(value); }
-
-        Int64Value(Int64 val) { value = val; }
-
-        virtual Value Add(const Value& v) const { return new Int64Value(value + v->ToInt64()); }
-        virtual Value Sub(const Value& v) const { return new Int64Value(value - v->ToInt64()); }
-        virtual Value Mul(const Value& v) const { return new Int64Value(value * v->ToInt64()); }
-        virtual Value Div(const Value& v) const { return new Int64Value(value / v->ToInt64()); }
-        virtual Value Mod(const Value& v) const { return new Int64Value(value % v->ToInt64()); }
-
         virtual bool Equals(const Value& v) const {  try { return value == v->ToInt64(); } catch(const Exception&) { return false; } }
 
-        virtual bool LessThan(const Value& v) const { return value < v->ToInt64(); }
-        virtual bool LessThanOrEquals(const Value& v) const { return value <= v->ToInt64(); }
-        virtual bool GreaterThan(const Value& v) const { return value > v->ToInt64(); }
-        virtual bool GreaterThanOrEquals(const Value& v) const { return value >= v->ToInt64(); }
-
-        virtual Value BitwiseAnd(const Value& v) const { return new Int64Value(value & v->ToInt64()); }
-        virtual Value BitwiseOr(const Value& v) const { return new Int64Value(value | v->ToInt64()); }
-        virtual Value BitwiseNot() const { return new Int64Value(~value); } 
-        virtual Value BitwiseXor(const Value& v) const { return new Int64Value(value ^ v->ToInt64()); }
+        Int64Value(Int64 val) { value = val; }
     };
     
     /**
@@ -371,20 +290,10 @@ namespace Xli
         virtual bool ToBool() const { return value != 0.0; }
 
         virtual UInt32 Hash() const { return DefaultTraits::Hash(value); }
+        virtual bool Equals(const Value& v) const { try{return value == v->ToDouble(); } catch(const Exception&) { return false; } }
 
         DoubleValue(double val) { value = val; }
         operator double() { return value; }
-
-        virtual Value Add(const Value& v) const { return new DoubleValue(value + v->ToDouble()); }
-        virtual Value Sub(const Value& v) const { return new DoubleValue(value - v->ToDouble()); }
-        virtual Value Mul(const Value& v) const { return new DoubleValue(value * v->ToDouble()); }
-        virtual Value Div(const Value& v) const { return new DoubleValue(value / v->ToDouble()); }
-
-        virtual bool Equals(const Value& v) const { try{return value == v->ToDouble(); } catch(const Exception&) { return false; } }
-        virtual bool LessThan(const Value& v) const { return value < v->ToDouble(); }
-        virtual bool LessThanOrEquals(const Value& v) const { return value <= v->ToDouble(); }
-        virtual bool GreaterThan(const Value& v) const { return value > v->ToDouble(); }
-        virtual bool GreaterThanOrEquals(const Value& v) const { return value >= v->ToDouble(); }
     };
 
     /**

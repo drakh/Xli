@@ -61,24 +61,7 @@ namespace Xli
     Value& IValue::Get(const Value& key) { UNSUPPORTED; }
     int IValue::Count() const { UNSUPPORTED; }
 
-    Value IValue::Add(const Value& v) const { UNSUPPORTED; }
-    Value IValue::Sub(const Value& v) const { UNSUPPORTED; }
-    Value IValue::Mul(const Value& v) const { UNSUPPORTED; }
-    Value IValue::Div(const Value& v) const { UNSUPPORTED; }
-    Value IValue::Mod(const Value& v) const { UNSUPPORTED; }
-
-    bool IValue::And(const Value& v) const { UNSUPPORTED; }
-    bool IValue::Or(const Value& v) const { UNSUPPORTED; }
-    bool IValue::Not() const { UNSUPPORTED; }
     bool IValue::Equals(const Value& v) const { UNSUPPORTED; }
-    bool IValue::LessThan(const Value& v) const { UNSUPPORTED; }
-    bool IValue::LessThanOrEquals(const Value& v) const { UNSUPPORTED; }
-    bool IValue::GreaterThan(const Value& v) const { UNSUPPORTED; }
-    bool IValue::GreaterThanOrEquals(const Value& v) const { UNSUPPORTED; }
-    Value IValue::BitwiseAnd(const Value& v) const { UNSUPPORTED; }
-    Value IValue::BitwiseOr(const Value& v) const { UNSUPPORTED; }
-    Value IValue::BitwiseNot() const { UNSUPPORTED; }
-    Value IValue::BitwiseXor(const Value& v) const { UNSUPPORTED; }
 
     #undef UNSUPPORTED
 
@@ -112,18 +95,23 @@ namespace Xli
     {
         ArrayValue* a = new ArrayValue();
         a->Values.Resize(count);
-        for (int i = 0; i < count; i++) a->Values[i] = values[i];
+
+        for (int i = 0; i < count; i++) 
+            a->Values[i] = values[i];
+
         v = a;
     }
 
     static void GetFloatArray(const Value& v, float* values, int count)
     {
-        for (int i = 0; i < count; i++) values[i] = v.GetValue(i).ToFloat();
+        for (int i = 0; i < count; i++) 
+            values[i] = v.GetValue(i).ToFloat();
     }
 
     static void GetIntArray(const Value& v, int* values, int count)
     {
-        for (int i = 0; i < count; i++) values[i] = v.GetValue(i).ToInt32();
+        for (int i = 0; i < count; i++) 
+            values[i] = v.GetValue(i).ToInt32();
     }
 
     Value::Value(const Vector2i& v)
