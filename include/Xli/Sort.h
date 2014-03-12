@@ -10,7 +10,8 @@ namespace Xli
         @{
     */
 
-    template <typename T, typename TComparator> void ShellSort(T* data, int left, int right)
+    template <typename T, typename TComparator> 
+    void ShellSort(T* data, int left, int right)
     {
         const float s = 2.8f;
 
@@ -24,7 +25,7 @@ namespace Xli
                 int j = i;
                 T temp = data[i];
 
-                while ((j >= increment) && TComparator::Compare(temp, data[j-increment]))
+                while ((j >= increment) && TComparator::Compare(temp, data[j - increment]))
                 {
                     Swap(data[j], data[j - increment]);
                     j -= increment;
@@ -40,7 +41,8 @@ namespace Xli
         }
     }
 
-    template <typename T, typename TComparator> void Sort(T* data, int left, int right)
+    template <typename T, typename TComparator> 
+    void Sort(T* data, int left, int right)
     {
         if (right - left > 280)
         {

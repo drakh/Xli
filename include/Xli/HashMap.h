@@ -8,23 +8,6 @@ namespace Xli
 {
     /**
         \ingroup XliCoreContainers
-    */
-    template <typename TKey, typename TValue> class HashMapTraits
-    {
-    public:
-        static UInt32 Hash(const TKey& key) 
-        {
-            return Xli::Hash(key); 
-        }
-        
-        static bool Equals(const TKey& a, const TKey& b) 
-        {
-            return a == b; 
-        }
-    };
-
-    /**
-        \ingroup XliCoreContainers
 
         Dictionary template.
         Maps keys to values using a very efficient hash map. For user-defined TKey types, methods
@@ -33,7 +16,7 @@ namespace Xli
         functions used. This is useful i.e. when using pointers to objects as keys and you want to
         compare the value of the objects and not the pointers.
     */
-    template <typename TKey, typename TValue, typename TTraits = HashMapTraits<TKey, TValue> > class HashMap
+    template <typename TKey, typename TValue, typename TTraits = HashTraits<TKey> > class HashMap
     {
         static const int BufSize = 4;
 

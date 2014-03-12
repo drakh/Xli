@@ -45,6 +45,22 @@ namespace Xli
     }
 
     /** @} */
+
+    /**
+        \ingroup XliCoreUtils
+    */
+    template <typename T> struct HashTraits
+    {
+        static UInt32 Hash(const T& key) 
+        {
+            return Xli::Hash(key); 
+        }
+        
+        static bool Equals(const T& a, const T& b) 
+        {
+            return a == b; 
+        }
+    };
 }
 
 #endif
