@@ -42,7 +42,7 @@ namespace Xli
 
     #define UNSUPPORTED XLI_THROW((String)XLI_FUNCTION + " is not supported for value of type " + Value::TypeToString(GetType()))
 
-    UInt32 IValue::GetHashCode() const { UNSUPPORTED; }
+    UInt32 IValue::Hash() const { UNSUPPORTED; }
 
     Int32 IValue::ToInt32() const { UNSUPPORTED; }
     Int64 IValue::ToInt64() const { UNSUPPORTED; }
@@ -70,12 +70,11 @@ namespace Xli
     bool IValue::And(const Value& v) const { UNSUPPORTED; }
     bool IValue::Or(const Value& v) const { UNSUPPORTED; }
     bool IValue::Not() const { UNSUPPORTED; }
-    bool IValue::Equal(const Value& v) const { UNSUPPORTED; }
-    bool IValue::NotEqual(const Value& v) const { return !Equal(v); }
+    bool IValue::Equals(const Value& v) const { UNSUPPORTED; }
     bool IValue::LessThan(const Value& v) const { UNSUPPORTED; }
-    bool IValue::LessThanOrEqual(const Value& v) const { UNSUPPORTED; }
+    bool IValue::LessThanOrEquals(const Value& v) const { UNSUPPORTED; }
     bool IValue::GreaterThan(const Value& v) const { UNSUPPORTED; }
-    bool IValue::GreaterThanOrEqual(const Value& v) const { UNSUPPORTED; }
+    bool IValue::GreaterThanOrEquals(const Value& v) const { UNSUPPORTED; }
     Value IValue::BitwiseAnd(const Value& v) const { UNSUPPORTED; }
     Value IValue::BitwiseOr(const Value& v) const { UNSUPPORTED; }
     Value IValue::BitwiseNot() const { UNSUPPORTED; }
@@ -221,10 +220,5 @@ namespace Xli
         Matrix4 v;
         GetFloatArray(*this, v.DataPtr(), 16);
         return v;
-    }
-
-    UInt32 Hash(const Value& value)
-    {
-        return value.GetHashCode();
     }
 }
