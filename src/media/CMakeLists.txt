@@ -15,22 +15,11 @@ set(Sources
     PngWriter.cpp
     Texture.cpp
     Value.cpp
-    Xml.cpp
     Zip.cpp
     )
 
 set(JsonSrc
     3rdparty/json_parser/JSON_parser.c
-    )
-
-set(TinyXmlInc 
-    3rdparty/tinyxml
-    )
-set(TinyXmlSrc
-    3rdparty/tinyxml/tinystr.cpp
-    3rdparty/tinyxml/tinyxml.cpp
-    3rdparty/tinyxml/tinyxmlerror.cpp
-    3rdparty/tinyxml/tinyxmlparser.cpp
     )
 
 set(UnzipInc 
@@ -184,8 +173,8 @@ set(FreetypeSrc
     3rdparty/freetype/src/winfonts/winfnt.c
     )
 
-include_directories(${TinyXmlInc} ${UnzipInc})
-set(Sources ${Sources} ${JsonSrc} ${TinyXmlSrc} ${UnzipSrc})
+include_directories(${UnzipInc})
+set(Sources ${Sources} ${JsonSrc} ${UnzipSrc})
 
 if (WIN32)
 
