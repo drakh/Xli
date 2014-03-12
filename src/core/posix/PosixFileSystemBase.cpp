@@ -93,13 +93,13 @@ namespace Xli
 
         void PosixFileSystemBase::DeleteDirectory(const String& path)
         { 
-            if (!rmdir(path.DataPtr()) != 0)
+            if (rmdir(path.DataPtr()) != 0)
                 XLI_THROW("Unable to delete directory '" + path + "'");
         }
 
         void PosixFileSystemBase::DeleteFile(const String& path)
         { 
-            if (!unlink(path.DataPtr()) != 0)
+            if (unlink(path.DataPtr()) != 0)
                 XLI_THROW("Unable to delete file '" + path + "'");
         }
 
