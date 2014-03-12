@@ -138,7 +138,7 @@ namespace Xli
     };
 
     /**
-        \addtogroup Xli
+        \addtogroup XliCoreTraits
         @{
     */
 
@@ -148,7 +148,7 @@ namespace Xli
 }
 
 /**
-    \addtogroup Xli
+    \addtogroup XliCoreText
     @{
 */
 

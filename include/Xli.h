@@ -37,8 +37,12 @@
     \brief Date, time and timers 
     \ingroup Xli
 
+    \defgroup XliCoreTraits Traits
+    \brief Default template traits
+    \ingroup Xli
+
     \defgroup XliCoreUtils Utils
-    \brief Utility functions
+    \brief Utilities, sorting, etc
     \ingroup Xli
 */
 

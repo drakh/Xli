@@ -1,7 +1,7 @@
 #include <Xli/String.h>
 #include <Xli/Array.h>
 #include <Xli/Exception.h>
-#include <Xli/Hash.h>
+#include <Xli/Traits.h>
 #include <cctype>
 #include <cstdio>
 #include <cstring>

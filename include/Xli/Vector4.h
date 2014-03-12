@@ -99,7 +99,8 @@ namespace Xli
             W = v.W;
         }
 
-        template <typename U> explicit Vector4t(const Vector4t<U>& v)
+        template <typename U> 
+        explicit Vector4t(const Vector4t<U>& v)
         {
             X = (T)v.X;
             Y = (T)v.Y;

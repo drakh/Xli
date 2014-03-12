@@ -1,7 +1,7 @@
 #include <Xli/Atomic.h>
 #include <Xli/Object.h>
 #include <Xli/Exception.h>
-#include <Xli/ToString.h>
+#include <Xli/Traits.h>
 
 namespace Xli
 {

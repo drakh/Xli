@@ -7,7 +7,7 @@
 #include <Xli/Map.h>
 #include <Xli/TextWriter.h>
 #include <Xli/Matrix4.h>
-#include <Xli/ToString.h>
+#include <Xli/Traits.h>
 
 /**
     \addtogroup XliMedia

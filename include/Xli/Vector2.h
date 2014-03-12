@@ -5,7 +5,6 @@
 #include <Xli/Exception.h>
 #include <Xli/Math.h>
 #include <Xli/String.h>
-#include <Xli/Hash.h>
 
 namespace Xli
 {
@@ -73,7 +72,8 @@ namespace Xli
             Y = v.Y;
         }
 
-        template <typename U> explicit Vector2t(const Vector2t<U>& v)
+        template <typename U> 
+        explicit Vector2t(const Vector2t<U>& v)
         {
             X = (T)v.X;
             Y = (T)v.Y;

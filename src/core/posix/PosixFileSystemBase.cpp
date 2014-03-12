@@ -2,7 +2,7 @@
 
 #include <Xli/Time.h>
 #include <Xli/Random.h>
-#include <Xli/Hash.h>
+#include <Xli/Traits.h>
 #include <Xli/DateTime.h>
 #include <Xli/Path.h>
 

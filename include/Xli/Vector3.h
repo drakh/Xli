@@ -83,7 +83,8 @@ namespace Xli
             Z = v.Z;
         }
 
-        template <typename U> explicit Vector3t(const Vector3t<U>& v)
+        template <typename U> 
+        explicit Vector3t(const Vector3t<U>& v)
         {
             X = (T)v.X;
             Y = (T)v.Y;

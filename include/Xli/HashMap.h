@@ -2,21 +2,14 @@
 #define __XLI_HASH_MAP_H__
 
 #include <Xli/Array.h>
-#include <Xli/Hash.h>
+#include <Xli/Traits.h>
 
 namespace Xli
 {
     /**
         \ingroup XliCoreContainers
-
-        Dictionary template.
-        Maps keys to values using a very efficient hash map. For user-defined TKey types, methods
-        UInt32 Hash() and operator == must be defined. All built-in C++ types can be used directly
-        as TKey. If the template argument TTraits can be specified to override the Hash() and Equals()
-        functions used. This is useful i.e. when using pointers to objects as keys and you want to
-        compare the value of the objects and not the pointers.
     */
-    template <typename TKey, typename TValue, typename TTraits = HashTraits<TKey> > class HashMap
+    template <typename TKey, typename TValue> class HashMap
     {
         static const int BufSize = 4;
 
@@ -246,14 +239,14 @@ namespace Xli
             if (count > (bucketCount / 8) * 5) 
                 expand();
             
-            int x = TTraits::Hash(key) & (bucketCount - 1);
+            int x = Traits<TKey>::Hash(key) & (bucketCount - 1);
             int firstX = x;
 
             while (true)
             {
                 if (buckets[x].State == BucketStateUsed)
                 {
-                    if (TTraits::Equals(buckets[x].Key, key)) 
+                    if (Traits<TKey>::Equals(buckets[x].Key, key)) 
                         return buckets[x].Value;
                 }
                 else if (buckets[x].State == BucketStateEmpty)
@@ -283,14 +276,14 @@ namespace Xli
             if (count > (bucketCount / 8) * 5) 
                 expand();
 
-            int x = TTraits::Hash(key) & (bucketCount - 1);
+            int x = Traits<TKey>::Hash(key) & (bucketCount - 1);
             int firstX = x;
 
             while (true)
             {
                 if (buckets[x].State == BucketStateUsed)
                 {
-                    if (TTraits::Equals(buckets[x].Key, key)) 
+                    if (Traits<TKey>::Equals(buckets[x].Key, key)) 
                         XLI_THROW("Map already contains the given key");
                 }
                 else if (buckets[x].State == BucketStateEmpty)
@@ -324,13 +317,13 @@ namespace Xli
 
         bool Remove(const TKey& key)
         {
-            int x = TTraits::Hash(key) & (bucketCount - 1);
+            int x = Traits<TKey>::Hash(key) & (bucketCount - 1);
 
             while (true)
             {
                 if (buckets[x].State == BucketStateUsed)
                 {
-                    if (TTraits::Equals(buckets[x].Key, key))
+                    if (Traits<TKey>::Equals(buckets[x].Key, key))
                     {
                         buckets[x].State = BucketStateDummy;
                         count--;
@@ -351,14 +344,14 @@ namespace Xli
 
         bool ContainsKey(const TKey& key) const
         {
-            int x = TTraits::Hash(key) & (bucketCount - 1);
+            int x = Traits<TKey>::Hash(key) & (bucketCount - 1);
             int firstX = x;
 
             while (true)
             {
                 if (buckets[x].State == BucketStateUsed)
                 {
-                    if (TTraits::Equals(buckets[x].Key, key)) 
+                    if (Traits<TKey>::Equals(buckets[x].Key, key)) 
                         return true;
                 }
                 else if (buckets[x].State == BucketStateEmpty)
@@ -378,14 +371,14 @@ namespace Xli
 
         bool TryGetValue(const TKey& key, TValue& value) const
         {
-            int x = TTraits::Hash(key) & (bucketCount - 1);
+            int x = Traits<TKey>::Hash(key) & (bucketCount - 1);
             int firstX = x;
 
             while (true)
             {
                 if (buckets[x].State == BucketStateUsed)
                 {
-                    if (TTraits::Equals(buckets[x].Key, key))
+                    if (Traits<TKey>::Equals(buckets[x].Key, key))
                     {
                         value = buckets[x].Value;
                         return true;
