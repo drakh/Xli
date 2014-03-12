@@ -34,7 +34,7 @@ namespace Xli
         {
             String prefix = Path::Combine(GetTempDirectory(), (String)(int)getpid() + "-");
 
-            Random rand(Hash(GetTimestamp()));
+            Random rand(DefaultTraits::Hash(GetTimestamp()));
             static const char* cs = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
             int cl = strlen(cs);
 

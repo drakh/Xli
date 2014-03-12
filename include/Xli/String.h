@@ -136,15 +136,6 @@ namespace Xli
         String& operator = (float f);
         String& operator = (double d);
     };
-
-    /**
-        \addtogroup XliCoreTraits
-        @{
-    */
-
-    UInt32 Hash(const String& str);
-
-    /** @} */
 }
 
 /**

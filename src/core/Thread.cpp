@@ -83,6 +83,6 @@ namespace Xli
 
     String Task::ToString() const
     {
-        return "<Task " + Xli::ToString((void*)this) + ">";
+        return "<Task " + DefaultTraits::ToString((void*)this) + ">";
     }
 }

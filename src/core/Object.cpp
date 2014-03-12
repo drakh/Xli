@@ -39,6 +39,6 @@ namespace Xli
 
     String Object::ToString() const
     {
-        return "<Object " + Xli::ToString((void*)this) + ">";
+        return "<Object " + DefaultTraits::ToString((void*)this) + ">";
     }
 }

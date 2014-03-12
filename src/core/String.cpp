@@ -1,7 +1,6 @@
 #include <Xli/String.h>
 #include <Xli/Array.h>
 #include <Xli/Exception.h>
-#include <Xli/Traits.h>
 #include <cctype>
 #include <cstdio>
 #include <cstring>
@@ -137,11 +136,6 @@ namespace Xli
     int String::Length() const
     {
         return length;
-    }
-
-    UInt32 Hash(const String& str)
-    {
-        return Xli::Hash((const UInt8*)str.DataPtr(), str.Length());
     }
 
     char& String::operator [] (int index)

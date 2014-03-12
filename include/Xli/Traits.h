@@ -7,73 +7,72 @@
 namespace Xli
 {
     /**
-        \addtogroup XliCoreTraits
-        @{
+        \ingroup XliCoreTraits
     */
-
-    template <typename T>
-    bool Equals(const T& a, const T& b)
+    struct DefaultTraits
     {
-        return a == b;
-    }
+        template <typename T>
+        static bool Equals(const T& a, const T& b)
+        {
+            return a == b;
+        }
 
-    UInt32 Hash(const UInt8* data, int size);
+        static UInt32 Hash(const UInt8* data, int size);
 
-    UInt32 Hash(bool b);
-    UInt32 Hash(const void* p);
-    UInt32 Hash(float f);
-    UInt32 Hash(double d);
+        static UInt32 Hash(bool b);
+        static UInt32 Hash(const void* p);
+        static UInt32 Hash(float f);
+        static UInt32 Hash(double d);
 
-    UInt32 Hash(Int8 i);
-    UInt32 Hash(UInt8 i);
-    UInt32 Hash(Int16 i);
-    UInt32 Hash(UInt16 i);
-    UInt32 Hash(Int32 i);
-    UInt32 Hash(UInt32 i);
-    UInt32 Hash(Int64 i);
-    UInt32 Hash(UInt64 i);
-    UInt32 Hash(const String& str);
+        static UInt32 Hash(Int8 i);
+        static UInt32 Hash(UInt8 i);
+        static UInt32 Hash(Int16 i);
+        static UInt32 Hash(UInt16 i);
+        static UInt32 Hash(Int32 i);
+        static UInt32 Hash(UInt32 i);
+        static UInt32 Hash(Int64 i);
+        static UInt32 Hash(UInt64 i);
+        static UInt32 Hash(const String& str);
 
-    template <typename T> 
-    UInt32 Hash(const T* t) 
-    { 
-        return Hash((const void*)t); 
-    }
-    
-    template <typename T> 
-    UInt32 Hash(T* t) 
-    { 
-        return Hash((const void*)t); 
-    }
+        template <typename T> 
+        static UInt32 Hash(const T* t) 
+        { 
+            return Hash((const void*)t); 
+        }
+        
+        template <typename T> 
+        static UInt32 Hash(T* t) 
+        { 
+            return Hash((const void*)t); 
+        }
 
-    template <typename T> 
-    UInt32 Hash(const T& t) 
-    { 
-        return Hash((const UInt8*)&t, (int)sizeof(T)); 
-    }
+        template <typename T> 
+        static UInt32 Hash(const T& t) 
+        { 
+            return Hash((const UInt8*)&t, (int)sizeof(T)); 
+        }
 
-    String ToString(void* p);
-    String ToString(int i);
-    String ToString(unsigned int i);
-    String ToString(short i);
-    String ToString(unsigned short i);
-    String ToString(long i);
-    String ToString(unsigned long i);
-    String ToString(long long i);
-    String ToString(unsigned long long i);
-    String ToString(float f);
-    String ToString(double d);
-    String ToString(char c);
-    String ToString(unsigned char c);
-    String ToString(bool b);
+        static String ToString(void* p);
+        static String ToString(int i);
+        static String ToString(unsigned int i);
+        static String ToString(short i);
+        static String ToString(unsigned short i);
+        static String ToString(long i);
+        static String ToString(unsigned long i);
+        static String ToString(long long i);
+        static String ToString(unsigned long long i);
+        static String ToString(float f);
+        static String ToString(double d);
+        static String ToString(char c);
+        static String ToString(unsigned char c);
+        static String ToString(bool b);
 
-    template <typename T> 
-    String ToString(const T& t)
-    {
-        return t.ToString();
-    }
-
-    /** @} */
+        template <typename T> 
+        static String ToString(const T& t)
+        {
+            return t.ToString();
+        }
+    };
 
     /**
         \ingroup XliCoreTraits
@@ -82,17 +81,17 @@ namespace Xli
     {
         static bool Equals(const T& a, const T& b) 
         {
-            return Xli::Equals(a, b);
+            return DefaultTraits::Equals(a, b);
         }
-        
+
         static UInt32 Hash(const T& t) 
         {
-            return Xli::Hash(t);
+            return DefaultTraits::Hash(t);
         }
 
         static String ToString(const T& t)
         {
-            return Xli::ToString(t);
+            return DefaultTraits::ToString(t);
         }
     };
 }
