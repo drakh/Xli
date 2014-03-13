@@ -20,10 +20,7 @@ namespace Xli
 {
     namespace PlatformSpecific
     {
-        static Timestamp ConvertToTimeStamp(time_t time)
-        {
-            return (Timestamp)time * DateTime::PerSecond + (369 * 365 + 89) * DateTime::PerDay;
-        }
+        Timestamp ConvertToTimestamp(time_t time);
 
         Stream* PosixFileSystemBase::OpenFile(const String& filename, FileMode mode)
         {
@@ -133,9 +130,9 @@ namespace Xli
             if (S_ISDIR(attributes.st_mode))
                 f.Flags |= FileFlagDirectory;
 
-            f.CreationTime = ConvertToTimeStamp(attributes.st_mtime);
-            f.LastAccessTime = ConvertToTimeStamp(attributes.st_atime);
-            f.LastWriteTime = ConvertToTimeStamp(attributes.st_mtime);
+            f.CreationTime = ConvertToTimestamp(attributes.st_mtime);
+            f.LastAccessTime = ConvertToTimestamp(attributes.st_atime);
+            f.LastWriteTime = ConvertToTimestamp(attributes.st_mtime);
 
             return true;
         }
