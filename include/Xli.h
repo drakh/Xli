@@ -67,7 +67,6 @@
 #include <Xli/Exception.h>
 #include <Xli/File.h>
 #include <Xli/FileSystem.h>
-#include <Xli/Hash.h>
 #include <Xli/HashMap.h>
 #include <Xli/Managed.h>
 #include <Xli/Math.h>
@@ -92,7 +91,7 @@
 #include <Xli/TextWriter.h>
 #include <Xli/Thread.h>
 #include <Xli/Time.h>
-#include <Xli/ToString.h>
+#include <Xli/Traits.h>
 #include <Xli/Unicode.h>
 #include <Xli/Utf16String.h>
 #include <Xli/Vector2.h>
