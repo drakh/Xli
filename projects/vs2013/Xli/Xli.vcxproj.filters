@@ -45,9 +45,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\Xli\Hash.h">
-      <Filter>Xli</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\Xli\Math.h">
       <Filter>Xli\Math</Filter>
     </ClInclude>
@@ -184,9 +181,6 @@
     <ClInclude Include="..\..\..\include\Xli\Utf16String.h">
       <Filter>Xli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\Xli\ToString.h">
-      <Filter>Xli</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\Xli\Unicode.h">
       <Filter>Xli</Filter>
     </ClInclude>
@@ -237,6 +231,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\Xli\Map.h">
       <Filter>Xli\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\Traits.h">
+      <Filter>Xli</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -375,13 +372,7 @@
     <ClCompile Include="..\..\..\src\core\StringBuilder.cpp">
       <Filter>Xli</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\core\ToString.cpp">
-      <Filter>Xli</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\core\Unicode.cpp">
-      <Filter>Xli</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\core\Hash.cpp">
       <Filter>Xli</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\core\Object.cpp">
@@ -425,6 +416,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\core\generic\GenericBundle.cpp">
       <Filter>Xli\Platform\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\core\Traits.cpp">
+      <Filter>Xli</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

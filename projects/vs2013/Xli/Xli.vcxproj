@@ -202,7 +202,6 @@
     <ClInclude Include="..\..\..\include\Xli\Disk.h" />
     <ClInclude Include="..\..\..\include\Xli\Display.h" />
     <ClInclude Include="..\..\..\include\Xli\Exception.h" />
-    <ClInclude Include="..\..\..\include\Xli\Hash.h" />
     <ClInclude Include="..\..\..\include\Xli\MessageBox.h" />
     <ClInclude Include="..\..\..\include\Xli\Mutex.h" />
     <ClInclude Include="..\..\..\include\Xli\MutexQueue.h" />
@@ -227,7 +226,7 @@
     <ClInclude Include="..\..\..\include\Xli\TextStream.h" />
     <ClInclude Include="..\..\..\include\Xli\Thread.h" />
     <ClInclude Include="..\..\..\include\Xli\Time.h" />
-    <ClInclude Include="..\..\..\include\Xli\ToString.h" />
+    <ClInclude Include="..\..\..\include\Xli\Traits.h" />
     <ClInclude Include="..\..\..\include\Xli\Unicode.h" />
     <ClInclude Include="..\..\..\include\Xli\Utf16String.h" />
     <ClInclude Include="..\..\..\include\Xli\Utils.h" />
@@ -321,7 +320,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\core\Hash.cpp" />
     <ClCompile Include="..\..\..\src\core\Matrix3.cpp" />
     <ClCompile Include="..\..\..\src\core\Matrix4.cpp" />
     <ClCompile Include="..\..\..\src\core\MessageBox.cpp" />
@@ -396,7 +394,7 @@
     <ClCompile Include="..\..\..\src\core\TextStream.cpp" />
     <ClCompile Include="..\..\..\src\core\TextWriter.cpp" />
     <ClCompile Include="..\..\..\src\core\Thread.cpp" />
-    <ClCompile Include="..\..\..\src\core\ToString.cpp" />
+    <ClCompile Include="..\..\..\src\core\Traits.cpp" />
     <ClCompile Include="..\..\..\src\core\Unicode.cpp" />
     <ClCompile Include="..\..\..\src\core\Utf16String.cpp" />
     <ClCompile Include="..\..\..\src\core\win32\Win32Cond.cpp" />
