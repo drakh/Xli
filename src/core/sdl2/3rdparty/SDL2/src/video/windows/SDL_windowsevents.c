@@ -25,6 +25,7 @@
 #include "SDL_windowsvideo.h"
 #include "SDL_windowsshape.h"
 #include "SDL_syswm.h"
+#include "SDL_timer.h"
 #include "SDL_vkeys.h"
 #include "../../events/SDL_events_c.h"
 #include "../../events/SDL_touch_c.h"
@@ -259,6 +260,30 @@ WIN_CheckRawMouseButtons( ULONG rawButtons, SDL_WindowData *data )
     }
 }
 
+void
+WIN_CheckAsyncMouseRelease( SDL_WindowData *data )
+{
+    Uint32 mouseFlags;
+    SHORT keyState;
+
+    /* mouse buttons may have changed state here, we need to resync them,
+       but we will get a WM_MOUSEMOVE right away which will fix things up if in non raw mode also
+    */
+    mouseFlags = SDL_GetMouseState( NULL, NULL );
+
+    keyState = GetAsyncKeyState( VK_LBUTTON );
+    WIN_CheckWParamMouseButton( ( keyState & 0x8000 ), ( mouseFlags & SDL_BUTTON_LMASK ), data, SDL_BUTTON_LEFT );
+    keyState = GetAsyncKeyState( VK_RBUTTON );
+    WIN_CheckWParamMouseButton( ( keyState & 0x8000 ), ( mouseFlags & SDL_BUTTON_RMASK ), data, SDL_BUTTON_RIGHT );
+    keyState = GetAsyncKeyState( VK_MBUTTON );
+    WIN_CheckWParamMouseButton( ( keyState & 0x8000 ), ( mouseFlags & SDL_BUTTON_MMASK ), data, SDL_BUTTON_MIDDLE );
+    keyState = GetAsyncKeyState( VK_XBUTTON1 );
+    WIN_CheckWParamMouseButton( ( keyState & 0x8000 ), ( mouseFlags & SDL_BUTTON_X1MASK ), data, SDL_BUTTON_X1 );
+    keyState = GetAsyncKeyState( VK_XBUTTON2 );
+    WIN_CheckWParamMouseButton( ( keyState & 0x8000 ), ( mouseFlags & SDL_BUTTON_X2MASK ), data, SDL_BUTTON_X2 );
+    data->mouse_button_flags = 0;
+}
+
 SDL_FORCE_INLINE BOOL
 WIN_ConvertUTF32toUTF8(UINT32 codepoint, char * text)
 {
@@ -344,32 +369,12 @@ WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
             minimized = HIWORD(wParam);
             if (!minimized && (LOWORD(wParam) != WA_INACTIVE)) {
-                Uint32 mouseFlags;
-                SHORT keyState;
-
                 SDL_SendWindowEvent(data->window, SDL_WINDOWEVENT_SHOWN, 0, 0);
                 if (SDL_GetKeyboardFocus() != data->window) {
                     SDL_SetKeyboardFocus(data->window);
                 }
-                /* mouse buttons may have changed state here, we need
-                to resync them, but we will get a WM_MOUSEMOVE right away which will fix
-                things up if in non raw mode also
-                */
-                mouseFlags = SDL_GetMouseState( NULL, NULL );
-
-                keyState = GetAsyncKeyState( VK_LBUTTON );
-                WIN_CheckWParamMouseButton( ( keyState & 0x8000 ), (mouseFlags & SDL_BUTTON_LMASK), data, SDL_BUTTON_LEFT );
-                keyState = GetAsyncKeyState( VK_RBUTTON );
-                WIN_CheckWParamMouseButton( ( keyState & 0x8000 ), (mouseFlags & SDL_BUTTON_RMASK), data, SDL_BUTTON_RIGHT );
-                keyState = GetAsyncKeyState( VK_MBUTTON );
-                WIN_CheckWParamMouseButton( ( keyState & 0x8000 ), (mouseFlags & SDL_BUTTON_MMASK), data, SDL_BUTTON_MIDDLE );
-                keyState = GetAsyncKeyState( VK_XBUTTON1 );
-                WIN_CheckWParamMouseButton( ( keyState & 0x8000 ), (mouseFlags & SDL_BUTTON_X1MASK), data, SDL_BUTTON_X1 );
-                keyState = GetAsyncKeyState( VK_XBUTTON2 );
-                WIN_CheckWParamMouseButton( ( keyState & 0x8000 ), (mouseFlags & SDL_BUTTON_X2MASK), data, SDL_BUTTON_X2 );
-                data->mouse_button_flags = 0;
-
                 WIN_UpdateClipCursor(data->window);
+                WIN_CheckAsyncMouseRelease(data);
 
                 /*
                  * FIXME: Update keyboard state
@@ -533,10 +538,10 @@ WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
             /* Detect relevant keyboard shortcuts */
             if (keyboardState[SDL_SCANCODE_LALT] == SDL_PRESSED || keyboardState[SDL_SCANCODE_RALT] == SDL_PRESSED ) {
-	            /* ALT+F4: Close window */
-	            if (code == SDL_SCANCODE_F4) {
-		            SDL_SendWindowEvent(data->window, SDL_WINDOWEVENT_CLOSE, 0, 0);
-	            }
+                /* ALT+F4: Close window */
+                if (code == SDL_SCANCODE_F4) {
+                    SDL_SendWindowEvent(data->window, SDL_WINDOWEVENT_CLOSE, 0, 0);
+                }
             }
 
             if ( code != SDL_SCANCODE_UNKNOWN ) {
@@ -565,6 +570,20 @@ WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         break;
 #endif /* WM_INPUTLANGCHANGE */
 
+    case WM_NCLBUTTONDOWN:
+        {
+            data->in_title_click = SDL_TRUE;
+            WIN_UpdateClipCursor(data->window);
+        }
+        break;
+
+    case WM_NCMOUSELEAVE:
+        {
+            data->in_title_click = SDL_FALSE;
+            WIN_UpdateClipCursor(data->window);
+        }
+        break;
+
     case WM_ENTERSIZEMOVE:
     case WM_ENTERMENULOOP:
         {
@@ -578,6 +597,9 @@ WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         {
             data->in_modal_loop = SDL_FALSE;
             WIN_UpdateClipCursor(data->window);
+
+            /* The mouse may have been released during the modal loop */
+            WIN_CheckAsyncMouseRelease(data);
         }
         break;
 
@@ -853,10 +875,17 @@ WIN_PumpEvents(_THIS)
 {
     const Uint8 *keystate;
     MSG msg;
+    DWORD start_ticks = GetTickCount();
+
     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
         /* Always translate the message in case it's a non-SDL window (e.g. with Qt integration) */
         TranslateMessage(&msg);
-        DispatchMessage(&msg);
+        DispatchMessage( &msg );
+
+        /* Make sure we don't busy loop here forever if there are lots of events coming in */
+        if (SDL_TICKS_PASSED(msg.time, start_ticks)) {
+            break;
+        }
     }
 
     /* Windows loses a shift KEYUP event when you have both pressed at once and let go of one.
