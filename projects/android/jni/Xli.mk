@@ -29,7 +29,6 @@ LOCAL_SRC_FILES := \
 	../../../src/core/Exception.cpp \
 	../../../src/core/File.cpp \
 	../../../src/core/FileSystem.cpp \
-	../../../src/core/Hash.cpp \
 	../../../src/core/Matrix3.cpp \
 	../../../src/core/Matrix4.cpp \
 	../../../src/core/MessageBox.cpp \
@@ -45,7 +44,7 @@ LOCAL_SRC_FILES := \
 	../../../src/core/TextStream.cpp \
 	../../../src/core/TextWriter.cpp \
 	../../../src/core/Thread.cpp \
-	../../../src/core/ToString.cpp \
+	../../../src/core/Traits.cpp \
 	../../../src/core/Unicode.cpp \
 	../../../src/core/Utf16String.cpp \
 	../../../src/core/Window.cpp \

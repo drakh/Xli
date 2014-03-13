@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A4E7BA118D1EBD30006CC4B /* Traits.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A4E7BA018D1EBD30006CC4B /* Traits.cpp */; };
 		5AAE58C0186F28100038835A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AAE58BF186F28100038835A /* Foundation.framework */; };
 		5AAE58E3186F28960038835A /* SDL2GLContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FC45454118576CF100EE7560 /* SDL2GLContext.cpp */; };
 		5AAE58E6186F2B9B0038835A /* iInit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5AAE58E5186F2B9B0038835A /* iInit.mm */; };
@@ -205,7 +206,6 @@
 		CE2D6C8D16C70D8500390436 /* File.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D670B16C70D8000390436 /* File.cpp */; };
 		CE2D6C8E16C70D8500390436 /* FileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D670C16C70D8000390436 /* FileSystem.cpp */; };
 		CE2D6C9016C70D8500390436 /* GenericDialogs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D670F16C70D8000390436 /* GenericDialogs.cpp */; };
-		CE2D6C9316C70D8500390436 /* Hash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D671216C70D8000390436 /* Hash.cpp */; };
 		CE2D6C9516C70D8500390436 /* Matrix3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D671416C70D8000390436 /* Matrix3.cpp */; };
 		CE2D6C9616C70D8500390436 /* Matrix4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D671516C70D8000390436 /* Matrix4.cpp */; };
 		CE2D6C9716C70D8500390436 /* MessageBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D671616C70D8000390436 /* MessageBox.cpp */; };
@@ -230,7 +230,6 @@
 		CE2D6CB416C70D8500390436 /* TextStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D673516C70D8000390436 /* TextStream.cpp */; };
 		CE2D6CB516C70D8500390436 /* TextWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D673616C70D8000390436 /* TextWriter.cpp */; };
 		CE2D6CB616C70D8500390436 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D673716C70D8000390436 /* Thread.cpp */; };
-		CE2D6CB716C70D8500390436 /* ToString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D673816C70D8000390436 /* ToString.cpp */; };
 		CE2D6CB816C70D8500390436 /* Unicode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D673916C70D8000390436 /* Unicode.cpp */; };
 		CE2D6CB916C70D8500390436 /* Utf16String.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D673A16C70D8000390436 /* Utf16String.cpp */; };
 		CE2D6CC516C70D8500390436 /* Window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D674716C70D8000390436 /* Window.cpp */; };
@@ -239,12 +238,6 @@
 		CE2D6EAF16C70D9B00390436 /* Wav.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D6E5A16C70D9A00390436 /* Wav.cpp */; };
 		CE2D732016C70DB600390436 /* JSON_parser.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70B616C70DB500390436 /* JSON_parser.c */; };
 		CE2D732116C70DB600390436 /* JSON_parser.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D70B716C70DB500390436 /* JSON_parser.h */; };
-		CE2D733416C70DB600390436 /* tinystr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70CC16C70DB500390436 /* tinystr.cpp */; };
-		CE2D733516C70DB600390436 /* tinystr.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D70CD16C70DB500390436 /* tinystr.h */; };
-		CE2D733616C70DB600390436 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70CE16C70DB500390436 /* tinyxml.cpp */; };
-		CE2D733716C70DB600390436 /* tinyxml.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D70CF16C70DB500390436 /* tinyxml.h */; };
-		CE2D733816C70DB600390436 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70D016C70DB500390436 /* tinyxmlerror.cpp */; };
-		CE2D733916C70DB600390436 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70D116C70DB500390436 /* tinyxmlparser.cpp */; };
 		CE2D733A16C70DB600390436 /* crypt.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D70D316C70DB500390436 /* crypt.h */; };
 		CE2D733B16C70DB600390436 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = CE2D70D416C70DB500390436 /* ioapi.c */; };
 		CE2D733C16C70DB600390436 /* ioapi.h in Headers */ = {isa = PBXBuildFile; fileRef = CE2D70D516C70DB500390436 /* ioapi.h */; };
@@ -262,7 +255,6 @@
 		CE2D73AD16C70DB600390436 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D715C16C70DB500390436 /* Texture.cpp */; };
 		CE2D73AE16C70DB600390436 /* UIImageReader.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE2D715D16C70DB500390436 /* UIImageReader.mm */; };
 		CE2D73AF16C70DB600390436 /* Value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D715E16C70DB500390436 /* Value.cpp */; };
-		CE2D73B016C70DB600390436 /* Xml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D715F16C70DB500390436 /* Xml.cpp */; };
 		CE2D73B116C70DB600390436 /* Zip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2D716016C70DB500390436 /* Zip.cpp */; };
 		CE9DEE25175E22C30079B8E1 /* adler32.c in Sources */ = {isa = PBXBuildFile; fileRef = CE9DEE0B175E22C30079B8E1 /* adler32.c */; };
 		CE9DEE26175E22C30079B8E1 /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = CE9DEE0C175E22C30079B8E1 /* compress.c */; };
@@ -373,6 +365,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5A4E7BA018D1EBD30006CC4B /* Traits.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Traits.cpp; sourceTree = "<group>"; };
 		5AA38E4D151A00CC00979B55 /* libXli.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXli.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AAE58BD186F280F0038835A /* libXliGL.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libXliGL.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AAE58BF186F28100038835A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -569,7 +562,6 @@
 		CE2D670B16C70D8000390436 /* File.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = File.cpp; sourceTree = "<group>"; };
 		CE2D670C16C70D8000390436 /* FileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem.cpp; sourceTree = "<group>"; };
 		CE2D670F16C70D8000390436 /* GenericDialogs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenericDialogs.cpp; sourceTree = "<group>"; };
-		CE2D671216C70D8000390436 /* Hash.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Hash.cpp; sourceTree = "<group>"; };
 		CE2D671416C70D8000390436 /* Matrix3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix3.cpp; sourceTree = "<group>"; };
 		CE2D671516C70D8000390436 /* Matrix4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix4.cpp; sourceTree = "<group>"; };
 		CE2D671616C70D8000390436 /* MessageBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MessageBox.cpp; sourceTree = "<group>"; };
@@ -594,7 +586,6 @@
 		CE2D673516C70D8000390436 /* TextStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextStream.cpp; sourceTree = "<group>"; };
 		CE2D673616C70D8000390436 /* TextWriter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextWriter.cpp; sourceTree = "<group>"; };
 		CE2D673716C70D8000390436 /* Thread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cpp; sourceTree = "<group>"; };
-		CE2D673816C70D8000390436 /* ToString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ToString.cpp; sourceTree = "<group>"; };
 		CE2D673916C70D8000390436 /* Unicode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Unicode.cpp; sourceTree = "<group>"; };
 		CE2D673A16C70D8000390436 /* Utf16String.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Utf16String.cpp; sourceTree = "<group>"; };
 		CE2D674716C70D8000390436 /* Window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Window.cpp; sourceTree = "<group>"; };
@@ -604,12 +595,6 @@
 		CE2D6EC416C70DA600390436 /* XliMain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XliMain.cpp; sourceTree = "<group>"; };
 		CE2D70B616C70DB500390436 /* JSON_parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = JSON_parser.c; sourceTree = "<group>"; };
 		CE2D70B716C70DB500390436 /* JSON_parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON_parser.h; sourceTree = "<group>"; };
-		CE2D70CC16C70DB500390436 /* tinystr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinystr.cpp; sourceTree = "<group>"; };
-		CE2D70CD16C70DB500390436 /* tinystr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tinystr.h; sourceTree = "<group>"; };
-		CE2D70CE16C70DB500390436 /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxml.cpp; sourceTree = "<group>"; };
-		CE2D70CF16C70DB500390436 /* tinyxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tinyxml.h; sourceTree = "<group>"; };
-		CE2D70D016C70DB500390436 /* tinyxmlerror.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlerror.cpp; sourceTree = "<group>"; };
-		CE2D70D116C70DB500390436 /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlparser.cpp; sourceTree = "<group>"; };
 		CE2D70D316C70DB500390436 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
 		CE2D70D416C70DB500390436 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
 		CE2D70D516C70DB500390436 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
@@ -627,7 +612,6 @@
 		CE2D715C16C70DB500390436 /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
 		CE2D715D16C70DB500390436 /* UIImageReader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UIImageReader.mm; sourceTree = "<group>"; };
 		CE2D715E16C70DB500390436 /* Value.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Value.cpp; sourceTree = "<group>"; };
-		CE2D715F16C70DB500390436 /* Xml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Xml.cpp; sourceTree = "<group>"; };
 		CE2D716016C70DB500390436 /* Zip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Zip.cpp; sourceTree = "<group>"; };
 		CE9DEE0B175E22C30079B8E1 /* adler32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = adler32.c; sourceTree = "<group>"; };
 		CE9DEE0C175E22C30079B8E1 /* compress.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = compress.c; sourceTree = "<group>"; };
@@ -1276,6 +1260,7 @@
 		CE2D5E0A16C70D7D00390436 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				5A4E7BA018D1EBD30006CC4B /* Traits.cpp */,
 				CE2D5E0B16C70D7D00390436 /* 3rdparty */,
 				CE0CD81B1768C90A00C02095 /* Application.cpp */,
 				CE2D66BB16C70D7F00390436 /* ArrayStream.cpp */,
@@ -1293,7 +1278,6 @@
 				CE2D670B16C70D8000390436 /* File.cpp */,
 				CE2D670C16C70D8000390436 /* FileSystem.cpp */,
 				CE2D670D16C70D8000390436 /* generic */,
-				CE2D671216C70D8000390436 /* Hash.cpp */,
 				5AAE58E4186F2B9B0038835A /* ios */,
 				CE2D671416C70D8000390436 /* Matrix3.cpp */,
 				CE2D671516C70D8000390436 /* Matrix4.cpp */,
@@ -1312,7 +1296,6 @@
 				CE2D673516C70D8000390436 /* TextStream.cpp */,
 				CE2D673616C70D8000390436 /* TextWriter.cpp */,
 				CE2D673716C70D8000390436 /* Thread.cpp */,
-				CE2D673816C70D8000390436 /* ToString.cpp */,
 				CE2D673916C70D8000390436 /* Unicode.cpp */,
 				CE2D673A16C70D8000390436 /* Utf16String.cpp */,
 				CE2D674716C70D8000390436 /* Window.cpp */,
@@ -1416,7 +1399,6 @@
 				CE2D715C16C70DB500390436 /* Texture.cpp */,
 				CE2D715D16C70DB500390436 /* UIImageReader.mm */,
 				CE2D715E16C70DB500390436 /* Value.cpp */,
-				CE2D715F16C70DB500390436 /* Xml.cpp */,
 				CE2D716016C70DB500390436 /* Zip.cpp */,
 			);
 			name = media;
@@ -1429,7 +1411,6 @@
 				FC4263DA185E3E5E00079544 /* freetype */,
 				CE9DEE0A175E22C30079B8E1 /* zlib */,
 				CE2D70B516C70DB500390436 /* json_parser */,
-				CE2D70CB16C70DB500390436 /* tinyxml */,
 				CE2D70D216C70DB500390436 /* unzip */,
 			);
 			path = 3rdparty;
@@ -1442,19 +1423,6 @@
 				CE2D70B716C70DB500390436 /* JSON_parser.h */,
 			);
 			path = json_parser;
-			sourceTree = "<group>";
-		};
-		CE2D70CB16C70DB500390436 /* tinyxml */ = {
-			isa = PBXGroup;
-			children = (
-				CE2D70CC16C70DB500390436 /* tinystr.cpp */,
-				CE2D70CD16C70DB500390436 /* tinystr.h */,
-				CE2D70CE16C70DB500390436 /* tinyxml.cpp */,
-				CE2D70CF16C70DB500390436 /* tinyxml.h */,
-				CE2D70D016C70DB500390436 /* tinyxmlerror.cpp */,
-				CE2D70D116C70DB500390436 /* tinyxmlparser.cpp */,
-			);
-			path = tinyxml;
 			sourceTree = "<group>";
 		};
 		CE2D70D216C70DB500390436 /* unzip */ = {
@@ -1786,8 +1754,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE2D732116C70DB600390436 /* JSON_parser.h in Headers */,
-				CE2D733516C70DB600390436 /* tinystr.h in Headers */,
-				CE2D733716C70DB600390436 /* tinyxml.h in Headers */,
 				CE2D733A16C70DB600390436 /* crypt.h in Headers */,
 				CE2D733C16C70DB600390436 /* ioapi.h in Headers */,
 				CE2D734016C70DB600390436 /* unzip.h in Headers */,
@@ -1993,7 +1959,6 @@
 				CE2D6C8D16C70D8500390436 /* File.cpp in Sources */,
 				CE2D6C8E16C70D8500390436 /* FileSystem.cpp in Sources */,
 				CE2D6C9016C70D8500390436 /* GenericDialogs.cpp in Sources */,
-				CE2D6C9316C70D8500390436 /* Hash.cpp in Sources */,
 				CE2D6C9516C70D8500390436 /* Matrix3.cpp in Sources */,
 				CE2D6C9616C70D8500390436 /* Matrix4.cpp in Sources */,
 				CE2D6C9716C70D8500390436 /* MessageBox.cpp in Sources */,
@@ -2018,7 +1983,6 @@
 				CE2D6CB416C70D8500390436 /* TextStream.cpp in Sources */,
 				CE2D6CB516C70D8500390436 /* TextWriter.cpp in Sources */,
 				CE2D6CB616C70D8500390436 /* Thread.cpp in Sources */,
-				CE2D6CB716C70D8500390436 /* ToString.cpp in Sources */,
 				CE2D6CB816C70D8500390436 /* Unicode.cpp in Sources */,
 				CE2D6CB916C70D8500390436 /* Utf16String.cpp in Sources */,
 				CE2D6CC516C70D8500390436 /* Window.cpp in Sources */,
@@ -2111,6 +2075,7 @@
 				CE2B2D5316C72AC40036FFA0 /* SDL_uikitmessagebox.m in Sources */,
 				CE2B2D5516C72AC40036FFA0 /* SDL_uikitmodes.m in Sources */,
 				CE2B2D5716C72AC40036FFA0 /* SDL_uikitopengles.m in Sources */,
+				5A4E7BA118D1EBD30006CC4B /* Traits.cpp in Sources */,
 				CE2B2D5916C72AC40036FFA0 /* SDL_uikitopenglview.m in Sources */,
 				CE2B2D5B16C72AC40036FFA0 /* SDL_uikitvideo.m in Sources */,
 				CE2B2D5D16C72AC40036FFA0 /* SDL_uikitview.m in Sources */,
@@ -2178,13 +2143,10 @@
 				FC426718185E468800079544 /* sfnt.c in Sources */,
 				FC426788185E510700079544 /* bdfdrivr.c in Sources */,
 				FC4263DD185E3E9900079544 /* FontFace.cpp in Sources */,
-				CE2D733416C70DB600390436 /* tinystr.cpp in Sources */,
-				CE2D733616C70DB600390436 /* tinyxml.cpp in Sources */,
 				FC426717185E468500079544 /* raster.c in Sources */,
 				FC42679D185E515500079544 /* psaux.c in Sources */,
 				FC426716185E468300079544 /* ftxf86.c in Sources */,
 				FC426758185E4FDB00079544 /* cidparse.c in Sources */,
-				CE2D733816C70DB600390436 /* tinyxmlerror.cpp in Sources */,
 				FC426714185E467E00079544 /* ftstroke.c in Sources */,
 				FC4267A5185E515500079544 /* t1cmap.c in Sources */,
 				FC42673D185E4F1000079544 /* t1parse.c in Sources */,
@@ -2193,7 +2155,6 @@
 				FC42678B185E510700079544 /* bdflib.c in Sources */,
 				FC42670F185E467000079544 /* ftbbox.c in Sources */,
 				FC4267B5185E519200079544 /* pcfdrivr.c in Sources */,
-				CE2D733916C70DB600390436 /* tinyxmlparser.cpp in Sources */,
 				CE2D733B16C70DB600390436 /* ioapi.c in Sources */,
 				FC4267C6185E51CC00079544 /* t42drivr.c in Sources */,
 				CE2D733F16C70DB600390436 /* unzip.c in Sources */,
@@ -2230,7 +2191,6 @@
 				FC42675A185E4FDB00079544 /* cidriver.c in Sources */,
 				FC4267CB185E51CC00079544 /* t42parse.c in Sources */,
 				FC4267BA185E519200079544 /* pcfutil.c in Sources */,
-				CE2D73B016C70DB600390436 /* Xml.cpp in Sources */,
 				FC426752185E4FDB00079544 /* cidgload.c in Sources */,
 				CE2D73B116C70DB600390436 /* Zip.cpp in Sources */,
 				CE9DEE25175E22C30079B8E1 /* adler32.c in Sources */,
