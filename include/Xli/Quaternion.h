@@ -14,12 +14,11 @@ namespace Xli
         union
         {
             struct { float X, Y, Z, W; };
-            float Coord[4];
+            float Data[4];
         };
 
-        operator float*();
-
-        float& operator [] (int i);
+        operator float* ();
+        operator const float* () const;
 
         String ToString() const;
 

@@ -15,37 +15,17 @@ namespace Xli
         {
             struct { T X, Y, Z, W; };
             struct { T R, G, B, A; };
-            T Comps[4];
-        }; 
-
-        T* DataPtr()
-        {
-            return Comps;
-        }
-
-        const T* DataPtr() const
-        {
-            return Comps;
-        }
+            T Data[4];
+        };
 
         operator T* ()
         {
-            return Comps;
+            return Data;
         }
 
         operator const T* () const
         {
-            return Comps;
-        }
-
-        T& operator [] (int i)
-        {
-#ifdef XLI_RANGE_CHECK
-            if (i >= 4 || i < 0)
-                XLI_THROW_INDEX_OUT_OF_BOUNDS;
-#endif
-
-            return Comps[i];
+            return Data;
         }
 
         String ToString() const

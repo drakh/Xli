@@ -116,97 +116,97 @@ namespace Xli
 
     Value::Value(const Vector2i& v)
     {
-        SetToArray(*this, v.DataPtr(), 2);
+        SetToArray(*this, v.Data, 2);
     }
 
     Value::Value(const Vector3i& v)
     {
-        SetToArray(*this, v.DataPtr(), 3);
+        SetToArray(*this, v.Data, 3);
     }
 
     Value::Value(const Vector4i& v)
     {
-        SetToArray(*this, v.DataPtr(), 4);
+        SetToArray(*this, v.Data, 4);
     }
 
     Value::Value(const Vector2& v)
     {
-        SetToArray(*this, v.DataPtr(), 2);
+        SetToArray(*this, v.Data, 2);
     }
 
     Value::Value(const Vector3& v)
     {
-        SetToArray(*this, v.DataPtr(), 3);
+        SetToArray(*this, v.Data, 3);
     }
 
     Value::Value(const Vector4& v)
     {
-        SetToArray(*this, v.DataPtr(), 4);
+        SetToArray(*this, v.Data, 4);
     }
 
     Value::Value(const Matrix3& v)
     {
-        SetToArray(*this, v.DataPtr(), 9);
+        SetToArray(*this, v.Data, 9);
     }
 
     Value::Value(const Matrix4& v)
     {
-        SetToArray(*this, v.DataPtr(), 16);
+        SetToArray(*this, v.Data, 16);
     }
 
     Vector2i Value::ToVector2i() const
     {
         Vector2i v;
-        GetIntArray(*this, v.DataPtr(), 2);
+        GetIntArray(*this, v.Data, 2);
         return v;
     }
 
     Vector3i Value::ToVector3i() const
     {
         Vector3i v;
-        GetIntArray(*this, v.DataPtr(), 3);
+        GetIntArray(*this, v.Data, 3);
         return v;
     }
 
     Vector4i Value::ToVector4i() const
     {
         Vector4i v;
-        GetIntArray(*this, v.DataPtr(), 4);
+        GetIntArray(*this, v.Data, 4);
         return v;
     }
 
     Vector2 Value::ToVector2() const
     {
         Vector2 v;
-        GetFloatArray(*this, v.DataPtr(), 2);
+        GetFloatArray(*this, v.Data, 2);
         return v;
     }
 
     Vector3 Value::ToVector3() const
     {
         Vector3 v;
-        GetFloatArray(*this, v.DataPtr(), 3);
+        GetFloatArray(*this, v.Data, 3);
         return v;
     }
 
     Vector4 Value::ToVector4() const
     {
         Vector4 v;
-        GetFloatArray(*this, v.DataPtr(), 4);
+        GetFloatArray(*this, v.Data, 4);
         return v;
     }
 
     Matrix3 Value::ToMatrix3() const
     {
         Matrix3 v;
-        GetFloatArray(*this, v.DataPtr(), 9);
+        GetFloatArray(*this, v.Data, 9);
         return v;
     }
 
     Matrix4 Value::ToMatrix4() const
     {
         Matrix4 v;
-        GetFloatArray(*this, v.DataPtr(), 16);
+        GetFloatArray(*this, v.Data, 16);
         return v;
     }
 }

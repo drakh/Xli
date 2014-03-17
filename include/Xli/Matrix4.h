@@ -10,9 +10,9 @@ namespace Xli
     */
     class Matrix4
     {
-        float data[16];
-
     public:
+        float Data[16];
+
         Matrix4();
         Matrix4(const Matrix4& m);
         explicit Matrix4(const float* values);
@@ -43,14 +43,9 @@ namespace Xli
         static bool Invert(const Matrix4& m, Matrix4& outResult);
         static bool Decompose(const Matrix4& m, Quaternion& outRotation, Vector3& outScale, Vector3& outTranslation); 
 
-        float* DataPtr();
-        const float* DataPtr() const;
-
         operator float* ();
         operator const float* () const;
         
-        float& operator [] (int i);
-
         String ToString() const;
         Matrix3 GetUpperLeft3x3() const;
         Vector3 GetTranslation() const;

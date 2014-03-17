@@ -12,9 +12,9 @@ namespace Xli
     */
     class Matrix3
     {
-        float data[9];
-
     public:
+        float Data[9];
+
         Matrix3();
         Matrix3(const Matrix3& m);
         explicit Matrix3(const float* values);
@@ -37,13 +37,8 @@ namespace Xli
         static Matrix3 Scaling(const Vector3& v);
         static Matrix3 Scaling(float s);
 
-        float* DataPtr();
-        const float* DataPtr() const;
-
         operator float* ();
         operator const float* () const;
-
-        float& operator [] (int i);
 
         String ToString() const;
         Quaternion ToQuaternion() const;
