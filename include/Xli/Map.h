@@ -87,43 +87,6 @@ namespace Xli
             return keys[iterator];
         }
 
-        /**
-            Returns a key with the given value.
-            If more than one key-value-pair contains the same value, which of the keys this funciton returns is undefined.
-            To get all keys with a given value, use GetKeysFromValue().
-            This is a very slow lookup, as it requires a linear iteration through the hash map.
-            If you want to perform this operation frequently, consider using a BiHashMap.
-            @param value The value to look up
-            @return The key at the given value.
-        */
-        bool TryGetKeyFromValue(const TValue& value, TKey& result) const
-        {
-            for (int i = Begin(); i != End(); i = Next(i))
-            {
-                if (GetValue(i) == value)
-                {
-                    result = GetKey(i);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        /**
-            Enumerates all keys with the given value.
-            This is a very slow lookup, as it requires a linear iteration through the hash map.
-            If you want to perform this operation frequently, consider using a BiHashMap.
-            @param value The value to look up
-            @param keys An array to fill with the found keys.
-        */
-        void GetKeysFromValue(const TValue& value, Array<TKey>& keys) const
-        {
-            for (int i = Begin(); i != End(); i = Next(i))
-                if (GetValue(i) == value) 
-                    keys.Add(GetKey(i));
-        }
-
         void Clear()
         {
             keys.Clear();

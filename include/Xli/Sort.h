@@ -3,7 +3,7 @@
 
 namespace Xli
 {
-/**
+    /**
         \ingroup XliCoreUtils
     */
     template <typename T> struct ComparatorLessThan

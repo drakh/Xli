@@ -15,9 +15,9 @@ namespace Xli
 
     int ArrayStream::Write(const void* src, int elmSize, int elmCount)
     {
-        int loc = buf.Length();
         buf.Expand();
-        buf.Resize(buf.Length() + elmSize * elmCount);
+        int loc = buf.Length();
+        buf.Resize(loc + elmSize * elmCount);
         memcpy(buf.DataPtr() + loc, src, elmSize * elmCount);
         return elmCount;
     }

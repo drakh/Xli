@@ -56,16 +56,6 @@ namespace Xli
                 delete [] data;
         }
 
-        void Copy(const Array& a)
-        {
-            Resize(a.used);
-
-            for (int i = 0; i < used; i++)
-                data[i] = a.data[i];
-
-            return *this;
-        }
-
         void Reserve(int newCapacity)
         {
             if (newCapacity > capacity)
@@ -175,7 +165,6 @@ namespace Xli
             if (index > used || index < 0)
                 XLI_THROW_INDEX_OUT_OF_BOUNDS;
 #endif
-
             Add(item);
 
             for (int i = used - 1; i > index; i--) 
@@ -215,7 +204,6 @@ namespace Xli
             if (index >= used || index < 0)
                 XLI_THROW_INDEX_OUT_OF_BOUNDS;
 #endif
-
             for (int i = index; i < used - 1; i++) 
                 data[i] = data[i + 1];
 
@@ -252,7 +240,7 @@ namespace Xli
             if (start >= used || start < 0)
                 XLI_THROW_INDEX_OUT_OF_BOUNDS;
 
-            if (start+count > used || count < 0)
+            if (start + count > used || count < 0)
                 XLI_THROW_INDEX_OUT_OF_BOUNDS;
 #endif
 
