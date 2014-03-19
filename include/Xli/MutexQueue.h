@@ -36,7 +36,7 @@ namespace Xli
         T Dequeue()
         {
             MutexLock lock(mutex);
-            queue.Dequeue();
+            return queue.Dequeue();
         }
 
         int Count()

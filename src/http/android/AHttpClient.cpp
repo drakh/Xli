@@ -414,7 +414,12 @@ namespace Xli
                 {(char* const)"XliJ_HttpProgressCallback", (char* const)"(JJJZ)V", (void *)&XliJ_HttpProgressCallback}, 
             };
             bool result = PlatformSpecific::AShim::RegisterNativeFunctions(nativeFuncs, 6);
-            if (!result) XLI_THROW("XliHttp: Could not register the java->c++ callbacks");
+            if (result)
+            {
+                LOGD("XliHttp: Registered the java->c++ callbacks");
+            } else {
+                XLI_THROW("XliHttp: Could not register the java->c++ callbacks"); 
+            }
             HttpInitialized = 1;
         }
     }

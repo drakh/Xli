@@ -216,6 +216,7 @@ namespace Xli
             
             virtual void EnqueueCrossThreadEvent(CTEvent* event)
             {
+                LOGF("What? : id=%i", event->CTType);
                 ctEventQueue.Enqueue(event);
             }
 
@@ -244,6 +245,7 @@ namespace Xli
                         XLI_THROW(((String*)event->Payload)->DataPtr());
                         break;
                     default:
+                        LOGF("XLI: Unknown cross thread event (id=%i)\n", event->CTType);
                         break;
                     }
                     

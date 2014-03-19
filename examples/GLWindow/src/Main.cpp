@@ -12,7 +12,7 @@ class Shouty : public HttpStateChangedHandler
         if (state == HttpHeadersReceived)
         {
             Err->WriteFormat("statusCode: %i\n", state);
-            Err->WriteFormat("ReasonPhrase: %s\n", request->ReasonPhrase.Data());
+            Err->WriteFormat("ReasonPhrase: %s\n", request->ReasonPhrase.DataPtr());
             //request->PullContentArray();
             request->PullContentString();
         } else if (state == HttpDone) {
@@ -51,7 +51,7 @@ class ErrorShout : public HttpErrorHandler
     virtual void OnResponse(HttpRequest* request, int errorCode, String errorMessage)
     {
         Err->WriteLine("Had an error:");
-        Err->WriteFormat("> %i: %s\n",errorCode, errorMessage.Data());
+        Err->WriteFormat("> %i: %s\n",errorCode, errorMessage.DataPtr());
         Err->WriteLine("-------------------------------------");
     }
 };
@@ -143,7 +143,7 @@ public:
 		if (wnd->GetKeyState(KeySpace))
 		{
 			Vector2i mousePos = wnd->GetMousePosition();
-			wnd->SetTitle(String::Format("%.2lf %d %d", GetTime(), mousePos.X, mousePos.Y));
+			wnd->SetTitle(String::Format("%.2lf %d %d", GetSeconds(), mousePos.X, mousePos.Y));
 		}
 	}
 
@@ -242,7 +242,7 @@ public:
 	virtual bool OnTouchDown(Window* wnd, Vector2 pos, int id)
 	{
 		Err->WriteLine("OnTouchDown: " + pos.ToString() + ", " + id);
-        touchDownTime = GetTime();
+        touchDownTime = GetSeconds();
 		return false;
 	}
 
@@ -257,25 +257,25 @@ public:
 	virtual bool OnTouchUp(Window* wnd, Vector2 pos, int id)
 	{
 		Err->WriteLine("OnTouchUp: " + pos.ToString() + ", " + id);
-        
-        if (GetTime() - touchDownTime < 0.15)
+        double currentTime = GetSeconds();
+        if (currentTime - touchDownTime < 0.15)
         {
-            if (GetTime() - tapTime < 0.3)
+            if (currentTime - tapTime < 0.3)
             {
                 Err->WriteLine("Bang");
                 //wnd->BeginTextInput((Xli::TextInputHint)0);
                 // sound->Play(false);
 
                 HttpRequest* req = httpClient->NewRequest();
-                req->Url = "http://httpbin.org/get";
-                //req->Url = "http://youtube.com";
+                //req->Url = "http://httpbin.org/get";
+                req->Url = "http://youtube.com";
                 req->Method = HttpGetMethod;
                 req->StateChangedCallback = stateChangedCallback;
                 req->TimeoutCallback = timeoutCallback;
                 req->ProgressCallback = progressCallback;
                 req->ErrorCallback = errorCallback;
-                req->Headers.Add("Accept", "*/*");
-                req->Headers.Add("ohhai","canhazdata");
+                //req->Headers.Add("Accept", "*/*");
+                //req->Headers.Add("ohhai","canhazdata");
                 //req->Send("test=and here is some data");
                 req->Send();
             }
@@ -283,7 +283,7 @@ public:
             {
                 wnd->EndTextInput();
             }
-            tapTime = GetTime();
+            tapTime = currentTime;
         }        
 		return false;
 	}
