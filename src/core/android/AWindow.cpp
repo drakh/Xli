@@ -216,7 +216,6 @@ namespace Xli
             
             virtual void EnqueueCrossThreadEvent(CTEvent* event)
             {
-                LOGF("What? : id=%i", event->CTType);
                 ctEventQueue.Enqueue(event);
             }
 

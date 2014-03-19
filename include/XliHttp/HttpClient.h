@@ -104,26 +104,29 @@ namespace Xli
     class HttpRequest : public Object
     {
     public:
-        Managed< HttpStateChangedHandler > StateChangedCallback;
-        Managed< HttpProgressHandler > ProgressCallback;
-        Managed< HttpTimeoutHandler > TimeoutCallback;
-        Managed< HttpErrorHandler > ErrorCallback;
-
-        String Url;
-        int Timeout;
-        HttpRequestState Status;
-
-        void* Body;
-        long BodySizeBytes;
-
-        HashMap<String,String> Headers; // managed?        
-        HttpMethodType Method;
-
-        int ResponseStatus;
-        String ReasonPhrase;
-        HashMap<String,String> ResponseHeaders; // managed?
+        HashMap<String,String> Headers;
+        HashMap<String,String> ResponseHeaders;
 
         static HttpRequest* Create(String url, HttpMethodType method, const HttpClient* client=NULL);       
+
+        virtual HttpRequestState GetStatus() const = 0;
+
+        virtual void SetMethod(HttpMethodType method) = 0;
+        virtual HttpMethodType GetMethod() const = 0;
+
+        virtual void SetUrl(String url) = 0;
+        virtual String GetUrl() const = 0;
+
+        virtual void SetTimeout(int timeout) = 0;
+        virtual int GetTimeout() const = 0;
+
+        virtual int GetResponseStatus() const = 0;
+        virtual String GetReasonPhrase() const = 0;
+
+        virtual void SetStateChangedCallback(HttpStateChangedHandler* callback) = 0;
+        virtual void SetProgressCallback(HttpProgressHandler* callback) = 0;
+        virtual void SetTimeoutCallback(HttpTimeoutHandler* callback) = 0;
+        virtual void SetErrorCallback(HttpErrorHandler* callback) = 0;
 
         virtual void Send(void* content, long byteLength) = 0;
         virtual void Send(String content) = 0;

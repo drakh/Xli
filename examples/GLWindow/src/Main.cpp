@@ -12,7 +12,7 @@ class Shouty : public HttpStateChangedHandler
         if (state == HttpHeadersReceived)
         {
             Err->WriteFormat("statusCode: %i\n", state);
-            Err->WriteFormat("ReasonPhrase: %s\n", request->ReasonPhrase.DataPtr());
+            Err->WriteFormat("ReasonPhrase: %s\n", request->GetReasonPhrase().DataPtr());
             //request->PullContentArray();
             request->PullContentString();
         } else if (state == HttpDone) {
@@ -267,15 +267,15 @@ public:
                 // sound->Play(false);
 
                 HttpRequest* req = httpClient->NewRequest();
-                //req->Url = "http://httpbin.org/get";
-                req->Url = "http://youtube.com";
-                req->Method = HttpGetMethod;
-                req->StateChangedCallback = stateChangedCallback;
-                req->TimeoutCallback = timeoutCallback;
-                req->ProgressCallback = progressCallback;
-                req->ErrorCallback = errorCallback;
-                //req->Headers.Add("Accept", "*/*");
-                //req->Headers.Add("ohhai","canhazdata");
+                req->SetUrl("http://httpbin.org/get");
+                //req->Url = "http://youtube.com";
+                req->SetMethod(HttpGetMethod);
+                req->SetStateChangedCallback(stateChangedCallback);
+                req->SetTimeoutCallback(timeoutCallback);
+                req->SetProgressCallback(progressCallback);
+                req->SetErrorCallback(errorCallback);
+                req->Headers.Add("Accept", "*/*");
+                req->Headers.Add("ohhai","canhazdata");
                 //req->Send("test=and here is some data");
                 req->Send();
             }

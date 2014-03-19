@@ -123,9 +123,9 @@ namespace Xli
             {
                 jobject activity = jni.GetInstance();
 
-                jstring jurl = jni->NewStringUTF(req->Url.DataPtr());
-                jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->Method).DataPtr());
-                jint jtimeout = (jint)req->Timeout;
+                jstring jurl = jni->NewStringUTF(req->GetUrl().DataPtr());
+                jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->GetMethod()).DataPtr());
+                jint jtimeout = (jint)req->GetTimeout();
                 jobject headers = XliToJavaHeaders(&(req->Headers));
 
                 jobject arrayHandle = 0;
@@ -156,9 +156,9 @@ namespace Xli
             {
                 jobject activity = jni.GetInstance();
 
-                jstring jurl = jni->NewStringUTF(req->Url.DataPtr());
-                jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->Method).DataPtr());
-                jint jtimeout = (jint)req->Timeout;
+                jstring jurl = jni->NewStringUTF(req->GetUrl().DataPtr());
+                jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->GetMethod()).DataPtr());
+                jint jtimeout = (jint)req->GetTimeout();
                 jobject headers = XliToJavaHeaders(&(req->Headers));
                 jobject body = 0;
 
@@ -190,9 +190,9 @@ namespace Xli
             {
                 jobject activity = jni.GetInstance();
 
-                jstring jurl = jni->NewStringUTF(req->Url.DataPtr());
-                jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->Method).DataPtr());
-                jint jtimeout = (jint)req->Timeout;
+                jstring jurl = jni->NewStringUTF(req->GetUrl().DataPtr());
+                jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->GetMethod()).DataPtr());
+                jint jtimeout = (jint)req->GetTimeout();
                 jobject headers = XliToJavaHeaders(&(req->Headers));
                 jobject arrayHandle = 0;                
             

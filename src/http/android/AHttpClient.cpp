@@ -9,7 +9,21 @@ namespace Xli
 
     class AHttpRequest : public HttpRequest
     {
+    private:
+        String url;
+        int timeout;
     public:
+        // the following fields should be private but due to having to set
+        // them through the callbacks they aren't
+        HttpRequestState status;
+        HttpMethodType method;
+        int responseStatus;
+        String reasonPhrase;
+        Managed< HttpStateChangedHandler > stateChangedCallback;
+        Managed< HttpProgressHandler > progressCallback;
+        Managed< HttpTimeoutHandler > timeoutCallback;
+        Managed< HttpErrorHandler > errorCallback;
+
         jobject javaAsyncHandle;
         jobject javaContentHandle;
         String cachedContentString;
@@ -19,10 +33,10 @@ namespace Xli
 
         AHttpRequest() 
         {
-            this->Status = HttpUnsent;
-            this->Url = "";
-            this->Method = HttpGetMethod;
-            this->Timeout = 0;
+            this->status = HttpUnsent;
+            this->url = "";
+            this->method = HttpGetMethod;
+            this->timeout = 0;
             this->javaAsyncHandle = 0;
             this->javaContentHandle = 0;
             this->cachedContentArray = 0;
@@ -30,10 +44,10 @@ namespace Xli
 
         AHttpRequest(String url, HttpMethodType method) 
         {
-            this->Status = HttpUnsent;
-            this->Url = url;
-            this->Method = method;
-            this->Timeout = 0;
+            this->status = HttpUnsent;
+            this->url = url;
+            this->method = method;
+            this->timeout = 0;
             this->javaAsyncHandle = 0;
             this->javaContentHandle = 0;
             this->cachedContentArray = 0;
@@ -52,31 +66,135 @@ namespace Xli
             }
         }
 
+        virtual HttpRequestState GetStatus() const
+        {
+            return this->status;
+        }
+
+        virtual void SetMethod(HttpMethodType method)
+        {
+            if (this->status == HttpUnsent)
+            {
+                this->method = method;
+            } else {
+                XLI_THROW("HttpRequest->SetMethod(): Not in a valid state to set the method");
+            }
+        }
+        virtual HttpMethodType GetMethod() const
+        {
+            return this->method;
+        }
+
+        virtual void SetUrl(String url)
+        {
+            if (this->status == HttpUnsent)
+            {
+                this->url = url;
+            } else {
+                XLI_THROW("HttpRequest->SetUrl(): Not in a valid state to set the url");
+            }
+        }
+        virtual String GetUrl() const
+        {
+            return this->url;
+        }
+
+        virtual void SetTimeout(int timeout)
+        {
+            if (this->status == HttpUnsent)
+            {
+                this->timeout = timeout;
+            } else {
+                XLI_THROW("HttpRequest->SetTimeout(): Not in a valid state to set the timeout");
+            }
+        }
+        virtual int GetTimeout() const
+        {
+            return this->timeout;
+        }
+
+        virtual int GetResponseStatus() const
+        {
+            if (this->status == HttpHeadersReceived) // {TODO} is this the correct state?
+            {
+                return this->responseStatus;
+            } else {
+                XLI_THROW("HttpRequest->GetResponseStatus(): Not in a valid state to get the response status");
+            }
+        }
+
+        virtual String GetReasonPhrase() const
+        {
+            if (this->status == HttpHeadersReceived) // {TODO} is this the correct state?
+            {
+                return this->reasonPhrase;
+            } else {
+                XLI_THROW("HttpRequest->GetReasonPhrase(): Not in a valid state to get the reason phrase");
+            }
+        }
+
+        virtual void SetStateChangedCallback(HttpStateChangedHandler* callback)
+        {
+            if (this->status == HttpUnsent)
+            {
+                this->stateChangedCallback = callback;
+            } else {
+                XLI_THROW("HttpRequest->SetStateChangedCallback(): Not in a valid state to set the callback");
+            }
+        }
+        virtual void SetProgressCallback(HttpProgressHandler* callback)
+        {
+            if (this->status == HttpUnsent)
+            {
+                this->progressCallback = callback;
+            } else {
+                XLI_THROW("HttpRequest->SetProgressCallback(): Not in a valid state to set the callback");
+            }
+        }
+        virtual void SetTimeoutCallback(HttpTimeoutHandler* callback)
+        {
+            if (this->status == HttpUnsent)
+            {
+                this->timeoutCallback = callback;
+            } else {
+                XLI_THROW("HttpRequest->SetProgressCallback(): Not in a valid state to set the callback");
+            }
+        }
+        virtual void SetErrorCallback(HttpErrorHandler* callback)
+        {
+            if (this->status == HttpUnsent)
+            {
+                this->errorCallback = callback;
+            } else {
+                XLI_THROW("HttpRequest->SetErrorCallback(): Not in a valid state to set the callback");
+            }
+        }
+
         virtual void Send(void* content, long byteLength)
         {
-            this->Status = HttpSent;
-            if (this->StateChangedCallback!=0) this->StateChangedCallback->OnResponse(this, this->Status);
+            this->status = HttpSent;
+            if (this->stateChangedCallback!=0) this->stateChangedCallback->OnResponse(this, this->status);
             javaAsyncHandle = PlatformSpecific::AShim::SendHttpAsync(this, content, byteLength);
         }
 
         virtual void Send(String content)
         {
-            this->Status = HttpSent;
-            if (this->StateChangedCallback!=0) this->StateChangedCallback->OnResponse(this, this->Status);
+            this->status = HttpSent;
+            if (this->stateChangedCallback!=0) this->stateChangedCallback->OnResponse(this, this->status);
             javaAsyncHandle = PlatformSpecific::AShim::SendHttpAsync(this, content);
         }
 
         virtual void Send()
         {
-            this->Status = HttpSent;
-            if (this->StateChangedCallback!=0) this->StateChangedCallback->OnResponse(this, this->Status);
+            this->status = HttpSent;
+            if (this->stateChangedCallback!=0) this->stateChangedCallback->OnResponse(this, this->status);
             javaAsyncHandle = PlatformSpecific::AShim::SendHttpAsync(this);
         }
         
         virtual void Abort()
         {
-            this->Status = HttpDone;
-            if (this->StateChangedCallback!=0) this->StateChangedCallback->OnResponse(this, this->Status);
+            this->status = HttpDone;
+            if (this->stateChangedCallback!=0) this->stateChangedCallback->OnResponse(this, this->status);
             if (javaAsyncHandle != 0)
                 PlatformSpecific::AShim::AbortAsyncConnection(javaAsyncHandle);
             javaContentHandle = 0;
@@ -85,10 +203,10 @@ namespace Xli
 
         virtual void PullContentString()
         {
-            if ((this->Status==HttpHeadersReceived) && (this->javaContentHandle))
+            if ((this->status==HttpHeadersReceived) && (this->javaContentHandle))
             {
-                this->Status = HttpLoading;
-                if (this->StateChangedCallback!=0) this->StateChangedCallback->OnResponse(this, this->Status);
+                this->status = HttpLoading;
+                if (this->stateChangedCallback!=0) this->stateChangedCallback->OnResponse(this, this->status);
                 this-> javaAsyncHandle = Xli::PlatformSpecific::AShim::AsyncInputStreamToString(this->javaContentHandle, this);
             } else {
                 XLI_THROW("HttpRequest->PullContentString(): Not in a valid state to pull the content string");
@@ -96,17 +214,17 @@ namespace Xli
         }
         virtual String GetContentString()
         {
-            if (this->Status == HttpDone)
+            if (this->status == HttpDone)
                 return this->cachedContentString;
             XLI_THROW("HttpRequest->GetContentString(): Request must be completed before retrieving the content string");
         }        
 
         virtual void PullContentArray()
         {    
-            if ((this->Status==HttpHeadersReceived) && (this->javaContentHandle))
+            if ((this->status==HttpHeadersReceived) && (this->javaContentHandle))
             {
-                this->Status = HttpLoading;
-                if (this->StateChangedCallback!=0) this->StateChangedCallback->OnResponse(this, this->Status);
+                this->status = HttpLoading;
+                if (this->stateChangedCallback!=0) this->stateChangedCallback->OnResponse(this, this->status);
                 this-> javaAsyncHandle = Xli::PlatformSpecific::AShim::AsyncInputStreamToByteArray(this->javaContentHandle, this);
             } else {
                 XLI_THROW("HttpRequest->PullContentArray(): Not in valid state for pulling the content array");
@@ -114,14 +232,14 @@ namespace Xli
         }
         virtual void* GetContentArray()
         {            
-            if (this->Status == HttpDone)
+            if (this->status == HttpDone)
                 return this->cachedContentArray;
 
             XLI_THROW("HttpRequest->GetContentArray(): Request must be complete before getting the content array");
         }
         virtual long GetContentArrayLength()
         {
-            if ((this->Status == HttpDone) && (this->cachedContentArray!=0))
+            if ((this->status == HttpDone) && (this->cachedContentArray!=0))
                 return this->cachedContentArrayLength;
             XLI_THROW("HttpRequest->GetContentArrayLength(): Not in valid state for pulling the content array");
         }
@@ -141,8 +259,8 @@ namespace Xli
             virtual ~AHttpTimeoutAction() {}
             virtual void Execute()
             {                       
-                if (this->Request->TimeoutCallback!=0)
-                    this->Request->TimeoutCallback->OnResponse(this->Request);                
+                if (this->Request->timeoutCallback!=0)
+                    this->Request->timeoutCallback->OnResponse(this->Request);                
             }
         };
         class AHttpProgressAction : public AWindowAction
@@ -163,8 +281,8 @@ namespace Xli
             virtual ~AHttpProgressAction() {}
             virtual void Execute()
             {                       
-                if (this->Request->ProgressCallback!=0)
-                    this->Request->ProgressCallback->OnResponse(this->Request, this->Position, this->TotalLength, this->LengthKnown);
+                if (this->Request->progressCallback!=0)
+                    this->Request->progressCallback->OnResponse(this->Request, this->Position, this->TotalLength, this->LengthKnown);
             }
         };
         class AHttpErrorAction : public AWindowAction
@@ -183,8 +301,8 @@ namespace Xli
             virtual ~AHttpErrorAction() {}
             virtual void Execute()
             {                       
-                if (this->Request->ErrorCallback!=0)
-                    this->Request->ErrorCallback->OnResponse(this->Request, this->ErrorCode, this->ErrorMessage);
+                if (this->Request->errorCallback!=0)
+                    this->Request->errorCallback->OnResponse(this->Request, this->ErrorCode, this->ErrorMessage);
             }
         };
         class AHttpResponseHandlerAction : public AWindowAction
@@ -210,9 +328,9 @@ namespace Xli
                 }
                     
                 if (this->Status>0) {
-                    this->Request->Status = this->Status;
-                    if (this->Request->StateChangedCallback!=0)
-                        this->Request->StateChangedCallback->OnResponse(this->Request, this->Status);
+                    this->Request->status = this->Status;
+                    if (this->Request->stateChangedCallback!=0)
+                        this->Request->stateChangedCallback->OnResponse(this->Request, this->Status);
                 }
             }
         };
@@ -271,11 +389,11 @@ extern "C"
                     }
 
                     request->Headers.Add(ckey,cval);
-                    request->ResponseStatus = (int)responseCode;
+                    request->responseStatus = (int)responseCode;
                     if (responseMessage!=0)
                     {
                         char const* rmess = env->GetStringUTFChars(responseMessage, NULL);
-                        request->ReasonPhrase = rmess;
+                        request->reasonPhrase = rmess;
                         env->ReleaseStringUTFChars(responseMessage, rmess);
                     }
                     
