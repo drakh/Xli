@@ -7,7 +7,6 @@ set -e
 cd "`dirname "$0"`/project-android"
 
 # Build Xli
-../../../build-android.sh --shim
 ../../../build-android.sh
 
 # Build .so

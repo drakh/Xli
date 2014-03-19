@@ -240,8 +240,8 @@ namespace Xli
                         ((AWindowAction*)event->Payload)->Execute();
                         break;
                     case Xli::CTThrowEvent:
-                        LOGE("XLI: JAVA THROWN ERROR: %s", ((String*)event->Payload)->Data());
-                        XLI_THROW(((String*)event->Payload)->Data());
+                        LOGE("XLI: JAVA THROWN ERROR: %s", ((String*)event->Payload)->DataPtr());
+                        XLI_THROW(((String*)event->Payload)->DataPtr());
                         break;
                     default:
                         break;

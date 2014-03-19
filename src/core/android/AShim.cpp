@@ -92,8 +92,8 @@ namespace Xli
 
             //vars for call
             jobject activity = jni.GetInstance();
-            jstring jcaption = jni->NewStringUTF(caption.Data());
-            jstring jmessage = jni->NewStringUTF(message.Data());
+            jstring jcaption = jni->NewStringUTF(caption.DataPtr());
+            jstring jmessage = jni->NewStringUTF(message.DataPtr());
 
             //call
             int result = (int)jni->CallObjectMethod(shim_class, mid, activity, jmessage, jcaption, (jint)buttons, (jint)hints);
@@ -123,8 +123,8 @@ namespace Xli
             {
                 jobject activity = jni.GetInstance();
 
-                jstring jurl = jni->NewStringUTF(req->Url.Data());
-                jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->Method).Data());
+                jstring jurl = jni->NewStringUTF(req->Url.DataPtr());
+                jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->Method).DataPtr());
                 jint jtimeout = (jint)req->Timeout;
                 jobject headers = XliToJavaHeaders(&(req->Headers));
 
@@ -156,15 +156,15 @@ namespace Xli
             {
                 jobject activity = jni.GetInstance();
 
-                jstring jurl = jni->NewStringUTF(req->Url.Data());
-                jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->Method).Data());
+                jstring jurl = jni->NewStringUTF(req->Url.DataPtr());
+                jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->Method).DataPtr());
                 jint jtimeout = (jint)req->Timeout;
                 jobject headers = XliToJavaHeaders(&(req->Headers));
                 jobject body = 0;
 
                 if ((content.Length()>0))
                 {
-                    body = jni->NewStringUTF(content.Data());
+                    body = jni->NewStringUTF(content.DataPtr());
                 }
             
                 jobject jresult = jni->CallObjectMethod(shim_class, mid, activity, 
@@ -190,8 +190,8 @@ namespace Xli
             {
                 jobject activity = jni.GetInstance();
 
-                jstring jurl = jni->NewStringUTF(req->Url.Data());
-                jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->Method).Data());
+                jstring jurl = jni->NewStringUTF(req->Url.DataPtr());
+                jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->Method).DataPtr());
                 jint jtimeout = (jint)req->Timeout;
                 jobject headers = XliToJavaHeaders(&(req->Headers));
                 jobject arrayHandle = 0;                
@@ -230,8 +230,8 @@ namespace Xli
             int i = src->Begin();
             while (i != src->End())
             {
-                jstring jkey = jni->NewStringUTF(src->GetKey(i).Data());
-                jstring jval = jni->NewStringUTF(src->GetValue(i).Data());
+                jstring jkey = jni->NewStringUTF(src->GetKey(i).DataPtr());
+                jstring jval = jni->NewStringUTF(src->GetValue(i).DataPtr());
             
                 jni->CallObjectMethod(hashmap, put, jkey, jval);
             
