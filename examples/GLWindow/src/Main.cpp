@@ -274,8 +274,8 @@ public:
                 req->SetTimeoutCallback(timeoutCallback);
                 req->SetProgressCallback(progressCallback);
                 req->SetErrorCallback(errorCallback);
-                req->Headers.Add("Accept", "*/*");
-                req->Headers.Add("ohhai","canhazdata");
+                req->SetHeader("Accept", "*/*");
+                req->SetHeader("ohhai","canhazdata");
                 //req->Send("test=and here is some data");
                 req->Send();
             }

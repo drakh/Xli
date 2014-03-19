@@ -104,12 +104,26 @@ namespace Xli
     class HttpRequest : public Object
     {
     public:
-        HashMap<String,String> Headers;
-        HashMap<String,String> ResponseHeaders;
-
         static HttpRequest* Create(String url, HttpMethodType method, const HttpClient* client=NULL);       
 
         virtual HttpRequestState GetStatus() const = 0;
+
+        virtual void SetHeader(String key, String value) = 0;
+        virtual void RemoveHeader(String key) = 0;
+        virtual int HeadersBegin() const = 0;
+        virtual int HeadersEnd() const = 0;
+        virtual int HeadersNext(int n) const = 0;
+        virtual String GetHeaderKeyN(int n) const = 0;
+        virtual String GetHeaderValueN(int n) const = 0;
+
+        virtual int GetResponseHeaderCount() const = 0;
+        virtual int ResponseHeadersBegin() const = 0;
+        virtual int ResponseHeadersEnd() const = 0;
+        virtual int ResponseHeadersNext(int n) const = 0;
+        virtual String GetResponseHeaderKeyN(int n) const = 0;        
+        virtual String GetResponseHeaderValueN(int n) const = 0;        
+        virtual String GetResponseHeader(String key) = 0;
+        //virtual bool TryGetResponseHeader(const String key, String value) = 0;
 
         virtual void SetMethod(HttpMethodType method) = 0;
         virtual HttpMethodType GetMethod() const = 0;

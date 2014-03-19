@@ -442,7 +442,7 @@ namespace Xli
             static int ShowMessageBox(const String& message, const String& caption, int buttons, int hints);
             
             static bool ConnectedToNetwork();
-            static jobject XliToJavaHeaders(const HashMap<String,String>* src);
+            static jobject XliToJavaHeaders(const HttpRequest* req);
             static jobject SendHttpAsync(const HttpRequest* req, void* content, long byteLength);
             static jobject SendHttpAsync(const HttpRequest* req, String content);
             static jobject SendHttpAsync(const HttpRequest* req);

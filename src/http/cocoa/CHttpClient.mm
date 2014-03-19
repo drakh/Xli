@@ -18,6 +18,8 @@ namespace Xli
         Managed< HttpTimeoutHandler > timeoutCallback;
         Managed< HttpErrorHandler > errorCallback;
 
+        HashMap<String,String> headers;
+        HashMap<String,String> responseHeaders;
         HttpRequestState status;
         String url;
         int timeout;
@@ -116,6 +118,45 @@ namespace Xli
             return this->url;
         }
 
+        virtual SetHeader(String key, String value)
+        {
+            if (this->status == HttpUnsent)
+            {
+                this->headers.Add(key,value);
+            } else {
+                XLI_THROW("HttpRequest->SetHeader(): Not in a valid state to set a header");
+            }
+        }
+        virtual RemoveHeader(String key)
+        {
+            if (this->status == HttpUnsent)
+            {
+                this->headers.Remove(key);
+            } else {
+                XLI_THROW("HttpRequest->SetHeader(): Not in a valid state to set a header");
+            }
+        }
+        virtual int HeadersBegin() const 
+        {
+            return this->headers.Begin();
+        }
+        virtual int HeadersEnd() const 
+        {
+            return this->headers.End();
+        }
+        virtual int HeadersNext(int n) const 
+        {
+            return this->headers.Next(n);
+        }
+        virtual String GetHeaderKeyN(int n) const
+        {
+            return this->headers.GetKey(n);
+        }
+        virtual String GetHeaderValueN(int n) const
+        {
+            return this->headers.GetValue(n);
+        }
+
         virtual void SetTimeout(int timeout)
         {
             if (this->status == HttpUnsent)
@@ -147,6 +188,61 @@ namespace Xli
                 return this->reasonPhrase;
             } else {
                 XLI_THROW("HttpRequest->GetReasonPhrase(): Not in a valid state to get the reason phrase");
+            }
+        }
+
+        virtual int GetResponseHeaderCount() const
+        {
+            if (this->status == HttpHeadersReceived)
+            {
+                return this->responseHeaders.Count();
+            } else {
+                XLI_THROW("HttpRequest->GetResponseHeaderCount(): Not in a valid state to get the response header count");
+            }
+        }
+        virtual int ResponseHeaderBegin() const
+        {
+            if (this->status == HttpHeadersReceived)
+            {
+                return this->responseHeaders.Begin();
+            } else {
+                XLI_THROW("HttpRequest->ResponseHeaderBegin(): Not in a valid state to get the response header iterator");
+            }
+        }
+        virtual int ResponseHeaderNext(int n) const
+        {
+            if (this->status == HttpHeadersReceived)
+            {
+                return this->responseHeaders.Next(n);
+            } else {
+                XLI_THROW("HttpRequest->ResponseHeaderNext(): Not in a valid state to get the next response header");
+            }
+        }
+        virtual String GetResponseHeaderKeyN(int n) const
+        {
+            if (this->status == HttpHeadersReceived)
+            {
+                return this->responseHeaders.GetKey(n);
+            } else {
+                XLI_THROW("HttpRequest->GetResponseHeaderN(): Not in a valid state to get the response header");
+            }
+        }
+        virtual String GetResponseHeaderValueN(int n) const
+        {
+            if (this->status == HttpHeadersReceived)
+            {
+                return this->responseHeaders.GetValue(n);
+            } else {
+                XLI_THROW("HttpRequest->GetResponseHeaderN(): Not in a valid state to get the response header");
+            }
+        }
+        virtual String GetResponseHeader(String key) const
+        {
+            if (this->status == HttpHeadersReceived)
+            {
+                return this->responseHeaders[key];
+            } else {
+                XLI_THROW("HttpRequest->GetResponseHeader(): Not in a valid state to get the response header");
             }
         }
 
@@ -287,17 +383,17 @@ namespace Xli
             if (!this->headersSet && this->status == HttpUnsent)
             {
                 this->headersSet = true;
-                int i = this->Headers.Begin();
-                while (i != this->Headers.End())
+                int i = this->headers.Begin();
+                while (i != this->headers.End())
                 {
-                    CFStringRef nKey = CFStringCreateWithCString(kCFAllocatorDefault, this->Headers.GetKey(i).Data(), kCFStringEncodingUTF8);
-                    CFStringRef nVal = CFStringCreateWithCString(kCFAllocatorDefault, this->Headers.GetValue(i).Data(), kCFStringEncodingUTF8);
+                    CFStringRef nKey = CFStringCreateWithCString(kCFAllocatorDefault, this->headers.GetKey(i).Data(), kCFStringEncodingUTF8);
+                    CFStringRef nVal = CFStringCreateWithCString(kCFAllocatorDefault, this->headers.GetValue(i).Data(), kCFStringEncodingUTF8);
 
                     CFHTTPMessageSetHeaderFieldValue(message, nKey, nVal);
 
                     CFRelease(nKey);
                     CFRelease(nVal);
-                    i = this->Headers.Next(i);
+                    i = this->headers.Next(i);
                 }
             }
         }

@@ -126,7 +126,7 @@ namespace Xli
                 jstring jurl = jni->NewStringUTF(req->GetUrl().DataPtr());
                 jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->GetMethod()).DataPtr());
                 jint jtimeout = (jint)req->GetTimeout();
-                jobject headers = XliToJavaHeaders(&(req->Headers));
+                jobject headers = XliToJavaHeaders(req);
 
                 jobject arrayHandle = 0;
                 if ((content!=0) && (byteLength>0))
@@ -159,7 +159,7 @@ namespace Xli
                 jstring jurl = jni->NewStringUTF(req->GetUrl().DataPtr());
                 jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->GetMethod()).DataPtr());
                 jint jtimeout = (jint)req->GetTimeout();
-                jobject headers = XliToJavaHeaders(&(req->Headers));
+                jobject headers = XliToJavaHeaders(req);
                 jobject body = 0;
 
                 if ((content.Length()>0))
@@ -193,7 +193,7 @@ namespace Xli
                 jstring jurl = jni->NewStringUTF(req->GetUrl().DataPtr());
                 jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->GetMethod()).DataPtr());
                 jint jtimeout = (jint)req->GetTimeout();
-                jobject headers = XliToJavaHeaders(&(req->Headers));
+                jobject headers = XliToJavaHeaders(req);
                 jobject arrayHandle = 0;                
             
                 jobject jresult = jni->CallObjectMethod(shim_class, mid, activity, 
@@ -221,23 +221,23 @@ namespace Xli
             jni->CallObjectMethod(shim_class, mid, connection);
         }
 
-        jobject AShim::XliToJavaHeaders(const HashMap<String,String>* src)
+        jobject AShim::XliToJavaHeaders(const HttpRequest* req)
         {
             AJniHelper jni;            
             jobject hashmap = jni.GetInstance("java/util/HashMap","()V");
             jmethodID put = jni.GetInstanceMethod(hashmap, "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
 
-            int i = src->Begin();
-            while (i != src->End())
+            int i = req->HeadersBegin();
+            while (i != req->HeadersEnd())
             {
-                jstring jkey = jni->NewStringUTF(src->GetKey(i).DataPtr());
-                jstring jval = jni->NewStringUTF(src->GetValue(i).DataPtr());
+                jstring jkey = jni->NewStringUTF(req->GetHeaderKeyN(i).DataPtr());
+                jstring jval = jni->NewStringUTF(req->GetHeaderValueN(i).DataPtr());
             
                 jni->CallObjectMethod(hashmap, put, jkey, jval);
             
                 jni->DeleteLocalRef(jkey);
                 jni->DeleteLocalRef(jval);
-                i = src->Next(i);
+                i = req->HeadersNext(i);
             }
 
             return hashmap;

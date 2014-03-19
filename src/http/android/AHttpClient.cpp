@@ -15,6 +15,8 @@ namespace Xli
     public:
         // the following fields should be private but due to having to set
         // them through the callbacks they aren't
+        HashMap<String,String> headers;
+        HashMap<String,String> responseHeaders;
         HttpRequestState status;
         HttpMethodType method;
         int responseStatus;
@@ -99,6 +101,45 @@ namespace Xli
             return this->url;
         }
 
+        virtual void SetHeader(String key, String value)
+        {
+            if (this->status == HttpUnsent)
+            {
+                this->headers.Add(key,value);
+            } else {
+                XLI_THROW("HttpRequest->SetHeader(): Not in a valid state to set a header");
+            }
+        }
+        virtual void RemoveHeader(String key)
+        {
+            if (this->status == HttpUnsent)
+            {
+                this->headers.Remove(key);
+            } else {
+                XLI_THROW("HttpRequest->SetHeader(): Not in a valid state to set a header");
+            }
+        }
+        virtual int HeadersBegin() const 
+        {
+            return this->headers.Begin();
+        }
+        virtual int HeadersEnd() const 
+        {
+            return this->headers.End();
+        }
+        virtual int HeadersNext(int n) const 
+        {
+            return this->headers.Next(n);
+        }
+        virtual String GetHeaderKeyN(int n) const
+        {
+            return this->headers.GetKey(n);
+        }
+        virtual String GetHeaderValueN(int n) const
+        {
+            return this->headers.GetValue(n);
+        }
+
         virtual void SetTimeout(int timeout)
         {
             if (this->status == HttpUnsent)
@@ -115,7 +156,7 @@ namespace Xli
 
         virtual int GetResponseStatus() const
         {
-            if (this->status == HttpHeadersReceived) // {TODO} is this the correct state?
+            if (this->status == HttpHeadersReceived)
             {
                 return this->responseStatus;
             } else {
@@ -125,11 +166,75 @@ namespace Xli
 
         virtual String GetReasonPhrase() const
         {
-            if (this->status == HttpHeadersReceived) // {TODO} is this the correct state?
+            if (this->status == HttpHeadersReceived)
             {
                 return this->reasonPhrase;
             } else {
                 XLI_THROW("HttpRequest->GetReasonPhrase(): Not in a valid state to get the reason phrase");
+            }
+        }
+
+        virtual int GetResponseHeaderCount() const
+        {
+            if (this->status == HttpHeadersReceived)
+            {
+                return this->responseHeaders.Count();
+            } else {
+                XLI_THROW("HttpRequest->GetResponseHeaderCount(): Not in a valid state to get the response header count");
+            }
+        }
+        virtual int ResponseHeadersBegin() const
+        {
+            if (this->status == HttpHeadersReceived)
+            {
+                return this->responseHeaders.Begin();
+            } else {
+                XLI_THROW("HttpRequest->ResponseHeaderBegin(): Not in a valid state to get the response header iterator");
+            }
+        }
+        virtual int ResponseHeadersNext(int n) const
+        {
+            if (this->status == HttpHeadersReceived)
+            {
+                return this->responseHeaders.Next(n);
+            } else {
+                XLI_THROW("HttpRequest->ResponseHeaderNext(): Not in a valid state to get the next response header");
+            }
+        }
+        virtual int ResponseHeadersEnd() const
+        {
+            if (this->status == HttpHeadersReceived)
+            {
+                return this->responseHeaders.End();
+            } else {
+                XLI_THROW("HttpRequest->ResponseHeaderEnd(): Not in a valid state to get the response header");
+            }
+        }
+        virtual String GetResponseHeaderValueN(int n) const
+        {
+            if (this->status == HttpHeadersReceived)
+            {
+                return this->responseHeaders.GetValue(n);
+            } else {
+                XLI_THROW("HttpRequest->GetResponseHeaderN(): Not in a valid state to get the response header");
+            }
+        }
+        virtual String GetResponseHeaderKeyN(int n) const
+        {
+            if (this->status == HttpHeadersReceived)
+            {
+                return this->responseHeaders.GetKey(n);
+            } else {
+                XLI_THROW("HttpRequest->GetResponseHeaderN(): Not in a valid state to get the response header");
+            }
+        }
+        virtual String GetResponseHeader(String key)
+        {
+            if (this->status == HttpHeadersReceived)
+            {
+                return this->responseHeaders[key];
+            } else {
+                XLI_THROW("HttpRequest->GetResponseHeader(): Not in a valid state to get the response header");
             }
         }
 
@@ -388,7 +493,7 @@ extern "C"
                         cval = env->GetStringUTFChars(jval, NULL); 
                     }
 
-                    request->Headers.Add(ckey,cval);
+                    request->responseHeaders.Add(ckey,cval);
                     request->responseStatus = (int)responseCode;
                     if (responseMessage!=0)
                     {
