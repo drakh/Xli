@@ -21,7 +21,7 @@ namespace Xli
 
         virtual int GetLength() const;
 
-        const UInt8* GetData() const;
+        const UInt8* GetDataPtr() const;
         Buffer* CopyData() const;
 
         void Clear();

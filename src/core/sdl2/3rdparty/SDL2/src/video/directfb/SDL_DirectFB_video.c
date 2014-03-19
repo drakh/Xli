@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2013 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -34,8 +34,6 @@
 #include "SDL_DirectFB_window.h"
 #include "SDL_DirectFB_WM.h"
 
-
-#include "../../SDL_internal.h"
 
 /* DirectFB video driver implementation.
 */

@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2013 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -226,6 +226,26 @@ Android_OnJoy(int device_id, int axis, float value)
     return 0;
 }
 
+int
+Android_OnHat(int device_id, int hat_id, int x, int y)
+{
+    const Uint8 position_map[3][3] = {
+        {SDL_HAT_LEFTUP, SDL_HAT_UP, SDL_HAT_RIGHTUP},
+        {SDL_HAT_LEFT, SDL_HAT_CENTERED, SDL_HAT_RIGHT},
+        {SDL_HAT_LEFTDOWN, SDL_HAT_DOWN, SDL_HAT_RIGHTDOWN}
+    };
+
+    if (x >= -1 && x <=1 && y >= -1 && y <= 1) {
+        SDL_joylist_item *item = JoystickByDeviceId(device_id);
+        if (item && item->joystick) {
+            SDL_PrivateJoystickHat(item->joystick, hat_id, position_map[y+1][x+1] );
+        }
+        return 0;
+    }
+
+    return -1;
+}
+
 
 int
 Android_AddJoystick(int device_id, const char *name, SDL_bool is_accelerometer, int nbuttons, int naxes, int nhats, int nballs)
@@ -359,11 +379,11 @@ Android_RemoveJoystick(int device_id)
 int
 SDL_SYS_JoystickInit(void)
 {
-    const char *env;
+    const char *hint;
     SDL_SYS_JoystickDetect();
     
-    env = SDL_GetHint(SDL_HINT_ACCEL_AS_JOY);
-    if (!env || SDL_atoi(env)) {
+    hint = SDL_GetHint(SDL_HINT_ACCELEROMETER_AS_JOYSTICK);
+    if (!hint || SDL_atoi(hint)) {
         /* Default behavior, accelerometer as joystick */
         Android_AddJoystick(ANDROID_ACCELEROMETER_DEVICE_ID, ANDROID_ACCELEROMETER_NAME, SDL_TRUE, 0, 3, 0, 0);
     }

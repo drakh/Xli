@@ -35,11 +35,6 @@ namespace Xli
         return false;
     }
 
-    bool WindowEventHandler::OnMouseLeave(Window* wnd, Vector2i pos)
-    {
-        return false;
-    }
-
     bool WindowEventHandler::OnMouseWheel(Window* wnd, Vector2i delta)
     {
         return false;

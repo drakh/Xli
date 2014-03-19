@@ -15,7 +15,7 @@ namespace Xli
         case ValueTypeArray: return "Array";
         case ValueTypeObject: return "Object";
         case ValueTypeOrderedObject: return "Object (ordered)";
-        default: return "<Unknown Value Type>";
+        default: return "<unknown>";
         }
     }
 
@@ -42,7 +42,7 @@ namespace Xli
 
     #define UNSUPPORTED XLI_THROW((String)XLI_FUNCTION + " is not supported for value of type " + Value::TypeToString(GetType()))
 
-    UInt32 IValue::GetHashCode() const { UNSUPPORTED; }
+    UInt32 IValue::Hash() const { UNSUPPORTED; }
 
     Int32 IValue::ToInt32() const { UNSUPPORTED; }
     Int64 IValue::ToInt64() const { UNSUPPORTED; }
@@ -61,25 +61,7 @@ namespace Xli
     Value& IValue::Get(const Value& key) { UNSUPPORTED; }
     int IValue::Count() const { UNSUPPORTED; }
 
-    Value IValue::Add(const Value& v) const { UNSUPPORTED; }
-    Value IValue::Sub(const Value& v) const { UNSUPPORTED; }
-    Value IValue::Mul(const Value& v) const { UNSUPPORTED; }
-    Value IValue::Div(const Value& v) const { UNSUPPORTED; }
-    Value IValue::Mod(const Value& v) const { UNSUPPORTED; }
-
-    bool IValue::And(const Value& v) const { UNSUPPORTED; }
-    bool IValue::Or(const Value& v) const { UNSUPPORTED; }
-    bool IValue::Not() const { UNSUPPORTED; }
-    bool IValue::Equal(const Value& v) const { UNSUPPORTED; }
-    bool IValue::NotEqual(const Value& v) const { return !Equal(v); }
-    bool IValue::LessThan(const Value& v) const { UNSUPPORTED; }
-    bool IValue::LessThanOrEqual(const Value& v) const { UNSUPPORTED; }
-    bool IValue::GreaterThan(const Value& v) const { UNSUPPORTED; }
-    bool IValue::GreaterThanOrEqual(const Value& v) const { UNSUPPORTED; }
-    Value IValue::BitwiseAnd(const Value& v) const { UNSUPPORTED; }
-    Value IValue::BitwiseOr(const Value& v) const { UNSUPPORTED; }
-    Value IValue::BitwiseNot() const { UNSUPPORTED; }
-    Value IValue::BitwiseXor(const Value& v) const { UNSUPPORTED; }
+    bool IValue::Equals(const Value& v) const { UNSUPPORTED; }
 
     #undef UNSUPPORTED
 
@@ -108,122 +90,123 @@ namespace Xli
         return Value(new OrderedObjectValue());
     }
 
-    template <typename T> static void SetToArray(Value& v, const T* values, int count)
+    template <typename T> 
+    static void SetToArray(Value& v, const T* values, int count)
     {
         ArrayValue* a = new ArrayValue();
         a->Values.Resize(count);
-        for (int i = 0; i < count; i++) a->Values[i] = values[i];
+
+        for (int i = 0; i < count; i++) 
+            a->Values[i] = values[i];
+
         v = a;
     }
 
     static void GetFloatArray(const Value& v, float* values, int count)
     {
-        for (int i = 0; i < count; i++) values[i] = v.GetValue(i).ToFloat();
+        for (int i = 0; i < count; i++) 
+            values[i] = v.GetValue(i).ToFloat();
     }
 
     static void GetIntArray(const Value& v, int* values, int count)
     {
-        for (int i = 0; i < count; i++) values[i] = v.GetValue(i).ToInt32();
+        for (int i = 0; i < count; i++) 
+            values[i] = v.GetValue(i).ToInt32();
     }
 
     Value::Value(const Vector2i& v)
     {
-        SetToArray(*this, v.Data(), 2);
+        SetToArray(*this, v.Data, 2);
     }
 
     Value::Value(const Vector3i& v)
     {
-        SetToArray(*this, v.Data(), 3);
+        SetToArray(*this, v.Data, 3);
     }
 
     Value::Value(const Vector4i& v)
     {
-        SetToArray(*this, v.Data(), 4);
+        SetToArray(*this, v.Data, 4);
     }
 
     Value::Value(const Vector2& v)
     {
-        SetToArray(*this, v.Data(), 2);
+        SetToArray(*this, v.Data, 2);
     }
 
     Value::Value(const Vector3& v)
     {
-        SetToArray(*this, v.Data(), 3);
+        SetToArray(*this, v.Data, 3);
     }
 
     Value::Value(const Vector4& v)
     {
-        SetToArray(*this, v.Data(), 4);
+        SetToArray(*this, v.Data, 4);
     }
 
     Value::Value(const Matrix3& v)
     {
-        SetToArray(*this, v.Data(), 9);
+        SetToArray(*this, v.Data, 9);
     }
 
     Value::Value(const Matrix4& v)
     {
-        SetToArray(*this, v.Data(), 16);
+        SetToArray(*this, v.Data, 16);
     }
 
     Vector2i Value::ToVector2i() const
     {
         Vector2i v;
-        GetIntArray(*this, v.Data(), 2);
+        GetIntArray(*this, v.Data, 2);
         return v;
     }
 
     Vector3i Value::ToVector3i() const
     {
         Vector3i v;
-        GetIntArray(*this, v.Data(), 3);
+        GetIntArray(*this, v.Data, 3);
         return v;
     }
 
     Vector4i Value::ToVector4i() const
     {
         Vector4i v;
-        GetIntArray(*this, v.Data(), 4);
+        GetIntArray(*this, v.Data, 4);
         return v;
     }
 
     Vector2 Value::ToVector2() const
     {
         Vector2 v;
-        GetFloatArray(*this, v.Data(), 2);
+        GetFloatArray(*this, v.Data, 2);
         return v;
     }
 
     Vector3 Value::ToVector3() const
     {
         Vector3 v;
-        GetFloatArray(*this, v.Data(), 3);
+        GetFloatArray(*this, v.Data, 3);
         return v;
     }
 
     Vector4 Value::ToVector4() const
     {
         Vector4 v;
-        GetFloatArray(*this, v.Data(), 4);
+        GetFloatArray(*this, v.Data, 4);
         return v;
     }
 
     Matrix3 Value::ToMatrix3() const
     {
         Matrix3 v;
-        GetFloatArray(*this, v.Data(), 9);
+        GetFloatArray(*this, v.Data, 9);
         return v;
     }
 
     Matrix4 Value::ToMatrix4() const
     {
         Matrix4 v;
-        GetFloatArray(*this, v.Data(), 16);
+        GetFloatArray(*this, v.Data, 16);
         return v;
-    }
-
-    UInt32 Hash(const Value& value)
-    {
-        return value.GetHashCode();
     }
 }

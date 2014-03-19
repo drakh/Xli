@@ -2,59 +2,33 @@
 #define __XLI_HASH_MAP_H__
 
 #include <Xli/Array.h>
-#include <Xli/Hash.h>
+#include <Xli/Traits.h>
 
 namespace Xli
 {
     /**
         \ingroup XliCoreContainers
     */
-    enum HashBucketState
+    template <typename TKey, typename TValue> class HashMap
     {
-        HashBucketStateEmpty = 0,
-        HashBucketStateUsed = 1,
-        HashBucketStateDummy = 2
-    };
+        static const int BufSize = 4;
 
-    /**
-        \ingroup XliCoreContainers
-    */
-    template <typename TKey, typename TValue> struct HashBucket
-    {
-        TKey Key;
-        TValue Value;
-        HashBucketState State;
-    };
+        enum BucketState
+        {
+            BucketStateEmpty = 0,
+            BucketStateUsed = 1,
+            BucketStateDummy = 2
+        };
 
-    /**
-        \ingroup XliCoreContainers
-    */
-    template <typename TKey, typename TValue> class HashMapDefaultTraits
-    {
-    public:
-        static UInt32 Hash(const TKey& key) { return Xli::Hash(key); }
-        static bool Equals(const TKey& a, const TKey& b) { return a == b; }
-        static HashBucket<TKey, TValue>* NewBuckets(int buckets, void* memPool) { return new HashBucket<TKey, TValue>[buckets]; }
-        static void DeleteBuckets(HashBucket<TKey, TValue>* ptr, void* memPool) { delete [] ptr; }
-    };
-
-    /**
-        \ingroup XliCoreContainers
-
-        Dictionary template.
-        Maps keys to values using a very efficient hash map. For user-defined TKey types, methods
-        UInt32 Hash() and operator == must be defined. All built-in C++ types can be used directly
-        as TKey. If the template argument TTraits can be specified to override the Hash() and Equals()
-        functions used. This is useful i.e. when using pointers to objects as keys and you want to
-        compare the value of the objects and not the pointers.
-    */
-    template <typename TKey, typename TValue, typename TTraits = HashMapDefaultTraits<TKey, TValue>, int TBufSize = 8> class HashMap: public Object
-    {
-    private:
-        typedef HashBucket<TKey, TValue> Bucket;
-        Bucket internalBuckets[TBufSize];
+        struct Bucket
+        {
+            TKey Key;
+            TValue Value;
+            BucketState State;
+        };
+        
+        Bucket internalBuckets[BufSize];
         Bucket* buckets;
-        void* memPool;
 
         int bucketCount;
         int count;
@@ -63,20 +37,20 @@ namespace Xli
         {
             Bucket* oldBuckets = buckets;
 
-            buckets = TTraits::NewBuckets(newSize, memPool);
+            buckets = new Bucket[newSize];
             int oldSize = bucketCount;
             bucketCount = newSize;
             count = 0;
 
             for (int i = 0; i < bucketCount; i++) 
-                buckets[i].State = HashBucketStateEmpty;
+                buckets[i].State = BucketStateEmpty;
 
             for (int i = 0; i < oldSize; i++)
-                if (oldBuckets[i].State == HashBucketStateUsed) 
+                if (oldBuckets[i].State == BucketStateUsed) 
                     (*this)[oldBuckets[i].Key] = oldBuckets[i].Value;
 
-            if (oldBuckets != internalBuckets) 
-                TTraits::DeleteBuckets(oldBuckets, memPool);
+            if (oldBuckets != internalBuckets)
+                delete [] oldBuckets;
         }
 
         void expand()
@@ -84,24 +58,25 @@ namespace Xli
             rehash(bucketCount * 2);
         }
 
-    public:
-        explicit HashMap(int initialSizeLog2 = 0, void* memPool = 0)
-        {
-            this->memPool = memPool;
+        HashMap(const HashMap& copy);
+        HashMap& operator = (const HashMap& copy);
 
+    public:
+        HashMap(int initialSizeLog2 = 0)
+        {
             if (initialSizeLog2 == 0)
             {
-                bucketCount = TBufSize;
+                bucketCount = BufSize;
                 buckets = internalBuckets;
             }
             else
             {
                 bucketCount = 1 << initialSizeLog2;
-                buckets = TTraits::NewBuckets(bucketCount, memPool);
+                buckets = new Bucket[bucketCount];
             }
 
             for (int i = 0; i < bucketCount; i++) 
-                buckets[i].State = HashBucketStateEmpty;
+                buckets[i].State = BucketStateEmpty;
 
             count = 0;
         }
@@ -109,46 +84,7 @@ namespace Xli
         ~HashMap()
         {
             if (buckets != internalBuckets)
-            {
-                TTraits::DeleteBuckets(buckets, memPool);
-            }
-        }
-
-        HashMap& operator = (const HashMap& map)
-        {
-            Clear();
-
-            for (int it = map.Begin(); it != map.End(); it = map.Next(it))
-                Add(map.GetKey(it), map.GetValue(it));
-
-            return *this;
-        }
-
-        Bucket* GetBucketBuffer() 
-        { 
-            return buckets; 
-        }
-        
-        void SetBucketBuffer(Bucket* buf) 
-        { 
-            TTraits::DeleteBuckets(buckets, memPool); 
-            buckets = buf;
-        }
-
-        /**
-            Returns the number of hash buckets currently in use in the map.
-        */
-        int GetBucketCount() const
-        {
-            return bucketCount;
-        }
-
-        /**
-            Returns a hash bucket with a given index.
-        */
-        const Bucket& GetBucket(int index) const
-        {
-            return buckets[index];
+                delete [] buckets;
         }
 
         /**
@@ -175,8 +111,12 @@ namespace Xli
         */
         int Next(int iterator) const
         {
+#ifdef XLI_RANGE_CHECK
+            if (iterator < 0) 
+                XLI_THROW("Invalid iterator");
+#endif     
             for (int i = iterator + 1; i < bucketCount; i++)
-                if (buckets[i].State == HashBucketStateUsed) 
+                if (buckets[i].State == BucketStateUsed) 
                     return i;
 
             return End();
@@ -191,10 +131,11 @@ namespace Xli
         const TValue& GetValue(int iterator) const
         {
 #ifdef XLI_RANGE_CHECK
-            if (buckets[iterator].State != HashBucketStateUsed) 
+            if (iterator < 0 ||
+                iterator >= bucketCount || 
+                buckets[iterator].State != BucketStateUsed) 
                 XLI_THROW("Invalid iterator");
-#endif
-            
+#endif     
             return buckets[iterator].Value;
         }
 
@@ -207,10 +148,11 @@ namespace Xli
         TValue& GetValue(int iterator)
         {
 #ifdef XLI_RANGE_CHECK
-            if (buckets[iterator].State != HashBucketStateUsed) 
+            if (iterator < 0 ||
+                iterator >= bucketCount || 
+                buckets[iterator].State != BucketStateUsed) 
                 XLI_THROW("Invalid iterator");
-#endif
-            
+#endif     
             return buckets[iterator].Value;
         }
 
@@ -222,9 +164,12 @@ namespace Xli
         */
         void SetValue(int iterator, const TValue& value)
         {
-            if (buckets[iterator].State != HashBucketStateUsed) 
+#ifdef XLI_RANGE_CHECK
+            if (iterator < 0 ||
+                iterator >= bucketCount || 
+                buckets[iterator].State != BucketStateUsed) 
                 XLI_THROW("Invalid iterator");
-            
+#endif     
             buckets[iterator].Value = value;
         }
 
@@ -237,83 +182,40 @@ namespace Xli
         const TKey& GetKey(int iterator) const
         {
 #ifdef XLI_RANGE_CHECK
-            if (buckets[iterator].State != HashBucketStateUsed) 
+            if (iterator < 0 ||
+                iterator >= bucketCount || 
+                buckets[iterator].State != BucketStateUsed) 
                 XLI_THROW("Invalid iterator");
-#endif
-            
+#endif     
             return buckets[iterator].Key;
-        }
-
-        /**
-            Returns a key with the given value.
-            If more than one key-value-pair contains the same value, which of the keys this funciton returns is undefined.
-            To get all keys with a given value, use GetKeysFromValue().
-            This is a very slow lookup, as it requires a linear iteration through the hash map.
-            If you want to perform this operation frequently, consider using a BiHashMap.
-            @param value The value to look up
-            @return The key at the given value.
-        */
-        bool TryGetKeyFromValue(const TValue& value, TKey& result) const
-        {
-            for (int i = Begin(); i != End(); i = Next(i))
-            {
-                if (GetValue(i) == value)
-                {
-                    result = GetKey(i);
-                    return true;
-                }
-            }
-            
-            return false;
-        }
-
-        bool ContainsValue(const TValue& value) const
-        {
-            for (int i = Begin(); i != End(); i = Next(i))
-                if (GetValue(i) == value) 
-                    return true;
-
-            return false;
-        }
-
-        /**
-            Enumerates all keys with the given value.
-            This is a very slow lookup, as it requires a linear iteration through the hash map.
-            If you want to perform this operation frequently, consider using a BiHashMap.
-            @param value The value to look up
-            @param keys An array to fill with the found keys.
-        */
-        void GetKeysFromValue(const TValue& value, Array<TKey>& keys) const
-        {
-            for (int i = Begin(); i != End(); i = Next(i))
-                if (GetValue(i) == value) 
-                    keys.Add(GetKey(i));
         }
 
         void Clear()
         {
             for (int i = 0; i < bucketCount; i++) 
-                buckets[i].State = HashBucketStateEmpty;
+                buckets[i].State = BucketStateEmpty;
 
             count = 0;
         }
 
         TValue& operator [] (const TKey& key)
         {
-            if (count > (bucketCount/8)*5) expand();
-            int x = TTraits::Hash(key) & (bucketCount - 1);
+            if (count > (bucketCount / 8) * 5) 
+                expand();
+            
+            int x = Traits<TKey>::Hash(key) & (bucketCount - 1);
             int firstX = x;
 
             while (true)
             {
-                if (buckets[x].State == HashBucketStateUsed)
+                if (buckets[x].State == BucketStateUsed)
                 {
-                    if (TTraits::Equals(buckets[x].Key, key)) 
+                    if (Traits<TKey>::Equals(buckets[x].Key, key)) 
                         return buckets[x].Value;
                 }
-                else if (buckets[x].State == HashBucketStateEmpty)
+                else if (buckets[x].State == BucketStateEmpty)
                 {
-                    buckets[x].State = HashBucketStateUsed;
+                    buckets[x].State = BucketStateUsed;
                     buckets[x].Key = key;
                     count++;
                     return buckets[x].Value;
@@ -335,20 +237,22 @@ namespace Xli
 
         void Add(const TKey& key, const TValue& value)
         {
-            if (count > (bucketCount/8)*5) expand();
-            int x = TTraits::Hash(key) & (bucketCount - 1);
+            if (count > (bucketCount / 8) * 5) 
+                expand();
+
+            int x = Traits<TKey>::Hash(key) & (bucketCount - 1);
             int firstX = x;
 
             while (true)
             {
-                if (buckets[x].State == HashBucketStateUsed)
+                if (buckets[x].State == BucketStateUsed)
                 {
-                    if (TTraits::Equals(buckets[x].Key, key)) 
+                    if (Traits<TKey>::Equals(buckets[x].Key, key)) 
                         XLI_THROW("Map already contains the given key");
                 }
-                else if (buckets[x].State == HashBucketStateEmpty)
+                else if (buckets[x].State == BucketStateEmpty)
                 {
-                    buckets[x].State = HashBucketStateUsed;
+                    buckets[x].State = BucketStateUsed;
                     buckets[x].Key = key;
                     buckets[x].Value = value;
                     count++;
@@ -369,22 +273,28 @@ namespace Xli
             }
         }
 
+        void AddRange(const HashMap& map)
+        {
+            for (int it = map.Begin(); it != map.End(); it = map.Next(it))
+                Add(map.GetKey(it), map.GetValue(it));
+        }
+
         bool Remove(const TKey& key)
         {
-            int x = TTraits::Hash(key) & (bucketCount - 1);
+            int x = Traits<TKey>::Hash(key) & (bucketCount - 1);
 
             while (true)
             {
-                if (buckets[x].State == HashBucketStateUsed)
+                if (buckets[x].State == BucketStateUsed)
                 {
-                    if (TTraits::Equals(buckets[x].Key, key))
+                    if (Traits<TKey>::Equals(buckets[x].Key, key))
                     {
-                        buckets[x].State = HashBucketStateDummy;
+                        buckets[x].State = BucketStateDummy;
                         count--;
                         return true;
                     }
                 }
-                else if (buckets[x].State == HashBucketStateEmpty)
+                else if (buckets[x].State == BucketStateEmpty)
                 {
                     return false;
                 }
@@ -398,17 +308,17 @@ namespace Xli
 
         bool ContainsKey(const TKey& key) const
         {
-            int x = TTraits::Hash(key) & (bucketCount - 1);
+            int x = Traits<TKey>::Hash(key) & (bucketCount - 1);
             int firstX = x;
 
             while (true)
             {
-                if (buckets[x].State == HashBucketStateUsed)
+                if (buckets[x].State == BucketStateUsed)
                 {
-                    if (TTraits::Equals(buckets[x].Key, key)) 
+                    if (Traits<TKey>::Equals(buckets[x].Key, key)) 
                         return true;
                 }
-                else if (buckets[x].State == HashBucketStateEmpty)
+                else if (buckets[x].State == BucketStateEmpty)
                 {
                     return false;
                 }
@@ -425,20 +335,20 @@ namespace Xli
 
         bool TryGetValue(const TKey& key, TValue& value) const
         {
-            int x = TTraits::Hash(key) & (bucketCount - 1);
+            int x = Traits<TKey>::Hash(key) & (bucketCount - 1);
             int firstX = x;
 
             while (true)
             {
-                if (buckets[x].State == HashBucketStateUsed)
+                if (buckets[x].State == BucketStateUsed)
                 {
-                    if (TTraits::Equals(buckets[x].Key, key))
+                    if (Traits<TKey>::Equals(buckets[x].Key, key))
                     {
                         value = buckets[x].Value;
                         return true;
                     }
                 }
-                else if (buckets[x].State == HashBucketStateEmpty)
+                else if (buckets[x].State == BucketStateEmpty)
                 {
                     return false;
                 }
@@ -448,7 +358,7 @@ namespace Xli
                 if (x >= bucketCount) 
                     x -= bucketCount;
                 
-                if (x == firstX) 
+                if (x == firstX)
                     return false;
             }
         }

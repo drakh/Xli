@@ -15,10 +15,10 @@ namespace Xli
 
     int ArrayStream::Write(const void* src, int elmSize, int elmCount)
     {
-        int loc = buf.Length();
         buf.Expand();
-        buf.Resize(buf.Length() + elmSize * elmCount);
-        memcpy(buf.Data() + loc, src, elmSize * elmCount);
+        int loc = buf.Length();
+        buf.Resize(loc + elmSize * elmCount);
+        memcpy(buf.DataPtr() + loc, src, elmSize * elmCount);
         return elmCount;
     }
 
@@ -27,14 +27,14 @@ namespace Xli
         return buf.Length();
     }
 
-    const UInt8* ArrayStream::GetData() const
+    const UInt8* ArrayStream::GetDataPtr() const
     {
-        return buf.Data();
+        return buf.DataPtr();
     }
 
     Buffer* ArrayStream::CopyData() const
     {
-        return Buffer::CopyFrom(buf.Data(), buf.Length());
+        return Buffer::CopyFrom(buf.DataPtr(), buf.Length());
     }
 
     void ArrayStream::Clear()

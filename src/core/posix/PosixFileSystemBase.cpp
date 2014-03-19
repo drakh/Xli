@@ -2,7 +2,7 @@
 
 #include <Xli/Time.h>
 #include <Xli/Random.h>
-#include <Xli/Hash.h>
+#include <Xli/Traits.h>
 #include <Xli/DateTime.h>
 #include <Xli/Path.h>
 
@@ -20,10 +20,7 @@ namespace Xli
 {
     namespace PlatformSpecific
     {
-        static Timestamp ConvertToTimeStamp(time_t time)
-        {
-            return (Timestamp)time * DateTime::PerSecond + (369 * 365 + 89) * DateTime::PerDay;
-        }
+        Timestamp ConvertToTimestamp(time_t time);
 
         Stream* PosixFileSystemBase::OpenFile(const String& filename, FileMode mode)
         {
@@ -34,7 +31,7 @@ namespace Xli
         {
             String prefix = Path::Combine(GetTempDirectory(), (String)(int)getpid() + "-");
 
-            Random rand(Hash(GetTimestamp()));
+            Random rand(DefaultTraits::Hash(GetTimestamp()));
             static const char* cs = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
             int cl = strlen(cs);
 
@@ -48,7 +45,7 @@ namespace Xli
                 String result = prefix + tmp;
 
                 struct stat attributes;
-                if (stat(result.Data(), &attributes) == -1)
+                if (stat(result.DataPtr(), &attributes) == -1)
                     return result;
             }
         }
@@ -57,54 +54,61 @@ namespace Xli
         {
             char buf[1024];
             const char* ptr = getcwd(buf, 1024);
-            if (ptr != buf) return ".";
+            
+            if (ptr != buf) 
+                return ".";
+            
             return buf;
         }
             
         void PosixFileSystemBase::ChangeDirectory(const String& path)
         {
-            if (!path.Length()) return;
+            if (!path.Length()) 
+                return;
 
-            if (chdir(path.Data()) != 0)
+            if (chdir(path.DataPtr()) != 0)
                 XLI_THROW("Unable to change directory to '" + path + "'");
         }
 
         void PosixFileSystemBase::CreateDirectory(const String& path)
         {
-            if (!path.Length()) return;
-            if (path == "~") return;
-
             struct stat st;
-            if (stat(path.Data(), &st) == 0) return;
 
-            if (mkdir(path.Data(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
+            if (!path.Length() || 
+                path == "~" ||
+                stat(path.DataPtr(), &st) == 0) 
+                return;
+
+            if (mkdir(path.DataPtr(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0)
             {
-                if (errno == EEXIST) return;
+                if (errno == EEXIST) 
+                    return;
+
                 XLI_THROW("Unable to create directory '" + path + "'");
             }
         }
 
         void PosixFileSystemBase::DeleteDirectory(const String& path)
         { 
-            if (!rmdir(path.Data()) != 0)
+            if (rmdir(path.DataPtr()) != 0)
                 XLI_THROW("Unable to delete directory '" + path + "'");
         }
 
         void PosixFileSystemBase::DeleteFile(const String& path)
         { 
-            if (!unlink(path.Data()) != 0)
+            if (unlink(path.DataPtr()) != 0)
                 XLI_THROW("Unable to delete file '" + path + "'");
         }
 
         void PosixFileSystemBase::MoveDirectory(const String& oldPath, const String& newPath)
         { 
-            if (rename(oldPath.Data(), newPath.Data()) != 0)
+            if (rename(oldPath.DataPtr(), newPath.DataPtr()) != 0)
                 XLI_THROW("Unable to move directory '" + oldPath + "' to '" + newPath + "'");
         }
             
         void PosixFileSystemBase::MoveFile(const String& oldPath, const String& newPath)
         { 
-            if (rename(oldPath.Data(), newPath.Data()) != 0)
+            if (rename(oldPath.DataPtr(), newPath.DataPtr()) != 0)
                 XLI_THROW("Unable to move file '" + oldPath + "' to '" + newPath + "'");
         }
 
@@ -112,7 +116,7 @@ namespace Xli
         {
             struct stat attributes;
 
-            if (stat(path.Data(), &attributes) == -1)
+            if (stat(path.DataPtr(), &attributes) == -1)
                 return false;
 
             f.Name = path;
@@ -126,9 +130,9 @@ namespace Xli
             if (S_ISDIR(attributes.st_mode))
                 f.Flags |= FileFlagDirectory;
 
-            f.CreationTime = ConvertToTimeStamp(attributes.st_mtime);
-            f.LastAccessTime = ConvertToTimeStamp(attributes.st_atime);
-            f.LastWriteTime = ConvertToTimeStamp(attributes.st_mtime);
+            f.CreationTime = ConvertToTimestamp(attributes.st_mtime);
+            f.LastAccessTime = ConvertToTimestamp(attributes.st_atime);
+            f.LastWriteTime = ConvertToTimestamp(attributes.st_mtime);
 
             return true;
         }
@@ -143,7 +147,7 @@ namespace Xli
             DIR *dp;
             struct dirent *ep;
 
-            if ((dp = opendir(prefix.Data())) == NULL)
+            if ((dp = opendir(prefix.DataPtr())) == NULL)
                 XLI_THROW_FILE_NOT_FOUND(prefix);
 
             if (prefix == "./")
@@ -152,7 +156,10 @@ namespace Xli
             while ((ep = readdir(dp)) != NULL)
             {
                 String fn = ep->d_name;
-                if (fn == "." || fn == "..") continue;
+                
+                if (fn == "." || fn == "..") 
+                    continue;
+
                 FileInfo info;
                 if (GetFileInfo(prefix + fn, info))
                     list.Add(info);

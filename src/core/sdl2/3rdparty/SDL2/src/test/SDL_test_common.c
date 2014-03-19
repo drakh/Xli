@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2013 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -706,6 +706,7 @@ SDLTest_CommonInit(SDLTest_CommonState * state)
             Uint32 Rmask, Gmask, Bmask, Amask;
 #if SDL_VIDEO_DRIVER_WINDOWS
 			int adapterIndex = 0;
+			int outputIndex = 0;
 #endif
             n = SDL_GetNumVideoDisplays();
             fprintf(stderr, "Number of displays: %d\n", n);
@@ -761,9 +762,13 @@ SDLTest_CommonInit(SDLTest_CommonState * state)
                 }
 
 #if SDL_VIDEO_DRIVER_WINDOWS
-				/* Print the adapter index */
+				/* Print the D3D9 adapter index */
 				adapterIndex = SDL_Direct3D9GetAdapterIndex( i );
-				fprintf( stderr, "Adapter Index: %d", adapterIndex );
+				fprintf( stderr, "D3D9 Adapter Index: %d", adapterIndex );
+
+				/* Print the DXGI adapter and output indices */
+				SDL_DXGIGetOutputInfo(i, &adapterIndex, &outputIndex);
+				fprintf( stderr, "DXGI Adapter Index: %d  Output Index: %d", adapterIndex, outputIndex );
 #endif
             }
         }
@@ -1537,6 +1542,7 @@ SDLTest_CommonQuit(SDLTest_CommonState * state)
         SDL_AudioQuit();
     }
     SDL_free(state);
+    SDL_Quit();
 }
 
 /* vi: set ts=4 sw=4 expandtab: */

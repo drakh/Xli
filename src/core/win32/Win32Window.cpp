@@ -64,7 +64,7 @@ namespace Xli
             AdjustWindowRect(&rect, dwStyle, 0);
 
             Utf16String titleW = Unicode::Utf8To16(title);
-            hWnd = CreateWindowW(WindowClassName, titleW.Data(), dwStyle, CW_USEDEFAULT, CW_USEDEFAULT, rect.right - rect.left, rect.bottom - rect.top, 0, 0, HInstance, 0);
+            hWnd = CreateWindowW(WindowClassName, titleW.DataPtr(), dwStyle, CW_USEDEFAULT, CW_USEDEFAULT, rect.right - rect.left, rect.bottom - rect.top, 0, 0, HInstance, 0);
 
             if (!hWnd)
                 XLI_THROW("Failed to create window: " + Win32Helpers::GetLastErrorString());
@@ -194,7 +194,7 @@ namespace Xli
         void Win32Window::SetTitle(const String& title)
         {
             Utf16String titleW = Unicode::Utf8To16(title);
-            SetWindowTextW(hWnd, titleW.Data());
+            SetWindowTextW(hWnd, titleW.DataPtr());
         }
 
         String Win32Window::GetTitle()
@@ -203,7 +203,7 @@ namespace Xli
             if (l == 0) return String();
 
             Utf16String titleW = Utf16String::Create(l);
-            l = GetWindowText(hWnd, titleW.Data(), l);
+            l = GetWindowText(hWnd, titleW.DataPtr(), l);
 
             return Unicode::Utf16To8(titleW);
         }
@@ -461,13 +461,14 @@ namespace Xli
                     return 0;
 
                 break;
-
+                // http://msdn.microsoft.com/en-us/library/windows/desktop/ms646265(v=vs.85).aspx
+                /*
             case WM_MOUSELEAVE:
-                if (wnd->eventHandler && wnd->eventHandler->OnMouseLeave(wnd, Vector2i(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))))
+                if (wnd->eventHandler && wnd->eventHandler->OnMouseMove(wnd, Vector2i(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))))
                     return 0;
 
                 break;
-
+                */
             case WM_MBUTTONDOWN:
                 if (wnd->eventHandler && wnd->eventHandler->OnMouseDown(wnd, Vector2i(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)), MouseButtonMiddle))
                     return 0;

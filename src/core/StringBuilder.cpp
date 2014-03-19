@@ -33,12 +33,12 @@ namespace Xli
 
     void StringBuilder::Append(const char* str)
     {
-        buffer.Add(str, (int)strlen(str));
+        buffer.AddRange(str, (int)strlen(str));
     }
 
     void StringBuilder::Append(const String& text)
     {
-        buffer.Add(text.Data(), text.Length());
+        buffer.AddRange(text.DataPtr(), text.Length());
     }
 
     void StringBuilder::Append(char c)
@@ -78,11 +78,11 @@ namespace Xli
 
     String StringBuilder::GetString() const
     {
-        return String(buffer.Data(), buffer.Length());
+        return String(buffer.DataPtr(), buffer.Length());
     }
 
     StringBuilder::operator String() const
     {
-        return String(buffer.Data(), buffer.Length());
+        return String(buffer.DataPtr(), buffer.Length());
     }
 }

@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2013 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -32,6 +32,7 @@
 
 #include "SDL_windowsvideo.h"
 #include "SDL_windowswindow.h"
+#include "SDL_hints.h"
 
 /* Dropfile support */
 #include <shellapi.h>
@@ -337,6 +338,31 @@ WIN_CreateWindowFrom(_THIS, SDL_Window * window, const void *data)
     if (SetupWindowData(_this, window, hwnd, SDL_FALSE) < 0) {
         return -1;
     }
+
+#if SDL_VIDEO_OPENGL_WGL
+    {
+        const char *hint = SDL_GetHint(SDL_HINT_VIDEO_WINDOW_SHARE_PIXEL_FORMAT);
+        if (hint) {
+            // This hint is a pointer (in string form) of the address of
+            // the window to share a pixel format with
+            SDL_Window *otherWindow = NULL;
+            SDL_sscanf(hint, "%p", (void**)&otherWindow);
+
+            // Do some error checking on the pointer
+            if (otherWindow != NULL && otherWindow->magic == &_this->window_magic)
+            {
+                // If the otherWindow has SDL_WINDOW_OPENGL set, set it for the new window as well
+                if (otherWindow->flags & SDL_WINDOW_OPENGL)
+                {
+                    window->flags |= SDL_WINDOW_OPENGL;
+                    if(!WIN_GL_SetPixelFormatFrom(_this, otherWindow, window)) {
+                        return -1;
+                    }
+                }
+            }
+        }
+    }
+#endif
     return 0;
 }
 
@@ -527,7 +553,7 @@ WIN_SetWindowFullscreen(_THIS, SDL_Window * window, SDL_VideoDisplay * display, 
     }
     SetWindowLong(hwnd, GWL_STYLE, style);
     data->expected_resize = TRUE;
-    SetWindowPos(hwnd, top, x, y, w, h, SWP_NOCOPYBITS);
+    SetWindowPos(hwnd, top, x, y, w, h, SWP_NOCOPYBITS | SWP_NOACTIVATE);
     data->expected_resize = FALSE;
 }
 
@@ -647,7 +673,7 @@ SDL_HelperWindowCreate(void)
 
     /* Register the class. */
     SDL_HelperWindowClass = RegisterClass(&wce);
-    if (SDL_HelperWindowClass == 0) {
+    if (SDL_HelperWindowClass == 0 && GetLastError() != ERROR_CLASS_ALREADY_EXISTS) {
         return WIN_SetError("Unable to create Helper Window Class");
     }
 
@@ -720,7 +746,7 @@ WIN_UpdateClipCursor(SDL_Window *window)
     SDL_Mouse *mouse = SDL_GetMouse();
 
     /* Don't clip the cursor while we're in the modal resize or move loop */
-    if (data->in_modal_loop) {
+    if (data->in_title_click || data->in_modal_loop) {
         ClipCursor(NULL);
         return;
     }

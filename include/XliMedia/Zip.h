@@ -22,7 +22,7 @@ namespace Xli
         
         static XLI_INLINE FileSystem* Open(Stream* file, const String& password) 
         { 
-            return Open(file, password.Data()); 
+            return Open(file, password.DataPtr()); 
         }
         
         static XLI_INLINE FileSystem* Open(const String& filename) 
@@ -34,7 +34,7 @@ namespace Xli
         static XLI_INLINE FileSystem* Open(const String& filename, const String& password) 
         { 
             Managed<File> f = new File(filename, FileModeRead); 
-            return Open(f, password.Data()); 
+            return Open(f, password.DataPtr()); 
         }
     };
 }

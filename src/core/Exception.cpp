@@ -15,14 +15,14 @@ namespace Xli
         this->_line = 0;
     }
 
-    Exception::Exception(const String& message, const String& func, int line)
+    Exception::Exception(const String& message, const char* func, int line)
     {
         this->_message = message;
         this->_func = func;
         this->_line = line;
     }
 
-    Exception::~Exception()
+    Exception::~Exception() XLI_NOEXCEPT
     {
         // empty
     }
@@ -32,7 +32,7 @@ namespace Xli
         return _message;
     }
 
-    const String& Exception::GetFunction() const
+    const char* Exception::GetFunction() const
     {
         return _func;
     }
@@ -45,5 +45,10 @@ namespace Xli
     const String& Exception::ToString() const
     {
         return _message;
+    }
+
+    const char* Exception::what() const XLI_NOEXCEPT
+    { 
+        return "Xli::Exception"; 
     }
 }

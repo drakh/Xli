@@ -1,5 +1,5 @@
 #include <Xli/Dialogs.h>
-#include <Xli/NativeFileSystem.h>
+#include <Xli/Disk.h>
 #include <Xli/StringBuilder.h>
 #include <Xli/Path.h>
 #include <Xli/MessageBox.h>
@@ -26,9 +26,8 @@ namespace Xli
         captionW = Unicode::Utf8To16(options.Caption);
 
         for (int i = 0; i < dirW.Length(); i++)
-        {
-            if (dirW[i] == '/') dirW[i] = '\\';
-        }
+            if (dirW[i] == '/') 
+                dirW[i] = '\\';
 
         if (options.FileExtensions.Length())
         {
@@ -39,8 +38,10 @@ namespace Xli
             {
                 String ext = FixExtension(options.FileExtensions[i].Extension);
 
-                if (ext.Length()) ext = "*." + ext;
-                else ext = "*.*";
+                if (ext.Length()) 
+                    ext = "*." + ext;
+                else 
+                    ext = "*.*";
 
                 fb.Append(options.FileExtensions[i].Description);
                 fb.Append(" (" + ext + ")");
@@ -49,9 +50,7 @@ namespace Xli
                 fb.Append('\0');
 
                 if (options.FileExtensions[i].Extension == options.DefaultExtension)
-                {
                     ofn.nFilterIndex = i + 1;
-                }
             }
 
             fb.Append('\0');
@@ -66,27 +65,25 @@ namespace Xli
         if (options.DefaultFile.Length())
         {
             Utf16String defaultFileW = Unicode::Utf8To16(options.DefaultFile);
-            memcpy(fnbufW, defaultFileW.Data(), defaultFileW.Length() * 2 + 2);
+            memcpy(fnbufW, defaultFileW.DataPtr(), defaultFileW.Length() * 2 + 2);
         }
         
         if (parent)
-        {
             ofn.hwndOwner = (HWND)parent->GetNativeHandle();
-        }
 
         ofn.hInstance = GetModuleHandle(NULL);
-        ofn.lpstrFilter = filterW.Data();
+        ofn.lpstrFilter = filterW.DataPtr();
         ofn.lpstrFile = fnbufW;
         ofn.nMaxFile = 4096;
-        ofn.lpstrInitialDir = dirW.Data();
-        ofn.lpstrTitle = captionW.Data();
+        ofn.lpstrInitialDir = dirW.DataPtr();
+        ofn.lpstrTitle = captionW.DataPtr();
 
         if (mustExist)
             ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_ENABLESIZING;
         else
             ofn.Flags = OFN_OVERWRITEPROMPT | OFN_ENABLESIZING;
 
-        ofn.lpstrDefExt = defW.Data();
+        ofn.lpstrDefExt = defW.DataPtr();
     }
 
     static bool EndFileDialog(bool ret, WCHAR* fnbufW, const String& cd, String& result)

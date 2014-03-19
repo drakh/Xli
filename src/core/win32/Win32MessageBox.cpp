@@ -38,7 +38,7 @@ namespace Xli
 
         Utf16String messageW = Unicode::Utf8To16(message);
         Utf16String captionW = Unicode::Utf8To16(caption);
-        int result = MessageBoxW(hWnd, messageW.Data(), captionW.Data(), type);
+        int result = MessageBoxW(hWnd, messageW.DataPtr(), captionW.DataPtr(), type);
 
         switch (result)
         {

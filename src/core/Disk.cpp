@@ -1,4 +1,4 @@
-#include <Xli/NativeFileSystem.h>
+#include <Xli/Disk.h>
 #include <cstdlib>
 
 namespace Xli

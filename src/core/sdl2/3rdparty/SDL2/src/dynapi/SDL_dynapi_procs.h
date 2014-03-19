@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2013 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -599,3 +599,10 @@ SDL_DYNAPI_PROC(void,SDL_GL_SwapWindow,(SDL_Window *a),(a),)
 SDL_DYNAPI_PROC(void,SDL_GL_DeleteContext,(SDL_GLContext a),(a),)
 SDL_DYNAPI_PROC(int,SDL_vsscanf,(const char *a, const char *b, va_list c),(a,b,c),return)
 SDL_DYNAPI_PROC(int,SDL_GameControllerAddMappingsFromRW,(SDL_RWops *a, int b),(a,b),return)
+SDL_DYNAPI_PROC(void,SDL_GL_ResetAttributes,(void),(),)
+SDL_DYNAPI_PROC(SDL_bool,SDL_HasAVX,(void),(),return)
+SDL_DYNAPI_PROC(SDL_AssertionHandler,SDL_GetDefaultAssertionHandler,(void),(),return)
+SDL_DYNAPI_PROC(SDL_AssertionHandler,SDL_GetAssertionHandler,(void **a),(a),return)
+#ifdef __WIN32__
+SDL_DYNAPI_PROC(void,SDL_DXGIGetOutputInfo,(int a,int *b, int *c),(a,b,c),)
+#endif

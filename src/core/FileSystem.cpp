@@ -4,25 +4,6 @@
 
 namespace Xli
 {
-    const char* FileModeToString(FileMode mode)
-    {
-        switch (mode)
-        {
-#define FORMAT(x) case x: return #x
-        FORMAT(FileModeRead);
-        FORMAT(FileModeWrite);
-        FORMAT(FileModeAppend);
-        FORMAT(FileModeNew);
-        FORMAT(FileModeRandom);
-        FORMAT(FileModeReadWrite);
-        FORMAT(FileModeReadWriteNew);
-        FORMAT(FileModeReadAppend);
-        FORMAT(FileModeReadRandom);
-        default: return "<Unknown FileMode>";
-#undef FORMAT
-        }
-    }
-
     FileSystem::~FileSystem()
     {
     }

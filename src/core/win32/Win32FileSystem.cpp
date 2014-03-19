@@ -50,8 +50,8 @@ namespace Xli
                 String result = Unicode::Utf16To8(fnW);
 
                 for (int i = 0; i < result.Length(); i++)
-                if (result[i] == '\\')
-                    result[i] = '/';
+                    if (result[i] == '\\')
+                        result[i] = '/';
 
                 return result;
             }
@@ -68,8 +68,8 @@ namespace Xli
                 }
 
                 for (int i = 0; i < result.Length(); i++)
-                if (result[i] == '\\')
-                    result[i] = '/';
+                    if (result[i] == '\\')
+                        result[i] = '/';
 
                 return result;
             }
@@ -99,8 +99,8 @@ namespace Xli
                 String result = Unicode::Utf16To8(bufW);
 
                 for (int i = 0; i < result.Length(); i++)
-                if (result[i] == '\\')
-                    result[i] = '/';
+                    if (result[i] == '\\')
+                        result[i] = '/';
 
                 return result;
             }
@@ -108,17 +108,18 @@ namespace Xli
             virtual void ChangeDirectory(const String& dir)
             {
                 Utf16String dirW = Unicode::Utf8To16(dir);
-                ::SetCurrentDirectoryW(dirW.Data());
+                ::SetCurrentDirectoryW(dirW.DataPtr());
             }
 
             virtual void CreateDirectory(const String& path)
             {
                 // silent ignore on disk roots
-                if (path.EndsWith(":")) return;
+                if (path.EndsWith(":")) 
+                    return;
 
                 Utf16String pathW = Unicode::Utf8To16(path);
 
-                if (!CreateDirectoryW(pathW.Data(), 0))
+                if (!CreateDirectoryW(pathW.DataPtr(), 0))
                 {
                     DWORD err = GetLastError();
                     switch (err)
@@ -137,7 +138,7 @@ namespace Xli
             {
                 Utf16String nameW = Unicode::Utf8To16(name);
 
-                if (!RemoveDirectoryW(nameW.Data()))
+                if (!RemoveDirectoryW(nameW.DataPtr()))
                 {
                     XLI_THROW("Unable to delete directory '" + name + "': " + Win32Helpers::GetLastErrorString());
                 }
@@ -147,7 +148,7 @@ namespace Xli
             {
                 Utf16String nameW = Unicode::Utf8To16(name);
 
-                if (!DeleteFileW(nameW.Data()))
+                if (!DeleteFileW(nameW.DataPtr()))
                     XLI_THROW("Unable to delete file '" + name + "': " + Win32Helpers::GetLastErrorString());
             }
 
@@ -156,7 +157,7 @@ namespace Xli
                 Utf16String oldNameW = Unicode::Utf8To16(oldName);
                 Utf16String newNameW = Unicode::Utf8To16(newName);
 
-                if (!MoveFileW(oldNameW.Data(), newNameW.Data()))
+                if (!MoveFileW(oldNameW.DataPtr(), newNameW.DataPtr()))
                     XLI_THROW("Unable to move directory '" + oldName + "' to '" + newName + "': " + Win32Helpers::GetLastErrorString());
             }
 
@@ -165,7 +166,7 @@ namespace Xli
                 Utf16String oldNameW = Unicode::Utf8To16(oldName);
                 Utf16String newNameW = Unicode::Utf8To16(newName);
 
-                if (!MoveFileW(oldNameW.Data(), newNameW.Data()))
+                if (!MoveFileW(oldNameW.DataPtr(), newNameW.DataPtr()))
                     XLI_THROW("Unable to move file '" + oldName + "' to '" + newName + "': " + Win32Helpers::GetLastErrorString());
             }
 
@@ -175,7 +176,7 @@ namespace Xli
 
                 WIN32_FILE_ATTRIBUTE_DATA data;
 
-                if (GetFileAttributesEx(pathW.Data(), GetFileExInfoStandard, &data))
+                if (GetFileAttributesEx(pathW.DataPtr(), GetFileExInfoStandard, &data))
                 {
                     info.Name = path;
                     info.Flags = 0;
@@ -183,8 +184,13 @@ namespace Xli
                     info.LastWriteTime = ConvertToTimestamp(data.ftLastWriteTime);
                     info.CreationTime = ConvertToTimestamp(data.ftCreationTime);
                     info.Size = ConvertToUInt64(data.nFileSizeHigh, data.nFileSizeLow);
-                    if (data.dwFileAttributes & FILE_ATTRIBUTE_READONLY) info.Flags |= FileFlagReadOnly;
-                    if (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) info.Flags |= FileFlagDirectory;
+                    
+                    if (data.dwFileAttributes & FILE_ATTRIBUTE_READONLY) 
+                        info.Flags |= FileFlagReadOnly;
+                    
+                    if (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) 
+                        info.Flags |= FileFlagDirectory;
+                    
                     return true;
                 }
 
@@ -200,7 +206,7 @@ namespace Xli
                 Utf16String filterW = Unicode::Utf8To16(filter);
 
                 WIN32_FIND_DATA findData;
-                HANDLE h = FindFirstFile((LPCWSTR)filterW.Data(), &findData);
+                HANDLE h = FindFirstFile((LPCWSTR)filterW.DataPtr(), &findData);
 
                 if (h != INVALID_HANDLE_VALUE)
                 {
@@ -225,12 +231,17 @@ namespace Xli
                         info.LastWriteTime = ConvertToTimestamp(findData.ftLastWriteTime);
                         info.CreationTime = ConvertToTimestamp(findData.ftCreationTime);
                         info.Size = ConvertToUInt64(findData.nFileSizeHigh, findData.nFileSizeLow);
-                        if (findData.dwFileAttributes & FILE_ATTRIBUTE_READONLY) info.Flags |= FileFlagReadOnly;
-                        if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) info.Flags |= FileFlagDirectory;
+                        
+                        if (findData.dwFileAttributes & FILE_ATTRIBUTE_READONLY) 
+                            info.Flags |= FileFlagReadOnly;
+                        
+                        if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) 
+                            info.Flags |= FileFlagDirectory;
 
                         list.Add(info);
 
-                    } while (FindNextFile(h, &findData) != 0);
+                    } 
+                    while (FindNextFile(h, &findData) != 0);
                 }
 
                 FindClose(h);

@@ -109,7 +109,7 @@ namespace Xli
 
 #undef FORMAT
 
-        default: return "<Unknown Format>";
+        default: return "<unknown>";
         }
     }
 

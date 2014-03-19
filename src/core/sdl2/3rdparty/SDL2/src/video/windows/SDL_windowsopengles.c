@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2013 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -31,8 +31,6 @@
 
 int
 WIN_GLES_LoadLibrary(_THIS, const char *path) {
-
-    SDL_VideoData *data = (SDL_VideoData *)_this->driverdata;
 
     /* If the profile requested is not GL ES, switch over to WIN_GL functions  */
     if (_this->gl_config.profile_mask != SDL_GL_CONTEXT_PROFILE_ES) {

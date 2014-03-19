@@ -2,14 +2,17 @@
 #define __XLI_MUTEX_H__
 
 #include <Xli/Object.h>
+#include <Xli/Exception.h>
 
 namespace Xli
 {
+    struct __MutexImpl;
+
     /**
         \addtogroup XliCoreThreading
         @{
     */
-    typedef void* MutexHandle;
+    typedef __MutexImpl* MutexHandle;
 
     MutexHandle CreateMutex();
     void DeleteMutex(MutexHandle mutex);
@@ -25,6 +28,9 @@ namespace Xli
     class Mutex
     {
         MutexHandle handle;
+
+        Mutex(const Mutex& copy);
+        Mutex& operator = (const Mutex& copy);
 
     public:
         Mutex()
@@ -50,6 +56,28 @@ namespace Xli
         operator MutexHandle()
         {
             return handle;
+        }
+    };
+
+    /**
+        \ingroup XliCoreThreading
+    */
+    class MutexLock
+    {
+        MutexHandle handle;
+    
+        MutexLock(const MutexLock& copy);
+        MutexLock& operator = (const MutexLock& copy);
+
+    public:
+        MutexLock(MutexHandle handle)
+        {
+            LockMutex(this->handle = handle);
+        }
+
+        ~MutexLock()
+        {
+            UnlockMutex(this->handle);
         }
     };
 }

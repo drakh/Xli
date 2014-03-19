@@ -2,42 +2,22 @@
 
 namespace Xli
 {
-    float* Matrix4::Data()
-    {
-        return data;
-    }
-
-    const float* Matrix4::Data() const
-    {
-        return data;
-    }
-
     Matrix4::operator float* ()
     {
-        return data;
+        return Data;
     }
 
     Matrix4::operator const float* () const
     {
-        return data;
-    }
-
-    float& Matrix4::operator [] (int i)
-    {
-#ifdef XLI_RANGE_CHECK
-        if (i >= 16 || i < 0)
-            XLI_THROW_INDEX_OUT_OF_BOUNDS;
-#endif
-        
-        return data[i];
+        return Data;
     }
 
     String Matrix4::ToString() const
     {
-        String s = data[0];
+        String s = Data[0];
         
         for (int i = 1; i < 16; i++) 
-            s = s + ", " + data[i];
+            s = s + ", " + Data[i];
 
         return s;
     }
@@ -49,27 +29,27 @@ namespace Xli
     Matrix4::Matrix4(const float* values)
     {
         for (int i = 0; i < 16; i++) 
-            data[i] = values[i];
+            Data[i] = values[i];
     }
 
     Matrix4::Matrix4(const Matrix4& m)
     {
         for (int i = 0; i < 16; i++) 
-            data[i] = m.data[i];
+            Data[i] = m.Data[i];
     }
 
     Matrix4::Matrix4(float v0, float v1, float v2, float v3, float v4, float v5, float v6, float v7, float v8, float v9, float v10, float v11, float v12, float v13, float v14, float v15) 
     { 
-        data[0] = v0; data[1] = v1; data[2] = v2; data[3] = v3;
-        data[4] = v4; data[5] = v5; data[6] = v6; data[7] = v7;
-        data[8] = v8; data[9] = v9; data[10] = v10; data[11] = v11;
-        data[12] = v12; data[13] = v13; data[14] = v14; data[15] = v15;
+        Data[0] = v0; Data[1] = v1; Data[2] = v2; Data[3] = v3;
+        Data[4] = v4; Data[5] = v5; Data[6] = v6; Data[7] = v7;
+        Data[8] = v8; Data[9] = v9; Data[10] = v10; Data[11] = v11;
+        Data[12] = v12; Data[13] = v13; Data[14] = v14; Data[15] = v15;
     }
 
     Matrix4& Matrix4::operator = (const Matrix4& m)
     {
         for (int i = 0; i < 16; i++) 
-            data[i] = m.data[i];
+            Data[i] = m.Data[i];
 
         return *this;
     }
@@ -79,7 +59,7 @@ namespace Xli
         Matrix4 r;
 
         for (int i = 0; i < 16; i++)
-            r.data[i] = data[i] + m.data[i];
+            r.Data[i] = Data[i] + m.Data[i];
 
         return r;
     }
@@ -89,7 +69,7 @@ namespace Xli
         Matrix4 r;
 
         for (int i = 0; i < 16; i++) 
-            r.data[i] = data[i] - m.data[i];
+            r.Data[i] = Data[i] - m.Data[i];
 
         return r;
     }
@@ -99,7 +79,7 @@ namespace Xli
         Matrix4 r;
 
         for (int i = 0; i < 16; i++) 
-            r.data[i] = data[i] + s;
+            r.Data[i] = Data[i] + s;
 
         return r;
     }
@@ -109,7 +89,7 @@ namespace Xli
         Matrix4 r;
 
         for (int i = 0; i < 16; i++) 
-            r.data[i] = data[i] - s;
+            r.Data[i] = Data[i] - s;
 
         return r;
     }
@@ -119,7 +99,7 @@ namespace Xli
         Matrix4 r;
 
         for (int i = 0; i < 16; i++) 
-            r.data[i] = data[i] * s;
+            r.Data[i] = Data[i] * s;
 
         return r;
     }
@@ -127,7 +107,7 @@ namespace Xli
     Matrix4& Matrix4::operator += (const Matrix4& m)
     {
         for (int i = 0; i < 16; i++) 
-            data[i] += m.data[i];
+            Data[i] += m.Data[i];
 
         return *this;
     }
@@ -135,7 +115,7 @@ namespace Xli
     Matrix4& Matrix4::operator -= (const Matrix4& m)
     {
         for (int i = 0; i < 16; i++) 
-            data[i] -= m.data[i];
+            Data[i] -= m.Data[i];
 
         return *this;
     }
@@ -143,7 +123,7 @@ namespace Xli
     Matrix4& Matrix4::operator += (float s)
     {
         for (int i = 0; i < 16; i++) 
-            data[i] += s;
+            Data[i] += s;
 
         return *this;
     }
@@ -151,7 +131,7 @@ namespace Xli
     Matrix4& Matrix4::operator -= (float s)
     {
         for (int i = 0; i < 16; i++) 
-            data[i] -= s;
+            Data[i] -= s;
 
         return *this;
     }
@@ -159,7 +139,7 @@ namespace Xli
     Matrix4& Matrix4::operator *= (float s)
     {
         for (int i = 0; i < 16; i++) 
-            data[i] *= s;
+            Data[i] *= s;
 
         return *this;
     }
@@ -167,19 +147,19 @@ namespace Xli
     Vector3 Matrix4::operator * (const Vector3& v) const
     {
         Vector3 r;
-        r.X = data[0] * v.X + data[4] * v.Y + data[8] * v.Z + data[12];
-        r.Y = data[1] * v.X + data[5] * v.Y + data[9] * v.Z + data[13];
-        r.Z = data[2] * v.X + data[6] * v.Y + data[10] * v.Z + data[14];
+        r.X = Data[0] * v.X + Data[4] * v.Y + Data[8] * v.Z + Data[12];
+        r.Y = Data[1] * v.X + Data[5] * v.Y + Data[9] * v.Z + Data[13];
+        r.Z = Data[2] * v.X + Data[6] * v.Y + Data[10] * v.Z + Data[14];
         return r;
     }
 
     Vector4 Matrix4::operator * (const Vector4& v) const
     {
         Vector4 r;
-        r.X = data[0] * v.X + data[4] * v.Y + data[8] * v.Z + data[12] * v.W;
-        r.Y = data[1] * v.X + data[5] * v.Y + data[9] * v.Z + data[13] * v.W;
-        r.Z = data[2] * v.X + data[6] * v.Y + data[10] * v.Z + data[14] * v.W;
-        r.W = data[3] * v.X + data[7] * v.Y + data[11] * v.Z + data[15] * v.W;
+        r.X = Data[0] * v.X + Data[4] * v.Y + Data[8] * v.Z + Data[12] * v.W;
+        r.Y = Data[1] * v.X + Data[5] * v.Y + Data[9] * v.Z + Data[13] * v.W;
+        r.Z = Data[2] * v.X + Data[6] * v.Y + Data[10] * v.Z + Data[14] * v.W;
+        r.W = Data[3] * v.X + Data[7] * v.Y + Data[11] * v.Z + Data[15] * v.W;
         return r;
     }
 
@@ -192,11 +172,11 @@ namespace Xli
             int idx = i * 4;
             for (int j = 0; j < 4; ++j)
             {
-                res.data[idx+j] =
-                    m.data[idx + 0] * data[0 * 4 + j] +
-                    m.data[idx + 1] * data[1 * 4 + j] +
-                    m.data[idx + 2] * data[2 * 4 + j] +
-                    m.data[idx + 3] * data[3 * 4 + j];
+                res.Data[idx+j] =
+                    m.Data[idx + 0] * Data[0 * 4 + j] +
+                    m.Data[idx + 1] * Data[1 * 4 + j] +
+                    m.Data[idx + 2] * Data[2 * 4 + j] +
+                    m.Data[idx + 3] * Data[3 * 4 + j];
             }
         }
 
@@ -233,22 +213,22 @@ namespace Xli
     Matrix4 Matrix4::Transpose(const Matrix4& m)
     {
         Matrix4 t;
-        t.data[0] = m.data[0];
-        t.data[1] = m.data[4];
-        t.data[2] = m.data[8];
-        t.data[3] = m.data[12];
-        t.data[4] = m.data[1];
-        t.data[5] = m.data[5];
-        t.data[6] = m.data[9];
-        t.data[7] = m.data[13];
-        t.data[8] = m.data[2];
-        t.data[9] = m.data[6];
-        t.data[10] = m.data[10];
-        t.data[11] = m.data[14];
-        t.data[12] = m.data[3];
-        t.data[13] = m.data[7];
-        t.data[14] = m.data[11];
-        t.data[15] = m.data[15];
+        t.Data[0] = m.Data[0];
+        t.Data[1] = m.Data[4];
+        t.Data[2] = m.Data[8];
+        t.Data[3] = m.Data[12];
+        t.Data[4] = m.Data[1];
+        t.Data[5] = m.Data[5];
+        t.Data[6] = m.Data[9];
+        t.Data[7] = m.Data[13];
+        t.Data[8] = m.Data[2];
+        t.Data[9] = m.Data[6];
+        t.Data[10] = m.Data[10];
+        t.Data[11] = m.Data[14];
+        t.Data[12] = m.Data[3];
+        t.Data[13] = m.Data[7];
+        t.Data[14] = m.Data[11];
+        t.Data[15] = m.Data[15];
         return t;
     }
 
@@ -261,7 +241,7 @@ namespace Xli
     {
         Matrix4 inverseMatrix = Matrix4::Identity();
 
-        float* src = data;
+        float* src = Data;
         float* inverse = inverseMatrix;
 
         int i, j, k;
@@ -335,34 +315,34 @@ namespace Xli
     Matrix3 Matrix4::GetUpperLeft3x3() const
     {
         Matrix3 m;
-        m[0] = data[0];
-        m[1] = data[1];
-        m[2] = data[2];
-        m[3] = data[4];
-        m[4] = data[5];
-        m[5] = data[6];
-        m[6] = data[8];
-        m[7] = data[9];
-        m[8] = data[10];
+        m[0] = Data[0];
+        m[1] = Data[1];
+        m[2] = Data[2];
+        m[3] = Data[4];
+        m[4] = Data[5];
+        m[5] = Data[6];
+        m[6] = Data[8];
+        m[7] = Data[9];
+        m[8] = Data[10];
         return m;
     }
 
     Vector3 Matrix4::GetTranslation() const
     {
-        return Vector3(data[3*4 + 0], data[3*4 + 1], data[3*4 + 2]);
+        return Vector3(Data[3*4 + 0], Data[3*4 + 1], Data[3*4 + 2]);
     }
 
     Vector3 Matrix4::GetScaling() const
     {
         return Vector3(
-            Sqrt((data[0*4 + 0] * data[0*4 + 0]) + (data[0*4 + 1] * data[0*4 + 1]) + (data[0*4 + 2] * data[0*4 + 2])),
-            Sqrt((data[1*4 + 0] * data[1*4 + 0]) + (data[1*4 + 1] * data[1*4 + 1]) + (data[1*4 + 2] * data[1*4 + 2])),
-            Sqrt((data[2*4 + 0] * data[2*4 + 0]) + (data[2*4 + 1] * data[2*4 + 1]) + (data[2*4 + 2] * data[2*4 + 2])));
+            Sqrt((Data[0*4 + 0] * Data[0*4 + 0]) + (Data[0*4 + 1] * Data[0*4 + 1]) + (Data[0*4 + 2] * Data[0*4 + 2])),
+            Sqrt((Data[1*4 + 0] * Data[1*4 + 0]) + (Data[1*4 + 1] * Data[1*4 + 1]) + (Data[1*4 + 2] * Data[1*4 + 2])),
+            Sqrt((Data[2*4 + 0] * Data[2*4 + 0]) + (Data[2*4 + 1] * Data[2*4 + 1]) + (Data[2*4 + 2] * Data[2*4 + 2])));
     }
 
     const Matrix4& Matrix4::Identity()
     {
-        static const float data[16] =
+        static const float Data[16] =
         {
             1, 0, 0, 0,
             0, 1, 0, 0,
@@ -370,16 +350,16 @@ namespace Xli
             0, 0, 0, 1
         };
 
-        static const Matrix4 id(data);
+        static const Matrix4 id(Data);
         return id;
     }
 
     Matrix4 Matrix4::Translation(float x, float y, float z)
     {
         Matrix4 m = Identity();
-        m.data[12] = x;
-        m.data[13] = y;
-        m.data[14] = z;
+        m.Data[12] = x;
+        m.Data[13] = y;
+        m.Data[14] = z;
         return m;
     }
     
@@ -391,7 +371,7 @@ namespace Xli
     Matrix4 Matrix4::RotationX(float angleRadians)
     {
         Matrix4 m;
-        float* a = m.data;
+        float* a = m.Data;
         float c = Cos(angleRadians);
         float s = Sin(angleRadians);
 
@@ -406,7 +386,7 @@ namespace Xli
     Matrix4 Matrix4::RotationY(float angleRadians)
     {
         Matrix4 m;
-        float* a = m.data;
+        float* a = m.Data;
         float c = Cos(angleRadians);
         float s = Sin(angleRadians);
 
@@ -421,7 +401,7 @@ namespace Xli
     Matrix4 Matrix4::RotationZ(float angleRadians)
     {
         Matrix4 m;
-        float* a = m.data;
+        float* a = m.Data;
         float c = Cos(angleRadians);
         float s = Sin(angleRadians);
 
@@ -447,7 +427,7 @@ namespace Xli
         float z = axis.Z * lenInv;
 
         Matrix4 m;
-        float* a = m.data;
+        float* a = m.Data;
         float c = Cos(angleRadians);
         float s = Sin(angleRadians);
 
@@ -491,9 +471,9 @@ namespace Xli
     Matrix4 Matrix4::Scaling(float x, float y, float z)
     {
         Matrix4 m = Identity();
-        m.data[0] = x;
-        m.data[5] = y;
-        m.data[10] = z;
+        m.Data[0] = x;
+        m.Data[5] = y;
+        m.Data[10] = z;
         return m;
     }
 

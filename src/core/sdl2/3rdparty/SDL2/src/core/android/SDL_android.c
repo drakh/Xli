@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2013 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -170,6 +170,14 @@ void Java_org_libsdl_app_SDLActivity_onNativeJoy(
                                     jint device_id, jint axis, jfloat value)
 {
     Android_OnJoy(device_id, axis, value);
+}
+
+/* POV Hat */
+void Java_org_libsdl_app_SDLActivity_onNativeHat(
+                                    JNIEnv* env, jclass jcls,
+                                    jint device_id, jint hat_id, jint x, jint y)
+{
+    Android_OnHat(device_id, hat_id, x, y);
 }
 
 

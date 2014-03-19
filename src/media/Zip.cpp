@@ -103,7 +103,7 @@ namespace Xli
         {
             if (fileMode != FileModeRead) XLI_THROW("Invalid FileMode; Zip is Read-Only");
 
-            if (unzLocateFile((unzFile)handle, filename.Data(), 2) != UNZ_OK) XLI_THROW(String("Couldn't locate file in zip-archive: ") + filename);
+            if (unzLocateFile((unzFile)handle, filename.DataPtr(), 2) != UNZ_OK) XLI_THROW(String("Couldn't locate file in zip-archive: ") + filename);
             if (unzOpenCurrentFile((unzFile)handle) != UNZ_OK) XLI_THROW(String("Couldn't open file in zip-archive: ") + filename);
 
             unz_file_info unzFileInfo;
@@ -111,7 +111,7 @@ namespace Xli
 
             Managed<Buffer> buf = Buffer::Create(unzFileInfo.uncompressed_size);
 
-            if (unzReadCurrentFile((unzFile)handle, buf->Data(), buf->Size()) != buf->Size()) XLI_THROW(String("Couldn't read in from zip-archive: ") + filename);
+            if (unzReadCurrentFile((unzFile)handle, buf->DataPtr(), buf->Size()) != buf->Size()) XLI_THROW(String("Couldn't read in from zip-archive: ") + filename);
             if (unzCloseCurrentFile((unzFile)handle) != UNZ_OK ) XLI_THROW(String("Couldn't close file in zip-archive: ") + filename);
 
             return new BufferStream(buf, true, false);

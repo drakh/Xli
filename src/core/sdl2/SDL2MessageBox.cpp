@@ -10,8 +10,8 @@ namespace Xli
 
         data.flags = 0;
         data.window = wnd != 0 && wnd->GetImplementation() == WindowImplementationSDL2 ? ((PlatformSpecific::SDL2Window*)wnd)->GetSDL_Window() : NULL;
-        data.title = caption.Data();
-        data.message = message.Data();
+        data.title = caption.DataPtr();
+        data.message = message.DataPtr();
         data.numbuttons = 0;
         data.buttons = buttondata;
         data.colorScheme = 0;

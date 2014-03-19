@@ -146,7 +146,7 @@ namespace Xli
             this->path = path;
             this->isasset = asset;
             
-            CoreAudioChannel* c = new CoreAudioChannel(path.Data(), false, false);
+            CoreAudioChannel* c = new CoreAudioChannel(path.DataPtr(), false, false);
             this->duration = c->GetDuration();
             delete c;            
         }
@@ -157,13 +157,13 @@ namespace Xli
         virtual SimpleSoundChannel* Play(bool paused)
         {
             SimpleSoundChannel* result;
-            result = new CoreAudioChannel(path.Data(), false, true);
+            result = new CoreAudioChannel(path.DataPtr(), false, true);
             return result;
         }
         virtual SimpleSoundChannel* PlayLoop(bool paused)
         {
             SimpleSoundChannel* result;
-            result = new CoreAudioChannel(path.Data(), true, true);
+            result = new CoreAudioChannel(path.DataPtr(), true, true);
             return result;
         }
         virtual String GetPath() const

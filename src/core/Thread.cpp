@@ -24,11 +24,11 @@ namespace Xli
         task->stopped = true;
     }
 
-    Thread::Thread(Task* task)
+    Thread::Thread(Managed<Task> task)
     {
         this->handle = 0;
 
-        if (task)
+        if (!task.IsNull())
             Start(task);
     }
 
@@ -48,9 +48,9 @@ namespace Xli
         return handle != 0;
     }
 
-    void Thread::Start(Task* task)
+    void Thread::Start(Managed<Task> task)
     {
-        if (!task)
+        if (task.IsNull())
             XLI_THROW_NULL_POINTER;
 
         if (handle)
@@ -83,6 +83,6 @@ namespace Xli
 
     String Task::ToString() const
     {
-        return "<Task " + Xli::ToString((void*)this) + ">";
+        return "<Task " + DefaultTraits::ToString((void*)this) + ">";
     }
 }

@@ -7,9 +7,6 @@
     <Filter Include="3rdparty\zlib">
       <UniqueIdentifier>{b0d6927b-165e-492c-b775-3e576a70c447}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rdparty\tinyxml">
-      <UniqueIdentifier>{16055379-3b3c-44a9-a1a8-b2a1c97331fc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="3rdparty\png">
       <UniqueIdentifier>{f4fe1871-e7b8-4d10-b47d-85dc16d6ff06}</UniqueIdentifier>
     </Filter>
@@ -68,18 +65,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\media\3rdparty\zlib\zutil.c">
       <Filter>3rdparty\zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\media\3rdparty\tinyxml\tinystr.cpp">
-      <Filter>3rdparty\tinyxml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\media\3rdparty\tinyxml\tinyxml.cpp">
-      <Filter>3rdparty\tinyxml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\media\3rdparty\tinyxml\tinyxmlerror.cpp">
-      <Filter>3rdparty\tinyxml</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\media\3rdparty\tinyxml\tinyxmlparser.cpp">
-      <Filter>3rdparty\tinyxml</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\media\3rdparty\png\png.c">
       <Filter>3rdparty\png</Filter>
@@ -459,9 +444,6 @@
     <ClCompile Include="..\..\..\src\media\Ktx.cpp">
       <Filter>XliMedia\Texture Formats</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\media\Xml.cpp">
-      <Filter>XliMedia\Other Formats</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\media\Zip.cpp">
       <Filter>XliMedia\Other Formats</Filter>
     </ClCompile>
@@ -476,12 +458,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\media\3rdparty\tinyxml\tinystr.h">
-      <Filter>3rdparty\tinyxml</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\media\3rdparty\tinyxml\tinyxml.h">
-      <Filter>3rdparty\tinyxml</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\media\3rdparty\unzip\ioapi.h">
       <Filter>3rdparty\unzip</Filter>
     </ClInclude>
@@ -542,9 +518,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\XliMedia\Ktx.h">
       <Filter>XliMedia\Texture Formats</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\XliMedia\Xml.h">
-      <Filter>XliMedia\Other Formats</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\XliMedia\Zip.h">
       <Filter>XliMedia\Other Formats</Filter>

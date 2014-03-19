@@ -38,7 +38,6 @@
 #include <XliMedia/ProgressCallback.h>
 #include <XliMedia/Texture.h>
 #include <XliMedia/Value.h>
-#include <XliMedia/Xml.h>
 #include <XliMedia/Zip.h>
 
 #endif

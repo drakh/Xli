@@ -1,8 +1,8 @@
 #ifndef __XLI_STRING_BUILDER_H__
 #define __XLI_STRING_BUILDER_H__
 
-#include "String.h"
-#include "Array.h"
+#include <Xli/String.h>
+#include <Xli/Array.h>
 
 namespace Xli
 {

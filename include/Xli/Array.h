@@ -4,66 +4,50 @@
 #include <Xli/Config.h>
 #include <Xli/Object.h>
 #include <Xli/Exception.h>
-#include "Sort.h"
+#include <Xli/Sort.h>
 
 namespace Xli
 {
     /**
         \ingroup XliCoreContainers
     */
-    template <typename T, int TBufSize> class Array: public Object
+    template <typename T> class Array
     {
+        static const int BufSize = 4;
+
         T* data;
-        T buf[TBufSize];
+        T buf[BufSize];
         int used;
         int capacity;
+
+        Array(const Array& copy);
+        Array& operator = (const Array& copy);
 
     public:
         Array()
         {
             used = 0;
-            capacity = TBufSize;
+            capacity = BufSize;
             data = buf;
         }
 
-        Array(int size)
+        explicit Array(int size)
         {
             used = 0;
-            capacity = TBufSize;
+            capacity = BufSize;
             data = buf;
             Resize(size);
         }
 
-        Array(int count, const T* initItems)
+        explicit Array(int count, const T* initItems)
         {
             used = 0;
-            capacity = TBufSize;
+            capacity = BufSize;
             data = buf;
             Resize(count);
 
             for (int i = 0; i < count; i++) 
                 data[i] = initItems[i];
-        }
-
-        Array(const Array& a)
-        {
-            used = 0;
-            capacity = TBufSize;
-            data = buf;
-            Resize(a.used);
-
-            for (int i = 0; i < used; i++)
-                data[i] = a.data[i];
-        }
-
-        Array& operator = (Array& a)
-        {
-            Resize(a.used);
-
-            for (int i = 0; i < used; i++)
-                data[i] = a.data[i];
-
-            return *this;
         }
 
         ~Array()
@@ -93,14 +77,14 @@ namespace Xli
         {
             if (data != buf)
             {
-                if (used <= (int)TBufSize)
+                if (used <= BufSize)
                 {
                     for (int i = 0; i < used; i++)
                         buf[i] = data[i];
 
                     delete [] data;
                     data = buf;
-                    capacity = TBufSize;
+                    capacity = BufSize;
                 }
                 else if (used < capacity)
                 {
@@ -160,7 +144,7 @@ namespace Xli
             return used++;
         }
 
-        int Add(const T* items, int count)
+        int AddRange(const T* items, int count)
         {
             int res = used;
             
@@ -170,9 +154,9 @@ namespace Xli
             return res;
         }
 
-        int Add(const Array<T>& values)
+        int AddRange(const Array<T>& values)
         {
-            return Add(values.data, values.used);
+            return AddRange(values.data, values.used);
         }
 
         int Insert(int index, const T& item)
@@ -181,7 +165,6 @@ namespace Xli
             if (index > used || index < 0)
                 XLI_THROW_INDEX_OUT_OF_BOUNDS;
 #endif
-
             Add(item);
 
             for (int i = used - 1; i > index; i--) 
@@ -221,7 +204,6 @@ namespace Xli
             if (index >= used || index < 0)
                 XLI_THROW_INDEX_OUT_OF_BOUNDS;
 #endif
-
             for (int i = index; i < used - 1; i++) 
                 data[i] = data[i + 1];
 
@@ -258,7 +240,7 @@ namespace Xli
             if (start >= used || start < 0)
                 XLI_THROW_INDEX_OUT_OF_BOUNDS;
 
-            if (start+count > used || count < 0)
+            if (start + count > used || count < 0)
                 XLI_THROW_INDEX_OUT_OF_BOUNDS;
 #endif
 
@@ -317,12 +299,12 @@ namespace Xli
             return Get(index);
         }
 
-        T* Data()
+        T* DataPtr()
         {
             return data;
         }
 
-        const T* Data() const
+        const T* DataPtr() const
         {
             return data;
         }
@@ -377,6 +359,12 @@ namespace Xli
         {
             Sort<ComparatorPointerGreaterThan<T> >();
         }
+    };
+
+    template <typename T> class ArrayRef: public Object
+    {
+    public:
+        Array<T> Data;
     };
 }
 

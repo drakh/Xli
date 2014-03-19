@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2013 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -345,11 +345,17 @@ extern VideoBootStrap COCOA_bootstrap;
 #if SDL_VIDEO_DRIVER_X11
 extern VideoBootStrap X11_bootstrap;
 #endif
+#if SDL_VIDEO_DRIVER_MIR
+extern VideoBootStrap MIR_bootstrap;
+#endif
 #if SDL_VIDEO_DRIVER_DIRECTFB
 extern VideoBootStrap DirectFB_bootstrap;
 #endif
 #if SDL_VIDEO_DRIVER_WINDOWS
 extern VideoBootStrap WINDOWS_bootstrap;
+#endif
+#if SDL_VIDEO_DRIVER_WINRT
+extern VideoBootStrap WINRT_bootstrap;
 #endif
 #if SDL_VIDEO_DRIVER_HAIKU
 extern VideoBootStrap HAIKU_bootstrap;

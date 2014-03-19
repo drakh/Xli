@@ -24,13 +24,13 @@ namespace Xli
                     if (c == '\n')
                     {
                         buf.Add('\0');
-                        NSLog(@"%@", [NSString stringWithUTF8String:buf.Data()]);
+                        NSLog(@"%@", [NSString stringWithUTF8String:buf.DataPtr()]);
                         buf.Clear();
                         continue;
                     }
                     else if (c == '\t')
                     {
-                        buf.Add("    ", 4 - buf.Length() % 4);
+                        buf.AddRange("    ", 4 - buf.Length() % 4);
                         continue;
                     }
                     else if (c == '\r')
@@ -49,7 +49,7 @@ namespace Xli
                 if (buf.Length() > 0)
                 {
                     buf.Add('\0');
-                    NSLog(@"%@", [NSString stringWithUTF8String:buf.Data()]);
+                    NSLog(@"%@", [NSString stringWithUTF8String:buf.DataPtr()]);
                     buf.Clear();
                 }
             }
@@ -65,4 +65,3 @@ namespace Xli
         }
     }
 }
-

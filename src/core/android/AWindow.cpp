@@ -28,13 +28,13 @@ namespace Xli
         
         class AWindow: public Window
         {
-            Managed<MutexQueue<CTEvent*> > ctEventQueue;
+            MutexQueue<CTEvent*> ctEventQueue;
+        
         public:
             AWindow()
             {
                 if (GlobalEventHandler != 0)
                     GlobalEventHandler->AddRef();
-                ctEventQueue = new MutexQueue<CTEvent*>();
             }
 
             virtual ~AWindow()
@@ -216,14 +216,14 @@ namespace Xli
             
             virtual void EnqueueCrossThreadEvent(CTEvent* event)
             {
-                ctEventQueue->Enqueue(event);
+                ctEventQueue.Enqueue(event);
             }
 
             virtual void ProcessCrossThreadEvents()
             {
-                while ((ctEventQueue->Count() > 0))
+                while ((ctEventQueue.Count() > 0))
                 {
-                    CTEvent* event = ctEventQueue->Dequeue();
+                    CTEvent* event = ctEventQueue.Dequeue();
                     switch (event->CTType)
                     {
                     case Xli::CTTextEvent:
@@ -268,7 +268,7 @@ namespace Xli
                 if (buf.Length())
                 {
                     buf.Add(0);
-                    __android_log_write(prio, AGetAppName(), buf.Data());
+                    __android_log_write(prio, AGetAppName(), buf.DataPtr());
                     buf.Clear();
                 }
             }
@@ -287,7 +287,7 @@ namespace Xli
                     if (c == '\n')
                     {
                         buf.Add(0);
-                        __android_log_write(prio, AGetAppName(), buf.Data());
+                        __android_log_write(prio, AGetAppName(), buf.DataPtr());
                         buf.Clear();
                         continue;
                     }

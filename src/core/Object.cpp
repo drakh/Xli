@@ -1,6 +1,7 @@
+#include <Xli/Atomic.h>
 #include <Xli/Object.h>
 #include <Xli/Exception.h>
-#include <Xli/ToString.h>
+#include <Xli/Traits.h>
 
 namespace Xli
 {
@@ -22,14 +23,12 @@ namespace Xli
 
     void Object::AddRef() 
     {
-        refCount++;
+        AtomicIncrement(&refCount);
     }
 
     void Object::Release()
     {
-        refCount--;
-
-        if (!refCount) 
+        if (AtomicDecrement(&refCount) == 0)
             Delete();
     }
 
@@ -40,6 +39,6 @@ namespace Xli
 
     String Object::ToString() const
     {
-        return "<Object " + Xli::ToString((void*)this) + ">";
+        return "<Object " + DefaultTraits::ToString((void*)this) + ">";
     }
 }

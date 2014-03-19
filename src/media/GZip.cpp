@@ -154,14 +154,14 @@ namespace Xli
         Managed<Buffer> src = Buffer::Create(input_size);
         Managed<Buffer> dst = Buffer::Create(expected_len);
 
-        sourceStream->ReadSafe(src->Data(), 1, src->Size());
+        sourceStream->ReadSafe(src->DataPtr(), 1, src->Size());
 
         z_stream stream;
         memset(&stream, 0, sizeof(z_stream));
 
-        stream.next_in = src->Data();
+        stream.next_in = src->DataPtr();
         stream.avail_in = src->Size();
-        stream.next_out = dst->Data();
+        stream.next_out = dst->DataPtr();
         stream.avail_out = dst->Size();
 
         int err = inflateInit2(&stream, 16 + MAX_WBITS);

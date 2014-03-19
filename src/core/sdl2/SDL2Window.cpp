@@ -95,7 +95,7 @@ namespace Xli
             sdlFlags |= SDL_WINDOW_ALLOW_HIGHDPI;
 
             // Enable OS X Lion native fullscreen feature
-            SDL_SetHint(SDL_HINT_VIDEO_FULLSCREEN_SPACES, "1");
+            //SDL_SetHint(SDL_HINT_VIDEO_FULLSCREEN_SPACES, "1");
             
 #endif
 
@@ -120,7 +120,7 @@ namespace Xli
 
 #endif
             
-            window = SDL_CreateWindow(title.Data(), x, y, width, height, sdlFlags);
+            window = SDL_CreateWindow(title.DataPtr(), x, y, width, height, sdlFlags);
 
             SDL_SetWindowData(window, "SDL2Window", this);
             
@@ -176,7 +176,7 @@ namespace Xli
         {
             if (!closed)
             {
-                if (eventHandler.IsSet())
+                if (!eventHandler.IsNull())
                 {
                     bool cancel = false;
                     if (eventHandler->OnClosing(this, cancel) && cancel) 
@@ -252,7 +252,7 @@ namespace Xli
 
         void SDL2Window::SetTitle(const String& title)
         {
-            SDL_SetWindowTitle(window, title.Data());
+            SDL_SetWindowTitle(window, title.DataPtr());
         }
 
         void SDL2Window::SetFullscreen(bool fullscreen)
@@ -701,7 +701,7 @@ namespace Xli
                         case SDL_WINDOWEVENT_CLOSE:
                             if (!wnd->closed)
                             {
-                                if (wnd->eventHandler.IsSet())
+                                if (!wnd->eventHandler.IsNull())
                                 {
                                     bool cancel = false;
                                     if (wnd->eventHandler->OnClosing(wnd, cancel) && cancel) 
@@ -744,8 +744,11 @@ namespace Xli
                     if (wnd->GetEventHandler() != 0)
                     {
                         Key key = SDLKeyToXliKey(e.key.keysym);
-                        if (key) wnd->GetEventHandler()->OnKeyDown(wnd, key);
-                        else Err->WriteLine("SDL_KEYDOWN: " + (String)*(int*)&e.key.keysym);
+                        
+                        if (key) 
+                            wnd->GetEventHandler()->OnKeyDown(wnd, key);
+                        else 
+                            Err->WriteLine("SDL_KEYDOWN: " + (String)*(int*)&e.key.keysym);
                     }
                     break;
                 
@@ -753,8 +756,11 @@ namespace Xli
                     if (wnd->GetEventHandler() != 0)
                     {
                         Key key = SDLKeyToXliKey(e.key.keysym);
-                        if (key) wnd->GetEventHandler()->OnKeyUp(wnd, key);
-                        else Err->WriteLine("SDL_KEYUP: " + (String)*(int*)&e.key.keysym);
+                        
+                        if (key) 
+                            wnd->GetEventHandler()->OnKeyUp(wnd, key);
+                        else 
+                            Err->WriteLine("SDL_KEYUP: " + (String)*(int*)&e.key.keysym);
                     }
                     break;
 

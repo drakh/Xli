@@ -9,6 +9,6 @@ namespace Xli
 
     String TextStream::GetText() const 
     { 
-        return String((const char*)buf.Data(), GetLength()); 
+        return String((const char*)buf.DataPtr(), GetLength()); 
     }
 }

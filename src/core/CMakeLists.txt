@@ -14,7 +14,6 @@ set(Sources
     Exception.cpp
     File.cpp
     FileSystem.cpp
-    Hash.cpp
     Matrix3.cpp
     Matrix4.cpp
     MessageBox.cpp
@@ -30,7 +29,7 @@ set(Sources
     TextStream.cpp 
     TextWriter.cpp
     Thread.cpp
-    ToString.cpp
+    Traits.cpp
     Unicode.cpp
     Utf16String.cpp
     Window.cpp

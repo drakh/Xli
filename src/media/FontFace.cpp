@@ -28,9 +28,9 @@ namespace Xli
         FreeTypeFontFace(Stream* fontFile)
         {
             _buf = Buffer::Create(fontFile->GetLength());
-            fontFile->ReadSafe(_buf->Data(), 1, _buf->Size());
+            fontFile->ReadSafe(_buf->DataPtr(), 1, _buf->Size());
 
-            switch (FT_New_Memory_Face(FreeTypeLibrary, (FT_Byte*)_buf->Data(), _buf->Size(), 0, &_face))
+            switch (FT_New_Memory_Face(FreeTypeLibrary, (FT_Byte*)_buf->DataPtr(), _buf->Size(), 0, &_face))
             {
             case 0:
                 break;
@@ -114,7 +114,7 @@ namespace Xli
                 if (mode == FontRenderModeMonochrome)
                 {
                     UInt8* src = _face->glyph->bitmap.buffer;
-                    UInt8* dst = result->GetData();
+                    UInt8* dst = result->GetDataPtr();
                     int p = _face->glyph->bitmap.pitch;
 
                     for (int y = 0; y < h; y++)
@@ -123,7 +123,7 @@ namespace Xli
                 }
                 else
                 {
-                    memcpy(result->GetData(), _face->glyph->bitmap.buffer, w * h);
+                    memcpy(result->GetDataPtr(), _face->glyph->bitmap.buffer, w * h);
                 }
             }
 

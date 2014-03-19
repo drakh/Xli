@@ -4,7 +4,7 @@
 #include <Xli/Stream.h>
 #include <Xli/String.h>
 #include <Xli/File.h>
-#include <Xli/ToString.h>
+#include <Xli/Traits.h>
 
 namespace Xli
 {
@@ -22,12 +22,14 @@ namespace Xli
         void Write(const String& str);
         void WriteLine();
 
-        template <typename T> void Write(const T& t)
+        template <typename T> 
+        void Write(const T& t)
         {
-            Write(Xli::ToString(t));
+            Write(Xli::Traits<T>::ToString(t));
         }
 
-        template <typename T> void WriteLine(const T& t)
+        template <typename T> 
+        void WriteLine(const T& t)
         {
             Write(t);
             WriteLine();

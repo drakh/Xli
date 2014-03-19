@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2013 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -170,6 +170,9 @@ struct SDL_RenderDriver
 
 #if SDL_VIDEO_RENDER_D3D
 extern SDL_RenderDriver D3D_RenderDriver;
+#endif
+#if SDL_VIDEO_RENDER_D3D11
+extern SDL_RenderDriver D3D11_RenderDriver;
 #endif
 #if SDL_VIDEO_RENDER_OGL
 extern SDL_RenderDriver GL_RenderDriver;

@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2013 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -22,7 +22,7 @@
 
 #ifdef SDL_JOYSTICK_HAIKU
 
-/* This is the system specific header for the SDL joystick API */
+/* This is the Haiku implementation of the SDL joystick API */
 
 #include <os/support/String.h>
 #include <os/device/Joystick.h>

@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2013 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -181,6 +181,7 @@ Wayland_CreateCursor(SDL_Surface *surface, int hot_x, int hot_y)
                    surface->h * surface->pitch);
 
         data->surface = wl_compositor_create_surface(wd->compositor);
+        wl_surface_set_user_data(data->surface, NULL);
         wl_surface_attach(data->surface,
                           data->buffer,
                           0,
@@ -214,6 +215,7 @@ CreateCursorFromWlCursor(SDL_VideoData *d, struct wl_cursor *wlcursor)
          * reference to it here */
         data->buffer = NULL;
         data->surface = wl_compositor_create_surface(d->compositor);
+        wl_surface_set_user_data(data->surface, NULL);
         wl_surface_attach(data->surface,
                           WAYLAND_wl_cursor_image_get_buffer(wlcursor->images[0]),
                           0,

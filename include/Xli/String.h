@@ -3,7 +3,7 @@
 
 #include <Xli/BaseTypes.h>
 
-#ifdef ANDROID 
+#ifdef XLI_PLATFORM_ANDROID 
 # include <stdarg.h>
 #else
 # include <cstdarg>
@@ -44,8 +44,8 @@ namespace Xli
 
         char* DataCopy();
 
-        char* Data();
-        const char* Data() const;
+        char* DataPtr();
+        const char* DataPtr() const;
 
         int Length() const;
 
@@ -136,19 +136,10 @@ namespace Xli
         String& operator = (float f);
         String& operator = (double d);
     };
-
-    /**
-        \addtogroup Xli
-        @{
-    */
-
-    UInt32 Hash(const String& str);
-
-    /** @} */
 }
 
 /**
-    \addtogroup Xli
+    \addtogroup XliCoreText
     @{
 */
 

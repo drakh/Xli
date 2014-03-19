@@ -65,6 +65,5 @@ namespace Xli
         return as;
     }
 
-    BundleAccessor Assets;
     BundleAccessor Bundle;
 }

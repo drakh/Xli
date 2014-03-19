@@ -29,12 +29,6 @@ namespace Xli
     /**
     \ingroup XliCoreIO
     */
-    /// TODO: Deprecated
-    extern BundleAccessor Assets;
-
-    /**
-    \ingroup XliCoreIO
-    */
     extern BundleAccessor Bundle;
 }
 

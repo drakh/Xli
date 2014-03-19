@@ -20,7 +20,7 @@ namespace Xli
             this->stream = stream;
             buf = stream->CreateDataAccessor();
             
-            NSData* data = [[NSData alloc] initWithBytesNoCopy:(void*)buf->GetData() length:buf->GetSizeInBytes() freeWhenDone:NO];
+            NSData* data = [[NSData alloc] initWithBytesNoCopy:(void*)buf->GetDataPtr() length:buf->GetSizeInBytes() freeWhenDone:NO];
             
             if (data == nil)
                 XLI_THROW("Failed to open image: Unable to create NSData object");
@@ -95,14 +95,14 @@ namespace Xli
                 Managed<Buffer> tmp = Buffer::Create(4 * width * height);
                 
                 CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-                CGContextRef imgcontext = CGBitmapContextCreate(tmp->Data(), width, height, 8, 4 * width, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+                CGContextRef imgcontext = CGBitmapContextCreate(tmp->DataPtr(), width, height, 8, 4 * width, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
                 CGColorSpaceRelease(colorSpace);
                 CGContextClearRect(imgcontext, CGRectMake(0, 0, width, height));
                 CGContextTranslateCTM(imgcontext, 0, 0);
                 CGContextDrawImage(imgcontext, CGRectMake(0, 0, width, height), image.CGImage);
                 CGContextRelease(imgcontext);
                 
-                UInt8* src = (UInt8*)tmp->Data();
+                UInt8* src = (UInt8*)tmp->DataPtr();
                 UInt8* dst = (UInt8*)targetBuffer;
                 
                 for (int i = 0; i < width * height; i++)

@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2013 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -59,11 +59,17 @@ static VideoBootStrap *bootstrap[] = {
 #if SDL_VIDEO_DRIVER_X11
     &X11_bootstrap,
 #endif
+#if SDL_VIDEO_DRIVER_MIR
+    &MIR_bootstrap,
+#endif
 #if SDL_VIDEO_DRIVER_DIRECTFB
     &DirectFB_bootstrap,
 #endif
 #if SDL_VIDEO_DRIVER_WINDOWS
     &WINDOWS_bootstrap,
+#endif
+#if SDL_VIDEO_DRIVER_WINRT
+    &WINRT_bootstrap,
 #endif
 #if SDL_VIDEO_DRIVER_HAIKU
     &HAIKU_bootstrap,
@@ -418,8 +424,10 @@ int
 SDL_VideoInit(const char *driver_name)
 {
     SDL_VideoDevice *video;
+    const char *hint;
     int index;
     int i;
+    SDL_bool allow_screensaver;
 
     /* Check to make sure we don't overwrite '_this' */
     if (_this != NULL) {
@@ -427,7 +435,7 @@ SDL_VideoInit(const char *driver_name)
     }
 
 #if !SDL_TIMERS_DISABLED
-    SDL_InitTicks();
+    SDL_TicksInit();
 #endif
 
     /* Start the event loop */
@@ -477,39 +485,7 @@ SDL_VideoInit(const char *driver_name)
     /* Set some very sane GL defaults */
     _this->gl_config.driver_loaded = 0;
     _this->gl_config.dll_handle = NULL;
-    _this->gl_config.red_size = 3;
-    _this->gl_config.green_size = 3;
-    _this->gl_config.blue_size = 2;
-    _this->gl_config.alpha_size = 0;
-    _this->gl_config.buffer_size = 0;
-    _this->gl_config.depth_size = 16;
-    _this->gl_config.stencil_size = 0;
-    _this->gl_config.double_buffer = 1;
-    _this->gl_config.accum_red_size = 0;
-    _this->gl_config.accum_green_size = 0;
-    _this->gl_config.accum_blue_size = 0;
-    _this->gl_config.accum_alpha_size = 0;
-    _this->gl_config.stereo = 0;
-    _this->gl_config.multisamplebuffers = 0;
-    _this->gl_config.multisamplesamples = 0;
-    _this->gl_config.retained_backing = 1;
-    _this->gl_config.accelerated = -1;  /* accelerated or not, both are fine */
-    _this->gl_config.profile_mask = 0;
-#if SDL_VIDEO_OPENGL
-    _this->gl_config.major_version = 2;
-    _this->gl_config.minor_version = 1;
-#elif SDL_VIDEO_OPENGL_ES2
-    _this->gl_config.major_version = 2;
-    _this->gl_config.minor_version = 0;
-    _this->gl_config.profile_mask = SDL_GL_CONTEXT_PROFILE_ES;   
-#elif SDL_VIDEO_OPENGL_ES
-    _this->gl_config.major_version = 1;
-    _this->gl_config.minor_version = 1;
-    _this->gl_config.profile_mask = SDL_GL_CONTEXT_PROFILE_ES;
-#endif
-    _this->gl_config.flags = 0;
-    
-    _this->gl_config.share_with_current_context = 0;
+    SDL_GL_ResetAttributes();
 
     _this->current_glwin_tls = SDL_TLSCreate();
     _this->current_glctx_tls = SDL_TLSCreate();
@@ -531,6 +507,22 @@ SDL_VideoInit(const char *driver_name)
         _this->CreateWindowFramebuffer = SDL_CreateWindowTexture;
         _this->UpdateWindowFramebuffer = SDL_UpdateWindowTexture;
         _this->DestroyWindowFramebuffer = SDL_DestroyWindowTexture;
+    }
+
+    /* Disable the screen saver by default. This is a change from <= 2.0.1,
+       but most things using SDL are games or media players; you wouldn't
+       want a screensaver to trigger if you're playing exclusively with a
+       joystick, or passively watching a movie. Things that use SDL but
+       function more like a normal desktop app should explicitly reenable the
+       screensaver. */
+    hint = SDL_GetHint(SDL_HINT_VIDEO_ALLOW_SCREENSAVER);
+    if (hint) {
+        allow_screensaver = SDL_atoi(hint) ? SDL_TRUE : SDL_FALSE;
+    } else {
+        allow_screensaver = SDL_FALSE;
+    }
+    if (!allow_screensaver) {
+        SDL_DisableScreenSaver();
     }
 
     /* If we don't use a screen keyboard, turn on text input by default,
@@ -2545,6 +2537,49 @@ SDL_GL_ExtensionSupported(const char *extension)
 #else
     return SDL_FALSE;
 #endif
+}
+
+void
+SDL_GL_ResetAttributes()
+{
+    if (!_this) {
+        return;
+    }
+
+    _this->gl_config.red_size = 3;
+    _this->gl_config.green_size = 3;
+    _this->gl_config.blue_size = 2;
+    _this->gl_config.alpha_size = 0;
+    _this->gl_config.buffer_size = 0;
+    _this->gl_config.depth_size = 16;
+    _this->gl_config.stencil_size = 0;
+    _this->gl_config.double_buffer = 1;
+    _this->gl_config.accum_red_size = 0;
+    _this->gl_config.accum_green_size = 0;
+    _this->gl_config.accum_blue_size = 0;
+    _this->gl_config.accum_alpha_size = 0;
+    _this->gl_config.stereo = 0;
+    _this->gl_config.multisamplebuffers = 0;
+    _this->gl_config.multisamplesamples = 0;
+    _this->gl_config.retained_backing = 1;
+    _this->gl_config.accelerated = -1;  /* accelerated or not, both are fine */
+    _this->gl_config.profile_mask = 0;
+#if SDL_VIDEO_OPENGL
+    _this->gl_config.major_version = 2;
+    _this->gl_config.minor_version = 1;
+#elif SDL_VIDEO_OPENGL_ES2
+    _this->gl_config.major_version = 2;
+    _this->gl_config.minor_version = 0;
+    _this->gl_config.profile_mask = SDL_GL_CONTEXT_PROFILE_ES;
+#elif SDL_VIDEO_OPENGL_ES
+    _this->gl_config.major_version = 1;
+    _this->gl_config.minor_version = 1;
+    _this->gl_config.profile_mask = SDL_GL_CONTEXT_PROFILE_ES;
+#endif
+    _this->gl_config.flags = 0;
+    _this->gl_config.framebuffer_srgb_capable = 0;
+
+    _this->gl_config.share_with_current_context = 0;
 }
 
 int

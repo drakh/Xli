@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2013 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -375,7 +375,7 @@ PSP_CreateRenderer(SDL_Window * window, Uint32 flags)
     renderer->DestroyTexture = PSP_DestroyTexture;
     renderer->DestroyRenderer = PSP_DestroyRenderer;
     renderer->info = PSP_RenderDriver.info;
-    renderer->info.flags = SDL_RENDERER_ACCELERATED;
+    renderer->info.flags = (SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
     renderer->driverdata = data;
     renderer->window = window;
 

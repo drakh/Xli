@@ -33,10 +33,15 @@ namespace Xli
     };
 
     /**
-    \addtogroup XliCoreIO
+        \ingroup XliCoreIO
     */
-    const char* FileModeToString(FileMode mode);
+    class FileModeInfo
+    {
+    public:
+        static String ToString(FileMode mode);
 
+    };
+    
     /**
         \ingroup XliCoreIO
     */

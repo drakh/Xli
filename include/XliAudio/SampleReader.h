@@ -2,7 +2,7 @@
 #define __XLI_AUDIO_SAMPLE_READER_H__
 
 #include <Xli/Stream.h>
-#include "AudioStream.h"
+#include <XliAudio/AudioStream.h>
 
 namespace Xli
 {

@@ -8,7 +8,7 @@ namespace Xli
     /**
         \ingroup XliCoreContainers
     */
-    template <typename T> class Queue: public Object
+    template <typename T> class Queue
     {
         struct Node
         {
@@ -22,6 +22,9 @@ namespace Xli
         Array<Node*> freeNodes;
         int len;
 
+        Queue(const Queue& copy);
+        Queue& operator = (const Queue& copy);
+
     public:
         Queue()
         {
@@ -30,7 +33,7 @@ namespace Xli
             len = 0;
         }
 
-        virtual ~Queue()
+        ~Queue()
         {
             Clear();
             Trim();
@@ -82,7 +85,8 @@ namespace Xli
         const T& Peek() const
         {
 #ifdef XLI_RANGE_CHECK
-            if (!head) XLI_THROW_INDEX_OUT_OF_BOUNDS;
+            if (!head) 
+                XLI_THROW_INDEX_OUT_OF_BOUNDS;
 #endif
             return head->Value;
         }
@@ -90,7 +94,8 @@ namespace Xli
         T Dequeue()
         {
 #ifdef XLI_RANGE_CHECK
-            if (!head) XLI_THROW_INDEX_OUT_OF_BOUNDS;
+            if (!head) 
+                XLI_THROW_INDEX_OUT_OF_BOUNDS;
 #endif
             Node* oldHead = head;
             head = head->Next;

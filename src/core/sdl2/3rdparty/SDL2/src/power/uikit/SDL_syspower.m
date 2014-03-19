@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2013 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -87,8 +87,8 @@ SDL_GetPowerInfo_UIKit(SDL_PowerState * state, int *seconds, int *percent)
     }
 
     const float level = [uidev batteryLevel];
-    *percent = ( (level < 0.0f) ? -1 : (((int) (level + 0.5f)) * 100) );
-    return SDL_TRUE;            /* always the definitive answer on iPhoneOS. */
+    *percent = ( (level < 0.0f) ? -1 : ((int) ((level * 100) + 0.5f)) );
+    return SDL_TRUE;            /* always the definitive answer on iOS. */
 }
 
 #endif /* SDL_POWER_UIKIT */

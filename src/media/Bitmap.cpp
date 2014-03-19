@@ -12,7 +12,7 @@ namespace Xli
         this->format = format;
         this->pitch = width * FormatInfo::SizeOf(format);
         this->dataOwner = Buffer::Create(pitch * height);
-        this->data = const_cast<UInt8*>(dataOwner->GetData());
+        this->data = const_cast<UInt8*>(dataOwner->GetDataPtr());
     }
 
     Bitmap::Bitmap(int width, int height, Format format, DataAccessor* dataAccessor, int pitch, int offset)
@@ -25,7 +25,7 @@ namespace Xli
         this->pitch = pitch;
         this->dataOwner = dataAccessor;
         this->dataOwner->AddRef();
-        this->data = const_cast<UInt8*>(dataOwner->GetData()) + offset;
+        this->data = const_cast<UInt8*>(dataOwner->GetDataPtr()) + offset;
     }
 
     Bitmap::~Bitmap()
@@ -78,12 +78,12 @@ namespace Xli
         return height * pitch;
     }
 
-    UInt8* Bitmap::GetData()
+    UInt8* Bitmap::GetDataPtr()
     {
         return data;
     }
 
-    const UInt8* Bitmap::GetData() const
+    const UInt8* Bitmap::GetDataPtr() const
     {
         return data;
     }
@@ -131,7 +131,7 @@ namespace Xli
     {
         if (rect.Left >= 0 && rect.Right <= width && rect.Top >= 0 && rect.Bottom <= height)
         {
-            int offset = rect.Top * pitch + rect.Left * GetBytesPerPixel() + (int)(dataOwner->GetData() - data);
+            int offset = rect.Top * pitch + rect.Left * GetBytesPerPixel() + (int)(dataOwner->GetDataPtr() - data);
             return new Bitmap(rect.Width(), rect.Height(), format, dataOwner, pitch, offset);
         }
 
@@ -179,7 +179,7 @@ namespace Xli
         else if (this->format == FormatL_8_UInt_Normalize && dstFormat == FormatRGBA_8_8_8_8_UInt_Normalize)
         {
             Bitmap* bmp = new Bitmap(width, height, FormatRGBA_8_8_8_8_UInt_Normalize);
-            Vector4u8* dst = (Vector4u8*)bmp->GetData();
+            Vector4u8* dst = (Vector4u8*)bmp->GetDataPtr();
 
             for (int y = 0; y < height; y++)
             {
@@ -201,7 +201,7 @@ namespace Xli
         else if (this->format == FormatL_8_UInt_Normalize && dstFormat == FormatRGB_8_8_8_UInt_Normalize)
         {
             Bitmap* bmp = new Bitmap(width, height, FormatRGB_8_8_8_UInt_Normalize);
-            UInt8* dst = bmp->GetData();
+            UInt8* dst = bmp->GetDataPtr();
 
             for (int y = 0; y < height; y++)
             {
@@ -221,7 +221,7 @@ namespace Xli
         else if (this->format == FormatRGB_8_8_8_UInt_Normalize && dstFormat == FormatRGBA_8_8_8_8_UInt_Normalize)
         {
             Bitmap* bmp = new Bitmap(width, height, FormatRGBA_8_8_8_8_UInt_Normalize);
-            Vector4u8* dst = (Vector4u8*)bmp->GetData();
+            Vector4u8* dst = (Vector4u8*)bmp->GetDataPtr();
 
             for (int y = 0; y < height; y++)
             {
@@ -242,7 +242,7 @@ namespace Xli
         else if (this->format == FormatRGBA_8_8_8_8_UInt_Normalize && dstFormat == FormatRGB_8_8_8_UInt_Normalize)
         {
             Bitmap* bmp = new Bitmap(width, height, FormatRGB_8_8_8_UInt_Normalize);
-            UInt8* dst = bmp->GetData();
+            UInt8* dst = bmp->GetDataPtr();
 
             for (int y = 0; y < height; y++)
             {

@@ -16,7 +16,7 @@ namespace Xli
     Texture::Face& Texture::Face::operator = (const Face& copy)
     {
         MipLevels.Clear();
-        MipLevels.Add(copy.MipLevels);
+        MipLevels.AddRange(copy.MipLevels);
         return *this;
     }
 

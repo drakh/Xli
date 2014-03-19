@@ -2,21 +2,16 @@
 
 namespace Xli
 {
-    Quaternion::operator float*()
+    Quaternion::operator float* ()
     {
-        return Coord;
+        return Data;
     }
     
-    float& Quaternion::operator [] (int i)
+    Quaternion::operator const float*() const
     {
-#ifdef XLI_RANGE_CHECK
-        if (i >= 4 || i < 0)
-            XLI_THROW_INDEX_OUT_OF_BOUNDS;
-#endif
+        return Data;
+    }
 
-        return Coord[i];
-    }
-    
     String Quaternion::ToString() const
     {
         return String(X) + ", " + Y + ", " + Z + ", " + W;
@@ -211,7 +206,7 @@ namespace Xli
         if (Abs(s) < FloatZeroTolerance) 
             return 0.0f;
         
-        return ArcCos(Dot(q)/s);
+        return ArcCos(Dot(q) / s);
     }
 
     float Quaternion::Angle() const
@@ -237,8 +232,11 @@ namespace Xli
 
     Quaternion Quaternion::Slerp(const Quaternion& q, float t) const
     {
-        if (t <= 0.0f) return *this;
-        if (t >= 1.0f) return q;
+        if (t <= 0.0f) 
+            return *this;
+        
+        if (t >= 1.0f) 
+            return q;
 
         float theta = q.Angle();
 

@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2013 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -38,6 +38,7 @@ typedef struct
     SDL_bool created;
     WPARAM mouse_button_flags;
     BOOL expected_resize;
+    SDL_bool in_title_click;
     SDL_bool in_modal_loop;
     struct SDL_VideoData *videodata;
 #if SDL_VIDEO_OPENGL_EGL  

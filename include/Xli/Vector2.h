@@ -5,7 +5,6 @@
 #include <Xli/Exception.h>
 #include <Xli/Math.h>
 #include <Xli/String.h>
-#include <Xli/Hash.h>
 
 namespace Xli
 {
@@ -19,37 +18,17 @@ namespace Xli
         {
             struct { T X, Y; };
             struct { T R, G; };
-            T Comps[2];
+            T Data[2];
         };
-
-        T* Data()
-        {
-            return Comps;
-        }
-
-        const T* Data() const
-        {
-            return Comps;
-        }
 
         operator T* ()
         {
-            return Comps;
+            return Data;
         }
 
         operator const T* () const
         {
-            return Comps;
-        }
-
-        T& operator [] (int i)
-        {
-#ifdef XLI_RANGE_CHECK
-            if (i >= 2 || i < 0)
-                XLI_THROW_INDEX_OUT_OF_BOUNDS;
-#endif
-
-            return Comps[i];
+            return Data;
         }
 
         String ToString() const
@@ -73,7 +52,8 @@ namespace Xli
             Y = v.Y;
         }
 
-        template <typename U> explicit Vector2t(const Vector2t<U>& v)
+        template <typename U> 
+        explicit Vector2t(const Vector2t<U>& v)
         {
             X = (T)v.X;
             Y = (T)v.Y;

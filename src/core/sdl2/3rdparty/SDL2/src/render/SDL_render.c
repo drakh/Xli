@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2013 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -49,6 +49,9 @@
 static const SDL_RenderDriver *render_drivers[] = {
 #if SDL_VIDEO_RENDER_D3D
     &D3D_RenderDriver,
+#endif
+#if SDL_VIDEO_RENDER_D3D11
+    &D3D11_RenderDriver,
 #endif
 #if SDL_VIDEO_RENDER_OGL
     &GL_RenderDriver,
@@ -1876,7 +1879,9 @@ int SDL_GL_UnbindTexture(SDL_Texture *texture)
 
     CHECK_TEXTURE_MAGIC(texture, -1);
     renderer = texture->renderer;
-    if (renderer && renderer->GL_UnbindTexture) {
+    if (texture->native) {
+        return SDL_GL_UnbindTexture(texture->native);
+    } else if (renderer && renderer->GL_UnbindTexture) {
         return renderer->GL_UnbindTexture(renderer, texture);
     }
 
