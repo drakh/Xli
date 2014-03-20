@@ -45,6 +45,7 @@ namespace Xli
     }
     inline HttpMethodType StringToHttpMethod(String method)
     {
+        method = method.ToUpper();
         if (method == "GET"){
             return HttpGetMethod;
         } else if (method == "POST") {
@@ -115,6 +116,7 @@ namespace Xli
         virtual int HeadersNext(int n) const = 0;
         virtual String GetHeaderKeyN(int n) const = 0;
         virtual String GetHeaderValueN(int n) const = 0;
+        virtual String GetHeadersAsString() const = 0;
 
         virtual int GetResponseHeaderCount() const = 0;
         virtual int ResponseHeadersBegin() const = 0;
@@ -123,9 +125,10 @@ namespace Xli
         virtual String GetResponseHeaderKeyN(int n) const = 0;        
         virtual String GetResponseHeaderValueN(int n) const = 0;        
         virtual String GetResponseHeader(String key) = 0;
-        //virtual bool TryGetResponseHeader(const String key, String value) = 0;
+        /* {TODO} virtual String GetResponseHeadersAsString() const = 0; */ 
 
         virtual void SetMethod(HttpMethodType method) = 0;
+        virtual void SetMethodFromString(String method) = 0;
         virtual HttpMethodType GetMethod() const = 0;
 
         virtual void SetUrl(String url) = 0;

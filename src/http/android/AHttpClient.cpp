@@ -82,6 +82,21 @@ namespace Xli
                 XLI_THROW("HttpRequest->SetMethod(): Not in a valid state to set the method");
             }
         }
+        virtual void SetMethodFromString(String method)
+        {
+            if (this->status == HttpUnsent)
+            {
+                HttpMethodType realMethod = StringToHttpMethod(method);
+                if (realMethod == HttpInvalidMethod)
+                {
+                    XLI_THROW("HttpRequest->SetMethodFromString(): Not a valid method type");
+                } else {
+                    this->method = realMethod;
+                }
+            } else {
+                XLI_THROW("HttpRequest->SetMethodFromString(): Not in a valid state to set the method");
+            }            
+        }
         virtual HttpMethodType GetMethod() const
         {
             return this->method;
@@ -138,6 +153,20 @@ namespace Xli
         virtual String GetHeaderValueN(int n) const
         {
             return this->headers.GetValue(n);
+        }
+        virtual String GetHeadersAsString() const
+        {
+            int i = this->HeadersBegin();
+            String result = "";
+            while (i != this->HeadersEnd())
+            {
+                result.Append(this->GetHeaderKeyN(i));
+                result.Append(":");
+                result.Append(this->GetHeaderValueN(i));
+                result.Append("\n");                
+                i = this->HeadersNext(i);
+            }
+            return result;
         }
 
         virtual void SetTimeout(int timeout)
