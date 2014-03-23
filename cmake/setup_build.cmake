@@ -15,7 +15,11 @@
 
     elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
 
-        if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+        execute_process(COMMAND uname -m OUTPUT_VARIABLE MACHINE)
+
+        if (${MACHINE} MATCHES "arm*")
+            set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/linux/arm)
+        elseif (CMAKE_SIZEOF_VOID_P EQUAL 8)
             set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/linux/x86_64)
         else()
             set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/linux/x86_32)
