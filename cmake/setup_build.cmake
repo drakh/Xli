@@ -19,6 +19,11 @@
 
         if (${MACHINE} MATCHES "arm*")
             set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/linux/arm)
+            
+            # GLES on RPi
+            include_directories(/opt/vc/include)
+            link_directories(/opt/vc/lib)
+
         elseif (CMAKE_SIZEOF_VOID_P EQUAL 8)
             set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/linux/x86_64)
         else()

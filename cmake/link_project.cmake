@@ -12,6 +12,11 @@ function(link_project PROJECT_DIR)
 
         if (${MACHINE} MATCHES "arm*")
             link_directories(${PROJECT_DIR}/lib/linux/arm)
+            
+            # GLES on RPi
+            include_directories(/opt/vc/include)
+            link_directories(/opt/vc/lib)
+            
 		elseif (CMAKE_SIZEOF_VOID_P EQUAL 8)
 			link_directories(${PROJECT_DIR}/lib/linux/x86_64)
 		else()
