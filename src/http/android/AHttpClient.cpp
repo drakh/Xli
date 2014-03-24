@@ -15,16 +15,16 @@ namespace Xli
     public:
         // the following fields should be private but due to having to set
         // them through the callbacks they aren't
+        Managed< HttpStateChangedHandler > stateChangedCallback;
+        Managed< HttpProgressHandler > progressCallback;
+        Managed< HttpTimeoutHandler > timeoutCallback;
+        Managed< HttpErrorHandler > errorCallback;
         HashMap<String,String> headers;
         HashMap<String,String> responseHeaders;
         HttpRequestState status;
         HttpMethodType method;
         int responseStatus;
         String reasonPhrase;
-        Managed< HttpStateChangedHandler > stateChangedCallback;
-        Managed< HttpProgressHandler > progressCallback;
-        Managed< HttpTimeoutHandler > timeoutCallback;
-        Managed< HttpErrorHandler > errorCallback;
 
         jobject javaAsyncHandle;
         jobject javaContentHandle;

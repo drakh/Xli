@@ -16,10 +16,7 @@
 		CE2B2DA216C72C7A0036FFA0 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B2DA116C72C7A0036FFA0 /* AudioToolbox.framework */; };
 		CE2B2DA416C72C890036FFA0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B2DA316C72C890036FFA0 /* QuartzCore.framework */; };
 		CE52CC3316C74B2000C6AAC7 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE52CC3216C74B2000C6AAC7 /* Main.cpp */; };
-		FC7C328A189681E800ECDF0D /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FC7C3289189681E800ECDF0D /* Default-568h@2x.png */; };
 		FC7C328E1896944300ECDF0D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC7C328D1896944300ECDF0D /* AVFoundation.framework */; };
-		FC7C32921896A05F00ECDF0D /* test.wav in Resources */ = {isa = PBXBuildFile; fileRef = FC7C32911896A05F00ECDF0D /* test.wav */; };
-		FC7C32941896A63400ECDF0D /* test2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FC7C32931896A63400ECDF0D /* test2.mp3 */; };
 		FCF1627818A65AFA00F1F160 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FCF1627718A65AFA00F1F160 /* CFNetwork.framework */; };
 /* End PBXBuildFile section */
 
@@ -36,10 +33,7 @@
 		CE2B2DA116C72C7A0036FFA0 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		CE2B2DA316C72C890036FFA0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		CE52CC3216C74B2000C6AAC7 /* Main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Main.cpp; path = ../../src/Main.cpp; sourceTree = "<group>"; };
-		FC7C3289189681E800ECDF0D /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		FC7C328D1896944300ECDF0D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		FC7C32911896A05F00ECDF0D /* test.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = test.wav; sourceTree = "<group>"; };
-		FC7C32931896A63400ECDF0D /* test2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = test2.mp3; sourceTree = "<group>"; };
 		FCF1627718A65AFA00F1F160 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -68,7 +62,6 @@
 			isa = PBXGroup;
 			children = (
 				FC7C32901896A05F00ECDF0D /* data */,
-				FC7C3289189681E800ECDF0D /* Default-568h@2x.png */,
 				CE2B21DC16C7263A0036FFA0 /* GLWindow */,
 				CE2B21D116C7263A0036FFA0 /* Frameworks */,
 				CE2B21CF16C7263A0036FFA0 /* Products */,
@@ -121,8 +114,6 @@
 		FC7C32901896A05F00ECDF0D /* data */ = {
 			isa = PBXGroup;
 			children = (
-				FC7C32931896A63400ECDF0D /* test2.mp3 */,
-				FC7C32911896A05F00ECDF0D /* test.wav */,
 			);
 			path = data;
 			sourceTree = "<group>";
@@ -182,9 +173,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC7C32921896A05F00ECDF0D /* test.wav in Resources */,
-				FC7C328A189681E800ECDF0D /* Default-568h@2x.png in Resources */,
-				FC7C32941896A63400ECDF0D /* test2.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
