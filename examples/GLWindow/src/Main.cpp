@@ -1,71 +1,12 @@
 #include <Xli.h>
-#include <XliHttp.h>
 #include <XliGL.h>
 #include <XliAudio.h>
 
 using namespace Xli;
 
-class Shouty : public HttpStateChangedHandler
-{
-    virtual void OnResponse(HttpRequest* request, HttpRequestState state)
-    {        
-        if (state == HttpHeadersReceived)
-        {
-            Err->WriteFormat("statusCode: %i\n", state);
-            Err->WriteFormat("ReasonPhrase: %s\n", request->GetReasonPhrase().DataPtr());
-            //request->PullContentArray();
-            request->PullContentString();
-        } else if (state == HttpDone) {
-            Err->WriteFormat("state changed: %i\n", state);            
-            Err->WriteLine("Got the body");
-            Err->WriteLine(request->GetContentString());
-        } else {
-            Err->WriteFormat("state changed: %i\n", state);
-        }
-        Err->WriteLine("-------------------------------------");
-    }
-};
-class ProgressShout : public HttpProgressHandler
-{
-    virtual void OnResponse(HttpRequest* request, long position, long totalLength, bool lengthKnown)
-    {        
-        if (lengthKnown) {
-            Err->WriteFormat("progress (percentage): %i\n", (int)(100*((1.0*position)/totalLength)));
-        } else {
-            Err->WriteFormat("progress: %lu, %lu\n", position, totalLength);
-            Err->WriteLine("Total length not known");
-        }
-        Err->WriteLine("-------------------------------------");
-    }
-};
-class TimeoutShout : public HttpTimeoutHandler
-{
-    virtual void OnResponse(HttpRequest* request)
-    {
-        Err->WriteLine("timed out");
-        Err->WriteLine("-------------------------------------");
-    }
-};
-class ErrorShout : public HttpErrorHandler
-{
-    virtual void OnResponse(HttpRequest* request, int errorCode, String errorMessage)
-    {
-        Err->WriteLine("Had an error:");
-        Err->WriteFormat("> %i: %s\n",errorCode, errorMessage.DataPtr());
-        Err->WriteLine("-------------------------------------");
-    }
-};
-
 class GLApp: public Application
 {
 	Managed<GLContext> gl;
-
-    // Managed<SimpleSound> sound;
-    Managed<HttpClient> httpClient;
-    Managed<Shouty> stateChangedCallback;
-    Managed<TimeoutShout> timeoutCallback;
-    Managed<ProgressShout> progressCallback;
-    Managed<ErrorShout> errorCallback;
 
     double touchDownTime;
     double tapTime;
@@ -114,15 +55,6 @@ public:
 		PrintLine((String)"FileSystem Roaming AppData: " + Disk->GetSystemDirectory(SystemDirectoryRoamingAppData));
 		PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
 
-        // Load some sounds
-        // sound = SimpleSound::Create("test2.mp3", true);
-
-        httpClient = HttpClient::Create();
-        stateChangedCallback = new Shouty();
-        timeoutCallback = new TimeoutShout();
-        progressCallback = new ProgressShout();
-        errorCallback = new ErrorShout();
-        Err->WriteLine("-------------------------------------");
 	}
 
 	virtual void OnLoad(Window* wnd)
@@ -257,34 +189,25 @@ public:
 	virtual bool OnTouchUp(Window* wnd, Vector2 pos, int id)
 	{
 		Err->WriteLine("OnTouchUp: " + pos.ToString() + ", " + id);
-        double currentTime = GetSeconds();
+        
+		double currentTime = GetSeconds();
+
         if (currentTime - touchDownTime < 0.15)
         {
             if (currentTime - tapTime < 0.3)
             {
+                //play
                 Err->WriteLine("Bang");
-                //wnd->BeginTextInput((Xli::TextInputHint)0);
-                // sound->Play(false);
-
-                HttpRequest* req = httpClient->NewRequest();
-                req->SetUrl("http://httpbin.org/get");
-                //req->Url = "http://youtube.com";
-                req->SetMethod(HttpGetMethod);
-                req->SetStateChangedCallback(stateChangedCallback);
-                req->SetTimeoutCallback(timeoutCallback);
-                req->SetProgressCallback(progressCallback);
-                req->SetErrorCallback(errorCallback);
-                req->SetHeader("Accept", "*/*");
-                req->SetHeader("ohhai","canhazdata");
-                //req->Send("test=and here is some data");
-                req->Send();
+                wnd->BeginTextInput((Xli::TextInputHint)0);
             }
             else if (wnd->IsTextInputActive())
             {
                 wnd->EndTextInput();
             }
+
             tapTime = currentTime;
-        }        
+        }
+        
 		return false;
 	}
 
