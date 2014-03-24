@@ -12,4 +12,5 @@ if (MSVC)
 
 endif()
 
-add_executable(XLI_Test core/test.cpp main.cpp)
+add_executable(XLI_Test core/test.cpp core/Unicode_test.cpp main.cpp)
+target_link_libraries(XLI_Test Xli)
