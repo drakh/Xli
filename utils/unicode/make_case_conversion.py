@@ -34,27 +34,63 @@ def get_data():
     return [upper_ints, lower_ints]
 
 def print_needy(characters):
-    for i in range(0,65536):
+    for i in range(0, len(characters)):
         if characters[i] != i:
-            print i, 
+            print str(i),
+
+def get_max_diff(characters):
+    max_diff = 0
+    max_diff_at = 0
+    for i in range(0, len(characters)):
+        diff = abs(characters[i] - i)
+        if diff > max_diff:
+            max_diff = diff
+            max_diff_at = i
+    return max_diff_at
         
+def get_array(case, lowest, highest, all):
+    string = "    static const Xli::Utf16 %s%d[] = {" % (case, lowest)
+    for i in range(lowest, highest+1):
+        string += "%d," % all[i]
+    string = string[0:-1]
+    string += "};\n";
+    return string
+
+def get_if_clause(case, lowest, highest, all):
+    string = "    if (chr >= %d && chr <= %d)\n" % (lowest, highest)
+    string += "        return %s%d[chr-%d];\n" % (case, lowest, lowest)
+    return string
 
 if __name__ == '__main__':
+    upper_ints, lower_ints = get_data()
+
+    print_needy(upper_ints)
+    print
+    print
+    print_needy(lower_ints)
+    print
+    print "Max diff upper", get_max_diff(upper_ints)
+    print "Max diff lower", get_max_diff(lower_ints)
+
     with open("../../src/core/UpperLower.cpp", 'w') as UpperLower_cpp:
-        UpperLower_cpp.write('#include "Xli/Unicode.h"\n')
         upper_ints, lower_ints = get_data()
 
-        UpperLower_cpp.write('Xli::Utf16 Xli::Unicode::ToUpperMap[] = {')
-        for i in upper_ints:
-            UpperLower_cpp.write("%d," % i)
-        UpperLower_cpp.write('};\n')
+        UpperLower_cpp.write('#include "Xli/Unicode.h"\n')
 
-        UpperLower_cpp.write('Xli::Utf16 Xli::Unicode::ToLowerMap[] = {')
-        for i in lower_ints:
-            UpperLower_cpp.write("%d," % i)
-        UpperLower_cpp.write('};\n')
+        UpperLower_cpp.write('Xli::Utf16 Xli::Unicode::ToUpper(Xli::Utf16 chr)\n{\n')
+        ranges = ((97,1414), (7545,9449), (11312,11565), (42561,42921))
+        for rng in ranges:
+            UpperLower_cpp.write(get_array('u', rng[0], rng[1], upper_ints))
+        for rng in ranges:
+            UpperLower_cpp.write(get_if_clause('u', rng[0], rng[1], upper_ints))
+        UpperLower_cpp.write('    else\n        return chr;\n')
+        UpperLower_cpp.write('}')
 
-        print_needy(upper_ints)
-        print
-        print
-        print_needy(lower_ints)
+        UpperLower_cpp.write('Xli::Utf16 Xli::Unicode::ToLower(Xli::Utf16 chr)\n{\n')
+        ranges = ((65,1366), (4256,4301), (7680,9423), (11246,11506), (42560,42922), (65313,65338))
+        for rng in ranges:
+            UpperLower_cpp.write(get_array('l', rng[0], rng[1], lower_ints))
+        for rng in ranges:
+            UpperLower_cpp.write(get_if_clause('l', rng[0], rng[1], lower_ints))
+        UpperLower_cpp.write('    else\n        return chr;\n')
+        UpperLower_cpp.write('}')

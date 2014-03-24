@@ -22,9 +22,6 @@ namespace Xli
 
         static Utf16 ToUpper(Utf16 chr);
         static Utf16 ToLower(Utf16 chr);
-    private :
-        static Utf16 ToUpperMap[65536];
-        static Utf16 ToLowerMap[65536];
     };
 }
 

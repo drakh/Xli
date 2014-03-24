@@ -6,6 +6,7 @@
 *.sdf
 *.suo
 *.swp
+*.swo
 *.user
 .DS_Store
 /examples/*

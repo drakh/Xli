@@ -68,14 +68,4 @@ namespace Xli
     {
         return Utf16To8(str.DataPtr(), str.Length());
     }
-
-    Utf16 Unicode::ToUpper(Utf16 chr)
-    {
-        return ToUpperMap[chr];
-    }
-
-    Utf16 Unicode::ToLower(Utf16 chr)
-    {
-        return ToLowerMap[chr];
-    }
 }
