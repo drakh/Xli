@@ -49,7 +49,7 @@ def get_max_diff(characters):
     return max_diff_at
         
 def get_array(case, lowest, highest, all):
-    string = "    static const Xli::Utf16 %s%d[] = {" % (case, lowest)
+    string = "    static const Utf16 %s%d[] = {" % (case, lowest)
     for i in range(lowest, highest+1):
         string += "%d," % all[i]
     string = string[0:-1]
@@ -72,25 +72,23 @@ if __name__ == '__main__':
     print "Max diff upper", get_max_diff(upper_ints)
     print "Max diff lower", get_max_diff(lower_ints)
 
-    with open("../../src/core/UpperLower.cpp", 'w') as UpperLower_cpp:
+    with open("../../src/core/UnicodeUpperLower.inc", 'w') as UpperLower_inc:
         upper_ints, lower_ints = get_data()
 
-        UpperLower_cpp.write('#include "Xli/Unicode.h"\n')
-
-        UpperLower_cpp.write('Xli::Utf16 Xli::Unicode::ToUpper(Xli::Utf16 chr)\n{\n')
+        UpperLower_inc.write('Utf16 Unicode::ToUpper(Utf16 chr)\n{\n')
         ranges = ((97,1414), (7545,9449), (11312,11565), (42561,42921))
         for rng in ranges:
-            UpperLower_cpp.write(get_array('u', rng[0], rng[1], upper_ints))
+            UpperLower_inc.write(get_array('u', rng[0], rng[1], upper_ints))
         for rng in ranges:
-            UpperLower_cpp.write(get_if_clause('u', rng[0], rng[1], upper_ints))
-        UpperLower_cpp.write('    else\n        return chr;\n')
-        UpperLower_cpp.write('}')
+            UpperLower_inc.write(get_if_clause('u', rng[0], rng[1], upper_ints))
+        UpperLower_inc.write('    else\n        return chr;\n')
+        UpperLower_inc.write('}\n\n')
 
-        UpperLower_cpp.write('Xli::Utf16 Xli::Unicode::ToLower(Xli::Utf16 chr)\n{\n')
+        UpperLower_inc.write('Utf16 Unicode::ToLower(Utf16 chr)\n{\n')
         ranges = ((65,1366), (4256,4301), (7680,9423), (11246,11506), (42560,42922), (65313,65338))
         for rng in ranges:
-            UpperLower_cpp.write(get_array('l', rng[0], rng[1], lower_ints))
+            UpperLower_inc.write(get_array('l', rng[0], rng[1], lower_ints))
         for rng in ranges:
-            UpperLower_cpp.write(get_if_clause('l', rng[0], rng[1], lower_ints))
-        UpperLower_cpp.write('    else\n        return chr;\n')
-        UpperLower_cpp.write('}')
+            UpperLower_inc.write(get_if_clause('l', rng[0], rng[1], lower_ints))
+        UpperLower_inc.write('    else\n        return chr;\n')
+        UpperLower_inc.write('}')
