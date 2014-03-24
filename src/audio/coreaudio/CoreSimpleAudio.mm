@@ -16,7 +16,7 @@ namespace Xli
     public:
         CoreAudioChannel(const char* filename, bool loop, bool play)
         {
-            NSString* string = [NSString stringWithFormat:@"%@/data/%@", [[NSBundle mainBundle] resourcePath], [NSString stringWithUTF8String:filename]];
+            NSString* string = [NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], [NSString stringWithUTF8String:filename]];
                 
             NSURL* url = [NSURL fileURLWithPath:string];
             //[string release];
@@ -24,9 +24,9 @@ namespace Xli
             NSError* error;
             
             BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:string];
-            
             if (!fileExists) {
                 Xli::ErrorPrintLine("audio file not found");
+                player = nil;
                 return;
             }
             
@@ -102,7 +102,7 @@ namespace Xli
    
         int GetDuration() const // this should be double
         {
-            if (player == nil) return 0.0;
+            if (player == nil || player == 0) return 0;
             return (int)player.duration;
         }
         virtual float GetPan() const
@@ -147,8 +147,9 @@ namespace Xli
             this->isasset = asset;
             
             CoreAudioChannel* c = new CoreAudioChannel(path.DataPtr(), false, false);
-            this->duration = c->GetDuration();
-            delete c;            
+            //this->duration = c->GetDuration();
+            delete c;
+            this->duration = 0.0;
         }
         virtual double GetDuration() const
         {

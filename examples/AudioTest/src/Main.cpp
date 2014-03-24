@@ -7,6 +7,8 @@ using namespace Xli;
 class GLApp: public Application
 {
 	Managed<GLContext> gl;
+    Managed<SimpleSound> mp3;
+    Managed<SimpleSound> wav;
 
     double touchDownTime;
     double tapTime;
@@ -54,7 +56,11 @@ public:
 		PrintLine((String)"FileSystem Local AppData: " + Disk->GetSystemDirectory(SystemDirectoryLocalAppData));
 		PrintLine((String)"FileSystem Roaming AppData: " + Disk->GetSystemDirectory(SystemDirectoryRoamingAppData));
 		PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
+        
+        mp3 = SimpleSound::Create("ChrisZabriskieCylinderOne.mp3",true);
+        wav = SimpleSound::Create("WilhelmScream.wav",true);
 
+        mp3->Play(false);
 	}
 
 	virtual void OnLoad(Window* wnd)
@@ -79,110 +85,10 @@ public:
 		}
 	}
 
-	virtual bool OnKeyDown(Window* wnd, Key key)
-	{
-		Err->WriteLine("OnKeyDown: " + (String)(int)key);
-
-		if (key == KeyF11 || (key == KeyEnter && wnd->GetKeyState(KeyCtrl)))
-		{
-			wnd->SetFullscreen(!wnd->IsFullscreen());
-			return true;
-		}
-		else if (key == KeyF4 || key == KeyAlt)
-		{
-			// Set as handled to disable default closing behaviour on Win32 (TODO: This does not work as expected)
-			return true;
-		}
-
-		return false;
-	}
-
-	virtual bool OnKeyUp(Window* wnd, Key key)
-	{
-		Err->WriteLine("OnKeyUp: " + (String)(int)key);
-		return false;
-	}
-
-	virtual bool OnTextInput(Window* wnd, const String& text)
-	{
-		Err->WriteLine("OnTextInput: " + text);
-		return false;
-	}
-
-	virtual bool OnMouseDown(Window* wnd, Vector2i pos, MouseButton button)
-	{
-		Err->WriteLine("OnMouseDown: " + pos.ToString() + ", " + (String)(int)button);
-		return false;
-	}
-
-	virtual bool OnMouseUp(Window* wnd, Vector2i pos, MouseButton button)
-	{
-		Err->WriteLine("OnMouseUp: " + pos.ToString() + ", " + (String)(int)button);
-		return false;
-	}
-
-	virtual bool OnMouseMove(Window* wnd, Vector2i pos)
-	{
-		Err->WriteLine("OnMouseMove: " + pos.ToString());
-
-		if (wnd->GetMouseButtonState(MouseButtonLeft))
-		{
-			Vector2i size = wnd->GetClientSize();
-
-			float x = (float)pos.X / size.X;
-			float y = (float)pos.Y / size.Y;
-
-			glClearColor(x, y, 0, 1);
-			return true;
-		}
-		else if (wnd->GetMouseButtonState(MouseButtonMiddle))
-		{
-			Vector2i size = wnd->GetClientSize();
-
-			float x = (float)pos.X / size.X;
-			float y = (float)pos.Y / size.Y;
-
-			glClearColor(x, y, x, 1);
-			return true;
-		}
-		else if (wnd->GetMouseButtonState(MouseButtonRight))
-		{
-			Vector2i size = wnd->GetClientSize();
-
-			float x = (float)pos.X / size.X;
-			float y = (float)pos.Y / size.Y;
-
-			glClearColor(y, 0, x, 1);
-			return true;
-		}
-
-		return false;
-	}
-
-	virtual bool OnMouseLeave(Window* wnd, Vector2i pos)
-	{
-		Err->WriteLine("OnMouseLeave: " + pos.ToString());
-		return false;
-	}
-
-	virtual bool OnMouseWheel(Window* wnd, Vector2i delta)
-	{
-		Err->WriteLine("OnMouseWheel: " + delta.ToString());
-		return false;
-	}
-
 	virtual bool OnTouchDown(Window* wnd, Vector2 pos, int id)
 	{
 		Err->WriteLine("OnTouchDown: " + pos.ToString() + ", " + id);
         touchDownTime = GetSeconds();
-		return false;
-	}
-
-	virtual bool OnTouchMove(Window* wnd, Vector2 pos, int id)
-	{
-		Err->WriteLine("OnTouchMove: " + pos.ToString() + ", " + id);
-        Vector2i size = wnd->GetClientSize();
-        glClearColor(pos.X / size.X, pos.Y / size.Y, 0, 1);
 		return false;
 	}
 
@@ -196,13 +102,8 @@ public:
         {
             if (currentTime - tapTime < 0.3)
             {
-                //play
                 Err->WriteLine("Bang");
-                wnd->BeginTextInput((Xli::TextInputHint)0);
-            }
-            else if (wnd->IsTextInputActive())
-            {
-                wnd->EndTextInput();
+                wav->Play(false);
             }
 
             tapTime = currentTime;
