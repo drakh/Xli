@@ -111,10 +111,17 @@ if [ "$DO_CLEAN" = "1" ]; then
     for dir in "build/release" "build/debug"; do
         if [ -f "$dir/Makefile" ]; then
             cd "$dir"
-            make clean
+            make clean || true
             cd "$OLDPWD"
         fi
     done
+
+    if [ -d "build/xcode" ]; then
+        cd build/xcode
+        xcodebuild -alltargets -configuration Debug clean || true
+        xcodebuild -alltargets -configuration Release clean || true
+        cd "$OLDPWD"
+    fi
 
     rm -rfv build
     exit 0
