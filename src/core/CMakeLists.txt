@@ -32,7 +32,6 @@ set(Sources
     Traits.cpp
     Unicode.cpp
     Utf16String.cpp
-    UpperLower.cpp
     Window.cpp
     )
 

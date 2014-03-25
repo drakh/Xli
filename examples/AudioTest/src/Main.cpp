@@ -4,6 +4,8 @@
 
 using namespace Xli;
 
+// A Very leaky example of using audio
+
 class GLApp: public Application
 {
 	Managed<GLContext> gl;
