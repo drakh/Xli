@@ -507,8 +507,25 @@ DI_DeviceObjectCallback(LPCDIDEVICEOBJECTINSTANCE dev, LPVOID pvRef)
     SDL_Haptic *haptic = (SDL_Haptic *) pvRef;
 
     if ((dev->dwType & DIDFT_AXIS) && (dev->dwFlags & DIDOI_FFACTUATOR)) {
+        const GUID *guid = &dev->guidType;
+        DWORD offset = 0;
+        if (DI_GUIDIsSame(guid, &GUID_XAxis)) {
+            offset = DIJOFS_X;
+        } else if (DI_GUIDIsSame(guid, &GUID_YAxis)) {
+            offset = DIJOFS_Y;
+        } else if (DI_GUIDIsSame(guid, &GUID_ZAxis)) {
+            offset = DIJOFS_Z;
+        } else if (DI_GUIDIsSame(guid, &GUID_RxAxis)) {
+            offset = DIJOFS_RX;
+        } else if (DI_GUIDIsSame(guid, &GUID_RyAxis)) {
+            offset = DIJOFS_RY;
+        } else if (DI_GUIDIsSame(guid, &GUID_RzAxis)) {
+            offset = DIJOFS_RZ;
+        } else {
+            return DIENUM_CONTINUE;   /* can't use this, go on. */
+        }
 
-        haptic->hwdata->axes[haptic->naxes] = dev->dwOfs;
+        haptic->hwdata->axes[haptic->naxes] = offset;
         haptic->naxes++;
 
         /* Currently using the artificial limit of 3 axes. */
@@ -658,38 +675,47 @@ SDL_SYS_HapticOpenFromDevice8(SDL_Haptic * haptic,
     haptic->hwdata->device = device8;
     haptic->hwdata->is_joystick = is_joystick;
 
-    /* Grab it exclusively to use force feedback stuff. */
-    ret = IDirectInputDevice8_SetCooperativeLevel(haptic->hwdata->device,
-                                                  SDL_HelperWindow,
-                                                  DISCL_EXCLUSIVE |
-                                                  DISCL_BACKGROUND);
-    if (FAILED(ret)) {
-        DI_SetError("Setting cooperative level to exclusive", ret);
-        goto acquire_err;
-    }
+    /* !!! FIXME: opening a haptic device here first will make an attempt to
+       !!! FIXME:  SDL_JoystickOpen() that same device fail later, since we
+       !!! FIXME:  have it open in exclusive mode. But this will allow
+       !!! FIXME:  SDL_JoystickOpen() followed by SDL_HapticOpenFromJoystick()
+       !!! FIXME:  to work, and that's probably the common case. Still,
+       !!! FIXME:  ideally, We need to unify the opening code. */
 
-    /* Set data format. */
-    ret = IDirectInputDevice8_SetDataFormat(haptic->hwdata->device,
-                                            &c_dfDIJoystick2);
-    if (FAILED(ret)) {
-        DI_SetError("Setting data format", ret);
-        goto acquire_err;
-    }
+    if (!is_joystick) {  /* if is_joystick, we already set this up elsewhere. */
+        /* Grab it exclusively to use force feedback stuff. */
+        ret = IDirectInputDevice8_SetCooperativeLevel(haptic->hwdata->device,
+                                                      SDL_HelperWindow,
+                                                      DISCL_EXCLUSIVE |
+                                                      DISCL_BACKGROUND);
+        if (FAILED(ret)) {
+            DI_SetError("Setting cooperative level to exclusive", ret);
+            goto acquire_err;
+        }
 
-    /* Get number of axes. */
-    ret = IDirectInputDevice8_EnumObjects(haptic->hwdata->device,
-                                          DI_DeviceObjectCallback,
-                                          haptic, DIDFT_AXIS);
-    if (FAILED(ret)) {
-        DI_SetError("Getting device axes", ret);
-        goto acquire_err;
-    }
+        /* Set data format. */
+        ret = IDirectInputDevice8_SetDataFormat(haptic->hwdata->device,
+                                                &c_dfDIJoystick2);
+        if (FAILED(ret)) {
+            DI_SetError("Setting data format", ret);
+            goto acquire_err;
+        }
 
-    /* Acquire the device. */
-    ret = IDirectInputDevice8_Acquire(haptic->hwdata->device);
-    if (FAILED(ret)) {
-        DI_SetError("Acquiring DirectInput device", ret);
-        goto acquire_err;
+        /* Get number of axes. */
+        ret = IDirectInputDevice8_EnumObjects(haptic->hwdata->device,
+                                              DI_DeviceObjectCallback,
+                                              haptic, DIDFT_AXIS);
+        if (FAILED(ret)) {
+            DI_SetError("Getting device axes", ret);
+            goto acquire_err;
+        }
+
+        /* Acquire the device. */
+        ret = IDirectInputDevice8_Acquire(haptic->hwdata->device);
+        if (FAILED(ret)) {
+            DI_SetError("Acquiring DirectInput device", ret);
+            goto acquire_err;
+        }
     }
 
     /* Reset all actuators - just in case. */

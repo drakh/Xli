@@ -20,18 +20,25 @@
 */
 #include "../../SDL_internal.h"
 
-#include "SDL_system.h"
-#include "SDL_winrtapp_direct3d.h"
-#include "SDL_winrtapp_xaml.h"
+#ifndef SDL_POWER_DISABLED
+#if SDL_POWER_WINRT
 
-int (*WINRT_SDLAppEntryPoint)(int, char **) = NULL;
+#include "SDL_power.h"
 
-extern "C" DECLSPEC int
-SDL_WinRTRunApp(int (*mainFunction)(int, char **), void * xamlBackgroundPanel)
+extern "C"
+SDL_bool
+SDL_GetPowerInfo_WinRT(SDL_PowerState * state, int *seconds, int *percent)
 {
-    if (xamlBackgroundPanel) {
-        return SDL_WinRTInitXAMLApp(mainFunction, xamlBackgroundPanel);
-    } else {
-        return SDL_WinRTInitNonXAMLApp(mainFunction);
-    }
+    /* TODO, WinRT: Battery info is available on at least one WinRT platform (Windows Phone 8).  Implement SDL_GetPowerInfo_WinRT as appropriate. */
+    /* Notes:
+         - the Win32 function, GetSystemPowerStatus, is not available for use on WinRT
+         - Windows Phone 8 has a 'Battery' class, which is documented as available for C++
+             - More info on WP8's Battery class can be found at http://msdn.microsoft.com/library/windowsphone/develop/jj207231
+    */
+    return SDL_FALSE;
 }
+
+#endif /* SDL_POWER_WINRT */
+#endif /* SDL_POWER_DISABLED */
+
+/* vi: set ts=4 sw=4 expandtab: */

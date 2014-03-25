@@ -20,18 +20,10 @@
 */
 #include "../../SDL_internal.h"
 
-#include "SDL_system.h"
-#include "SDL_winrtapp_direct3d.h"
-#include "SDL_winrtapp_xaml.h"
+#if SDL_VIDEO_DRIVER_WINRT
 
-int (*WINRT_SDLAppEntryPoint)(int, char **) = NULL;
+extern int WINRT_ShowMessageBox(const SDL_MessageBoxData *messageboxdata, int *buttonid);
 
-extern "C" DECLSPEC int
-SDL_WinRTRunApp(int (*mainFunction)(int, char **), void * xamlBackgroundPanel)
-{
-    if (xamlBackgroundPanel) {
-        return SDL_WinRTInitXAMLApp(mainFunction, xamlBackgroundPanel);
-    } else {
-        return SDL_WinRTInitNonXAMLApp(mainFunction);
-    }
-}
+#endif /* SDL_VIDEO_DRIVER_WINRT */
+
+/* vi: set ts=4 sw=4 expandtab: */
