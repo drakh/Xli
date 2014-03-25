@@ -68,4 +68,6 @@ namespace Xli
     {
         return Utf16To8(str.DataPtr(), str.Length());
     }
+
+    #include "UnicodeUpperLower.inc"
 }

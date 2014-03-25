@@ -30,9 +30,15 @@
 # define XLI_GL_DESKTOP
 
 #elif defined(XLI_PLATFORM_LINUX)
-# include <GL/glew.h>
-# include <GL/gl.h>
-# define XLI_GL_DESKTOP
+# ifdef __arm__
+#  include <GLES2/gl2.h>
+#  include <GLES2/gl2ext.h>
+#  define XLI_GL_ES2
+# else
+#  include <GL/glew.h>
+#  include <GL/gl.h>
+#  define XLI_GL_DESKTOP
+# endif
 
 #else
 #error "Unsupported platform"

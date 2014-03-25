@@ -19,6 +19,9 @@ namespace Xli
         static String Utf16To8(const Utf16* str, int len);
         static String Utf16To8(const Utf16* str);
         static String Utf16To8(const Utf16String& str);
+
+        static Utf16 ToUpper(Utf16 chr);
+        static Utf16 ToLower(Utf16 chr);
     };
 }
 
