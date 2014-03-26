@@ -67,24 +67,26 @@ namespace Xli
             assert(SL_RESULT_SUCCESS == result);
         }
 
+        float GainToAttenuation(float gain) const
+        {
+            //http://vec3.ca/getting-started-with-opensl-on-android/
+            return gain < 0.01f ? -96.0f : 20 * log10( gain );
+        }
+        float AttenuationToGain(float att) const
+        {
+            return att <= -96.0f ? 0.0f : pow(10, (att / 20.0f));
+        }
 		virtual float GetVolume() const
         {
-            SLmillibel max;
-            (*playerVolumeItf)->GetMaxVolumeLevel(playerVolumeItf, &max);
             SLmillibel vol;
             SLresult result = (*playerVolumeItf)->GetVolumeLevel(playerVolumeItf, &vol);
             assert(SL_RESULT_SUCCESS == result);
-            return (100.0f / (max - SL_MILLIBEL_MIN)) * vol;
+            return AttenuationToGain(vol / 100.0f);
         }
 		virtual void SetVolume(float volume) const
         {
-            SLmillibel max;
-            (*playerVolumeItf)->GetMaxVolumeLevel(playerVolumeItf, &max);
-            SLmillibel vol = SL_MILLIBEL_MIN + (((max - SL_MILLIBEL_MIN) / 100.0f) * volume);
-            if (vol > max) vol = max;
-            if (vol < SL_MILLIBEL_MIN) vol = SL_MILLIBEL_MIN;
-            // LOGD("min: %d max: %d vol-in: %f vol: %d", SL_MILLIBEL_MIN, max, volume, vol);
-            SLresult result = (*playerVolumeItf)->SetVolumeLevel(playerVolumeItf, vol);
+            float att = (GainToAttenuation(volume) * 100.0f);
+            SLresult result = (*playerVolumeItf)->SetVolumeLevel(playerVolumeItf, (SLmillibel)att);
             assert(SL_RESULT_SUCCESS == result);
         }
 
