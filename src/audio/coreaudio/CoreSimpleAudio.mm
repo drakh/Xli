@@ -16,7 +16,7 @@ namespace Xli
     public:
         CoreAudioChannel(const char* filename, bool loop, bool play)
         {
-            NSString* string = [NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], [NSString stringWithUTF8String:filename]];
+            NSString* string = [NSString stringWithFormat:@"%@/data/%@", [[NSBundle mainBundle] resourcePath], [NSString stringWithUTF8String:filename]];
                 
             NSURL* url = [NSURL fileURLWithPath:string];
             //[string release];
