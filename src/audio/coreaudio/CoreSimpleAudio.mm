@@ -68,15 +68,15 @@ namespace Xli
             [player play];
         }
         
-        virtual int GetPosition() const // this should be double
+        virtual double GetPosition() const
         {
             if (player == nil) return 0.0;
-            return (int)player.currentTime;
+            return player.currentTime;
         }
-        virtual void SetPosition(int value) // this shouldbe double, fix the headers
+        virtual void SetPosition(double value)
         {
             if (player == nil) return;
-            player.currentTime = (double)value;
+            player.currentTime = value;
         }
 
         virtual float GetVolume() const
@@ -100,10 +100,10 @@ namespace Xli
             return false;
         }
    
-        int GetDuration() const // this should be double
+        double GetDuration() const
         {
             if (player == nil || player == 0) return 0;
-            return (int)player.duration;
+            return (double)player.duration;
         }
         virtual float GetPan() const
         {
@@ -147,7 +147,7 @@ namespace Xli
             this->isasset = asset;
             
             CoreAudioChannel* c = new CoreAudioChannel(path.DataPtr(), false, false);
-            //this->duration = c->GetDuration();
+            this->duration = c->GetDuration();
             delete c;
             this->duration = 0.0;
         }
