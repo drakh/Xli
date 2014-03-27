@@ -401,15 +401,27 @@ namespace Xli
         */
         class AShim
         {
+        private:
+            static jmethodID makeNoise;
+            static jmethodID raiseKeyboard;
+            static jmethodID hideKeyboard;
+            static jmethodID showMessageBox;
+            static jmethodID connectedToNetwork;
+            static jmethodID newHttpConnection;
+            static jmethodID httpGetOutputStream;
+            static jmethodID httpGetInputStream;
+            static jmethodID httpShowHeaders;
+            static jmethodID initDefaultCookieManager;
+            static jmethodID getAssetManager;
         public:
             static int kbVisible;
 
+            static void CacheMids(JNIEnv *env, jclass shim_class);
             static void MakeNoise();
             static void RaiseSoftKeyboard();
             static void HideSoftKeyboard();
             static bool KeyboardVisible();
-            static int ShowMessageBox(const String& message, const String& caption, int buttons, int hints);
-            
+            static int ShowMessageBox(const String& message, const String& caption, int buttons, int hints);            
             static bool ConnectedToNetwork();
             static jobject HttpNewConnection(const String& uri, const String& method, bool hasPayload);
             static void HttpCloseConnection(jobject httpConnection);
