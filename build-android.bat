@@ -2,7 +2,7 @@
 set START_DIR=%CD%
 
 cd "%~dp0\projects\android"
-call ndk-build -j %NUMBER_OF_PROCESSORS%
+call ndk-build -j %NUMBER_OF_PROCESSORS% %*
 
 if %ERRORLEVEL% neq 0 (
 	cd %START_DIR%
