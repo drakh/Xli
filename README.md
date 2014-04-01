@@ -24,22 +24,61 @@ Library documentation can be generated using `doxygen`.
 
 # Building
 
-## Windows
+## Android
 
 ### Prerequisites
 
-- Visual Studio 2013
+- Android NDK (ndk-build must be available in $PATH)
+- UNIX Shell
+
+### Instructions - OS X, Linux, MSYS
+
+1. Open terminal and `cd` to Xli directory
+2. Execute `./build-android.sh`
+   * This should produce .so files located here:
+     - `lib/android/armeabi-v7a`
+
+Debug binaries can be produced by replacing command in step 2 with `./build-android.sh --debug`. 
+
+**Note:** Android build will output debug and release binaries to the same folder -- do a `./build-android.sh clean` before rebuilding just to be safe. Also, debug binaries should be huge. For instance `lib/android/armeabi-v7a/libXli.so` should be roughly ~1,5MB after a debug build, while ~200KB in release.
+
+### Instructions - Windows
+
+Windows users need a way to execute the `build-android.sh` UNIX shell script. This can be done using MSYS or Cygwin.
+
+Uno users can use the UnoNativeBuildEnv installer provided by Outracks. It contains both MSYS and the Android NDK. Use `start.bat` and then type `bash -li` to open a bash shell. Then follow the instructions above.
 
 
-### Instructions
+## Linux
 
-1. Open solution located at `Xli\projects\vs2013\Xli Library.sln`.
-2. Do a batch build.
-   * This should produce static libraries located here:
-     - `lib\vs2013\x86\Debug\`
-     - `lib\vs2013\x86\Release\`
-     - `lib\vs2013\x64\Debug\`
-     - `lib\vs2013\x64\Release\`
+### Prerequisites
+
+- GNU make, C++ compiler, etc
+- cmake
+- curl
+- freetype
+- GLEW
+- [libjpeg]
+- OpenSSL
+- png
+- portaudio
+- SDL2
+
+`apt-get` users can execute `sudo apt-get install -y libpng12-dev libjpeg-dev libfreetype6-dev libglew-dev portaudio19-dev libcurl4-openssl-dev cmake g++`
+
+SDL2 can be built and installed from source. Instructions here: http://libsdl.org
+
+### Instructions - Command line
+
+1. Open terminal and `cd` to Xli directory
+2. Execute `./build.sh`
+   * This should produce .so files located here:
+     - `lib/linux/x86_$ARCH/`
+4. Optional step: `./build.sh install`
+
+Debug binaries can be produced by replacing command in step 2 with `./build.sh --debug`.
+
+List of available options can be shown using `./build.sh --help`.
 
 
 ## OS X
@@ -76,36 +115,22 @@ List of available options can be shown using `./build.sh --help`.
      - `build/xcode/Xli Library.xcodeproj`
 
 
-## Linux
+## Windows
 
 ### Prerequisites
 
-- GNU make, C++ compiler, etc
-- cmake
-- curl
-- freetype
-- GLEW
-- [libjpeg]
-- OpenSSL
-- png
-- portaudio
-- SDL2
+- Visual Studio 2013
 
-`apt-get` users can execute `sudo apt-get install -y libpng12-dev libjpeg-dev libfreetype6-dev libglew-dev portaudio19-dev libcurl4-openssl-dev cmake g++`
 
-SDL2 can be built and installed from source. Instructions here: http://libsdl.org
+### Instructions
 
-### Instructions - Command line
-
-1. Open terminal and `cd` to Xli directory
-2. Execute `./build.sh`
-   * This should produce .so files located here:
-     - `lib/linux/x86_$ARCH/`
-4. Optional step: `./build.sh install`
-
-Debug binaries can be produced by replacing command in step 2 with `./build.sh --debug`.
-
-List of available options can be shown using `./build.sh --help`.
+1. Open solution located at `Xli\projects\vs2013\Xli Library.sln`.
+2. Do a batch build.
+   * This should produce static libraries located here:
+     - `lib\vs2013\x86\Debug\`
+     - `lib\vs2013\x86\Release\`
+     - `lib\vs2013\x64\Debug\`
+     - `lib\vs2013\x64\Release\`
 
 
 # License
