@@ -108,23 +108,30 @@ fi
 cd "$PROJECT_DIR"
 
 if [ "$DO_CLEAN" = "1" ]; then
-    for dir in "build/cmake-release" "build/cmake-debug"; do
+    for dir in "build/release" "build/debug"; do
         if [ -f "$dir/Makefile" ]; then
             cd "$dir"
-            make clean
+            make clean || true
             cd "$OLDPWD"
         fi
     done
 
-    rm -rfv build/cmake-*
+    if [ -d "build/xcode" ]; then
+        cd build/xcode
+        xcodebuild -alltargets -configuration Debug clean || true
+        xcodebuild -alltargets -configuration Release clean || true
+        cd "$OLDPWD"
+    fi
+
+    rm -rfv build
     exit 0
 fi
 
 if [ "$DEBUG" = "1" ]; then
-    BUILD_DIR="build/cmake-debug"
+    BUILD_DIR="build/debug"
     CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_BUILD_TYPE:STRING=Debug"
 else
-    BUILD_DIR="build/cmake-release"
+    BUILD_DIR="build/release"
     CMAKE_ARGS="$CMAKE_ARGS -DCMAKE_BUILD_TYPE:STRING=Release"
 fi
 
@@ -147,8 +154,8 @@ fi
 if [ -n "$TARGET" ]; then
     case $TARGET in
     xcode)
-        mkdir -p build/cmake-xcode
-        cd build/cmake-xcode
+        mkdir -p build/xcode
+        cd build/xcode
 
         cmake ../.. -GXcode $CMAKE_ARGS
 

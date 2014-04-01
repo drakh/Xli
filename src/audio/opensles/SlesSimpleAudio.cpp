@@ -21,6 +21,7 @@ namespace Xli
         SLSeekItf playerSeekItf;
         SLVolumeItf playerVolumeItf;
         bool Closed;
+        mutable double cachedDuration;
         
     public:
         SlesSimpleSoundChannel(const SimpleSound& sound)
@@ -29,6 +30,7 @@ namespace Xli
             playerPlayItf = NULL;
             playerSeekItf = NULL;
             playerVolumeItf = NULL;
+            cachedDuration = -1.0;
             Closed = !PrepareSlesPlayer(sound.GetPath(), sound.IsAsset());
         }    
 
@@ -51,37 +53,40 @@ namespace Xli
                 (*playerPlayItf)->SetPlayState(playerPlayItf, SL_PLAYSTATE_PLAYING);
         }
 
-        virtual int GetPosition() const
+        virtual double GetPosition() const
         {
             SLmillisecond pos = -1;
             SLresult result = (*playerPlayItf)->GetPosition(playerPlayItf, &pos);
             assert(SL_RESULT_SUCCESS == result);
-            return (int)pos;
+            return ((double)((int)pos))/1000.0;
         }
-        virtual void SetPosition(int position)
+        virtual void SetPosition(double position)
         {
-            SLresult result = (*playerSeekItf)->SetPosition(playerSeekItf, position, SL_SEEKMODE_FAST);
+            int pos = (int)(position * 1000);
+            SLresult result = (*playerSeekItf)->SetPosition(playerSeekItf, pos, SL_SEEKMODE_FAST);
             assert(SL_RESULT_SUCCESS == result);
         }
 
+        float GainToAttenuation(float gain) const
+        {
+            //http://vec3.ca/getting-started-with-opensl-on-android/
+            return gain < 0.01f ? -96.0f : 20 * log10( gain );
+        }
+        float AttenuationToGain(float att) const
+        {
+            return att <= -96.0f ? 0.0f : pow(10, (att / 20.0f));
+        }
 		virtual float GetVolume() const
         {
-            SLmillibel max;
-            (*playerVolumeItf)->GetMaxVolumeLevel(playerVolumeItf, &max);
             SLmillibel vol;
             SLresult result = (*playerVolumeItf)->GetVolumeLevel(playerVolumeItf, &vol);
             assert(SL_RESULT_SUCCESS == result);
-            return (100.0f / (max - SL_MILLIBEL_MIN)) * vol;
+            return AttenuationToGain(vol / 100.0f);
         }
 		virtual void SetVolume(float volume) const
         {
-            SLmillibel max;
-            (*playerVolumeItf)->GetMaxVolumeLevel(playerVolumeItf, &max);
-            SLmillibel vol = SL_MILLIBEL_MIN + (((max - SL_MILLIBEL_MIN) / 100.0f) * volume);
-            if (vol > max) vol = max;
-            if (vol < SL_MILLIBEL_MIN) vol = SL_MILLIBEL_MIN;
-            // LOGD("min: %d max: %d vol-in: %f vol: %d", SL_MILLIBEL_MIN, max, volume, vol);
-            SLresult result = (*playerVolumeItf)->SetVolumeLevel(playerVolumeItf, vol);
+            float att = (GainToAttenuation(volume) * 100.0f);
+            SLresult result = (*playerVolumeItf)->SetVolumeLevel(playerVolumeItf, (SLmillibel)att);
             assert(SL_RESULT_SUCCESS == result);
         }
 
@@ -97,12 +102,16 @@ namespace Xli
             return ((!IsPlaying()) && AtEnd());
         }
 
-        virtual int GetDuration() const
+        virtual double GetDuration() const
         {
-            SLmillisecond duration = -1;
-            SLresult result = (*playerPlayItf)->GetPosition(playerPlayItf, &duration);
-            assert(SL_RESULT_SUCCESS == result);
-            return (int)duration;
+            if (cachedDuration<0)
+            {
+                SLmillisecond duration = -1;
+                SLresult result = (*playerPlayItf)->GetDuration(playerPlayItf, &duration);
+                assert(SL_RESULT_SUCCESS == result);
+                cachedDuration = ((double)((int)duration)/1000.0);
+            } 
+            return cachedDuration;
         }
  
         virtual void Play()

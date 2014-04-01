@@ -109,9 +109,8 @@ LOCAL_C_INCLUDES := \
     ../../src/media/3rdparty/png \
     ../../src/media/3rdparty/tinyxml \ 
 
-LOCAL_CFLAGS   := -fexceptions -fno-rtti -fPIC -DPIC
-LOCAL_CFLAGS   += "-DDARWIN_NO_CARBON"
-LOCAL_CFLAGS   += "-DFT2_BUILD_LIBRARY"
+LOCAL_CFLAGS   := -fexceptions -fno-rtti 
+LOCAL_CFLAGS   += -DFT2_BUILD_LIBRARY
 LOCAL_LDLIBS   := -lz -llog -lOpenSLES -landroid
 
 LOCAL_SHARED_LIBRARIES := Xli

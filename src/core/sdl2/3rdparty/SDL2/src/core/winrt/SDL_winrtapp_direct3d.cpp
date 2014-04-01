@@ -1,4 +1,25 @@
-﻿
+/*
+  Simple DirectMedia Layer
+  Copyright (C) 1997-2014 Sam Lantinga <slouken@libsdl.org>
+
+  This software is provided 'as-is', without any express or implied
+  warranty.  In no event will the authors be held liable for any damages
+  arising from the use of this software.
+
+  Permission is granted to anyone to use this software for any purpose,
+  including commercial applications, and to alter it and redistribute it
+  freely, subject to the following restrictions:
+
+  1. The origin of this software must not be misrepresented; you must not
+     claim that you wrote the original software. If you use this software
+     in a product, an acknowledgment in the product documentation would be
+     appreciated but is not required.
+  2. Altered source versions must be plainly marked as such, and must not be
+     misrepresented as being the original software.
+  3. This notice may not be removed or altered from any source distribution.
+*/
+#include "../../SDL_internal.h"
+
 /* Standard C++11 includes */
 #include <functional>
 #include <string>
@@ -48,6 +69,13 @@ extern "C" {
 #include "../../video/winrt/SDL_winrtvideo_cpp.h"
 #include "SDL_winrtapp_common.h"
 #include "SDL_winrtapp_direct3d.h"
+
+#if SDL_VIDEO_RENDER_D3D11 && !SDL_RENDER_DISABLED
+/* Calling IDXGIDevice3::Trim on the active Direct3D 11.x device is necessary
+ * when Windows 8.1 apps are about to get suspended.
+ */
+extern "C" void D3D11_Trim(SDL_Renderer *);
+#endif
 
 
 // Compile-time debugging options:
@@ -142,12 +170,18 @@ static void WINRT_SetDisplayOrientationsPreference(void *userdata, const char *n
     // for details.  Microsoft's "Display orientation sample" also gives an
     // outline of how Windows treats device rotation
     // (http://code.msdn.microsoft.com/Display-Orientation-Sample-19a58e93).
+#if NTDDI_VERSION > NTDDI_WIN8
+    DisplayInformation::AutoRotationPreferences = (DisplayOrientations) orientationFlags;
+#else
     DisplayProperties::AutoRotationPreferences = (DisplayOrientations) orientationFlags;
+#endif
 }
 
 static void
 WINRT_ProcessWindowSizeChange()
 {
+    SDL_VideoDevice *_this = SDL_GetVideoDevice();
+
     // Make the new window size be the one true fullscreen mode.
     // This change was initially done, in part, to allow the Direct3D 11.1
     // renderer to receive window-resize events as a device rotates.
@@ -167,31 +201,31 @@ WINRT_ProcessWindowSizeChange()
     // Make note of the old display mode, and it's old driverdata.
     SDL_DisplayMode oldDisplayMode;
     SDL_zero(oldDisplayMode);
-    if (WINRT_GlobalSDLVideoDevice) {
-        oldDisplayMode = WINRT_GlobalSDLVideoDevice->displays[0].desktop_mode;
+    if (_this) {
+        oldDisplayMode = _this->displays[0].desktop_mode;
     }
 
     // Setup the new display mode in the appropriate spots.
-    if (WINRT_GlobalSDLVideoDevice) {
+    if (_this) {
         // Make a full copy of the display mode for display_modes[0],
         // one with with a separately malloced 'driverdata' field.
         // SDL_VideoQuit(), if called, will attempt to free the driverdata
         // fields in 'desktop_mode' and each entry in the 'display_modes'
         // array.
-        if (WINRT_GlobalSDLVideoDevice->displays[0].display_modes[0].driverdata) {
+        if (_this->displays[0].display_modes[0].driverdata) {
             // Free the previous mode's memory
-            SDL_free(WINRT_GlobalSDLVideoDevice->displays[0].display_modes[0].driverdata);
-            WINRT_GlobalSDLVideoDevice->displays[0].display_modes[0].driverdata = NULL;
+            SDL_free(_this->displays[0].display_modes[0].driverdata);
+            _this->displays[0].display_modes[0].driverdata = NULL;
         }
-        if (WINRT_DuplicateDisplayMode(&(WINRT_GlobalSDLVideoDevice->displays[0].display_modes[0]), &newDisplayMode) != 0) {
+        if (WINRT_DuplicateDisplayMode(&(_this->displays[0].display_modes[0]), &newDisplayMode) != 0) {
             // Uh oh, something went wrong.  A malloc call probably failed.
             SDL_free(newDisplayMode.driverdata);
             return;
         }
 
         // Install 'newDisplayMode' into 'current_mode' and 'desktop_mode'.
-        WINRT_GlobalSDLVideoDevice->displays[0].current_mode = newDisplayMode;
-        WINRT_GlobalSDLVideoDevice->displays[0].desktop_mode = newDisplayMode;
+        _this->displays[0].current_mode = newDisplayMode;
+        _this->displays[0].desktop_mode = newDisplayMode;
     }
 
     if (WINRT_GlobalSDLWindow) {
@@ -262,20 +296,13 @@ void SDL_WinRTApp::Initialize(CoreApplicationView^ applicationView)
 
     CoreApplication::Exiting +=
         ref new EventHandler<Platform::Object^>(this, &SDL_WinRTApp::OnExiting);
-
-    DisplayProperties::OrientationChanged +=
-        ref new DisplayPropertiesEventHandler(this, &SDL_WinRTApp::OnOrientationChanged);
-
-    // Register the hint, SDL_HINT_ORIENTATIONS, with SDL.  This needs to be
-    // done before the hint's callback is registered (as of Feb 22, 2013),
-    // otherwise the hint callback won't get registered.
-    //
-    // TODO, WinRT: see if an app's default orientation can be found out via WinRT API(s), then set the initial value of SDL_HINT_ORIENTATIONS accordingly.
-    //SDL_SetHint(SDL_HINT_ORIENTATIONS, "LandscapeLeft LandscapeRight Portrait PortraitUpsideDown");   // DavidL: this is no longer needed (for SDL_AddHintCallback)
-    SDL_AddHintCallback(SDL_HINT_ORIENTATIONS, WINRT_SetDisplayOrientationsPreference, NULL);
 }
 
+#if NTDDI_VERSION > NTDDI_WIN8
+void SDL_WinRTApp::OnOrientationChanged(DisplayInformation^ sender, Object^ args)
+#else
 void SDL_WinRTApp::OnOrientationChanged(Object^ sender)
+#endif
 {
 #if LOG_ORIENTATION_EVENTS==1
     CoreWindow^ window = CoreWindow::GetForCurrentThread();
@@ -358,6 +385,18 @@ void SDL_WinRTApp::SetWindow(CoreWindow^ window)
         ref new EventHandler<BackPressedEventArgs^>(this, &SDL_WinRTApp::OnBackButtonPressed);
 #endif
 
+#if NTDDI_VERSION > NTDDI_WIN8
+    DisplayInformation::GetForCurrentView()->OrientationChanged +=
+        ref new TypedEventHandler<Windows::Graphics::Display::DisplayInformation^, Object^>(this, &SDL_WinRTApp::OnOrientationChanged);
+#else
+    DisplayProperties::OrientationChanged +=
+        ref new DisplayPropertiesEventHandler(this, &SDL_WinRTApp::OnOrientationChanged);
+#endif
+
+    // Register the hint, SDL_HINT_ORIENTATIONS, with SDL.
+    // TODO, WinRT: see if an app's default orientation can be found out via WinRT API(s), then set the initial value of SDL_HINT_ORIENTATIONS accordingly.
+    SDL_AddHintCallback(SDL_HINT_ORIENTATIONS, WINRT_SetDisplayOrientationsPreference, NULL);
+
 #if WINAPI_FAMILY == WINAPI_FAMILY_APP  // for Windows 8/8.1/RT apps... (and not Phone apps)
     // Make sure we know when a user has opened the app's settings pane.
     // This is needed in order to display a privacy policy, which needs
@@ -386,16 +425,62 @@ void SDL_WinRTApp::Run()
     }
 }
 
+static bool IsSDLWindowEventPending(SDL_WindowEventID windowEventID)
+{
+    SDL_Event events[128];
+    const int count = SDL_PeepEvents(events, sizeof(events)/sizeof(SDL_Event), SDL_PEEKEVENT, SDL_WINDOWEVENT, SDL_WINDOWEVENT);
+    for (int i = 0; i < count; ++i) {
+        if (events[i].window.event == windowEventID) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool SDL_WinRTApp::ShouldWaitForAppResumeEvents()
+{
+    /* Don't wait if the app is visible: */
+    if (m_windowVisible) {
+        return false;
+    }
+    
+    /* Don't wait until the window-hide events finish processing.
+     * Do note that if an app-suspend event is sent (as indicated
+     * by SDL_APP_WILLENTERBACKGROUND and SDL_APP_DIDENTERBACKGROUND
+     * events), then this code may be a moot point, as WinRT's
+     * own event pump (aka ProcessEvents()) will pause regardless
+     * of what we do here.  This happens on Windows Phone 8, to note.
+     * Windows 8.x apps, on the other hand, may get a chance to run
+     * these.
+     */
+    if (IsSDLWindowEventPending(SDL_WINDOWEVENT_HIDDEN)) {
+        return false;
+    } else if (IsSDLWindowEventPending(SDL_WINDOWEVENT_FOCUS_LOST)) {
+        return false;
+    } else if (IsSDLWindowEventPending(SDL_WINDOWEVENT_MINIMIZED)) {
+        return false;
+    }
+
+    return true;
+}
+
 void SDL_WinRTApp::PumpEvents()
 {
-    if (!m_windowClosed)
-    {
-        if (m_windowVisible)
-        {
+    if (!m_windowClosed) {
+        if (!ShouldWaitForAppResumeEvents()) {
+            /* This is the normal way in which events should be pumped.
+             * 'ProcessAllIfPresent' will make ProcessEvents() process anywhere
+             * from zero to N events, and will then return.
+             */
             CoreWindow::GetForCurrentThread()->Dispatcher->ProcessEvents(CoreProcessEventsOption::ProcessAllIfPresent);
-        }
-        else
-        {
+        } else {
+            /* This style of event-pumping, with 'ProcessOneAndAllPending',
+             * will cause anywhere from one to N events to be processed.  If
+             * at least one event is processed, the call will return.  If
+             * no events are pending, then the call will wait until one is
+             * available, and will not return (to the caller) until this
+             * happens!  This should only occur when the app is hidden.
+             */
             CoreWindow::GetForCurrentThread()->Dispatcher->ProcessEvents(CoreProcessEventsOption::ProcessOneAndAllPending);
         }
     }
@@ -479,8 +564,12 @@ void SDL_WinRTApp::OnVisibilityChanged(CoreWindow^ sender, VisibilityChangedEven
 
         if (args->Visible) {
             SDL_SendWindowEvent(WINRT_GlobalSDLWindow, SDL_WINDOWEVENT_SHOWN, 0, 0);
+            SDL_SendWindowEvent(WINRT_GlobalSDLWindow, SDL_WINDOWEVENT_FOCUS_GAINED, 0, 0);
+            SDL_SendWindowEvent(WINRT_GlobalSDLWindow, SDL_WINDOWEVENT_RESTORED, 0, 0);
         } else {
             SDL_SendWindowEvent(WINRT_GlobalSDLWindow, SDL_WINDOWEVENT_HIDDEN, 0, 0);
+            SDL_SendWindowEvent(WINRT_GlobalSDLWindow, SDL_WINDOWEVENT_FOCUS_LOST, 0, 0);
+            SDL_SendWindowEvent(WINRT_GlobalSDLWindow, SDL_WINDOWEVENT_MINIMIZED, 0, 0);
         }
 
         // HACK: Prevent SDL's window-hide handling code, which currently
@@ -506,55 +595,45 @@ void SDL_WinRTApp::OnActivated(CoreApplicationView^ applicationView, IActivatedE
     CoreWindow::GetForCurrentThread()->Activate();
 }
 
-static int SDLCALL RemoveAppSuspendAndResumeEvents(void * userdata, SDL_Event * event)
-{
-    if (event->type == SDL_WINDOWEVENT)
-    {
-        switch (event->window.event)
-        {
-            case SDL_WINDOWEVENT_MINIMIZED:
-            case SDL_WINDOWEVENT_RESTORED:
-                // Return 0 to indicate that the event should be removed from the
-                // event queue:
-                return 0;
-            default:
-                break;
-        }
-    }
-
-    // Return 1 to indicate that the event should stay in the event queue:
-    return 1;
-}
-
 void SDL_WinRTApp::OnSuspending(Platform::Object^ sender, SuspendingEventArgs^ args)
 {
     // Save app state asynchronously after requesting a deferral. Holding a deferral
     // indicates that the application is busy performing suspending operations. Be
     // aware that a deferral may not be held indefinitely. After about five seconds,
     // the app will be forced to exit.
+
+    // ... but first, let the app know it's about to go to the background.
+    // The separation of events may be important, given that the deferral
+    // runs in a separate thread.  This'll make SDL_APP_WILLENTERBACKGROUND
+    // the only event among the two that runs in the main thread.  Given
+    // that a few WinRT operations can only be done from the main thread
+    // (things that access the WinRT CoreWindow are one example of this),
+    // this could be important.
+    SDL_SendAppEvent(SDL_APP_WILLENTERBACKGROUND);
+
     SuspendingDeferral^ deferral = args->SuspendingOperation->GetDeferral();
     create_task([this, deferral]()
     {
-        // Send a window-minimized event immediately to observers.
+        // Send an app did-enter-background event immediately to observers.
         // CoreDispatcher::ProcessEvents, which is the backbone on which
         // SDL_WinRTApp::PumpEvents is built, will not return to its caller
         // once it sends out a suspend event.  Any events posted to SDL's
         // event queue won't get received until the WinRT app is resumed.
         // SDL_AddEventWatch() may be used to receive app-suspend events on
         // WinRT.
-        //
-        // In order to prevent app-suspend events from being received twice:
-        // first via a callback passed to SDL_AddEventWatch, and second via
-        // SDL's event queue, the event will be sent to SDL, then immediately
-        // removed from the queue.
-        if (WINRT_GlobalSDLWindow)
-        {
-            SDL_SendWindowEvent(WINRT_GlobalSDLWindow, SDL_WINDOWEVENT_MINIMIZED, 0, 0);   // TODO: see if SDL_WINDOWEVENT_SIZE_CHANGED should be getting triggered here (it is, currently)
-            SDL_FilterEvents(RemoveAppSuspendAndResumeEvents, 0);
-        }
-
-        SDL_SendAppEvent(SDL_APP_WILLENTERBACKGROUND);
         SDL_SendAppEvent(SDL_APP_DIDENTERBACKGROUND);
+
+        // Let the Direct3D 11 renderer prepare for the app to be backgrounded.
+        // This is necessary for Windows 8.1, possibly elsewhere in the future.
+        // More details at: http://msdn.microsoft.com/en-us/library/windows/apps/Hh994929.aspx
+#if SDL_VIDEO_RENDER_D3D11 && !SDL_RENDER_DISABLED
+        if (WINRT_GlobalSDLWindow) {
+            SDL_Renderer * renderer = SDL_GetRenderer(WINRT_GlobalSDLWindow);
+            if (renderer && (SDL_strcmp(renderer->info.name, "direct3d11") == 0)) {
+                D3D11_Trim(renderer);
+            }
+        }
+#endif
 
         deferral->Complete();
     });
@@ -562,24 +641,11 @@ void SDL_WinRTApp::OnSuspending(Platform::Object^ sender, SuspendingEventArgs^ a
 
 void SDL_WinRTApp::OnResuming(Platform::Object^ sender, Platform::Object^ args)
 {
+    // Restore any data or state that was unloaded on suspend. By default, data
+    // and state are persisted when resuming from suspend. Note that these events
+    // do not occur if the app was previously terminated.
     SDL_SendAppEvent(SDL_APP_WILLENTERFOREGROUND);
     SDL_SendAppEvent(SDL_APP_DIDENTERFOREGROUND);
-
-    // Restore any data or state that was unloaded on suspend. By default, data
-    // and state are persisted when resuming from suspend. Note that this event
-    // does not occur if the app was previously terminated.
-    if (WINRT_GlobalSDLWindow)
-    {
-        SDL_SendWindowEvent(WINRT_GlobalSDLWindow, SDL_WINDOWEVENT_RESTORED, 0, 0);    // TODO: see if SDL_WINDOWEVENT_SIZE_CHANGED should be getting triggered here (it is, currently)
-
-        // Remove the app-resume event from the queue, as is done with the
-        // app-suspend event.
-        //
-        // TODO, WinRT: consider posting this event to the queue even though
-        // its counterpart, the app-suspend event, effectively has to be
-        // processed immediately.
-        SDL_FilterEvents(RemoveAppSuspendAndResumeEvents, 0);
-    }
 }
 
 void SDL_WinRTApp::OnExiting(Platform::Object^ sender, Platform::Object^ args)

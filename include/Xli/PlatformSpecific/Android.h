@@ -410,37 +410,26 @@ namespace Xli
         class AShim
         {
         private:
-            static bool midsCached;
-            static jmethodID makeNoiseMid;
-            static jmethodID raiseSoftKeyboardMid;
-            static jmethodID hideSoftKeyboardMid;
-            static jmethodID keyboardVisibleMid;
-            static jmethodID showMessageBoxMid;
-            static jmethodID connectedToNetworkMid;
-            static jmethodID xliToJavaHeadersMid;
-            static jmethodID sendHttpAsyncMid;
-            static jmethodID abortAsyncConnectionMid;
-            static jmethodID httpNewConnectionMid;
-            static jmethodID inputStreamToStringMid;
-            static jmethodID asyncInputStreamToStringMid;
-            static jmethodID asyncInputStreamToByteArrayMid;
-            static jmethodID readBytesFromInputStreamMid;
-            static jmethodID getAssetManagerMid;
-            static jmethodID registerNativeFunctionsMid;
-            static jmethodID androidToXliKeyEventMid;
-            static jmethodID handleSpecialAndroidKeyEventsMid;
-            static jmethodID initDefaultCookieManagerMid;
+            static jmethodID makeNoise;
+            static jmethodID raiseKeyboard;
+            static jmethodID hideKeyboard;
+            static jmethodID showMessageBox;
+            static jmethodID connectedToNetwork;
+            static jmethodID newHttpConnection;
+            static jmethodID httpGetOutputStream;
+            static jmethodID httpGetInputStream;
+            static jmethodID httpShowHeaders;
+            static jmethodID initDefaultCookieManager;
+            static jmethodID getAssetManager;
         public:
             static int kbVisible;
 
-            static void CacheMids();
-            
+            static void CacheMids(JNIEnv *env, jclass shim_class);
             static void MakeNoise();
             static void RaiseSoftKeyboard();
             static void HideSoftKeyboard();
             static bool KeyboardVisible();
-            static int ShowMessageBox(const String& message, const String& caption, int buttons, int hints);
-            
+            static int ShowMessageBox(const String& message, const String& caption, int buttons, int hints);            
             static bool ConnectedToNetwork();
             static jobject XliToJavaHeaders(const HttpRequest* req);
             static jobject SendHttpAsync(const HttpRequest* req, void* content, long byteLength);

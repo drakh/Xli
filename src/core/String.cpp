@@ -82,7 +82,7 @@ namespace Xli
 
     String::String(const char* str)
     {
-        init(str, (int)strlen(str));
+        init(str, !str ? 0 : (int)strlen(str));
     }
 
     String::String(const char* str, int len)
@@ -445,7 +445,7 @@ namespace Xli
 
     bool String::Equals(const char* str) const
     {
-        return Equals(str, (int)strlen(str));
+        return Equals(str, !str ? 0 : (int)strlen(str));
     }
 
     bool String::Equals(const String& str) const
@@ -478,7 +478,7 @@ namespace Xli
 
     int String::CompareTo(const char* str) const
     {
-        return CompareTo(str, (int)strlen(str));
+        return CompareTo(str, !str ? 0 : (int)strlen(str));
     }
 
     int String::CompareTo(const String& str) const
@@ -497,7 +497,7 @@ namespace Xli
 
     String String::Add(const char* str) const
     {
-        return Add(str, (int)strlen(str));
+        return Add(str, !str ? 0 : (int)strlen(str));
     }
 
     String String::Add(const String& str) const
@@ -532,7 +532,7 @@ namespace Xli
     
     void String::Append(const char* str)
     {
-        Append(str, (int)strlen(str));
+        Append(str, !str ? 0 : (int)strlen(str));
     }
     
     void String::Append(const String& str)
@@ -638,7 +638,7 @@ namespace Xli
             return *this;
 
         deinit();
-        init(str, (int)strlen(str));
+        init(str, !str ? 0 : (int)strlen(str));
         return *this;
     }
 
@@ -673,7 +673,7 @@ namespace Xli
 
 Xli::String operator + (const char* a, const Xli::String& b)
 {
-    int len = (int)strlen(a);
+    int len = !a ? 0 : (int)strlen(a);
     Xli::String r = Xli::String::Create(len + b.Length());
     memcpy(r.DataPtr(), a, len);
     memcpy(r.DataPtr() + len, b.DataPtr(), b.Length());

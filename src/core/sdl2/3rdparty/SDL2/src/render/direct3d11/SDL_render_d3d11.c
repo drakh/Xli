@@ -35,6 +35,10 @@
 
 #ifdef __WINRT__
 
+#if NTDDI_VERSION > NTDDI_WIN8
+#include <DXGI1_3.h>
+#endif
+
 #include "SDL_render_winrt.h"
 
 #if WINAPI_FAMILY == WINAPI_FAMILY_APP
@@ -134,6 +138,7 @@ typedef struct
 /* Defined here so we don't have to include uuid.lib */
 static const GUID IID_IDXGIFactory2 = { 0x50c83a1c, 0xe072, 0x4c48, { 0x87, 0xb0, 0x36, 0x30, 0xfa, 0x36, 0xa6, 0xd0 } };
 static const GUID IID_IDXGIDevice1 = { 0x77db970f, 0x6276, 0x48ba, { 0xba, 0x28, 0x07, 0x01, 0x43, 0xb4, 0x39, 0x2c } };
+static const GUID IID_IDXGIDevice3 = { 0x6007896c, 0x3244, 0x4afd, { 0xbf, 0x18, 0xa6, 0xd3, 0xbe, 0xda, 0x50, 0x23 } };
 static const GUID IID_ID3D11Texture2D = { 0x6f15aaf2, 0xd208, 0x4e89, { 0x9a, 0xb4, 0x48, 0x95, 0x35, 0xd3, 0x4f, 0x9c } };
 static const GUID IID_ID3D11Device1 = { 0xa04bfb29, 0x08ef, 0x43d6, { 0xa4, 0x9c, 0xa9, 0xbd, 0xbd, 0xcb, 0xe6, 0x86 } };
 static const GUID IID_ID3D11DeviceContext1 = { 0xbb2c6faa, 0xb5fb, 0x4082, { 0x8e, 0x6b, 0x38, 0x8b, 0x8c, 0xfa, 0x90, 0xe1 } };
@@ -846,10 +851,17 @@ D3D11_CreateRenderer(SDL_Window * window, Uint32 flags)
 }
 
 static void
-D3D11_DestroyRenderer(SDL_Renderer * renderer)
+D3D11_ReleaseAll(SDL_Renderer * renderer)
 {
     D3D11_RenderData *data = (D3D11_RenderData *) renderer->driverdata;
+    SDL_Texture *texture = NULL;
 
+    /* Release all textures */
+    for (texture = renderer->textures; texture; texture = texture->next) {
+        D3D11_DestroyTexture(renderer, texture);
+    }
+
+    /* Release/reset everything else */
     if (data) {
         SAFE_RELEASE(data->dxgiFactory);
         SAFE_RELEASE(data->dxgiAdapter);
@@ -873,12 +885,35 @@ D3D11_DestroyRenderer(SDL_Renderer * renderer)
         SAFE_RELEASE(data->clippedRasterizer);
         SAFE_RELEASE(data->vertexShaderConstants);
 
+        data->swapEffect = (DXGI_SWAP_EFFECT) 0;
+        data->rotation = DXGI_MODE_ROTATION_UNSPECIFIED;
+        data->currentRenderTargetView = NULL;
+        data->currentRasterizerState = NULL;
+        data->currentBlendState = NULL;
+        data->currentShader = NULL;
+        data->currentShaderResource = NULL;
+        data->currentSampler = NULL;
+
+        /* Unload the D3D libraries.  This should be done last, in order
+         * to prevent IUnknown::Release() calls from crashing.
+         */
         if (data->hD3D11Mod) {
             SDL_UnloadObject(data->hD3D11Mod);
+            data->hD3D11Mod = NULL;
         }
         if (data->hDXGIMod) {
             SDL_UnloadObject(data->hDXGIMod);
+            data->hDXGIMod = NULL;
         }
+    }
+}
+
+static void
+D3D11_DestroyRenderer(SDL_Renderer * renderer)
+{
+    D3D11_RenderData *data = (D3D11_RenderData *) renderer->driverdata;
+    D3D11_ReleaseAll(renderer);
+    if (data) {
         SDL_free(data);
     }
     SDL_free(renderer);
@@ -1417,6 +1452,8 @@ D3D11_CreateSwapChain(SDL_Renderer * renderer, int w, int h)
             WIN_SetErrorFromHRESULT(__FUNCTION__ ", IDXGIFactory2::CreateSwapChainForHwnd", result);
             goto done;
         }
+
+        IDXGIFactory_MakeWindowAssociation(data->dxgiFactory, windowinfo.info.win.window, DXGI_MWA_NO_WINDOW_CHANGES);
 #else
         SDL_SetError(__FUNCTION__", Unable to find something to attach a swap chain to");
         goto done;
@@ -1438,30 +1475,24 @@ D3D11_CreateWindowSizeDependentResources(SDL_Renderer * renderer)
     ID3D11Texture2D *backBuffer = NULL;
     HRESULT result = S_OK;
     int w, h;
-    BOOL swapDimensions;
 
     /* Release the previous render target view */
     D3D11_ReleaseMainRenderTargetView(renderer);
 
-    /* The width and height of the swap chain must be based on the window's
-     * landscape-oriented width and height. If the window is in a portrait
-     * rotation, the dimensions must be reversed.
+    /* The width and height of the swap chain must be based on the display's
+     * non-rotated size.
      */
     SDL_GetWindowSize(renderer->window, &w, &h);
     data->rotation = D3D11_GetCurrentRotation();
-
-#if WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP
-    swapDimensions = FALSE;
-#else
-    swapDimensions = D3D11_IsDisplayRotated90Degrees(data->rotation);
-#endif
-    if (swapDimensions) {
+    if (D3D11_IsDisplayRotated90Degrees(data->rotation)) {
         int tmp = w;
         w = h;
         h = tmp;
     }
 
     if (data->swapChain) {
+        /* IDXGISwapChain::ResizeBuffers is not available on Windows Phone 8. */
+#if !defined(__WINRT__) || (WINAPI_FAMILY != WINAPI_FAMILY_PHONE_APP)
         /* If the swap chain already exists, resize it. */
         result = IDXGISwapChain_ResizeBuffers(data->swapChain,
             0,
@@ -1469,10 +1500,19 @@ D3D11_CreateWindowSizeDependentResources(SDL_Renderer * renderer)
             DXGI_FORMAT_UNKNOWN,
             0
             );
-        if (FAILED(result)) {
+        if (result == DXGI_ERROR_DEVICE_REMOVED) {
+            /* If the device was removed for any reason, a new device and swap chain will need to be created. */
+            D3D11_HandleDeviceLost(renderer);
+
+            /* Everything is set up now. Do not continue execution of this method. HandleDeviceLost will reenter this method 
+             * and correctly set up the new device.
+             */
+            goto done;
+        } else if (FAILED(result)) {
             WIN_SetErrorFromHRESULT(__FUNCTION__ ", IDXGISwapChain::ResizeBuffers", result);
             goto done;
         }
+#endif
     } else {
         result = D3D11_CreateSwapChain(renderer, w, h);
         if (FAILED(result)) {
@@ -1542,7 +1582,7 @@ D3D11_HandleDeviceLost(SDL_Renderer * renderer)
     D3D11_RenderData *data = (D3D11_RenderData *) renderer->driverdata;
     HRESULT result = S_OK;
 
-    /* FIXME: Need to release all resources - all textures are invalid! */
+    D3D11_ReleaseAll(renderer);
 
     result = D3D11_CreateDeviceResources(renderer);
     if (FAILED(result)) {
@@ -1556,7 +1596,35 @@ D3D11_HandleDeviceLost(SDL_Renderer * renderer)
         return result;
     }
 
+    /* Let the application know that the device has been reset */
+    {
+        SDL_Event event;
+        event.type = SDL_RENDER_DEVICE_RESET;
+        SDL_PushEvent(&event);
+    }
+
     return S_OK;
+}
+
+void
+D3D11_Trim(SDL_Renderer * renderer)
+{
+#ifdef __WINRT__
+#if NTDDI_VERSION > NTDDI_WIN8
+    D3D11_RenderData *data = (D3D11_RenderData *)renderer->driverdata;
+    HRESULT result = S_OK;
+    IDXGIDevice3 *dxgiDevice = NULL;
+
+    result = ID3D11Device_QueryInterface(data->d3dDevice, &IID_IDXGIDevice3, &dxgiDevice);
+    if (FAILED(result)) {
+        //WIN_SetErrorFromHRESULT(__FUNCTION__ ", ID3D11Device to IDXGIDevice3", result);
+        return;
+    }
+
+    IDXGIDevice3_Trim(dxgiDevice);
+    SAFE_RELEASE(dxgiDevice);
+#endif
+#endif
 }
 
 static void

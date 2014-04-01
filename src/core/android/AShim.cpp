@@ -10,34 +10,37 @@ namespace Xli
     namespace PlatformSpecific
     {
         int AShim::kbVisible = 0;
-        bool AShim::midsCached = false;
 
-        void AShim::CacheMids()
+        jmethodID AShim::makeNoise;
+        jmethodID AShim::raiseKeyboard;
+        jmethodID AShim::hideKeyboard;
+        jmethodID AShim::showMessageBox;
+        jmethodID AShim::connectedToNetwork;
+        jmethodID AShim::newHttpConnection;
+        jmethodID AShim::httpGetOutputStream;
+        jmethodID AShim::httpGetInputStream;
+        jmethodID AShim::httpShowHeaders;
+        jmethodID AShim::initDefaultCookieManager;
+        jmethodID AShim::getAssetManager;
+
+        void AShim::CacheMids(JNIEnv *env, jclass shim_class)
         {
-            // if (!midsCached)
-            // {
-            //     makeNoiseMid = ;
-            //     raiseSoftKeyboardMid = ;
-            //     hideSoftKeyboardMid = ;
-            //     keyboardVisibleMid = ;
-            //     showMessageBoxMid = ;
-            //     connectedToNetworkMid = ;
-            //     xliToJavaHeadersMid = ;
-            //     sendHttpAsyncMid = ;
-            //     sendHttpAsyncMid = ;
-            //     sendHttpAsyncMid = ;
-            //     abortAsyncConnectionMid = ;
-            //     httpNewConnectionMid = ;
-            //     inputStreamToStringMid = ;
-            //     asyncInputStreamToStringMid = ;
-            //     asyncInputStreamToByteArrayMid = ;
-            //     readBytesFromInputStreamMid = ;
-            //     getAssetManagerMid = ;
-            //     registerNativeFunctionsMid = ;
-            //     androidToXliKeyEventMid = ;
-            //     handleSpecialAndroidKeyEventsMid = ;
-            //     initDefaultCookieManagerMid = ;
-            // }
+            makeNoise = env->GetStaticMethodID(shim_class, "makeNoise", "()V");
+            raiseKeyboard = env->GetStaticMethodID(shim_class, "raiseKeyboard", "(Landroid/app/NativeActivity;)V");
+            hideKeyboard = env->GetStaticMethodID(shim_class, "hideKeyboard", "(Landroid/app/NativeActivity;)V");
+            showMessageBox = env->GetStaticMethodID(shim_class, "ShowMessageBox", "(Landroid/app/NativeActivity;Ljava/lang/CharSequence;Ljava/lang/CharSequence;II)I");
+            connectedToNetwork = env->GetStaticMethodID(shim_class, "ConnectedToNetwork", "(Landroid/app/NativeActivity;)Z");
+            newHttpConnection = env->GetStaticMethodID(shim_class, "NewHttpConnection", "(Ljava/lang/String;Ljava/lang/String;Z)Ljava/net/HttpURLConnection;");
+            httpGetOutputStream = env->GetStaticMethodID(shim_class, "HttpGetOutputStream", "(Ljava/net/HttpURLConnection;)Ljava/io/OutputStream;");
+            httpGetInputStream = env->GetStaticMethodID(shim_class, "HttpGetInputStream", "(Ljava/net/HttpURLConnection;)Ljava/io/InputStream;");
+            httpShowHeaders = env->GetStaticMethodID(shim_class, "HttpShowHeaders","(Ljava/net/HttpURLConnection;)V");
+            initDefaultCookieManager = env->GetStaticMethodID(shim_class, "InitDefaultCookieManager", "()V");
+            getAssetManager = env->GetStaticMethodID(shim_class, "GetAssetManager", "(Landroid/app/NativeActivity;)Landroid/content/res/AssetManager;");
+
+            if ((!makeNoise) || (!raiseKeyboard) || (!hideKeyboard) || (!showMessageBox) || (!connectedToNetwork) || (!newHttpConnection) || (!httpGetOutputStream) || (!httpGetInputStream) || (!httpShowHeaders) || (!initDefaultCookieManager) || (!getAssetManager)) 
+            {
+                XLI_THROW("Cannot cache mids for shim. Exiting.");
+            }
         }
 
         void AShim::HandleSpecialAndroidKeyEvents(AKeyEvent androidKeyCode) 
@@ -53,18 +56,16 @@ namespace Xli
         void AShim::MakeNoise()
         {
             AJniHelper jni;
-            jclass shim_class = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shim_class, "makeNoise", "()V");
-            jni->CallObjectMethod(shim_class, mid);
+            jclass shim_class = jni.GetShim();            
+            jni->CallObjectMethod(shim_class, makeNoise);
         }
 
         void AShim::RaiseSoftKeyboard()
         {
             AJniHelper jni;
             jclass shim_class = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shim_class, "raiseKeyboard", "(Landroid/app/NativeActivity;)V");
             jobject activity = jni.GetInstance();
-            jni->CallObjectMethod(shim_class, mid, activity);
+            jni->CallObjectMethod(shim_class, raiseKeyboard, activity);
             kbVisible = 1;
         }
 
@@ -72,9 +73,8 @@ namespace Xli
         {
             AJniHelper jni;
             jclass shim_class = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shim_class, "hideKeyboard", "(Landroid/app/NativeActivity;)V");
             jobject activity = jni.GetInstance();
-            jni->CallObjectMethod(shim_class, mid, activity);
+            jni->CallObjectMethod(shim_class, hideKeyboard, activity);
             kbVisible = 0;
         }
 
@@ -88,7 +88,6 @@ namespace Xli
             //setup for call
             AJniHelper jni;
             jclass shim_class = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shim_class, "ShowMessageBox", "(Landroid/app/NativeActivity;Ljava/lang/CharSequence;Ljava/lang/CharSequence;II)I");
 
             //vars for call
             jobject activity = jni.GetInstance();
@@ -96,7 +95,7 @@ namespace Xli
             jstring jmessage = jni->NewStringUTF(message.DataPtr());
 
             //call
-            int result = (int)jni->CallObjectMethod(shim_class, mid, activity, jmessage, jcaption, (jint)buttons, (jint)hints);
+            int result = (int)jni->CallObjectMethod(shim_class, showMessageBox, activity, jmessage, jcaption, (jint)buttons, (jint)hints);
             return result;
         }
 
@@ -105,9 +104,8 @@ namespace Xli
             //setup for call
             AJniHelper jni;
             jclass shim_class = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shim_class, "ConnectedToNetwork", "(Landroid/app/NativeActivity;)Z");
             jobject activity = jni.GetInstance();
-            jobject jresult = jni->CallObjectMethod(shim_class, mid, activity);
+            jobject jresult = jni->CallObjectMethod(shim_class, connectedToNetwork, activity);
             bool result = (bool)jresult;
             jni->DeleteLocalRef(jresult);
             jni->DeleteLocalRef(activity);
@@ -185,6 +183,7 @@ namespace Xli
         {
             AJniHelper jni;
             jclass shim_class = jni.GetShim();
+
             jmethodID mid = jni->GetStaticMethodID(shim_class, "SendHttpAsync", "(Landroid/app/NativeActivity;Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/nio/ByteBuffer;IJ)Landroid/os/AsyncTask;");
             if (mid)
             {
@@ -286,6 +285,7 @@ namespace Xli
         {
             AJniHelper jni;
             jclass shim_class = jni.GetShim();
+
             jmethodID mid = jni->GetStaticMethodID(shim_class, "ReadBytesFromInputStream", "(Ljava/io/BufferedInputStream;I)[B");
             if (!mid) {
                 LOGE("Unable to get ReadBytesFromInputStream mid");
@@ -308,9 +308,7 @@ namespace Xli
         {
             AJniHelper jni;
             jclass shim_class = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shim_class, "InitDefaultCookieManager", "()V");
-            if (!mid) LOGE("Unable to get InitDefaultCookieManager, cant get mid");
-            jni->CallObjectMethod(shim_class, mid);
+            jni->CallObjectMethod(shim_class, initDefaultCookieManager);
         }
 
 
@@ -318,8 +316,6 @@ namespace Xli
         {
             AJniHelper jni;
             jclass shim_class = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shim_class, "GetAssetManager", "(Landroid/app/NativeActivity;)Landroid/content/res/AssetManager;");
-            if (!mid) LOGE("Unable to GetAssetManager, cant get mid");
             jobject activity = jni.GetInstance();
             jobject assetManager = jni->CallObjectMethod(shim_class, mid, activity);
             assetManager = reinterpret_cast<jobject>(jni->NewGlobalRef(assetManager));

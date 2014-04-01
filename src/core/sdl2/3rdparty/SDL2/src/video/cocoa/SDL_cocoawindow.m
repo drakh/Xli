@@ -587,6 +587,8 @@ SetWindowStyle(SDL_Window * window, unsigned int style)
 
     inFullscreenTransition = NO;
 
+    [nswindow setLevel:kCGNormalWindowLevel];
+
     if (pendingWindowOperation == PENDING_OPERATION_ENTER_FULLSCREEN) {
         pendingWindowOperation = PENDING_OPERATION_NONE;
         [self setFullscreenSpace:YES];
@@ -610,6 +612,11 @@ SetWindowStyle(SDL_Window * window, unsigned int style)
         window->w = 0;
         window->h = 0;
         [self windowDidResize:aNotification];
+
+        /* FIXME: Why does the window get hidden? */
+        if (window->flags & SDL_WINDOW_SHOWN) {
+            Cocoa_ShowWindow(SDL_GetVideoDevice(), window);
+        }
     }
 }
 
@@ -1457,9 +1464,7 @@ Cocoa_SetWindowGrab(_THIS, SDL_Window * window, SDL_bool grabbed)
         CGDisplayMoveCursorToPoint(kCGDirectMainDisplay, cgpoint);
     }
 
-    if ( window->flags & SDL_WINDOW_FULLSCREEN ) {
-        SDL_WindowData *data = (SDL_WindowData *) window->driverdata;
-
+    if ( data && (window->flags & SDL_WINDOW_FULLSCREEN) ) {
         if (SDL_ShouldAllowTopmost() && (window->flags & SDL_WINDOW_INPUT_FOCUS)) {
             /* OpenGL is rendering to the window, so make it visible! */
             [data->nswindow setLevel:CGShieldingWindowLevel()];
