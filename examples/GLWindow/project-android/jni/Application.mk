@@ -6,3 +6,6 @@ APP_PLATFORM := android-9
 
 # Required for including std library headers
 APP_STL := stlport_static
+
+# Debug build
+APP_OPTIM := debug

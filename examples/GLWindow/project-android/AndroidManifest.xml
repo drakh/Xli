@@ -14,7 +14,9 @@
     <application android:label="GLWindow"
                  android:allowBackup="false"
                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-                 android:hardwareAccelerated="true">
+                 android:hardwareAccelerated="true"
+                 android:debuggable="true"
+                 >
         <activity android:name="GLWindow" 
         		android:label="GLWindow"
                 android:configChanges="orientation|keyboardHidden"

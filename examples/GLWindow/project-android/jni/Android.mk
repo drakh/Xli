@@ -53,7 +53,7 @@ LOCAL_SRC_FILES := \
 
 LOCAL_C_INCLUDES := ../../../include
 
-LOCAL_CFLAGS   := -fexceptions -fno-rtti -fPIC -DPIC -O3 -Wno-invalid-offsetof
+LOCAL_CFLAGS   := -fexceptions -fno-rtti
 LOCAL_LDLIBS   := -lm -lGLESv2 -landroid -llog
 
 LOCAL_WHOLE_STATIC_LIBRARIES := XliMain
