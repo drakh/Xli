@@ -36,7 +36,13 @@ SOURCE="projects/android"
 TARGET="lib/android"
 
 cd "$SOURCE"
-ndk-build -j $JOB_COUNT "$@"
+
+if [ "$OSTYPE" = "msys" ]; then
+    cmd "/c call ndk-build -j $JOB_COUNT $@"
+else
+    ndk-build -j $JOB_COUNT "$@"
+fi
+
 cd "$OLDPWD"
 
 if which rsync > /dev/null 2>&1; then
