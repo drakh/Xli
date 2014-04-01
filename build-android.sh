@@ -2,6 +2,8 @@
 set -e
 cd "`dirname "$0"`"
 
+DEBUG=0
+
 case $1 in
 clean)
     rm -rfv projects/android/libs
@@ -39,7 +41,11 @@ TARGET="lib/android"
 cd "$SOURCE"
 
 if [ "$OSTYPE" = "msys" ]; then
-    cmd "/c call ndk-build -j $JOB_COUNT $@"
+    if [ "$DEBUG" = "1" ]; then
+        cmd "/c call ndk-build -j $JOB_COUNT APP_OPTIM=debug"
+    else
+        cmd "/c call ndk-build -j $JOB_COUNT"
+    fi
 else
     ndk-build -j $JOB_COUNT "$@"
 fi
@@ -55,7 +61,9 @@ fi
 for arch in "armeabi" "armeabi-v7a" "x86"; do
     if [ -d "$SOURCE/obj/local/$arch" ]; then
         mkdir -p "$TARGET/$arch"
-        if [ "$DEBUG" = 1 ]; then
+
+        # Note: Copy from 'obj' folder instead of 'libs' if DEBUG -- Non-stripped .so-s there
+        if [ "$DEBUG" = "1" ]; then
             $CP_CMD "$SOURCE/obj/local/$arch/"*.a "$SOURCE/obj/local/$arch/"*.so "$TARGET/$arch"
         else
             $CP_CMD "$SOURCE/obj/local/$arch/"*.a "$SOURCE/libs/$arch/"*.so "$TARGET/$arch"

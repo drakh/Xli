@@ -7,7 +7,7 @@ LOCAL_SRC_FILES := \
 LOCAL_C_INCLUDES := \
     ../../include \
 
-LOCAL_CFLAGS   := -fexceptions -fno-rtti -fPIC -DPIC
+LOCAL_CFLAGS   := -fexceptions -fno-rtti
 LOCAL_LDLIBS   := -lEGL -lGLESv2 -landroid
 
 LOCAL_SHARED_LIBRARIES := Xli

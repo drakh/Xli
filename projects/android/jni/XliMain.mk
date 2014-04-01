@@ -8,6 +8,6 @@ LOCAL_SRC_FILES := \
 LOCAL_C_INCLUDES := \
     ../../include
 
-LOCAL_CFLAGS   := -fexceptions -fno-rtti -fPIC -DPIC
+LOCAL_CFLAGS   := -fexceptions -fno-rtti
 
 include $(BUILD_STATIC_LIBRARY)
