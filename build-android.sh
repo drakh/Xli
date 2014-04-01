@@ -1,4 +1,4 @@
-#!/bin/sh	
+#!/bin/sh    
 set -e
 cd "`dirname "$0"`"
 
@@ -18,6 +18,7 @@ shim)
     ;;
 --debug)
     shift
+    DEBUG=1
     set APP_OPTIM=debug "$@"
     ;;
 esac
@@ -46,14 +47,18 @@ fi
 cd "$OLDPWD"
 
 if which rsync > /dev/null 2>&1; then
-	CP_CMD="rsync -vru"
+    CP_CMD="rsync -vru"
 else
-	CP_CMD="cp -vru"
+    CP_CMD="cp -vru"
 fi
 
 for arch in "armeabi" "armeabi-v7a" "x86"; do
-	if [ -d "$SOURCE/obj/local/$arch" ]; then
+    if [ -d "$SOURCE/obj/local/$arch" ]; then
         mkdir -p "$TARGET/$arch"
-		$CP_CMD "$SOURCE/obj/local/$arch/"*.a "$SOURCE/libs/$arch/"*.so "$TARGET/$arch"
-	fi
+        if [ "$DEBUG" = 1 ]; then
+            $CP_CMD "$SOURCE/obj/local/$arch/"*.a "$SOURCE/obj/local/$arch/"*.so "$TARGET/$arch"
+        else
+            $CP_CMD "$SOURCE/obj/local/$arch/"*.a "$SOURCE/libs/$arch/"*.so "$TARGET/$arch"
+        fi
+    fi
 done
