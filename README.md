@@ -28,8 +28,8 @@ Library documentation can be generated using `doxygen`.
 
 ### Prerequisites
 
-- Android NDK (ndk-build must be available in $PATH)
-- UNIX Shell
+- Android NDK (`ndk-build` must be available in PATH)
+- Unix Shell (Windows only)
 
 ### Instructions - OS X, Linux, MSYS
 
@@ -44,9 +44,9 @@ Debug binaries can be produced by replacing command in step 2 with `./build-andr
 
 ### Instructions - Windows
 
-Windows users need a way to execute the `build-android.sh` UNIX shell script. This can be done using MSYS or Cygwin.
+Windows users need a way to execute unix shell scripts. This can be done using i.e. [MSYS](http://www.mingw.org/wiki/MSYS).
 
-Uno users can use the UnoNativeBuildEnv installer provided by Outracks. It contains both MSYS and the Android NDK. Use `start.bat` and then type `bash -li` to open a bash shell. Then follow the instructions above.
+Uno users can use the *Uno Native Build environment* provided by Outracks, containing both MSYS and the Android NDK. Open `start.bat`, type `bash -li` to get a bash shell, then follow the instructions given above.
 
 
 ## Linux
@@ -64,7 +64,7 @@ Uno users can use the UnoNativeBuildEnv installer provided by Outracks. It conta
 - portaudio
 - SDL2
 
-`apt-get` users can execute `sudo apt-get install -y libpng12-dev libjpeg-dev libfreetype6-dev libglew-dev portaudio19-dev libcurl4-openssl-dev cmake g++`
+**apt-get** users can execute `sudo apt-get install -y libpng12-dev libjpeg-dev libfreetype6-dev libglew-dev portaudio19-dev libcurl4-openssl-dev cmake g++`
 
 SDL2 can be built and installed from source. Instructions here: http://libsdl.org
 
@@ -74,7 +74,7 @@ SDL2 can be built and installed from source. Instructions here: http://libsdl.or
 2. Execute `./build.sh`
    * This should produce .so files located here:
      - `lib/linux/x86_$ARCH/`
-4. Optional step: `./build.sh install`
+3. Optional step: `./build.sh install`
 
 Debug binaries can be produced by replacing command in step 2 with `./build.sh --debug`.
 
@@ -90,7 +90,7 @@ List of available options can be shown using `./build.sh --help`.
 - cmake
 - portaudio (universal)
 
-MacPorts users can execute `sudo port install cmake portaudio +universal`
+**MacPorts** users can execute `sudo port install cmake portaudio +universal`
 
 ### Instructions - Command line
 
