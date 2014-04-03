@@ -7,7 +7,7 @@ set -e
 cd "`dirname "$0"`/project-android"
 
 # Build Xli
-../../../build-android.sh
+../../../build-android.sh --debug
 
 # Build .so
 ndk-build

@@ -90,6 +90,16 @@ namespace Xli
     public:
         virtual void OnResponse(HttpRequest* request) = 0;
     };
+    class HttpStringPulledHandler : public Object
+    {
+    public:
+        virtual void OnResponse(HttpRequest* request, String content) = 0;
+    };
+    class HttpArrayPulledHandler : public Object
+    {
+    public:
+        virtual void OnResponse(HttpRequest* request, void* content, long byteLength) = 0;
+    };
 
     //------------------------------
 
@@ -144,6 +154,8 @@ namespace Xli
         virtual void SetProgressCallback(HttpProgressHandler* callback) = 0;
         virtual void SetTimeoutCallback(HttpTimeoutHandler* callback) = 0;
         virtual void SetErrorCallback(HttpErrorHandler* callback) = 0;
+        virtual void SetStringPulledCallback(HttpStringPulledHandler* callback) = 0;
+        virtual void SetArrayPulledCallback(HttpArrayPulledHandler* callback) = 0;
 
         virtual void Send(void* content, long byteLength) = 0;
         virtual void Send(String content) = 0;
@@ -152,11 +164,11 @@ namespace Xli
         virtual void Abort() = 0;
 
         virtual void PullContentString() = 0;
-        virtual String GetContentString() = 0;
+        /* virtual String GetContentString() = 0; */
 
         virtual void PullContentArray() = 0;
-        virtual void* GetContentArray() = 0;
-        virtual long GetContentArrayLength() = 0;
+        /* virtual void* GetContentArray() = 0; */
+        /* virtual long GetContentArrayLength() = 0; */
     };
 }
 

@@ -12,6 +12,7 @@ namespace Xli
     private:
         String url;
         int timeout;
+        virtual void EmitStateEvent();
     public:
         // the following fields should be private but due to having to set
         // them through the callbacks they aren't
@@ -19,6 +20,8 @@ namespace Xli
         Managed< HttpProgressHandler > progressCallback;
         Managed< HttpTimeoutHandler > timeoutCallback;
         Managed< HttpErrorHandler > errorCallback;
+        Managed< HttpStringPulledHandler > stringPulledCallback;
+        Managed< HttpArrayPulledHandler > arrayPulledCallback;
         HashMap<String,String> headers;
         HashMap<String,String> responseHeaders;
         HttpRequestState status;
@@ -32,6 +35,7 @@ namespace Xli
         void* cachedContentArray;
         long cachedContentArrayLength;
         bool completedSuccessfully;
+        bool arrayBody;        
 
         AHttpRequest() 
         {
@@ -42,6 +46,7 @@ namespace Xli
             this->javaAsyncHandle = 0;
             this->javaContentHandle = 0;
             this->cachedContentArray = 0;
+            this->arrayBody = false;
         }
 
         AHttpRequest(String url, HttpMethodType method) 
@@ -53,6 +58,7 @@ namespace Xli
             this->javaAsyncHandle = 0;
             this->javaContentHandle = 0;
             this->cachedContentArray = 0;
+            this->arrayBody = false;
         }
 
         virtual ~AHttpRequest()
@@ -304,31 +310,52 @@ namespace Xli
             }
         }
 
+        virtual void SetStringPulledCallback(HttpStringPulledHandler* callback)
+        {
+            if (this->status == HttpUnsent)
+            {
+                this->stringPulledCallback = callback;
+            } else {
+                XLI_THROW("HttpRequest->SetStringPulledCallback(): Not in a valid state to set the callback");
+            }
+        }
+
+        virtual void SetArrayPulledCallback(HttpArrayPulledHandler* callback)
+        {
+            if (this->status == HttpUnsent)
+            {
+                this->arrayPulledCallback = callback;
+            } else {
+                XLI_THROW("HttpRequest->SetArrayPulledCallback(): Not in a valid state to set the callback");
+            }
+        }
+        
         virtual void Send(void* content, long byteLength)
         {
             this->status = HttpSent;
-            if (this->stateChangedCallback!=0) this->stateChangedCallback->OnResponse(this, this->status);
+            if (this->stateChangedCallback!=0) this->EmitStateEvent();
+
             javaAsyncHandle = PlatformSpecific::AShim::SendHttpAsync(this, content, byteLength);
         }
 
         virtual void Send(String content)
         {
             this->status = HttpSent;
-            if (this->stateChangedCallback!=0) this->stateChangedCallback->OnResponse(this, this->status);
+            if (this->stateChangedCallback!=0) this->EmitStateEvent();
             javaAsyncHandle = PlatformSpecific::AShim::SendHttpAsync(this, content);
         }
 
         virtual void Send()
         {
             this->status = HttpSent;
-            if (this->stateChangedCallback!=0) this->stateChangedCallback->OnResponse(this, this->status);
+            if (this->stateChangedCallback!=0) this->EmitStateEvent();
             javaAsyncHandle = PlatformSpecific::AShim::SendHttpAsync(this);
         }
         
         virtual void Abort()
         {
             this->status = HttpDone;
-            if (this->stateChangedCallback!=0) this->stateChangedCallback->OnResponse(this, this->status);
+            if (this->stateChangedCallback!=0) this->EmitStateEvent();
             if (javaAsyncHandle != 0)
                 PlatformSpecific::AShim::AbortAsyncConnection(javaAsyncHandle);
             javaContentHandle = 0;
@@ -340,43 +367,45 @@ namespace Xli
             if ((this->status==HttpHeadersReceived) && (this->javaContentHandle))
             {
                 this->status = HttpLoading;
-                if (this->stateChangedCallback!=0) this->stateChangedCallback->OnResponse(this, this->status);
+                if (this->stateChangedCallback!=0) this->EmitStateEvent();
+                this->arrayBody = false;
                 this-> javaAsyncHandle = Xli::PlatformSpecific::AShim::AsyncInputStreamToString(this->javaContentHandle, this);
             } else {
                 XLI_THROW("HttpRequest->PullContentString(): Not in a valid state to pull the content string");
             }
         }
-        virtual String GetContentString()
-        {
-            if (this->status == HttpDone)
-                return this->cachedContentString;
-            XLI_THROW("HttpRequest->GetContentString(): Request must be completed before retrieving the content string");
-        }        
+        // virtual String GetContentString()
+        // {
+        //     if (this->status == HttpDone)
+        //         return this->cachedContentString;
+        //     XLI_THROW("HttpRequest->GetContentString(): Request must be completed before retrieving the content string");
+        // }        
 
         virtual void PullContentArray()
         {    
             if ((this->status==HttpHeadersReceived) && (this->javaContentHandle))
             {
                 this->status = HttpLoading;
-                if (this->stateChangedCallback!=0) this->stateChangedCallback->OnResponse(this, this->status);
+                if (this->stateChangedCallback!=0) this->EmitStateEvent();
+                this->arrayBody = true;
                 this-> javaAsyncHandle = Xli::PlatformSpecific::AShim::AsyncInputStreamToByteArray(this->javaContentHandle, this);
             } else {
                 XLI_THROW("HttpRequest->PullContentArray(): Not in valid state for pulling the content array");
             }
         }
-        virtual void* GetContentArray()
-        {            
-            if (this->status == HttpDone)
-                return this->cachedContentArray;
+        // virtual void* GetContentArray()
+        // {            
+        //     if (this->status == HttpDone)
+        //         return this->cachedContentArray;
 
-            XLI_THROW("HttpRequest->GetContentArray(): Request must be complete before getting the content array");
-        }
-        virtual long GetContentArrayLength()
-        {
-            if ((this->status == HttpDone) && (this->cachedContentArray!=0))
-                return this->cachedContentArrayLength;
-            XLI_THROW("HttpRequest->GetContentArrayLength(): Not in valid state for pulling the content array");
-        }
+        //     XLI_THROW("HttpRequest->GetContentArray(): Request must be complete before getting the content array");
+        // }
+        // virtual long GetContentArrayLength()
+        // {
+        //     if ((this->status == HttpDone) && (this->cachedContentArray!=0))
+        //         return this->cachedContentArrayLength;
+        //     XLI_THROW("HttpRequest->GetContentArrayLength(): Not in valid state for pulling the content array");
+        // }
     };
 
     namespace PlatformSpecific
@@ -465,6 +494,18 @@ namespace Xli
                     this->Request->status = this->Status;
                     if (this->Request->stateChangedCallback!=0)
                         this->Request->stateChangedCallback->OnResponse(this->Request, this->Status);
+                    if (this->Status == HttpDone)
+                    {
+                        if (this->Request->arrayBody)
+                        {
+                            if (this->Request->cachedContentArray && this->Request->arrayPulledCallback)
+                            {
+                                this->Request->arrayPulledCallback->OnResponse(this->Request, this->Request->cachedContentArray, this->Request->cachedContentArrayLength);
+                            }
+                        } else if (this->Request->stringPulledCallback) {
+                            this->Request->stringPulledCallback->OnResponse(this->Request, this->Request->cachedContentString);
+                        }
+                    }
                 }
             }
         };
@@ -650,6 +691,15 @@ extern "C"
 
 namespace Xli
 {
+
+    void AHttpRequest::EmitStateEvent()
+    {
+        Xli::CTEvent* event = new Xli::CTEvent();
+        event->CTType = Xli::CTActionEvent;
+        event->Code = -1;
+        event->Payload = (void*)(new Xli::PlatformSpecific::AHttpResponseHandlerAction(this, this->status));
+        GlobalWindow->EnqueueCrossThreadEvent(event);
+    }
 
     static int HttpInitialized = 0;
     static void InitAndroidHttp()

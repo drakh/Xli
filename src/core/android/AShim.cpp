@@ -16,9 +16,6 @@ namespace Xli
         jmethodID AShim::hideKeyboard;
         jmethodID AShim::showMessageBox;
         jmethodID AShim::connectedToNetwork;
-        jmethodID AShim::newHttpConnection;
-        jmethodID AShim::httpGetOutputStream;
-        jmethodID AShim::httpGetInputStream;
         jmethodID AShim::httpShowHeaders;
         jmethodID AShim::initDefaultCookieManager;
         jmethodID AShim::getAssetManager;
@@ -30,14 +27,32 @@ namespace Xli
             hideKeyboard = env->GetStaticMethodID(shim_class, "hideKeyboard", "(Landroid/app/NativeActivity;)V");
             showMessageBox = env->GetStaticMethodID(shim_class, "ShowMessageBox", "(Landroid/app/NativeActivity;Ljava/lang/CharSequence;Ljava/lang/CharSequence;II)I");
             connectedToNetwork = env->GetStaticMethodID(shim_class, "ConnectedToNetwork", "(Landroid/app/NativeActivity;)Z");
-            newHttpConnection = env->GetStaticMethodID(shim_class, "NewHttpConnection", "(Ljava/lang/String;Ljava/lang/String;Z)Ljava/net/HttpURLConnection;");
-            httpGetOutputStream = env->GetStaticMethodID(shim_class, "HttpGetOutputStream", "(Ljava/net/HttpURLConnection;)Ljava/io/OutputStream;");
-            httpGetInputStream = env->GetStaticMethodID(shim_class, "HttpGetInputStream", "(Ljava/net/HttpURLConnection;)Ljava/io/InputStream;");
-            httpShowHeaders = env->GetStaticMethodID(shim_class, "HttpShowHeaders","(Ljava/net/HttpURLConnection;)V");
             initDefaultCookieManager = env->GetStaticMethodID(shim_class, "InitDefaultCookieManager", "()V");
             getAssetManager = env->GetStaticMethodID(shim_class, "GetAssetManager", "(Landroid/app/NativeActivity;)Landroid/content/res/AssetManager;");
 
-            if ((!makeNoise) || (!raiseKeyboard) || (!hideKeyboard) || (!showMessageBox) || (!connectedToNetwork) || (!newHttpConnection) || (!httpGetOutputStream) || (!httpGetInputStream) || (!httpShowHeaders) || (!initDefaultCookieManager) || (!getAssetManager)) 
+            if (!makeNoise) {
+                XLI_THROW("Cannot cache mid for makeNoise.");
+            }
+            if (!raiseKeyboard) {
+                XLI_THROW("Cannot cache mid for raiseKeyboard.");
+            }
+            if (!hideKeyboard) {
+                XLI_THROW("Cannot cache mid for hideKeyboard.");
+            }
+            if (!showMessageBox) {
+                XLI_THROW("Cannot cache mid for showMessageBox.");
+            }
+            if (!connectedToNetwork) {
+                XLI_THROW("Cannot cache mid for connectedToNetwork.");
+            }
+            if (!initDefaultCookieManager) {
+                XLI_THROW("Cannot cache mid for initDefaultCookieManager.");
+            }
+            if (!getAssetManager) {
+                XLI_THROW("Cannot cache mid for getAssetManager.");
+            }
+
+            if ((!makeNoise) || (!raiseKeyboard) || (!hideKeyboard) || (!showMessageBox) || (!connectedToNetwork) || (!initDefaultCookieManager) || (!getAssetManager)) 
             {
                 XLI_THROW("Cannot cache mids for shim. Exiting.");
             }
@@ -312,13 +327,13 @@ namespace Xli
         }
 
 
-        AAssetManager* AShim::GetAssetManager()
-        {
+        AAssetManager* AShim::GetAssetManager() 
+        { 
             AJniHelper jni;
             jclass shim_class = jni.GetShim();
             jobject activity = jni.GetInstance();
-            jobject assetManager = jni->CallObjectMethod(shim_class, mid, activity);
-            assetManager = reinterpret_cast<jobject>(jni->NewGlobalRef(assetManager));
+            jobject assetManager = jni->CallObjectMethod(shim_class, getAssetManager, activity);
+            jni->NewGlobalRef(assetManager);
             AAssetManager* result = AAssetManager_fromJava(jni.GetEnv(), assetManager);
             return result;
         }
