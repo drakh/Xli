@@ -17,6 +17,8 @@ namespace Xli
         Managed< HttpProgressHandler > progressCallback;
         Managed< HttpTimeoutHandler > timeoutCallback;
         Managed< HttpErrorHandler > errorCallback;
+        Managed< HttpStringPulledHandler > stringPulledCallback;
+        Managed< HttpArrayPulledHandler > arrayPulledCallback;
         HashMap<String,String> headers;
         HashMap<String,String> responseHeaders;
         HttpRequestState status;
@@ -34,12 +36,45 @@ namespace Xli
         
         bool dataReady;
         bool reading;
-        bool contentAsString; // {TODO} use this
+        bool contentAsString;
         int readPosition;
         String cachedContentString;
         CFWriteStreamRef cachedContentStream;
-    public:
 
+        virtual void* getContentArray() 
+        {            
+            if (this->status == HttpDone && !this->errored && !this->contentAsString)
+            {
+                CFStringRef prop = CFSTR("kCFStreamPropertyDataWritten");
+                CFDataRef streamDataHandle = (CFDataRef)CFWriteStreamCopyProperty(this->cachedContentStream, prop);
+                long len = CFDataGetLength(streamDataHandle);
+                this->readPosition = len;
+                
+                void* data = malloc(len);
+                CFDataGetBytes(streamDataHandle, CFRangeMake(0,len), (UInt8*)data);
+
+                CFWriteStreamClose(this->cachedContentStream);
+                CFRelease(this->cachedContentStream);
+                CFRelease(streamDataHandle);//{TODO} test this
+                this->cachedContentStream = 0;
+                return data;
+            }
+            NSLog(@"Cant get content array"); // {TODO} error needed here
+            return 0;
+        }
+        virtual long getContentArrayLength()
+        {
+            if ((this->status == HttpDone) && (!this->errored) && (!this->contentAsString))
+            {
+                CFStringRef prop = CFSTR("kCFStreamPropertyDataWritten");
+                CFDataRef streamDataHandle = (CFDataRef)CFWriteStreamCopyProperty(this->cachedContentStream, prop);
+                this->readPosition = CFDataGetLength(streamDataHandle);
+                return this->readPosition;
+            }
+            NSLog(@"Cant get content array length");
+            return -1; // {TODO} throw error?
+        }
+    public:
         CHttpRequest() 
         {
             this->status = HttpUnsent;
@@ -320,6 +355,24 @@ namespace Xli
                 XLI_THROW("HttpRequest->SetErrorCallback(): Not in a valid state to set the callback");
             }
         }
+        virtual void SetStringPulledCallback(HttpStringPulledHandler* callback)
+        {
+            if (this->status == HttpUnsent)
+            {
+                this->stringPulledCallback = callback;
+            } else {
+                XLI_THROW("HttpRequest->SetStringPulledCallback(): Not in a valid state to set the callback");
+            }
+        }
+        virtual void SetArrayPulledCallback(HttpArrayPulledHandler* callback)
+        {
+            if (this->status == HttpUnsent)
+            {
+                this->arrayPulledCallback = callback;
+            } else {
+                XLI_THROW("HttpRequest->SetArrayPulledCallback(): Not in a valid state to set the callback");
+            }
+        }
 
         virtual void Send(void* content, long byteLength)
         {
@@ -471,15 +524,8 @@ namespace Xli
                 NSLog(@"Cant pull content string"); //{TODO} proper error here
             }
         }
-        virtual String GetContentString()
-        {
-            if (this->status == HttpDone)
-                return this->cachedContentString;
-            NSLog(@"Cant get content string");
-            return ""; // {TODO} throw error?
-        }        
 
-        virtual void PullContentArray() // {TODO} this needs to be a byte array async
+        virtual void PullContentArray() 
         {    
             if ((this->status==HttpHeadersReceived) && (this->cachedContentStream == 0))
             {
@@ -494,36 +540,6 @@ namespace Xli
             } else {
                 NSLog(@"Cant pull content array"); //{TODO} proper error here
             }
-        }
-        virtual void* GetContentArray() // {TODO} this needs to be a byte array async
-        {            
-            if (this->status == HttpDone && !this->errored && !this->contentAsString)
-            {
-                CFStringRef prop = CFSTR("kCFStreamPropertyDataWritten");
-                CFDataRef streamDataHandle = (CFDataRef)CFWriteStreamCopyProperty(this->cachedContentStream, prop);
-                long len = CFDataGetLength(streamDataHandle);
-                this->readPosition = len;
-                
-                void* data = malloc(len);
-                CFDataGetBytes(streamDataHandle, CFRangeMake(0,len), (UInt8*)data);
-
-                CFWriteStreamClose(this->cachedContentStream);
-                CFRelease(this->cachedContentStream);
-                CFRelease(streamDataHandle);//{TODO} test this
-                this->cachedContentStream = 0;
-                return data;
-            }
-            NSLog(@"Cant get content array"); // {TODO} error needed here
-            return 0;
-        }
-        virtual long GetContentArrayLength()
-        {
-            if ((this->status == HttpDone) && (!this->errored) && (!this->contentAsString))
-            {
-                return this->readPosition;
-            }
-            NSLog(@"Cant get content array length");
-            return -1; // {TODO} throw error?
         }
 
         virtual void NHeadersToHeaders(CFDictionaryRef dictRef)
@@ -663,8 +679,7 @@ namespace Xli
                         CHttpRequest::OnStringProgress(request, stream, event);
                     } else {
                         CHttpRequest::OnByteProgress(request, stream, event);
-                    }
-                    
+                    }                    
                 } else {
                     request->dataReady = true;
                 }
@@ -681,6 +696,13 @@ namespace Xli
                 {
                     CFReadStreamClose(request->cachedReadStream);
                     CFRelease(request->cachedReadStream);
+                }
+                if (request->contentAsString) {
+                    if (request->stringPulledCallback!=0)
+                        request->stringPulledCallback->OnResponse(request, request->cachedContentString);
+                } else {    
+                    if (request->arrayPulledCallback!=0)
+                        request->arrayPulledCallback->OnResponse(request, request->getContentArray(), (long)request->getContentArrayLength());
                 }
                 break;
             }
