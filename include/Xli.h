@@ -17,10 +17,6 @@
     \brief Console, streams, file systems, memory mapping
     \ingroup Xli
 
-    \defgroup XliCoreMath Math
-    \brief Vectors, matrices and random numbers
-    \ingroup Xli
-
     \defgroup XliCorePlatform Platform
     \brief Windows and input devices
     \ingroup Xli
@@ -50,7 +46,6 @@
 #include <Xli/Array.h>
 #include <Xli/ArrayStream.h>
 #include <Xli/Atomic.h>
-#include <Xli/IntTypes.h>
 #include <Xli/BinaryReader.h>
 #include <Xli/BinaryWriter.h>
 #include <Xli/Buffer.h>
@@ -68,16 +63,13 @@
 #include <Xli/File.h>
 #include <Xli/FileSystem.h>
 #include <Xli/HashMap.h>
+#include <Xli/IntTypes.h>
 #include <Xli/Managed.h>
-#include <Xli/Math.h>
-#include <Xli/Matrix3.h>
-#include <Xli/Matrix4.h>
 #include <Xli/MessageBox.h>
 #include <Xli/Mutex.h>
 #include <Xli/Object.h>
 #include <Xli/Map.h>
 #include <Xli/Path.h>
-#include <Xli/Quaternion.h>
 #include <Xli/Queue.h>
 #include <Xli/Random.h>
 #include <Xli/Rectangle.h>

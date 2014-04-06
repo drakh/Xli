@@ -8,7 +8,7 @@
 namespace Xli
 {
     /**
-        \ingroup XliCoreMath
+        \ingroup Xli
 
         A simple 32-bit pseudo-random number generator
     */
@@ -63,7 +63,7 @@ namespace Xli
     };
 
     /**
-        \addtogroup XliCoreMath
+        \addtogroup Xli
         @{
     */
 
