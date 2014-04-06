@@ -1,7 +1,7 @@
 #ifndef __XLI_VECTOR2_H__
 #define __XLI_VECTOR2_H__
 
-#include <Xli/BaseTypes.h>
+#include <Xli/IntTypes.h>
 #include <Xli/Exception.h>
 #include <Xli/String.h>
 

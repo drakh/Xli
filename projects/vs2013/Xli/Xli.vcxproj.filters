@@ -220,7 +220,7 @@
     <ClInclude Include="..\..\..\include\Xli\Traits.h">
       <Filter>Xli</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\Xli\BaseTypes.h">
+    <ClInclude Include="..\..\..\include\Xli\IntTypes.h">
       <Filter>Xli</Filter>
     </ClInclude>
   </ItemGroup>

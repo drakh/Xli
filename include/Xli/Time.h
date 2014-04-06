@@ -1,7 +1,7 @@
 #ifndef __XLI_PLATFORM_TIME_H__
 #define __XLI_PLATFORM_TIME_H__
 
-#include <Xli/BaseTypes.h>
+#include <Xli/IntTypes.h>
 
 namespace Xli
 {

@@ -1,7 +1,7 @@
 #ifndef __XLI_DATE_TIME_H__
 #define __XLI_DATE_TIME_H__
 
-#include <Xli/BaseTypes.h>
+#include <Xli/IntTypes.h>
 #include <Xli/String.h>
 
 namespace Xli
