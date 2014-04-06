@@ -50,7 +50,7 @@
 #include <Xli/Array.h>
 #include <Xli/ArrayStream.h>
 #include <Xli/Atomic.h>
-#include <Xli/BaseTypes.h>
+#include <Xli/IntTypes.h>
 #include <Xli/BinaryReader.h>
 #include <Xli/BinaryWriter.h>
 #include <Xli/Buffer.h>

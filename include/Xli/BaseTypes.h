@@ -1,5 +1,5 @@
-#ifndef __XLI_BASE_TYPES_H__
-#define __XLI_BASE_TYPES_H__
+#ifndef __XLI_INT_TYPES_H__
+#define __XLI_INT_TYPES_H__
 
 #include <Xli/Config.h>
 
@@ -28,6 +28,15 @@ namespace Xli
 
     typedef UInt32 Utf32;
     typedef UInt64 Timestamp;
+
+    static const Int8 Int8Max = 0x7f;
+    static const UInt8 UInt8Max = 0xff;
+    static const Int16 Int16Max = 0x7fff;
+    static const UInt16 UInt16Max = 0xffff;
+    static const Int32 Int32Max = 0x7fffffff;
+    static const UInt32 UInt32Max = 0xffffffff;
+    static const Int64 Int64Max = 0x7fffffffffffffffll;
+    static const UInt64 UInt64Max = 0xffffffffffffffffull;
 
     /** @} */
 

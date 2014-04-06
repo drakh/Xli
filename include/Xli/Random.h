@@ -1,7 +1,6 @@
 #ifndef __XLI_RANDOM_H__
 #define __XLI_RANDOM_H__
 
-#include <Xli/Math.h>
 #include <Xli/Vector2.h>
 #include <Xli/Vector3.h>
 #include <Xli/Vector4.h>

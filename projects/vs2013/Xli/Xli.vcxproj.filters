@@ -45,18 +45,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\Xli\Math.h">
-      <Filter>Xli\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Xli\Matrix3.h">
-      <Filter>Xli\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Xli\Matrix4.h">
-      <Filter>Xli\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Xli\Quaternion.h">
-      <Filter>Xli\Math</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\Xli\Random.h">
       <Filter>Xli\Math</Filter>
     </ClInclude>
@@ -89,9 +77,6 @@
       <Filter>3rdparty</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\Xli\DataType.h">
-      <Filter>Xli</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\Xli\BaseTypes.h">
       <Filter>Xli</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\Xli\Object.h">
@@ -235,6 +220,9 @@
     <ClInclude Include="..\..\..\include\Xli\Traits.h">
       <Filter>Xli</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\Xli\BaseTypes.h">
+      <Filter>Xli</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\core\Random.cpp">
@@ -353,15 +341,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\core\TextWriter.cpp">
       <Filter>Xli\IO</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\core\Matrix4.cpp">
-      <Filter>Xli\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\core\Quaternion.cpp">
-      <Filter>Xli\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\core\Matrix3.cpp">
-      <Filter>Xli\Math</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\core\String.cpp">
       <Filter>Xli</Filter>

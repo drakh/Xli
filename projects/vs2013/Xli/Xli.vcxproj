@@ -230,10 +230,6 @@
     <ClInclude Include="..\..\..\include\Xli\Unicode.h" />
     <ClInclude Include="..\..\..\include\Xli\Utf16String.h" />
     <ClInclude Include="..\..\..\include\Xli\Utils.h" />
-    <ClInclude Include="..\..\..\include\Xli\Math.h" />
-    <ClInclude Include="..\..\..\include\Xli\Matrix3.h" />
-    <ClInclude Include="..\..\..\include\Xli\Matrix4.h" />
-    <ClInclude Include="..\..\..\include\Xli\Quaternion.h" />
     <ClInclude Include="..\..\..\include\Xli\Random.h" />
     <ClInclude Include="..\..\..\include\Xli\Rectangle.h" />
     <ClInclude Include="..\..\..\include\Xli\Vector2.h" />
@@ -320,8 +316,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\core\Matrix3.cpp" />
-    <ClCompile Include="..\..\..\src\core\Matrix4.cpp" />
     <ClCompile Include="..\..\..\src\core\MessageBox.cpp" />
     <ClCompile Include="..\..\..\src\core\Object.cpp" />
     <ClCompile Include="..\..\..\src\core\Path.cpp" />
@@ -355,7 +349,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\core\Quaternion.cpp" />
     <ClCompile Include="..\..\..\src\core\sdl2\SDL2Display.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>

@@ -289,26 +289,6 @@ namespace Xli
     typedef Vector4t<UInt16> Vector4u16;
     typedef Vector4t<UInt8> Vector4u8;
 
-    XLI_INLINE float Dot(const Vector4& v1, const Vector4& v2)
-    {
-        return v1.X * v2.X + v1.Y * v2.Y + v1.Z * v2.Z + v1.W * v2.W;
-    }
-
-    XLI_INLINE float LengthSquared(const Vector4& v)
-    {
-        return Dot(v, v);
-    }
-
-    XLI_INLINE float Length(const Vector4& v)
-    {
-        return Sqrt(Dot(v, v));
-    }
-
-    XLI_INLINE Vector4 Normalize(const Vector4& v)
-    {
-        return v / Length(v);
-    }
-
     /** @} */
 }
 
