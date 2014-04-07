@@ -2,7 +2,7 @@
 
 namespace Xli
 {
-    GLContextAttributes::GLContextAttributes(const Vector4i& colorBits, int depthBits, int stencilBits, int samples, Vector4i& accumBits, int buffers, bool stereo)
+    GLContextAttributes::GLContextAttributes(const Vector4i& colorBits, int depthBits, int stencilBits, int samples, const Vector4i& accumBits, int buffers, bool stereo)
     {
         ColorBits = colorBits;
         DepthBits = depthBits;

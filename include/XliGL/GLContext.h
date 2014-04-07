@@ -16,7 +16,7 @@ namespace Xli
         int Buffers;
         bool Stereo;
 
-        GLContextAttributes(const Vector4i& colorBits, int depthBits, int stencilBits, int samples, Vector4i& accumBits, int buffers, bool stereo);
+        GLContextAttributes(const Vector4i& colorBits, int depthBits, int stencilBits, int samples, const Vector4i& accumBits, int buffers, bool stereo);
 
         static const GLContextAttributes& Default();
     };

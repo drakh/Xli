@@ -2,8 +2,9 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := XliGL
 
 LOCAL_SRC_FILES := \
+    ../../../src/gl/GLContext.cpp \
     ../../../src/gl/egl/EGLContext.cpp \
-    
+
 LOCAL_C_INCLUDES := \
     ../../include \
 
