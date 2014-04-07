@@ -31,7 +31,10 @@ public:
 
 		// Setup OpenGL
 
-		this->gl = GLContext::Create(wnd, 16);
+        GLContextAttributes glAttribs = GLContextAttributes::Default();
+        glAttribs.Samples = 16;
+
+        this->gl = GLContext::Create(wnd, glAttribs);
 
 		glClearColor(1,0,0,1);
 
@@ -46,8 +49,9 @@ public:
 		PrintLine((String)"OpenGL Vendor: " + (const char*)glGetString(GL_VENDOR));
 		PrintLine((String)"OpenGL Renderer: " + (const char*)glGetString(GL_RENDERER));
 		PrintLine((String)"OpenGL Version: " + (const char*)glGetString(GL_VERSION));
-		PrintLine((String)"OpenGL Multisamples: " + gl->GetMultiSamples());
-		PrintLine((String)"OpenGL Swap Interval: " + gl->GetSwapInterval());
+        PrintLine((String)"OpenGL Backbuffer Size: " + gl->GetBackbufferSize().ToString());
+        PrintLine((String)"OpenGL Swap Interval: " + gl->GetSwapInterval());
+        PrintLine((String)"OpenGL Samples: " + gl->GetSamples());
     
 		PrintLine((String)"FileSystem Working Dir: " + Disk->GetCurrentDirectory());
 		PrintLine((String)"FileSystem Documents: " + Disk->GetSystemDirectory(SystemDirectoryDocuments));
