@@ -42,5 +42,8 @@
     <ClCompile Include="..\..\..\src\gl\egl\EGLContext.cpp">
       <Filter>XliGL\egl</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\gl\GLContext.cpp">
+      <Filter>XliGL</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
