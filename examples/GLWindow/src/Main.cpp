@@ -51,7 +51,7 @@ public:
 		PrintLine((String)"OpenGL Vendor: " + (const char*)glGetString(GL_VENDOR));
 		PrintLine((String)"OpenGL Renderer: " + (const char*)glGetString(GL_RENDERER));
 		PrintLine((String)"OpenGL Version: " + (const char*)glGetString(GL_VERSION));
-        PrintLine((String)"OpenGL Backbuffer Size: " + gl->GetBackbufferSize().ToString());
+        PrintLine((String)"OpenGL Drawable Size: " + gl->GetDrawableSize().ToString());
         PrintLine((String)"OpenGL Swap Interval: " + gl->GetSwapInterval());
         PrintLine((String)"OpenGL Color Bits: " + glAttribs.ColorBits.ToString());
         PrintLine((String)"OpenGL Depth Bits: " + glAttribs.DepthBits);

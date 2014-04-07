@@ -35,7 +35,7 @@ namespace Xli
         virtual Window* GetWindow() = 0;
 
         virtual void GetAttributes(GLContextAttributes& result) = 0;
-        virtual Vector2i GetBackbufferSize() = 0;
+        virtual Vector2i GetDrawableSize() = 0;
 
         virtual void MakeCurrent(bool current) = 0;
         virtual bool IsCurrent() = 0;

@@ -179,7 +179,7 @@ namespace Xli
             return swapInterval;
         }
 
-        virtual Vector2i GetBackbufferSize()
+        virtual Vector2i GetDrawableSize()
         {
             return window->GetClientSize();
         }

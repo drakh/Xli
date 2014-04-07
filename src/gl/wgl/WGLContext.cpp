@@ -126,10 +126,7 @@ namespace Xli
                 ZeroMemory(&pfd, sizeof(PIXELFORMATDESCRIPTOR));
                 pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
                 pfd.nVersion = 1;
-                pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL;
-
-                if (attribs.Buffers > 1)
-                    pfd.dwFlags |= PFD_DOUBLEBUFFER;
+                pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
 
                 if (attribs.Stereo)
                     pfd.dwFlags |= PFD_STEREO;
@@ -248,7 +245,7 @@ namespace Xli
                 return wglGetSwapIntervalEXT ? wglGetSwapIntervalEXT() : -1;
             }
 
-            virtual Vector2i GetBackbufferSize()
+            virtual Vector2i GetDrawableSize()
             {
                 return window->GetClientSize();
             }
@@ -267,7 +264,8 @@ namespace Xli
                 ZeroMemory(&result, sizeof(GLContextAttributes));
                 wglGetPixelFormatAttribivARB(hDC, pf, 0, 11, iattribs, (int*)&result);
 
-                result.Buffers = (pfd.dwFlags & PFD_DOUBLEBUFFER) ? 2 : 1;
+                // TODO
+                result.Buffers = 2;
                 result.Stereo = false;
             }
         };
