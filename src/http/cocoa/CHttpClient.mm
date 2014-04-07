@@ -798,19 +798,8 @@ namespace Xli
         }
     };
     
-    class CHttpClient : public HttpClient
+    HttpRequest* HttpRequest::Create()
     {
-    public:
-        CHttpClient() {}
-        virtual ~CHttpClient() {}
-        virtual HttpRequest* NewRequest()
-        {
-            return new CHttpRequest();
-        }
-    };
-    
-    HttpClient* HttpClient::Create()
-    {
-        return new CHttpClient();
+        return new CHttpRequest();
     }
 }

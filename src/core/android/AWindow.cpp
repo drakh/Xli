@@ -28,7 +28,7 @@ namespace Xli
         
         class AWindow: public Window
         {
-            MutexQueue<CTEvent*> ctEventQueue;
+            MutexQueue<WindowAction*> ctActionQueue;
         
         public:
             AWindow()
@@ -214,41 +214,18 @@ namespace Xli
             {
             }
             
-            virtual void EnqueueCrossThreadEvent(CTEvent* event)
+            virtual void EnqueueCrossThreadEvent(WindowAction* action)
             {
-                ctEventQueue.Enqueue(event);
+                ctActionQueue.Enqueue(action);
             }
 
             virtual void ProcessCrossThreadEvents()
             {
-                while ((ctEventQueue.Count() > 0))
+                while ((ctActionQueue.Count() > 0))
                 {
-                    CTEvent* event = ctEventQueue.Dequeue();
-                    switch (event->CTType)
-                    {
-                    case Xli::CTTextEvent:
-                        GlobalEventHandler->OnTextInput(GlobalWindow, *((Xli::String*)event->Payload));
-                        delete ((Xli::String*)event->Payload);
-                        break;
-                    case Xli::CTKeyUpEvent:
-                        GlobalEventHandler->OnKeyUp(GlobalWindow, Xli::PlatformSpecific::AShim::AndroidToXliKeyEvent((Xli::PlatformSpecific::AKeyEvent)event->Code));
-                        break;
-                    case Xli::CTKeyDownEvent:
-                        GlobalEventHandler->OnKeyDown(GlobalWindow, Xli::PlatformSpecific::AShim::AndroidToXliKeyEvent((Xli::PlatformSpecific::AKeyEvent)event->Code));
-                        break;
-                    case Xli::CTActionEvent:
-                        ((AWindowAction*)event->Payload)->Execute();
-                        break;
-                    case Xli::CTThrowEvent:
-                        LOGE("XLI: JAVA THROWN ERROR: %s", ((String*)event->Payload)->DataPtr());
-                        XLI_THROW(((String*)event->Payload)->DataPtr());
-                        break;
-                    default:
-                        LOGF("XLI: Unknown cross thread event (id=%i)\n", event->CTType);
-                        break;
-                    }
-                    
-                    delete event;
+                    WindowAction* action = ctActionQueue.Dequeue();
+                    action->Execute();
+                    delete action;
                 }
             }
         };

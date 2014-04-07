@@ -132,10 +132,15 @@ namespace Xli
             virtual bool Init(AStreamType streamType, jobject javaStream);
         };
 
-        class AWindowAction : public Object
-        {
-        public:
-            virtual void Execute() = 0;
+        class CTError : WindowAction
+        {        
+            String message;
+            CTError(String message) { this->message = message; }
+            virtual void Execute()
+            {
+                LOGE("XLI: ", this->message->DataPtr());
+                XLI_THROW(this->message->DataPtr());
+            }
         };
 
         /**
@@ -446,6 +451,23 @@ namespace Xli
             static Key AndroidToXliKeyEvent(AKeyEvent keyEvent);
             static void HandleSpecialAndroidKeyEvents(AKeyEvent androidKeyCode);
             static void InitDefaultCookieManager();
+        };
+        class CTKeyAction : WindowAction
+        {
+            Xli::Key KeyEvent;
+            bool KeyDown;
+            CTKeyAction(AKeyEvent keyEvent, keyDown) 
+            { 
+                this->KeyEvent = AShim::AndroidToXliKeyEvent(keyEvent);
+                this->KeyDown = keyDown;
+            }
+            virtual void Execute();
+        };
+        class CTTextAction : WindowAction
+        {
+            String Text;
+            CTKeyAction(String text) { this->Text; }
+            virtual void Execute();
         };
 
         /**

@@ -410,7 +410,7 @@ namespace Xli
 
     namespace PlatformSpecific
     {
-        class AHttpTimeoutAction : public AWindowAction
+        class AHttpTimeoutAction : public WindowAction
         {    
         public:
             AHttpRequest* Request;
@@ -426,7 +426,7 @@ namespace Xli
                     this->Request->timeoutCallback->OnResponse(this->Request);                
             }
         };
-        class AHttpProgressAction : public AWindowAction
+        class AHttpProgressAction : public WindowAction
         {    
         public:
             AHttpRequest* Request;
@@ -448,7 +448,7 @@ namespace Xli
                     this->Request->progressCallback->OnResponse(this->Request, this->Position, this->TotalLength, this->LengthKnown);
             }
         };
-        class AHttpErrorAction : public AWindowAction
+        class AHttpErrorAction : public WindowAction
         {    
         public:
             AHttpRequest* Request;
@@ -468,7 +468,7 @@ namespace Xli
                     this->Request->errorCallback->OnResponse(this->Request, this->ErrorCode, this->ErrorMessage);
             }
         };
-        class AHttpResponseHandlerAction : public AWindowAction
+        class AHttpResponseHandlerAction : public WindowAction
         {    
         public:
             AHttpRequest* Request;
@@ -514,13 +514,10 @@ namespace Xli
 
 extern "C"
 {
-    void XliJ_CrossHttpThreadThrow(Xli::String message)
+    void CrossHttpThreadThrow(Xli::String message)
     {
-        Xli::CTEvent* event = new Xli::CTEvent();
-        event->CTType = Xli::CTThrowEvent;
-        event->Code = -1;
-        event->Payload = new Xli::String(message);
-        GlobalWindow->EnqueueCrossThreadEvent(event);
+        String emess = String("JAVA THROWN ERROR: ") + message;
+        GlobalWindow->EnqueueCrossThreadEvent(new Xli::PlatformSpecific::CTError(emess));
     }
 
     void JNICALL XliJ_HttpCallback (JNIEnv *env , jobject obj, jobject body,
@@ -581,11 +578,7 @@ extern "C"
             env->DeleteLocalRef(headers);
             request->javaAsyncHandle = 0;
 
-            Xli::CTEvent* event = new Xli::CTEvent();
-            event->CTType = Xli::CTActionEvent;
-            event->Code = -1;
-            event->Payload = (void*)(new Xli::PlatformSpecific::AHttpResponseHandlerAction(request, Xli::HttpHeadersReceived));
-            GlobalWindow->EnqueueCrossThreadEvent(event);
+            GlobalWindow->EnqueueCrossThreadEvent(new Xli::PlatformSpecific::AHttpResponseHandlerAction(request, Xli::HttpHeadersReceived));
 
         } else {
             XliJ_CrossHttpThreadThrow("XliJ_HttpCallback: Request pointer was not given to callback");
@@ -598,12 +591,8 @@ extern "C"
             Xli::AHttpRequest* request = ((Xli::AHttpRequest*)((void*)requestPointer));
             char const* ccontent = env->GetStringUTFChars(content, NULL);
             request->cachedContentString = ccontent;
-            env->ReleaseStringUTFChars(content, ccontent);
-            Xli::CTEvent* event = new Xli::CTEvent();
-            event->CTType = Xli::CTActionEvent;
-            event->Code = -1;
-            event->Payload = (void*)(new Xli::PlatformSpecific::AHttpResponseHandlerAction(request, Xli::HttpDone, true));
-            GlobalWindow->EnqueueCrossThreadEvent(event);
+            env->ReleaseStringUTFChars(content, ccontent);            
+            GlobalWindow->EnqueueCrossThreadEvent(new Xli::PlatformSpecific::AHttpResponseHandlerAction(request, Xli::HttpDone, true));
         } else {
             LOGE("No callback pointer error");
             XliJ_CrossHttpThreadThrow("XliJ_HttpContentStringCallback: Request pointer was not given to callback");
@@ -623,13 +612,8 @@ extern "C"
                 request->cachedContentArrayLength = (long)len;
                 env->DeleteLocalRef(content);
                 env->DeleteLocalRef((jobject)len);
-            }
-
-            Xli::CTEvent* event = new Xli::CTEvent();
-            event->CTType = Xli::CTActionEvent;
-            event->Code = -1;
-            event->Payload = (void*)(new Xli::PlatformSpecific::AHttpResponseHandlerAction(request, Xli::HttpDone, true));
-            GlobalWindow->EnqueueCrossThreadEvent(event);
+            }            
+            GlobalWindow->EnqueueCrossThreadEvent(new Xli::PlatformSpecific::AHttpResponseHandlerAction(request, Xli::HttpDone, true));
         } else {
             XliJ_CrossHttpThreadThrow("XliJ_HttpContentByteArrayCallback: Request pointer was not given to callback");
         }
@@ -640,12 +624,7 @@ extern "C"
         if (requestPointer)
         {
             Xli::AHttpRequest* request = ((Xli::AHttpRequest*)((void*)requestPointer));
-
-            Xli::CTEvent* event = new Xli::CTEvent();
-            event->CTType = Xli::CTActionEvent;
-            event->Code = -1;
-            event->Payload = (void*)(new Xli::PlatformSpecific::AHttpTimeoutAction(request));
-            GlobalWindow->EnqueueCrossThreadEvent(event);
+            GlobalWindow->EnqueueCrossThreadEvent(new Xli::PlatformSpecific::AHttpTimeoutAction(request));
         } else {
             XliJ_CrossHttpThreadThrow("XliJ_HttpTimeoutCallback: Request pointer was not given to callback");
         }
@@ -657,15 +636,11 @@ extern "C"
         {
             Xli::AHttpRequest* request = ((Xli::AHttpRequest*)((void*)requestPointer));
 
-            Xli::CTEvent* event = new Xli::CTEvent();
-            event->CTType = Xli::CTActionEvent;
-            event->Code = -1;
-
             char const* cerrorMessage = env->GetStringUTFChars(errorMessage, NULL);
-            event->Payload = (void*)(new Xli::PlatformSpecific::AHttpErrorAction(request, (int)errorCode, Xli::String(cerrorMessage)));
+            Xli::PlatformSpecific::AHttpErrorAction err =  new Xli::PlatformSpecific::AHttpErrorAction(request, (int)errorCode, Xli::String(cerrorMessage)));
             env->ReleaseStringUTFChars(errorMessage, cerrorMessage);
 
-            GlobalWindow->EnqueueCrossThreadEvent(event);
+            GlobalWindow->EnqueueCrossThreadEvent(err);
         } else {
             XliJ_CrossHttpThreadThrow("XliJ_HttpErrorCallback: Request pointer was not given to callback");
         }
@@ -676,12 +651,7 @@ extern "C"
         if (requestPointer)
         {
             Xli::AHttpRequest* request = ((Xli::AHttpRequest*)((void*)requestPointer));
-
-            Xli::CTEvent* event = new Xli::CTEvent();
-            event->CTType = Xli::CTActionEvent;
-            event->Code = -1;
-            event->Payload = (void*)(new Xli::PlatformSpecific::AHttpProgressAction(request, position, totalLength, lengthKnown));
-            GlobalWindow->EnqueueCrossThreadEvent(event);
+            GlobalWindow->EnqueueCrossThreadEvent(new Xli::PlatformSpecific::AHttpProgressAction(request, position, totalLength, lengthKnown));
         } else {
             XliJ_CrossHttpThreadThrow("XliJ_HttpProgressCallback: Request pointer was not given to callback");
         }
@@ -694,11 +664,7 @@ namespace Xli
 
     void AHttpRequest::EmitStateEvent()
     {
-        Xli::CTEvent* event = new Xli::CTEvent();
-        event->CTType = Xli::CTActionEvent;
-        event->Code = -1;
-        event->Payload = (void*)(new Xli::PlatformSpecific::AHttpResponseHandlerAction(this, this->status));
-        GlobalWindow->EnqueueCrossThreadEvent(event);
+        GlobalWindow->EnqueueCrossThreadEvent(new Xli::PlatformSpecific::AHttpResponseHandlerAction(this, this->status));
     }
 
     static int HttpInitialized = 0;
@@ -726,20 +692,9 @@ namespace Xli
         }
     }
 
-    class AHttpClient : public HttpClient
-    {
-    public:
-        AHttpClient() {}
-        virtual ~AHttpClient() {}
-        virtual HttpRequest* NewRequest()
-        {
-            return new AHttpRequest();
-        }
-    };
-
-    HttpClient* HttpClient::Create()
+    HttpRequest* HttpRequest::Create()
     {
         if (!HttpInitialized) InitAndroidHttp();
-        return new AHttpClient();
+        return new AHttpRequest();
     }
 };

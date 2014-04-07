@@ -3,9 +3,26 @@
 #include <curl/curl.h>
 
 namespace Xli
-{
-    CURLcode curlGlobalCode;
+{    
+    class CurlHook
+    {
+    public:
+        static int HttpInitialized = 0;
+        CURLcode CurlGlobalCode;
 
+        static void Init()
+        {
+            if (!HttpInitialized)
+            {
+                CurlGlobalCode = curl_global_init(CURL_GLOBAL_ALL);
+                HttpInitialized = 1;
+            }
+        }
+        static void Close()
+        {
+            curl_global_cleanup();
+        }
+    };
 
     class CurlHttpRequest : public HttpRequest
     {
@@ -312,8 +329,6 @@ namespace Xli
             javaAsyncHandle = PlatformSpecific::AShim::SendHttpAsync(this, content);
         }
 
-
-        
         virtual void Send()
         {
             CURL* curl = curl_easy_init();
@@ -385,30 +400,9 @@ namespace Xli
         }
     };
 
-    static int HttpInitialized = 0;
-    static void InitAndroidHttp()
+    HttpRequest* HttpRequest::Create()
     {
-        if (!HttpInitialized)
-        {
-            curlGlobalCode = curl_global_init(CURL_GLOBAL_ALL);
-            HttpInitialized = 1;
-        }
-    }
-
-    class CurlHttpClient : public HttpClient
-    {
-    public:
-        CurlHttpClient() {}
-        virtual ~CurlHttpClient() {}
-        virtual HttpRequest* NewRequest()
-        {
-            return new CurlHttpRequest();
-        }
-    };
-
-    HttpClient* HttpClient::Create()
-    {
-        if (!HttpInitialized) InitAndroidHttp();
-        return new CurlHttpClient();
+        if (!HttpInitialized) CurlHook.Init();
+        return new CurlHttpRequest();
     }
 }

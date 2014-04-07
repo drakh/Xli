@@ -103,19 +103,10 @@ namespace Xli
 
     //------------------------------
 
-    class HttpClient : public Object
-    {
-    public:
-        virtual HttpRequest* NewRequest() = 0;
-        static HttpClient* Create();       
-    };
-
-    //------------------------------
-
     class HttpRequest : public Object
     {
     public:
-        static HttpRequest* Create(String url, HttpMethodType method, const HttpClient* client=NULL);       
+        static HttpRequest* Create();
 
         virtual HttpRequestState GetStatus() const = 0;
 
