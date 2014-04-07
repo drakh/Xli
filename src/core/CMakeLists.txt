@@ -14,12 +14,9 @@ set(Sources
     Exception.cpp
     File.cpp
     FileSystem.cpp
-    Matrix3.cpp
-    Matrix4.cpp
     MessageBox.cpp
     Object.cpp
     Path.cpp
-    Quaternion.cpp
     Random.cpp
     Stream.cpp
     StringBuilder.cpp

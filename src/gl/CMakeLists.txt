@@ -3,7 +3,7 @@ if (WIN32)
  
 else()
 
-    set(Sources sdl2/SDL2GLContext.cpp)
+    set(Sources GLContext.cpp sdl2/SDL2GLContext.cpp)
 
     add_definitions(-DXLI_HAS_GLEW)
 

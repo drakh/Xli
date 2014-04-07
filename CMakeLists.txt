@@ -3,6 +3,7 @@ project("Xli Library")
 cmake_minimum_required(VERSION 2.6)
 
 include(cmake/library_setup.cmake)
+
 include_directories(${PROJECT_SOURCE_DIR}/include)
 link_directories(${LIBRARY_OUTPUT_PATH})
 
@@ -18,5 +19,4 @@ add_subdirectory(src/media)
 add_subdirectory(src/audio)
 add_subdirectory(src/main)
 add_subdirectory(src/gl)
-add_subdirectory(src/gl_helper)
 add_subdirectory(src/http)
