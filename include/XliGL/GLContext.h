@@ -29,27 +29,21 @@ namespace Xli
     public:
         static GLContext* Create(Window* window, const GLContextAttributes& attribs);
 
-        virtual ~GLContext() {}
-
         virtual GLContext* CreateSharedContext() = 0;
 
         virtual void SetWindow(Window* window) = 0;
+        virtual Window* GetWindow() = 0;
 
-        virtual void MakeCurrent(bool current) = 0;
-        virtual void SwapBuffers() = 0;
-
-        /**
-            Sets the swap interval.
-            @param interval 1 enables VSync, 0 disables VSync
-            @return true on success, false on failure
-        */
-        virtual bool SetSwapInterval(int interval) = 0;
-
-        virtual int GetSwapInterval() = 0;
-
+        virtual void GetAttributes(GLContextAttributes& result) = 0;
         virtual Vector2i GetBackbufferSize() = 0;
 
-        virtual int GetSamples() = 0;
+        virtual void MakeCurrent(bool current) = 0;
+        virtual bool IsCurrent() = 0;
+
+        virtual void SwapBuffers() = 0;
+
+        virtual void SetSwapInterval(int value) = 0;
+        virtual int GetSwapInterval() = 0;
     };
 }
 

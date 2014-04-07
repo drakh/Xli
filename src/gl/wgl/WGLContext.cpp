@@ -195,6 +195,11 @@ namespace Xli
                 return new WGLContext(this);
             }
 
+            virtual Window* GetWindow()
+            {
+                return window;
+            }
+
             virtual void SetWindow(Window* window)
             {
                 if (window->GetImplementation() != WindowImplementationWin32) 
@@ -223,19 +228,24 @@ namespace Xli
                     XLI_THROW("Unable to make OpenGL context current: " + Win32Helpers::GetLastErrorString());
             }
 
+            virtual bool IsCurrent()
+            {
+                return wglGetCurrentContext() == hGLRC;
+            }
+
             virtual void SwapBuffers()
             {
                 ::SwapBuffers(hDC);
             }
 
-            virtual bool SetSwapInterval(int interval)
+            virtual void SetSwapInterval(int interval)
             {
-                return wglSwapIntervalEXT && wglSwapIntervalEXT(interval) == TRUE;
+                wglSwapIntervalEXT && wglSwapIntervalEXT(interval);
             }
 
             virtual int GetSwapInterval()
             {
-                return wglGetSwapIntervalEXT ? wglGetSwapIntervalEXT() : 0;
+                return wglGetSwapIntervalEXT ? wglGetSwapIntervalEXT() : -1;
             }
 
             virtual Vector2i GetBackbufferSize()
@@ -243,12 +253,22 @@ namespace Xli
                 return window->GetClientSize();
             }
 
-            virtual int GetSamples()
+            virtual void GetAttributes(GLContextAttributes& result)
             {
-                int attr = WGL_SAMPLES_ARB;
-                int samples = 0;
-                wglGetPixelFormatAttribivARB(hDC, pf, 0, 1, &attr, &samples);
-                return samples;
+                int iattribs[] =
+                {
+                    WGL_RED_BITS_ARB, WGL_GREEN_BITS_ARB, WGL_BLUE_BITS_ARB, WGL_ALPHA_BITS_ARB,
+                    WGL_DEPTH_BITS_ARB,
+                    WGL_STENCIL_BITS_ARB,
+                    WGL_SAMPLES_ARB,
+                    WGL_ACCUM_RED_BITS_ARB, WGL_ACCUM_GREEN_BITS_ARB, WGL_ACCUM_BLUE_BITS_ARB, WGL_ACCUM_ALPHA_BITS_ARB,
+                };
+
+                ZeroMemory(&result, sizeof(GLContextAttributes));
+                wglGetPixelFormatAttribivARB(hDC, pf, 0, 11, iattribs, (int*)&result);
+
+                result.Buffers = (pfd.dwFlags & PFD_DOUBLEBUFFER) ? 2 : 1;
+                result.Stereo = false;
             }
         };
     }

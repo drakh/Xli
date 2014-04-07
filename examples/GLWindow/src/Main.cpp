@@ -34,7 +34,8 @@ public:
         GLContextAttributes glAttribs = GLContextAttributes::Default();
         glAttribs.Samples = 16;
 
-        this->gl = GLContext::Create(wnd, glAttribs);
+        gl = GLContext::Create(wnd, glAttribs);
+        gl->GetAttributes(glAttribs);
 
 		glClearColor(1,0,0,1);
 
@@ -51,7 +52,12 @@ public:
 		PrintLine((String)"OpenGL Version: " + (const char*)glGetString(GL_VERSION));
         PrintLine((String)"OpenGL Backbuffer Size: " + gl->GetBackbufferSize().ToString());
         PrintLine((String)"OpenGL Swap Interval: " + gl->GetSwapInterval());
-        PrintLine((String)"OpenGL Samples: " + gl->GetSamples());
+        PrintLine((String)"OpenGL Color Bits: " + glAttribs.ColorBits.ToString());
+        PrintLine((String)"OpenGL Depth Bits: " + glAttribs.DepthBits);
+        PrintLine((String)"OpenGL Stencil Bits: " + glAttribs.StencilBits);
+        PrintLine((String)"OpenGL Accum Bits: " + glAttribs.AccumBits.ToString());
+        PrintLine((String)"OpenGL Buffers: " + glAttribs.Buffers);
+        PrintLine((String)"OpenGL Stereo: " + String::FromBool(glAttribs.Stereo));
     
 		PrintLine((String)"FileSystem Working Dir: " + Disk->GetCurrentDirectory());
 		PrintLine((String)"FileSystem Documents: " + Disk->GetSystemDirectory(SystemDirectoryDocuments));

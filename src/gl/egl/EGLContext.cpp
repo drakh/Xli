@@ -1,6 +1,7 @@
 #include <XliGL.h>
 #include <Xli/Shared.h>
 #include <EGL/egl.h>
+#include <stdlib.h>
 
 #ifdef XLI_PLATFORM_ANDROID
 # include <android/native_window.h>
@@ -16,6 +17,7 @@ namespace Xli
         EGLSurface surface;
         EGLContext context;
         EGLConfig config;
+        int swapInterval;
 
     public:
         EglContext(Window* wnd, const GLContextAttributes& attribs)
@@ -28,7 +30,6 @@ namespace Xli
 
             const EGLint iattribs[] =
             {
-                
                 EGL_RED_SIZE, 5,
                 EGL_GREEN_SIZE, 6,
                 EGL_BLUE_SIZE, 5,
@@ -59,7 +60,10 @@ namespace Xli
                 eglGetConfigAttrib(display, configs[i], EGL_GREEN_SIZE, &g);
                 eglGetConfigAttrib(display, configs[i], EGL_BLUE_SIZE, &b);
                 eglGetConfigAttrib(display, configs[i], EGL_ALPHA_SIZE, &a);
+
+#ifdef XLI_DEBUG
                 ErrorPrintLine(String::Format("EGL Config %d:  M %d  D %d  S %d  B %d  R %d  G %d  B %d  A %d", i, samples, depth, stencil, buffer, r, g, b, a));
+#endif
 
                 if (samples >= cs && depth >= cd && buffer >= cb && 
                     samples <= attribs.Samples && r <= attribs.ColorBits.R && g <= attribs.ColorBits.G && b <= attribs.ColorBits.B && a <= attribs.ColorBits.A)
@@ -71,10 +75,31 @@ namespace Xli
                 }
             }
 
+#ifdef XLI_DEBUG
             ErrorPrintLine((String)"Selected EGL config: " + (int)cc);
+#endif
+
             config = configs[cc];
+            swapInterval = -1;
 
             SetWindow(wnd);
+            
+        }
+
+        virtual ~EglContext()
+        {
+            if (display != EGL_NO_DISPLAY)
+            {
+                eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+
+                if (context != EGL_NO_CONTEXT)
+                    eglDestroyContext(display, context);
+
+                if (surface != EGL_NO_SURFACE)
+                    eglDestroySurface(display, surface);
+
+                eglTerminate(display);
+            }
         }
 
         virtual void SetWindow(Window* window)
@@ -115,20 +140,9 @@ namespace Xli
             MakeCurrent(true);
         }
 
-        virtual ~EglContext()
+        virtual Window* GetWindow()
         {
-            if (display != EGL_NO_DISPLAY)
-            {
-                eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-                
-                if (context != EGL_NO_CONTEXT) 
-                    eglDestroyContext(display, context);
-                
-                if (surface != EGL_NO_SURFACE) 
-                    eglDestroySurface(display, surface);
-                
-                eglTerminate(display);
-            }
+            return window;
         }
 
         virtual GLContext* CreateSharedContext()
@@ -142,26 +156,41 @@ namespace Xli
                 XLI_THROW("Unable to make EGL context current");
         }
 
+        virtual bool IsCurrent()
+        {
+            return eglGetCurrentContext() == context;
+        }
+
         virtual void SwapBuffers()
         {
             eglSwapBuffers(display, surface);
         }
         
-        virtual bool SetSwapInterval(int interval)
+        virtual void SetSwapInterval(int value)
         {
-            return eglSwapInterval(display, interval) == EGL_TRUE;
+            if (eglSwapInterval(display, value))
+                swapInterval = value;
         }
 
         virtual int GetSwapInterval()
         {
-            return -1;
+            return swapInterval;
         }
 
-        virtual int GetSamples()
+        virtual void GetAttributes(GLContextAttributes& result)
         {
-            EGLint samples;
-            eglGetConfigAttrib(display, config, EGL_SAMPLES, &samples);
-            return samples;
+            memset(&result, 0, sizeof(GLContextAttributes));
+            eglGetConfigAttrib(display, config, EGL_RED_SIZE, &result.ColorBits.R);
+            eglGetConfigAttrib(display, config, EGL_GREEN_SIZE, &result.ColorBits.G);
+            eglGetConfigAttrib(display, config, EGL_BLUE_SIZE, &result.ColorBits.B);
+            eglGetConfigAttrib(display, config, EGL_ALPHA_SIZE, &result.ColorBits.A);
+            eglGetConfigAttrib(display, config, EGL_DEPTH_SIZE, &result.DepthBits);
+            eglGetConfigAttrib(display, config, EGL_STENCIL_SIZE, &result.StencilBits);
+            eglGetConfigAttrib(display, config, EGL_SAMPLES, &result.Samples);
+
+            // TODO:
+            result.Buffers = 2;
+            result.Stereo = false;
         }
 
         virtual Vector2i GetBackbufferSize()
