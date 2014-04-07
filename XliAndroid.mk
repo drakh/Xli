@@ -34,12 +34,3 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := XliGL
 LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXliGL.so
 include $(PREBUILT_SHARED_LIBRARY)
-
-
-# libXliGLHelper.so
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := XliGLHelper
-
-LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXliGLHelper.so
-include $(PREBUILT_SHARED_LIBRARY)	

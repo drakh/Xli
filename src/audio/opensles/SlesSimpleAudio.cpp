@@ -5,6 +5,7 @@
 #include <SLES/OpenSLES.h>
 #include <SLES/OpenSLES_Android.h>
 #include <assert.h>
+#include <math.h>
 
 extern Xli::PlatformSpecific::SlesAudioEngine* GlobalAAudioEngine = 0;
 
