@@ -11,15 +11,24 @@ namespace Xli
             SDL_GLContext context;
 
         public:
-            SDL2GLContext(SDL2Window* window, int multiSamples)
+            SDL2GLContext(SDL2Window* window, const GLContextAttributes& attribs)
             {
-#ifdef XLI_GL_DESKTOP
-                if (multiSamples > 1)
-                {
-                    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-                    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, multiSamples);
-                }
+                SDL_GL_SetAttribute(SDL_GL_RED_SIZE, attribs.ColorBits.R);
+                SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, attribs.ColorBits.G);
+                SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, attribs.ColorBits.B);
+                SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, attribs.ColorBits.A);
+                SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, attribs.DepthBits);
+                SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, attribs.StencilBits);
+#ifndef XLI_PLATFORM_IOS
+                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, attribs.Samples > 1 ? 1 : 0);
+                SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, attribs.Samples);
 #endif
+                SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE, attribs.AccumBits.R);
+                SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE, attribs.AccumBits.G);
+                SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, attribs.AccumBits.B);
+                SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, attribs.AccumBits.A);
+                SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, attribs.Buffers <= 1 ? 0 : 1);
+                SDL_GL_SetAttribute(SDL_GL_STEREO, attribs.Stereo ? 1 : 0);
 
 #ifdef XLI_GL_ES2
                 SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
@@ -50,11 +59,9 @@ namespace Xli
                 XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
             }
 
-            virtual int GetMultiSamples()
+            virtual Window* GetWindow()
             {
-                int result;
-                SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &result);
-                return result;
+                return window;
             }
 
             virtual void SetWindow(Window* window)
@@ -67,14 +74,19 @@ namespace Xli
                 SDL_GL_MakeCurrent(window->GetSDL_Window(), current ? context : 0);
             }
 
+            virtual bool IsCurrent()
+            {
+                return SDL_GL_GetCurrentContext() == context;
+            }
+
             virtual void SwapBuffers()
             {
                 SDL_GL_SwapWindow(window->GetSDL_Window());
             }
 
-            virtual bool SetSwapInterval(int interval)
+            virtual void SetSwapInterval(int value)
             {
-                return SDL_GL_SetSwapInterval(interval) == 0;
+                SDL_GL_SetSwapInterval(value);
             }
 
             virtual int GetSwapInterval()
@@ -82,7 +94,7 @@ namespace Xli
                 return SDL_GL_GetSwapInterval();
             }
 
-            virtual Vector2i GetBackbufferSize()
+            virtual Vector2i GetDrawableSize()
             {
                 Vector2i size;
 #ifdef XLI_PLATFORM_LINUX
@@ -92,14 +104,37 @@ namespace Xli
 #endif
                 return size;
             }
+
+            virtual void GetAttributes(GLContextAttributes& result)
+            {
+                memset(&result, 0, sizeof(GLContextAttributes));
+
+                SDL_GL_GetAttribute(SDL_GL_RED_SIZE, &result.ColorBits.R);
+                SDL_GL_GetAttribute(SDL_GL_GREEN_SIZE, &result.ColorBits.G);
+                SDL_GL_GetAttribute(SDL_GL_BLUE_SIZE, &result.ColorBits.B);
+                SDL_GL_GetAttribute(SDL_GL_ALPHA_SIZE, &result.ColorBits.A);
+                SDL_GL_GetAttribute(SDL_GL_DEPTH_SIZE, &result.DepthBits);
+                SDL_GL_GetAttribute(SDL_GL_STENCIL_SIZE, &result.StencilBits);
+                SDL_GL_GetAttribute(SDL_GL_MULTISAMPLESAMPLES, &result.Samples);
+                SDL_GL_GetAttribute(SDL_GL_ACCUM_RED_SIZE, &result.AccumBits.R);
+                SDL_GL_GetAttribute(SDL_GL_ACCUM_GREEN_SIZE, &result.AccumBits.G);
+                SDL_GL_GetAttribute(SDL_GL_ACCUM_BLUE_SIZE, &result.AccumBits.B);
+                SDL_GL_GetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, &result.AccumBits.A);
+
+                int doubleBuffer, stereo;
+                SDL_GL_GetAttribute(SDL_GL_DOUBLEBUFFER, &doubleBuffer);
+                SDL_GL_GetAttribute(SDL_GL_STEREO, &stereo);
+                result.Buffers = doubleBuffer ? 2 : 1;
+                result.Stereo = stereo ? true : false;
+            }
         };
     }
 
-    GLContext* GLContext::Create(Window* window, int multiSamples)
+    GLContext* GLContext::Create(Window* window, const GLContextAttributes& attribs)
     {
         if (window->GetImplementation() != WindowImplementationSDL2) 
-            XLI_THROW("Unsupported window");
+            XLI_THROW("Unsupported window implementation");
 
-        return new PlatformSpecific::SDL2GLContext((PlatformSpecific::SDL2Window*)window, multiSamples);
+        return new PlatformSpecific::SDL2GLContext((PlatformSpecific::SDL2Window*)window, attribs);
     }
 }

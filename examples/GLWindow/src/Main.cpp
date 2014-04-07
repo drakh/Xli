@@ -32,7 +32,7 @@ public:
 		// Setup OpenGL
 
         GLContextAttributes glAttribs = GLContextAttributes::Default();
-        glAttribs.Buffers = 1;
+        //glAttribs.Buffers = 1;
         glAttribs.Samples = 16;
 
         gl = GLContext::Create(wnd, glAttribs);
