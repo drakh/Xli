@@ -82,15 +82,6 @@ namespace Xli
                 return SDL_GL_GetSwapInterval();
             }
 
-            virtual unsigned int GetBackbufferHandle()
-            {
-#ifdef XLI_PLATFORM_IOS
-                return 1;
-#else
-                return 0;
-#endif
-            }
-
             virtual Vector2i GetBackbufferSize()
             {
                 Vector2i size;

@@ -160,11 +160,6 @@ namespace Xli
             return samples;
         }
 
-        virtual unsigned int GetBackbufferHandle()
-        {
-            return 0;
-        }
-
         virtual Vector2i GetBackbufferSize()
         {
             return window->GetClientSize();

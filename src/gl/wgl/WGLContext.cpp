@@ -209,11 +209,6 @@ namespace Xli
                 return wglGetSwapIntervalEXT ? wglGetSwapIntervalEXT() : 0;
             }
 
-            virtual unsigned int GetBackbufferHandle()
-            {
-                return 0;
-            }
-
             virtual Vector2i GetBackbufferSize()
             {
                 return window->GetClientSize();
