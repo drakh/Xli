@@ -32,6 +32,7 @@ public:
 		// Setup OpenGL
 
         GLContextAttributes glAttribs = GLContextAttributes::Default();
+        glAttribs.Buffers = 1;
         glAttribs.Samples = 16;
 
         gl = GLContext::Create(wnd, glAttribs);
@@ -45,7 +46,7 @@ public:
 		PrintLine((String)"Time: " + DateTime::Now().ToString());
 		PrintLine((String)"Time (UTC): " + DateTime::NowUtc().ToString());
 
-		PrintLine((String)"Resolution: " + wnd->GetClientSize().ToString());
+		PrintLine((String)"Window Client Size: " + wnd->GetClientSize().ToString());
 
 		PrintLine((String)"OpenGL Vendor: " + (const char*)glGetString(GL_VENDOR));
 		PrintLine((String)"OpenGL Renderer: " + (const char*)glGetString(GL_RENDERER));

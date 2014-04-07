@@ -37,13 +37,14 @@ namespace Xli
                 EGL_DEPTH_SIZE, 16,
                 EGL_STENCIL_SIZE, 0,
                 EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
+                //EGL_RENDER_BUFFER, attribs.Buffers <= 1 ? EGL_SINGLE_BUFFER : EGL_BACK_BUFFER,
                 EGL_NONE
             };
 
             EGLint numConfigs;
-            EGLConfig configs[64];
+            EGLConfig configs[128];
 
-            if (!eglChooseConfig(display, iattribs, configs, 64, &numConfigs) || numConfigs == 0)
+            if (!eglChooseConfig(display, iattribs, configs, 128, &numConfigs) || numConfigs == 0)
                 XLI_THROW("Unable to choose EGL config");
         
             EGLint cs = 0, cd = 0, cb = 0;
@@ -51,18 +52,19 @@ namespace Xli
 
             for (int i = 0; i < numConfigs; i++)
             {
-                EGLint samples, depth, stencil, buffer, r, g, b, a;
-                eglGetConfigAttrib(display, configs[i], EGL_SAMPLES, &samples);
-                eglGetConfigAttrib(display, configs[i], EGL_DEPTH_SIZE, &depth);
-                eglGetConfigAttrib(display, configs[i], EGL_STENCIL_SIZE, &stencil);
-                eglGetConfigAttrib(display, configs[i], EGL_BUFFER_SIZE, &buffer);
+                EGLint samples, depth, stencil, buffer, r, g, b, a, render;
                 eglGetConfigAttrib(display, configs[i], EGL_RED_SIZE, &r);
                 eglGetConfigAttrib(display, configs[i], EGL_GREEN_SIZE, &g);
                 eglGetConfigAttrib(display, configs[i], EGL_BLUE_SIZE, &b);
                 eglGetConfigAttrib(display, configs[i], EGL_ALPHA_SIZE, &a);
+                eglGetConfigAttrib(display, configs[i], EGL_BUFFER_SIZE, &buffer);
+                eglGetConfigAttrib(display, configs[i], EGL_DEPTH_SIZE, &depth);
+                eglGetConfigAttrib(display, configs[i], EGL_STENCIL_SIZE, &stencil);
+                eglGetConfigAttrib(display, configs[i], EGL_SAMPLES, &samples);
+                eglGetConfigAttrib(display, configs[i], EGL_RENDER_BUFFER, &render);
 
 #ifdef XLI_DEBUG
-                ErrorPrintLine(String::Format("EGL Config %d:  M %d  D %d  S %d  B %d  R %d  G %d  B %d  A %d", i, samples, depth, stencil, buffer, r, g, b, a));
+                ErrorPrintLine(String::Format("EGL Config %d:  M %d  D %d  S %d  B %d  R %d  G %d  B %d  A %d  Single %d", i, samples, depth, stencil, buffer, r, g, b, a, render == EGL_SINGLE_BUFFER));
 #endif
 
                 if (samples >= cs && depth >= cd && buffer >= cb && 
@@ -177,6 +179,11 @@ namespace Xli
             return swapInterval;
         }
 
+        virtual Vector2i GetBackbufferSize()
+        {
+            return window->GetClientSize();
+        }
+
         virtual void GetAttributes(GLContextAttributes& result)
         {
             memset(&result, 0, sizeof(GLContextAttributes));
@@ -188,14 +195,9 @@ namespace Xli
             eglGetConfigAttrib(display, config, EGL_STENCIL_SIZE, &result.StencilBits);
             eglGetConfigAttrib(display, config, EGL_SAMPLES, &result.Samples);
 
-            // TODO:
-            result.Buffers = 2;
-            result.Stereo = false;
-        }
-
-        virtual Vector2i GetBackbufferSize()
-        {
-            return window->GetClientSize();
+            EGLint renderBuffer;
+            eglGetConfigAttrib(display, config, EGL_RENDER_BUFFER, &renderBuffer);
+            result.Buffers = renderBuffer == EGL_SINGLE_BUFFER ? 1 : 2;
         }
     };
 
