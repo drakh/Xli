@@ -2,7 +2,7 @@ project("Xli Library")
 
 cmake_minimum_required(VERSION 2.6)
 
-include(cmake/library_setup.cmake)
+include(cmake/modules/XliLibSetup.cmake)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 link_directories(${LIBRARY_OUTPUT_PATH})
