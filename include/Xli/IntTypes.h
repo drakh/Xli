@@ -49,7 +49,7 @@ namespace Xli
 
     /** @} */
 
-    // Verify size of base types at compile time
+    // Verify size of int types at compile time
     typedef char __TestInt8[sizeof(Int8) == 1 ? 1 : -1];
     typedef char __TestInt16[sizeof(Int16) == 2 ? 1 : -1];
     typedef char __TestInt32[sizeof(Int32) == 4 ? 1 : -1];
@@ -58,6 +58,7 @@ namespace Xli
     typedef char __TestUInt16[sizeof(UInt16) == 2 ? 1 : -1];
     typedef char __TestUInt32[sizeof(UInt32) == 4 ? 1 : -1];
     typedef char __TestUInt64[sizeof(UInt64) == 8 ? 1 : -1];
+    typedef char __TestUtf16[sizeof(Utf16) == 2 ? 1 : -1];
 }
 
 #endif

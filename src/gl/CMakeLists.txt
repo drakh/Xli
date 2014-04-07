@@ -5,19 +5,21 @@ else()
 
     set(Sources GLContext.cpp sdl2/SDL2GLContext.cpp)
 
-    add_definitions(-DXLI_HAS_GLEW)
+    if (IOS)
 
-    if (APPLE)
+        include_directories(${PROJECT_SOURCE_DIR}/src/core/sdl2/3rdparty/SDL2/include)
+
+    elseif (APPLE)
 
         set(Sources ${Sources} 3rdparty/glew/src/glew.c)
-        add_definitions(-DGLEW_STATIC)
+        add_definitions(-DXLI_HAS_GLEW -DGLEW_STATIC)
         include_directories(${PROJECT_SOURCE_DIR}/src/gl/3rdparty/glew/include)
         include_directories(${PROJECT_SOURCE_DIR}/src/core/sdl2/3rdparty/SDL2/include)
         set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-framework,OpenGL")
 
     else()
 
-        add_definitions(`sdl2-config --cflags`)
+        add_definitions(-DXLI_HAS_GLEW `sdl2-config --cflags`)
 
     endif()
 

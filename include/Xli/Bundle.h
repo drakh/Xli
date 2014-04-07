@@ -6,7 +6,7 @@
 namespace Xli
 {
     /**
-    \ingroup XliCoreIO
+        \ingroup XliCoreIO
     */
     class BundleFileSystem
     {
@@ -16,7 +16,7 @@ namespace Xli
     };
 
     /**
-    \ingroup XliCoreIO
+        \ingroup XliCoreIO
     */
     class BundleAccessor
     {
@@ -27,7 +27,7 @@ namespace Xli
     };
 
     /**
-    \ingroup XliCoreIO
+        \ingroup XliCoreIO
     */
     extern BundleAccessor Bundle;
 }

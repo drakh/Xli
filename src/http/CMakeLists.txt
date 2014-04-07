@@ -1,2 +1,6 @@
-add_library(XliHttp curl/CurlClient.cpp)
-target_link_libraries(XliHttp Xli curl)
+if (NOT IOS)
+
+	add_library(XliHttp curl/CurlClient.cpp)
+	target_link_libraries(XliHttp Xli curl)
+
+endif()

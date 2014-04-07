@@ -7,16 +7,25 @@ set(Sources
     GZip.cpp
     ImageReader.cpp
     ImageWriter.cpp
-    JpegReader.cpp
-    JpegWriter.cpp
     Json.cpp
-    Ktx.cpp    
-    PngReader.cpp
-    PngWriter.cpp
+    Ktx.cpp
     Texture.cpp
     Value.cpp
     Zip.cpp
     )
+
+if (IOS)
+    set(Sources ${Sources}
+        UIImageReader.mm
+        )
+else()
+    set(Sources ${Sources}
+        JpegReader.cpp
+        JpegWriter.cpp
+        PngReader.cpp
+        PngWriter.cpp
+        )
+endif()
 
 set(JsonSrc
     3rdparty/json_parser/JSON_parser.c
@@ -125,21 +134,16 @@ set(FreetypeInc
     )
 set(FreetypeSrc
     3rdparty/freetype/src/autofit/autofit.c
-    3rdparty/freetype/src/bdf/bdf.c
-    3rdparty/freetype/src/cff/cff.c
     3rdparty/freetype/src/base/ftapi.c
     3rdparty/freetype/src/base/ftbase.c
     3rdparty/freetype/src/base/ftbdf.c
     3rdparty/freetype/src/base/ftbitmap.c
-    3rdparty/freetype/src/cache/ftcache.c
     3rdparty/freetype/src/base/ftdebug.c
     3rdparty/freetype/src/base/ftgasp.c
     3rdparty/freetype/src/base/ftglyph.c
     3rdparty/freetype/src/base/ftgxval.c
-    3rdparty/freetype/src/gzip/ftgzip.c
     3rdparty/freetype/src/base/ftinit.c
     3rdparty/freetype/src/base/ftlcdfil.c
-    3rdparty/freetype/src/lzw/ftlzw.c
     3rdparty/freetype/src/base/ftmm.c
     3rdparty/freetype/src/base/ftotval.c
     3rdparty/freetype/src/base/ftpatent.c
@@ -150,12 +154,18 @@ set(FreetypeSrc
     3rdparty/freetype/src/base/fttype1.c
     3rdparty/freetype/src/base/ftwinfnt.c
     3rdparty/freetype/src/base/ftxf86.c
+    3rdparty/freetype/src/bdf/bdf.c
+    3rdparty/freetype/src/cache/ftcache.c
+    3rdparty/freetype/src/cff/cff.c
+    3rdparty/freetype/src/cid/type1cid.c
     3rdparty/freetype/src/gxvalid/gxvalid.c
+    3rdparty/freetype/src/gzip/ftgzip.c
+    3rdparty/freetype/src/lzw/ftlzw.c
     3rdparty/freetype/src/otvalid/otvalid.c
     3rdparty/freetype/src/pcf/pcf.c
     3rdparty/freetype/src/pfr/pfr.c
-    3rdparty/freetype/src/pfr/pfrload.c
     3rdparty/freetype/src/pfr/pfrgload.c
+    3rdparty/freetype/src/pfr/pfrload.c
     3rdparty/freetype/src/pfr/pfrobjs.c
     3rdparty/freetype/src/pfr/pfrsbit.c
     3rdparty/freetype/src/psaux/psaux.c
@@ -164,12 +174,11 @@ set(FreetypeSrc
     3rdparty/freetype/src/raster/raster.c
     3rdparty/freetype/src/sfnt/sfnt.c
     3rdparty/freetype/src/smooth/smooth.c
+    3rdparty/freetype/src/truetype/truetype.c
+    3rdparty/freetype/src/type1/type1.c
     3rdparty/freetype/src/type42/t42drivr.c
     3rdparty/freetype/src/type42/t42objs.c
     3rdparty/freetype/src/type42/t42parse.c
-    3rdparty/freetype/src/truetype/truetype.c
-    3rdparty/freetype/src/type1/type1.c
-    3rdparty/freetype/src/cid/type1cid.c
     3rdparty/freetype/src/winfonts/winfnt.c
     )
 
@@ -183,11 +192,18 @@ if (WIN32)
     set(Sources ${Sources} ${ZlibSrc} ${JpegSrc} ${PngSrc} ${FreetypeSrc})
 
 elseif (APPLE)
+ 
+    add_definitions(-DFT2_BUILD_LIBRARY -DDARWIN_NO_CARBON)
 
-    add_definitions(-DFT2_BUILD_LIBRARY)
     include_directories(${JpegInc} ${PngInc} ${FreetypeInc})
     set(Sources ${Sources} ${JpegSrc} ${PngSrc} ${FreetypeSrc})
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-framework,CoreFoundation -Wl,-framework,CoreServices -Wl,-framework,ApplicationServices")
+
+    if (IOS)
+        include_directories(${ZlibInc})
+        set(Sources ${Sources} ${ZlibSrc})  
+    else()
+        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-framework,CoreFoundation -Wl,-framework,CoreServices -Wl,-framework,ApplicationServices")
+    endif()
 
 elseif (UNIX)
 

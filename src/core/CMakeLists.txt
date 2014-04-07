@@ -65,6 +65,8 @@ else()
 
         set(SDL2_DIR "${PROJECT_SOURCE_DIR}/src/core/sdl2/3rdparty/SDL2")
 
+        include_directories(${SDL2_DIR}/include)
+
         set(Sources ${Sources} 
             cocoa/CocoaFileSystem.mm
             ${SDL2_DIR}/src/atomic/SDL_atomic.c
@@ -182,9 +184,6 @@ else()
             ${SDL2_DIR}/src/video/x11/SDL_x11window.c
             ${SDL2_DIR}/src/video/x11/SDL_x11xinput2.c
             )
-
-        include_directories(${SDL2_DIR}/include)
-        #link_directories(${SDL2_DIR}/lib)
 
         set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lm -liconv -Wl,-framework,OpenGL -Wl,-framework,ForceFeedback -lobjc -Wl,-framework,Cocoa -Wl,-framework,Carbon -Wl,-framework,IOKit -Wl,-framework,CoreAudio -Wl,-framework,AudioToolbox -Wl,-framework,AudioUnit")
 

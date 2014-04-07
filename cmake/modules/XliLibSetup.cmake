@@ -1,4 +1,4 @@
-if (UNIX AND NOT WIN32)
+if (UNIX AND NOT WIN32 AND NOT IOS)
     set(BUILD_SHARED_LIBS TRUE CACHE BOOL "Build shared or static libs")
 endif()
 
@@ -8,8 +8,12 @@ endif()
 
 if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
-    set(CMAKE_OSX_ARCHITECTURES "x86_64;i386")
-    set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/OSX/x86)
+    if (IOS)
+        set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/iOS)
+    else()
+        set(CMAKE_OSX_ARCHITECTURES "x86_64;i386")
+        set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/OSX/x86)
+    endif()
 
 elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
 

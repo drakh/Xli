@@ -5,6 +5,9 @@
 
 namespace Xli
 {
+    /**
+        \ingroup XliGL
+     */
     class GLContextAttributes
     {
     public:
