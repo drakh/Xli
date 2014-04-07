@@ -149,10 +149,14 @@ namespace Xli
 
                 pf = TryEnableMultisample(attribs);
 
-                if (pf == -1)
-                    SetPixelFormat(hDC, ChoosePixelFormat(hDC, &pfd), &pfd);
+                if (pf == -1 && !SetPixelFormat(hDC, ChoosePixelFormat(hDC, &pfd), &pfd))
+                    XLI_THROW("Failed to create OpenGL context: " + Win32Helpers::GetLastErrorString());
 
                 hGLRC = wglCreateContext(hDC);
+                
+                if (!hGLRC)
+                    XLI_THROW("Failed to create OpenGL context: " + Win32Helpers::GetLastErrorString());
+
                 MakeCurrent(true);
 
                 glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -252,7 +256,7 @@ namespace Xli
     GLContext* GLContext::Create(Window* window, const GLContextAttributes& attribs)
     {
         if (window->GetImplementation() != WindowImplementationWin32) 
-            XLI_THROW("Unsupported window");
+            XLI_THROW("Unsupported window implementation");
         
         return new PlatformSpecific::WGLContext((PlatformSpecific::Win32Window*)window, attribs);
     }
