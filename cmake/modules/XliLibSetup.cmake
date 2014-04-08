@@ -9,17 +9,21 @@ endif()
 if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
     if (IOS)
+        set(XLI_PLATFORM_IOS True)
         set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/iOS)
     else()
+        set(XLI_PLATFORM_OSX True)
         set(CMAKE_OSX_ARCHITECTURES "x86_64;i386")
         set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/OSX/x86)
     endif()
 
 elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
 
+    set(XLI_PLATFORM_LINUX True)
     execute_process(COMMAND uname -m OUTPUT_VARIABLE MACHINE)
 
     if (${MACHINE} MATCHES "arm*")
+        set(XLI_ARCH_ARM True)
         set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/linux/arm)
         
         # GLES on RPi
@@ -35,6 +39,8 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
 elseif (MSVC)
 
     message(FATAL_ERROR "FIXME: Visual Studio builds are broken.")
+
+    set(XLI_PLATFORM_WIN32 True)
 
     set(CMAKE_BUILD_SHARED_LIBS FALSE INTERNAL)
     set(CMAKE_CONFIGURATION_TYPES "Debug;Release" INTERNAL)
@@ -77,6 +83,8 @@ elseif (MSVC)
 
 elseif (WIN32)
 
+    set(XLI_PLATFORM_WIN32 True)
+
     if (CMAKE_SIZEOF_VOID_P EQUAL 8)
         set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/mingw/x86_64)
     else()
@@ -91,15 +99,12 @@ endif()
 
 if (CMAKE_GENERATOR MATCHES "Unix Makefiles")
 
-    install(
-        DIRECTORY ${LIBRARY_OUTPUT_PATH}/
-        DESTINATION lib
-        PATTERN "Debug" EXCLUDE
-        PATTERN "Release" EXCLUDE
-        )
-    install(
-        DIRECTORY ${PROJECT_SOURCE_DIR}/include/
-        DESTINATION include
-        )
+    install(DIRECTORY ${LIBRARY_OUTPUT_PATH}/
+            DESTINATION lib
+            PATTERN "Debug" EXCLUDE
+            PATTERN "Release" EXCLUDE)
+
+    install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
+            DESTINATION include)
 
 endif()
