@@ -64,7 +64,7 @@ namespace Xli
                 eglGetConfigAttrib(display, configs[i], EGL_RENDER_BUFFER, &render);
 
 #ifdef XLI_DEBUG
-                ErrorPrintLine(String::Format("EGL Config %d:  M %d  D %d  S %d  B %d  R %d  G %d  B %d  A %d  Single %d", i, samples, depth, stencil, buffer, r, g, b, a, render == EGL_SINGLE_BUFFER));
+                ErrorPrintLine(String::Format("DEBUG: EGLConfig[%d]:  M %d  D %d  S %d  B %d  R %d  G %d  B %d  A %d  Single %d", i, samples, depth, stencil, buffer, r, g, b, a, render == EGL_SINGLE_BUFFER));
 #endif
 
                 if (samples >= cs && depth >= cd && buffer >= cb && 
@@ -78,7 +78,7 @@ namespace Xli
             }
 
 #ifdef XLI_DEBUG
-            ErrorPrintLine((String)"Selected EGL config: " + (int)cc);
+            ErrorPrintLine((String)"DEBUG: Selected EGLConfig[" + (int)cc + "]");
 #endif
 
             config = configs[cc];

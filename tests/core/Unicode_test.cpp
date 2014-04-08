@@ -21,3 +21,19 @@ TEST_CASE("ToLower")
     REQUIRE('a' == Unicode::ToLower('A'));
     REQUIRE(0xe5 == Unicode::ToLower(0xc5)); //æ
 }
+
+TEST_CASE("ModifiedUtf8")
+{
+    Utf16String utf16 = Unicode::Utf8To16(String("\0\0HEI\0\0HADE\0\0", 13), 0);
+    String mutf8 = Unicode::Utf16To8(utf16, UnicodeFlagsModifiedUtf8);
+    REQUIRE(mutf8.Length() == 17);
+    REQUIRE(mutf8.Length() > 0 && mutf8[0] == (char)(unsigned char)0xC0);
+    REQUIRE(mutf8.Length() > 1 && mutf8[1] == (char)(unsigned char)0x80);
+
+    Utf16String utf16_3 = Unicode::Utf8To16(mutf8, UnicodeFlagsModifiedUtf8);
+    REQUIRE(Unicode::Utf16To8(utf16_3, 0).Length() == 13);
+    REQUIRE(Unicode::Utf16To8(utf16_3, UnicodeFlagsModifiedUtf8).Length() == 17);
+
+    Utf16String utf16_2 = Unicode::Utf8To16(mutf8, UnicodeFlagsIgnoreError);
+    REQUIRE(Unicode::Utf16To8(utf16_2, UnicodeFlagsIgnoreError).Length() == 0);
+}
