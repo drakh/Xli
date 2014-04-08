@@ -175,6 +175,7 @@ set(FREETYPE_SRC
 
 include_directories(${UNZIP_INC})
 set(SRC ${SRC} ${JSON_SRC} ${UNZIP_SRC})
+set(LIBS Xli)
 
 if (XLI_PLATFORM_WIN32)
 
@@ -193,24 +194,15 @@ elseif (XLI_PLATFORM_OSX)
     add_definitions(-DFT2_BUILD_LIBRARY -DDARWIN_NO_CARBON)
     include_directories(${JPEG_INC} ${PNG_INC} ${FREETYPE_INC})
     set(SRC ${SRC} ${JPEG_SRC} ${PNG_SRC} ${FREETYPE_SRC})
+    set(LIBS ${LIBS} z)
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-framework,CoreFoundation -Wl,-framework,CoreServices -Wl,-framework,ApplicationServices")
 
 elseif (XLI_PLATFORM_LINUX)
 
     include_directories(/usr/include/freetype2)
+    set(LIBS ${LIBS} freetype jpeg png z)
 
 endif()
 
 add_library(XliMedia ${SRC})
-target_link_libraries(XliMedia Xli)
-
-if (XLI_PLATFORM_OSX)
-
-    target_link_libraries(XliMedia z)
-
-elseif (XLI_PLATFORM_LINUX)
-
-    target_link_libraries(XliMedia freetype jpeg png z)
-
-endif()
-
+target_link_libraries(XliMedia ${LIBS})

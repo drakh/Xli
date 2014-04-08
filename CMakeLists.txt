@@ -14,9 +14,9 @@ if (APPLE)
 
 endif()
 
+#add_subdirectory(src/audio)
 add_subdirectory(src/core)
-add_subdirectory(src/media)
-add_subdirectory(src/audio)
-add_subdirectory(src/main)
 add_subdirectory(src/gl)
 add_subdirectory(src/http)
+add_subdirectory(src/main)
+add_subdirectory(src/media)

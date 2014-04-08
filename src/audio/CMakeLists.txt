@@ -1,11 +1,10 @@
-set(Sources
+set(SRC
     portaudio/PAAudioBuffer.cpp
     AudioBuffer.cpp
     AudioStream.cpp
     SoundChannel.cpp
     Sound.cpp
-    Wav.cpp
-    )
+    Wav.cpp)
 
 if (WIN32)
     
@@ -18,5 +17,5 @@ elseif (APPLE)
 
 endif()
 
-add_library(XliAudio ${Sources})
+add_library(XliAudio ${SRC})
 target_link_libraries(XliAudio Xli portaudio)

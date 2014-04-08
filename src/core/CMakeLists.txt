@@ -31,17 +31,7 @@ set(SRC
     Utf16String.cpp
     Window.cpp)
 
-set(WIN32_SRC
-    win32/Win32Cond.cpp
-    win32/Win32Dialogs.cpp
-    win32/Win32FileSystem.cpp
-    win32/Win32Helpers.cpp
-    win32/Win32MessageBox.cpp
-    win32/Win32Thread.cpp
-    win32/Win32Time.cpp
-    win32/Win32Window.cpp
-    win32/Win32Display.cpp
-    win32/Win32Helpers.cpp)
+set(SDL2_DIR ${PROJECT_SOURCE_DIR}/src/core/sdl2/3rdparty/SDL2)
 
 set(SDL2_SRC
     generic/GenericDialogs.cpp
@@ -54,9 +44,7 @@ set(SDL2_SRC
     sdl2/SDL2Display.cpp
     sdl2/SDL2MessageBox.cpp)
 
-set(SDL2_DIR ${PROJECT_SOURCE_DIR}/src/core/sdl2/3rdparty/SDL2)
-
-set(SDL2_COMMON_SRC
+set(SDL2_STATIC_SRC
     cocoa/CocoaFileSystem.mm
     ${SDL2_DIR}/src/atomic/SDL_atomic.c
     ${SDL2_DIR}/src/atomic/SDL_spinlock.c
@@ -139,21 +127,32 @@ set(SDL2_COMMON_SRC
 
 if (XLI_PLATFORM_WIN32)
 
-    set(SRC ${SRC} ${WIN32_SRC})
+    set(SRC ${SRC}
+        win32/Win32Cond.cpp
+        win32/Win32Dialogs.cpp
+        win32/Win32FileSystem.cpp
+        win32/Win32Helpers.cpp
+        win32/Win32MessageBox.cpp
+        win32/Win32Thread.cpp
+        win32/Win32Time.cpp
+        win32/Win32Window.cpp
+        win32/Win32Display.cpp
+        win32/Win32Helpers.cpp)
 
 elseif (XLI_PLATFORM_LINUX)
+
+    add_definitions(`sdl2-config --cflags`)
+    set(LIBS SDL2 pthread)
 
     set(SRC ${SRC} ${SDL2_SRC}
         generic/GenericBundle.cpp
         xdg/XdgFileSystem.cpp)
 
-    add_definitions(`sdl2-config --cflags`)
-
 elseif (XLI_PLATFORM_IOS)
 
     include_directories(${SDL2_DIR}/include)
 
-    set(SRC ${SRC} ${SDL2_SRC} ${SDL2_COMMON_SRC}
+    set(SRC ${SRC} ${SDL2_SRC} ${SDL2_STATIC_SRC}
         ios/iInit.mm
         ${SDL2_DIR}/src/joystick/iphoneos/SDL_sysjoystick.m
         ${SDL2_DIR}/src/joystick/iphoneos/SDLUIAccelerationDelegate.m
@@ -176,7 +175,9 @@ elseif (XLI_PLATFORM_OSX)
 
     include_directories(${SDL2_DIR}/include)
 
-    set(SRC ${SRC} ${SDL2_SRC} ${SDL2_COMMON_SRC}
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lm -liconv -Wl,-framework,OpenGL -Wl,-framework,ForceFeedback -lobjc -Wl,-framework,Cocoa -Wl,-framework,Carbon -Wl,-framework,IOKit -Wl,-framework,CoreAudio -Wl,-framework,AudioToolbox -Wl,-framework,AudioUnit")
+
+    set(SRC ${SRC} ${SDL2_SRC} ${SDL2_STATIC_SRC}
         ${SDL2_DIR}/src/audio/disk/SDL_diskaudio.c
         ${SDL2_DIR}/src/dynapi/SDL_dynapi.c
         ${SDL2_DIR}/src/filesystem/cocoa/SDL_sysfilesystem.m
@@ -213,15 +214,8 @@ elseif (XLI_PLATFORM_OSX)
         ${SDL2_DIR}/src/video/x11/SDL_x11video.c
         ${SDL2_DIR}/src/video/x11/SDL_x11window.c
         ${SDL2_DIR}/src/video/x11/SDL_x11xinput2.c)
-    
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lm -liconv -Wl,-framework,OpenGL -Wl,-framework,ForceFeedback -lobjc -Wl,-framework,Cocoa -Wl,-framework,Carbon -Wl,-framework,IOKit -Wl,-framework,CoreAudio -Wl,-framework,AudioToolbox -Wl,-framework,AudioUnit")
 
 endif()
 
 add_library(Xli ${SRC})
-
-if (XLI_PLATFORM_LINUX)
-
-    target_link_libraries(Xli SDL2 pthread)
-
-endif()
+target_link_libraries(Xli ${LIBS})

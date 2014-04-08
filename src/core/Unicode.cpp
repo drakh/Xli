@@ -141,26 +141,26 @@ namespace Xli
             {
                 if (result[i] == 0)
                 {
-                    Array<char> mutf8Result;
-                    mutf8Result.Reserve(len * 2);
-                    mutf8Result.AddRange(result.data, i);
-                    mutf8Result.Add((char)(unsigned char)0xC0);
-                    mutf8Result.Add((char)(unsigned char)0x80);
+                    Array<char> mutf8;
+                    mutf8.Reserve(len * 2);
+                    mutf8.AddRange(result.data, i);
+                    mutf8.Add((char)(unsigned char)0xC0);
+                    mutf8.Add((char)(unsigned char)0x80);
 
                     for (int j = i + 1; j < result.length; j++)
                     {
                         if (result.data[j] == 0)
                         {
-                            mutf8Result.Add((char)(unsigned char)0xC0);
-                            mutf8Result.Add((char)(unsigned char)0x80);
+                            mutf8.Add((char)(unsigned char)0xC0);
+                            mutf8.Add((char)(unsigned char)0x80);
                         }
                         else
                         {
-                            mutf8Result.Add(result.data[j]);
+                            mutf8.Add(result.data[j]);
                         }
                     }
 
-                    return String(mutf8Result.DataPtr(), mutf8Result.Length());
+                    return String(mutf8.DataPtr(), mutf8.Length());
                 }
             }
         }
