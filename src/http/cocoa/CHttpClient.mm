@@ -519,7 +519,7 @@ namespace Xli
                 reading=true;
                 this->contentAsString = true;
                 if (this->stateChangedCallback!=0) this->stateChangedCallback->OnResponse(this, this->status);
-                if (dataReady) OnStringProgress(this, cachedReadStream, NULL);
+                if (dataReady) OnStringDataRecieved(this, cachedReadStream, NULL);
             } else {
                 NSLog(@"Cant pull content string"); //{TODO} proper error here
             }
@@ -536,7 +536,7 @@ namespace Xli
           
                 this->cachedContentStream = CFWriteStreamCreateWithAllocatedBuffers(kCFAllocatorDefault, kCFAllocatorDefault);
                 CFWriteStreamOpen(this->cachedContentStream);
-                if (dataReady) OnByteProgress(this, cachedReadStream, NULL);
+                if (dataReady) OnByteDataRecieved(this, cachedReadStream, NULL);
             } else {
                 NSLog(@"Cant pull content array"); //{TODO} proper error here
             }
@@ -582,7 +582,7 @@ namespace Xli
             //CFRelease(nHeaders); //{TODO} this crashes...why?
         }
 
-        static void OnStringProgress(CHttpRequest* request, CFReadStreamRef stream, CFStreamEventType event)
+        static void OnStringDataRecieved(CHttpRequest* request, CFReadStreamRef stream, CFStreamEventType event)
         {
             UInt8 buff[1024];
             CFIndex nBytesRead = CFReadStreamRead(stream, buff, 1024);
@@ -596,7 +596,7 @@ namespace Xli
                 request->progressCallback->OnResponse(request, request->readPosition, 0, false);
         }
         
-        static void OnByteProgress(CHttpRequest* request, CFReadStreamRef stream, CFStreamEventType event)
+        static void OnByteDataRecieved(CHttpRequest* request, CFReadStreamRef stream, CFStreamEventType event)
         {
             UInt8 buff[1024];
             CFIndex nBytesRead = CFReadStreamRead(stream, buff, 1024);
@@ -676,9 +676,9 @@ namespace Xli
                 {
                     request->dataReady = true;
                     if (request->contentAsString) {
-                        CHttpRequest::OnStringProgress(request, stream, event);
+                        CHttpRequest::OnStringDataRecieved(request, stream, event);
                     } else {
-                        CHttpRequest::OnByteProgress(request, stream, event);
+                        CHttpRequest::OnByteDataRecieved(request, stream, event);
                     }                    
                 } else {
                     request->dataReady = true;

@@ -155,11 +155,7 @@ namespace Xli
         virtual void Abort() = 0;
 
         virtual void PullContentString() = 0;
-        /* virtual String GetContentString() = 0; */
-
         virtual void PullContentArray() = 0;
-        /* virtual void* GetContentArray() = 0; */
-        /* virtual long GetContentArrayLength() = 0; */
     };
 }
 

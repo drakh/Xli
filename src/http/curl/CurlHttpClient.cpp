@@ -1,9 +1,11 @@
-#include <Xli/HashMap.h>
 #include <XliHttp/HttpClient.h>
+#include <CurlHttpClient.h>
+#include <Xli/HashMap.h>
 #include <curl/curl.h>
+#include <pthread.h>
 
 namespace Xli
-{    
+{
     class CurlHook
     {
     public:
@@ -27,17 +29,20 @@ namespace Xli
     class CurlHttpRequest : public HttpRequest
     {
     private:
-        CURL* curlSession;
         Managed< HttpStateChangedHandler > stateChangedCallback;
         Managed< HttpProgressHandler > progressCallback;
         Managed< HttpTimeoutHandler > timeoutCallback;
         Managed< HttpErrorHandler > errorCallback;
         Managed< HttpStringPulledHandler > stringPulledCallback;
         Managed< HttpArrayPulledHandler > arrayPulledCallback;
-
-        String url;
-        int timeout;
         HttpMethodType method;
+        CURL* curlSession;
+        int timeout;
+        String url;
+        Array<UInt8> recievedData;
+        String recievedString;
+        bool dataReady;
+        bool reading;
     public:
         CurlHttpRequest()
         {
@@ -45,13 +50,19 @@ namespace Xli
             this->url = "";
             this->method = HttpGetMethod;
             this->timeout = 0;
+            this->recievedData = malloc(1);
+            this->dataReady = false;
+            this->reading = false;
         }
-        CurlHttpRequest(String url, HttpMethodType method) 
+        CurlHttpRequest(String url, HttpMethodType method)
         {
             this->status = HttpUnsent;
             this->url = url;
             this->method = method;
             this->timeout = 0;
+            this->recievedData = malloc(1);
+            this->dataReady = false;
+            this->reading = false;
         }
 
         virtual ~CurlHttpRequest()
@@ -85,7 +96,7 @@ namespace Xli
                 }
             } else {
                 XLI_THROW("HttpRequest->SetMethodFromString(): Not in a valid state to set the method");
-            }            
+            }
         }
         virtual HttpMethodType GetMethod() const
         {
@@ -106,7 +117,7 @@ namespace Xli
             return this->url;
         }
 
-                virtual void SetHeader(String key, String value)
+        virtual void SetHeader(String key, String value)
         {
             if (this->status == HttpUnsent)
             {
@@ -124,15 +135,15 @@ namespace Xli
                 XLI_THROW("HttpRequest->SetHeader(): Not in a valid state to set a header");
             }
         }
-        virtual int HeadersBegin() const 
+        virtual int HeadersBegin() const
         {
             return this->headers.Begin();
         }
-        virtual int HeadersEnd() const 
+        virtual int HeadersEnd() const
         {
             return this->headers.End();
         }
-        virtual int HeadersNext(int n) const 
+        virtual int HeadersNext(int n) const
         {
             return this->headers.Next(n);
         }
@@ -153,7 +164,7 @@ namespace Xli
                 result.Append(this->GetHeaderKeyN(i));
                 result.Append(":");
                 result.Append(this->GetHeaderValueN(i));
-                result.Append("\n");                
+                result.Append("\n");
                 i = this->HeadersNext(i);
             }
             return result;
@@ -317,7 +328,7 @@ namespace Xli
         void callback Send(void* content, long byteLength)
         {
             this->status = HttpSent;
-            if (this->stateChangedCallback!=0) this->EmitStateEvent();
+            if (this->stateChangedCallback!=0) this->emitStateEvent();
 
             javaAsyncHandle = PlatformSpecific::AShim::SendHttpAsync(this, content, byteLength);
         }
@@ -325,28 +336,39 @@ namespace Xli
         virtual void Send(String content)
         {
             this->status = HttpSent;
-            if (this->stateChangedCallback!=0) this->EmitStateEvent();
+            if (this->stateChangedCallback!=0) this->emitStateEvent();
             javaAsyncHandle = PlatformSpecific::AShim::SendHttpAsync(this, content);
         }
 
         virtual void Send()
         {
-            CURL* curl = curl_easy_init();
-            if (!curl)
+            CURL* session = curl_easy_init();
+            if (!session)
                 XLI_THROW("CURL ERROR: Failed to create handle");
-            
+
             CURLcode result = CURLE_OK;
-            if (result == CURLE_OK) result = curl_easy_setopt(curl, CURLOPT_URL, url.DataPtr());
-            if (result == CURLE_OK) result = curl_easy_setopt(curl, MethodToCurlCode(self->method), 1);
-            if (result == CURLE_OK) result = curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, self->timeout);
-            if (result == CURLE_OK) result = curl_easy_setopt(curl, CURLOPT_AUTOREFERER, 1);
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_URL, url.DataPtr());
+            if (result == CURLE_OK) result = curl_easy_setopt(session, methodToCurlCode(self->method), 1);
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_CONNECTTIMEOUT, self->timeout);
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_AUTOREFERER, 1);
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_USERAGENT, "libcurl-agent/1.0");
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_WRITEFUNCTION, onDataRecieved);
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_WRITEDATA, (void*)this);
+
+            //progress callback
+            if (this->progressCallback!=0 &&)
+            {
+                result = curl_easy_setopt(session, CURLOPT_NOPROGRESS, 0);
+                result = curl_easy_setopt(session, CURLOPT_XFERINFODATA, (void*)this);
+                result = curl_easy_setopt(session, CURLOPT_XFERINFOFUNCTION, onProgress);
+            }
 
             //Method specific options
             switch(method)
             {
             case HttpGetMethod:
                 break;
-            case HttpPostMethod:                
+            case HttpPostMethod:
                 break;
             case HttpOptionsMethod:
                 break;
@@ -360,27 +382,36 @@ namespace Xli
             case HttpTraceMethod:
                 break;
             };
-
             //CURLOPT_NOBODY
 
-            //progress callback
-            if (this->progressCallback!=0 &&) 
-            {
-                result = curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0);
-                result = curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, (void*)this);
-                result = curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, OnProgress);
-            }
-            
+            if (result == CURLE_OK) result = curl_easy_perform(session); //{TODO} and if it isnt?
 
-            if (result == CURLE_OK) result = curl_easy_perform(curl);
-
-            this->status = HttpSent;
-            if (this->stateChangedCallback!=0) this->EmitStateEvent();
-            javaAsyncHandle = PlatformSpecific::AShim::SendHttpAsync(this);
+            this->perform(CURL* session);
         }
 
     private:
-        virtual CURLcode MethodToCurlCode(HttpMethodType method)
+        virtual perform(CURL* session)
+        {
+            //signal state changed
+            this->status = HttpSent;
+            if (this->stateChangedCallback!=0) this->emitStateEvent();
+            
+            //start the curl request. curl_easy_perform will block
+            this->session = session;
+            CURLcode result = curl_easy_perform(session);
+            if (result != 0)
+                dispatchError(result);
+        }
+        virtual void dispatchError(CURLcode error)
+        {
+            switch(method)
+            {
+            case CURLE_OPERATION_TIMEOUT : onTimeout(this); break;
+            default: XLI_THROW("XLI CURL: UNHANDLED CURL ERROR."); break;
+            };
+        }
+
+        virtual CURLcode methodToCurlCode(HttpMethodType method)
         {
             switch(method)
             {
@@ -394,11 +425,125 @@ namespace Xli
             default: XLI_THROW("MethodToCurlCode: Invalid Method Code");
             };
         }
-        static int progressCallback(void* clientp, double dltotal, double dlnow, double ultotal, double ulnow)
+        void CurlHttpRequest::emitStateEvent()
+        {
+            GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpStateAction(this, this->status));
+        }
+        static size_t onDataRecieved(char* ptr, size_t size, size_t nmemb, void* userdata);
+        {
+            CurlHttpRequest* request = (CurlHttpRequest*)userdata;            
+
+            request->reading = true  //{TODO} this is a temporary hack
+
+            if (request->reading == true)
+            {
+                request->dataReady = true;
+                if (request->contentAsString) {
+                    onStringDataRecieved(request, ptr, (size * nmemb));
+                } else {
+                    onByteDataRecieved(request, ptr, (size * nmemb));
+                }
+            } else {
+                request->dataReady = true;
+            }
+        }
+        static size_t onStringDataRecieved(CurlHttpRequest* request, char* ptr, size_t bytesRecieved)
+        {
+            request->recievedString.Append((char*)ptr, bytesRecieved);
+        }
+        static size_t onByteDataRecieved(CurlHttpRequest* request, char* ptr, size_t bytesRecieved)
+        {
+            request->recievedData.AddRange((UInt8*)ptr, bytesRecieved);            
+        }
+        static void onStateChanged()
+        {
+        }
+        static int onProgress(void *clientp, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow);
+        {
+            CurlHttpRequest* request = (CurlHttpRequest*)userdata;
+            UInt64 total = (UInt64)dltotal;
+            UInt64 pos = (UInt64)dlnow;
+        }
+        static void onTimeout(CurlHttpRequest* request)
         {
             
         }
+        static void onError()
+        {
+        }
+        static void onStringPulled()
+        {
+        }
+        static void onArrayPulled()
+        {
+        }
     };
+
+    //------------------------------------------------------------
+
+    CurlHttpStateAction::CHttpStateAction(CurlHttpRequest* request, HttpRequestState status)
+    {
+        this->Request = request;
+        this->Status = status;
+    }
+    void CurlHttpStateAction::Execute()
+    {
+        if (this->Status>0) {
+            this->Request->status = this->Status;
+            if (this->Request->stateChangedCallback!=0)
+                this->Request->stateChangedCallback->OnResponse(this->Request, this->Status);
+            if (this->Status == HttpDone)
+            {
+                if (this->Request->arrayBody)
+                {
+                    if (this->Request->cachedContentArray && this->Request->arrayPulledCallback)
+                    {
+                        //{TODO} Fix me
+                        //this->Request->arrayPulledCallback->OnResponse(this->Request, this->Request->cachedContentArray, this->Request->cachedContentArrayLength);
+                    }
+                } else if (this->Request->stringPulledCallback) {
+                    this->Request->stringPulledCallback->OnResponse(this->Request, this->Request->recievedString);
+                }
+            }
+        }
+    }
+
+    CurlHttpTimeoutAction::CurlHttpTimeoutAction(CurlHttpRequest* request)
+    {
+        this->Request = request;
+    }
+    void CurlHttpTimeoutAction::Execute()
+    {
+        if (this->Request->timeoutCallback!=0)
+            this->Request->timeoutCallback->OnResponse(this->Request);
+    }
+
+    CurlHttpProgressAction::CurlHttpProgressAction(CurlHttpRequest* request, long position, long totalLength, bool lengthKnown)
+    {
+        this->Request = request;
+        this->Position = position;
+        this->TotalLength = totalLength;
+        this->LengthKnown = lengthKnown;
+    }
+    void CurlHttpProgressAction::Execute()
+    {
+        if (this->Request->progressCallback!=0)
+            this->Request->progressCallback->OnResponse(this->Request, this->Position, this->TotalLength, this->LengthKnown);
+    }
+
+    CurlHttpErrorAction::CurlHttpErrorAction(CurlHttpRequest* request, int errorCode, String errorMessage)
+    {
+        this->Request = request;
+        this->ErrorCode = errorCode;
+        this->ErrorMessage = errorMessage;
+    }
+    void CurlHttpErrorAction::Execute()
+    {
+        if (this->Request->errorCallback!=0)
+            this->Request->errorCallback->OnResponse(this->Request, this->ErrorCode, this->ErrorMessage);
+    }
+
+    //------------------------------------------------------------
 
     HttpRequest* HttpRequest::Create()
     {
