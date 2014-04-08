@@ -1,8 +1,7 @@
 #include "../catch.hpp"
 #include <Xli/Unicode.h>
 
-using Xli::Unicode;
-using Xli::Utf16;
+using namespace Xli;
 
 TEST_CASE("ToUpper")
 {
@@ -24,16 +23,16 @@ TEST_CASE("ToLower")
 
 TEST_CASE("ModifiedUtf8")
 {
-    Utf16String utf16 = Unicode::Utf8To16(String("\0\0HEI\0\0HADE\0\0", 13), 0);
+    Utf16String utf16 = Unicode::Utf8To16(String("\0\0foo\0\0bar\0\0", 12));
     String mutf8 = Unicode::Utf16To8(utf16, UnicodeFlagsModifiedUtf8);
-    REQUIRE(mutf8.Length() == 17);
-    REQUIRE(mutf8.Length() > 0 && mutf8[0] == (char)(unsigned char)0xC0);
-    REQUIRE(mutf8.Length() > 1 && mutf8[1] == (char)(unsigned char)0x80);
+    REQUIRE(mutf8.Length() == 18);
+    REQUIRE(mutf8[0] == (char)(unsigned char)0xC0);
+    REQUIRE(mutf8[1] == (char)(unsigned char)0x80);
 
     Utf16String utf16_3 = Unicode::Utf8To16(mutf8, UnicodeFlagsModifiedUtf8);
-    REQUIRE(Unicode::Utf16To8(utf16_3, 0).Length() == 13);
-    REQUIRE(Unicode::Utf16To8(utf16_3, UnicodeFlagsModifiedUtf8).Length() == 17);
+    REQUIRE(Unicode::Utf16To8(utf16_3, 0).Length() == 12);
+    REQUIRE(Unicode::Utf16To8(utf16_3, UnicodeFlagsModifiedUtf8).Length() == 18);
 
     Utf16String utf16_2 = Unicode::Utf8To16(mutf8, UnicodeFlagsIgnoreError);
-    REQUIRE(Unicode::Utf16To8(utf16_2, UnicodeFlagsIgnoreError).Length() == 0);
+    REQUIRE(Unicode::Utf16To8(utf16_2).Length() == 0);
 }
