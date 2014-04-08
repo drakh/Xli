@@ -1,33 +1,39 @@
-if (WIN32)
+set(SRC GLContext.cpp)
 
- 
-else()
+if (XLI_PLATFORM_IOS)
 
-    set(Sources GLContext.cpp sdl2/SDL2GLContext.cpp)
+    set(SRC ${SRC} sdl2/SDL2GLContext.cpp)
+    include_directories(${PROJECT_SOURCE_DIR}/src/core/sdl2/3rdparty/SDL2/include)
 
-    if (IOS)
+elseif (XLI_PLATFORM_OSX)
 
-        include_directories(${PROJECT_SOURCE_DIR}/src/core/sdl2/3rdparty/SDL2/include)
+    set(SRC ${SRC} 3rdparty/glew/src/glew.c)
+    set(SRC ${SRC} sdl2/SDL2GLContext.cpp)
+    add_definitions(-DXLI_HAS_GLEW -DGLEW_STATIC)
+    include_directories(${PROJECT_SOURCE_DIR}/src/gl/3rdparty/glew/include)
+    include_directories(${PROJECT_SOURCE_DIR}/src/core/sdl2/3rdparty/SDL2/include)
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-framework,OpenGL")
 
-    elseif (APPLE)
+elseif (XLI_PLATFORM_LINUX)
 
-        set(Sources ${Sources} 3rdparty/glew/src/glew.c)
-        add_definitions(-DXLI_HAS_GLEW -DGLEW_STATIC)
-        include_directories(${PROJECT_SOURCE_DIR}/src/gl/3rdparty/glew/include)
-        include_directories(${PROJECT_SOURCE_DIR}/src/core/sdl2/3rdparty/SDL2/include)
-        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-framework,OpenGL")
+    set(SRC ${SRC} sdl2/SDL2GLContext.cpp)
+    add_definitions(`sdl2-config --cflags`)
 
-    else()
-
-        add_definitions(-DXLI_HAS_GLEW `sdl2-config --cflags`)
-
+    if (NOT XLI_ARCH_ARM)
+        add_definitions(-DXLI_HAS_GLEW)
     endif()
 
 endif()
 
-add_library(XliGL ${Sources})
+add_library(XliGL ${SRC})
 target_link_libraries(XliGL Xli)
 
-if (UNIX AND NOT APPLE AND NOT WIN32)
-    target_link_libraries(XliGL SDL2 GL GLEW)
+if (XLI_PLATFORM_LINUX)
+
+    target_link_libraries(XliGL SDL2)
+
+    if (NOT XLI_ARCH_ARM)
+        target_link_libraries(GL GLEW)
+    endif()
+
 endif()

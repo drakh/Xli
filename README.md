@@ -59,6 +59,9 @@ Uno users can use the *Uno Native Build environment* provided by Outracks, conta
 - OS X (>= 10.7)
 - Xcode with most recent iOS SDK
 - Xcode command line tools
+- CMake
+
+**MacPorts** users can execute `sudo port install cmake` to install CMake.
 
 ### Instructions
 
@@ -70,15 +73,13 @@ Uno users can use the *Uno Native Build environment* provided by Outracks, conta
      - `lib/iOS/Release-iphoneos/`
      - `lib/iOS/Release-iphonesimulator/`
 
-If needed, the actual Xcode project is located here: `projects/iOS/Xli Library.xcodeproj`
-
 
 ## Linux
 
 ### Prerequisites
 
 - GNU make, C++ compiler, etc
-- cmake
+- CMake
 - curl (with OpenSSL support)
 - freetype
 - GLEW
@@ -117,12 +118,12 @@ List of available options can be shown using `./build.sh --help`.
 - OS X (>= 10.7)
 - Xcode
 - Xcode command line tools
-- cmake
+- CMake
 - portaudio (universal)
 
-**MacPorts** users can execute `sudo port install cmake portaudio +universal`
+**MacPorts** users can execute `sudo port install cmake portaudio +universal` to install CMake and portaudio.
 
-### Instructions - Command line
+### Instructions
 
 1. Open terminal and `cd` to Xli directory
 2. Execute `./build.sh`
@@ -134,14 +135,14 @@ Debug binaries can be produced by replacing command in step 2 with `./build.sh -
 
 List of available options can be shown using `./build.sh --help`.
 
-### Instructions - Xcode project
+**Note:** When building applications using Xcode, it would be useful to also build Xli using a generated Xcode project for better integration with debugger and such. This can be achieved using these alternative instructions:
 
 1. Open terminal and `cd` to Xli directory
 2. Execute `./build.sh --target=xcode`
    * This should produce universal binaries located here:
      - `lib/OSX/x86/Debug/`
      - `lib/OSX/x86/Release/`
-   * Xcode project located here:
+   * Generated Xcode project located here:
      - `build/xcode/Xli Library.xcodeproj`
 
 
@@ -150,7 +151,7 @@ List of available options can be shown using `./build.sh --help`.
 ### Prerequisites
 
 - GNU make, C++ compiler, etc
-- cmake
+- CMake
 - curl (with OpenSSL support)
 - freetype
 - [libjpeg]

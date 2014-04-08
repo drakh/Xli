@@ -1,23 +1,23 @@
 #!/bin/sh
 set -e
 
-if [ "$CMAKE" = "1" ]; then
+cd "`dirname "$0"`"
+XLI_DIR="`pwd -P`"
 
-	mkdir -p build/iOS
-	cd build/iOS
+cd "$XLI_DIR"
+mkdir -p build/iphoneos
+cd build/iphoneos
 
-	rm -f CMakeCache.txt
-	cmake -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain/iOS.cmake -GXcode ../..
+cmake -DCMAKE_TOOLCHAIN_FILE="$XLI_DIR/cmake/toolchain/iOS.cmake" -DIOS_PLATFORM=OS -GXcode "$XLI_DIR"
 
-	xcodebuild -alltargets -configuration Debug
-	xcodebuild -alltargets -configuration Release
+xcodebuild -alltargets -configuration Debug -sdk iphoneos
+xcodebuild -alltargets -configuration Release -sdk iphoneos
 
-else
+cd "$XLI_DIR"
+mkdir -p build/iphonesimulator
+cd build/iphonesimulator
 
-	cd "`dirname "$0"`/projects/iOS"
-	xcodebuild -alltargets -configuration Debug -sdk iphoneos
-	xcodebuild -alltargets -configuration Release -sdk iphoneos
-	xcodebuild -alltargets -configuration Debug -sdk iphonesimulator
-	xcodebuild -alltargets -configuration Release -sdk iphonesimulator
+cmake -DCMAKE_TOOLCHAIN_FILE="$XLI_DIR/cmake/toolchain/iOS.cmake" -DIOS_PLATFORM=SIMULATOR -GXcode "$XLI_DIR"
 
-fi
+xcodebuild -alltargets -configuration Debug -sdk iphonesimulator
+xcodebuild -alltargets -configuration Release -sdk iphonesimulator

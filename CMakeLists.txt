@@ -1,6 +1,6 @@
 project("Xli Library")
 
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8)
 
 include(cmake/modules/XliLibSetup.cmake)
 
@@ -9,8 +9,8 @@ link_directories(${LIBRARY_OUTPUT_PATH})
 
 if (APPLE)
 
-    set(CMAKE_C_FLAGS "-Wno-switch-enum -Wno-logical-op-parentheses -Wno-parentheses-equality -Wno-extra-tokens -Wno-deprecated-declarations")
-    set(CMAKE_CXX_FLAGS "-Wno-switch-enum -Wno-logical-op-parentheses -Wno-parentheses-equality")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-switch-enum -Wno-logical-op-parentheses -Wno-parentheses-equality -Wno-extra-tokens -Wno-deprecated-declarations")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-switch-enum -Wno-logical-op-parentheses -Wno-parentheses-equality")
 
 endif()
 
