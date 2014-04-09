@@ -5,6 +5,13 @@
 
 namespace Xli
 {
+    //{TODO} terrible
+    void CTError::Execute()
+    {
+        //Err->WriteLine("XLI: ", this->message.DataPtr());
+        XLI_THROW(this->message.DataPtr());
+    }
+
     bool WindowEventHandler::OnKeyDown(Window* wnd, Key key)
     {
         return false;

@@ -24,8 +24,7 @@ static volatile int visible = 1;
 namespace Xli
 {
     namespace PlatformSpecific
-    {        
-        
+    {                      
         class AWindow: public Window
         {
             MutexQueue<WindowAction*> ctActionQueue;

@@ -1,58 +1,66 @@
 #include <XliHttp/HttpClient.h>
-#include <CurlHttpClient.h>
+#include "CurlHttpClient.h"
 #include <Xli/HashMap.h>
+#include <Xli/Mutex.h>
 #include <curl/curl.h>
 #include <pthread.h>
 
+extern Xli::Window* GlobalWindow;
+
 namespace Xli
 {
-    class CurlHook
+    static int HttpInitialized = 0;
+    static CURLcode CurlGlobalCode;
+    static void InitCurlHttp()
     {
-    public:
-        static int HttpInitialized = 0;
-        CURLcode CurlGlobalCode;
-
-        static void Init()
+        if (!HttpInitialized)
         {
-            if (!HttpInitialized)
-            {
-                CurlGlobalCode = curl_global_init(CURL_GLOBAL_ALL);
-                HttpInitialized = 1;
-            }
+            CurlGlobalCode = curl_global_init(CURL_GLOBAL_ALL);
+            HttpInitialized = 1;
         }
-        static void Close()
-        {
-            curl_global_cleanup();
-        }
-    };
+    }
+    static void ShutdownCurlHttp()
+    {
+        curl_global_cleanup();
+    }
 
     class CurlHttpRequest : public HttpRequest
     {
     private:
+        int timeout;
+        String url;
+    public:
         Managed< HttpStateChangedHandler > stateChangedCallback;
         Managed< HttpProgressHandler > progressCallback;
         Managed< HttpTimeoutHandler > timeoutCallback;
         Managed< HttpErrorHandler > errorCallback;
         Managed< HttpStringPulledHandler > stringPulledCallback;
         Managed< HttpArrayPulledHandler > arrayPulledCallback;
+        HashMap<String,String> headers;
+        HashMap<String,String> responseHeaders;
+        HttpRequestState status;
         HttpMethodType method;
+        int responseStatus;
+        String reasonPhrase;
         CURL* curlSession;
-        int timeout;
-        String url;
+        pthread_t threadID;
         Array<UInt8> recievedData;
         String recievedString;
+        bool contentAsString;
         bool dataReady;
+        Mutex unpauseMutex;
+        bool unpause;
         bool reading;
-    public:
+
         CurlHttpRequest()
         {
             this->status = HttpUnsent;
             this->url = "";
             this->method = HttpGetMethod;
             this->timeout = 0;
-            this->recievedData = malloc(1);
             this->dataReady = false;
             this->reading = false;
+            this->unpause = false;
         }
         CurlHttpRequest(String url, HttpMethodType method)
         {
@@ -60,9 +68,9 @@ namespace Xli
             this->url = url;
             this->method = method;
             this->timeout = 0;
-            this->recievedData = malloc(1);
             this->dataReady = false;
             this->reading = false;
+            this->unpause = false;
         }
 
         virtual ~CurlHttpRequest()
@@ -72,6 +80,10 @@ namespace Xli
         virtual HttpRequestState GetStatus() const
         {
             return this->status;
+        }
+        virtual void EmitStateEvent()
+        {
+            GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpStateAction(this, this->status));
         }
 
         virtual void SetMethod(HttpMethodType method)
@@ -325,154 +337,215 @@ namespace Xli
             }
         }
 
-        void callback Send(void* content, long byteLength)
+        virtual void Send(void* content, long byteLength)
         {
-            this->status = HttpSent;
-            if (this->stateChangedCallback!=0) this->emitStateEvent();
-
-            javaAsyncHandle = PlatformSpecific::AShim::SendHttpAsync(this, content, byteLength);
-        }
-
-        virtual void Send(String content)
-        {
-            this->status = HttpSent;
-            if (this->stateChangedCallback!=0) this->emitStateEvent();
-            javaAsyncHandle = PlatformSpecific::AShim::SendHttpAsync(this, content);
-        }
-
-        virtual void Send()
-        {
+            //{TODO} WHERE IS THE CONTEXT CACHED?
             CURL* session = curl_easy_init();
             if (!session)
                 XLI_THROW("CURL ERROR: Failed to create handle");
 
             CURLcode result = CURLE_OK;
-            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_URL, url.DataPtr());
-            if (result == CURLE_OK) result = curl_easy_setopt(session, methodToCurlCode(self->method), 1);
-            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_CONNECTTIMEOUT, self->timeout);
+            if (result == CURLE_OK) result = curl_easy_setopt(session, methodToCurlOption(this->method), 1);
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_URL, url.DataPtr());            
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_CONNECTTIMEOUT, this->timeout);
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_AUTOREFERER, 1);
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_USERAGENT, "libcurl-agent/1.0");
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_HEADERFUNCTION, onHeaderRecieved);
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_HEADERDATA, (void*)this);
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_WRITEFUNCTION, onDataRecieved);
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_WRITEDATA, (void*)this);
 
+
             //progress callback
-            if (this->progressCallback!=0 &&)
+            if (this->progressCallback!=0) //{TODO} check method type?
             {
-                result = curl_easy_setopt(session, CURLOPT_NOPROGRESS, 0);
-                result = curl_easy_setopt(session, CURLOPT_XFERINFODATA, (void*)this);
-                result = curl_easy_setopt(session, CURLOPT_XFERINFOFUNCTION, onProgress);
+                if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_NOPROGRESS, 0);
+                if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_PROGRESSDATA, (void*)this);
+                if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_PROGRESSFUNCTION, onProgress);
             }
 
             //Method specific options
             switch(method)
             {
             case HttpGetMethod:
+                //{TODO} if content then fail
                 break;
             case HttpPostMethod:
-                break;
-            case HttpOptionsMethod:
-                break;
-            case HttpHeadMethod:
+                //{TODO} if no content fail
+                if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_POSTFIELDS, (void*)content);
+                if (byteLength == -1)
+                {
+                    if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_POSTFIELDSIZE, -1);
+                } else {
+                    if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_POSTFIELDSIZE_LARGE, byteLength);
+                }
                 break;
             case HttpPutMethod:
+                //{TODO} if no content fail
+                if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_READFUNCTION, onDataUpload);
+                if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_READDATA, (void*)this);
                 // CURLOPT_READDATA and CURLOPT_INFILESIZE or CURLOPT_INFILESIZE_LARGE
                 break;
-            case HttpDeleteMethod:
-                break;
-            case HttpTraceMethod:
-                break;
+            default:
+                //{TODO} fail as unimplemented
+                break;                
             };
-            //CURLOPT_NOBODY
 
-            if (result == CURLE_OK) result = curl_easy_perform(session); //{TODO} and if it isnt?
+            if (result == CURLE_OK)
+            {
+                this->curlSession = session;                
+                //{TODO} MUST SET default attributes (arg 2)
+                int threadError = pthread_create(&threadID, NULL, perform, (void*)this);
+                //{TODO} handle errors here - http://man7.org/linux/man-pages/man3/pthread_create.3.html
+            } else {
+                //{TODO} what do we have to tear down here?
+            }
+        }
+        virtual void Send(String content)
+        {
+            this->Send((void*)content.DataPtr(), -1);
+        }
+        virtual void Send()
+        {
+            this->Send((void*)0, -1);
+        }
 
-            this->perform(CURL* session);
+        virtual void Abort()
+        {
+            //{TODO} implement me
+        }
+        virtual void PullContentString() 
+        {
+            //{TODO} implement me
+            if (this->status==HttpHeadersReceived)
+            {
+                this->contentAsString = true;
+                MutexLock lock(this->unpauseMutex);
+                this->unpause = true;
+                
+            } else {
+                Err->Write("Cant pull content string"); //{TODO} proper error here
+            }
+        }
+        virtual void PullContentArray() 
+        {
+            //{TODO} implement me
         }
 
     private:
-        virtual perform(CURL* session)
+        virtual void cleanUpSession()
+        {
+            //{TODO} implement me
+        }
+
+        static void* perform(void* requestVoid)
         {
             //signal state changed
-            this->status = HttpSent;
-            if (this->stateChangedCallback!=0) this->emitStateEvent();
-            
+            CurlHttpRequest* request = (CurlHttpRequest*)requestVoid;
+            GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpStateAction(request, HttpSent));
+
             //start the curl request. curl_easy_perform will block
-            this->session = session;
-            CURLcode result = curl_easy_perform(session);
-            if (result != 0)
-                dispatchError(result);
-        }
-        virtual void dispatchError(CURLcode error)
-        {
-            switch(method)
+            CURLcode error = curl_easy_perform(request->curlSession);
+            if (error != 0)
             {
-            case CURLE_OPERATION_TIMEOUT : onTimeout(this); break;
-            default: XLI_THROW("XLI CURL: UNHANDLED CURL ERROR."); break;
-            };
+                switch(error)
+                {
+                case CURLE_OPERATION_TIMEDOUT : onTimeout(request); break;
+                default:
+                    String finalMessage = Xli::String("XliHttp: UNHANDLED CURL ERROR: ");
+                    finalMessage += CurlErrorToString(error);
+                    GlobalWindow->EnqueueCrossThreadEvent(new CTError(finalMessage));
+                    break;
+                };
+            }
+            return 0; //{TODO} valid return?
         }
 
-        virtual CURLcode methodToCurlCode(HttpMethodType method)
+        static size_t onHeaderRecieved(void *ptr, size_t size, size_t nmemb, void *userdata)
         {
-            switch(method)
+            CurlHttpRequest* request = (CurlHttpRequest*)userdata;
+            size_t bytesPulled = (size * nmemb);
+            if (bytesPulled > 0)
             {
-            case HttpGetMethod: return CURLOPT_GET;
-            case HttpPostMethod: return CURLOPT_POST;
-            case HttpOptionsMethod: return CURLOPT_OPTIONS;
-            case HttpHeadMethod: return CURLOPT_HEAD;
-            case HttpPutMethod: return CURLOPT_UPLOAD;
-            case HttpDeleteMethod: return CURLOPT_DELETE;
-            case HttpTraceMethod: return CURLOPT_TRACE;
-            default: XLI_THROW("MethodToCurlCode: Invalid Method Code");
-            };
+                String fullHeader((char*)ptr, bytesPulled);
+                int splitPos = fullHeader.IndexOf(':');
+                if (splitPos > 0)
+                {
+                    request->responseHeaders.Add(fullHeader.Substring(0, splitPos-1), fullHeader.Substring(splitPos+1));
+                } else {
+                    request->responseHeaders.Add(fullHeader, "");
+                }
+            }
+            return bytesPulled;
         }
-        void CurlHttpRequest::emitStateEvent()
+        static size_t onDataUpload( void *ptr, size_t size, size_t nmemb, void *userdata)
         {
-            GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpStateAction(this, this->status));
+            CurlHttpRequest* request = (CurlHttpRequest*)userdata;
+            //{TODO} IMPLEMENT ME
+            return 0; //{TODO} valid return?
         }
-        static size_t onDataRecieved(char* ptr, size_t size, size_t nmemb, void* userdata);
-        {
-            CurlHttpRequest* request = (CurlHttpRequest*)userdata;            
 
-            request->reading = true  //{TODO} this is a temporary hack
+        static size_t onDataRecieved(char* ptr, size_t size, size_t nmemb, void* userdata)
+        {
+            CurlHttpRequest* request = (CurlHttpRequest*)userdata;
+            size_t actualBytesRead = 0;
+
+            // {TODO} saying we have the headers at this point. Check the validity
 
             if (request->reading == true)
             {
                 request->dataReady = true;
                 if (request->contentAsString) {
-                    onStringDataRecieved(request, ptr, (size * nmemb));
+                    actualBytesRead = onStringDataRecieved(request, ptr, (size * nmemb));
                 } else {
-                    onByteDataRecieved(request, ptr, (size * nmemb));
+                    actualBytesRead = onByteDataRecieved(request, ptr, (size * nmemb));
                 }
             } else {
                 request->dataReady = true;
+                actualBytesRead = CURL_WRITEFUNC_PAUSE;
+                if ((int)request->status < (int)HttpHeadersReceived)
+                    GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpStateAction(request, HttpHeadersReceived));
             }
+            //{TODO} Is this correct? check the specific methods
+            return actualBytesRead;
         }
         static size_t onStringDataRecieved(CurlHttpRequest* request, char* ptr, size_t bytesRecieved)
         {
             request->recievedString.Append((char*)ptr, bytesRecieved);
+            return bytesRecieved;
         }
         static size_t onByteDataRecieved(CurlHttpRequest* request, char* ptr, size_t bytesRecieved)
         {
-            request->recievedData.AddRange((UInt8*)ptr, bytesRecieved);            
+            request->recievedData.AddRange((UInt8*)ptr, bytesRecieved);
+            return bytesRecieved;
         }
-        static void onStateChanged()
+        static int onProgress(void *clientp, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow)
         {
-        }
-        static int onProgress(void *clientp, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow);
-        {
-            CurlHttpRequest* request = (CurlHttpRequest*)userdata;
-            UInt64 total = (UInt64)dltotal;
-            UInt64 pos = (UInt64)dlnow;
+            CurlHttpRequest* request = (CurlHttpRequest*)clientp;
+            //{TODO} check if we are uploading or downloading...not sure if we can do this by status.. check the size vals above
+            if (request->reading)
+            {
+                UInt64 total = (UInt64)dltotal;
+                UInt64 pos = (UInt64)dlnow;
+                //{TODO} stuff here ... ^^-the fuck is that? hehe
+            } else {
+                MutexLock lock(request->unpauseMutex);
+                if (request->unpause)
+                {
+                    request->reading=true;
+                    GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpStateAction(request, HttpLoading));
+                    curl_easy_pause(request->curlSession, CURLPAUSE_CONT);
+                }
+            }
+            return 0; //{TODO} valid return?
         }
         static void onTimeout(CurlHttpRequest* request)
         {
-            
-        }
-        static void onError()
-        {
+            GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpTimeoutAction(request));
         }
         static void onStringPulled()
         {
+            
         }
         static void onArrayPulled()
         {
@@ -481,7 +554,7 @@ namespace Xli
 
     //------------------------------------------------------------
 
-    CurlHttpStateAction::CHttpStateAction(CurlHttpRequest* request, HttpRequestState status)
+    CurlHttpStateAction::CurlHttpStateAction(CurlHttpRequest* request, HttpRequestState status)
     {
         this->Request = request;
         this->Status = status;
@@ -494,9 +567,9 @@ namespace Xli
                 this->Request->stateChangedCallback->OnResponse(this->Request, this->Status);
             if (this->Status == HttpDone)
             {
-                if (this->Request->arrayBody)
+                if (!this->Request->contentAsString)
                 {
-                    if (this->Request->cachedContentArray && this->Request->arrayPulledCallback)
+                    if (this->Request->recievedData.Length() && this->Request->arrayPulledCallback)
                     {
                         //{TODO} Fix me
                         //this->Request->arrayPulledCallback->OnResponse(this->Request, this->Request->cachedContentArray, this->Request->cachedContentArrayLength);
@@ -547,7 +620,7 @@ namespace Xli
 
     HttpRequest* HttpRequest::Create()
     {
-        if (!HttpInitialized) CurlHook.Init();
+        if (!HttpInitialized) InitCurlHttp();
         return new CurlHttpRequest();
     }
 }

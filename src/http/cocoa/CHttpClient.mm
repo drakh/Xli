@@ -802,4 +802,4 @@ namespace Xli
     {
         return new CHttpRequest();
     }
-}
+};

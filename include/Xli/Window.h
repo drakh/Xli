@@ -24,6 +24,14 @@ namespace Xli
     public:
         virtual void Execute() = 0;
     };
+    //{TODO} these actions need a better home
+    class CTError : public WindowAction
+    {   
+    public:
+        String message;
+        CTError(String message) { this->message = message; }
+        virtual void Execute();
+    };
 
     enum Key
     {

@@ -132,16 +132,17 @@ namespace Xli
             virtual bool Init(AStreamType streamType, jobject javaStream);
         };
 
-        class CTError : WindowAction
-        {        
-            String message;
-            CTError(String message) { this->message = message; }
-            virtual void Execute()
-            {
-                LOGE("XLI: ", this->message->DataPtr());
-                XLI_THROW(this->message->DataPtr());
-            }
-        };
+        /* this has moved */
+        /* class CTError : public WindowAction */
+        /* {         */
+        /*     String message; */
+        /*     CTError(String message) { this->message = message; } */
+        /*     virtual void Execute() */
+        /*     { */
+        /*         LOGE("XLI: ", this->message->DataPtr()); */
+        /*         XLI_THROW(this->message->DataPtr()); */
+        /*     } */
+        /* }; */
 
         /**
             \ingroup XliCorePlatform
@@ -452,21 +453,23 @@ namespace Xli
             static void HandleSpecialAndroidKeyEvents(AKeyEvent androidKeyCode);
             static void InitDefaultCookieManager();
         };
-        class CTKeyAction : WindowAction
+        class CTKeyAction : public WindowAction
         {
+        public:
             Xli::Key KeyEvent;
             bool KeyDown;
-            CTKeyAction(AKeyEvent keyEvent, keyDown) 
+            CTKeyAction(AKeyEvent keyEvent, bool keyDown) 
             { 
                 this->KeyEvent = AShim::AndroidToXliKeyEvent(keyEvent);
                 this->KeyDown = keyDown;
             }
             virtual void Execute();
         };
-        class CTTextAction : WindowAction
+        class CTTextAction : public WindowAction
         {
+        public:
             String Text;
-            CTKeyAction(String text) { this->Text; }
+            CTTextAction(String text) { this->Text = text; }
             virtual void Execute();
         };
 

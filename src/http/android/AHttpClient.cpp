@@ -8,7 +8,6 @@ extern Xli::Window* GlobalWindow;
 
 namespace Xli
 {
-
     class AHttpRequest : public HttpRequest
     {
     private:
@@ -391,7 +390,7 @@ namespace Xli
         }
     };
     
-    class AHttpTimeoutAction : public PlatformSpecific::WindowAction
+    class AHttpTimeoutAction : public WindowAction
     {
     public:
         AHttpRequest* Request;
@@ -407,7 +406,7 @@ namespace Xli
                 this->Request->timeoutCallback->OnResponse(this->Request);
         }
     };
-    class AHttpProgressAction : public PlatformSpecific::WindowAction
+    class AHttpProgressAction : public WindowAction
     {
     public:
         AHttpRequest* Request;
@@ -429,7 +428,7 @@ namespace Xli
                 this->Request->progressCallback->OnResponse(this->Request, this->Position, this->TotalLength, this->LengthKnown);
         }
     };
-    class AHttpErrorAction : public PlatformSpecific::WindowAction
+    class AHttpErrorAction : public WindowAction
     {
     public:
         AHttpRequest* Request;
@@ -449,7 +448,7 @@ namespace Xli
                 this->Request->errorCallback->OnResponse(this->Request, this->ErrorCode, this->ErrorMessage);
         }
     };
-    class AHttpStateAction : public PlatformSpecific::WindowAction
+    class AHttpStateAction : public WindowAction
     {
     public:
         AHttpRequest* Request;
@@ -493,10 +492,10 @@ namespace Xli
 
     extern "C"
     {
-        void CrossHttpThreadThrow(Xli::String message)
+        void XliJ_CrossHttpThreadThrow(Xli::String message)
         {
             String emess = String("JAVA THROWN ERROR: ") + message;
-            GlobalWindow->EnqueueCrossThreadEvent(new Xli::PlatformSpecific::CTError(emess));
+            GlobalWindow->EnqueueCrossThreadEvent(new Xli::CTError(emess));
         }
 
         void JNICALL XliJ_HttpCallback (JNIEnv *env , jobject obj, jobject body,
@@ -616,7 +615,7 @@ namespace Xli
                 Xli::AHttpRequest* request = ((Xli::AHttpRequest*)((void*)requestPointer));
 
                 char const* cerrorMessage = env->GetStringUTFChars(errorMessage, NULL);
-                Xli::AHttpErrorAction err =  new Xli::AHttpErrorAction(request, (int)errorCode, Xli::String(cerrorMessage));
+                Xli::AHttpErrorAction* err =  new Xli::AHttpErrorAction(request, (int)errorCode, Xli::String(cerrorMessage));
                 env->ReleaseStringUTFChars(errorMessage, cerrorMessage);
 
                 GlobalWindow->EnqueueCrossThreadEvent(err);

@@ -9,7 +9,10 @@ extern Xli::WindowEventHandler* GlobalEventHandler;
 extern Xli::Window* GlobalWindow;
 
 
-void Xli::PlatformSpecific::CTTextAction::Execute() { GlobalEventHandler->OnTextInput(GlobalWindow, this->Text); }
+void Xli::PlatformSpecific::CTTextAction::Execute() 
+{ 
+    GlobalEventHandler->OnTextInput(GlobalWindow, this->Text); 
+}
 void Xli::PlatformSpecific::CTKeyAction::Execute() 
 { 
     if (this->KeyDown)
@@ -20,17 +23,16 @@ void Xli::PlatformSpecific::CTKeyAction::Execute()
     }    
 }
 
-
 extern "C"
 {
     void JNICALL XliJ_OnKeyUp (JNIEnv *env , jobject obj, jint keyCode) 
     {
-        GlobalWindow->EnqueueCrossThreadEvent(new Xli::PlatformSpecific::CTKeyAction((int)keyCode, false));
+        GlobalWindow->EnqueueCrossThreadEvent(new Xli::PlatformSpecific::CTKeyAction((Xli::PlatformSpecific::AKeyEvent)keyCode, false));
     }
 
     void JNICALL XliJ_OnKeyDown (JNIEnv *env , jobject obj, jint keyCode) 
     {
-        GlobalWindow->EnqueueCrossThreadEvent(new Xli::PlatformSpecific::CTKeyAction((int)keyCode, true));
+        GlobalWindow->EnqueueCrossThreadEvent(new Xli::PlatformSpecific::CTKeyAction((Xli::PlatformSpecific::AKeyEvent)keyCode, true));
     }
 
     void JNICALL XliJ_OnTextInput (JNIEnv *env , jobject obj, jstring keyChars) 
@@ -44,7 +46,7 @@ extern "C"
     {
         char const* cerrorMessage = env->GetStringUTFChars(errorMessage, NULL);
         Xli::String finalMessage = Xli::String("JavaThrown:(")+Xli::String(errorCode)+Xli::String("): ")+Xli::String(cerrorMessage); 
-        GlobalWindow->EnqueueCrossThreadEvent(new Xli::PlatformSpecific::CrossThreadError(finalMessage));
+        GlobalWindow->EnqueueCrossThreadEvent(new Xli::CTError(finalMessage));
         env->ReleaseStringUTFChars(errorMessage, cerrorMessage);
     }
 }

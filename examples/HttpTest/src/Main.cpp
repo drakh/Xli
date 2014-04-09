@@ -18,7 +18,6 @@ class Shouty : public HttpStateChangedHandler
         } else if (state == HttpDone) {
             Err->WriteFormat("state changed: %i\n", state);            
             Err->WriteLine("Got the body");
-            Err->WriteLine(request->GetContentString());
         } else {
             Err->WriteFormat("state changed: %i\n", state);
         }
@@ -55,17 +54,26 @@ class ErrorShout : public HttpErrorHandler
         Err->WriteLine("-------------------------------------");
     }
 };
+class ContentShout : public HttpStringPulledHandler
+{
+    virtual void OnResponse(HttpRequest* request, String content)
+    {
+        Err->WriteLine("-------------------------------------");
+        Err->WriteLine(content);
+        Err->WriteLine("-------------------------------------");
+    }
+};
 
 class GLApp: public Application
 {
 	Managed<GLContext> gl;
 
     // Managed<SimpleSound> sound;
-    Managed<HttpClient> httpClient;
     Managed<Shouty> stateChangedCallback;
     Managed<TimeoutShout> timeoutCallback;
     Managed<ProgressShout> progressCallback;
     Managed<ErrorShout> errorCallback;
+    Managed<ContentShout> contentCallback;
 
     double touchDownTime;
     double tapTime;
@@ -117,11 +125,12 @@ public:
         // Load some sounds
         // sound = SimpleSound::Create("test2.mp3", true);
 
-        httpClient = HttpClient::Create();
         stateChangedCallback = new Shouty();
         timeoutCallback = new TimeoutShout();
         progressCallback = new ProgressShout();
         errorCallback = new ErrorShout();
+        contentCallback = new ContentShout();
+        
         Err->WriteLine("-------------------------------------");
 	}
 
@@ -266,7 +275,7 @@ public:
                 //wnd->BeginTextInput((Xli::TextInputHint)0);
                 // sound->Play(false);
 
-                HttpRequest* req = httpClient->NewRequest();
+                HttpRequest* req = HttpRequest::Create();
                 req->SetUrl("http://httpbin.org/get");
                 //req->Url = "http://youtube.com";
                 req->SetMethod(HttpGetMethod);
@@ -274,6 +283,7 @@ public:
                 req->SetTimeoutCallback(timeoutCallback);
                 req->SetProgressCallback(progressCallback);
                 req->SetErrorCallback(errorCallback);
+                req->SetStringPulledCallback(contentCallback);
                 req->SetHeader("Accept", "*/*");
                 req->SetHeader("ohhai","canhazdata");
                 //req->Send("test=and here is some data");
