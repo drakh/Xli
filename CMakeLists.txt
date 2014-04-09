@@ -21,13 +21,13 @@ add_subdirectory(src/main)
 add_subdirectory(src/media)
 
 if (NOT XLI_NO_GL)
-	add_subdirectory(src/gl)
+    add_subdirectory(src/gl)
 endif()
 
-if (NOT XLI_NO_HTTP)
-	#add_subdirectory(src/http)
+if (NOT XLI_NO_HTTP_CLIENT)
+    add_subdirectory(src/http)
 endif()
 
-if (NOT XLI_NO_AUDIO)
-	#add_subdirectory(src/audio)
+if (NOT XLI_NO_SOUND_PLAYER)
+    add_subdirectory(src/sound_player)
 endif()
