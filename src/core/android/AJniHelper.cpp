@@ -1,5 +1,5 @@
 #include <Xli/PlatformSpecific/Android.h>
-#include <XliHttp/HttpClient.h>
+#include <XliHttpClient.h>
 #include <pthread.h>
 #include <stdarg.h>
 

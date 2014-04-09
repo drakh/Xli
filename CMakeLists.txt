@@ -25,7 +25,7 @@ if (NOT XLI_NO_GL)
 endif()
 
 if (NOT XLI_NO_HTTP_CLIENT)
-    add_subdirectory(src/http)
+    add_subdirectory(src/http_client)
 endif()
 
 if (NOT XLI_NO_SOUND_PLAYER)
