@@ -5,6 +5,7 @@
 #include <Xli/Stream.h>
 #include <Xli/HashMap.h>
 
+//{TODO} Need to add a cross platform error code for http.
 
 namespace Xli
 {   

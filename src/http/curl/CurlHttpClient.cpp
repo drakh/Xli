@@ -4,6 +4,8 @@
 #include <Xli/Mutex.h>
 #include <curl/curl.h>
 #include <pthread.h>
+#include <stdlib.h>
+#include <cstring>
 
 extern Xli::Window* GlobalWindow;
 
@@ -38,9 +40,13 @@ namespace Xli
         Managed< HttpArrayPulledHandler > arrayPulledCallback;
         HashMap<String,String> headers;
         HashMap<String,String> responseHeaders;
+        struct curl_slist* curlUploadHeaders;
         HttpRequestState status;
         HttpMethodType method;
         int responseStatus;
+        void* uploadData;
+        long uploadByteLength;
+        long uploadPosition;
         String reasonPhrase;
         CURL* curlSession;
         pthread_t threadID;
@@ -48,9 +54,11 @@ namespace Xli
         String recievedString;
         bool contentAsString;
         bool dataReady;
-        Mutex unpauseMutex;
-        bool unpause;
         bool reading;
+        // cross thread flags
+        Mutex communicationMutex;
+        bool unpause;
+        bool abort;
 
         CurlHttpRequest()
         {
@@ -61,6 +69,8 @@ namespace Xli
             this->dataReady = false;
             this->reading = false;
             this->unpause = false;
+            this->abort = false;
+            curlUploadHeaders=NULL;        
         }
         CurlHttpRequest(String url, HttpMethodType method)
         {
@@ -70,7 +80,8 @@ namespace Xli
             this->timeout = 0;
             this->dataReady = false;
             this->reading = false;
-            this->unpause = false;
+            this->abort = false;
+            curlUploadHeaders=NULL;
         }
 
         virtual ~CurlHttpRequest()
@@ -339,14 +350,22 @@ namespace Xli
 
         virtual void Send(void* content, long byteLength)
         {
-            //{TODO} WHERE IS THE CONTEXT CACHED?
+            if (this->status != HttpUnsent)
+                XLI_THROW("HttpRequest->SetArrayPulledCallback(): Not in a valid state to set the virtual");
+
+            //{TODO} Clarify when we copy data.
+            this->uploadByteLength = byteLength;
+            this->uploadData = malloc((size_t)byteLength);
+            this->uploadPosition = 0;
+            memcpy(content, this->uploadData, (size_t)byteLength);
+
             CURL* session = curl_easy_init();
             if (!session)
                 XLI_THROW("CURL ERROR: Failed to create handle");
 
             CURLcode result = CURLE_OK;
             if (result == CURLE_OK) result = curl_easy_setopt(session, methodToCurlOption(this->method), 1);
-            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_URL, url.DataPtr());            
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_URL, url.DataPtr());
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_CONNECTTIMEOUT, this->timeout);
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_AUTOREFERER, 1);
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_USERAGENT, "libcurl-agent/1.0");
@@ -355,9 +374,8 @@ namespace Xli
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_WRITEFUNCTION, onDataRecieved);
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_WRITEDATA, (void*)this);
 
-
             //progress callback
-            if (this->progressCallback!=0) //{TODO} check method type?
+            if (this->progressCallback!=0)
             {
                 if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_NOPROGRESS, 0);
                 if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_PROGRESSDATA, (void*)this);
@@ -368,10 +386,10 @@ namespace Xli
             switch(method)
             {
             case HttpGetMethod:
-                //{TODO} if content then fail
+                if (content!=0) result = CURLE_FAILED_INIT;
                 break;
             case HttpPostMethod:
-                //{TODO} if no content fail
+                if (content==0) result = CURLE_FAILED_INIT;
                 if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_POSTFIELDS, (void*)content);
                 if (byteLength == -1)
                 {
@@ -381,24 +399,67 @@ namespace Xli
                 }
                 break;
             case HttpPutMethod:
-                //{TODO} if no content fail
+                if (content==0) result = CURLE_FAILED_INIT;
                 if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_READFUNCTION, onDataUpload);
                 if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_READDATA, (void*)this);
-                // CURLOPT_READDATA and CURLOPT_INFILESIZE or CURLOPT_INFILESIZE_LARGE
                 break;
             default:
-                //{TODO} fail as unimplemented
-                break;                
+                if (content==0) result = CURLE_FAILED_INIT;
+                break;
             };
+
+            //Add headers
+            int i = this->HeadersBegin();
+            String header;
+            while (i != this->HeadersEnd())
+            {
+                header = "";
+                header.Append(this->GetHeaderKeyN(i));
+                header.Append(":");
+                header.Append(this->GetHeaderValueN(i));
+                this->curlUploadHeaders = curl_slist_append(this->curlUploadHeaders, header.DataPtr());
+                i = this->HeadersNext(i);
+            }           
+            curl_easy_setopt(session, CURLOPT_HTTPHEADER, this->curlUploadHeaders);
+            //{TODO} Add following to cleanup: curl_slist_free_all(this->curlUploadHeaders);
 
             if (result == CURLE_OK)
             {
-                this->curlSession = session;                
-                //{TODO} MUST SET default attributes (arg 2)
-                int threadError = pthread_create(&threadID, NULL, perform, (void*)this);
-                //{TODO} handle errors here - http://man7.org/linux/man-pages/man3/pthread_create.3.html
+                this->curlSession = session;
+                pthread_attr_t attr;
+                int rc;
+
+                //{TODO} what attrs do we need set?
+                //{TODO} when can we destroy the attrs?
+                rc = pthread_attr_init(&attr);
+
+                if (rc) {
+                    GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpErrorAction(this, (int)CURLE_OK, "Xli: Http: Could not create request"));
+                } else {
+                    int threadError = pthread_create(&threadID, &attr, perform, (void*)this);
+                    // {TODO} has some issues with compiling using the enums so am
+                    //        using the int vars. Seems to be a clang issue.
+                    switch (threadError)
+                    {
+                    case 35: //EAGAIN
+                        GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpErrorAction(this, 0, "XliHttp: Not enough resources to crate thread"));
+                        break;
+                    case 22: //EINVAL
+                        GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpErrorAction(this, 0, "XliHttp: Invalid settings in thread attributes."));
+                        break;
+                    case 1: //EPERM:
+                        GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpErrorAction(this, 0, "XliHttp: Permission issue creating thread"));
+                        break;
+                    default:
+                        if (threadError>0)
+                            GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpErrorAction(this, 0, "XliHttp: Thread Error")); //{TODO} add error code here
+                        break;
+                    }
+                    
+                }
             } else {
-                //{TODO} what do we have to tear down here?
+                curl_easy_cleanup(session);
+                GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpErrorAction(this, (int)result, "Xli: Http: Could not create request"));
             }
         }
         virtual void Send(String content)
@@ -412,32 +473,36 @@ namespace Xli
 
         virtual void Abort()
         {
-            //{TODO} implement me
+            if (this->status > 1 && this->status < 5 )
+            {
+                MutexLock lock(this->communicationMutex);
+                this->abort = true;
+            }
         }
-        virtual void PullContentString() 
+        virtual void PullContentString()
         {
-            //{TODO} implement me
             if (this->status==HttpHeadersReceived)
             {
                 this->contentAsString = true;
-                MutexLock lock(this->unpauseMutex);
+                MutexLock lock(this->communicationMutex);
                 this->unpause = true;
-                
             } else {
-                Err->Write("Cant pull content string"); //{TODO} proper error here
+                GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpErrorAction(this, 0, "XliHttp: Can't pull content string, invalid state'"));
             }
         }
-        virtual void PullContentArray() 
+        virtual void PullContentArray()
         {
-            //{TODO} implement me
+            if (this->status==HttpHeadersReceived)
+            {
+                this->contentAsString = false;
+                MutexLock lock(this->communicationMutex);
+                this->unpause = true;
+            } else {
+                GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpErrorAction(this, 0, "XliHttp: Can't pull content array, invalid state'"));
+            }
         }
 
     private:
-        virtual void cleanUpSession()
-        {
-            //{TODO} implement me
-        }
-
         static void* perform(void* requestVoid)
         {
             //signal state changed
@@ -445,7 +510,8 @@ namespace Xli
             GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpStateAction(request, HttpSent));
 
             //start the curl request. curl_easy_perform will block
-            CURLcode error = curl_easy_perform(request->curlSession);
+            CURLcode error = curl_easy_perform(request->curlSession);            
+            
             if (error != 0)
             {
                 switch(error)
@@ -458,7 +524,10 @@ namespace Xli
                     break;
                 };
             }
-            return 0; //{TODO} valid return?
+
+            //{TODO} cleanup this thread only and then call back to main thread to clean up there
+            //       -how?
+            return 0;
         }
 
         static size_t onHeaderRecieved(void *ptr, size_t size, size_t nmemb, void *userdata)
@@ -481,8 +550,19 @@ namespace Xli
         static size_t onDataUpload( void *ptr, size_t size, size_t nmemb, void *userdata)
         {
             CurlHttpRequest* request = (CurlHttpRequest*)userdata;
-            //{TODO} IMPLEMENT ME
-            return 0; //{TODO} valid return?
+            size_t maxCopyLength = (size * nmemb);
+            size_t copyLength = 0;
+            if (maxCopyLength > 0)
+            {
+                copyLength = (request->uploadByteLength - request->uploadPosition);
+                if (copyLength > maxCopyLength) copyLength = maxCopyLength;
+                if (copyLength>0)
+                {
+                    memcpy(request->uploadData, ptr, copyLength);
+                    request->uploadPosition += copyLength;
+                }
+            }
+            return copyLength;
         }
 
         static size_t onDataRecieved(char* ptr, size_t size, size_t nmemb, void* userdata)
@@ -522,14 +602,16 @@ namespace Xli
         static int onProgress(void *clientp, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow)
         {
             CurlHttpRequest* request = (CurlHttpRequest*)clientp;
-            //{TODO} check if we are uploading or downloading...not sure if we can do this by status.. check the size vals above
+            if (request->abort) 
+            {
+                return CURLE_ABORTED_BY_CALLBACK;
+            }
             if (request->reading)
             {
-                UInt64 total = (UInt64)dltotal;
-                UInt64 pos = (UInt64)dlnow;
-                //{TODO} stuff here ... ^^-the fuck is that? hehe
+                if (dlnow)
+                    GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpProgressAction(request, (long)dlnow, (long)dltotal, (dltotal > 0)));
             } else {
-                MutexLock lock(request->unpauseMutex);
+                MutexLock lock(request->communicationMutex);
                 if (request->unpause)
                 {
                     request->reading=true;
@@ -537,7 +619,7 @@ namespace Xli
                     curl_easy_pause(request->curlSession, CURLPAUSE_CONT);
                 }
             }
-            return 0; //{TODO} valid return?
+            return 0;
         }
         static void onTimeout(CurlHttpRequest* request)
         {
@@ -545,7 +627,7 @@ namespace Xli
         }
         static void onStringPulled()
         {
-            
+
         }
         static void onArrayPulled()
         {
@@ -571,8 +653,7 @@ namespace Xli
                 {
                     if (this->Request->recievedData.Length() && this->Request->arrayPulledCallback)
                     {
-                        //{TODO} Fix me
-                        //this->Request->arrayPulledCallback->OnResponse(this->Request, this->Request->cachedContentArray, this->Request->cachedContentArrayLength);
+                        this->Request->arrayPulledCallback->OnResponse(this->Request, this->Request->recievedData.DataPtr(), this->Request->recievedData.Length());
                     }
                 } else if (this->Request->stringPulledCallback) {
                     this->Request->stringPulledCallback->OnResponse(this->Request, this->Request->recievedString);

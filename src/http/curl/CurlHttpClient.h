@@ -5,7 +5,6 @@
 
 namespace Xli
 {
-
     class CurlHttpRequest;
     
     class CurlHttpStateAction : public WindowAction
