@@ -2,12 +2,12 @@
 set -e
 cd "`dirname "$0"`"
 
+XLI_DIR="`pwd -P`"
 DEBUG=0
 
 case $1 in
 clean)
-    rm -rfv projects/android/libs
-    rm -rfv projects/android/obj
+    rm -rfv build/android
     rm -rfv lib/android
     exit 0
     ;;
@@ -24,6 +24,22 @@ shim)
     ;;
 esac
 
+if [ "$DEBUG" = "1" ]; then
+    BUILD_TYPE="Debug"
+else
+    BUILD_TYPE="Release"
+fi
+
+BUILD_DIR="build/android/$BUILD_TYPE-$NDK_ABI"
+
+mkdir -p "$BUILD_DIR"
+cd "$BUILD_DIR"
+
+NDK_FILENAME=`which ndk-build`
+NDK_DIR=`dirname "$NDK_FILENAME"`
+NDK_ABI="armeabi-v7a"
+TOOLCHAIN_FILE="../../../cmake/toolchain/android.toolchain.cmake"
+
 if [ -f /proc/cpuinfo ]; then
     JOB_COUNT=`grep processor /proc/cpuinfo | wc -l`
 elif [ "`uname`" = "Darwin" ]; then
@@ -36,73 +52,23 @@ fi
 
 if [ "$OSTYPE" = "msys" ]; then
 
-SOURCE="projects/android"
-TARGET="lib/android"
-
-cd "$SOURCE"
-
-if [ "$OSTYPE" = "msys" ]; then
-    if [ "$DEBUG" = "1" ]; then
-        cmd "/c call ndk-build -j $JOB_COUNT APP_OPTIM=debug"
+    if [ -d "$NDK_DIR/prebuilt/windows-x86_64/bin" ]; then
+        MAKE_DIR="$NDK_DIR/prebuilt/windows-x86_64/bin"
     else
-        cmd "/c call ndk-build -j $JOB_COUNT"
+        MAKE_DIR="$NDK_DIR/prebuilt/windows-x86_32/bin"
     fi
-else
-    ndk-build -j $JOB_COUNT "$@"
+
+    CMAKE_FILENAME=`which cmake`
+    CMAKE_DIR=`dirname "$CMAKE_FILENAME"`
+    PATH="$CMAKE_DIR:$MAKE_DIR"
+
+    set -- -G"MinGW Makefiles" "$@"
+
 fi
 
-cd "$OLDPWD"
-
-if which rsync > /dev/null 2>&1; then
-    CP_CMD="rsync -vru"
-else
-    CP_CMD="cp -vru"
-fi
-
-for arch in "armeabi" "armeabi-v7a" "x86"; do
-    if [ -d "$SOURCE/obj/local/$arch" ]; then
-        mkdir -p "$TARGET/$arch"
-
-        # Note: Copy from 'obj' folder instead of 'libs' if DEBUG -- Non-stripped .so-s there
-        if [ "$DEBUG" = "1" ]; then
-            $CP_CMD "$SOURCE/obj/local/$arch/"*.a "$SOURCE/obj/local/$arch/"*.so "$TARGET/$arch"
-        else
-            $CP_CMD "$SOURCE/obj/local/$arch/"*.a "$SOURCE/libs/$arch/"*.so "$TARGET/$arch"
-        fi
-    fi
-done
-
-else
-
-XLI_DIR="`pwd -P`"
-NDK_FILENAME=`which ndk-build`
-NDK_DIR=`dirname "$NDK_FILENAME"`
-NDK_ABI="armeabi-v7a"
-
-if [ "$DEBUG" = "1" ]; then
-    BUILD_TYPE="Debug"
-else
-    BUILD_TYPE="Release"
-fi
-
-BUILD_DIR="build/android/$BUILD_TYPE-$NDK_ABI"
-
-mkdir -p "$BUILD_DIR"
-cd "$BUILD_DIR"
-
-set -- "$@" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
-set -- "$@" -DCMAKE_TOOLCHAIN_FILE="$XLI_DIR/cmake/toolchain/android.toolchain.cmake" 
-set -- "$@" -DANDROID_NDK="$NDK_DIR" 
-set -- "$@" -DANDROID_ABI="$NDK_ABI" 
-set -- "$@" -DANDROID_NATIVE_API_LEVEL="android-9"
-set -- "$@" -DANDROID_STL="stlport_static"
-
-if [ "$OSTYPE" = "msys" ]; then
-    set -- "$@" -G"MinGW Makefiles"
-    MAKE="$NDK_DIR/prebuilt/windows-x86_64/bin/make.exe"
-fi
+set -- -DCMAKE_BUILD_TYPE="$BUILD_TYPE" -DCMAKE_TOOLCHAIN_FILE="$TOOLCHAIN_FILE" "$@"
+set -- -DANDROID_NDK="$NDK_DIR" -DANDROID_ABI="$NDK_ABI" "$@"
+set -- -DANDROID_NATIVE_API_LEVEL="android-9" -DANDROID_STL="stlport_static" "$@"
 
 cmake "$@" "$XLI_DIR"
-make -j $JOB_COUNT
-
-fi
+make -j$JOB_COUNT
