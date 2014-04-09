@@ -2,7 +2,6 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := XliMedia
 
 LOCAL_SRC_FILES := \
-    ../../../src/sound_player/opensles/SlesSimpleAudio.cpp \
     ../../../src/media/3rdparty/json_parser/JSON_parser.c \
     ../../../src/media/3rdparty/unzip/ioapi.c \
     ../../../src/media/3rdparty/unzip/unzip.c \
@@ -111,7 +110,7 @@ LOCAL_C_INCLUDES := \
 
 LOCAL_CFLAGS   := -fexceptions -fno-rtti 
 LOCAL_CFLAGS   += -DFT2_BUILD_LIBRARY
-LOCAL_LDLIBS   := -lz -llog -lOpenSLES -landroid
+LOCAL_LDLIBS   := -lz -llog -landroid
 
 LOCAL_SHARED_LIBRARIES := Xli
 
