@@ -6,9 +6,12 @@ if (CMAKE_COMPILER_IS_GNUCC AND NOT APPLE)
     set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
 endif()
 
+set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+
 if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
     if (IOS)
+    
         set(XLI_PLATFORM_IOS True)
         set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/iOS)
 
@@ -19,29 +22,41 @@ if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
             set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${LIBRARY_OUTPUT_PATH}/Release-iphonesimulator)
             set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${LIBRARY_OUTPUT_PATH}/Debug-iphonesimulator)
         endif()
+    
     else()
+    
         set(XLI_PLATFORM_OSX True)
         set(CMAKE_OSX_ARCHITECTURES "x86_64;i386")
         set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/OSX/x86)
+    
     endif()
 
 elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
 
-    set(XLI_PLATFORM_LINUX True)
-    execute_process(COMMAND uname -m OUTPUT_VARIABLE MACHINE)
+    if (ANDROID)
 
-    if (${MACHINE} MATCHES "arm*")
-        set(XLI_ARCH_ARM True)
-        set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/linux/arm)
-        
-        # GLES on RPi
-        include_directories(/opt/vc/include)
-        link_directories(/opt/vc/lib)
+        set(XLI_PLATFORM_ANDROID True)
+        set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/android/${ANDROID_ABI})
 
-    elseif (CMAKE_SIZEOF_VOID_P EQUAL 8)
-        set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/linux/x86_64)
     else()
-        set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/linux/x86_32)
+
+        set(XLI_PLATFORM_LINUX True)
+        execute_process(COMMAND uname -m OUTPUT_VARIABLE MACHINE)
+
+        if (${MACHINE} MATCHES "arm*")
+            set(XLI_ARCH_ARM True)
+            set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/linux/arm)
+            
+            # GLES on RPi
+            include_directories(/opt/vc/include)
+            link_directories(/opt/vc/lib)
+
+        elseif (CMAKE_SIZEOF_VOID_P EQUAL 8)
+            set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/linux/x86_64)
+        else()
+            set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/linux/x86_32)
+        endif()
+
     endif()
 
 elseif (MSVC)

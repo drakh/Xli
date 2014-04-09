@@ -1,7 +1,12 @@
 set(SRC GLContext.cpp)
 set(LIBS Xli)
 
-if (XLI_PLATFORM_IOS)
+if (XLI_PLATFORM_ANDROID)
+
+    set(SRC ${SRC} egl/EGLContext.cpp)
+    set(LIBS ${LIBS} android log EGL GLESv2)
+
+elseif (XLI_PLATFORM_IOS)
 
     include_directories(${PROJECT_SOURCE_DIR}/src/core/sdl2/3rdparty/SDL2/include)
     set(SRC ${SRC} sdl2/SDL2GLContext.cpp)

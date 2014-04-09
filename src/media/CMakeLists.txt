@@ -177,7 +177,14 @@ include_directories(${UNZIP_INC})
 set(SRC ${SRC} ${JSON_SRC} ${UNZIP_SRC})
 set(LIBS Xli)
 
-if (XLI_PLATFORM_WIN32)
+if (XLI_PLATFORM_ANDROID)
+
+    add_definitions(-DFT2_BUILD_LIBRARY)
+    include_directories(${JPEG_INC} ${PNG_INC} ${FREETYPE_INC})
+    set(SRC ${SRC} ${JPEG_SRC} ${PNG_SRC} ${FREETYPE_SRC})
+    set(LIBS ${LIBS} z)
+
+elseif (XLI_PLATFORM_WIN32)
 
     add_definitions(-DFT2_BUILD_LIBRARY)
     include_directories(${ZLIB_INC} ${JPEG_INC} ${PNG_INC} ${FREETYPE_INC})

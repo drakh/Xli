@@ -33,14 +33,14 @@ Usage: cmakemake [<build-options>] <project-dir>
 
 Build options:
 
-  --debug             Debug build
-  --release           Release build (default)
-  --target="xcode"    Generate and build Xcode project
-  --no-build          Generate project, but don't build
-  --prefix=<path>     Set install prefix
-  -j<cpu-count>       Set compiler job count
-  -D<variable=value>  Define a cmake variable
-  -U<variable>        Undefine a cmake variable
+  --debug               Debug build
+  --release             Release build (default)
+  --target="xcode"      Generate and build Xcode project
+  --no-build            Generate project, but don't build
+  --prefix=<path>       Set install prefix
+  -j<cpu-count>         Set compiler job count
+  -D<variable>=<value>  Define a cmake variable
+  -U<variable>          Undefine a cmake variable
 
 Build script for CMake projects.
 

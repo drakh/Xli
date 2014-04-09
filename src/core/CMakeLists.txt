@@ -125,7 +125,25 @@ set(SDL2_STATIC_SRC
     ${SDL2_DIR}/src/video/SDL_surface.c
     ${SDL2_DIR}/src/video/SDL_video.c)
 
-if (XLI_PLATFORM_WIN32)
+if (XLI_PLATFORM_ANDROID)
+
+    set(SRC ${SRC}
+        android/AFileSystem.cpp
+        android/AJniHelper.cpp
+        android/AMessageBox.cpp
+        android/AShim.cpp
+        android/AStream.cpp
+        android/AWindow.cpp
+        generic/GenericDialogs.cpp
+        posix/PosixCond.cpp
+        posix/PosixFileSystemBase.cpp
+        posix/PosixMutex.cpp
+        posix/PosixTime.cpp
+        posix/PosixThread.cpp)
+
+    set(LIBS log android)
+
+elseif (XLI_PLATFORM_WIN32)
 
     set(SRC ${SRC}
         win32/Win32Cond.cpp
