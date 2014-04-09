@@ -12,8 +12,9 @@ if (XLI_PLATFORM_IOS)
 elseif (XLI_PLATFORM_ANDROID)
 
     set(SRC ${SRC} opensles/SlesSimpleAudio.cpp)
+    set(LIBS ${LIBS} OpenSLES)
 
 endif()
 
 add_library(XliSoundPlayer ${SRC})
-target_link_libraries(XliAudio ${LIBS})
+target_link_libraries(XliSoundPlayer ${LIBS})

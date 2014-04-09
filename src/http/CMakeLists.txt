@@ -1,6 +1,21 @@
-if (NOT IOS)
+set(SRC)
+set(LIBS Xli)
 
-    add_library(XliHttp curl/CurlClient.cpp)
-    target_link_libraries(XliHttp Xli curl)
+if (XLI_PLATFORM_IOS)
+
+	set(SRC ${SRC} cocoa/CHttpClient.mm)
+
+elseif (XLI_PLATFORM_ANDROID)
+
+	set(SRC ${SRC} android/AHttpClient.cpp)
+
+else()
+
+	set(SRC ${SRC} curl/CurlClient.cpp)
+	set(LIBS ${LIBS} curl)
 
 endif()
+
+add_library(XliHttpClient ${SRC})
+target_link_libraries(XliHttpClient ${LIBS})
+
