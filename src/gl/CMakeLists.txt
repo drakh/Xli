@@ -30,6 +30,16 @@ elseif (XLI_PLATFORM_LINUX)
         set(LIBS ${LIBS} GL GLEW)
     endif()
 
+elseif (XLI_PLATFORM_WIN32)
+
+    add_definitions(-DXLI_HAS_GLEW -DGLEW_STATIC)
+    include_directories(${PROJECT_SOURCE_DIR}/src/gl/3rdparty/glew/include)
+    set(SRC ${SRC} wgl/WGLContext.cpp 3rdparty/glew/src/glew.c)
+
+    if (MSVC)
+        set(LIBS ${LIBS} opengl32.lib)
+    endif()
+
 endif()
 
 add_library(XliGL ${SRC})

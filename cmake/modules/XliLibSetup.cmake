@@ -3,7 +3,7 @@ if (UNIX AND NOT WIN32 AND NOT IOS)
 endif()
 
 if (CMAKE_COMPILER_IS_GNUCC AND NOT APPLE)
-    set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-undefined")
 endif()
 
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
@@ -61,14 +61,31 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
 
 elseif (MSVC)
 
-    message(FATAL_ERROR "FIXME: Visual Studio builds are broken.")
-
     set(XLI_PLATFORM_WIN32 True)
 
-    set(CMAKE_BUILD_SHARED_LIBS FALSE INTERNAL)
-    set(CMAKE_CONFIGURATION_TYPES "Debug;Release" INTERNAL)
+    if (MSVC12)
+        set(LIBRARY_OUTPUT_PATH ${PROJECT_DIR}/lib/vs2013/$(PlatformShortName))
+    elseif (MSVC11)
+        set(LIBRARY_OUTPUT_PATH ${PROJECT_DIR}/lib/vs2012/$(PlatformShortName))
+    elseif (MSVC10)
+        set(LIBRARY_OUTPUT_PATH ${PROJECT_DIR}/lib/vs2010/$(PlatformShortName))
+    else()
+        message(FATAL_ERROR "Unsupported MSVC version")
+    endif()
 
-    set(XLI_MSVC_MT FALSE CACHE BOOL "Static Linked Runtime Library (/MT)")
+    if (CMAKE_CONFIGURATION_TYPES MATCHES "")
+        set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Solution Configurations" FORCE)
+    endif()
+
+    if (CMAKE_CXX_FLAGS MATCHES "")
+        set(CMAKE_CXX_FLAGS "/DWIN32 /D_WINDOWS /DUNICODE /D_UNICODE /W3 /GR- /EHsc /MP" CACHE STRING "C++ Compiler Flags" FORCE)
+    endif()
+
+    if (CMAKE_C_FLAGS MATCHES "")
+        set(CMAKE_C_FLAGS "/ /DWIN32 /D_WINDOWS /DUNICODE /D_UNICODE /W3 /MP" CACHE STRING "C Compiler Flags" FORCE)
+    endif()
+
+    #set(XLI_MSVC_MT FALSE CACHE BOOL "Static Linked Runtime Library (/MT)")
 
     if (XLI_MSVC_MT)
 
@@ -77,32 +94,8 @@ elseif (MSVC)
 
         set(CMAKE_CXX_FLAGS_DEBUG "/D_DEBUG /MTd /Zi /Ob0 /Od /RTC1")
         set(CMAKE_CXX_FLAGS_RELEASE "/MT /O2 /Ob2 /D NDEBUG")
-
-        set(CMAKE_RELEASE_POSTFIX MT)
-        set(CMAKE_DEBUG_POSTFIX MTD)
-
-    else()
-
-        set(CMAKE_RELEASE_POSTFIX MD)
-        set(CMAKE_DEBUG_POSTFIX MDD)
         
     endif()
-
-    if (CMAKE_SIZEOF_VOID_P EQUAL 8)
-        set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/msvc/x64)
-    else()
-        set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/msvc/x86)
-    endif()
-
-    set(CMAKE_C_FLAGS "/MP")
-    set(CMAKE_CXX_FLAGS "/MP /GR-")
-
-    set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Build Configurations (forced)" FORCE)
-
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${LIBRARY_OUTPUT_PATH})
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${LIBRARY_OUTPUT_PATH})
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${LIBRARY_OUTPUT_PATH})
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${LIBRARY_OUTPUT_PATH})
 
 elseif (WIN32)
 

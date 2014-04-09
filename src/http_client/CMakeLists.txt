@@ -1,3 +1,7 @@
+if (WIN32)
+    return()
+endif()
+
 set(SRC)
 set(LIBS Xli)
 
