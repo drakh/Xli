@@ -1,6 +1,5 @@
 #include <Xli.h>
 #include <XliGL.h>
-#include <XliAudio.h>
 
 using namespace Xli;
 
@@ -15,6 +14,8 @@ class GLApp: public Application
 public:
     GLApp()
     {
+        dialogType = 0;
+        
         PrintLine("Starting GLApp");
     }
 
@@ -27,8 +28,6 @@ public:
     {
         Err->WriteLine("OnInit");
         
-        dialogType = 0;
-
         // Setup OpenGL
 
         GLContextAttributes glAttribs = GLContextAttributes::Default();
