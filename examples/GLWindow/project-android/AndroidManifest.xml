@@ -12,19 +12,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application android:label="GLWindow"
-                 android:debuggable="true"
                  android:allowBackup="false"
-<<<<<<< .mine
                  android:hardwareAccelerated="true"
                  >
-
-=======
-                 android:vmSafeMode="true"       
-                 android:allowClearUserData="true"
-                 android:hardwareAccelerated="true">
->>>>>>> .theirs
         <activity android:name="GLWindow" 
-                android:label="GLWindow"
                   android:label="GLWindow"
                   android:configChanges="orientation|keyboardHidden"
                   >
