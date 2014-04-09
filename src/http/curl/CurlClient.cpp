@@ -163,7 +163,7 @@ namespace Xli
         this->url = url;
         this->client = HttpClient::Create();
         this->request = HttpRequest::Create();
-        this->request->SetMethod(Xli::HttpMethods::StringToMethod(method));
+        this->request->SetMethod(Xli::HttpStringToMethod(method));
     }
 
     void HttpClientWrapper::Send(String data)

@@ -16,6 +16,7 @@
 #include <Xli/Stream.h>
 #include <Xli/Window.h>
 #include <XliAudio/SimpleAudio.h>
+#include <XliHttp/HttpClient.h>
 
 #define LOGD(...) ((void)__android_log_print(ANDROID_LOG_DEBUG, Xli::PlatformSpecific::AGetAppName(), __VA_ARGS__))
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, Xli::PlatformSpecific::AGetAppName(), __VA_ARGS__))
@@ -130,6 +131,18 @@ namespace Xli
             AStreamType streamType;
             virtual bool Init(AStreamType streamType, jobject javaStream);
         };
+
+        /* this has moved */
+        /* class CTError : public WindowAction */
+        /* {         */
+        /*     String message; */
+        /*     CTError(String message) { this->message = message; } */
+        /*     virtual void Execute() */
+        /*     { */
+        /*         LOGE("XLI: ", this->message->DataPtr()); */
+        /*         XLI_THROW(this->message->DataPtr()); */
+        /*     } */
+        /* }; */
 
         /**
             \ingroup XliCorePlatform
@@ -399,6 +412,7 @@ namespace Xli
         /**
             \ingroup XliCorePlatform
         */
+
         class AShim
         {
         private:
@@ -423,18 +437,40 @@ namespace Xli
             static bool KeyboardVisible();
             static int ShowMessageBox(const String& message, const String& caption, int buttons, int hints);            
             static bool ConnectedToNetwork();
+            static jobject XliToJavaHeaders(const HttpRequest* req);
+            static jobject SendHttpAsync(const HttpRequest* req, void* content, long byteLength);
+            static jobject SendHttpAsync(const HttpRequest* req, String content);
+            static jobject SendHttpAsync(const HttpRequest* req);
+            static void AbortAsyncConnection(jobject connection);
             static jobject HttpNewConnection(const String& uri, const String& method, bool hasPayload);
-            static void HttpCloseConnection(jobject httpConnection);
-            static void HttpSetHeader(jobject httpConnection, const String& key, const String& val);
-            static String HttpGetHeader(jobject httpConnection, const String& key);
-            static void HttpShowHeaders(jobject httpConnection);
-            static int GetResponseCode(jobject httpConnection);
-            static AStream* HttpGetInputStream(jobject httpConnection);
-            static AStream* HttpGetOutputStream(jobject httpConnection);
+            static String InputStreamToString(jobject bufferedInputStream);
+            static jobject AsyncInputStreamToString(jobject bufferedInputStream, HttpRequest* request);
+            static jobject AsyncInputStreamToByteArray(jobject bufferedInputStream, HttpRequest* request);
+            static int ReadBytesFromInputStream(jobject bufferedInputStream, int bytesToRead, void* dst);
             static AAssetManager* GetAssetManager();
+            static bool RegisterNativeFunctions(JNINativeMethod native_funcs[], int funcCount);
             static Key AndroidToXliKeyEvent(AKeyEvent keyEvent);
             static void HandleSpecialAndroidKeyEvents(AKeyEvent androidKeyCode);
             static void InitDefaultCookieManager();
+        };
+        class CTKeyAction : public WindowAction
+        {
+        public:
+            Xli::Key KeyEvent;
+            bool KeyDown;
+            CTKeyAction(AKeyEvent keyEvent, bool keyDown) 
+            { 
+                this->KeyEvent = AShim::AndroidToXliKeyEvent(keyEvent);
+                this->KeyDown = keyDown;
+            }
+            virtual void Execute();
+        };
+        class CTTextAction : public WindowAction
+        {
+        public:
+            String Text;
+            CTTextAction(String text) { this->Text = text; }
+            virtual void Execute();
         };
 
         /**

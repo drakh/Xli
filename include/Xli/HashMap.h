@@ -112,7 +112,7 @@ namespace Xli
         int Next(int iterator) const
         {
 #ifdef XLI_RANGE_CHECK
-            if (iterator < 0) 
+            if (iterator < -1) 
                 XLI_THROW("Invalid iterator");
 #endif     
             for (int i = iterator + 1; i < bucketCount; i++)

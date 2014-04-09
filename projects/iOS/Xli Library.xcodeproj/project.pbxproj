@@ -349,6 +349,7 @@
 		FC7C328518954DAA00ECDF0D /* CoreSimpleAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = FCE4298818903642002361B3 /* CoreSimpleAudio.mm */; };
 		FC7C328618954DB500ECDF0D /* CoreSimpleAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = FCE4298818903642002361B3 /* CoreSimpleAudio.mm */; };
 		FC7C328C18968A7C00ECDF0D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC7C328B18968A7C00ECDF0D /* AVFoundation.framework */; };
+		FCADC86A18A6415800D2C4CA /* CHttpClient.mm in Sources */ = {isa = PBXBuildFile; fileRef = FCADC86818A6411000D2C4CA /* CHttpClient.mm */; };
 		FCE4298A18903642002361B3 /* CoreSimpleAudio.mm in Sources */ = {isa = PBXBuildFile; fileRef = FCE4298818903642002361B3 /* CoreSimpleAudio.mm */; };
 /* End PBXBuildFile section */
 
@@ -704,6 +705,7 @@
 		FC426802185E538F00079544 /* pfrdrivr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pfrdrivr.c; sourceTree = "<group>"; };
 		FC45454118576CF100EE7560 /* SDL2GLContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDL2GLContext.cpp; sourceTree = "<group>"; };
 		FC7C328B18968A7C00ECDF0D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		FCADC86818A6411000D2C4CA /* CHttpClient.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CHttpClient.mm; path = cocoa/CHttpClient.mm; sourceTree = "<group>"; };
 		FCE4298818903642002361B3 /* CoreSimpleAudio.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CoreSimpleAudio.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -821,6 +823,7 @@
 		CE1535D7174CF305009C6275 /* http */ = {
 			isa = PBXGroup;
 			children = (
+				FCADC86818A6411000D2C4CA /* CHttpClient.mm */,
 				CE1536DC174CF306009C6275 /* dummy */,
 			);
 			name = http;
@@ -2114,6 +2117,7 @@
 			files = (
 				CE1535CC174CF171009C6275 /* AudioBuffer.cpp in Sources */,
 				FC7C328618954DB500ECDF0D /* CoreSimpleAudio.mm in Sources */,
+				FCADC86A18A6415800D2C4CA /* CHttpClient.mm in Sources */,
 				CE1535CD174CF171009C6275 /* AudioStream.cpp in Sources */,
 				CE1535CE174CF171009C6275 /* Wav.cpp in Sources */,
 				CE1537CD174CF306009C6275 /* DummyClient.cpp in Sources */,

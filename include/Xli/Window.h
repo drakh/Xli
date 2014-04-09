@@ -19,19 +19,18 @@ namespace Xli
         \ingroup XliCorePlatform
     */
 
-    // TODO: Move away from public interface
-    enum CTEventType
+    class WindowAction : public Object
     {
-        CTKeyUpEvent = 0,
-        CTKeyDownEvent = 1,
-        CTTextEvent = 2,
-        CTMotionEvent = 3
+    public:
+        virtual void Execute() = 0;
     };
-    struct CTEvent 
-    {
-        CTEventType CTType;
-        int Code;
-        void* Payload;
+    //{TODO} these actions need a better home
+    class CTError : public WindowAction
+    {   
+    public:
+        String message;
+        CTError(String message) { this->message = message; }
+        virtual void Execute();
     };
 
     enum Key
@@ -411,7 +410,7 @@ namespace Xli
         virtual bool HasOnscreenKeyboardSupport() { return false; }
         virtual bool IsOnscreenKeyboardVisible() { return false; }
 
-        virtual void EnqueueCrossThreadEvent(CTEvent* event) {};
+        virtual void EnqueueCrossThreadEvent(WindowAction* action) {};
         virtual void ProcessCrossThreadEvents() {};
 
         /**

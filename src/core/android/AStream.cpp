@@ -81,14 +81,14 @@ namespace Xli
                 return false;
                 break;
             case AStream::READ:
-                this->javaStream = javaStream;
-                jni->NewGlobalRef(this->javaStream);
+                this->javaStream = reinterpret_cast<jobject>(jni->NewGlobalRef(javaStream));
+                if (jni->ExceptionCheck()) LOGE("Could not make AStream global ref");
                 this->streamType = AStream::READ;
                 canRead = true;
                 break;
             case AStream::WRITE:
-                this->javaStream = javaStream;
-                jni->NewGlobalRef(this->javaStream);
+                this->javaStream = reinterpret_cast<jobject>(jni->NewGlobalRef(javaStream));
+                if (jni->ExceptionCheck()) LOGE("Could not make AStream global ref");
                 this->streamType = AStream::WRITE;
                 canWrite = true;
                 break;
@@ -100,7 +100,7 @@ namespace Xli
         AStream::~AStream()
         {
             AJniHelper jni;
-            if (this->javaStream) jni->DeleteGlobalRef(this->javaStream);        
+            this->Close();
         }
         
         void AStream::Flush()
@@ -109,6 +109,7 @@ namespace Xli
             if (CanRead() && (streamType == AStream::WRITE))
             {
                 jni->CallObjectMethod(javaStream, flushMid);
+                if (jni->ExceptionCheck()) LOGE("Could not flush AStream");
             }
             else
             {
@@ -134,6 +135,12 @@ namespace Xli
                 closed = true;
                 break;
             };
+            if (jni->ExceptionCheck()) LOGE("Could not close AStream");
+            if (this->javaStream) 
+            { 
+                jni->DeleteGlobalRef(this->javaStream);
+                this->javaStream = 0;
+            }
         }
 
         bool AStream::IsClosed() const
@@ -158,34 +165,15 @@ namespace Xli
 
         int AStream::Read(void* dst, int elmSize, int elmCount)
         {
+
             if (!CanRead()) XLI_THROW_STREAM_CANT_READ;
             if (IsClosed()) XLI_THROW_STREAM_CLOSED;
-
-            AJniHelper jni;
-            
             int fetchBytes = elmCount * elmSize;
-
-            jbyteArray arr = jni->NewByteArray(fetchBytes);
-
-            jobject jrecievedBytes = jni->CallObjectMethod(javaStream, readBufferMid, arr, 0, fetchBytes);
-            
-            int recievedBytes = (int)jrecievedBytes;
-            if (jni->ExceptionCheck()) {
-                LOGE("Index out of bounds for dst");
-                return -1;
-            }
-            if (recievedBytes >= 0)
-            {
-                 jni->GetByteArrayRegion(arr, 0, recievedBytes, (jbyte*)dst);
-                 jni->DeleteLocalRef(arr);
-            } else {
+            int recievedBytes = PlatformSpecific::AShim::ReadBytesFromInputStream(this->javaStream, fetchBytes, dst);
+            if (recievedBytes < 0) {
                 atEnd = true;
-                jni->DeleteLocalRef(jrecievedBytes);
-                jni->DeleteLocalRef(arr);
                 return -1;
             }
-
-            jni->DeleteLocalRef(jrecievedBytes);
             return (recievedBytes / elmSize);
         }
 
@@ -217,13 +205,17 @@ namespace Xli
         {
             AJniHelper jni;
             
-            jclass rcls = jni->FindClass("java/io/InputStream");
+            jclass rcls = jni->FindClass("java/io/BufferedInputStream");
             if (rcls) 
             {
                 closeReadMid = jni->GetMethodID(rcls, "close", "()V");
+                if (jni->ExceptionCheck()) LOGE("Could not get 'close' method");
                 readByteMid = jni->GetMethodID(rcls, "read", "()I");
+                if (jni->ExceptionCheck()) LOGE("Could not get 'read' method (1)");
                 readBufferMid = jni->GetMethodID(rcls, "read", "([BII)I");
+                if (jni->ExceptionCheck()) LOGE("Could not get 'read' method (2)");
                 resetMid = jni->GetMethodID(rcls, "reset", "()V");
+                if (jni->ExceptionCheck()) LOGE("Could not get 'reset' method");
                 if (closeReadMid && readByteMid && readBufferMid && resetMid)
                 {
                     AStream::midsCached = 1;
@@ -242,9 +234,13 @@ namespace Xli
             if (wcls) 
             {
                 closeWriteMid = jni->GetMethodID(wcls, "close", "()V");
+                if (jni->ExceptionCheck()) LOGE("Could not get 'close' method");
                 flushMid = jni->GetMethodID(wcls, "flush", "()V");
+                if (jni->ExceptionCheck()) LOGE("Could not get 'flush' method");
                 writeBufferMid = jni->GetMethodID(wcls, "write", "([B)V");
+                if (jni->ExceptionCheck()) LOGE("Could not get 'write' method (1)");
                 writeBufferDetailedMid = jni->GetMethodID(wcls, "write", "([BII)V");
+                if (jni->ExceptionCheck()) LOGE("Could not get 'write' method (2)");
                 if (closeWriteMid && flushMid && writeBufferMid && writeBufferDetailedMid)
                 {
                     AStream::midsCached = 1;

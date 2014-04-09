@@ -25,6 +25,6 @@ namespace Xli
         if (!wnd)
             wnd = Window::GetMainWindow();
 
-        Show(wnd, sb, "Unhandled exception", Xli::DialogButtonsOK, Xli::DialogHintError);
+        Show(wnd, "Unhandled exception", sb, Xli::DialogButtonsOK, Xli::DialogHintError);
     }
 }

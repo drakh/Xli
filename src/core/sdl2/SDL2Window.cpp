@@ -5,9 +5,10 @@
 #include <SDL.h>
 #include <SDL_syswm.h>
 
+Xli::PlatformSpecific::SDL2Window* GlobalWindow = 0;
+
 namespace Xli
 {
-    static PlatformSpecific::SDL2Window* GlobalWindow = 0;
     static bool QuitRecieved = false;
     static int CancelCount = 0;
 

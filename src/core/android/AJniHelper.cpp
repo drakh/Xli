@@ -1,4 +1,5 @@
 #include <Xli/PlatformSpecific/Android.h>
+#include <XliHttp/HttpClient.h>
 #include <pthread.h>
 #include <stdarg.h>
 
@@ -7,36 +8,46 @@
 extern Xli::WindowEventHandler* GlobalEventHandler;
 extern Xli::Window* GlobalWindow;
 
+
+void Xli::PlatformSpecific::CTTextAction::Execute() 
+{ 
+    GlobalEventHandler->OnTextInput(GlobalWindow, this->Text); 
+}
+void Xli::PlatformSpecific::CTKeyAction::Execute() 
+{ 
+    if (this->KeyDown)
+    {
+        GlobalEventHandler->OnKeyDown(GlobalWindow, this->KeyEvent);
+    } else {
+        GlobalEventHandler->OnKeyUp(GlobalWindow, this->KeyEvent); 
+    }    
+}
+
 extern "C"
 {
     void JNICALL XliJ_OnKeyUp (JNIEnv *env , jobject obj, jint keyCode) 
     {
-        Xli::CTEvent* event = new Xli::CTEvent();
-        event->CTType = Xli::CTKeyUpEvent;
-        event->Code = (int)keyCode;
-        event->Payload = NULL;
-        GlobalWindow->EnqueueCrossThreadEvent(event);
-    }
-
-    void JNICALL XliJ_OnTextInput (JNIEnv *env , jobject obj, jstring keyChars) 
-    {
-        const char* jChars = env->GetStringUTFChars((jstring)keyChars, NULL);
-        Xli::String* xliChars = new Xli::String(jChars);
-        Xli::CTEvent* event = new Xli::CTEvent();
-        event->CTType = Xli::CTTextEvent;
-        event->Code = -1;
-        event->Payload = xliChars;
-        GlobalWindow->EnqueueCrossThreadEvent(event);
-        env->ReleaseStringUTFChars((jstring)keyChars, jChars);
+        GlobalWindow->EnqueueCrossThreadEvent(new Xli::PlatformSpecific::CTKeyAction((Xli::PlatformSpecific::AKeyEvent)keyCode, false));
     }
 
     void JNICALL XliJ_OnKeyDown (JNIEnv *env , jobject obj, jint keyCode) 
     {
-        Xli::CTEvent* event = new Xli::CTEvent();
-        event->CTType = Xli::CTKeyDownEvent;
-        event->Code = (int)keyCode;
-        event->Payload = NULL;
-        GlobalWindow->EnqueueCrossThreadEvent(event);
+        GlobalWindow->EnqueueCrossThreadEvent(new Xli::PlatformSpecific::CTKeyAction((Xli::PlatformSpecific::AKeyEvent)keyCode, true));
+    }
+
+    void JNICALL XliJ_OnTextInput (JNIEnv *env , jobject obj, jstring keyChars) 
+    {
+        const char* jChars = env->GetStringUTFChars((jstring)keyChars, NULL);        
+        GlobalWindow->EnqueueCrossThreadEvent(new Xli::PlatformSpecific::CTTextAction(Xli::String(jChars)));
+        env->ReleaseStringUTFChars((jstring)keyChars, jChars);
+    }
+
+    void JNICALL XliJ_JavaThrowError (JNIEnv *env , jobject obj, jint errorCode, jstring errorMessage) 
+    {
+        char const* cerrorMessage = env->GetStringUTFChars(errorMessage, NULL);
+        Xli::String finalMessage = Xli::String("JavaThrown:(")+Xli::String(errorCode)+Xli::String("): ")+Xli::String(cerrorMessage); 
+        GlobalWindow->EnqueueCrossThreadEvent(new Xli::CTError(finalMessage));
+        env->ReleaseStringUTFChars(errorMessage, cerrorMessage);
     }
 }
 
@@ -81,11 +92,13 @@ namespace Xli
                 {(char* const)"XliJ_OnKeyUp", (char* const)"(I)V", (void *)&XliJ_OnKeyUp},
                 {(char* const)"XliJ_OnKeyDown", (char* const)"(I)V", (void *)&XliJ_OnKeyDown},
                 {(char* const)"XliJ_OnTextInput", (char* const)"(Ljava/lang/String;)V", (void *)&XliJ_OnTextInput},
+                {(char* const)"XliJ_JavaThrowError", (char* const)"(ILjava/lang/String;)V", (void *)&XliJ_JavaThrowError},
             };
             // the last argument is the number of native functions
-            jint attached = l_env->RegisterNatives(*shim_class, native_funcs, 3);
+            jint attached = l_env->RegisterNatives(*shim_class, native_funcs, 4);
             if (attached < 0) {
                 LOGE("COULD NOT REGISTER NATIVE FUNCTIONS");
+                XLI_THROW("COULD NOT REGISTER NATIVE FUNCTIONS");
             } else {
                 LOGD("Native functions registered");
             }
@@ -123,10 +136,9 @@ namespace Xli
 
                 jclass *shim_class = new jclass;
                 *shim_class = GetAssetClass("XliShimJ.apk","XliJ");
-                
+
                 pthread_setspecific(JniThreadKey, (void*)env);
                 pthread_setspecific(JniShimKey, (void*)shim_class);
-                
                 AShim::CacheMids(env, *shim_class);
                 AttachNativeCallbacks(shim_class, env);                
                 AttachHiddenView(shim_class, env, AndroidActivity->clazz);

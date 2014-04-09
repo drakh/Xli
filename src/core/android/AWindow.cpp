@@ -24,10 +24,10 @@ static volatile int visible = 1;
 namespace Xli
 {
     namespace PlatformSpecific
-    {
+    {                      
         class AWindow: public Window
         {
-            MutexQueue<CTEvent*> ctEventQueue;
+            MutexQueue<WindowAction*> ctActionQueue;
         
         public:
             AWindow()
@@ -213,33 +213,18 @@ namespace Xli
             {
             }
             
-            virtual void EnqueueCrossThreadEvent(CTEvent* event)
+            virtual void EnqueueCrossThreadEvent(WindowAction* action)
             {
-                ctEventQueue.Enqueue(event);
+                ctActionQueue.Enqueue(action);
             }
 
             virtual void ProcessCrossThreadEvents()
             {
-                while ((ctEventQueue.Count() > 0))
+                while ((ctActionQueue.Count() > 0))
                 {
-                    CTEvent* event = ctEventQueue.Dequeue();
-                    switch (event->CTType)
-                    {
-                    case Xli::CTTextEvent:
-                        GlobalEventHandler->OnTextInput(GlobalWindow, *((Xli::String*)event->Payload));
-                        delete ((Xli::String*)event->Payload);
-                        break;
-                    case Xli::CTKeyUpEvent:
-                        GlobalEventHandler->OnKeyUp(GlobalWindow, Xli::PlatformSpecific::AShim::AndroidToXliKeyEvent((Xli::PlatformSpecific::AKeyEvent)event->Code));
-                        break;
-                    case Xli::CTKeyDownEvent:
-                        GlobalEventHandler->OnKeyDown(GlobalWindow, Xli::PlatformSpecific::AShim::AndroidToXliKeyEvent((Xli::PlatformSpecific::AKeyEvent)event->Code));
-                        break;
-                    default:
-                        break;
-                    }
-                    
-                    delete event;
+                    WindowAction* action = ctActionQueue.Dequeue();
+                    action->Execute();
+                    delete action;
                 }
             }
         };
