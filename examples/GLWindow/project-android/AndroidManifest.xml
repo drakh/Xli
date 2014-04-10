@@ -13,7 +13,6 @@
 
     <application android:label="GLWindow"
                  android:allowBackup="false"
-                 android:hardwareAccelerated="true"
                  >
         <activity android:name="GLWindow" 
                   android:label="GLWindow"

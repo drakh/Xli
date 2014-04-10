@@ -7,21 +7,23 @@ class GLApp: public Application
 {
     Managed<GLContext> gl;
 
+    int dialogType;
     double touchDownTime;
     double tapTime;
-    int dialogType;
 
 public:
     GLApp()
     {
+        PrintLine("Constructor");
+
         dialogType = 0;
-        
-        PrintLine("Starting GLApp");
+        touchDownTime = 0;
+        tapTime = 0;
     }
 
     virtual ~GLApp()
     {
-        PrintLine("Exiting GLApp");
+        PrintLine("Destructor");
     }
 
     virtual void OnInit(Window* wnd)
@@ -36,8 +38,9 @@ public:
 
         gl = GLContext::Create(wnd, glAttribs);
         gl->GetAttributes(glAttribs);
-
-        glClearColor(1,0,0,1);
+        gl->SetSwapInterval(0);
+        
+        glClearColor(1, 0, 0, 1);
 
 
         // Print platform info
@@ -227,7 +230,6 @@ public:
         Application::OnSizeChanged(wnd, clientSize);
     }
 
-    //[TODO] cant show message box when closing as shim is gone
     virtual bool OnClosing(Window* wnd, bool& cancel)
     {
         Err->WriteLine("OnClosing");

@@ -1,4 +1,4 @@
-project("Xli Library")
+project("XliLibrary")
 
 cmake_minimum_required(VERSION 2.8)
 
@@ -10,10 +10,6 @@ link_directories(${LIBRARY_OUTPUT_PATH})
 if (APPLE)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-switch-enum -Wno-logical-op-parentheses -Wno-parentheses-equality -Wno-extra-tokens -Wno-deprecated-declarations")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-switch-enum -Wno-logical-op-parentheses -Wno-parentheses-equality")
-endif()
-
-if (ANDROID)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 endif()
 
 add_subdirectory(src/core)

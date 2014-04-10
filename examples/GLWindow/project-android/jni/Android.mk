@@ -42,11 +42,11 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := GLWindow
 
 LOCAL_SRC_FILES := \
-	../../src/Main.cpp \
+	../../Main.cpp \
 
 LOCAL_C_INCLUDES := ../../../include
 
-LOCAL_CFLAGS   := -fexceptions -fno-rtti
+LOCAL_CFLAGS   := -fexceptions
 LOCAL_LDLIBS   := -lm -lGLESv2 -landroid -llog
 
 LOCAL_WHOLE_STATIC_LIBRARIES := XliMain
