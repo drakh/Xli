@@ -1,7 +1,6 @@
 #include <Xli.h>
-#include <XliHttp.h>
+#include <XliHttpClient.h>
 #include <XliGL.h>
-#include <XliAudio.h>
 
 using namespace Xli;
 
@@ -67,6 +66,7 @@ class ContentShout : public HttpStringPulledHandler
 class GLApp: public Application
 {
 	Managed<GLContext> gl;
+    Managed<HttpClient> httpClient;
 
     // Managed<SimpleSound> sound;
     Managed<Shouty> stateChangedCallback;
@@ -98,33 +98,25 @@ public:
 
 		// Setup OpenGL
 
-		this->gl = GLContext::Create(wnd, 16);
+        GLContextAttributes glAttribs = GLContextAttributes::Default();
+        glAttribs.Samples = 16;
+		this->gl = GLContext::Create(wnd, glAttribs);
+        gl->GetAttributes(glAttribs);
 
 		glClearColor(1,0,0,1);
-
 
 		// Print platform info
 
 		PrintLine((String)"Time: " + DateTime::Now().ToString());
 		PrintLine((String)"Time (UTC): " + DateTime::NowUtc().ToString());
 
-		PrintLine((String)"Resolution: " + wnd->GetClientSize().ToString());
-
-		PrintLine((String)"OpenGL Vendor: " + (const char*)glGetString(GL_VENDOR));
-		PrintLine((String)"OpenGL Renderer: " + (const char*)glGetString(GL_RENDERER));
-		PrintLine((String)"OpenGL Version: " + (const char*)glGetString(GL_VERSION));
-		PrintLine((String)"OpenGL Multisamples: " + gl->GetMultiSamples());
-		PrintLine((String)"OpenGL Swap Interval: " + gl->GetSwapInterval());
-    
 		PrintLine((String)"FileSystem Working Dir: " + Disk->GetCurrentDirectory());
 		PrintLine((String)"FileSystem Documents: " + Disk->GetSystemDirectory(SystemDirectoryDocuments));
 		PrintLine((String)"FileSystem Local AppData: " + Disk->GetSystemDirectory(SystemDirectoryLocalAppData));
 		PrintLine((String)"FileSystem Roaming AppData: " + Disk->GetSystemDirectory(SystemDirectoryRoamingAppData));
 		PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
 
-        // Load some sounds
-        // sound = SimpleSound::Create("test2.mp3", true);
-
+        httpClient = HttpClient::Create();
         stateChangedCallback = new Shouty();
         timeoutCallback = new TimeoutShout();
         progressCallback = new ProgressShout();
@@ -275,7 +267,7 @@ public:
                 //wnd->BeginTextInput((Xli::TextInputHint)0);
                 // sound->Play(false);
 
-                HttpRequest* req = HttpRequest::Create();
+                HttpRequest* req = httpClient->CreateRequest();
                 req->SetUrl("http://httpbin.org/get");
                 //req->Url = "http://youtube.com";
                 req->SetMethod(HttpMethodGet);
@@ -286,8 +278,8 @@ public:
                 req->SetStringPulledCallback(contentCallback);
                 req->SetHeader("Accept", "*/*");
                 req->SetHeader("ohhai","canhazdata");
-                //req->Send("test=and here is some data");
-                req->Send();
+                //req->SendASync("test=and here is some data");
+                req->SendASync();
             }
             else if (wnd->IsTextInputActive())
             {
