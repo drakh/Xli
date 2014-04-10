@@ -49,8 +49,8 @@ This command wraps 'cmake && make' with some additional features:
   - Optimized release build by default, unless --debug or DEBUG=1
   - Out of source builds with debug and release built to separate folders
   - Paralell builds out of the box
+  - MSYS/MinGW support (Windows only)
   - Xcode batch builds (OS X only)
-  - MSYS support (Windows only)
   - iOS + Android cross builds
 
 Additional arguments to cmake can be passed using environment variable CMAKE_ARGS.
@@ -96,6 +96,7 @@ E0
 done
 
 PROJECT_DIR="$@"
+set --
 
 #echo "'$DO_INSTALL' '$DO_CLEAN' '$DO_BUILD' '$DEBUG' '$TARGET' '$JOB_COUNT' '$CMAKE_ARGS' '$PROJECT_DIR'" && exit 1
 
@@ -204,16 +205,8 @@ if [ -n "$PLATFORM" ]; then
         cd "$BUILD_DIR"
 
         if [ "$OSTYPE" = "msys" ]; then
-            # TODO: Try to replace this stuff with `cmake --build .`
-            if [ -d "$NDK_DIR/prebuilt/windows-x86_64/bin" ]; then
-                MAKE_DIR="$NDK_DIR/prebuilt/windows-x86_64/bin"
-            else
-                MAKE_DIR="$NDK_DIR/prebuilt/windows-x86_32/bin"
-            fi
-
             CMAKE_FILENAME=`which cmake`
-            CMAKE_DIR=`dirname "$CMAKE_FILENAME"`
-            PATH="$CMAKE_DIR:$MAKE_DIR"
+            PATH=`dirname "$CMAKE_FILENAME"`
             set -- -G"MinGW Makefiles"
         fi
 
@@ -237,11 +230,13 @@ else
     cd "$BUILD_DIR"
 
     if [ "$OSTYPE" = "msys" ]; then
-        export CMAKE_ARGS="$CMAKE_ARGS -G\"MSYS Makefiles"
-        cmd "/C cmake ../.. %CMAKE_ARGS%"
-    else
-        cmake ../.. $CMAKE_ARGS
+        CMAKE_FILENAME=`which cmake`
+        GCC_FILENAME=`which gcc`
+        PATH="`dirname "$CMAKE_FILENAME"`:`dirname "$GCC_FILENAME"`"
+        set -- -G"MinGW Makefiles"
     fi
+
+    cmake "$@" $CMAKE_ARGS ../..
 
     if [ "$DO_BUILD" != "0" ]; then
         cmake --build . --use-stderr -- -j "$JOB_COUNT"
