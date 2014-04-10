@@ -42,7 +42,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := GLWindow
 
 LOCAL_SRC_FILES := \
-	../../src/Main.cpp \
+	../../Main.cpp \
 
 LOCAL_C_INCLUDES := ../../../include
 
