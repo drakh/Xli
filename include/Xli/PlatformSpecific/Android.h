@@ -132,17 +132,24 @@ namespace Xli
             virtual bool Init(AStreamType streamType, jobject javaStream);
         };
 
-        /* this has moved */
-        /* class CTError : public WindowAction */
-        /* {         */
-        /*     String message; */
-        /*     CTError(String message) { this->message = message; } */
-        /*     virtual void Execute() */
-        /*     { */
-        /*         LOGE("XLI: ", this->message->DataPtr()); */
-        /*         XLI_THROW(this->message->DataPtr()); */
-        /*     } */
-        /* }; */
+        class CTErrorAction : public WindowAction
+        {   
+        private:
+            String message;
+            int errorCode;
+        public:
+            CTErrorAction(String message, int errorCode) 
+            { 
+                this->message = message; 
+                this->errorCode = errorCode; 
+            }
+            virtual void Execute()
+            {
+                String finalMessage = String("Xli Error(") + String(errorCode)+String("): ") + String(message);
+                LOGE(finalMessage.DataPtr());
+                XLI_THROW(finalMessage);
+            }
+        };
 
         /**
             \ingroup XliCorePlatform

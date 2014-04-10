@@ -9,13 +9,13 @@ class Shouty : public HttpStateChangedHandler
 {
     virtual void OnResponse(HttpRequest* request, HttpRequestState state)
     {        
-        if (state == HttpHeadersReceived)
+        if (state == HttpRequestStateHeadersReceived)
         {
             Err->WriteFormat("statusCode: %i\n", state);
             Err->WriteFormat("ReasonPhrase: %s\n", request->GetReasonPhrase().DataPtr());
             //request->PullContentArray();
             request->PullContentString();
-        } else if (state == HttpDone) {
+        } else if (state == HttpRequestStateDone) {
             Err->WriteFormat("state changed: %i\n", state);            
             Err->WriteLine("Got the body");
         } else {
@@ -278,7 +278,7 @@ public:
                 HttpRequest* req = HttpRequest::Create();
                 req->SetUrl("http://httpbin.org/get");
                 //req->Url = "http://youtube.com";
-                req->SetMethod(HttpGetMethod);
+                req->SetMethod(HttpMethodGet);
                 req->SetStateChangedCallback(stateChangedCallback);
                 req->SetTimeoutCallback(timeoutCallback);
                 req->SetProgressCallback(progressCallback);

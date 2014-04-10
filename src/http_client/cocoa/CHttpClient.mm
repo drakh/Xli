@@ -13,6 +13,7 @@ namespace Xli
     class CHttpRequest : public HttpRequest
     {
     private:
+        HttpClient* client;
         Managed< HttpStateChangedHandler > stateChangedCallback;
         Managed< HttpProgressHandler > progressCallback;
         Managed< HttpTimeoutHandler > timeoutCallback;
@@ -22,7 +23,7 @@ namespace Xli
         HashMap<String,String> headers;
         HashMap<String,String> responseHeaders;
         HttpRequestState status;
-        HttpMethodType method;
+        HttpMethod method;
         int responseStatus;
         String reasonPhrase;
         String url;
@@ -43,7 +44,7 @@ namespace Xli
 
         virtual void* getContentArray() 
         {            
-            if (this->status == HttpDone && !this->errored && !this->contentAsString)
+            if (this->status == HttpRequestStateDone && !this->errored && !this->contentAsString)
             {
                 CFStringRef prop = CFSTR("kCFStreamPropertyDataWritten");
                 CFDataRef streamDataHandle = (CFDataRef)CFWriteStreamCopyProperty(this->cachedContentStream, prop);
@@ -64,7 +65,7 @@ namespace Xli
         }
         virtual long getContentArrayLength()
         {
-            if ((this->status == HttpDone) && (!this->errored) && (!this->contentAsString))
+            if ((this->status == HttpRequestStateDone) && (!this->errored) && (!this->contentAsString))
             {
                 CFStringRef prop = CFSTR("kCFStreamPropertyDataWritten");
                 CFDataRef streamDataHandle = (CFDataRef)CFWriteStreamCopyProperty(this->cachedContentStream, prop);
@@ -75,11 +76,12 @@ namespace Xli
             return -1; // {TODO} throw error?
         }
     public:
-        CHttpRequest() 
+        CHttpRequest(HttpClient* client) 
         {
-            this->status = HttpUnsent;
+            this->client = client;
+            this->status = HttpRequestStateUnsent;
             this->url = "";
-            this->method = HttpGetMethod;
+            this->method = HttpMethodGet;
             this->timeout = 0;
             this->readPosition = 0;
             this->reading = false;
@@ -88,9 +90,10 @@ namespace Xli
             this->cachedRequestMessage = 0;
         }
 
-        CHttpRequest(String url, HttpMethodType method) 
+        CHttpRequest(HttpClient* client, String url, HttpMethod method) 
         {
-            this->status = HttpUnsent;
+            this->client = client;
+            this->status = HttpRequestStateUnsent;
             this->url = url;
             this->method = method;
             this->timeout = 0;
@@ -103,7 +106,7 @@ namespace Xli
 
         virtual ~CHttpRequest()
         {
-            this->status = HttpDone;
+            this->status = HttpRequestStateDone;
             
             if (cachedRequestMessage != 0)
                 CFRelease(this->cachedRequestMessage);
@@ -125,9 +128,9 @@ namespace Xli
             return this->status;
         }
 
-        virtual void SetMethod(HttpMethodType method)
+        virtual void SetMethod(HttpMethod method)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->method = method;
             } else {
@@ -136,10 +139,10 @@ namespace Xli
         }
         virtual void SetMethodFromString(String method)
             {
-                if (this->status == HttpUnsent)
+                if (this->status == HttpRequestStateUnsent)
                 {
-                    HttpMethodType realMethod = StringToHttpMethod(method);
-                    if (realMethod == HttpInvalidMethod)
+                    HttpMethod realMethod = StringToHttpMethod(method);
+                    if (realMethod == HttpMethodUnknown)
                     {
                         XLI_THROW("HttpRequest->SetMethodFromString(): Not a valid method type");
                     } else {
@@ -149,14 +152,14 @@ namespace Xli
                     XLI_THROW("HttpRequest->SetMethodFromString(): Not in a valid state to set the method");
                 }            
             }
-        virtual HttpMethodType GetMethod() const
+        virtual HttpMethod GetMethod() const
         {
             return this->method;
         }
 
         virtual void SetUrl(String url)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->url = url;
             } else {
@@ -170,7 +173,7 @@ namespace Xli
 
         virtual void SetHeader(String key, String value)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->headers.Add(key,value);
             } else {
@@ -179,7 +182,7 @@ namespace Xli
         }
         virtual void RemoveHeader(String key)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->headers.Remove(key);
             } else {
@@ -223,7 +226,7 @@ namespace Xli
 
         virtual void SetTimeout(int timeout)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->timeout = timeout;
             } else {
@@ -237,7 +240,7 @@ namespace Xli
 
         virtual int GetResponseStatus() const
         {
-            if (this->status == HttpHeadersReceived) // {TODO} is this the correct state?
+            if (this->status == HttpRequestStateHeadersReceived) // {TODO} is this the correct state?
             {
                 return this->responseStatus;
             } else {
@@ -247,7 +250,7 @@ namespace Xli
 
         virtual String GetReasonPhrase() const
         {
-            if (this->status == HttpHeadersReceived) // {TODO} is this the correct state?
+            if (this->status == HttpRequestStateHeadersReceived) // {TODO} is this the correct state?
             {
                 return this->reasonPhrase;
             } else {
@@ -257,7 +260,7 @@ namespace Xli
 
         virtual int GetResponseHeaderCount() const
         {
-            if (this->status == HttpHeadersReceived)
+            if (this->status == HttpRequestStateHeadersReceived)
             {
                 return this->responseHeaders.Count();
             } else {
@@ -266,7 +269,7 @@ namespace Xli
         }
         virtual int ResponseHeadersBegin() const
         {
-            if (this->status == HttpHeadersReceived)
+            if (this->status == HttpRequestStateHeadersReceived)
             {
                 return this->responseHeaders.Begin();
             } else {
@@ -275,7 +278,7 @@ namespace Xli
         }
         virtual int ResponseHeadersNext(int n) const
         {
-            if (this->status == HttpHeadersReceived)
+            if (this->status == HttpRequestStateHeadersReceived)
             {
                 return this->responseHeaders.Next(n);
             } else {
@@ -284,7 +287,7 @@ namespace Xli
         }
         virtual int ResponseHeadersEnd() const
         {
-            if (this->status == HttpHeadersReceived)
+            if (this->status == HttpRequestStateHeadersReceived)
             {
                 return this->responseHeaders.End();
             } else {
@@ -293,7 +296,7 @@ namespace Xli
         }
         virtual String GetResponseHeaderKeyN(int n) const
         {
-            if (this->status == HttpHeadersReceived)
+            if (this->status == HttpRequestStateHeadersReceived)
             {
                 return this->responseHeaders.GetKey(n);
             } else {
@@ -302,7 +305,7 @@ namespace Xli
         }
         virtual String GetResponseHeaderValueN(int n) const
         {
-            if (this->status == HttpHeadersReceived)
+            if (this->status == HttpRequestStateHeadersReceived)
             {
                 return this->responseHeaders.GetValue(n);
             } else {
@@ -311,7 +314,7 @@ namespace Xli
         }
         virtual String GetResponseHeader(String key)
         {
-            if (this->status == HttpHeadersReceived)
+            if (this->status == HttpRequestStateHeadersReceived)
             {
                 return this->responseHeaders[key];
             } else {
@@ -321,7 +324,7 @@ namespace Xli
 
         virtual void SetStateChangedCallback(HttpStateChangedHandler* callback)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->stateChangedCallback = callback;
             } else {
@@ -330,7 +333,7 @@ namespace Xli
         }
         virtual void SetProgressCallback(HttpProgressHandler* callback)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->progressCallback = callback;
             } else {
@@ -339,7 +342,7 @@ namespace Xli
         }
         virtual void SetTimeoutCallback(HttpTimeoutHandler* callback)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->timeoutCallback = callback;
             } else {
@@ -348,7 +351,7 @@ namespace Xli
         }
         virtual void SetErrorCallback(HttpErrorHandler* callback)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->errorCallback = callback;
             } else {
@@ -357,7 +360,7 @@ namespace Xli
         }
         virtual void SetStringPulledCallback(HttpStringPulledHandler* callback)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->stringPulledCallback = callback;
             } else {
@@ -366,7 +369,7 @@ namespace Xli
         }
         virtual void SetArrayPulledCallback(HttpArrayPulledHandler* callback)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->arrayPulledCallback = callback;
             } else {
@@ -374,9 +377,9 @@ namespace Xli
             }
         }
 
-        virtual void Send(void* content, long byteLength)
+        virtual void SendASync(void* content, long byteLength)
         {
-            if (this->status != HttpUnsent) return;
+            if (this->status != HttpRequestStateUnsent) return;
             
             this->contentAsString = false;
             
@@ -411,7 +414,7 @@ namespace Xli
             CFReadStreamScheduleWithRunLoop( cachedReadStream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes );
             CFReadStreamOpen( cachedReadStream );
             
-            this->status = HttpSent;
+            this->status = HttpRequestStateSent;
             if (this->stateChangedCallback!=0) this->stateChangedCallback->OnResponse(this, this->status);
             
             CFRelease(nUrlStr);
@@ -419,9 +422,9 @@ namespace Xli
             CFRelease(nUrl);
         }
 
-        virtual void Send(String content)
+        virtual void SendASync(String content)
         {
-            if (this->status != HttpUnsent) return;
+            if (this->status != HttpRequestStateUnsent) return;
             
             this->cachedContentString = "";
             this->contentAsString = true;
@@ -456,7 +459,7 @@ namespace Xli
             CFReadStreamScheduleWithRunLoop( cachedReadStream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes );
             CFReadStreamOpen( cachedReadStream );
             
-            this->status = HttpSent;
+            this->status = HttpRequestStateSent;
             if (this->stateChangedCallback!=0) this->stateChangedCallback->OnResponse(this, this->status);
             
             CFRelease(nUrlStr);
@@ -464,14 +467,14 @@ namespace Xli
             CFRelease(nUrl);
         }
 
-        virtual void Send()
+        virtual void SendASync()
         {
-            this->Send("");
+            this->SendASync("");
         }
 
         virtual void SetCFHeaders(CFHTTPMessageRef message)
         {
-            if (!this->headersSet && this->status == HttpUnsent)
+            if (!this->headersSet && this->status == HttpRequestStateUnsent)
             {
                 this->headersSet = true;
                 int i = this->headers.Begin();
@@ -492,7 +495,7 @@ namespace Xli
         virtual void Abort()
         {
             if (this->status > 1 && this->status < 5 )
-            this->status = HttpDone; //{TODO} how does statechanged know if it was successful?
+            this->status = HttpRequestStateDone; //{TODO} how does statechanged know if it was successful?
             
             if (cachedReadStream!=0)
             {
@@ -513,9 +516,9 @@ namespace Xli
 
         virtual void PullContentString()
         {
-            if (this->status==HttpHeadersReceived)
+            if (this->status==HttpRequestStateHeadersReceived)
             {
-                this->status = HttpLoading;
+                this->status = HttpRequestStateLoading;
                 reading=true;
                 this->contentAsString = true;
                 if (this->stateChangedCallback!=0) this->stateChangedCallback->OnResponse(this, this->status);
@@ -527,9 +530,9 @@ namespace Xli
 
         virtual void PullContentArray() 
         {    
-            if ((this->status==HttpHeadersReceived) && (this->cachedContentStream == 0))
+            if ((this->status==HttpRequestStateHeadersReceived) && (this->cachedContentStream == 0))
             {
-                this->status = HttpLoading;
+                this->status = HttpRequestStateLoading;
                 this->contentAsString = false;
                 this->reading = true;
                 if (this->stateChangedCallback!=0) this->stateChangedCallback->OnResponse(this, this->status);
@@ -619,7 +622,7 @@ namespace Xli
         static void OnError(CHttpRequest* request, CFReadStreamRef stream, CFStreamEventType event)
         {
             //HttpRequestState oldStatus = request->status; //{TODO} add this to android
-            request->status = HttpDone;
+            request->status = HttpRequestStateDone;
             request->errored = true;
             if (request->errorCallback!=0)
             {
@@ -666,7 +669,7 @@ namespace Xli
             {
             case kCFStreamEventOpenCompleted:
                 CHttpRequest::OnHeadersRecieved(request, stream, event);
-                CHttpRequest::OnStateChanged(request, HttpHeadersReceived, stream, event);
+                CHttpRequest::OnStateChanged(request, HttpRequestStateHeadersReceived, stream, event);
                 break;
             case kCFStreamEventCanAcceptBytes:
                 // not currently used but will be needed for upload progress
@@ -688,8 +691,8 @@ namespace Xli
                 CHttpRequest::OnError(request, stream, event);
                 break;
             case kCFStreamEventEndEncountered:
-                request->status = HttpDone;
-                CHttpRequest::OnStateChanged(request, HttpDone, stream, event);
+                request->status = HttpRequestStateDone;
+                CHttpRequest::OnStateChanged(request, HttpRequestStateDone, stream, event);
                 if (request->cachedUploadData!=0) CFRelease(request->cachedUploadData);
                 if (request->cachedRequestMessage!=0) CFRelease(request->cachedRequestMessage);
                 if (request->cachedReadStream!=0)
@@ -797,9 +800,17 @@ namespace Xli
             }
         }
     };
-    
-    HttpRequest* HttpRequest::Create()
+
+    class CHttpClient : public HttpClient
     {
-        return new CHttpRequest();
+        virtual CHttpRequest* CreateRequest()
+        {
+            new CHttpRequest(this);
+        }       
+    };
+
+    HttpClient* HttpClient::Create()
+    {
+        return new CHttpClient();
     }
 };

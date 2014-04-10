@@ -35,6 +35,18 @@ namespace Xli
         virtual bool IsAsset() const = 0;
         static SimpleSound* Create(const String& path, bool asset);
     };
+
+    class SoundPlayer: public Object
+    {
+    public:
+        static SoundPlayer* Create();
+
+        virtual Sound* CreateSoundFromAsset(const String& filename) = 0;
+        virtual SoundChannel* PlaySound(Sound* sound, bool loop) = 0;
+
+        virtual void Update();
+
+    };
 }
 
 #endif
