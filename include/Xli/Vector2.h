@@ -1,15 +1,14 @@
 #ifndef __XLI_VECTOR2_H__
 #define __XLI_VECTOR2_H__
 
-#include <Xli/BaseTypes.h>
+#include <Xli/IntTypes.h>
 #include <Xli/Exception.h>
-#include <Xli/Math.h>
 #include <Xli/String.h>
 
 namespace Xli
 {
     /**
-        \ingroup XliCoreMath
+        \ingroup Xli
     */
     template <typename T> class Vector2t
     {
@@ -206,7 +205,7 @@ namespace Xli
     };
 
     /**
-        \addtogroup XliCoreMath
+        \addtogroup Xli
         @{
     */
 
@@ -223,54 +222,6 @@ namespace Xli
     typedef Vector2t<UInt32> Vector2u32;
     typedef Vector2t<UInt16> Vector2u16;
     typedef Vector2t<UInt8> Vector2u8;
-
-    XLI_INLINE float Dot(const Vector2& v1, const Vector2& v2)
-    {
-        return v1.X * v2.X + v1.Y * v2.Y;
-    }
-
-    XLI_INLINE float LengthSquared(const Vector2& v)
-    {
-        return Dot(v, v);
-    }
-
-    XLI_INLINE float Length(const Vector2& v)
-    {
-        return Sqrt(Dot(v, v));
-    }
-
-    XLI_INLINE Vector2 Normalize(const Vector2& v)
-    {
-        return v * (1.0f / Length(v));
-    }
-
-    XLI_INLINE Vector2 Rotate(const Vector2& v, float angleRadians)
-    {
-        float c = Cos(angleRadians);
-        float s = Sin(angleRadians);
-
-        Vector2 w;
-        w.X = c * v.X + s * v.Y;
-        w.Y = c * v.Y - s * v.X;
-
-        return Normalize(w) * Length(v);
-    }
-
-    XLI_INLINE Vector2 Vector2FromAngle(float angleRadians)
-    {
-        return Vector2(Cos(angleRadians), Sin(angleRadians));
-    }
-
-    XLI_INLINE float Vector2ToAngle(const Vector2& v)
-    {
-        float linv = 1.0f / Length(v);
-        return v.Y > 0.0f ? ArcCos(v.X * linv) : 2.0f * PIf - ArcCos(v.X * linv);
-    }
-
-    XLI_INLINE float AngleBetween(const Vector2& v1, const Vector2& v2)
-    {
-        return ArcCos(Dot(Normalize(v1), Normalize(v2)));
-    }
 
     /** @} */
 }

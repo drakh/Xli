@@ -2,7 +2,7 @@
 #define __XLI_BINARY_WRITER_H__
 
 #include <Xli/Stream.h>
-#include <Xli/Matrix4.h>
+#include <Xli/Vector4.h>
 
 namespace Xli
 {

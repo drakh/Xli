@@ -1,7 +1,6 @@
 #ifndef __XLI_RANDOM_H__
 #define __XLI_RANDOM_H__
 
-#include <Xli/Math.h>
 #include <Xli/Vector2.h>
 #include <Xli/Vector3.h>
 #include <Xli/Vector4.h>
@@ -9,7 +8,7 @@
 namespace Xli
 {
     /**
-        \ingroup XliCoreMath
+        \ingroup Xli
 
         A simple 32-bit pseudo-random number generator
     */
@@ -64,7 +63,7 @@ namespace Xli
     };
 
     /**
-        \addtogroup XliCoreMath
+        \addtogroup Xli
         @{
     */
 

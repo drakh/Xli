@@ -1,7 +1,7 @@
 #ifndef __XLI_BUFFER_H__
 #define __XLI_BUFFER_H__
 
-#include <Xli/BaseTypes.h>
+#include <Xli/IntTypes.h>
 #include <Xli/Object.h>
 #include <cstddef>
 #include <new>

@@ -1,7 +1,7 @@
 #ifndef __XLI_MEDIA_IMAGE_FORMAT_H__
 #define __XLI_MEDIA_IMAGE_FORMAT_H__
 
-#include <Xli/BaseTypes.h>
+#include <Xli/IntTypes.h>
 #include <Xli/Exception.h>
 
 namespace Xli

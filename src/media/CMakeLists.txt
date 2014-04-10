@@ -1,4 +1,4 @@
-set(Sources
+set(SRC
     Bitmap.cpp
     CompressedImage.cpp
     FontFace.cpp
@@ -7,33 +7,37 @@ set(Sources
     GZip.cpp
     ImageReader.cpp
     ImageWriter.cpp
-    JpegReader.cpp
     JpegWriter.cpp
     Json.cpp
-    Ktx.cpp    
-    PngReader.cpp
+    Ktx.cpp
     PngWriter.cpp
     Texture.cpp
     Value.cpp
-    Zip.cpp
-    )
+    Zip.cpp)
 
-set(JsonSrc
-    3rdparty/json_parser/JSON_parser.c
-    )
+if (XLI_PLATFORM_IOS)
+    set(SRC ${SRC} 
+        UIImageReader.mm)
+else()
+    set(SRC ${SRC} 
+        JpegReader.cpp
+        PngReader.cpp)
+endif()
 
-set(UnzipInc 
-    3rdparty/unzip
-    )    
-set(UnzipSrc
+set(JSON_SRC 
+    3rdparty/json_parser/JSON_parser.c)
+
+set(UNZIP_INC 
+    3rdparty/unzip)
+
+set(UNZIP_SRC
     3rdparty/unzip/ioapi.c
-    3rdparty/unzip/unzip.c
-    )
+    3rdparty/unzip/unzip.c)
 
-set(ZlibInc 
-    3rdparty/zlib
-    )
-set(ZlibSrc
+set(ZLIB_INC 
+    3rdparty/zlib)
+
+set(ZLIB_SRC
     3rdparty/zlib/adler32.c
     3rdparty/zlib/compress.c
     3rdparty/zlib/crc32.c
@@ -44,13 +48,12 @@ set(ZlibSrc
     3rdparty/zlib/inftrees.c
     3rdparty/zlib/trees.c
     3rdparty/zlib/uncompr.c
-    3rdparty/zlib/zutil.c
-    )
+    3rdparty/zlib/zutil.c)
 
-set(JpegInc 
-    3rdparty/jpeg
-    )
-set(JpegSrc
+set(JPEG_INC 
+    3rdparty/jpeg)
+
+set(JPEG_SRC
     3rdparty/jpeg/jcapimin.c
     3rdparty/jpeg/jcapistd.c
     3rdparty/jpeg/jccoefct.c
@@ -96,13 +99,12 @@ set(JpegSrc
     3rdparty/jpeg/jmemnobs.c
     3rdparty/jpeg/jquant1.c
     3rdparty/jpeg/jquant2.c
-    3rdparty/jpeg/jutils.c
-    )
+    3rdparty/jpeg/jutils.c)
 
-set(PngInc 
-    3rdparty/png
-    )
-set(PngSrc
+set(PNG_INC 
+    3rdparty/png)
+
+set(PNG_SRC
     3rdparty/png/png.c
     3rdparty/png/pngerror.c
     3rdparty/png/pngget.c
@@ -117,29 +119,23 @@ set(PngSrc
     3rdparty/png/pngwio.c
     3rdparty/png/pngwrite.c
     3rdparty/png/pngwtran.c
-    3rdparty/png/pngwutil.c
-    )
+    3rdparty/png/pngwutil.c)
 
-set(FreetypeInc 
-    3rdparty/freetype/include
-    )
-set(FreetypeSrc
+set(FREETYPE_INC 
+    3rdparty/freetype/include)
+
+set(FREETYPE_SRC
     3rdparty/freetype/src/autofit/autofit.c
-    3rdparty/freetype/src/bdf/bdf.c
-    3rdparty/freetype/src/cff/cff.c
     3rdparty/freetype/src/base/ftapi.c
     3rdparty/freetype/src/base/ftbase.c
     3rdparty/freetype/src/base/ftbdf.c
     3rdparty/freetype/src/base/ftbitmap.c
-    3rdparty/freetype/src/cache/ftcache.c
     3rdparty/freetype/src/base/ftdebug.c
     3rdparty/freetype/src/base/ftgasp.c
     3rdparty/freetype/src/base/ftglyph.c
     3rdparty/freetype/src/base/ftgxval.c
-    3rdparty/freetype/src/gzip/ftgzip.c
     3rdparty/freetype/src/base/ftinit.c
     3rdparty/freetype/src/base/ftlcdfil.c
-    3rdparty/freetype/src/lzw/ftlzw.c
     3rdparty/freetype/src/base/ftmm.c
     3rdparty/freetype/src/base/ftotval.c
     3rdparty/freetype/src/base/ftpatent.c
@@ -150,12 +146,18 @@ set(FreetypeSrc
     3rdparty/freetype/src/base/fttype1.c
     3rdparty/freetype/src/base/ftwinfnt.c
     3rdparty/freetype/src/base/ftxf86.c
+    3rdparty/freetype/src/bdf/bdf.c
+    3rdparty/freetype/src/cache/ftcache.c
+    3rdparty/freetype/src/cff/cff.c
+    3rdparty/freetype/src/cid/type1cid.c
     3rdparty/freetype/src/gxvalid/gxvalid.c
+    3rdparty/freetype/src/gzip/ftgzip.c
+    3rdparty/freetype/src/lzw/ftlzw.c
     3rdparty/freetype/src/otvalid/otvalid.c
     3rdparty/freetype/src/pcf/pcf.c
     3rdparty/freetype/src/pfr/pfr.c
-    3rdparty/freetype/src/pfr/pfrload.c
     3rdparty/freetype/src/pfr/pfrgload.c
+    3rdparty/freetype/src/pfr/pfrload.c
     3rdparty/freetype/src/pfr/pfrobjs.c
     3rdparty/freetype/src/pfr/pfrsbit.c
     3rdparty/freetype/src/psaux/psaux.c
@@ -164,43 +166,50 @@ set(FreetypeSrc
     3rdparty/freetype/src/raster/raster.c
     3rdparty/freetype/src/sfnt/sfnt.c
     3rdparty/freetype/src/smooth/smooth.c
+    3rdparty/freetype/src/truetype/truetype.c
+    3rdparty/freetype/src/type1/type1.c
     3rdparty/freetype/src/type42/t42drivr.c
     3rdparty/freetype/src/type42/t42objs.c
     3rdparty/freetype/src/type42/t42parse.c
-    3rdparty/freetype/src/truetype/truetype.c
-    3rdparty/freetype/src/type1/type1.c
-    3rdparty/freetype/src/cid/type1cid.c
-    3rdparty/freetype/src/winfonts/winfnt.c
-    )
+    3rdparty/freetype/src/winfonts/winfnt.c)
 
-include_directories(${UnzipInc})
-set(Sources ${Sources} ${JsonSrc} ${UnzipSrc})
+include_directories(${UNZIP_INC})
+set(SRC ${SRC} ${JSON_SRC} ${UNZIP_SRC})
+set(LIBS Xli)
 
-if (WIN32)
+if (XLI_PLATFORM_ANDROID)
 
     add_definitions(-DFT2_BUILD_LIBRARY)
-    include_directories(${ZlibInc} ${JpegInc} ${PngInc} ${FreetypeInc})
-    set(Sources ${Sources} ${ZlibSrc} ${JpegSrc} ${PngSrc} ${FreetypeSrc})
+    include_directories(${JPEG_INC} ${PNG_INC} ${FREETYPE_INC})
+    set(SRC ${SRC} ${JPEG_SRC} ${PNG_SRC} ${FREETYPE_SRC})
+    set(LIBS ${LIBS} z)
 
-elseif (APPLE)
+elseif (XLI_PLATFORM_WIN32)
 
     add_definitions(-DFT2_BUILD_LIBRARY)
-    include_directories(${JpegInc} ${PngInc} ${FreetypeInc})
-    set(Sources ${Sources} ${JpegSrc} ${PngSrc} ${FreetypeSrc})
+    include_directories(${ZLIB_INC} ${JPEG_INC} ${PNG_INC} ${FREETYPE_INC})
+    set(SRC ${SRC} ${ZLIB_SRC} ${JPEG_SRC} ${PNG_SRC} ${FREETYPE_SRC})
+
+elseif (XLI_PLATFORM_IOS)
+ 
+    add_definitions(-DFT2_BUILD_LIBRARY -DDARWIN_NO_CARBON)
+    include_directories(${ZLIB_INC} ${JPEG_INC} ${PNG_INC} ${FREETYPE_INC})
+    set(SRC ${SRC} ${ZLIB_SRC} ${JPEG_SRC} ${PNG_SRC} ${FREETYPE_SRC})
+
+elseif (XLI_PLATFORM_OSX)
+
+    add_definitions(-DFT2_BUILD_LIBRARY -DDARWIN_NO_CARBON)
+    include_directories(${JPEG_INC} ${PNG_INC} ${FREETYPE_INC})
+    set(SRC ${SRC} ${JPEG_SRC} ${PNG_SRC} ${FREETYPE_SRC})
+    set(LIBS ${LIBS} z)
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-framework,CoreFoundation -Wl,-framework,CoreServices -Wl,-framework,ApplicationServices")
 
-elseif (UNIX)
+elseif (XLI_PLATFORM_LINUX)
 
     include_directories(/usr/include/freetype2)
+    set(LIBS ${LIBS} freetype jpeg png z)
 
 endif()
 
-add_library(XliMedia ${Sources})
-target_link_libraries(XliMedia Xli)
-
-if (APPLE)
-    target_link_libraries(XliMedia z)
-elseif (UNIX AND NOT WIN32)
-    target_link_libraries(XliMedia freetype jpeg png z)
-endif()
-
+add_library(XliMedia ${SRC})
+target_link_libraries(XliMedia ${LIBS})

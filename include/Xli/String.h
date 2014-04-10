@@ -1,7 +1,7 @@
 #ifndef __XLI_STRING_DECL_H__
 #define __XLI_STRING_DECL_H__
 
-#include <Xli/BaseTypes.h>
+#include <Xli/IntTypes.h>
 
 #ifdef XLI_PLATFORM_ANDROID 
 # include <stdarg.h>

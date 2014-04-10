@@ -1,31 +1,46 @@
-if (WIN32)
+set(SRC GLContext.cpp)
+set(LIBS Xli)
 
- 
-else()
+if (XLI_PLATFORM_ANDROID)
 
-    set(Sources sdl2/SDL2GLContext.cpp)
+    set(SRC ${SRC} egl/EGLContext.cpp)
+    set(LIBS ${LIBS} android log EGL GLESv2)
 
-    add_definitions(-DXLI_HAS_GLEW)
+elseif (XLI_PLATFORM_IOS)
 
-    if (APPLE)
+    include_directories(${PROJECT_SOURCE_DIR}/src/core/sdl2/3rdparty/SDL2/include)
+    set(SRC ${SRC} sdl2/SDL2GLContext.cpp)
 
-        set(Sources ${Sources} 3rdparty/glew/src/glew.c)
-        add_definitions(-DGLEW_STATIC)
-        include_directories(${PROJECT_SOURCE_DIR}/src/gl/3rdparty/glew/include)
-        include_directories(${PROJECT_SOURCE_DIR}/src/core/sdl2/3rdparty/SDL2/include)
-        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-framework,OpenGL")
+elseif (XLI_PLATFORM_OSX)
 
-    else()
+    add_definitions(-DXLI_HAS_GLEW -DGLEW_STATIC)
+    include_directories(${PROJECT_SOURCE_DIR}/src/core/sdl2/3rdparty/SDL2/include)
+    include_directories(${PROJECT_SOURCE_DIR}/src/gl/3rdparty/glew/include)
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-framework,OpenGL")
+    set(SRC ${SRC} 3rdparty/glew/src/glew.c sdl2/SDL2GLContext.cpp)
 
-        add_definitions(`sdl2-config --cflags`)
+elseif (XLI_PLATFORM_LINUX)
 
+    add_definitions(`sdl2-config --cflags`)
+    set(SRC ${SRC} sdl2/SDL2GLContext.cpp)
+    set(LIBS ${LIBS} SDL2)
+
+    if (NOT XLI_ARCH_ARM)
+        add_definitions(-DXLI_HAS_GLEW)
+        set(LIBS ${LIBS} GL GLEW)
+    endif()
+
+elseif (XLI_PLATFORM_WIN32)
+
+    add_definitions(-DXLI_HAS_GLEW -DGLEW_STATIC)
+    include_directories(${PROJECT_SOURCE_DIR}/src/gl/3rdparty/glew/include)
+    set(SRC ${SRC} wgl/WGLContext.cpp 3rdparty/glew/src/glew.c)
+
+    if (MSVC)
+        set(LIBS ${LIBS} opengl32.lib)
     endif()
 
 endif()
 
-add_library(XliGL ${Sources})
-target_link_libraries(XliGL Xli)
-
-if (UNIX AND NOT APPLE AND NOT WIN32)
-    target_link_libraries(XliGL SDL2 GL GLEW)
-endif()
+add_library(XliGL ${SRC})
+target_link_libraries(XliGL ${LIBS})

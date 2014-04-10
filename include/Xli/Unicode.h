@@ -9,16 +9,26 @@ namespace Xli
     /**
         \ingroup XliCoreText
     */
+    enum UnicodeFlags
+    {
+        UnicodeFlagsModifiedUtf8 = 1 << 0,
+        UnicodeFlagsIgnoreError = 1 << 1,
+    };
+
+    /**
+        \ingroup XliCoreText
+    */
     class Unicode
     {
     public:
-        static Utf16String Utf8To16(const char* str, int len);
-        static Utf16String Utf8To16(const char* str);
-        static Utf16String Utf8To16(const String& str);
+        static bool IsLegalUtf8(const char* str, int len, int flags = 0);
+        static bool IsLegalUtf8(const String& str, int flags = 0);
 
-        static String Utf16To8(const Utf16* str, int len);
-        static String Utf16To8(const Utf16* str);
-        static String Utf16To8(const Utf16String& str);
+        static Utf16String Utf8To16(const char* str, int len, int flags = 0);
+        static Utf16String Utf8To16(const String& str, int flags = 0);
+
+        static String Utf16To8(const Utf16* str, int len, int flags = 0);
+        static String Utf16To8(const Utf16String& str, int flags = 0);
 
         static Utf16 ToUpper(Utf16 chr);
         static Utf16 ToLower(Utf16 chr);

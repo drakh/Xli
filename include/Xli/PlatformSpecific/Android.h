@@ -15,8 +15,8 @@
 #include <Xli/String.h>
 #include <Xli/Stream.h>
 #include <Xli/Window.h>
-#include <XliAudio/SimpleAudio.h>
-#include <XliHttp/HttpClient.h>
+#include <XliSoundPlayer.h>
+#include <XliHttpClient.h>
 
 #define LOGD(...) ((void)__android_log_print(ANDROID_LOG_DEBUG, Xli::PlatformSpecific::AGetAppName(), __VA_ARGS__))
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, Xli::PlatformSpecific::AGetAppName(), __VA_ARGS__))

@@ -1,5 +1,7 @@
 #include <XliAudio/SampleReader.h>
 
+#define min(a, b) ((a) < (b) ? (a) : (b))
+
 namespace Xli
 {
     float SampleReader::convertSample(Int16 sample)
@@ -30,7 +32,7 @@ namespace Xli
         int bufferOffset = 0;
         while (samplesRead < expectedSamples)
         {
-            int samplesToRead = Min(expectedSamples - samplesRead, internalBufferSize);
+            int samplesToRead = min(expectedSamples - samplesRead, internalBufferSize);
             int currentSamplesRead;
             if (stream->GetChannelCount() != 2 && forceStereo)
             {

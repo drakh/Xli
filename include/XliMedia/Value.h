@@ -6,7 +6,6 @@
 #include <Xli/HashMap.h>
 #include <Xli/Map.h>
 #include <Xli/TextWriter.h>
-#include <Xli/Matrix4.h>
 #include <Xli/Traits.h>
 
 /**
@@ -132,9 +131,6 @@ namespace Xli
         Value(const Vector3& v);
         Value(const Vector4& v);
 
-        Value(const Matrix3& v);
-        Value(const Matrix4& v);
-
         Vector2i ToVector2i() const;
         Vector3i ToVector3i() const;
         Vector4i ToVector4i() const;
@@ -143,9 +139,6 @@ namespace Xli
         Vector3 ToVector3() const;
         Vector4 ToVector4() const;
 
-        Matrix3 ToMatrix3() const;
-        Matrix4 ToMatrix4() const;
-
         void ToType(Vector2i& result) const { result = ToVector2i(); } 
         void ToType(Vector3i& result) const { result = ToVector3i(); }
         void ToType(Vector4i& result) const { result = ToVector4i(); } 
@@ -153,9 +146,6 @@ namespace Xli
         void ToType(Vector2& result) const { result = ToVector2(); } 
         void ToType(Vector3& result) const { result = ToVector3(); } 
         void ToType(Vector4& result) const { result = ToVector4(); }
-
-        void ToType(Matrix3& result) const { result = ToMatrix3(); }
-        void ToType(Matrix4& result) const { result = ToMatrix4(); } 
 
         int Begin() const { return object->Begin(); }
         int End() const { return object->End(); }

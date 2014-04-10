@@ -144,16 +144,6 @@ namespace Xli
         SetToArray(*this, v.Data, 4);
     }
 
-    Value::Value(const Matrix3& v)
-    {
-        SetToArray(*this, v.Data, 9);
-    }
-
-    Value::Value(const Matrix4& v)
-    {
-        SetToArray(*this, v.Data, 16);
-    }
-
     Vector2i Value::ToVector2i() const
     {
         Vector2i v;
@@ -193,20 +183,6 @@ namespace Xli
     {
         Vector4 v;
         GetFloatArray(*this, v.Data, 4);
-        return v;
-    }
-
-    Matrix3 Value::ToMatrix3() const
-    {
-        Matrix3 v;
-        GetFloatArray(*this, v.Data, 9);
-        return v;
-    }
-
-    Matrix4 Value::ToMatrix4() const
-    {
-        Matrix4 v;
-        GetFloatArray(*this, v.Data, 16);
         return v;
     }
 }

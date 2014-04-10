@@ -1,4 +1,4 @@
-include(${CMAKE_CURRENT_LIST_DIR}/cmake/link_project.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/cmake/modules/XliLinkProject.cmake)
 link_project(${CMAKE_CURRENT_LIST_DIR})
 
 if (CMAKE_SYSTEM_NAME MATCHES "Linux")

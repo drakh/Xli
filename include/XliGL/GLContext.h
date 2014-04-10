@@ -8,34 +8,45 @@ namespace Xli
     /**
         \ingroup XliGL
      */
+    class GLContextAttributes
+    {
+    public:
+        Vector4i ColorBits;
+        int DepthBits;
+        int StencilBits;
+        int Samples;
+        Vector4i AccumBits;
+        int Buffers;
+        bool Stereo;
+
+        GLContextAttributes(const Vector4i& colorBits, int depthBits, int stencilBits, int samples, const Vector4i& accumBits, int buffers, bool stereo);
+
+        static const GLContextAttributes& Default();
+    };
+
+    /**
+        \ingroup XliGL
+     */
     class GLContext: public Object
     {
     public:
-        static GLContext* Create(Window* window, int multiSamples);
-
-        virtual ~GLContext() {}
+        static GLContext* Create(Window* window, const GLContextAttributes& attribs);
 
         virtual GLContext* CreateSharedContext() = 0;
 
-        virtual void SetWindow(Window* window) { XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION); }
+        virtual void SetWindow(Window* window) = 0;
+        virtual Window* GetWindow() = 0;
+
+        virtual void GetAttributes(GLContextAttributes& result) = 0;
+        virtual Vector2i GetDrawableSize() = 0;
 
         virtual void MakeCurrent(bool current) = 0;
+        virtual bool IsCurrent() = 0;
+
         virtual void SwapBuffers() = 0;
 
-        /**
-            Sets the swap interval.
-            @param interval 1 enables VSync, 0 disables VSync
-            @return true on success, false on failure
-        */
-        virtual bool SetSwapInterval(int interval) = 0;
-
+        virtual void SetSwapInterval(int value) = 0;
         virtual int GetSwapInterval() = 0;
-
-        virtual int GetMultiSamples() = 0;
-
-        virtual unsigned int GetBackbufferHandle() = 0;
-
-        virtual Vector2i GetBackbufferSize() = 0;
     };
 }
 

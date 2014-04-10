@@ -1,1 +1,1 @@
-./build.sh && ./XLI_Test $@
+./build.sh && ./XliTest $@

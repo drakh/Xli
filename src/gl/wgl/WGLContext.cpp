@@ -8,25 +8,6 @@ namespace Xli
 {
     namespace PlatformSpecific
     {
-        static const PIXELFORMATDESCRIPTOR pfd =
-        {
-            sizeof(PIXELFORMATDESCRIPTOR),
-            1,
-            PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER,
-            PFD_TYPE_RGBA,
-            32,
-            0, 0, 0, 0, 0, 0,
-            0, // No alpha buffer
-            0,
-            0, // No accumulation buffer
-            0, 0, 0, 0,
-            24, // 24-bit z buffer
-            0, // No stencil buffer
-            0, // No auxilary buffer
-            PFD_MAIN_PLANE,
-            0, 0, 0, 0
-        };
-
         static bool Inited = false;
 
         class WGLContext : public GLContext
@@ -34,15 +15,35 @@ namespace Xli
             HDC hDC;
             HGLRC hGLRC;
             Shared<Win32Window> window;
+            PIXELFORMATDESCRIPTOR pfd;
             int pf;
 
-            int TryEnableMultisample(int multiSamples)
+            int TryEnableMultisample(const GLContextAttributes& attribs)
             {
                 if (!Inited)
                 {
-                    HWND tmpW = CreateWindowEx(0, L"STATIC", L"", 0, 0, 0, 16, 16, window->GetHWND(), 0, GetModuleHandle(0), 0);
-                    HDC tmpDC = GetDC(tmpW);
-                    int fmt = ChoosePixelFormat(tmpDC, &pfd);
+                    static const PIXELFORMATDESCRIPTOR tmpPfd =
+                    {
+                        sizeof(PIXELFORMATDESCRIPTOR),
+                        1,
+                        PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER,
+                        PFD_TYPE_RGBA,
+                        32,
+                        0, 0, 0, 0, 0, 0,
+                        0, // No alpha buffer
+                        0,
+                        0, // No accumulation buffer
+                        0, 0, 0, 0,
+                        24, // 24-bit z buffer
+                        0, // No stencil buffer
+                        0, // No auxilary buffer
+                        PFD_MAIN_PLANE,
+                        0, 0, 0, 0
+                    };
+
+                    HWND tmpWnd = CreateWindowEx(0, L"STATIC", L"", 0, 0, 0, 16, 16, window->GetHWND(), 0, GetModuleHandle(0), 0);
+                    HDC tmpDC = GetDC(tmpWnd);
+                    int fmt = ChoosePixelFormat(tmpDC, &tmpPfd);
                     SetPixelFormat(tmpDC, fmt, &pfd);
                     HGLRC tmpGL = wglCreateContext(tmpDC);
                     wglMakeCurrent(tmpDC, tmpGL);
@@ -51,31 +52,39 @@ namespace Xli
 
                     wglMakeCurrent(tmpDC, 0);
                     wglDeleteContext(tmpGL);
-                    ReleaseDC(tmpW, tmpDC);
-                    DestroyWindow(tmpW);
+                    ReleaseDC(tmpWnd, tmpDC);
+                    DestroyWindow(tmpWnd);
 
                     Inited = true;
                 }
 
-                if (multiSamples <= 1)
+                if (attribs.Samples <= 1)
                 {
                     return -1;
                 }
 
-                int attribs[] =
+                int iattribs[] =
                 {
                     WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
                     WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
                     WGL_ACCELERATION_ARB, WGL_FULL_ACCELERATION_ARB,
-                    WGL_COLOR_BITS_ARB, 24,
-                    WGL_ALPHA_BITS_ARB, 0,
-                    WGL_DEPTH_BITS_ARB, 16,
-                    WGL_STENCIL_BITS_ARB, 0,
-                    WGL_DOUBLE_BUFFER_ARB, GL_TRUE,
+                    WGL_RED_BITS_ARB, attribs.ColorBits.R,
+                    WGL_GREEN_BITS_ARB, attribs.ColorBits.G,
+                    WGL_BLUE_BITS_ARB, attribs.ColorBits.B,
+                    WGL_ALPHA_BITS_ARB, attribs.ColorBits.A,
+                    WGL_ACCUM_RED_BITS_ARB, attribs.AccumBits.R,
+                    WGL_ACCUM_GREEN_BITS_ARB, attribs.AccumBits.G,
+                    WGL_ACCUM_BLUE_BITS_ARB, attribs.AccumBits.B,
+                    WGL_ACCUM_ALPHA_BITS_ARB, attribs.AccumBits.A,
+                    WGL_DEPTH_BITS_ARB, attribs.DepthBits,
+                    WGL_STENCIL_BITS_ARB, attribs.StencilBits,
+                    WGL_DOUBLE_BUFFER_ARB, attribs.Buffers > 1 ? GL_TRUE : GL_FALSE,
                     WGL_SAMPLE_BUFFERS_ARB, GL_TRUE,
-                    WGL_SAMPLES_ARB, multiSamples,
+                    WGL_SAMPLES_ARB, attribs.Samples,
                     0, 0
                 };
+
+                // TODO: attribs.Stereo is not handled.
 
                 float fattribs[] = { 0, 0 };
 
@@ -84,11 +93,11 @@ namespace Xli
 
                 while (true)
                 {
-                    if (!wglChoosePixelFormatARB(hDC, attribs, fattribs, 64, configs, &numConfigs) || numConfigs == 0)
+                    if (!wglChoosePixelFormatARB(hDC, iattribs, fattribs, 64, configs, &numConfigs) || numConfigs == 0)
                     {
-                        if (attribs[19] > 2)
+                        if (iattribs[19] > 2)
                         {
-                            attribs[19] /= 2;
+                            iattribs[19] /= 2;
                             continue;
                         }
 
@@ -109,20 +118,45 @@ namespace Xli
             }
 
         public:
-            WGLContext(Win32Window* wnd, int multiSamples)
+            WGLContext(Win32Window* wnd, const GLContextAttributes& attribs)
             {
                 this->window = wnd;
                 hDC = GetDC(wnd->GetHWND());
 
-                pf = TryEnableMultisample(multiSamples);
+                ZeroMemory(&pfd, sizeof(PIXELFORMATDESCRIPTOR));
+                pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
+                pfd.nVersion = 1;
+                pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
 
-                if (pf == -1)
-                    SetPixelFormat(hDC, ChoosePixelFormat(hDC, &pfd), &pfd);
+                if (attribs.Stereo)
+                    pfd.dwFlags |= PFD_STEREO;
+
+                pfd.iPixelType = PFD_TYPE_RGBA;
+                pfd.cRedBits = attribs.ColorBits.R;
+                pfd.cGreenBits = attribs.ColorBits.G;
+                pfd.cBlueBits = attribs.ColorBits.B;
+                pfd.cAlphaBits = attribs.ColorBits.A;
+                pfd.cAccumRedBits = attribs.AccumBits.R;
+                pfd.cAccumGreenBits = attribs.AccumBits.G;
+                pfd.cAccumBlueBits = attribs.AccumBits.B;
+                pfd.cAccumAlphaBits = attribs.AccumBits.A;
+                pfd.cDepthBits = attribs.DepthBits;
+                pfd.cStencilBits = attribs.StencilBits;
+                pfd.iLayerType = PFD_MAIN_PLANE;
+
+                pf = TryEnableMultisample(attribs);
+
+                if (pf == -1 && !SetPixelFormat(hDC, ChoosePixelFormat(hDC, &pfd), &pfd))
+                    XLI_THROW("Failed to create OpenGL context: " + Win32Helpers::GetLastErrorString());
 
                 hGLRC = wglCreateContext(hDC);
+                
+                if (!hGLRC)
+                    XLI_THROW("Failed to create OpenGL context: " + Win32Helpers::GetLastErrorString());
+
                 MakeCurrent(true);
 
-                glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+                glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
                 SwapBuffers();
 
                 if (pf != -1)
@@ -158,12 +192,9 @@ namespace Xli
                 return new WGLContext(this);
             }
 
-            virtual int GetMultiSamples()
+            virtual Window* GetWindow()
             {
-                int attr = WGL_SAMPLES_ARB;
-                int samples = 0;
-                wglGetPixelFormatAttribivARB(hDC, pf, 0, 1, &attr, &samples);
-                return samples;
+                return window;
             }
 
             virtual void SetWindow(Window* window)
@@ -194,38 +225,57 @@ namespace Xli
                     XLI_THROW("Unable to make OpenGL context current: " + Win32Helpers::GetLastErrorString());
             }
 
+            virtual bool IsCurrent()
+            {
+                return wglGetCurrentContext() == hGLRC;
+            }
+
             virtual void SwapBuffers()
             {
                 ::SwapBuffers(hDC);
             }
 
-            virtual bool SetSwapInterval(int interval)
+            virtual void SetSwapInterval(int interval)
             {
-                return wglSwapIntervalEXT && wglSwapIntervalEXT(interval) == TRUE;
+                wglSwapIntervalEXT && wglSwapIntervalEXT(interval);
             }
 
             virtual int GetSwapInterval()
             {
-                return wglGetSwapIntervalEXT ? wglGetSwapIntervalEXT() : 0;
+                return wglGetSwapIntervalEXT ? wglGetSwapIntervalEXT() : -1;
             }
 
-            virtual unsigned int GetBackbufferHandle()
-            {
-                return 0;
-            }
-
-            virtual Vector2i GetBackbufferSize()
+            virtual Vector2i GetDrawableSize()
             {
                 return window->GetClientSize();
+            }
+
+            virtual void GetAttributes(GLContextAttributes& result)
+            {
+                int iattribs[] =
+                {
+                    WGL_RED_BITS_ARB, WGL_GREEN_BITS_ARB, WGL_BLUE_BITS_ARB, WGL_ALPHA_BITS_ARB,
+                    WGL_DEPTH_BITS_ARB,
+                    WGL_STENCIL_BITS_ARB,
+                    WGL_SAMPLES_ARB,
+                    WGL_ACCUM_RED_BITS_ARB, WGL_ACCUM_GREEN_BITS_ARB, WGL_ACCUM_BLUE_BITS_ARB, WGL_ACCUM_ALPHA_BITS_ARB,
+                };
+
+                ZeroMemory(&result, sizeof(GLContextAttributes));
+                wglGetPixelFormatAttribivARB(hDC, pf, 0, 11, iattribs, (int*)&result);
+
+                // TODO
+                result.Buffers = 2;
+                result.Stereo = false;
             }
         };
     }
 
-    GLContext* GLContext::Create(Window* window, int multiSamples)
+    GLContext* GLContext::Create(Window* window, const GLContextAttributes& attribs)
     {
         if (window->GetImplementation() != WindowImplementationWin32) 
-            XLI_THROW("Unsupported window");
+            XLI_THROW("Unsupported window implementation");
         
-        return new PlatformSpecific::WGLContext((PlatformSpecific::Win32Window*)window, multiSamples);
+        return new PlatformSpecific::WGLContext((PlatformSpecific::Win32Window*)window, attribs);
     }
 }
