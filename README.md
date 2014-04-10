@@ -31,7 +31,8 @@ Library documentation can be generated using `doxygen`.
 
 ### Prerequisites
 
-- Android NDK (`ndk-build` must be available in PATH)
+- CMake
+- Android NDK (`ndk-build` must be available in *PATH*)
 - Unix Shell (Windows only)
 
 ### Instructions - OS X, Linux, MSYS
@@ -43,23 +44,23 @@ Library documentation can be generated using `doxygen`.
 
 Debug binaries can be produced by replacing command in step 2 with `./build-android.sh --debug`. 
 
-**Note:** Android build will output debug and release binaries to the same folder -- do a `./build-android.sh clean` before rebuilding just to be safe. Also, debug binaries should be huge. For instance `lib/android/armeabi-v7a/libXli.so` should be roughly ~1,5MB after a debug build, while ~200KB in release.
+List of available options can be shown using `./build-android.sh --help`.
 
 ### Instructions - Windows
 
 Windows users need a way to execute unix shell scripts. This can be done using i.e. [MSYS](http://www.mingw.org/wiki/MSYS).
 
-Uno users can use the *Uno Native Build environment* provided by Outracks, containing both MSYS and the Android NDK. Open `start.bat`, type `bash -li` to get a bash shell, then follow the instructions given above.
+Uno users can use the *Uno Native Build environment* provided by Outracks, containing both CMake, MSYS and the Android NDK. Open `start.bat`, type `bash -li` to get a bash shell, then follow the instructions given above.
 
 
 ## iOS
 
 ### Prerequisites
 
-- OS X (>= 10.7)
+- CMake
 - Xcode with most recent iOS SDK
 - Xcode command line tools
-- CMake
+- OS X (>= 10.7)
 
 **MacPorts** users can execute `sudo port install cmake` to install CMake.
 
@@ -72,14 +73,17 @@ Uno users can use the *Uno Native Build environment* provided by Outracks, conta
      - `lib/iOS/Debug-iphonesimulator/`
      - `lib/iOS/Release-iphoneos/`
      - `lib/iOS/Release-iphonesimulator/`
+   * Generated Xcode projects located here:
+     - `build/iOS/OS/XliLibrary.xcodeproj`
+     - `build/iOS/SIMULATOR/XliLibrary.xcodeproj`
 
 
 ## Linux
 
 ### Prerequisites
 
-- GNU make, C++ compiler, etc
 - CMake
+- GNU make, C++ compiler, etc
 - curl (with OpenSSL support)
 - freetype
 - GLEW
@@ -103,7 +107,7 @@ Uno users can use the *Uno Native Build environment* provided by Outracks, conta
 1. Open terminal and `cd` to Xli directory
 2. Execute `./build.sh`
    * This should produce .so files located here:
-     - `lib/linux/x86_$ARCH/`
+     - `lib/linux/x86_32/` *OR* `lib/linux/x86_64/`
 3. Optional step: `sudo ./build.sh install`
 
 Debug binaries can be produced by replacing command in step 2 with `./build.sh --debug`.
@@ -115,13 +119,12 @@ List of available options can be shown using `./build.sh --help`.
 
 ### Prerequisites
 
-- OS X (>= 10.7)
+- CMake
 - Xcode
 - Xcode command line tools
-- CMake
-- portaudio (universal)
+- OS X (>= 10.7)
 
-**MacPorts** users can execute `sudo port install cmake portaudio +universal` to install CMake and portaudio.
+**MacPorts** users can execute `sudo port install cmake` to install CMake.
 
 ### Instructions
 
@@ -135,23 +138,23 @@ Debug binaries can be produced by replacing command in step 2 with `./build.sh -
 
 List of available options can be shown using `./build.sh --help`.
 
-**Note:** When building applications using Xcode, it would be useful to also build Xli using a generated Xcode project for better integration with debugger and such. This can be achieved using these alternative instructions:
+**Note:** When building applications using Xcode, it would be useful to also build Xli using Xcode for better integration with debugger and such. This can be achieved using these alternative instructions:
 
 1. Open terminal and `cd` to Xli directory
-2. Execute `./build.sh --target=xcode`
+2. Execute `./build.sh --platform=xcode`
    * This should produce universal binaries located here:
      - `lib/OSX/x86/Debug/`
      - `lib/OSX/x86/Release/`
    * Generated Xcode project located here:
-     - `build/xcode/Xli Library.xcodeproj`
+     - `build/Xcode/XliLibrary.xcodeproj`
 
 
 ## Raspberry PI
 
 ### Prerequisites
 
-- GNU make, C++ compiler, etc
 - CMake
+- GNU make, C++ compiler, etc
 - curl (with OpenSSL support)
 - freetype
 - [libjpeg]

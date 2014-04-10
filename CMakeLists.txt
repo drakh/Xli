@@ -1,4 +1,4 @@
-project("Xli Library")
+project("XliLibrary")
 
 cmake_minimum_required(VERSION 2.8)
 
