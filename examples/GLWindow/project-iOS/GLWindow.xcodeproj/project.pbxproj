@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5AB0DAB318F6CF6C00975F8B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5AB0DAB218F6CF6C00975F8B /* Images.xcassets */; };
 		CE2B21D316C7263A0036FFA0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B21D216C7263A0036FFA0 /* UIKit.framework */; };
 		CE2B21D516C7263A0036FFA0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B21D416C7263A0036FFA0 /* Foundation.framework */; };
 		CE2B21D716C7263A0036FFA0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B21D616C7263A0036FFA0 /* CoreGraphics.framework */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5AB0DAB218F6CF6C00975F8B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		CE2B21CE16C7263A0036FFA0 /* GLWindow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GLWindow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE2B21D216C7263A0036FFA0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CE2B21D416C7263A0036FFA0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -92,6 +94,7 @@
 			isa = PBXGroup;
 			children = (
 				CE52CC3216C74B2000C6AAC7 /* Main.cpp */,
+				5AB0DAB218F6CF6C00975F8B /* Images.xcassets */,
 				CE2B21DD16C7263A0036FFA0 /* Supporting Files */,
 			);
 			path = GLWindow;
@@ -132,7 +135,7 @@
 		CE2B21C516C7263A0036FFA0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0510;
 				TargetAttributes = {
 					CE2B21CD16C7263A0036FFA0 = {
 						DevelopmentTeam = K3P9TEQ2M4;
@@ -161,6 +164,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5AB0DAB318F6CF6C00975F8B /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,8 +186,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -198,10 +203,14 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lXli",
 					"-lXliMain",
@@ -218,8 +227,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -227,10 +237,13 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = (
 					"-lXli",
@@ -248,6 +261,9 @@
 		CE2B21F816C7263A0036FFA0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = armv7;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -255,11 +271,13 @@
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
 				HEADER_SEARCH_PATHS = ../../../include;
 				INFOPLIST_FILE = "GLWindow/GLWindow-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = ../../../lib/iOS/$CONFIGURATION$EFFECTIVE_PLATFORM_NAME;
 				LINK_WITH_STANDARD_LIBRARIES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -267,6 +285,9 @@
 		CE2B21F916C7263A0036FFA0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = armv7;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -274,11 +295,13 @@
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
 				HEADER_SEARCH_PATHS = ../../../include;
 				INFOPLIST_FILE = "GLWindow/GLWindow-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = ../../../lib/iOS/$CONFIGURATION$EFFECTIVE_PLATFORM_NAME;
 				LINK_WITH_STANDARD_LIBRARIES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				STRIP_INSTALLED_PRODUCT = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
