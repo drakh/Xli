@@ -708,7 +708,7 @@ namespace Xli
     public:
         virtual CurlHttpRequest* CreateRequest()
         {
-            new CurlHttpRequest(this);
+            return new CurlHttpRequest(this);
         }
 
         virtual void Update()

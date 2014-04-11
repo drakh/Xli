@@ -1,7 +1,7 @@
 #include <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
 #include <Xli/PlatformSpecific/iOS.h>
-#include <XliSoundPlayer/SimpleAudio.h>
+#include <XliSoundPlayer/SoundPlayer.h>
 #include <Xli/Array.h>
 #include <Xli/Console.h>
 #include <assert.h>
@@ -9,7 +9,7 @@
 namespace Xli
 {      
 
-    class CoreAudioChannel : public SimpleSoundChannel
+    class CoreSoundChannel : public SoundChannel
     {
         AVAudioPlayer* player;
             
@@ -51,7 +51,7 @@ namespace Xli
             }
         }
             
-        virtual ~CoreAudioChannel()
+        virtual ~CoreSoundChannel()
         {
             if (player == nil) return;
             [player release];
@@ -134,19 +134,19 @@ namespace Xli
         }
     };
         
-    class CoreSimpleSound : public SimpleSound 
+    class CoreSound : public Sound 
     {
     private:
         double duration;
         bool isasset;
         String path;
     public:
-        CoreSimpleSound(const String& path, bool asset)
+        CoreSound(const String& path, bool asset)
         {
             this->path = path;
             this->isasset = asset;
             
-            CoreAudioChannel* c = new CoreAudioChannel(path.DataPtr(), false, false);
+            CoreSoundChannel* c = new CoreSoundChannel(path.DataPtr(), false, false);
             this->duration = c->GetDuration();
             delete c;
             this->duration = 0.0;
@@ -154,18 +154,6 @@ namespace Xli
         virtual double GetDuration() const
         {
             return duration;
-        }
-        virtual SimpleSoundChannel* Play(bool paused)
-        {
-            SimpleSoundChannel* result;
-            result = new CoreAudioChannel(path.DataPtr(), false, true);
-            return result;
-        }
-        virtual SimpleSoundChannel* PlayLoop(bool paused)
-        {
-            SimpleSoundChannel* result;
-            result = new CoreAudioChannel(path.DataPtr(), true, true);
-            return result;
         }
         virtual String GetPath() const
         {
@@ -176,9 +164,24 @@ namespace Xli
             return isasset;
         }
     };
-    
-    SimpleSound* SimpleSound::Create(const String& path, bool asset)
+
+    class CoreSoundPlayer : public SoundPlayer
     {
-        return new CoreSimpleSound(path, asset);
+        virtual CoreSound* CreateSoundFromAsset(const String& filename) 
+        {
+            return new CoreSound(filename, true);
+        }
+        virtual SoundChannel* PlaySound(Sound* sound, bool loop)
+        {
+            CoreSoundChannel* result = new CoreSoundChannel(sound);
+            result = new CoreSoundChannel(path.DataPtr(), loop, true);
+            result->Play();
+            return result;
+        }        
+    };
+
+    SoundPlayer* SoundPlayer::Create()
+    {
+        return new CoreSoundPlayer();
     }
 }

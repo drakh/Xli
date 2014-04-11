@@ -7,11 +7,11 @@ set(LIBS Xli)
 
 if (XLI_PLATFORM_IOS)
 
-    set(SRC ${SRC} coreaudio/CoreSimpleAudio.mm)
+    set(SRC ${SRC} coreaudio/CoreSoundPlayer.mm)
 
 elseif (XLI_PLATFORM_ANDROID)
 
-    set(SRC ${SRC} opensles/SlesSimpleAudio.cpp)
+    set(SRC ${SRC} opensles/SlesSoundPlayer.cpp)
     set(LIBS ${LIBS} OpenSLES)
 
 endif()

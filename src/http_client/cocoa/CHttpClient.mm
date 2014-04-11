@@ -805,7 +805,7 @@ namespace Xli
     {
         virtual CHttpRequest* CreateRequest()
         {
-            new CHttpRequest(this);
+            return new CHttpRequest(this);
         }       
     };
 

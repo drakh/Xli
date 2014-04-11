@@ -1,6 +1,7 @@
+
 #include <Xli.h>
 #include <XliGL.h>
-#include <XliAudio.h>
+#include <XliSoundPlayer.h>
 
 using namespace Xli;
 
@@ -9,8 +10,10 @@ using namespace Xli;
 class GLApp: public Application
 {
 	Managed<GLContext> gl;
-    Managed<SimpleSound> mp3;
-    Managed<SimpleSound> wav;
+
+    Managed<SoundPlayer> soundPlayer;
+    Managed<Sound> mp3;
+    Managed<Sound> wav;
 
     double touchDownTime;
     double tapTime;
@@ -34,24 +37,17 @@ public:
         dialogType = 0;
 
 		// Setup OpenGL
-
-		this->gl = GLContext::Create(wnd, 16);
+        GLContextAttributes glAttribs = GLContextAttributes::Default();
+        glAttribs.Samples = 16;
+		this->gl = GLContext::Create(wnd, glAttribs);
+        gl->GetAttributes(glAttribs);
 
 		glClearColor(1,0,0,1);
-
 
 		// Print platform info
 
 		PrintLine((String)"Time: " + DateTime::Now().ToString());
 		PrintLine((String)"Time (UTC): " + DateTime::NowUtc().ToString());
-
-		PrintLine((String)"Resolution: " + wnd->GetClientSize().ToString());
-
-		PrintLine((String)"OpenGL Vendor: " + (const char*)glGetString(GL_VENDOR));
-		PrintLine((String)"OpenGL Renderer: " + (const char*)glGetString(GL_RENDERER));
-		PrintLine((String)"OpenGL Version: " + (const char*)glGetString(GL_VERSION));
-		PrintLine((String)"OpenGL Multisamples: " + gl->GetMultiSamples());
-		PrintLine((String)"OpenGL Swap Interval: " + gl->GetSwapInterval());
     
 		PrintLine((String)"FileSystem Working Dir: " + Disk->GetCurrentDirectory());
 		PrintLine((String)"FileSystem Documents: " + Disk->GetSystemDirectory(SystemDirectoryDocuments));
@@ -59,10 +55,11 @@ public:
 		PrintLine((String)"FileSystem Roaming AppData: " + Disk->GetSystemDirectory(SystemDirectoryRoamingAppData));
 		PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
         
-        mp3 = SimpleSound::Create("ChrisZabriskieCylinderOne.mp3",true);
-        wav = SimpleSound::Create("WilhelmScream.wav",true);
+        soundPlayer = SoundPlayer::Create();
+        mp3 = soundPlayer->CreateSoundFromAsset("ChrisZabriskieCylinderOne.mp3");
+        wav = soundPlayer->CreateSoundFromAsset("WilhelmScream.wav");
 
-        mp3->Play(false);
+        soundPlayer->PlaySound(mp3.Get(), false);
 	}
 
 	virtual void OnLoad(Window* wnd)
@@ -105,7 +102,7 @@ public:
             if (currentTime - tapTime < 0.3)
             {
                 Err->WriteLine("Bang");
-                wav->Play(false);
+                soundPlayer->PlaySound(wav.Get(), false);
             }
 
             tapTime = currentTime;

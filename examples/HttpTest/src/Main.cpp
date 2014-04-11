@@ -129,16 +129,17 @@ public:
 	virtual void OnLoad(Window* wnd)
 	{
 		Err->WriteLine("OnLoad");
-
-		// TODO: Load something
 	}
 
+    
+    
 	virtual void OnDraw(Window* wnd)
 	{
+        //
+        httpClient->Update();
+        
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-		// TODO: Draw something
-		
 		gl->SwapBuffers();
 
 		if (wnd->GetKeyState(KeySpace))

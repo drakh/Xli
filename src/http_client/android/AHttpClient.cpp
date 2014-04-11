@@ -608,7 +608,7 @@ namespace Xli
     public:
         virtual AHttpRequest* CreateRequest()
         {
-            new AHttpRequest(this);
+            return new AHttpRequest(this);
         }
 
         virtual void Update()
