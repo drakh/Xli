@@ -14,18 +14,20 @@ namespace Xli
         AVAudioPlayer* player;
             
     public:
-        CoreAudioChannel(const char* filename, bool loop, bool play)
+        CoreSoundChannel(const char* filename, bool loop, bool play)
         {
-            NSString* string = [NSString stringWithFormat:@"%@/data/%@", [[NSBundle mainBundle] resourcePath], [NSString stringWithUTF8String:filename]];
+            NSString* pathString = [NSString stringWithFormat:@"%@/data/%@", [[NSBundle mainBundle] resourcePath], [NSString stringWithUTF8String:filename]];
                 
-            NSURL* url = [NSURL fileURLWithPath:string];
-            //[string release];
+            NSURL* url = [NSURL fileURLWithPath:pathString];
+            //[pathString release];
                 
             NSError* error;
             
-            BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:string];
+            BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:pathString];
             if (!fileExists) {
-                Xli::ErrorPrintLine("audio file not found");
+                const char* wrongPath = [pathString UTF8String];
+                Xli::ErrorPrintLine("SoundPlayer: Audio file not found at:");
+                Xli::ErrorPrintLine(wrongPath);
                 player = nil;
                 return;
             }
@@ -173,9 +175,7 @@ namespace Xli
         }
         virtual SoundChannel* PlaySound(Sound* sound, bool loop)
         {
-            CoreSoundChannel* result = new CoreSoundChannel(sound);
-            result = new CoreSoundChannel(path.DataPtr(), loop, true);
-            result->Play();
+            CoreSoundChannel* result = new CoreSoundChannel(sound->GetPath().DataPtr(), loop, true);
             return result;
         }        
     };
