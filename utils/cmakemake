@@ -223,7 +223,7 @@ if [ -n "$PLATFORM" ]; then
         set -- -DANDROID_NATIVE_API_LEVEL="android-9" -DANDROID_STL="stlport_static" "$@"
         set -- -DANDROID_TOOLCHAIN_NAME="arm-linux-androideabi-4.6" "$@"
 
-        cmake $@ $CMAKE_ARGS ../../..
+        cmake "$@" $CMAKE_ARGS ../../..
 
         if [ "$DO_BUILD" != "0" ]; then
             cmake --build . --use-stderr -- -j$JOB_COUNT
