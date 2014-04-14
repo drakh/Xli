@@ -76,9 +76,9 @@ namespace Xli
         case CURLE_COULDNT_CONNECT: return String("COULDNT_CONNECT:");
         case CURLE_FTP_WEIRD_SERVER_REPLY: return String("FTP_WEIRD_SERVER_REPLY");
         case CURLE_REMOTE_ACCESS_DENIED: return String("REMOTE_ACCESS_DENIED");
-        case CURLE_FTP_ACCEPT_FAILED: return String("FTP_ACCEPT_FAILED");
+        //case CURLE_FTP_ACCEPT_FAILED: return String("FTP_ACCEPT_FAILED");
         case CURLE_FTP_WEIRD_PASS_REPLY: return String("FTP_WEIRD_PASS_REPLY");
-        case CURLE_FTP_ACCEPT_TIMEOUT: return String("FTP_ACCEPT_TIMEOUT");
+        //case CURLE_FTP_ACCEPT_TIMEOUT: return String("FTP_ACCEPT_TIMEOUT");
         case CURLE_FTP_WEIRD_PASV_REPLY: return String("FTP_WEIRD_PASV_REPLY");
         case CURLE_FTP_WEIRD_227_FORMAT: return String("FTP_WEIRD_227_FORMAT");
         case CURLE_FTP_CANT_GET_HOST: return String("FTP_CANT_GET_HOST");
@@ -145,7 +145,7 @@ namespace Xli
         case CURLE_RTSP_SESSION_ERROR: return String("RTSP_SESSION_ERROR");
         case CURLE_FTP_BAD_FILE_LIST: return String("FTP_BAD_FILE_LIST");
         case CURLE_CHUNK_FAILED: return String("CHUNK_FAILED");
-        case CURLE_NO_CONNECTION_AVAILABLE: return String("NO_CONNECTION_AVAILABLE");
+        //case CURLE_NO_CONNECTION_AVAILABLE: return String("NO_CONNECTION_AVAILABLE");
         default: return String("-INVALID CURL ERROR CODE-");
         }
     }
