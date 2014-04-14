@@ -38,6 +38,7 @@ Build options:
 
 Supported platforms:
 
+  * (default)           Build native binaries for current platform
   * Android             Build Android binaries (armeabi-v7a) (MSYS, Linux, OS X)
   * iOS                 Build iOS binaries (iphoneos+simulator) (OS X only)
   * Xcode               Build using Xcode (debug+release) (OS X only)

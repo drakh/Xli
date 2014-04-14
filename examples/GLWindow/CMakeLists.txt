@@ -7,6 +7,6 @@ endif()
 add_executable(GLWindow Main.cpp)
 target_link_libraries(GLWindow Xli XliGL XliMain)
 
-if (UNIX AND NOT APPLE AND NOT WIN32)
+if (XLI_PLATFORM_LINUX AND NOT XLI_ARCH_ARM)
     target_link_libraries(GLWindow GL GLEW)
 endif()
