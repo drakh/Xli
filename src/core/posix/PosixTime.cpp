@@ -16,14 +16,15 @@ namespace Xli
         Timestamp ConvertToTimestamp(const tm* const time)
         {
             DateTime dt;
-            dt.Year = time->tm_year;
-            dt.Month = time->tm_mon;
+            dt.Year = time->tm_year + 1900;
+            dt.Month = time->tm_mon + 1;
             dt.Day = time->tm_mday;
             dt.Hour = time->tm_hour;
             dt.Minute = time->tm_min;
             dt.Second = time->tm_sec;
             return dt.ToTimestamp();
         }
+
     }
 
     double GetSeconds()
