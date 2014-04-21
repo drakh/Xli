@@ -533,6 +533,9 @@ namespace Xli
             int w = ANativeWindow_getWidth(GlobalAndroidApp->window);
             int h = ANativeWindow_getHeight(GlobalAndroidApp->window);
 
+            // Adjust for non-fullscreen (FIXME: Need proper solution)
+            h -= 38;
+
             if (w != GlobalWidth || h != GlobalHeight)
             {
                 GlobalWidth = w;
@@ -541,6 +544,7 @@ namespace Xli
                 if (GlobalEventHandler)
                     GlobalEventHandler->OnSizeChanged(GlobalWindow, Vector2i(w, h));
             }
+            
             if (GlobalWindow)
                 GlobalWindow->ProcessCrossThreadEvents();
         }

@@ -13,8 +13,14 @@ if (APPLE)
 endif()
 
 add_subdirectory(src/core)
-add_subdirectory(src/main)
-add_subdirectory(src/media)
+
+if (NOT XLI_NO_MAIN)
+    add_subdirectory(src/main)
+endif()
+
+if (NOT XLI_NO_MEDIA)
+    add_subdirectory(src/media)
+endif()
 
 if (NOT XLI_NO_GL)
     add_subdirectory(src/gl)
