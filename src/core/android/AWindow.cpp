@@ -134,6 +134,12 @@ namespace Xli
 
             virtual void SetFullscreen(bool fullscreen)
             {
+                if (fullscreen)
+                {
+                    AShim::HideStatusBar();
+                } else {
+                    AShim::ShowStatusBar();
+                }
             }
 
             virtual void SetPosition(Vector2i pos)
@@ -149,7 +155,7 @@ namespace Xli
             }
 
             virtual void Maximize()
-            {
+            {                
             }
 
             virtual void Restore()

@@ -427,6 +427,8 @@ namespace Xli
             static jmethodID httpShowHeaders;
             static jmethodID initDefaultCookieManager;
             static jmethodID getAssetManager;
+            static jmethodID hideStatusBar;
+            static jmethodID showStatusBar;        
         public:
             static int kbVisible;
 
@@ -435,6 +437,8 @@ namespace Xli
             static void RaiseSoftKeyboard();
             static void HideSoftKeyboard();
             static bool KeyboardVisible();
+            static void ShowStatusBar();
+            static void HideStatusBar();
             static int ShowMessageBox(const String& message, const String& caption, int buttons, int hints);            
             static bool ConnectedToNetwork();
             static jobject XliToJavaHeaders(const HttpRequest* req);

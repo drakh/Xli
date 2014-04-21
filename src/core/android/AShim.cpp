@@ -19,6 +19,8 @@ namespace Xli
         jmethodID AShim::httpShowHeaders;
         jmethodID AShim::initDefaultCookieManager;
         jmethodID AShim::getAssetManager;
+        jmethodID AShim::hideStatusBar;
+        jmethodID AShim::showStatusBar;        
 
         void AShim::CacheMids(JNIEnv *env, jclass shim_class)
         {
@@ -29,6 +31,8 @@ namespace Xli
             connectedToNetwork = env->GetStaticMethodID(shim_class, "ConnectedToNetwork", "(Landroid/app/NativeActivity;)Z");
             initDefaultCookieManager = env->GetStaticMethodID(shim_class, "InitDefaultCookieManager", "()V");
             getAssetManager = env->GetStaticMethodID(shim_class, "GetAssetManager", "(Landroid/app/NativeActivity;)Landroid/content/res/AssetManager;");
+            hideStatusBar = env->GetStaticMethodID(shim_class, "hideStatusBar", "(Landroid/app/NativeActivity;)V");
+            showStatusBar = env->GetStaticMethodID(shim_class, "showStatusBar", "(Landroid/app/NativeActivity;)V");
 
             if (!makeNoise) {
                 XLI_THROW("Cannot cache mid for makeNoise.");
@@ -51,8 +55,14 @@ namespace Xli
             if (!getAssetManager) {
                 XLI_THROW("Cannot cache mid for getAssetManager.");
             }
+            if (!hideStatusBar) {
+                XLI_THROW("Cannot cache mid for hideStatusBar.");
+            }
+            if (!showStatusBar) {
+                XLI_THROW("Cannot cache mid for showStatusBar.");
+            }
 
-            if ((!makeNoise) || (!raiseKeyboard) || (!hideKeyboard) || (!showMessageBox) || (!connectedToNetwork) || (!initDefaultCookieManager) || (!getAssetManager)) 
+            if ((!makeNoise) || (!raiseKeyboard) || (!hideKeyboard) || (!showMessageBox) || (!connectedToNetwork) || (!initDefaultCookieManager) || (!getAssetManager) || (!showStatusBar) || (!hideStatusBar)) 
             {
                 XLI_THROW("Cannot cache mids for shim. Exiting.");
             }
@@ -90,6 +100,24 @@ namespace Xli
             jclass shim_class = jni.GetShim();
             jobject activity = jni.GetInstance();
             jni->CallObjectMethod(shim_class, hideKeyboard, activity);
+            kbVisible = 0;
+        } 
+
+        void AShim::HideStatusBar()
+        {
+            AJniHelper jni;
+            jclass shim_class = jni.GetShim();
+            jobject activity = jni.GetInstance();
+            jni->CallObjectMethod(shim_class, hideStatusBar, activity);
+            kbVisible = 0;
+        }
+
+        void AShim::ShowStatusBar()
+        {
+            AJniHelper jni;
+            jclass shim_class = jni.GetShim();
+            jobject activity = jni.GetInstance();
+            jni->CallObjectMethod(shim_class, showStatusBar, activity);
             kbVisible = 0;
         }
 

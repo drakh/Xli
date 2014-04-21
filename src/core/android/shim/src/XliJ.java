@@ -42,6 +42,8 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
@@ -71,8 +73,8 @@ public class XliJ extends android.app.NativeActivity {
     protected static ViewGroup hidden_layout;
     
     public static int AttachHiddenView(final NativeActivity activity)
-    {
-        final int[] result = {1};
+    {    	
+    	final int[] result = {1};
         Log.d("XliApp","Initialising shim on Java side");
         if (hidden_layout == null)
         {
@@ -92,6 +94,17 @@ public class XliJ extends android.app.NativeActivity {
             }});
         }
         return result[0];
+    }
+    
+    public static void hideStatusBar(final NativeActivity activity) {
+    	//Window win = activity.getWindow();
+    	//win.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //win.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+    }
+
+    public static void showStatusBar(final NativeActivity activity) {
+    	//Window win = activity.getWindow();
+    	//win.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
     //===========

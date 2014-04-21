@@ -42,6 +42,8 @@ public:
         
         glClearColor(1, 0, 0, 1);
 
+        // hide statusbar
+        wnd->SetFullscreen(true);
 
         // Print platform info
 
