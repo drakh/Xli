@@ -410,6 +410,16 @@ namespace Xli
         virtual bool HasOnscreenKeyboardSupport() { return false; }
         virtual bool IsOnscreenKeyboardVisible() { return false; }
 
+        virtual void SetOnscreenKeyboardPosition(Vector2i position) { }
+        virtual Vector2i GetOnscreenKeyboardPosition() { return Vector2i(0, 0); }
+        virtual Vector2i GetOnscreenKeyboardSize() { return Vector2i(0, 0); }
+
+        virtual bool IsStatusBarVisible() { return false; }
+        virtual Vector2i GetStatusBarPosition() { return Vector2i(0, 0); }
+        virtual Vector2i GetStatusBarSize() { return Vector2i(0, 0); }
+
+
+        // TODO: Remove these methods
         virtual void EnqueueCrossThreadEvent(WindowAction* action) {};
         virtual void ProcessCrossThreadEvents() {};
 
