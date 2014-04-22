@@ -132,14 +132,8 @@ namespace Xli
             {
             }
 
-            virtual void SetFullscreen(bool fullscreen)
+            virtual void SetFullscreen(bool fullscreen)               
             {
-                if (fullscreen)
-                {
-                    AShim::HideStatusBar();
-                } else {
-                    AShim::ShowStatusBar();
-                }
             }
 
             virtual void SetPosition(Vector2i pos)
@@ -189,6 +183,11 @@ namespace Xli
             virtual bool IsOnscreenKeyboardVisible()
             {
                 return AShim::KeyboardVisible();
+            }
+
+            virtual Vector2i GetOnscreenKeyboardSize() 
+            { 
+                return Vector2i(GlobalWidth, (float)AShim::GetKeyboardSize()); 
             }
 
             virtual bool GetKeyState(Key key)

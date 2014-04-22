@@ -42,9 +42,6 @@ public:
         
         glClearColor(1, 0, 0, 1);
 
-        // hide statusbar
-        wnd->SetFullscreen(true);
-
         // Print platform info
 
         PrintLine((String)"Time: " + DateTime::Now().ToString());
@@ -187,6 +184,7 @@ public:
 
     virtual bool OnTouchDown(Window* wnd, Vector2 pos, int id)
     {
+        wnd->SetFullscreen(true);
         Err->WriteLine("OnTouchDown: " + pos.ToString() + ", " + id);
         touchDownTime = GetSeconds();
         return false;

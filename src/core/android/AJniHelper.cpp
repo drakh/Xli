@@ -140,7 +140,7 @@ namespace Xli
                 pthread_setspecific(JniThreadKey, (void*)env);
                 pthread_setspecific(JniShimKey, (void*)shim_class);
                 AShim::CacheMids(env, *shim_class);
-                AttachNativeCallbacks(shim_class, env);                
+                AttachNativeCallbacks(shim_class, env);
                 AttachHiddenView(shim_class, env, AndroidActivity->clazz);
             }
 

@@ -419,6 +419,7 @@ namespace Xli
             static jmethodID makeNoise;
             static jmethodID raiseKeyboard;
             static jmethodID hideKeyboard;
+            static jmethodID getKeyboardSize;
             static jmethodID showMessageBox;
             static jmethodID connectedToNetwork;
             static jmethodID newHttpConnection;
@@ -437,6 +438,7 @@ namespace Xli
             static void RaiseSoftKeyboard();
             static void HideSoftKeyboard();
             static bool KeyboardVisible();
+            static int GetKeyboardSize();
             static void ShowStatusBar();
             static void HideStatusBar();
             static int ShowMessageBox(const String& message, const String& caption, int buttons, int hints);            

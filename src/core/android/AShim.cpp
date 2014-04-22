@@ -6,7 +6,7 @@
 //{TODO} All these mids should be cacheable
 
 namespace Xli
-{    
+{
     namespace PlatformSpecific
     {
         int AShim::kbVisible = 0;
@@ -14,19 +14,22 @@ namespace Xli
         jmethodID AShim::makeNoise;
         jmethodID AShim::raiseKeyboard;
         jmethodID AShim::hideKeyboard;
+        jmethodID AShim::getKeyboardSize;
         jmethodID AShim::showMessageBox;
         jmethodID AShim::connectedToNetwork;
         jmethodID AShim::httpShowHeaders;
         jmethodID AShim::initDefaultCookieManager;
         jmethodID AShim::getAssetManager;
         jmethodID AShim::hideStatusBar;
-        jmethodID AShim::showStatusBar;        
+        jmethodID AShim::showStatusBar;
 
         void AShim::CacheMids(JNIEnv *env, jclass shim_class)
         {
+            LOGE("Caching Mids");
             makeNoise = env->GetStaticMethodID(shim_class, "makeNoise", "()V");
             raiseKeyboard = env->GetStaticMethodID(shim_class, "raiseKeyboard", "(Landroid/app/NativeActivity;)V");
             hideKeyboard = env->GetStaticMethodID(shim_class, "hideKeyboard", "(Landroid/app/NativeActivity;)V");
+            getKeyboardSize = env->GetStaticMethodID(shim_class, "GetKeyboardSize", "()I");
             showMessageBox = env->GetStaticMethodID(shim_class, "ShowMessageBox", "(Landroid/app/NativeActivity;Ljava/lang/CharSequence;Ljava/lang/CharSequence;II)I");
             connectedToNetwork = env->GetStaticMethodID(shim_class, "ConnectedToNetwork", "(Landroid/app/NativeActivity;)Z");
             initDefaultCookieManager = env->GetStaticMethodID(shim_class, "InitDefaultCookieManager", "()V");
@@ -42,6 +45,9 @@ namespace Xli
             }
             if (!hideKeyboard) {
                 XLI_THROW("Cannot cache mid for hideKeyboard.");
+            }
+            if (!getKeyboardSize) {
+                XLI_THROW("Cannot cache mid for getKeyboardSize.");
             }
             if (!showMessageBox) {
                 XLI_THROW("Cannot cache mid for showMessageBox.");
@@ -61,27 +67,27 @@ namespace Xli
             if (!showStatusBar) {
                 XLI_THROW("Cannot cache mid for showStatusBar.");
             }
-
-            if ((!makeNoise) || (!raiseKeyboard) || (!hideKeyboard) || (!showMessageBox) || (!connectedToNetwork) || (!initDefaultCookieManager) || (!getAssetManager) || (!showStatusBar) || (!hideStatusBar)) 
+            if ((!makeNoise) || (!raiseKeyboard) || (!hideKeyboard) || (!showMessageBox) || (!connectedToNetwork) || (!initDefaultCookieManager) || (!getAssetManager) || (!getKeyboardSize) || (!showStatusBar) || (!hideStatusBar))
             {
                 XLI_THROW("Cannot cache mids for shim. Exiting.");
             }
+            LOGE("Mids Cached");
         }
 
-        void AShim::HandleSpecialAndroidKeyEvents(AKeyEvent androidKeyCode) 
+        void AShim::HandleSpecialAndroidKeyEvents(AKeyEvent androidKeyCode)
         {
             switch (androidKeyCode)
             {
             case KEYCODE_BACK:
                 AShim::kbVisible = 0;
-                break;  
-            };          
+                break;
+            };
         }
-        
+
         void AShim::MakeNoise()
         {
             AJniHelper jni;
-            jclass shim_class = jni.GetShim();            
+            jclass shim_class = jni.GetShim();
             jni->CallObjectMethod(shim_class, makeNoise);
         }
 
@@ -101,7 +107,16 @@ namespace Xli
             jobject activity = jni.GetInstance();
             jni->CallObjectMethod(shim_class, hideKeyboard, activity);
             kbVisible = 0;
-        } 
+        }
+
+        int AShim::GetKeyboardSize()
+        {
+            AJniHelper jni;
+            jclass shim_class = jni.GetShim();
+            jobject activity = jni.GetInstance();
+            jint result = (jint)jni->CallStaticIntMethod(shim_class, getKeyboardSize);
+            return (int)result;
+        }
 
         void AShim::HideStatusBar()
         {
@@ -109,7 +124,6 @@ namespace Xli
             jclass shim_class = jni.GetShim();
             jobject activity = jni.GetInstance();
             jni->CallObjectMethod(shim_class, hideStatusBar, activity);
-            kbVisible = 0;
         }
 
         void AShim::ShowStatusBar()
@@ -118,7 +132,6 @@ namespace Xli
             jclass shim_class = jni.GetShim();
             jobject activity = jni.GetInstance();
             jni->CallObjectMethod(shim_class, showStatusBar, activity);
-            kbVisible = 0;
         }
 
         bool AShim::KeyboardVisible()
@@ -126,7 +139,7 @@ namespace Xli
             return kbVisible;
         }
 
-        int AShim::ShowMessageBox(const String& message, const String& caption, int buttons, int hints) 
+        int AShim::ShowMessageBox(const String& message, const String& caption, int buttons, int hints)
         {
             //setup for call
             AJniHelper jni;
@@ -174,8 +187,8 @@ namespace Xli
                 {
                     arrayHandle = jni->NewDirectByteBuffer(content, byteLength);
                 }
-            
-                jobject jresult = jni->CallObjectMethod(shim_class, mid, activity, 
+
+                jobject jresult = jni->CallObjectMethod(shim_class, mid, activity,
                                                         jurl, jmethod, headers, arrayHandle,
                                                         jtimeout, (jlong)req);
                 jni->DeleteLocalRef(jurl);
@@ -207,8 +220,8 @@ namespace Xli
                 {
                     body = jni->NewStringUTF(content.DataPtr());
                 }
-            
-                jobject jresult = jni->CallObjectMethod(shim_class, mid, activity, 
+
+                jobject jresult = jni->CallObjectMethod(shim_class, mid, activity,
                                                         jurl, jmethod, headers, body,
                                                         jtimeout, (jlong)req);
                 jni->DeleteLocalRef(jurl);
@@ -236,9 +249,9 @@ namespace Xli
                 jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->GetMethod()).DataPtr());
                 jint jtimeout = (jint)req->GetTimeout();
                 jobject headers = XliToJavaHeaders(req);
-                jobject arrayHandle = 0;                
-            
-                jobject jresult = jni->CallObjectMethod(shim_class, mid, activity, 
+                jobject arrayHandle = 0;
+
+                jobject jresult = jni->CallObjectMethod(shim_class, mid, activity,
                                                         jurl, jmethod, headers, arrayHandle,
                                                         jtimeout, (jlong)req);
                 jni->DeleteLocalRef(jurl);
@@ -253,7 +266,7 @@ namespace Xli
 
         void AShim::AbortAsyncConnection(jobject connection)
         {
-            AJniHelper jni;            
+            AJniHelper jni;
             jclass shim_class = jni.GetShim();
             jmethodID mid = jni->GetStaticMethodID(shim_class, "AbortAsyncConnection", "(Landroid/os/AsyncTask;)V");
             if (!mid) {
@@ -265,7 +278,7 @@ namespace Xli
 
         jobject AShim::XliToJavaHeaders(const HttpRequest* req)
         {
-            AJniHelper jni;            
+            AJniHelper jni;
             jobject hashmap = jni.GetInstance("java/util/HashMap","()V");
             jmethodID put = jni.GetInstanceMethod(hashmap, "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
 
@@ -274,9 +287,9 @@ namespace Xli
             {
                 jstring jkey = jni->NewStringUTF(req->GetHeaderKeyN(i).DataPtr());
                 jstring jval = jni->NewStringUTF(req->GetHeaderValueN(i).DataPtr());
-            
+
                 jni->CallObjectMethod(hashmap, put, jkey, jval);
-            
+
                 jni->DeleteLocalRef(jkey);
                 jni->DeleteLocalRef(jval);
                 i = req->HeadersNext(i);
@@ -355,8 +368,8 @@ namespace Xli
         }
 
 
-        AAssetManager* AShim::GetAssetManager() 
-        { 
+        AAssetManager* AShim::GetAssetManager()
+        {
             AJniHelper jni;
             jclass shim_class = jni.GetShim();
             jobject activity = jni.GetInstance();
@@ -368,13 +381,13 @@ namespace Xli
 
         bool AShim::RegisterNativeFunctions(JNINativeMethod native_funcs[], int funcCount)
         {
-            AJniHelper jni;            
+            AJniHelper jni;
             jclass shim_class = jni.GetShim();
             jint attached = jni->RegisterNatives(shim_class, native_funcs, (jint)funcCount);
             return (attached >= 0);
         }
 
-        Xli::Key AShim::AndroidToXliKeyEvent(AKeyEvent androidKeyCode) 
+        Xli::Key AShim::AndroidToXliKeyEvent(AKeyEvent androidKeyCode)
         {
             switch (androidKeyCode)
             {
@@ -537,7 +550,7 @@ namespace Xli
             case KEYCODE_Y:
                 return KeyY;
             case KEYCODE_Z:
-                return KeyZ; 
+                return KeyZ;
             };
             return KeyUnknown;
         }

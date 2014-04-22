@@ -42,12 +42,14 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
+
 import java.net.CookieManager;
 
 import android.widget.EditText;
@@ -68,9 +70,10 @@ public class XliJ extends android.app.NativeActivity {
     public static native void XliJ_HttpErrorCallback(long requestPointer, int errorCode, String errorMessage);
     public static native void XliJ_JavaThrowError(int code, String throwMessage);
 	
-    // The shim's state. Try to not any more than the two UI related fields below
+    // The shim's state. Try to not any more than the three UI related fields below
     static Hidden hidden_text;
     protected static ViewGroup hidden_layout;
+    static int KeyboardSize;
     
     public static int AttachHiddenView(final NativeActivity activity)
     {    	
@@ -91,20 +94,35 @@ public class XliJ extends android.app.NativeActivity {
                     Log.e("XliApp","Unable to create Layout or View for input capture.");
                     result[0] = 0;
                 }
+
+                try {
+                	KeyboardSize = 0;
+                	hidden_layout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener(){
+                            public void onGlobalLayout(){
+                                int heightDiff = hidden_layout.getRootView().getHeight()- hidden_layout.getHeight();
+                                if (heightDiff < 150) heightDiff = 0;
+                                KeyboardSize = heightDiff;
+                            }
+                        });
+                    Log.i("XliApp","Successfully attached View Tree Observer.");
+                } catch (Exception e) {
+                    Log.e("XliApp","Unable to attach keyboard height monitor.");
+                    result[0] = 0;
+                }
             }});
         }
         return result[0];
     }
     
     public static void hideStatusBar(final NativeActivity activity) {
-    	//Window win = activity.getWindow();
-    	//win.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        //win.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+    	Window win = activity.getWindow();
+    	win.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        win.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
     }
 
     public static void showStatusBar(final NativeActivity activity) {
-    	//Window win = activity.getWindow();
-    	//win.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    	Window win = activity.getWindow();
+    	win.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
     //===========
@@ -127,6 +145,11 @@ public class XliJ extends android.app.NativeActivity {
                 Log.e("XliApp","Unable to get get resources to raise keyboard");
             }
         }});
+    }
+
+    public static int GetKeyboardSize()
+    {
+        return (int)KeyboardSize;
     }
 
     public static class Hidden extends View {
