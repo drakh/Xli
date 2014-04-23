@@ -41,6 +41,23 @@ namespace Xli
             int PrepareAssetJar(const char* file_name, const char* class_name, int package);
             jclass GetAssetClass(const char* file_name, const char* class_name);
         };        
+
+        class CTError : public WindowAction
+        {
+        public:
+            String message;
+            int errorCode;
+            CTError(String message, int errorCode) 
+            { 
+                this->message = message; 
+                this->errorCode = errorCode;
+            }
+            virtual void Execute()
+            {
+                String finalMessage = "XLiError (" + String(errorCode)+ ") - " + message;
+                XLI_THROW(finalMessage.DataPtr());
+            }
+        };
     };
 };
 

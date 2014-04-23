@@ -25,8 +25,8 @@ namespace Xli
     class HttpRequest: public Object
     {
     public:
-        virtual String GetMethod() = 0;
-        virtual String GetUrl() = 0;
+        virtual String GetMethod() const = 0;
+        virtual String GetUrl() const = 0;
 
         virtual HttpRequestState GetState() const = 0;
 
@@ -69,6 +69,12 @@ namespace Xli
         virtual void OnRequestAborted(HttpRequest* request) { }
         virtual void OnRequestTimeout(HttpRequest* request) { }
         virtual void OnRequestError(HttpRequest* request) { } //why no code or message?
+    };
+
+    class HttpAction : public Object
+    {
+    public:
+        virtual void Execute() = 0;
     };
 
     class HttpClient: public Object

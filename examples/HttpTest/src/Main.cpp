@@ -4,61 +4,47 @@
 
 using namespace Xli;
 
-class Shouty : public HttpStateChangedHandler
+class EHandler : public HttpEventHandler
 {
-    virtual void OnResponse(HttpRequest* request, HttpRequestState state)
-    {        
+    virtual void OnRequestStateChanged(HttpRequest* request) 
+    {
+        HttpRequestState state = request->GetState();
         if (state == HttpRequestStateHeadersReceived)
         {
             Err->WriteFormat("statusCode: %i\n", state);
-            Err->WriteFormat("ReasonPhrase: %s\n", request->GetReasonPhrase().DataPtr());
-            //request->PullContentArray();
-            request->PullContentString();
         } else if (state == HttpRequestStateDone) {
             Err->WriteFormat("state changed: %i\n", state);            
-            Err->WriteLine("Got the body");
+            String body = String((char*)(request->GetResponseBody()->GetDataPtr()),
+                          (request->GetResponseBody()->GetSizeInBytes()));
+            Err->WriteLine(body);
         } else {
             Err->WriteFormat("state changed: %i\n", state);
         }
         Err->WriteLine("-------------------------------------");
     }
-};
-class ProgressShout : public HttpProgressHandler
-{
-    virtual void OnResponse(HttpRequest* request, long position, long totalLength, bool lengthKnown)
-    {        
-        if (lengthKnown) {
-            Err->WriteFormat("progress (percentage): %i\n", (int)(100*((1.0*position)/totalLength)));
+    virtual void OnRequestProgress(HttpRequest* request,int position, int total, bool totalKnown,
+                                   HttpTransferDirection direction) 
+    {
+        if (totalKnown) {
+            Err->WriteFormat("progress (percentage): %i\n", (int)(100*((1.0*position)/total)));
         } else {
-            Err->WriteFormat("progress: %lu, %lu\n", position, totalLength);
+            Err->WriteFormat("progress: %lu, %lu\n", position, total);
             Err->WriteLine("Total length not known");
         }
+        Err->WriteLine("Direction is: "+String((int)direction));
         Err->WriteLine("-------------------------------------");
     }
-};
-class TimeoutShout : public HttpTimeoutHandler
-{
-    virtual void OnResponse(HttpRequest* request)
+    virtual void OnRequestAborted(HttpRequest* request) 
+    {
+    }
+    virtual void OnRequestTimeout(HttpRequest* request) 
     {
         Err->WriteLine("timed out");
         Err->WriteLine("-------------------------------------");
     }
-};
-class ErrorShout : public HttpErrorHandler
-{
-    virtual void OnResponse(HttpRequest* request, int errorCode, String errorMessage)
+    virtual void OnRequestError(HttpRequest* request) 
     {
         Err->WriteLine("Had an error:");
-        Err->WriteFormat("> %i: %s\n",errorCode, errorMessage.DataPtr());
-        Err->WriteLine("-------------------------------------");
-    }
-};
-class ContentShout : public HttpStringPulledHandler
-{
-    virtual void OnResponse(HttpRequest* request, String content)
-    {
-        Err->WriteLine("-------------------------------------");
-        Err->WriteLine(content);
         Err->WriteLine("-------------------------------------");
     }
 };
@@ -66,14 +52,9 @@ class ContentShout : public HttpStringPulledHandler
 class GLApp: public Application
 {
 	Managed<GLContext> gl;
-    Managed<HttpClient> httpClient;
 
-    // Managed<SimpleSound> sound;
-    Managed<Shouty> stateChangedCallback;
-    Managed<TimeoutShout> timeoutCallback;
-    Managed<ProgressShout> progressCallback;
-    Managed<ErrorShout> errorCallback;
-    Managed<ContentShout> contentCallback;
+    Managed<EHandler> eventHandler;
+    Managed<HttpClient> httpClient;
 
     double touchDownTime;
     double tapTime;
@@ -117,11 +98,8 @@ public:
 		PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
 
         httpClient = HttpClient::Create();
-        stateChangedCallback = new Shouty();
-        timeoutCallback = new TimeoutShout();
-        progressCallback = new ProgressShout();
-        errorCallback = new ErrorShout();
-        contentCallback = new ContentShout();
+        eventHandler = new EHandler();
+        httpClient->SetEventHandler(eventHandler.Get());
         
         Err->WriteLine("-------------------------------------");
 	}
@@ -265,22 +243,11 @@ public:
             if (currentTime - tapTime < 0.3)
             {
                 Err->WriteLine("Bang");
-                //wnd->BeginTextInput((Xli::TextInputHint)0);
-                // sound->Play(false);
 
-                HttpRequest* req = httpClient->CreateRequest();
-                req->SetUrl("http://httpbin.org/get");
-                //req->Url = "http://youtube.com";
-                req->SetMethod(HttpMethodGet);
-                req->SetStateChangedCallback(stateChangedCallback);
-                req->SetTimeoutCallback(timeoutCallback);
-                req->SetProgressCallback(progressCallback);
-                req->SetErrorCallback(errorCallback);
-                req->SetStringPulledCallback(contentCallback);
+                HttpRequest* req = httpClient->CreateRequest("GET","http://httpbin.org/get");
                 req->SetHeader("Accept", "*/*");
                 req->SetHeader("ohhai","canhazdata");
-                //req->SendASync("test=and here is some data");
-                req->SendASync();
+                req->SendAsync();
             }
             else if (wnd->IsTextInputActive())
             {

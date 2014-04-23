@@ -3,6 +3,7 @@
 #include <XliHttpClient.h>
 #include <pthread.h>
 #include <stdarg.h>
+#include <Xli/Window.h>
 
 #define DEBUG_JNI
 
@@ -50,7 +51,7 @@ namespace Xli
             {
                 char const* cerrorMessage = env->GetStringUTFChars(errorMessage, NULL);
                 String finalMessage = String("JavaThrown:")+String(cerrorMessage); 
-                GlobalWindow->EnqueueCrossThreadEvent(new CTErrorAction(finalMessage, errorCode));
+                GlobalWindow->EnqueueCrossThreadEvent(new CTError(finalMessage, errorCode));
                 env->ReleaseStringUTFChars(errorMessage, cerrorMessage);
             }
         }

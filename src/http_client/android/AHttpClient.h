@@ -1,18 +1,21 @@
 #include <Xli/HashMap.h>
+#include <Xli/MutexQueue.h>
 #include <XliHttpClient/HttpClient.h>
 #include <Xli/PlatformSpecific/Android.h>
 
 namespace Xli
 {
+    class AHttpClient;
+
     class AHttpRequest : public HttpRequest
     {
     public:
-        HttpClient* client;
+        AHttpClient* client;
 
         HttpRequestState state;
 
         String url;
-        HttpMethod method;
+        String method;
         int timeout;
         HashMap<String,String> headers;
 
@@ -27,7 +30,7 @@ namespace Xli
         HashMap<String,String> responseHeaders;
 
 
-        AHttpRequest(HttpClient* client, String url, HttpMethod method);
+        AHttpRequest(AHttpClient* client, String url, String method);
 
         virtual ~AHttpRequest();
 
@@ -41,8 +44,8 @@ namespace Xli
         virtual void SetTimeout(int timeout);
         virtual int GetTimeout() const;
 
-        virtual void SetHeader(String key, String value);
-        virtual void RemoveHeader(String key);
+        virtual void SetHeader(const String& key, const String& value);
+        virtual void RemoveHeader(const String& key);
 
         virtual int HeadersBegin() const;
         virtual int HeadersEnd() const;
@@ -50,9 +53,9 @@ namespace Xli
         virtual String GetHeaderKey(int n) const;
         virtual String GetHeaderValue(int n) const;
 
-        virtual void SendASync(void* content, long byteLength);
-        virtual void SendASync(String content);
-        virtual void SendASync();
+        virtual void SendAsync(const void* content, int byteLength);
+        virtual void SendAsync(const String& content);
+        virtual void SendAsync();
         virtual void StartDownload();
         virtual void Abort();
 
@@ -63,12 +66,30 @@ namespace Xli
         virtual String GetResponseHeaderKey(int n) const;
         virtual String GetResponseHeaderValue(int n) const;
 
-        virtual bool TryGetResponseHeader(const String& key, String& result);
+        virtual bool TryGetResponseHeader(const String& key, String& result) const;
 
         virtual int GetResponseStatus() const;
         virtual DataAccessor* GetResponseBody() const;
     };
 
+    //------- Client -------//
+    class AHttpClient : public HttpClient
+    { 
+    private:
+        MutexQueue<HttpAction*> actionQueue;
+        Managed<HttpEventHandler> eventHandler;
+    public:
+        static HttpClient* Create();
+
+        virtual AHttpRequest* CreateRequest(const String& method, const String& url);
+
+        virtual void SetEventHandler(HttpEventHandler* eventHandler);
+        virtual HttpEventHandler* GetEventHandler();
+
+        virtual void EnqueueAction(HttpAction* action);
+
+        virtual void Update();
+    };
 
     //------ Actions -------//
     class AHttpTimeoutAction : public HttpAction
@@ -91,7 +112,7 @@ namespace Xli
         bool LengthKnown;
         HttpTransferDirection Direction;
         AHttpProgressAction(AHttpRequest* request, long position, long totalLength, bool lengthKnown,
-                            HttpTransferDirection direction);
+                            HttpTransferDirection direction)
         {
             Request = request;
             Position = position;
@@ -148,6 +169,7 @@ namespace Xli
                 Request->state = State;
                 HttpEventHandler* eh = Request->client->GetEventHandler();
                 if (eh!=0) eh->OnRequestStateChanged(Request);
+                if (State == HttpRequestStateHeadersReceived) Request->StartDownload();
             }
         }
     };

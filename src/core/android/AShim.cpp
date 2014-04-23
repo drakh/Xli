@@ -209,24 +209,28 @@ namespace Xli
             return (bool)result;
         }
 
-        jobject AShim::SendHttpAsync(const HttpRequest* req, void* content, long byteLength)
+        jobject AShim::SendHttpAsync(const HttpRequest* req, const void* content, long byteLength)
         {
             AJniHelper jni;
             jclass shimClass = jni.GetShim();
             jmethodID mid = jni->GetStaticMethodID(shimClass, "SendHttpAsync", "(Landroid/app/NativeActivity;Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/nio/ByteBuffer;IJ)Landroid/os/AsyncTask;");
             if (mid)
             {
-                jobject activity = jni.GetInstance();
+                String url = req->GetUrl();
+                String method = req->GetMethod();
 
-                jstring jurl = jni->NewStringUTF(req->GetUrl().DataPtr());
-                jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->GetMethod()).DataPtr());
+                jobject activity = jni.GetInstance();
+                
+                jstring jurl = jni->NewStringUTF(url.DataPtr());
+                jstring jmethod = jni->NewStringUTF(method.DataPtr());
                 jint jtimeout = (jint)req->GetTimeout();
                 jobject headers = XliToJavaHeaders(req);
 
                 jobject arrayHandle = 0;
                 if ((content!=0) && (byteLength>0))
                 {
-                    arrayHandle = jni->NewDirectByteBuffer(content, byteLength);
+                    // no way around the const_cast here, we dont modify the data in java so should be safe.
+                    arrayHandle = jni->NewDirectByteBuffer(const_cast<void*>(content), byteLength);
                 }
 
                 jobject jresult = jni->CallObjectMethod(shimClass, mid, activity,
@@ -249,10 +253,13 @@ namespace Xli
             jmethodID mid = jni->GetStaticMethodID(shimClass, "SendHttpStringAsync", "(Landroid/app/NativeActivity;Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/lang/String;IJ)Landroid/os/AsyncTask;");
             if (mid)
             {
+                String url = req->GetUrl();
+                String method = req->GetMethod();
+
                 jobject activity = jni.GetInstance();
 
-                jstring jurl = jni->NewStringUTF(req->GetUrl().DataPtr());
-                jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->GetMethod()).DataPtr());
+                jstring jurl = jni->NewStringUTF(url.DataPtr());
+                jstring jmethod = jni->NewStringUTF(method.DataPtr());
                 jint jtimeout = (jint)req->GetTimeout();
                 jobject headers = XliToJavaHeaders(req);
                 jobject body = 0;
@@ -284,10 +291,13 @@ namespace Xli
             jmethodID mid = jni->GetStaticMethodID(shimClass, "SendHttpAsync", "(Landroid/app/NativeActivity;Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/nio/ByteBuffer;IJ)Landroid/os/AsyncTask;");
             if (mid)
             {
+                String url = req->GetUrl();
+                String method = req->GetMethod();
+
                 jobject activity = jni.GetInstance();
 
-                jstring jurl = jni->NewStringUTF(req->GetUrl().DataPtr());
-                jstring jmethod = jni->NewStringUTF(HttpMethodToString(req->GetMethod()).DataPtr());
+                jstring jurl = jni->NewStringUTF(url.DataPtr());
+                jstring jmethod = jni->NewStringUTF(method.DataPtr());
                 jint jtimeout = (jint)req->GetTimeout();
                 jobject headers = XliToJavaHeaders(req);
                 jobject arrayHandle = 0;
@@ -326,8 +336,8 @@ namespace Xli
             int i = req->HeadersBegin();
             while (i != req->HeadersEnd())
             {
-                jstring jkey = jni->NewStringUTF(req->GetHeaderKeyN(i).DataPtr());
-                jstring jval = jni->NewStringUTF(req->GetHeaderValueN(i).DataPtr());
+                jstring jkey = jni->NewStringUTF(req->GetHeaderKey(i).DataPtr());
+                jstring jval = jni->NewStringUTF(req->GetHeaderValue(i).DataPtr());
 
                 jni->CallObjectMethod(hashmap, put, jkey, jval);
 

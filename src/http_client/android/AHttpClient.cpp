@@ -9,8 +9,8 @@ extern Xli::Window* GlobalWindow;
 namespace Xli
 {
     //---- AHttpRequest ----//
-    
-    AHttpRequest::AHttpRequest(HttpClient* client, String url, HttpMethod method)            
+
+    AHttpRequest::AHttpRequest(AHttpClient* client, String url, String method)
     {
         this->client = client;
         this->state = HttpRequestStateUnsent;
@@ -19,7 +19,6 @@ namespace Xli
         this->timeout = 0;
         this->javaAsyncHandle = 0;
         this->javaContentHandle = 0;
-        this->cachedContentArray = 0;
     }
 
     AHttpRequest::~AHttpRequest()
@@ -29,13 +28,14 @@ namespace Xli
 
     void AHttpRequest::CleanHandles()
     {
+        PlatformSpecific::AJniHelper jni;
         if (javaAsyncHandle!=0) jni->DeleteGlobalRef(javaAsyncHandle);
         if (javaContentHandle!=0) jni->DeleteGlobalRef(javaContentHandle);
         javaAsyncHandle = 0;
         javaContentHandle = 0;
     }
 
-    HttpMethod AHttpRequest::GetMethod() const { return method; }
+    String AHttpRequest::GetMethod() const { return method; }
     String AHttpRequest::GetUrl() const { return url; }
     HttpRequestState AHttpRequest::GetState() const { return state; }
     int AHttpRequest::GetTimeout() const { return timeout; }
@@ -48,9 +48,9 @@ namespace Xli
         } else {
             XLI_THROW("HttpRequest->SetTimeout(): Not in a valid state to set the timeout");
         }
-    }    
+    }
 
-    void AHttpRequest::SetHeader(String key, String value)
+    void AHttpRequest::SetHeader(const String& key, const String& value)
     {
         if (state == HttpRequestStateUnsent)
         {
@@ -59,7 +59,7 @@ namespace Xli
             XLI_THROW("HttpRequest->SetHeader(): Not in a valid state to set a header");
         }
     }
-    void AHttpRequest::RemoveHeader(String key)
+    void AHttpRequest::RemoveHeader(const String& key)
     {
         if (state == HttpRequestStateUnsent)
         {
@@ -75,56 +75,56 @@ namespace Xli
     String AHttpRequest::GetHeaderKey(int n) const { return headers.GetKey(n); }
     String AHttpRequest::GetHeaderValue(int n) const { return headers.GetValue(n); }
 
-    void AHttpRequest::SendASync(void* content, long byteLength)
+    void AHttpRequest::SendAsync(const void* content, int byteLength)
     {
-        if (state == HttpRequestStateUnsent) 
+        if (state == HttpRequestStateUnsent)
         {
             state = HttpRequestStateSent;
-            HttpEventHandler* eh = Request->client->GetEventHandler();
+            HttpEventHandler* eh = client->GetEventHandler();
             if (eh!=0) eh->OnRequestStateChanged(this);
             javaAsyncHandle = PlatformSpecific::AShim::SendHttpAsync(this, content, byteLength);
         } else {
-            XLI_THROW("HttpRequest->SendASync(): Not in a valid state to send");
+            XLI_THROW("HttpRequest->SendAsync(): Not in a valid state to send");
         }
     }
 
-    void AHttpRequest::SendASync(String content)
+    void AHttpRequest::SendAsync(const String& content)
     {
-        if (state == HttpRequestStateUnsent) 
+        if (state == HttpRequestStateUnsent)
         {
             state = HttpRequestStateSent;
-            HttpEventHandler* eh = Request->client->GetEventHandler();
+            HttpEventHandler* eh = client->GetEventHandler();
             if (eh!=0) eh->OnRequestStateChanged(this);
             javaAsyncHandle = PlatformSpecific::AShim::SendHttpAsync(this, content);
         } else {
-            XLI_THROW("HttpRequest->SendASync(): Not in a valid state to send");
+            XLI_THROW("HttpRequest->SendAsync(): Not in a valid state to send");
         }
     }
 
-    void AHttpRequest::SendASync()
+    void AHttpRequest::SendAsync()
     {
-        if (state == HttpRequestStateUnsent) 
+        if (state == HttpRequestStateUnsent)
         {
             state = HttpRequestStateSent;
-            HttpEventHandler* eh = Request->client->GetEventHandler();
+            HttpEventHandler* eh = client->GetEventHandler();
             if (eh!=0) eh->OnRequestStateChanged(this);
             javaAsyncHandle = PlatformSpecific::AShim::SendHttpAsync(this);
         } else {
-            XLI_THROW("HttpRequest->SendASync(): Not in a valid state to send");
+            XLI_THROW("HttpRequest->SendAsync(): Not in a valid state to send");
         }
     }
 
     void AHttpRequest::Abort()
     {
-        if ((int)state > (int)HttpRequestStateUnsent) 
+        if ((int)state > (int)HttpRequestStateUnsent)
         {
-            state = HttpRequestStateDone;
+            //state = HttpRequestStateDone;
             if (javaAsyncHandle != 0) PlatformSpecific::AShim::AbortAsyncConnection(javaAsyncHandle);
-            HttpEventHandler* eh = Request->client->GetEventHandler();
+            HttpEventHandler* eh = client->GetEventHandler();
             if (eh!=0) eh->OnRequestAborted(this);
             CleanHandles();
         } else {
-            XLI_THROW("HttpRequest->SendASync(): Request has not beem sent, cannot abort");
+            XLI_THROW("HttpRequest->SendAsync(): Request has not beem sent, cannot abort");
         }
     }
     void AHttpRequest::StartDownload()
@@ -132,9 +132,9 @@ namespace Xli
         if ((this->state==HttpRequestStateHeadersReceived) && (this->javaContentHandle))
         {
             this-> javaAsyncHandle = PlatformSpecific::AShim::AsyncInputStreamToByteArray(this->javaContentHandle, this);
-            this->state = HttpRequestStateLoading;           
-            HttpEventHandler* eh = Request->client->GetEventHandler();
-            if (eh!=0) eh->OnRequestStateChanged(this);            
+            this->state = HttpRequestStateLoading;
+            HttpEventHandler* eh = client->GetEventHandler();
+            if (eh!=0) eh->OnRequestStateChanged(this);
         } else {
             XLI_THROW("HttpRequest->PullContentArray(): Not in valid state for pulling the content array");
         }
@@ -199,7 +199,7 @@ namespace Xli
     {
         if (state == HttpRequestStateHeadersReceived)
         {
-            return responseHeaders->TryGetValue(key, result);
+            return responseHeaders.TryGetValue(key, result);
         } else {
             XLI_THROW("HttpRequest->GetResponseHeader(): Not in a valid state to get the response header");
         }
@@ -214,14 +214,14 @@ namespace Xli
             XLI_THROW("HttpRequest->GetResponseStatus(): Not in a valid state to get the response status");
         }
     }
-    
-    DataAccessor* AHttpRequest::GetResponseBody()
+
+    DataAccessor* AHttpRequest::GetResponseBody() const
     {
-        if (state == HttpRequestStateHeadersReceived)
+        if (state == HttpRequestStateDone)
         {
-            return (DataAccessor*)0;
+            return (DataAccessor*)responseBody;
         } else {
-            XLI_THROW("HttpRequest->GetResponseStatus(): Not in a valid state to get the response status");
+            XLI_THROW("HttpRequest->GetResponseBody(): Not in a valid state to get the response body");
         }
     }
 
@@ -286,9 +286,7 @@ namespace Xli
                 }
                 env->DeleteLocalRef(headers);
                 request->javaAsyncHandle = 0;
-
                 request->client->EnqueueAction(new Xli::AHttpStateAction(request, Xli::HttpRequestStateHeadersReceived));
-                Request->StartDownload();
             } else {
                 LOGE("CRITICAL HTTP ERROR: No callback pointer error");
             }
@@ -301,11 +299,11 @@ namespace Xli
 
                 if (content != 0) {
                     jsize len = env->GetArrayLength(content);
-                    request->responseBody = Buffer::Create((int)len);                    
-                    env->GetByteArrayRegion(content, 0, len, (jbyte*)request->responseBody->DataPtr());
+                    void* cachedContentArray = malloc((long)len);
+                    env->GetByteArrayRegion(content, 0, len, (jbyte*)cachedContentArray);
+                    request->responseBody = Buffer::CopyFrom(cachedContentArray, (int)len);
 
                     env->DeleteLocalRef(content);
-                    env->DeleteLocalRef((jobject)len);
                 }
                 request->client->EnqueueAction(new Xli::AHttpStateAction(request, Xli::HttpRequestStateDone, true));
             } else {
@@ -346,7 +344,7 @@ namespace Xli
             {
                 Xli::AHttpRequest* request = ((Xli::AHttpRequest*)((void*)requestPointer));
                 request->client->EnqueueAction(new Xli::AHttpProgressAction(request, position, totalLength, lengthKnown,
-                                                                            (HttpTransferDirection)(int)direction)));
+                                                                            (HttpTransferDirection)(int)direction));
             } else {
                 LOGE("CRITICAL HTTP ERROR: No callback pointer error");
             }
@@ -361,7 +359,7 @@ namespace Xli
             PlatformSpecific::AShim::InitDefaultCookieManager();
             static JNINativeMethod nativeFuncs[] = {
                 {(char* const)"XliJ_HttpCallback", (char* const)"(Ljava/lang/Object;[Ljava/lang/String;ILjava/lang/String;J)V",
-                 (void *)&XliJ_HttpCallback},                
+                 (void *)&XliJ_HttpCallback},
                 {(char* const)"XliJ_HttpContentByteArrayCallback", (char* const)"([BJ)V",
                  (void *)&XliJ_HttpContentByteArrayCallback},
                 {(char* const)"XliJ_HttpTimeoutCallback", (char* const)"(J)V", (void *)&XliJ_HttpTimeoutCallback},
@@ -369,7 +367,7 @@ namespace Xli
                  (void *)&XliJ_HttpErrorCallback},
                 {(char* const)"XliJ_HttpProgressCallback", (char* const)"(JJJZI)V", (void *)&XliJ_HttpProgressCallback},
             };
-            bool result = PlatformSpecific::AShim::RegisterNativeFunctions(nativeFuncs, 6);
+            bool result = PlatformSpecific::AShim::RegisterNativeFunctions(nativeFuncs, 5);
             if (result)
             {
                 LOGD("XliHttp: Registered the java->c++ callbacks");
@@ -380,31 +378,35 @@ namespace Xli
         }
     }
 
-    class AHttpClient : public HttpClient
+
+    AHttpRequest* AHttpClient::CreateRequest(const String& method, const String& url)
     {
-    private:
-        MutexQueue<HttpAction*> actionQueue;
-    public:
-        virtual AHttpRequest* CreateRequest()
-        {
-            return new AHttpRequest(this);
-        }
+        return new AHttpRequest(this, url, method);
+    }
 
-        virtual void Update()
+    void AHttpClient::Update()
+    {
+        while ((actionQueue.Count() > 0))
         {
-            while ((actionQueue.Count() > 0))
-            {
-                HttpAction* action = actionQueue.Dequeue();
-                action->Execute();
-                delete action;
-            }
+            HttpAction* action = actionQueue.Dequeue();
+            action->Execute();
+            delete action;
         }
+    }
 
-        virtual void EnqueueAction(HttpAction* action)
-        {
-            actionQueue.Enqueue(action);
-        }
-    };
+    void AHttpClient::SetEventHandler(HttpEventHandler* eventHandler) 
+    {
+        this->eventHandler = eventHandler;
+    }
+    HttpEventHandler* AHttpClient::GetEventHandler() 
+    {
+        return eventHandler;
+    }
+
+    void AHttpClient::EnqueueAction(HttpAction* action)
+    {
+        actionQueue.Enqueue(action);
+    }
 
     HttpClient* HttpClient::Create()
     {
