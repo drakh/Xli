@@ -16,6 +16,12 @@ namespace Xli
         HttpRequestStateDone,
     };
 
+    enum HttpTransferDirection
+    {
+        HttpTransferDirection_UPLOAD = 0,
+        HttpTransferDirection_DOWNLOAD = 1,
+    };
+
     class HttpRequest: public Object
     {
     public:
@@ -47,6 +53,7 @@ namespace Xli
         virtual int ResponseHeadersNext(int iterator) const = 0;
         virtual String GetResponseHeaderKey(int iterator) const = 0;
         virtual String GetResponseHeaderValue(int iterator) const = 0;
+        //{TODO} why no reason phrase?
         
         virtual bool TryGetResponseHeader(const String& key, String& result) const = 0;
 
@@ -57,11 +64,11 @@ namespace Xli
     class HttpEventHandler: public Object
     {
     public:
-        virtual void OnRequestStateChanged(HttpRequest* request) { }
-        virtual void OnRequestProgress(HttpRequest* request, int position, int total, bool totalKnown) { }
+        virtual void OnRequestStateChanged(HttpRequest* request) { } // call this on abort? for now, no
+        virtual void OnRequestProgress(HttpRequest* request,int position, int total, bool totalKnown, HttpTransferDirection direction) { }
         virtual void OnRequestAborted(HttpRequest* request) { }
         virtual void OnRequestTimeout(HttpRequest* request) { }
-        virtual void OnRequestError(HttpRequest* request) { }
+        virtual void OnRequestError(HttpRequest* request) { } //why no code or message?
     };
 
     class HttpClient: public Object

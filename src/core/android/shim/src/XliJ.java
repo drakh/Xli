@@ -72,7 +72,7 @@ public class XliJ extends android.app.NativeActivity {
     public static native void XliJ_HttpContentStringCallback(String content, long requestPointer);
     public static native void XliJ_HttpContentByteArrayCallback(byte[] result, long requestPointer);
     public static native void XliJ_HttpTimeoutCallback(long requestPointer);
-    public static native void XliJ_HttpProgressCallback(long requestPointer, long position, long totalLength, boolean lengthKnown);
+    public static native void XliJ_HttpProgressCallback(long requestPointer, long position, long totalLength, boolean lengthKnown, int direction);
     public static native void XliJ_HttpErrorCallback(long requestPointer, int errorCode, String errorMessage);
     public static native void XliJ_JavaThrowError(int code, String throwMessage);
 	
@@ -507,7 +507,7 @@ public class XliJ extends android.app.NativeActivity {
         }
         @Override
         protected void onProgressUpdate(Integer... progress) {
-        	XliJ_HttpProgressCallback(requestPointer, progress[0], progress[1], true);
+        	XliJ_HttpProgressCallback(requestPointer, progress[0], progress[1], true, 0);
         }
         @Override
         protected void onPostExecute(HttpWrappedResponse result)
@@ -567,7 +567,6 @@ public class XliJ extends android.app.NativeActivity {
         protected String doInBackground(Object... params) {
         	requestPointer = (long)((Long)params[1]);
             try {
-            	//XliJ_HttpProgressCallback(requestPointer, progress[0], progress[1], true);
 				return InputStreamToString((InputStream)params[0]);
 			} catch (UnsupportedEncodingException e) {
 				XliJ_HttpErrorCallback(requestPointer, -1, "UnsupportedEncodingException: "+e.getLocalizedMessage());
@@ -625,7 +624,7 @@ public class XliJ extends android.app.NativeActivity {
 		  if (runningTotal/progressThreshold > steps)
 		  {
 			  steps = runningTotal/progressThreshold;
-			  XliJ_HttpProgressCallback(requestPointer, runningTotal, 0, false);
+			  XliJ_HttpProgressCallback(requestPointer, runningTotal, 0, false, 1);
 		  }
 		}
 		buffer.flush();
