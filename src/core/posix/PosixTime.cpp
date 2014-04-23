@@ -13,7 +13,7 @@ namespace Xli
             return (Timestamp)time * DateTime::PerSecond + (369 * 365 + 89) * DateTime::PerDay;
         }
 
-        Timestamp ConvertToTimestamp(const tm* const time)
+        Timestamp ConvertToTimestamp(const tm* const time, const suseconds_t useconds = 0)
         {
             DateTime dt;
             dt.Year = time->tm_year + 1900;
@@ -22,6 +22,7 @@ namespace Xli
             dt.Hour = time->tm_hour;
             dt.Minute = time->tm_min;
             dt.Second = time->tm_sec;
+            dt.Millisecond = useconds / 1000;
             return dt.ToTimestamp();
         }
 
@@ -36,15 +37,15 @@ namespace Xli
 
     Timestamp GetTimestamp()
     {
-        time_t t;
-        time(&t);
-        return PlatformSpecific::ConvertToTimestamp(localtime(&t));
+        timeval t;
+        gettimeofday(&t, NULL);
+        return PlatformSpecific::ConvertToTimestamp(localtime(&t.tv_sec), t.tv_usec);
     }
 
     Timestamp GetTimestampUtc()
     {
-        time_t t;
-        time(&t);
-        return PlatformSpecific::ConvertToTimestamp(gmtime(&t));
+        timeval t;
+        gettimeofday(&t, NULL);
+        return PlatformSpecific::ConvertToTimestamp(gmtime(&t.tv_sec), t.tv_usec);
     }
 }
