@@ -14,7 +14,7 @@ namespace Xli
         HttpRequestStateHeadersReceived,
         HttpRequestStateLoading,
         HttpRequestStateDone,
-    };
+    }; // {TODO} this needs an aborted state
 
     enum HttpTransferDirection
     {
