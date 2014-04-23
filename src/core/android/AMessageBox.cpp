@@ -1,4 +1,6 @@
 #include <Xli/PlatformSpecific/Android.h>
+#include "AJniHelper.h"
+#include "AShim.h"
 #include <Xli/MessageBox.h>
 #include <Xli/Console.h>
 

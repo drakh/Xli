@@ -2,6 +2,9 @@
 #include <XliHttpClient/HttpClient.h>
 #include <Xli/PlatformSpecific/Android.h>
 #include "AHttpClient.h"
+#include "../../core/android/AJniHelper.h"
+
+extern Xli::Window* GlobalWindow;
 
 namespace Xli
 {

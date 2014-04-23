@@ -6,6 +6,8 @@
 #include <unistd.h>
 
 #include <Xli/PlatformSpecific/Android.h>
+#include "AJniHelper.h"
+#include "AShim.h"
 #include <Xli/MutexQueue.h>
 #include <Xli/Console.h>
 #include <Xli/Display.h>
@@ -103,6 +105,26 @@ namespace Xli
                 return true;
             }
 
+            virtual bool IsStatusBarVisible() 
+            {
+                return true;
+            }            
+
+            virtual Vector2i GetStatusBarPosition() 
+            { 
+                return Vector2i(0, 0);
+            }            
+
+            virtual Vector2i GetStatusBarSize()
+            {
+                if (!IsStatusBarVisible())
+                { 
+                    return Vector2i(GlobalWidth, 0);
+                } else {
+                    return Vector2i(GlobalWidth, AShim::GetStatusBarHeight());
+                }                
+            }
+
             virtual int GetDisplayIndex()
             {
                 return 0;
@@ -132,7 +154,7 @@ namespace Xli
             {
             }
 
-            virtual void SetFullscreen(bool fullscreen)
+            virtual void SetFullscreen(bool fullscreen)               
             {
             }
 
@@ -149,7 +171,7 @@ namespace Xli
             }
 
             virtual void Maximize()
-            {
+            {                
             }
 
             virtual void Restore()
@@ -183,6 +205,16 @@ namespace Xli
             virtual bool IsOnscreenKeyboardVisible()
             {
                 return AShim::KeyboardVisible();
+            }
+
+            virtual Vector2i GetOnscreenKeyboardPosition() 
+            { 
+                return Vector2i(0, GlobalHeight - AShim::GetKeyboardSize()); 
+            }
+
+            virtual Vector2i GetOnscreenKeyboardSize() 
+            { 
+                return Vector2i(GlobalWidth, AShim::GetKeyboardSize()); 
             }
 
             virtual bool GetKeyState(Key key)
@@ -568,5 +600,14 @@ namespace Xli
     bool Display::ChangeSettings(int index, const DisplaySettings& settings)
     {
         return false;
+    }
+
+    float Display::GetDensity(int displayIndex)
+    {
+        return PlatformSpecific::AShim::GetDensity();
+    }
+    Vector2 Display::GetDpi(int displayIndex)
+    {
+        return PlatformSpecific::AShim::GetDpi();
     }
 }

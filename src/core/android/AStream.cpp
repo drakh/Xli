@@ -1,4 +1,6 @@
 #include <Xli/PlatformSpecific/Android.h>
+#include "AJniHelper.h"
+#include "AStream.h"
 
 namespace Xli
 {

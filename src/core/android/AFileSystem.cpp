@@ -1,5 +1,6 @@
 #include <Xli/PlatformSpecific/Android.h>
 #include "../posix/PosixFileSystemBase.h"
+#include "AJniHelper.h"
 
 namespace Xli
 {

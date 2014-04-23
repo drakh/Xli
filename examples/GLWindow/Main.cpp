@@ -1,5 +1,6 @@
 #include <Xli.h>
 #include <XliGL.h>
+#include <Xli/Display.h>
 
 using namespace Xli;
 
@@ -41,7 +42,6 @@ public:
         gl->SetSwapInterval(0);
         
         glClearColor(1, 0, 0, 1);
-
 
         // Print platform info
 
@@ -200,15 +200,12 @@ public:
 
     virtual bool OnTouchUp(Window* wnd, Vector2 pos, int id)
     {
-        Err->WriteLine("OnTouchUp: " + pos.ToString() + ", " + id);
-        
         double currentTime = GetSeconds();
 
         if (currentTime - touchDownTime < 0.15)
         {
             if (currentTime - tapTime < 0.3)
             {
-                //play
                 Err->WriteLine("Bang");
                 wnd->BeginTextInput((Xli::TextInputHint)0);
             }

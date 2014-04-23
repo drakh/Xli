@@ -20,6 +20,7 @@ namespace Xli
             SDL_Window* window;
             bool closed, fullscreen;
             int x, y, w, h, buttons;
+            Vector2i keyboardSize;
 
         public:
             SDL_Window* GetSDL_Window() { return window; }
@@ -27,6 +28,8 @@ namespace Xli
             SDL2Window(int width, int height, const Xli::String& title, int flags);
             SDL2Window(const void* nativeHandle);
             virtual ~SDL2Window();
+
+            virtual void SDL2WindowInit();
 
             virtual WindowImplementation GetImplementation();
 
@@ -70,6 +73,14 @@ namespace Xli
             
             virtual bool HasOnscreenKeyboardSupport();
             virtual bool IsOnscreenKeyboardVisible();
+
+            virtual void SetOnscreenKeyboardPosition(Vector2i position);
+            virtual Vector2i GetOnscreenKeyboardPosition();
+            virtual Vector2i GetOnscreenKeyboardSize();
+
+            virtual bool IsStatusBarVisible();
+            virtual Vector2i GetStatusBarPosition();
+            virtual Vector2i GetStatusBarSize();
         };
     }
 }

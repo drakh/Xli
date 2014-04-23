@@ -3,6 +3,8 @@
 #include <android/asset_manager_jni.h>
 #include <XliSoundPlayer/SoundPlayer.h>
 #include <Xli/PlatformSpecific/Android.h>
+#include "../../core/android/AJniHelper.h"
+#include "SlesSoundPlayer.h"
 #include <SLES/OpenSLES.h>
 #include <SLES/OpenSLES_Android.h>
 #include <assert.h>

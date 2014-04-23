@@ -1,4 +1,5 @@
 #include <Xli/Display.h>
+#include <Xli/PlatformSpecific/iOS.h>
 #include <SDL.h>
 
 namespace Xli
