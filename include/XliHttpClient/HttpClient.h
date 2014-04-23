@@ -1,7 +1,7 @@
 #ifndef __XLI_HTTP_HTTP_CLIENT_H__
 #define __XLI_HTTP_HTTP_CLIENT_H__
 
-#include <Xli/DataAccessor.h>
+#include <Xli/Buffer.h>
 #include <Xli/String.h>
 
 namespace Xli
@@ -27,8 +27,8 @@ namespace Xli
         virtual void SetTimeout(int timeout) = 0;
         virtual int GetTimeout() const = 0;
 
-        virtual void SetHeader(String key, String value) = 0;
-        virtual void RemoveHeader(String key) = 0;
+        virtual void SetHeader(const String& key, const String& value) = 0;
+        virtual void RemoveHeader(const String& key) = 0;
 
         virtual int HeadersBegin() const = 0;
         virtual int HeadersEnd() const = 0;
@@ -36,9 +36,9 @@ namespace Xli
         virtual String GetHeaderKey(int iterator) const = 0;
         virtual String GetHeaderValue(int iterator) const = 0;
 
-        virtual void SendASync(void* content, int byteLength) = 0;
-        virtual void SendASync(String content) = 0;
-        virtual void SendASync() = 0;
+        virtual void SendAsync(const void* content, int byteLength) = 0;
+        virtual void SendAsync(const String& content) = 0;
+        virtual void SendAsync() = 0;
         virtual void Abort() = 0;
 
         virtual int GetResponseHeaderCount() const = 0;
