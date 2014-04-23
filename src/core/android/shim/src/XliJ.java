@@ -27,17 +27,23 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.nio.ByteBuffer;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.NativeActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.content.res.AssetManager;
+import android.graphics.Rect;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.ConditionVariable;
 import android.text.InputType;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -312,9 +318,33 @@ public class XliJ extends android.app.NativeActivity {
             bufferLock.block();
         } catch (Exception e) {
             Log.e("XliApp", e.getMessage());
-        }
+        }       
         return result[0];
     }
+
+	@SuppressLint("NewApi")
+	public static DisplayMetrics GetDisplayMetrics(final NativeActivity activity) 
+	{
+		DisplayMetrics metrics = new DisplayMetrics();
+    	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {    		
+    		activity.getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
+            return metrics;
+    	} else {
+    		activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            return metrics;
+    	}
+    }
+	
+	public static float GetStatusBarHeight(NativeActivity activity)
+	{
+		Rect rectangle= new Rect();
+		Window window= activity.getWindow();
+		window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
+		int statusBarHeight = rectangle.top;
+		int contentViewTop = window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
+		//int titleBarHeight= contentViewTop - statusBarHeight; //dont need this yet but is useful code
+		return statusBarHeight;
+	}
 
     //===========
 

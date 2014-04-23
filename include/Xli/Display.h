@@ -34,6 +34,9 @@ namespace Xli
         static bool GetCurrentSettings(int index, DisplaySettings& settings);
         static void GetSupportedSettings(int index, Array<DisplaySettings>& settings);
         static bool ChangeSettings(int index, const DisplaySettings& settings);
+
+        static float GetDensity(int displayIndex);
+        static Vector2 GetDpi(int displayIndex);
     };
 }
 

@@ -1,4 +1,5 @@
 #include <Xli/PlatformSpecific/Android.h>
+#include "AJniHelper.h"
 #include <XliHttpClient.h>
 #include <pthread.h>
 #include <stdarg.h>

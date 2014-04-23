@@ -1,5 +1,6 @@
 #include <Xli.h>
 #include <XliGL.h>
+#include <Xli/Display.h>
 
 using namespace Xli;
 
@@ -184,7 +185,6 @@ public:
 
     virtual bool OnTouchDown(Window* wnd, Vector2 pos, int id)
     {
-        wnd->SetFullscreen(true);
         Err->WriteLine("OnTouchDown: " + pos.ToString() + ", " + id);
         touchDownTime = GetSeconds();
         return false;
@@ -208,9 +208,11 @@ public:
         {
             if (currentTime - tapTime < 0.3)
             {
-                //play
                 Err->WriteLine("Bang");
                 wnd->BeginTextInput((Xli::TextInputHint)0);
+                Err->WriteLine("density: " + String(Display::GetDensity(0)));
+                Err->WriteLine("dpi: " + Display::GetDpi(0).ToString());
+                Err->WriteLine("statusBarSize: " + wnd->GetStatusBarSize().ToString());
             }
             else if (wnd->IsTextInputActive())
             {

@@ -70,6 +70,10 @@ namespace Xli
             
             virtual bool HasOnscreenKeyboardSupport();
             virtual bool IsOnscreenKeyboardVisible();
+
+            virtual void SetOnscreenKeyboardPosition(Vector2i position);
+            virtual Vector2i GetOnscreenKeyboardPosition();
+            virtual Vector2i GetOnscreenKeyboardSize();
         };
     }
 }

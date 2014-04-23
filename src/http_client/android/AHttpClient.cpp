@@ -1,6 +1,7 @@
 #include <Xli/HashMap.h>
 #include <XliHttpClient/HttpClient.h>
 #include <Xli/PlatformSpecific/Android.h>
+#include "../../core/android/AJniHelper.h"
 
 extern Xli::Window* GlobalWindow;
 

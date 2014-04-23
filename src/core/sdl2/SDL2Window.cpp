@@ -470,6 +470,39 @@ namespace Xli
         {
             return SDL_IsScreenKeyboardShown(window);
         }
+        
+        Vector2i SDL2Window::GetOnscreenKeyboardPosition() 
+        { 
+            return Vector2i(0, 0);
+        }
+
+        Vector2i SDL2Window::GetOnscreenKeyboardSize() 
+        { 
+            return Vector2i(0, 0);
+        }
+
+        //SetFullscreen
+        
+        bool SDL2Window::IsStatusBarVisible() 
+        {
+            return !this->fullscreen;
+        }
+
+        Vector2i SDL2Window::GetStatusBarPosition() 
+        {
+            return Vector2i(0, 0);
+        }
+
+        Vector2i SDL2Window::GetStatusBarSize() 
+        {
+            if (this->fullscreen)
+            {
+                return Vector2i(0, 0);
+            } else {
+                return Vector2i(0, 20);
+            }            
+        }
+        
     }
 
     static bool Inited = false;
