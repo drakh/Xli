@@ -7,8 +7,6 @@
 #include <stdlib.h>
 #include <cstring>
 
-extern Xli::Window* GlobalWindow;
-
 namespace Xli
 {
     static int HttpInitialized = 0;
@@ -31,6 +29,7 @@ namespace Xli
     private:
         int timeout;
         String url;
+        HttpClient* client;
     public:
         Managed< HttpStateChangedHandler > stateChangedCallback;
         Managed< HttpProgressHandler > progressCallback;
@@ -42,7 +41,7 @@ namespace Xli
         HashMap<String,String> responseHeaders;
         struct curl_slist* curlUploadHeaders;
         HttpRequestState status;
-        HttpMethodType method;
+        HttpMethod method;
         int responseStatus;
         void* uploadData;
         long uploadByteLength;
@@ -60,11 +59,12 @@ namespace Xli
         bool unpause;
         bool abort;
 
-        CurlHttpRequest()
+        CurlHttpRequest(HttpClient* client)
         {
-            this->status = HttpUnsent;
+            this->client = client;
+            this->status = HttpRequestStateUnsent;
             this->url = "";
-            this->method = HttpGetMethod;
+            this->method = HttpMethodGet;
             this->timeout = 0;
             this->dataReady = false;
             this->reading = false;
@@ -72,9 +72,10 @@ namespace Xli
             this->abort = false;
             curlUploadHeaders=NULL;        
         }
-        CurlHttpRequest(String url, HttpMethodType method)
+        CurlHttpRequest(HttpClient* client, String url, HttpMethod method)
         {
-            this->status = HttpUnsent;
+            this->client = client;
+            this->status = HttpRequestStateUnsent;
             this->url = url;
             this->method = method;
             this->timeout = 0;
@@ -94,12 +95,12 @@ namespace Xli
         }
         virtual void EmitStateEvent()
         {
-            GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpStateAction(this, this->status));
+            this->client->EnqueueAction(new CurlHttpStateAction(this, this->status));
         }
 
-        virtual void SetMethod(HttpMethodType method)
+        virtual void SetMethod(HttpMethod method)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->method = method;
             } else {
@@ -108,10 +109,10 @@ namespace Xli
         }
         virtual void SetMethodFromString(String method)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
-                HttpMethodType realMethod = StringToHttpMethod(method);
-                if (realMethod == HttpInvalidMethod)
+                HttpMethod realMethod = StringToHttpMethod(method);
+                if (realMethod == HttpMethodUnknown)
                 {
                     XLI_THROW("HttpRequest->SetMethodFromString(): Not a valid method type");
                 } else {
@@ -121,14 +122,14 @@ namespace Xli
                 XLI_THROW("HttpRequest->SetMethodFromString(): Not in a valid state to set the method");
             }
         }
-        virtual HttpMethodType GetMethod() const
+        virtual HttpMethod GetMethod() const
         {
             return this->method;
         }
 
         virtual void SetUrl(String url)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->url = url;
             } else {
@@ -142,7 +143,7 @@ namespace Xli
 
         virtual void SetHeader(String key, String value)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->headers.Add(key,value);
             } else {
@@ -151,7 +152,7 @@ namespace Xli
         }
         virtual void RemoveHeader(String key)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->headers.Remove(key);
             } else {
@@ -195,7 +196,7 @@ namespace Xli
 
         virtual void SetTimeout(int timeout)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->timeout = timeout;
             } else {
@@ -209,7 +210,7 @@ namespace Xli
 
         virtual int GetResponseStatus() const
         {
-            if (this->status == HttpHeadersReceived)
+            if (this->status == HttpRequestStateHeadersReceived)
             {
                 return this->responseStatus;
             } else {
@@ -219,7 +220,7 @@ namespace Xli
 
         virtual String GetReasonPhrase() const
         {
-            if (this->status == HttpHeadersReceived)
+            if (this->status == HttpRequestStateHeadersReceived)
             {
                 return this->reasonPhrase;
             } else {
@@ -229,7 +230,7 @@ namespace Xli
 
         virtual int GetResponseHeaderCount() const
         {
-            if (this->status == HttpHeadersReceived)
+            if (this->status == HttpRequestStateHeadersReceived)
             {
                 return this->responseHeaders.Count();
             } else {
@@ -238,7 +239,7 @@ namespace Xli
         }
         virtual int ResponseHeadersBegin() const
         {
-            if (this->status == HttpHeadersReceived)
+            if (this->status == HttpRequestStateHeadersReceived)
             {
                 return this->responseHeaders.Begin();
             } else {
@@ -247,7 +248,7 @@ namespace Xli
         }
         virtual int ResponseHeadersNext(int n) const
         {
-            if (this->status == HttpHeadersReceived)
+            if (this->status == HttpRequestStateHeadersReceived)
             {
                 return this->responseHeaders.Next(n);
             } else {
@@ -256,7 +257,7 @@ namespace Xli
         }
         virtual int ResponseHeadersEnd() const
         {
-            if (this->status == HttpHeadersReceived)
+            if (this->status == HttpRequestStateHeadersReceived)
             {
                 return this->responseHeaders.End();
             } else {
@@ -265,7 +266,7 @@ namespace Xli
         }
         virtual String GetResponseHeaderValueN(int n) const
         {
-            if (this->status == HttpHeadersReceived)
+            if (this->status == HttpRequestStateHeadersReceived)
             {
                 return this->responseHeaders.GetValue(n);
             } else {
@@ -274,7 +275,7 @@ namespace Xli
         }
         virtual String GetResponseHeaderKeyN(int n) const
         {
-            if (this->status == HttpHeadersReceived)
+            if (this->status == HttpRequestStateHeadersReceived)
             {
                 return this->responseHeaders.GetKey(n);
             } else {
@@ -283,7 +284,7 @@ namespace Xli
         }
         virtual String GetResponseHeader(String key)
         {
-            if (this->status == HttpHeadersReceived)
+            if (this->status == HttpRequestStateHeadersReceived)
             {
                 return this->responseHeaders[key];
             } else {
@@ -293,7 +294,7 @@ namespace Xli
 
         virtual void SetStateChangedCallback(HttpStateChangedHandler* callback)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->stateChangedCallback = callback;
             } else {
@@ -302,7 +303,7 @@ namespace Xli
         }
         virtual void SetProgressCallback(HttpProgressHandler* callback)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->progressCallback = callback;
             } else {
@@ -311,7 +312,7 @@ namespace Xli
         }
         virtual void SetTimeoutCallback(HttpTimeoutHandler* callback)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->timeoutCallback = callback;
             } else {
@@ -320,7 +321,7 @@ namespace Xli
         }
         virtual void SetErrorCallback(HttpErrorHandler* callback)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->errorCallback = callback;
             } else {
@@ -330,7 +331,7 @@ namespace Xli
 
         virtual void SetStringPulledCallback(HttpStringPulledHandler* callback)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->stringPulledCallback = callback;
             } else {
@@ -340,7 +341,7 @@ namespace Xli
 
         virtual void SetArrayPulledCallback(HttpArrayPulledHandler* callback)
         {
-            if (this->status == HttpUnsent)
+            if (this->status == HttpRequestStateUnsent)
             {
                 this->arrayPulledCallback = callback;
             } else {
@@ -348,9 +349,9 @@ namespace Xli
             }
         }
 
-        virtual void Send(void* content, long byteLength)
+        virtual void SendASync(void* content, long byteLength)
         {
-            if (this->status != HttpUnsent)
+            if (this->status != HttpRequestStateUnsent)
                 XLI_THROW("HttpRequest->SetArrayPulledCallback(): Not in a valid state to set the virtual");
 
             //{TODO} Clarify when we copy data.
@@ -385,10 +386,10 @@ namespace Xli
             //Method specific options
             switch(method)
             {
-            case HttpGetMethod:
+            case HttpMethodGet:
                 if (content!=0) result = CURLE_FAILED_INIT;
                 break;
-            case HttpPostMethod:
+            case HttpMethodPost:
                 if (content==0) result = CURLE_FAILED_INIT;
                 if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_POSTFIELDS, (void*)content);
                 if (byteLength == -1)
@@ -398,7 +399,7 @@ namespace Xli
                     if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_POSTFIELDSIZE_LARGE, byteLength);
                 }
                 break;
-            case HttpPutMethod:
+            case HttpMethodPut:
                 if (content==0) result = CURLE_FAILED_INIT;
                 if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_READFUNCTION, onDataUpload);
                 if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_READDATA, (void*)this);
@@ -434,7 +435,7 @@ namespace Xli
                 rc = pthread_attr_init(&attr);
 
                 if (rc) {
-                    GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpErrorAction(this, (int)CURLE_OK, "Xli: Http: Could not create request"));
+                    this->client->EnqueueAction(new CurlHttpErrorAction(this, (int)CURLE_OK, "Xli: Http: Could not create request"));
                 } else {
                     int threadError = pthread_create(&threadID, &attr, perform, (void*)this);
                     // {TODO} has some issues with compiling using the enums so am
@@ -442,33 +443,33 @@ namespace Xli
                     switch (threadError)
                     {
                     case 35: //EAGAIN
-                        GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpErrorAction(this, 0, "XliHttp: Not enough resources to crate thread"));
+                        this->client->EnqueueAction(new CurlHttpErrorAction(this, 0, "XliHttp: Not enough resources to crate thread"));
                         break;
                     case 22: //EINVAL
-                        GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpErrorAction(this, 0, "XliHttp: Invalid settings in thread attributes."));
+                        this->client->EnqueueAction(new CurlHttpErrorAction(this, 0, "XliHttp: Invalid settings in thread attributes."));
                         break;
                     case 1: //EPERM:
-                        GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpErrorAction(this, 0, "XliHttp: Permission issue creating thread"));
+                        this->client->EnqueueAction(new CurlHttpErrorAction(this, 0, "XliHttp: Permission issue creating thread"));
                         break;
                     default:
                         if (threadError>0)
-                            GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpErrorAction(this, 0, "XliHttp: Thread Error")); //{TODO} add error code here
+                            this->client->EnqueueAction(new CurlHttpErrorAction(this, 0, "XliHttp: Thread Error")); //{TODO} add error code here
                         break;
                     }
                     
                 }
             } else {
                 curl_easy_cleanup(session);
-                GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpErrorAction(this, (int)result, "Xli: Http: Could not create request"));
+                this->client->EnqueueAction(new CurlHttpErrorAction(this, (int)result, "Xli: Http: Could not create request"));
             }
         }
-        virtual void Send(String content)
+        virtual void SendASync(String content)
         {
-            this->Send((void*)content.DataPtr(), -1);
+            this->SendASync((void*)content.DataPtr(), -1);
         }
-        virtual void Send()
+        virtual void SendASync()
         {
-            this->Send((void*)0, -1);
+            this->SendASync((void*)0, -1);
         }
 
         virtual void Abort()
@@ -481,24 +482,24 @@ namespace Xli
         }
         virtual void PullContentString()
         {
-            if (this->status==HttpHeadersReceived)
+            if (this->status==HttpRequestStateHeadersReceived)
             {
                 this->contentAsString = true;
                 MutexLock lock(this->communicationMutex);
                 this->unpause = true;
             } else {
-                GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpErrorAction(this, 0, "XliHttp: Can't pull content string, invalid state'"));
+                this->client->EnqueueAction(new CurlHttpErrorAction(this, 0, "XliHttp: Can't pull content string, invalid state'"));
             }
         }
         virtual void PullContentArray()
         {
-            if (this->status==HttpHeadersReceived)
+            if (this->status==HttpRequestStateHeadersReceived)
             {
                 this->contentAsString = false;
                 MutexLock lock(this->communicationMutex);
                 this->unpause = true;
             } else {
-                GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpErrorAction(this, 0, "XliHttp: Can't pull content array, invalid state'"));
+                this->client->EnqueueAction(new CurlHttpErrorAction(this, 0, "XliHttp: Can't pull content array, invalid state'"));
             }
         }
 
@@ -507,7 +508,7 @@ namespace Xli
         {
             //signal state changed
             CurlHttpRequest* request = (CurlHttpRequest*)requestVoid;
-            GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpStateAction(request, HttpSent));
+            request->client->EnqueueAction(new CurlHttpStateAction(request, HttpRequestStateSent));
 
             //start the curl request. curl_easy_perform will block
             CURLcode error = curl_easy_perform(request->curlSession);            
@@ -520,7 +521,8 @@ namespace Xli
                 default:
                     String finalMessage = Xli::String("XliHttp: UNHANDLED CURL ERROR: ");
                     finalMessage += CurlErrorToString(error);
-                    GlobalWindow->EnqueueCrossThreadEvent(new CTError(finalMessage));
+                    //{TODO} vv- this needs to use the httperroraction
+                    //request->client->EnqueueAction(new CTError(finalMessage));
                     break;
                 };
             }
@@ -583,8 +585,8 @@ namespace Xli
             } else {
                 request->dataReady = true;
                 actualBytesRead = CURL_WRITEFUNC_PAUSE;
-                if ((int)request->status < (int)HttpHeadersReceived)
-                    GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpStateAction(request, HttpHeadersReceived));
+                if ((int)request->status < (int)HttpRequestStateHeadersReceived)
+                    request->client->EnqueueAction(new CurlHttpStateAction(request, HttpRequestStateHeadersReceived));
             }
             //{TODO} Is this correct? check the specific methods
             return actualBytesRead;
@@ -609,13 +611,13 @@ namespace Xli
             if (request->reading)
             {
                 if (dlnow)
-                    GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpProgressAction(request, (long)dlnow, (long)dltotal, (dltotal > 0)));
+                    request->client->EnqueueAction(new CurlHttpProgressAction(request, (long)dlnow, (long)dltotal, (dltotal > 0)));
             } else {
                 MutexLock lock(request->communicationMutex);
                 if (request->unpause)
                 {
                     request->reading=true;
-                    GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpStateAction(request, HttpLoading));
+                    request->client->EnqueueAction(new CurlHttpStateAction(request, HttpRequestStateLoading));
                     curl_easy_pause(request->curlSession, CURLPAUSE_CONT);
                 }
             }
@@ -623,7 +625,7 @@ namespace Xli
         }
         static void onTimeout(CurlHttpRequest* request)
         {
-            GlobalWindow->EnqueueCrossThreadEvent(new CurlHttpTimeoutAction(request));
+            request->client->EnqueueAction(new CurlHttpTimeoutAction(request));
         }
         static void onStringPulled()
         {
@@ -647,7 +649,7 @@ namespace Xli
             this->Request->status = this->Status;
             if (this->Request->stateChangedCallback!=0)
                 this->Request->stateChangedCallback->OnResponse(this->Request, this->Status);
-            if (this->Status == HttpDone)
+            if (this->Status == HttpRequestStateDone)
             {
                 if (!this->Request->contentAsString)
                 {
@@ -699,9 +701,34 @@ namespace Xli
 
     //------------------------------------------------------------
 
-    HttpRequest* HttpRequest::Create()
+    class CurlHttpClient : public HttpClient
     {
-        if (!HttpInitialized) InitCurlHttp();
-        return new CurlHttpRequest();
+    private:
+        MutexQueue<HttpAction*> actionQueue;
+    public:
+        virtual CurlHttpRequest* CreateRequest()
+        {
+            return new CurlHttpRequest(this);
+        }
+
+        virtual void Update()
+        {
+            while ((actionQueue.Count() > 0))
+            {
+                HttpAction* action = actionQueue.Dequeue();
+                action->Execute();
+                delete action;
+            }
+        }
+
+        virtual void EnqueueAction(HttpAction* action)
+        {
+            actionQueue.Enqueue(action);
+        }
+    };
+
+    HttpClient* HttpClient::Create()
+    {
+        return new CurlHttpClient();
     }
 }

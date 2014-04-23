@@ -1,20 +1,79 @@
+#include <sys/types.h>
 #include <android/asset_manager.h>
 #include <android/asset_manager_jni.h>
-#include <XliSoundPlayer/SimpleAudio.h>
+#include <XliSoundPlayer/SoundPlayer.h>
 #include <Xli/PlatformSpecific/Android.h>
 #include <SLES/OpenSLES.h>
 #include <SLES/OpenSLES_Android.h>
 #include <assert.h>
 #include <math.h>
 
-extern Xli::PlatformSpecific::SlesAudioEngine* GlobalAAudioEngine = 0;
-
-//{TODO} share the player obj
-
 namespace Xli
 {
+    static Xli::PlatformSpecific::SlesAudioEngine* GlobalAAudioEngine = 0;
     
-    class SlesSimpleSoundChannel : public SimpleSoundChannel
+    class AudioEngine
+    {
+    public:
+        static void Startup()
+        {
+            SLresult result;
+            Xli::PlatformSpecific::SlesAudioEngine* newAudioEngine = new Xli::PlatformSpecific::SlesAudioEngine();
+        
+            SLEngineOption options[] = { SL_ENGINEOPTION_THREADSAFE, SL_BOOLEAN_TRUE };
+            result = slCreateEngine(&newAudioEngine->EngineObject, 1, options, 0, NULL, NULL);
+            assert(SL_RESULT_SUCCESS == result);
+            (void)result;
+
+            // realize the engine
+            result = (*newAudioEngine->EngineObject)->Realize(newAudioEngine->EngineObject,SL_BOOLEAN_FALSE);
+            assert(SL_RESULT_SUCCESS == result);
+            (void)result;
+
+            // get the engine interface, which is needed in order to create other objects
+            result = (*newAudioEngine->EngineObject)->GetInterface(newAudioEngine->EngineObject, SL_IID_ENGINE, &newAudioEngine->EngineEngine);
+            assert(SL_RESULT_SUCCESS == result);
+            (void)result;
+
+            // create output mix
+            result = (*newAudioEngine->EngineEngine)->CreateOutputMix(newAudioEngine->EngineEngine, &newAudioEngine->OutputMixObject, 0, NULL, NULL);
+            assert(SL_RESULT_SUCCESS == result);
+            (void)result;
+
+            // realize the output mix
+            // [TODO] What does that FALSE do?
+            result = (*newAudioEngine->OutputMixObject)->Realize(newAudioEngine->OutputMixObject, SL_BOOLEAN_FALSE);
+            assert(SL_RESULT_SUCCESS == result);
+            (void)result;
+            if (GlobalAAudioEngine != 0) GlobalAAudioEngine->Release();
+            GlobalAAudioEngine = newAudioEngine;        
+        
+            LOGD("Engine Created");
+        }
+
+        static void Shutdown()
+        {
+            // destroy engine object and interfaces
+            if (GlobalAAudioEngine->EngineObject != NULL) {
+                (*GlobalAAudioEngine->EngineObject)->Destroy(GlobalAAudioEngine->EngineObject);
+                GlobalAAudioEngine->EngineObject = NULL;
+                GlobalAAudioEngine->EngineEngine = NULL;
+            }
+        }
+    };
+
+	static int SoundRefCount = 0;
+    static void AssertInit()
+	{
+		if (!SoundRefCount)
+		{
+            AudioEngine::Startup();
+			atexit(AudioEngine::Shutdown);
+            SoundRefCount+=1;
+		}
+	}
+
+    class SlesSoundChannel : public SoundChannel
     {
     private:
         SLObjectItf playerObject;
@@ -25,17 +84,17 @@ namespace Xli
         mutable double cachedDuration;
         
     public:
-        SlesSimpleSoundChannel(const SimpleSound& sound)
+        SlesSoundChannel(const Sound* const sound)
         {
             playerObject = NULL;
             playerPlayItf = NULL;
             playerSeekItf = NULL;
             playerVolumeItf = NULL;
             cachedDuration = -1.0;
-            Closed = !PrepareSlesPlayer(sound.GetPath(), sound.IsAsset());
+            Closed = !PrepareSlesPlayer(sound->GetPath(), sound->IsAsset());
         }    
 
-        virtual ~SlesSimpleSoundChannel()
+        virtual ~SlesSoundChannel()
         {
             playerPlayItf = NULL;
             playerSeekItf = NULL;
@@ -110,7 +169,8 @@ namespace Xli
                 SLmillisecond duration = -1;
                 SLresult result = (*playerPlayItf)->GetDuration(playerPlayItf, &duration);
                 assert(SL_RESULT_SUCCESS == result);
-                cachedDuration = ((double)((int)duration)/1000.0);
+                if (cachedDuration >= 0)
+                    cachedDuration = ((double)((int)duration)/1000.0);
             } 
             return cachedDuration;
         }
@@ -135,11 +195,16 @@ namespace Xli
             assert(SL_RESULT_SUCCESS == result);
             return (bool)looping;
         }
-        virtual void SetLoop(double milli_start, double milli_end)
-        {                     
+        virtual void SetLoop(double start, double end)
+        {
+            if (start >= 0 && end < 0) {
+                end = SL_TIME_UNKNOWN;
+            } else {
+                end = start * 1000.0;
+            }
             SLresult result = (*playerSeekItf)->SetLoop(playerSeekItf, SL_BOOLEAN_TRUE,
-                                                        (SLmillisecond)milli_start,
-                                                        (SLmillisecond)milli_end);
+                                                        (SLmillisecond)start * 1000.0,
+                                                        (SLmillisecond)end);
             assert(SL_RESULT_SUCCESS == result);
         }
 
@@ -229,6 +294,10 @@ namespace Xli
             result = (*playerObject)->Realize(playerObject, SL_BOOLEAN_FALSE);
             assert(SL_RESULT_SUCCESS == result);
             (void)result;
+            // get prefetch interface
+            //{TODO} we need to add prefetch callbacks
+            //       http://www.srombauts.fr/android-ndk-r5b/docs/opensles/
+            //       read the prefetch section
             // get the play interface
             result = (*playerObject)->GetInterface(playerObject, SL_IID_PLAY, &playerPlayItf);
             assert(SL_RESULT_SUCCESS == result);
@@ -249,14 +318,14 @@ namespace Xli
         }
     };
    
-    class SlesSimpleSound : public SimpleSound 
+    class SlesSound : public Sound 
     {
     private:
         double duration;
         String path;
         bool isasset;
     public:
-        SlesSimpleSound(const String& path, bool asset)
+        SlesSound(const String& path, bool asset)
         {
             duration = -1;
             this->path = path;
@@ -269,22 +338,9 @@ namespace Xli
         }
         virtual void PopulateMetadata()
         {
-            SlesSimpleSoundChannel* channel = new SlesSimpleSoundChannel(*this);
+            SlesSoundChannel* channel = new SlesSoundChannel(this);
             duration = channel->GetDuration();
             delete(channel);
-        }
-        virtual SimpleSoundChannel* Play(bool paused)
-        {
-            SlesSimpleSoundChannel* result = new SlesSimpleSoundChannel(*this);
-            if (!paused) result->Play();
-            return (SimpleSoundChannel*)result;
-        }
-        virtual SimpleSoundChannel* PlayLoop(bool paused)
-        {
-            SlesSimpleSoundChannel* result = new SlesSimpleSoundChannel(*this);
-            if (paused) result->Pause();
-            result->SetLoop(0, duration);
-            return (SimpleSoundChannel*)result;
         }
         virtual String GetPath() const
         {
@@ -296,69 +352,25 @@ namespace Xli
         }
     };
 
-    class SimpleAudioEngine
+    class SlesSoundPlayer : public SoundPlayer
     {
-    public:
-        static void Startup()
+        virtual SlesSound* CreateSoundFromAsset(const String& filename) 
         {
-            SLresult result;
-            Xli::PlatformSpecific::SlesAudioEngine* newAudioEngine = new Xli::PlatformSpecific::SlesAudioEngine();
-        
-            SLEngineOption options[] = { SL_ENGINEOPTION_THREADSAFE, SL_BOOLEAN_TRUE };
-            result = slCreateEngine(&newAudioEngine->EngineObject, 1, options, 0, NULL, NULL);
-            assert(SL_RESULT_SUCCESS == result);
-            (void)result;
-
-            // realize the engine
-            result = (*newAudioEngine->EngineObject)->Realize(newAudioEngine->EngineObject,SL_BOOLEAN_FALSE);
-            assert(SL_RESULT_SUCCESS == result);
-            (void)result;
-
-            // get the engine interface, which is needed in order to create other objects
-            result = (*newAudioEngine->EngineObject)->GetInterface(newAudioEngine->EngineObject, SL_IID_ENGINE, &newAudioEngine->EngineEngine);
-            assert(SL_RESULT_SUCCESS == result);
-            (void)result;
-
-            // create output mix
-            result = (*newAudioEngine->EngineEngine)->CreateOutputMix(newAudioEngine->EngineEngine, &newAudioEngine->OutputMixObject, 0, NULL, NULL);
-            assert(SL_RESULT_SUCCESS == result);
-            (void)result;
-
-            // realize the output mix
-            // [TODO] What does that FALSE do?
-            result = (*newAudioEngine->OutputMixObject)->Realize(newAudioEngine->OutputMixObject, SL_BOOLEAN_FALSE);
-            assert(SL_RESULT_SUCCESS == result);
-            (void)result;
-            if (GlobalAAudioEngine != 0) GlobalAAudioEngine->Release();
-            GlobalAAudioEngine = newAudioEngine;        
-        
-            LOGD("Engine Created");
+            return new SlesSound(filename, true);               
         }
-
-        static void Shutdown()
+        virtual SoundChannel* PlaySound(Sound* sound, bool loop)
         {
-            // destroy engine object and interfaces
-            if (GlobalAAudioEngine->EngineObject != NULL) {
-                (*GlobalAAudioEngine->EngineObject)->Destroy(GlobalAAudioEngine->EngineObject);
-                GlobalAAudioEngine->EngineObject = NULL;
-                GlobalAAudioEngine->EngineEngine = NULL;
-            }
-        }
+            SlesSoundChannel* result = new SlesSoundChannel(sound);
+            double duration = sound->GetDuration();
+            if (loop) result->SetLoop(0, -1);
+            result->Play();
+            return (SoundChannel*)result;
+        }        
     };
 
-	static int SoundRefCount = 0;
-    static void AssertInit()
-	{
-		if (!SoundRefCount)
-		{
-            SimpleAudioEngine::Startup();
-			atexit(SimpleAudioEngine::Shutdown);
-		}
-	}
-
-    SimpleSound* SimpleSound::Create(const String& path, bool asset)
+    SoundPlayer* SoundPlayer::Create()
     {
         AssertInit();
-        return new SlesSimpleSound(path, asset);
+        return new SlesSoundPlayer();
     }
 }

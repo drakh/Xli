@@ -4,65 +4,66 @@
 #include <Xli/String.h>
 #include <Xli/Stream.h>
 #include <Xli/HashMap.h>
+#include <Xli/MutexQueue.h>
 
 //{TODO} Need to add a cross platform error code for http.
 
 namespace Xli
 {   
-    enum HttpMethodType
+    enum HttpMethod
     {
-        HttpGetMethod = 0,
-        HttpPostMethod = 1,
-        HttpOptionsMethod = 2,
-        HttpHeadMethod = 3,
-        HttpPutMethod = 4,
-        HttpDeleteMethod = 5,
-        HttpTraceMethod = 6,
-        HttpInvalidMethod = 7,
+        HttpMethodUnknown = 0,
+        HttpMethodGet = 1,
+        HttpMethodPost = 2,
+        HttpMethodOptions = 3,
+        HttpMethodHead = 4,
+        HttpMethodPut = 5,
+        HttpMethodDelete = 6,
+        HttpMethodTrace = 7,
     };
     enum HttpRequestState
     {
-        HttpInvalidState = 999,
-        HttpUnsent = 1, //send() has not been called yet.
-        HttpSent = 2, //send() has been called but a reply has not been delivered.
-        HttpHeadersReceived = 3, //headers and status are available.
-        HttpLoading = 4, //downloading; responsetext holds partial data.
-        HttpDone = 5, //the operation is complete. or has been aborted
+        HttpRequestStateInvalid = 0,
+        HttpRequestStateUnsent = 1, //send() has not been called yet.
+        HttpRequestStateSent = 2, //send() has been called but a reply has not been delivered.
+        HttpRequestStateHeadersReceived = 3, //headers and status are available.
+        HttpRequestStateLoading = 4, //downloading; responsetext holds partial data.
+        HttpRequestStateDone = 5, //the operation is complete. or has been aborted
     };
 
-    inline String HttpMethodToString(HttpMethodType method)
+    inline String HttpMethodToString(HttpMethod method)
     {
         switch(method)
         {
-        case HttpGetMethod: return String("GET");
-        case HttpPostMethod: return String("POST");
-        case HttpOptionsMethod: return String("OPTIONS");
-        case HttpHeadMethod: return String("HEAD");
-        case HttpPutMethod: return String("PUT");
-        case HttpDeleteMethod: return String("DELETE");
-        case HttpTraceMethod: return String("TRACE");
+        case HttpMethodGet: return String("GET");
+        case HttpMethodPost: return String("POST");
+        case HttpMethodOptions: return String("OPTIONS");
+        case HttpMethodHead: return String("HEAD");
+        case HttpMethodPut: return String("PUT");
+        case HttpMethodDelete: return String("DELETE");
+        case HttpMethodTrace: return String("TRACE");
         default: return String("INVALID");
         };
     }
-    inline HttpMethodType StringToHttpMethod(String method)
+    inline HttpMethod StringToHttpMethod(String method)
     {
         method = method.ToUpper();
         if (method == "GET"){
-            return HttpGetMethod;
+            return HttpMethodGet;
         } else if (method == "POST") {
-            return HttpPostMethod;
+            return HttpMethodPost;
         } else if (method == "OPTIONS") {
-            return HttpOptionsMethod;
+            return HttpMethodOptions;
         } else if (method == "HEAD") {
-            return HttpHeadMethod;
+            return HttpMethodHead;
         } else if (method == "PUT") {
-            return HttpPutMethod;
+            return HttpMethodPut;
         } else if (method == "DELETE") {
-            return HttpDeleteMethod;
+            return HttpMethodDelete;
         } else if (method == "TRACE") {
-            return HttpTraceMethod;
+            return HttpMethodTrace;
         } else {
-            return HttpInvalidMethod;
+            return HttpMethodUnknown;
         }
     }           
 
@@ -107,8 +108,6 @@ namespace Xli
     class HttpRequest : public Object
     {
     public:
-        static HttpRequest* Create();
-
         virtual HttpRequestState GetStatus() const = 0;
 
         virtual void SetHeader(String key, String value) = 0;
@@ -129,9 +128,9 @@ namespace Xli
         virtual String GetResponseHeader(String key) = 0;
         /* {TODO} virtual String GetResponseHeadersAsString() const = 0; */ 
 
-        virtual void SetMethod(HttpMethodType method) = 0;
+        virtual void SetMethod(HttpMethod method) = 0;
         virtual void SetMethodFromString(String method) = 0;
-        virtual HttpMethodType GetMethod() const = 0;
+        virtual HttpMethod GetMethod() const = 0;
 
         virtual void SetUrl(String url) = 0;
         virtual String GetUrl() const = 0;
@@ -149,14 +148,31 @@ namespace Xli
         virtual void SetStringPulledCallback(HttpStringPulledHandler* callback) = 0;
         virtual void SetArrayPulledCallback(HttpArrayPulledHandler* callback) = 0;
 
-        virtual void Send(void* content, long byteLength) = 0;
-        virtual void Send(String content) = 0;
-        virtual void Send() = 0;
+        virtual void SendASync(void* content, long byteLength) = 0;
+        virtual void SendASync(String content) = 0;
+        virtual void SendASync() = 0;
 
         virtual void Abort() = 0;
 
         virtual void PullContentString() = 0;
         virtual void PullContentArray() = 0;
+    };
+
+    class HttpAction : public Object
+    {
+    public:
+        virtual void Execute() = 0;
+    };
+    
+    class HttpClient : public Object
+    { 
+    private:
+        MutexQueue<HttpAction*> actionQueue;
+    public:
+        virtual HttpRequest* CreateRequest() = 0;
+        virtual void Update() {};
+        virtual void EnqueueAction(HttpAction* action) {};
+        static HttpClient* Create();
     };
 }
 

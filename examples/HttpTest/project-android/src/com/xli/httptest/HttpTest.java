@@ -7,8 +7,7 @@ public class HttpTest extends android.app.NativeActivity
         System.loadLibrary("Xli");
         System.loadLibrary("XliGL");
         System.loadLibrary("XliMedia");
-        System.loadLibrary("XliHttp");
-        System.loadLibrary("XliGLHelper");
+        System.loadLibrary("XliHttpClient");
         System.loadLibrary("HttpTest");
     }
 }

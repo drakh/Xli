@@ -222,7 +222,7 @@
 				OTHER_LDFLAGS = (
 					"-lXli",
 					"-lXliMain",
-					"-lXliHttp",
+					"-lXliHttpClient",
 					"-lXliMedia",
 					"-lXliGL",
 				);
@@ -257,7 +257,7 @@
 				OTHER_LDFLAGS = (
 					"-lXli",
 					"-lXliMain",
-					"-lXliHttp",
+					"-lXliHttpClient",
 					"-lXliMedia",
 					"-lXliGL",
 				);

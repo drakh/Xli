@@ -1,3 +1,4 @@
+#include <sys/types.h>
 #include <android/asset_manager.h>
 #include <android/asset_manager_jni.h>
 #include <Xli/PlatformSpecific/Android.h>

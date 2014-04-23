@@ -5,7 +5,7 @@
 
 namespace Xli
 {
-	class SimpleSoundChannel : public Object
+	class SoundChannel : public Object
 	{
 	public:
 		virtual void Pause() = 0;
@@ -25,15 +25,21 @@ namespace Xli
 		virtual bool IsPaused() = 0;
 	};
 
-    class SimpleSound : public Object
+    class Sound : public Object
     {
     public:
         virtual double GetDuration() const = 0;
-        virtual SimpleSoundChannel* Play(bool paused) = 0;
-        virtual SimpleSoundChannel* PlayLoop(bool paused) = 0;
         virtual String GetPath() const = 0;
         virtual bool IsAsset() const = 0;
-        static SimpleSound* Create(const String& path, bool asset);
+    };
+
+    class SoundPlayer: public Object
+    {
+    public:
+        virtual Sound* CreateSoundFromAsset(const String& filename) = 0;
+        virtual SoundChannel* PlaySound(Sound* sound, bool loop) = 0;
+        virtual void Update() {}
+        static SoundPlayer* Create();
     };
 }
 

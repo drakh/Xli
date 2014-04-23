@@ -8,53 +8,52 @@
 extern Xli::WindowEventHandler* GlobalEventHandler;
 extern Xli::Window* GlobalWindow;
 
-
-void Xli::PlatformSpecific::CTTextAction::Execute() 
-{ 
-    GlobalEventHandler->OnTextInput(GlobalWindow, this->Text); 
-}
-void Xli::PlatformSpecific::CTKeyAction::Execute() 
-{ 
-    if (this->KeyDown)
-    {
-        GlobalEventHandler->OnKeyDown(GlobalWindow, this->KeyEvent);
-    } else {
-        GlobalEventHandler->OnKeyUp(GlobalWindow, this->KeyEvent); 
-    }    
-}
-
-extern "C"
-{
-    void JNICALL XliJ_OnKeyUp (JNIEnv *env , jobject obj, jint keyCode) 
-    {
-        GlobalWindow->EnqueueCrossThreadEvent(new Xli::PlatformSpecific::CTKeyAction((Xli::PlatformSpecific::AKeyEvent)keyCode, false));
-    }
-
-    void JNICALL XliJ_OnKeyDown (JNIEnv *env , jobject obj, jint keyCode) 
-    {
-        GlobalWindow->EnqueueCrossThreadEvent(new Xli::PlatformSpecific::CTKeyAction((Xli::PlatformSpecific::AKeyEvent)keyCode, true));
-    }
-
-    void JNICALL XliJ_OnTextInput (JNIEnv *env , jobject obj, jstring keyChars) 
-    {
-        const char* jChars = env->GetStringUTFChars((jstring)keyChars, NULL);        
-        GlobalWindow->EnqueueCrossThreadEvent(new Xli::PlatformSpecific::CTTextAction(Xli::String(jChars)));
-        env->ReleaseStringUTFChars((jstring)keyChars, jChars);
-    }
-
-    void JNICALL XliJ_JavaThrowError (JNIEnv *env , jobject obj, jint errorCode, jstring errorMessage) 
-    {
-        char const* cerrorMessage = env->GetStringUTFChars(errorMessage, NULL);
-        Xli::String finalMessage = Xli::String("JavaThrown:(")+Xli::String(errorCode)+Xli::String("): ")+Xli::String(cerrorMessage); 
-        GlobalWindow->EnqueueCrossThreadEvent(new Xli::CTError(finalMessage));
-        env->ReleaseStringUTFChars(errorMessage, cerrorMessage);
-    }
-}
-
 namespace Xli
 {
     namespace PlatformSpecific
     {
+        void CTTextAction::Execute() 
+        { 
+            GlobalEventHandler->OnTextInput(GlobalWindow, this->Text); 
+        }
+        void CTKeyAction::Execute() 
+        { 
+            if (this->KeyDown)
+            {
+                GlobalEventHandler->OnKeyDown(GlobalWindow, this->KeyEvent);
+            } else {
+                GlobalEventHandler->OnKeyUp(GlobalWindow, this->KeyEvent); 
+            }    
+        }
+
+        extern "C"
+        {
+            void JNICALL XliJ_OnKeyUp (JNIEnv *env , jobject obj, jint keyCode) 
+            {
+                GlobalWindow->EnqueueCrossThreadEvent(new CTKeyAction((AKeyEvent)keyCode, false));
+            }
+
+            void JNICALL XliJ_OnKeyDown (JNIEnv *env , jobject obj, jint keyCode) 
+            {
+                GlobalWindow->EnqueueCrossThreadEvent(new CTKeyAction((AKeyEvent)keyCode, true));
+            }
+
+            void JNICALL XliJ_OnTextInput (JNIEnv *env , jobject obj, jstring keyChars) 
+            {
+                const char* jChars = env->GetStringUTFChars((jstring)keyChars, NULL);        
+                GlobalWindow->EnqueueCrossThreadEvent(new CTTextAction(String(jChars)));
+                env->ReleaseStringUTFChars((jstring)keyChars, jChars);
+            }
+
+            void JNICALL XliJ_JavaThrowError (JNIEnv *env , jobject obj, jint errorCode, jstring errorMessage) 
+            {
+                char const* cerrorMessage = env->GetStringUTFChars(errorMessage, NULL);
+                String finalMessage = String("JavaThrown:")+String(cerrorMessage); 
+                GlobalWindow->EnqueueCrossThreadEvent(new CTErrorAction(finalMessage, errorCode));
+                env->ReleaseStringUTFChars(errorMessage, cerrorMessage);
+            }
+        }
+
         struct ANativeActivity* AndroidActivity = 0;
         
         static pthread_key_t JniThreadKey;

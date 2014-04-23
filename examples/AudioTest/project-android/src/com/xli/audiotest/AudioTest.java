@@ -7,7 +7,7 @@ public class AudioTest extends android.app.NativeActivity
         System.loadLibrary("Xli");
         System.loadLibrary("XliGL");
         System.loadLibrary("XliMedia");
-        System.loadLibrary("XliGLHelper");
+        System.loadLibrary("XliSoundPlayer");
         System.loadLibrary("AudioTest");
     }
 }

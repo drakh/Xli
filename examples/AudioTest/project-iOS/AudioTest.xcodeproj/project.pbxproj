@@ -17,7 +17,6 @@
 		CE2B2DA416C72C890036FFA0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B2DA316C72C890036FFA0 /* QuartzCore.framework */; };
 		CE52CC3316C74B2000C6AAC7 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE52CC3216C74B2000C6AAC7 /* Main.cpp */; };
 		FC7C328E1896944300ECDF0D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC7C328D1896944300ECDF0D /* AVFoundation.framework */; };
-		FCF23E1F18E0A98E00AB6D2D /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FCF23E1E18E0A98E00AB6D2D /* Default-568h@2x.png */; };
 		FCF23E2318E0AADF00AB6D2D /* ChrisZabriskieCylinderOne.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FCF23E2118E0AADF00AB6D2D /* ChrisZabriskieCylinderOne.mp3 */; };
 		FCF23E2418E0AADF00AB6D2D /* WilhelmScream.wav in Resources */ = {isa = PBXBuildFile; fileRef = FCF23E2218E0AADF00AB6D2D /* WilhelmScream.wav */; };
 /* End PBXBuildFile section */
@@ -36,7 +35,6 @@
 		CE2B2DA316C72C890036FFA0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		CE52CC3216C74B2000C6AAC7 /* Main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Main.cpp; path = ../../src/Main.cpp; sourceTree = "<group>"; };
 		FC7C328D1896944300ECDF0D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		FCF23E1E18E0A98E00AB6D2D /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		FCF23E2118E0AADF00AB6D2D /* ChrisZabriskieCylinderOne.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = ChrisZabriskieCylinderOne.mp3; sourceTree = "<group>"; };
 		FCF23E2218E0AADF00AB6D2D /* WilhelmScream.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = WilhelmScream.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -65,7 +63,6 @@
 			isa = PBXGroup;
 			children = (
 				FCF23E2018E0AADF00AB6D2D /* data */,
-				FCF23E1E18E0A98E00AB6D2D /* Default-568h@2x.png */,
 				CE2B21DC16C7263A0036FFA0 /* AudioTest */,
 				CE2B21D116C7263A0036FFA0 /* Frameworks */,
 				CE2B21CF16C7263A0036FFA0 /* Products */,
@@ -180,7 +177,6 @@
 			files = (
 				FCF23E2418E0AADF00AB6D2D /* WilhelmScream.wav in Resources */,
 				FCF23E2318E0AADF00AB6D2D /* ChrisZabriskieCylinderOne.mp3 in Resources */,
-				FCF23E1F18E0A98E00AB6D2D /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,6 +228,7 @@
 					"-lXliMain",
 					"-lXliMedia",
 					"-lXliGL",
+					"-lXliSoundPlayer",
 				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -266,6 +263,7 @@
 					"-lXliMain",
 					"-lXliMedia",
 					"-lXliGL",
+					"-lXliSoundPlayer",
 				);
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

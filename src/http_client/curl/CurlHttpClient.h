@@ -47,17 +47,17 @@ namespace Xli
         virtual void Execute();
     };
 
-    inline CURLoption methodToCurlOption(HttpMethodType method)
+    inline CURLoption methodToCurlOption(HttpMethod method)
     {
         switch(method)
         {
-        case HttpGetMethod: return CURLOPT_HTTPGET;
-        case HttpPostMethod: return CURLOPT_POST;
-        case HttpOptionsMethod: XLI_THROW("MethodToCurlCode: Unimplemented Method Code");
-        case HttpHeadMethod: XLI_THROW("MethodToCurlCode: Unimplemented Method Code");
-        case HttpPutMethod: return CURLOPT_UPLOAD;
-        case HttpDeleteMethod: XLI_THROW("MethodToCurlCode: Unimplemented Method Code");
-        case HttpTraceMethod: XLI_THROW("MethodToCurlCode: Unimplemented Method Code");
+        case HttpGetMethodGet: return CURLOPT_HTTPGET;
+        case HttpMethodPost: return CURLOPT_POST;
+        case HttpMethodOptions: XLI_THROW("MethodToCurlCode: Unimplemented Method Code");
+        case HttpMethodHead: XLI_THROW("MethodToCurlCode: Unimplemented Method Code");
+        case HttpMethodPut: return CURLOPT_UPLOAD;
+        case HttpMethodDelete: XLI_THROW("MethodToCurlCode: Unimplemented Method Code");
+        case HttpMethodTrace: XLI_THROW("MethodToCurlCode: Unimplemented Method Code");
         default: XLI_THROW("MethodToCurlCode: Invalid Method Code");
         };
     }

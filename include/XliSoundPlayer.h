@@ -6,6 +6,6 @@
     \brief A simple sound player interface
 */
 
-#include <XliSoundPlayer/SimpleAudio.h>
+#include <XliSoundPlayer/SoundPlayer.h>
 
 #endif
