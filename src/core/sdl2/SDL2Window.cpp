@@ -159,6 +159,10 @@ namespace Xli
             SDL_DestroyWindow(window);
         }
 
+        void SDL2Window::SDL2WindowInit() 
+        {
+        }
+
         WindowImplementation SDL2Window::GetImplementation()
         {
             return WindowImplementationSDL2;
@@ -470,6 +474,35 @@ namespace Xli
         bool SDL2Window::IsOnscreenKeyboardVisible() 
         {
             return SDL_IsScreenKeyboardShown(window);
+        }
+
+        Vector2i SDL2Window::GetStatusBarSize()
+        {
+            return Vector2i(0,0);
+        }
+
+        Vector2i SDL2Window::GetStatusBarPosition()
+        {
+            return Vector2i(0,0);
+        }
+
+        bool SDL2Window::IsStatusBarVisible() 
+        {
+            return !this->fullscreen;
+        }
+
+        void SDL2Window::SetOnscreenKeyboardPosition(Vector2i position) 
+        { 
+        }
+        
+        Vector2i SDL2Window::GetOnscreenKeyboardPosition() 
+        { 
+            return Vector2i(0,0);
+        }
+
+        Vector2i SDL2Window::GetOnscreenKeyboardSize() 
+        { 
+            return Vector2i(0,0);
         }
     }
 
