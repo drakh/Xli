@@ -4,6 +4,7 @@
 #include <sys/sysctl.h>
 #include <stdlib.h>
 #include <Xli/String.h>
+#include <Xli/Console.h>
 
 namespace Xli
 {
@@ -20,42 +21,42 @@ namespace Xli
 
         enum IDeviceType
         {
-            IDeviceType_UNKNOWN,
-            IDeviceType_IPHONE_1G,
-            IDeviceType_IPHONE_3G,
-            IDeviceType_IPHONE_3GS,
-            IDeviceType_IPHONE_4,
-            IDeviceType_VERIZON_IPHONE_4,
-            IDeviceType_IPHONE_4S,
-            IDeviceType_IPHONE_5_GSM,
-            IDeviceType_IPHONE_5_GSM_CDMA,
-            IDeviceType_IPHONE_5C_GSM,
-            IDeviceType_IPHONE_5C_GSM_CDMA,
-            IDeviceType_IPHONE_5S_GSM,
-            IDeviceType_IPHONE_5S_GSM_CDMA,
-            IDeviceType_IPOD_TOUCH_1G,
-            IDeviceType_IPOD_TOUCH_2G,
-            IDeviceType_IPOD_TOUCH_3G,
-            IDeviceType_IPOD_TOUCH_4G,
-            IDeviceType_IPOD_TOUCH_5G,
-            IDeviceType_IPAD,
-            IDeviceType_IPAD_2_WIFI,
-            IDeviceType_IPAD_2_GSM,
-            IDeviceType_IPAD_2_CDMA,
-            IDeviceType_IPAD_MINI_WIFI,
-            IDeviceType_IPAD_MINI_GSM,
-            IDeviceType_IPAD_MINI_GSM_CDMA,
-            IDeviceType_IPAD_3_WIFI,
-            IDeviceType_IPAD_3_GSM_CDMA,
-            IDeviceType_IPAD_3_GSM,
-            IDeviceType_IPAD_4_WIFI,
-            IDeviceType_IPAD_4_GSM,
-            IDeviceType_IPAD_4_GSM_CDMA,
-            IDeviceType_IPAD_AIR_WIFI,
-            IDeviceType_IPAD_AIR_CELLULAR,
-            IDeviceType_IPAD_MINI_2G_WIFI,
-            IDeviceType_IPAD_MINI_2G_CELLULAR,
-            IDeviceType_SIMULATOR
+            IDeviceType_UNKNOWN = 0,
+            IDeviceType_IPHONE_1G = 1,
+            IDeviceType_IPHONE_3G = 2,
+            IDeviceType_IPHONE_3GS = 3,
+            IDeviceType_IPHONE_4 = 4,
+            IDeviceType_VERIZON_IPHONE_4 = 5,
+            IDeviceType_IPHONE_4S = 6,
+            IDeviceType_IPHONE_5_GSM = 7,
+            IDeviceType_IPHONE_5_GSM_CDMA = 8,
+            IDeviceType_IPHONE_5C_GSM = 9,
+            IDeviceType_IPHONE_5C_GSM_CDMA = 10,
+            IDeviceType_IPHONE_5S_GSM = 11,
+            IDeviceType_IPHONE_5S_GSM_CDMA = 12,
+            IDeviceType_IPOD_TOUCH_1G = 13,
+            IDeviceType_IPOD_TOUCH_2G = 14,
+            IDeviceType_IPOD_TOUCH_3G = 15,
+            IDeviceType_IPOD_TOUCH_4G = 16,
+            IDeviceType_IPOD_TOUCH_5G = 17,
+            IDeviceType_IPAD = 18,
+            IDeviceType_IPAD_2_WIFI = 19,
+            IDeviceType_IPAD_2_GSM = 20,
+            IDeviceType_IPAD_2_CDMA = 21,
+            IDeviceType_IPAD_MINI_WIFI = 22,
+            IDeviceType_IPAD_MINI_GSM = 23,
+            IDeviceType_IPAD_MINI_GSM_CDMA = 24,
+            IDeviceType_IPAD_3_WIFI = 25,
+            IDeviceType_IPAD_3_GSM_CDMA = 26,
+            IDeviceType_IPAD_3_GSM = 27,
+            IDeviceType_IPAD_4_WIFI = 28,
+            IDeviceType_IPAD_4_GSM = 29,
+            IDeviceType_IPAD_4_GSM_CDMA = 30,
+            IDeviceType_IPAD_AIR_WIFI = 31,
+            IDeviceType_IPAD_AIR_CELLULAR = 32,
+            IDeviceType_IPAD_MINI_2G_WIFI = 33,
+            IDeviceType_IPAD_MINI_2G_CELLULAR = 34,
+            IDeviceType_SIMULATOR = 35
         };
 
         static IDeviceType GetIDeviceType()
@@ -64,7 +65,7 @@ namespace Xli
             sysctlbyname("hw.machine", NULL, &size, NULL, 0);
             char* machine = (char*)malloc(size);
             sysctlbyname("hw.machine", machine, &size, NULL, 0);
-            String platform(machine,size);
+            String platform(machine,size-1);
             free(machine);
 
             if (platform == "iPhone1,1") return IDeviceType_IPHONE_1G;
@@ -107,7 +108,7 @@ namespace Xli
             return IDeviceType_UNKNOWN;
         }
 
-        static float GetIDeviceDensity(IDeviceType type)
+        static float GetIDeviceDpi(IDeviceType type)
         {
             switch (type)
             {

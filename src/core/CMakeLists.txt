@@ -187,7 +187,9 @@ elseif (XLI_PLATFORM_IOS)
         ${SDL2_DIR}/src/video/uikit/SDL_uikitvideo.m
         ${SDL2_DIR}/src/video/uikit/SDL_uikitview.m
         ${SDL2_DIR}/src/video/uikit/SDL_uikitviewcontroller.m
-        ${SDL2_DIR}/src/video/uikit/SDL_uikitwindow.m)
+        ${SDL2_DIR}/src/video/uikit/SDL_uikitwindow.m
+        sdl2/SDL2Display.mm
+        sdl2/SDL2Window_iOS.mm)
 
 elseif (XLI_PLATFORM_OSX)
 

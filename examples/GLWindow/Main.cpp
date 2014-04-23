@@ -200,8 +200,6 @@ public:
 
     virtual bool OnTouchUp(Window* wnd, Vector2 pos, int id)
     {
-        Err->WriteLine("OnTouchUp: " + pos.ToString() + ", " + id);
-        
         double currentTime = GetSeconds();
 
         if (currentTime - touchDownTime < 0.15)
@@ -210,9 +208,6 @@ public:
             {
                 Err->WriteLine("Bang");
                 wnd->BeginTextInput((Xli::TextInputHint)0);
-                Err->WriteLine("density: " + String(Display::GetDensity(0)));
-                Err->WriteLine("dpi: " + Display::GetDpi(0).ToString());
-                Err->WriteLine("statusBarSize: " + wnd->GetStatusBarSize().ToString());
             }
             else if (wnd->IsTextInputActive())
             {

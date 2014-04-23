@@ -401,8 +401,6 @@ namespace Xli
         */
         virtual SystemCursor GetSystemCursor() = 0;
 
-
-        // TODO:
         virtual void BeginTextInput(TextInputHint hint) { }
         virtual void EndTextInput() { }
         virtual bool IsTextInputActive() { return false; }
@@ -417,7 +415,6 @@ namespace Xli
         virtual bool IsStatusBarVisible() { return false; }
         virtual Vector2i GetStatusBarPosition() { return Vector2i(0, 0); }
         virtual Vector2i GetStatusBarSize() { return Vector2i(0, 0); }
-
 
         // TODO: Remove these methods
         virtual void EnqueueCrossThreadEvent(WindowAction* action) {};

@@ -41,9 +41,6 @@
 
 #include <Foundation/Foundation.h>
 
-
-
-
 static int SetupWindowData(_THIS, SDL_Window *window, UIWindow *uiwindow, SDL_bool created)
 {
     SDL_VideoDisplay *display = SDL_GetDisplayForWindow(window);

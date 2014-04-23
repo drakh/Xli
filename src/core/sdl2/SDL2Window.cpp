@@ -114,7 +114,6 @@ namespace Xli
             
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
-
 #else
 
             sdlFlags |= SDL_WINDOW_OPENGL;
@@ -133,7 +132,9 @@ namespace Xli
                 SetFullscreen(true);
             }
 
-#endif
+#else 
+            this->SDL2WindowInit();
+#endif           
         }
 
         SDL2Window::SDL2Window(const void* nativeHandle)
@@ -470,39 +471,6 @@ namespace Xli
         {
             return SDL_IsScreenKeyboardShown(window);
         }
-        
-        Vector2i SDL2Window::GetOnscreenKeyboardPosition() 
-        { 
-            return Vector2i(0, 0);
-        }
-
-        Vector2i SDL2Window::GetOnscreenKeyboardSize() 
-        { 
-            return Vector2i(0, 0);
-        }
-
-        //SetFullscreen
-        
-        bool SDL2Window::IsStatusBarVisible() 
-        {
-            return !this->fullscreen;
-        }
-
-        Vector2i SDL2Window::GetStatusBarPosition() 
-        {
-            return Vector2i(0, 0);
-        }
-
-        Vector2i SDL2Window::GetStatusBarSize() 
-        {
-            if (this->fullscreen)
-            {
-                return Vector2i(0, 0);
-            } else {
-                return Vector2i(0, 20);
-            }            
-        }
-        
     }
 
     static bool Inited = false;
@@ -528,6 +496,18 @@ namespace Xli
         }
     }
 
+    Window* Window::Create(int width, int height, const String& title, int flags)
+    {
+        AssertInit();
+        return new PlatformSpecific::SDL2Window(width, height, title, flags);
+    }
+
+    Window* Window::CreateFrom(void* nativeWindowHandle)
+    {
+        AssertInit();
+        return new PlatformSpecific::SDL2Window(nativeWindowHandle);
+    }
+
     void Window::SetMainWindow(Window* wnd)
     {
         GlobalWindow = wnd && wnd->GetImplementation() == WindowImplementationSDL2 ? (PlatformSpecific::SDL2Window*)wnd : NULL;
@@ -543,18 +523,6 @@ namespace Xli
         SDL_DisplayMode mode;
         SDL_GetDesktopDisplayMode(0, &mode);
         return Vector2i(mode.w, mode.h);
-    }
-
-    Window* Window::Create(int width, int height, const String& title, int flags)
-    {
-        AssertInit();
-        return new PlatformSpecific::SDL2Window(width, height, title, flags);
-    }
-
-    Window* Window::CreateFrom(void* nativeWindowHandle)
-    {
-        AssertInit();
-        return new PlatformSpecific::SDL2Window(nativeWindowHandle);
     }
 
     static Xli::Key SDLKeyToXliKey(const SDL_Keysym& key)
