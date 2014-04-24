@@ -34,6 +34,7 @@ set(SRC
 set(SDL2_DIR ${PROJECT_SOURCE_DIR}/src/core/sdl2/3rdparty/SDL2)
 
 set(SDL2_SRC
+    generic/GenericBundle.cpp
     generic/GenericDialogs.cpp
     posix/PosixFileSystemBase.cpp
     posix/PosixTime.cpp
@@ -163,7 +164,6 @@ elseif (XLI_PLATFORM_LINUX)
     set(LIBS SDL2 pthread)
 
     set(SRC ${SRC} ${SDL2_SRC}
-        generic/GenericBundle.cpp
         xdg/XdgFileSystem.cpp)
 
 elseif (XLI_PLATFORM_IOS)

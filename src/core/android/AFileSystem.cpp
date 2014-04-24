@@ -129,6 +129,11 @@ namespace Xli
                 File_getAbsolutePath = jni.FindMethod("java/io/File", "getAbsolutePath", "()Ljava/lang/String;");
             }
 
+            virtual String GetBaseDirectory()
+            {
+                return "";
+            }
+
             virtual String GetTempDirectory()
             {
                 AJniHelper jni;
@@ -141,14 +146,13 @@ namespace Xli
             {
                 switch (dir)
                 {
-                case SystemDirectoryLocalAppData:
-                    return (String)AndroidActivity->internalDataPath;
-
-                case SystemDirectoryRoamingAppData:
+                case SystemDirectoryConfig:
                     return (String)AndroidActivity->externalDataPath;
 
+                case SystemDirectoryData:
+                    return (String)AndroidActivity->internalDataPath;
+
                 // TODO: Conform to Android specifications on proper handling of system directories
-                case SystemDirectoryDocuments:
                 default:
                     return "/sdcard";
                 }
