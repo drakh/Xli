@@ -160,6 +160,14 @@ public:
 	virtual bool OnMouseDown(Window* wnd, Vector2i pos, MouseButton button)
 	{
 		Err->WriteLine("OnMouseDown: " + pos.ToString() + ", " + (String)(int)button);
+        
+        
+        Err->WriteLine("Bang");
+        HttpRequest* req = httpClient->CreateRequest("GET","http://httpbin.org/get");
+        req->SetHeader("Accept", "*/*");
+        req->SetHeader("ohhai","canhazdata");
+        req->SendAsync();
+        
 		return false;
 	}
 
@@ -237,24 +245,7 @@ public:
 	virtual bool OnTouchUp(Window* wnd, Vector2 pos, int id)
 	{
 		Err->WriteLine("OnTouchUp: " + pos.ToString() + ", " + id);
-        double currentTime = GetSeconds();
-        if (currentTime - touchDownTime < 0.15)
-        {
-            if (currentTime - tapTime < 0.3)
-            {
-                Err->WriteLine("Bang");
-
-                HttpRequest* req = httpClient->CreateRequest("GET","http://httpbin.org/get");
-                req->SetHeader("Accept", "*/*");
-                req->SetHeader("ohhai","canhazdata");
-                req->SendAsync();
-            }
-            else if (wnd->IsTextInputActive())
-            {
-                wnd->EndTextInput();
-            }
-            tapTime = currentTime;
-        }        
+      
 		return false;
 	}
 

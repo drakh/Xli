@@ -14,7 +14,7 @@ namespace Xli
         HttpRequestStateHeadersReceived,
         HttpRequestStateLoading,
         HttpRequestStateDone,
-    }; // {TODO} this needs an aborted state
+    }; // {TODO} this needs an aborted state ,no, do whatever javascript does
 
     enum HttpTransferDirection
     {
@@ -53,7 +53,6 @@ namespace Xli
         virtual int ResponseHeadersNext(int iterator) const = 0;
         virtual String GetResponseHeaderKey(int iterator) const = 0;
         virtual String GetResponseHeaderValue(int iterator) const = 0;
-        //{TODO} why no reason phrase?
         
         virtual bool TryGetResponseHeader(const String& key, String& result) const = 0;
 
@@ -64,11 +63,11 @@ namespace Xli
     class HttpEventHandler: public Object
     {
     public:
-        virtual void OnRequestStateChanged(HttpRequest* request) { } // call this on abort? for now, no
+        virtual void OnRequestStateChanged(HttpRequest* request) { } // call this on abort? for now, no (see above)
         virtual void OnRequestProgress(HttpRequest* request,int position, int total, bool totalKnown, HttpTransferDirection direction) { }
         virtual void OnRequestAborted(HttpRequest* request) { }
         virtual void OnRequestTimeout(HttpRequest* request) { }
-        virtual void OnRequestError(HttpRequest* request) { } //why no code or message?
+        virtual void OnRequestError(HttpRequest* request) { }
     };
 
     class HttpAction : public Object

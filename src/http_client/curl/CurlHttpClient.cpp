@@ -1,6 +1,7 @@
 #include <XliHttpClient/HttpClient.h>
 #include "CurlHttpClient.h"
 #include <Xli/HashMap.h>
+#include <Xli/ArrayStream.h>
 #include <Xli/Mutex.h>
 #include <curl/curl.h>
 #include <pthread.h>
@@ -27,28 +28,30 @@ namespace Xli
     class CurlHttpRequest : public HttpRequest
     {
     private:
-        HttpClient* client;
+        CurlHttpClient* client;
 
         String method;
         String url;
         int timeout;
+        bool abort;
         HttpRequestState state;
 
         HashMap<String,String> headers;
         struct curl_slist* curlUploadHeaders;
 
         CURL* curlSession;
-        void* uploadData;
+        const void* uploadData;
         long uploadByteLength;
         long uploadPosition;
 
         HashMap<String,String> responseHeaders;
-        Array<UInt8> recievedData;
+        Managed< ArrayStream > responseBody;
+        Managed< BufferReference > responseBodyRef;
         int responseStatus;
 
     public:
 
-        CurlHttpRequest(HttpClient* client, String url, HttpMethod method)
+        CurlHttpRequest(CurlHttpClient* client, String url, String method)
         {
             this->client = client;
             this->state = HttpRequestStateUnsent;
@@ -56,7 +59,8 @@ namespace Xli
             this->method = method;
             this->timeout = 0;
             this->abort = false;
-            curlUploadHeaders=NULL;
+            this->curlUploadHeaders=NULL;
+            this->responseBody = new ArrayStream(1);
         }
 
         virtual ~CurlHttpRequest()
@@ -100,6 +104,95 @@ namespace Xli
         virtual int HeadersNext(int n) const { return headers.Next(n); }
         virtual String GetHeaderKey(int n) const { return headers.GetKey(n); }
         virtual String GetHeaderValue(int n) const { return headers.GetValue(n); }
+
+
+
+        virtual void SendAsync(const void* content, int byteLength)
+        {
+            if (state != HttpRequestStateUnsent)
+                XLI_THROW("HttpRequest->SetArrayPulledCallback(): Not in a valid state to send");
+
+            uploadByteLength = byteLength;
+            uploadData = content;
+            uploadPosition = 0;
+
+            CURL* session = curl_easy_init();
+            if (!session)
+                XLI_THROW("CURL ERROR: Failed to create handle");
+
+            CURLcode result = CURLE_OK;
+            if (result == CURLE_OK) result = curl_easy_setopt(session, methodToCurlOption(method), 1);
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_URL, url.DataPtr());
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_CONNECTTIMEOUT, timeout);
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_AUTOREFERER, 1);
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_USERAGENT, "libcurl-agent/1.0");
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_HEADERFUNCTION, onHeaderRecieved);
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_HEADERDATA, (void*)this);
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_WRITEFUNCTION, onDataRecieved);
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_WRITEDATA, (void*)this);
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_NOPROGRESS, 0);
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_PROGRESSDATA, (void*)this);
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_PROGRESSFUNCTION, onProgress);
+
+            //Method specific options
+            if (method ==  "GET")
+            {                
+                if (content!=0) result = CURLE_FAILED_INIT;
+            } else if (method == "POST") {
+                if (content==0) result = CURLE_FAILED_INIT;
+                if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_POSTFIELDS, (void*)content);
+                if (byteLength == -1)
+                {
+                    if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_POSTFIELDSIZE, -1);
+                } else {
+                    if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_POSTFIELDSIZE_LARGE, byteLength);
+                }
+            } else if (method == "PUT") {
+                if (content==0) result = CURLE_FAILED_INIT;
+                if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_READFUNCTION, onDataUpload);
+                if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_READDATA, (void*)this);
+            } else {
+                if (content==0) result = CURLE_FAILED_INIT;
+            };
+
+            //Add headers
+            int i = HeadersBegin();
+            String header;
+            while (i != HeadersEnd())
+            {
+                header = "";
+                header.Append(GetHeaderKey(i));
+                header.Append(":");
+                header.Append(GetHeaderValue(i));
+                curlUploadHeaders = curl_slist_append(curlUploadHeaders, header.DataPtr());
+                i = HeadersNext(i);
+            }           
+            curl_easy_setopt(session, CURLOPT_HTTPHEADER, curlUploadHeaders);
+            //{TODO} Add following to cleanup: curl_slist_free_all(curlUploadHeaders);
+
+            if (result == CURLE_OK)
+            {
+                curlSession = session;
+                client->AddSession(session, this);
+            } else {
+                HttpEventHandler* eh = client->GetEventHandler();
+                if (eh!=0) eh->OnRequestError(this);
+            }
+        }
+        virtual void SendAsync(const String& content)
+        {
+            SendAsync((void*)content.DataPtr(), -1);
+        }
+        virtual void SendAsync()
+        {
+            SendAsync((void*)0, -1);
+        }
+
+        virtual void Abort()
+        {
+            // {TODO} what are we aborting? needs to work for upload and download
+            abort = true;
+        }
 
         virtual int GetResponseHeaderCount() const
         {
@@ -176,109 +269,24 @@ namespace Xli
             }
         }
 
-
         virtual DataAccessor* GetResponseBody() const
         {
-            &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&;
-            // if (state == HttpRequestStateDone)
-            // {
-            //     return (DataAccessor*)responseBody;
-            // } else {
-            //     XLI_THROW("HttpRequest->GetResponseBody(): Not in a valid state to get the response body");
-            // }
-        }
-
-
-        virtual void SendASync(void* content, long byteLength)
-        {
-            if (this->state != HttpRequestStateUnsent)
-                XLI_THROW("HttpRequest->SetArrayPulledCallback(): Not in a valid state to send");
-
-            this->uploadByteLength = byteLength;
-            this->uploadData = content;
-            this->uploadPosition = 0;
-
-            CURL* session = curl_easy_init();
-            if (!session)
-                XLI_THROW("CURL ERROR: Failed to create handle");
-
-            CURLcode result = CURLE_OK;
-            if (result == CURLE_OK) result = curl_easy_setopt(session, methodToCurlOption(this->method), 1);
-            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_URL, url.DataPtr());
-            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_CONNECTTIMEOUT, this->timeout);
-            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_AUTOREFERER, 1);
-            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_USERAGENT, "libcurl-agent/1.0");
-            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_HEADERFUNCTION, onHeaderRecieved);
-            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_HEADERDATA, (void*)this);
-            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_WRITEFUNCTION, onDataRecieved);
-            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_WRITEDATA, (void*)this);
-            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_NOPROGRESS, 0);
-            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_PROGRESSDATA, (void*)this);
-            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_PROGRESSFUNCTION, onProgress);
-
-            //Method specific options
-            switch(method)
+            if (state == HttpRequestStateDone)
             {
-            case HttpMethodGet:
-                if (content!=0) result = CURLE_FAILED_INIT;
-                break;
-            case HttpMethodPost:
-                if (content==0) result = CURLE_FAILED_INIT;
-                if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_POSTFIELDS, (void*)content);
-                if (byteLength == -1)
-                {
-                    if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_POSTFIELDSIZE, -1);
-                } else {
-                    if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_POSTFIELDSIZE_LARGE, byteLength);
-                }
-                break;
-            case HttpMethodPut:
-                if (content==0) result = CURLE_FAILED_INIT;
-                if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_READFUNCTION, onDataUpload);
-                if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_READDATA, (void*)this);
-                break;
-            default:
-                if (content==0) result = CURLE_FAILED_INIT;
-                break;
-            };
-
-            //Add headers
-            int i = this->HeadersBegin();
-            String header;
-            while (i != this->HeadersEnd())
-            {
-                header = "";
-                header.Append(this->GetHeaderKeyN(i));
-                header.Append(":");
-                header.Append(this->GetHeaderValueN(i));
-                this->curlUploadHeaders = curl_slist_append(this->curlUploadHeaders, header.DataPtr());
-                i = this->HeadersNext(i);
-            }           
-            curl_easy_setopt(session, CURLOPT_HTTPHEADER, this->curlUploadHeaders);
-            //{TODO} Add following to cleanup: curl_slist_free_all(this->curlUploadHeaders);
-
-            if (result == CURLE_OK)
-            {
-                //Add to the client's multi-session
-                client->AddSession(session);
+                return (DataAccessor*)responseBodyRef.Get();
             } else {
-                curl_easy_cleanup(session);
-                this->client->EnqueueAction(new CurlHttpErrorAction(this, (int)result, "Xli: Http: Could not create request"));
+                XLI_THROW("HttpRequest->GetResponseBody(): Not in a valid state to get the response body");
             }
-        }
-        virtual void SendASync(String content)
-        {
-            this->SendASync((void*)content.DataPtr(), -1);
-        }
-        virtual void SendASync()
-        {
-            this->SendASync((void*)0, -1);
-        }
+        }      
 
-        virtual void Abort()
+        virtual void onDone()
         {
-            // {TODO} what are we aborting? needs to work for upload and download
-            abort = true;
+            state = HttpRequestStateDone;
+                        
+            responseBodyRef = new BufferReference((void*)responseBody->GetDataPtr(), responseBody->GetLength(), (Object*)responseBody.Get());
+
+            HttpEventHandler* eh = client->GetEventHandler();
+            if (eh!=0) eh->OnRequestStateChanged(this);
         }
 
     private:
@@ -293,7 +301,7 @@ namespace Xli
                 if (copyLength > maxCopyLength) copyLength = maxCopyLength;
                 if (copyLength>0)
                 {
-                    memcpy(request->uploadData, ptr, copyLength);
+                    memcpy(ptr, request->uploadData, copyLength);
                     request->uploadPosition += copyLength;
                 }
             }
@@ -321,68 +329,63 @@ namespace Xli
         static size_t onDataRecieved(char* ptr, size_t size, size_t nmemb, void* userdata)
         {
             CurlHttpRequest* request = (CurlHttpRequest*)userdata;
-            size_t actualBytesRead = 0;
+            size_t bytesRead = 0;
 
             // {TODO} saying we have the headers at this point. Check the validity
-
-            HttpEventHandler* eh = client->GetEventHandler();
+           
+            request->state = HttpRequestStateHeadersReceived;
+            HttpEventHandler* eh = request->client->GetEventHandler();
             if (eh!=0) eh->OnRequestStateChanged(request);
 
-            actualBytesRead = onByteDataRecieved(request, ptr, (size * nmemb));
+            bytesRead = (size * nmemb);
+            request->responseBody->Write((UInt8*)ptr, 1, bytesRead);
 
-            //{TODO} Is this correct? check the specific methods
-            return actualBytesRead;
-        }
-        static size_t onByteDataRecieved(CurlHttpRequest* request, char* ptr, size_t bytesRecieved)
-        {
-            request->recievedData.AddRange((UInt8*)ptr, bytesRecieved);
-            return bytesRecieved;
+            return bytesRead;
         }
         static int onProgress(void *clientp, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow)
         {
             CurlHttpRequest* request = (CurlHttpRequest*)clientp;
             if (request->abort) 
             {
+                //{TODO} where should the cleanup live?
                 return CURLE_ABORTED_BY_CALLBACK;
             }
-            if (dlnow){
-                HttpEventHandler* eh = client->GetEventHandler();
+            if (dlnow && (request->state == HttpRequestStateLoading)){
+                HttpEventHandler* eh = request->client->GetEventHandler();
                 if (eh!=0) eh->OnRequestProgress(request, dlnow, dltotal, (dltotal > 0), HttpTransferDirection_DOWNLOAD);
             }
-            if (ulnow){
-                HttpEventHandler* eh = client->GetEventHandler();
+            if (ulnow && (request->state == HttpRequestStateSent)){
+                HttpEventHandler* eh = request->client->GetEventHandler();
                 if (eh!=0) eh->OnRequestProgress(request, ulnow, ultotal, (ultotal > 0), HttpTransferDirection_UPLOAD);
             }
             return 0;
         }
         static void onTimeout(CurlHttpRequest* request)
         {
-            HttpEventHandler* eh = client->GetEventHandler();
+            HttpEventHandler* eh = request->client->GetEventHandler();
             if (eh!=0) eh->OnRequestTimeout(request);
-        }
-        static void onStringPulled()
-        {
-
-        }
-        static void onArrayPulled()
-        {
         }
     };
 
     //------------------------------------------------------------
 
+
     CurlHttpClient::CurlHttpClient()
     {
+        InitCurlHttp();
         multiSession = curl_multi_init();
     }
 
     CurlHttpClient::~CurlHttpClient()
     {
         // {TODO} cleanup multisession here
+        // for each item in sessionTable;
+        // - abort request
+        // - close easy_session
         // CURLMcode curl_multi_cleanup( CURLM *multi_handle );
     }
 
-    CurlHttpRequest* CurlHttpClient::CreateRequest(const String& method, const String& url)
+    HttpRequest* CurlHttpClient::CreateRequest(const String& method, const String& url)
     {
         return new CurlHttpRequest(this, url, method);
     }
@@ -397,14 +400,48 @@ namespace Xli
         return eventHandler;
     }
 
-    void CurlHttpClient::AddSession(CURL* session)
+    void CurlHttpClient::AddSession(CURL* session, CurlHttpRequest* request)
     {
+        sessionTable.Add(session, request);
         CURLMcode result = curl_multi_add_handle(multiSession, session);        
+    }
+
+    void CurlHttpClient::RemoveSession(CURL* session)
+    {
+        CurlHttpRequest* request;
+        if (sessionTable.TryGetValue(session, request))
+        {
+            sessionTable.Remove(session);
+            curl_multi_remove_handle(multiSession, session);
+            curl_easy_cleanup(session);
+        } else {
+            XLI_THROW("Could not remove HttpRequest session as none found in session table");
+        }
     }
 
     void CurlHttpClient::Update()
     {
-        
+        int msgRemaining;
+        int runningHandles;
+        CURLMsg* msg;
+        CURL* session;
+        CurlHttpRequest* request;
+        CURLMSG messageType;
+
+        CURLMcode pCode = curl_multi_perform(multiSession, &runningHandles); 
+
+        while (NULL != (msg = curl_multi_info_read(multiSession, &msgRemaining)))
+        {
+            session = msg->easy_handle;
+            request = sessionTable[session];
+            messageType = msg->msg;
+            if (messageType == CURLMSG_DONE)
+            {
+                request->onDone();
+            } else {
+                XLI_THROW("Unknown curl message type");
+            }
+        }
     }
 
     HttpClient* HttpClient::Create()

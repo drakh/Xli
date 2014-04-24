@@ -13,3 +13,4 @@ endif()
 
 add_subdirectory(GLWindow)
 add_subdirectory(AssetLoading)
+add_subdirectory(HttpTest)

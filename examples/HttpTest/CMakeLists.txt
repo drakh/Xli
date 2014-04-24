@@ -5,7 +5,7 @@ if (APPLE)
 endif()
 
 add_executable(HttpTest src/Main.cpp)
-target_link_libraries(HttpTest Xli XliGL XliMain)
+target_link_libraries(HttpTest Xli XliGL XliMain XliHttpClient)
 
 if (UNIX AND NOT APPLE AND NOT WIN32)
     target_link_libraries(HttpTest GL GLEW)
