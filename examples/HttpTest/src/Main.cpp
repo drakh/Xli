@@ -86,17 +86,6 @@ public:
 
 		glClearColor(1,0,0,1);
 
-		// Print platform info
-
-		PrintLine((String)"Time: " + DateTime::Now().ToString());
-		PrintLine((String)"Time (UTC): " + DateTime::NowUtc().ToString());
-
-		PrintLine((String)"FileSystem Working Dir: " + Disk->GetCurrentDirectory());
-		PrintLine((String)"FileSystem Documents: " + Disk->GetSystemDirectory(SystemDirectoryDocuments));
-		PrintLine((String)"FileSystem Local AppData: " + Disk->GetSystemDirectory(SystemDirectoryLocalAppData));
-		PrintLine((String)"FileSystem Roaming AppData: " + Disk->GetSystemDirectory(SystemDirectoryRoamingAppData));
-		PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
-
         httpClient = HttpClient::Create();
         eventHandler = new EHandler();
         httpClient->SetEventHandler(eventHandler.Get());

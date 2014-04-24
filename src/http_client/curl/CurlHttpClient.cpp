@@ -169,9 +169,13 @@ namespace Xli
             }           
             curl_easy_setopt(session, CURLOPT_HTTPHEADER, curlUploadHeaders);
             //{TODO} Add following to cleanup: curl_slist_free_all(curlUploadHeaders);
-
             if (result == CURLE_OK)
             {
+                state = HttpRequestStateSent;
+
+                HttpEventHandler* eh = client->GetEventHandler();
+                if (eh!=0 && eh!=NULL) eh->OnRequestStateChanged(this);
+
                 curlSession = session;
                 client->AddSession(session, this);
             } else {

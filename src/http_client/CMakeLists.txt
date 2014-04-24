@@ -1,7 +1,3 @@
-if (WIN32 OR XLI_PLATFORM_LINUX OR XLI_PLATFORM_OSX)
-    return()
-endif()
-
 set(SRC)
 set(LIBS Xli)
 
