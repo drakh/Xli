@@ -39,6 +39,11 @@ namespace Xli
         virtual String GetSystemDirectory(SystemDirectory dir) = 0;
 
         /**
+            Returns the directory where application is run from
+        */
+        virtual String GetBaseDirectory() = 0;
+
+        /**
             Returns the working directory
         */
         virtual String GetCurrentDirectory() = 0;

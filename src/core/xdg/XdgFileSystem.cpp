@@ -1,5 +1,10 @@
 #include "../posix/PosixFileSystemBase.h"
 #include <Xli/Console.h>
+#include <Xli/Path.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <climits>
 #include <cstdlib>
 #include <cstring>
 
@@ -10,7 +15,21 @@ namespace Xli
         class XdgFileSystem: public PosixFileSystemBase
         {
         public:
-            String GetTempDirectory()
+            virtual String GetBaseDirectory()
+            {
+                char path[PATH_MAX];
+                char dest[PATH_MAX];
+                struct stat info;
+                pid_t pid = getpid();
+                sprintf(path, "/proc/%d/exe", pid);
+                
+                if (readlink(path, dest, PATH_MAX) == -1)
+                    return "";
+                
+                return Path::GetDirectoryName(dest);
+            }
+
+            virtual String GetTempDirectory()
             {
                 const char* tmpdir = getenv("TMPDIR");
                 if (tmpdir == 0 || strlen(tmpdir) == 0) tmpdir = getenv("TEMP");
@@ -20,7 +39,7 @@ namespace Xli
                 return tmpdir;
             }
 
-            String GetSystemDirectory(SystemDirectory dir)
+            virtual String GetSystemDirectory(SystemDirectory dir)
             {
                 const char* homedir = getenv("HOME");
 
