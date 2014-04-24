@@ -61,11 +61,19 @@ public:
         PrintLine((String)"OpenGL Accum Bits: " + glAttribs.AccumBits.ToString());
         PrintLine((String)"OpenGL Buffers: " + glAttribs.Buffers);
         PrintLine((String)"OpenGL Stereo: " + String::FromBool(glAttribs.Stereo));
-    
+
+        PrintLine((String)"FileSystem Base Dir: " + Disk->GetBaseDirectory());
         PrintLine((String)"FileSystem Working Dir: " + Disk->GetCurrentDirectory());
-        PrintLine((String)"FileSystem Documents: " + Disk->GetSystemDirectory(SystemDirectoryDocuments));
-        PrintLine((String)"FileSystem Local AppData: " + Disk->GetSystemDirectory(SystemDirectoryLocalAppData));
-        PrintLine((String)"FileSystem Roaming AppData: " + Disk->GetSystemDirectory(SystemDirectoryRoamingAppData));
+        PrintLine((String)"FileSystem Config Dir: " + Disk->GetSystemDirectory(SystemDirectoryConfig));
+        PrintLine((String)"FileSystem Data Dir: " + Disk->GetSystemDirectory(SystemDirectoryData));
+        PrintLine((String)"FileSystem Desktop Dir: " + Disk->GetSystemDirectory(SystemDirectoryDesktop));
+        PrintLine((String)"FileSystem Downloads Dir: " + Disk->GetSystemDirectory(SystemDirectoryDownloads));
+        PrintLine((String)"FileSystem Templates Dir: " + Disk->GetSystemDirectory(SystemDirectoryTemplates));
+        PrintLine((String)"FileSystem Public Dir: " + Disk->GetSystemDirectory(SystemDirectoryPublic));
+        PrintLine((String)"FileSystem Documents Dir: " + Disk->GetSystemDirectory(SystemDirectoryDocuments));
+        PrintLine((String)"FileSystem Music Dir: " + Disk->GetSystemDirectory(SystemDirectoryMusic));
+        PrintLine((String)"FileSystem Pictures Dir: " + Disk->GetSystemDirectory(SystemDirectoryPictures));
+        PrintLine((String)"FileSystem Videos Dir: " + Disk->GetSystemDirectory(SystemDirectoryVideos));
         PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
     }
 
