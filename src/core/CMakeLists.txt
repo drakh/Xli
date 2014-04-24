@@ -6,11 +6,11 @@ set(SRC
     BinaryWriter.cpp
     Buffer.cpp
     BufferStream.cpp
-	Bundle.cpp
+    Bundle.cpp
     Console.cpp
     DataType.cpp
     DateTime.cpp
-	Disk.cpp
+    Disk.cpp
     Exception.cpp
     File.cpp
     FileSystem.cpp
@@ -147,7 +147,9 @@ if (XLI_PLATFORM_ANDROID)
 elseif (XLI_PLATFORM_WIN32)
 
     set(SRC ${SRC}
+        generic/GenericBundle.cpp
         win32/Win32Cond.cpp
+        win32/Win32Mutex.cpp
         win32/Win32Dialogs.cpp
         win32/Win32FileSystem.cpp
         win32/Win32Helpers.cpp

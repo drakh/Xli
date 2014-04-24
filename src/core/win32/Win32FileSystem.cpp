@@ -28,6 +28,27 @@ namespace Xli
                 return new File(filename, mode);
             }
 
+            virtual String GetBaseDirectory()
+            {
+                const size_t BufSize = 4096;
+
+                WCHAR buf[BufSize];
+                DWORD result = GetModuleFileNameW(GetModuleHandle(0), buf, BufSize);
+
+                if (result > 0 && result < BufSize)
+                {
+                    String exe = Unicode::Utf16To8(buf, (int)result);
+
+                    for (int i = 0; i < exe.Length(); i++)
+                        if (exe[i] == '\\')
+                            exe[i] = '/';
+
+                    return Path::GetDirectoryName(exe);
+                }
+
+                return "";
+            }
+
             virtual String CreateTempFilename()
             {
                 Random rand(GetTickCount());
@@ -81,10 +102,10 @@ namespace Xli
                 case SystemDirectoryDocuments:
                     return GetKnownDirectory(FOLDERID_Documents);
 
-                case SystemDirectoryRoamingAppData:
+                case SystemDirectoryConfig:
                     return GetKnownDirectory(FOLDERID_RoamingAppData);
 
-                case SystemDirectoryLocalAppData:
+                case SystemDirectoryData:
                     return GetKnownDirectory(FOLDERID_LocalAppData);
                 }
 
@@ -252,38 +273,5 @@ namespace Xli
     NativeFileSystem* CreateNativeFileSystem()
     {
         return new PlatformSpecific::Win32FileSystem();
-    }
-
-    FileSystem* CreateBundleFileSystem()
-    {
-        const char* possibleDataSuffixes[] =
-        {
-            "/data",
-            "/../data",
-            "/../../data",
-            "/../../../data",
-        };
-
-        const size_t BufSize = 4096;
-
-        WCHAR buf[BufSize];
-        DWORD result = GetModuleFileNameW(GetModuleHandle(0), buf, BufSize);
-
-        if (result > 0 && result < BufSize)
-        {
-            String exe = Unicode::Utf16To8(buf, (int)result);
-
-            for (int i = 0; i < exe.Length(); i++)
-                if (exe[i] == '\\')
-                    exe[i] = '/';
-
-            String dir = Path::GetDirectoryName(exe);
-
-            for (int i = 0; i < sizeof(possibleDataSuffixes); i++)
-                if (Disk->IsDirectory(dir + possibleDataSuffixes[i]))
-                    return Disk->CreateSubFileSystem(dir + possibleDataSuffixes[i]);
-        }
-
-        return Disk->CreateSubFileSystem(Disk->GetCurrentDirectory() + "/data");
     }
 }
