@@ -1,4 +1,4 @@
-if (WIN32)
+if (WIN32 OR XLI_PLATFORM_LINUX)
     return()
 endif()
 
