@@ -1,4 +1,5 @@
 #import <Foundation/Foundation.h>
+#include <Xli/Path.h>
 #include "../posix/PosixFileSystemBase.h"
 
 namespace Xli
@@ -42,6 +43,13 @@ namespace Xli
                 return [documentsDirectory UTF8String];
             }
             
+            virtual String GetBaseDirectory()
+            {
+                NSArray* arguments = [[NSProcessInfo processInfo] arguments];
+                NSString* exe = [arguments objectAtIndex:0];
+                return Path::GetDirectoryName([exe UTF8String]);
+            }
+
             virtual String GetTempDirectory()
             {
                 return [NSTemporaryDirectory() UTF8String];
@@ -52,10 +60,5 @@ namespace Xli
     NativeFileSystem* CreateNativeFileSystem()
     {
         return new PlatformSpecific::CocoaFileSystem();
-    }
-
-    FileSystem* CreateBundleFileSystem()
-    {
-        return Disk->CreateSubFileSystem("data");
     }
 }

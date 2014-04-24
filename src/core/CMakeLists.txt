@@ -6,11 +6,11 @@ set(SRC
     BinaryWriter.cpp
     Buffer.cpp
     BufferStream.cpp
-	Bundle.cpp
+    Bundle.cpp
     Console.cpp
     DataType.cpp
     DateTime.cpp
-	Disk.cpp
+    Disk.cpp
     Exception.cpp
     File.cpp
     FileSystem.cpp
@@ -34,6 +34,7 @@ set(SRC
 set(SDL2_DIR ${PROJECT_SOURCE_DIR}/src/core/sdl2/3rdparty/SDL2)
 
 set(SDL2_SRC
+    generic/GenericBundle.cpp
     generic/GenericDialogs.cpp
     posix/PosixFileSystemBase.cpp
     posix/PosixTime.cpp
@@ -146,7 +147,9 @@ if (XLI_PLATFORM_ANDROID)
 elseif (XLI_PLATFORM_WIN32)
 
     set(SRC ${SRC}
+        generic/GenericBundle.cpp
         win32/Win32Cond.cpp
+        win32/Win32Mutex.cpp
         win32/Win32Dialogs.cpp
         win32/Win32FileSystem.cpp
         win32/Win32Helpers.cpp
@@ -163,7 +166,6 @@ elseif (XLI_PLATFORM_LINUX)
     set(LIBS SDL2 pthread)
 
     set(SRC ${SRC} ${SDL2_SRC}
-        generic/GenericBundle.cpp
         xdg/XdgFileSystem.cpp)
 
 elseif (XLI_PLATFORM_IOS)

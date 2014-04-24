@@ -1,5 +1,10 @@
 #include "../posix/PosixFileSystemBase.h"
 #include <Xli/Console.h>
+#include <Xli/Path.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <climits>
 #include <cstdlib>
 #include <cstring>
 
@@ -10,7 +15,21 @@ namespace Xli
         class XdgFileSystem: public PosixFileSystemBase
         {
         public:
-            String GetTempDirectory()
+            virtual String GetBaseDirectory()
+            {
+                char path[PATH_MAX];
+                char dest[PATH_MAX];
+                struct stat info;
+                pid_t pid = getpid();
+                sprintf(path, "/proc/%d/exe", pid);
+                
+                if (readlink(path, dest, PATH_MAX) == -1)
+                    return "";
+                
+                return Path::GetDirectoryName(dest);
+            }
+
+            virtual String GetTempDirectory()
             {
                 const char* tmpdir = getenv("TMPDIR");
                 if (tmpdir == 0 || strlen(tmpdir) == 0) tmpdir = getenv("TEMP");
@@ -20,40 +39,73 @@ namespace Xli
                 return tmpdir;
             }
 
-            String GetSystemDirectory(SystemDirectory dir)
+            virtual String GetSystemDirectory(SystemDirectory dir)
             {
                 const char* homedir = getenv("HOME");
-                if (homedir == 0 || strlen(homedir) == 0) homedir = "~";
 
-                /*
-                    XDG_DESKTOP_DIR="$HOME/Desktop"
-                    XDG_DOWNLOAD_DIR="$HOME/Downloads"
-                    XDG_TEMPLATES_DIR="$HOME/Templates"
-                    XDG_PUBLICSHARE_DIR="$HOME/Public"
-                    XDG_DOCUMENTS_DIR="$HOME/Documents"
-                    XDG_MUSIC_DIR="$HOME/Music"
-                    XDG_PICTURES_DIR="$HOME/Pictures"
-                    XDG_VIDEOS_DIR="$HOME/Videos"
-                */
+                if (homedir == 0 || strlen(homedir) == 0) 
+                    homedir = "~";
 
                 switch (dir)
                 {
+                case SystemDirectoryConfig:
+                    {
+                        const char* dir = getenv("XDG_CONFIG_HOME");
+                        return dir != 0 && strlen(dir) ? dir : (String)homedir + "/.config";
+                    }
+
+                case SystemDirectoryData:
+                    {
+                        const char* dir = getenv("XDG_DATA_HOME");
+                        return dir != 0 && strlen(dir) ? dir : (String)homedir + "/.local/share";
+                    }
+
+                case SystemDirectoryDesktop:
+                    {
+                        const char* dir = getenv("XDG_DESKTOP_DIR");
+                        return dir != 0 && strlen(dir) ? dir : (String)homedir + "/Desktop";
+                    }
+
+                case SystemDirectoryDownloads:
+                    {
+                        const char* dir = getenv("XDG_DOWNLOAD_DIR");
+                        return dir != 0 && strlen(dir) ? dir : (String)homedir + "/Downloads";
+                    }
+
+                case SystemDirectoryTemplates:
+                    {
+                        const char* dir = getenv("XDG_TEMPLATES_DIR");
+                        return dir != 0 && strlen(dir) ? dir : (String)homedir + "/Templates";
+                    }
+
+                case SystemDirectoryPublic:
+                    {
+                        const char* dir = getenv("XDG_PUBLICSHARE_DIR");
+                        return dir != 0 && strlen(dir) ? dir : (String)homedir + "/Public";
+                    }
+
                 case SystemDirectoryDocuments:
                     {
-                        const char* docsdir = getenv("XDG_DOCUMENTS_DIR");
-                        return docsdir != 0 && strlen(docsdir) ? docsdir : (String)homedir + "/Documents";
+                        const char* dir = getenv("XDG_DOCUMENTS_DIR");
+                        return dir != 0 && strlen(dir) ? dir : (String)homedir + "/Documents";
                     }
 
-                case SystemDirectoryRoamingAppData:
+                case SystemDirectoryMusic:
                     {
-                        const char* configdir = getenv("XDG_CONFIG_HOME");
-                        return configdir != 0 && strlen(configdir) ? configdir : (String)homedir + "/.config";
+                        const char* dir = getenv("XDG_MUSIC_DIR");
+                        return dir != 0 && strlen(dir) ? dir : (String)homedir + "/Music";
                     }
 
-                case SystemDirectoryLocalAppData:
+                case SystemDirectoryPictures:
                     {
-                        const char* datadir = getenv("XDG_DATA_HOME");
-                        return datadir != 0 && strlen(datadir) ? datadir : (String)homedir + "/.local/share";
+                        const char* dir = getenv("XDG_PICTURES_DIR");
+                        return dir != 0 && strlen(dir) ? dir : (String)homedir + "/Pictures";
+                    }
+
+                case SystemDirectoryVideos:
+                    {
+                        const char* dir = getenv("XDG_VIDEOS_DIR");
+                        return dir != 0 && strlen(dir) ? dir : (String)homedir + "/Videos";
                     }
 
                 default:
