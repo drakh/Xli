@@ -27,60 +27,34 @@ namespace Xli
     class CurlHttpRequest : public HttpRequest
     {
     private:
-        int timeout;
-        String url;
         HttpClient* client;
-    public:
-        Managed< HttpStateChangedHandler > stateChangedCallback;
-        Managed< HttpProgressHandler > progressCallback;
-        Managed< HttpTimeoutHandler > timeoutCallback;
-        Managed< HttpErrorHandler > errorCallback;
-        Managed< HttpStringPulledHandler > stringPulledCallback;
-        Managed< HttpArrayPulledHandler > arrayPulledCallback;
+
+        String method;
+        String url;
+        int timeout;
+        HttpRequestState state;
+
         HashMap<String,String> headers;
-        HashMap<String,String> responseHeaders;
         struct curl_slist* curlUploadHeaders;
-        HttpRequestState status;
-        HttpMethod method;
-        int responseStatus;
+
+        CURL* curlSession;
         void* uploadData;
         long uploadByteLength;
         long uploadPosition;
-        String reasonPhrase;
-        CURL* curlSession;
-        pthread_t threadID;
-        Array<UInt8> recievedData;
-        String recievedString;
-        bool contentAsString;
-        bool dataReady;
-        bool reading;
-        // cross thread flags
-        Mutex communicationMutex;
-        bool unpause;
-        bool abort;
 
-        CurlHttpRequest(HttpClient* client)
-        {
-            this->client = client;
-            this->status = HttpRequestStateUnsent;
-            this->url = "";
-            this->method = HttpMethodGet;
-            this->timeout = 0;
-            this->dataReady = false;
-            this->reading = false;
-            this->unpause = false;
-            this->abort = false;
-            curlUploadHeaders=NULL;        
-        }
+        HashMap<String,String> responseHeaders;
+        Array<UInt8> recievedData;
+        int responseStatus;
+
+    public:
+
         CurlHttpRequest(HttpClient* client, String url, HttpMethod method)
         {
             this->client = client;
-            this->status = HttpRequestStateUnsent;
+            this->state = HttpRequestStateUnsent;
             this->url = url;
             this->method = method;
             this->timeout = 0;
-            this->dataReady = false;
-            this->reading = false;
             this->abort = false;
             curlUploadHeaders=NULL;
         }
@@ -89,276 +63,140 @@ namespace Xli
         {
         }
 
-        virtual HttpRequestState GetStatus() const
-        {
-            return this->status;
-        }
-        virtual void EmitStateEvent()
-        {
-            this->client->EnqueueAction(new CurlHttpStateAction(this, this->status));
-        }
-
-        virtual void SetMethod(HttpMethod method)
-        {
-            if (this->status == HttpRequestStateUnsent)
-            {
-                this->method = method;
-            } else {
-                XLI_THROW("HttpRequest->SetMethod(): Not in a valid state to set the method");
-            }
-        }
-        virtual void SetMethodFromString(String method)
-        {
-            if (this->status == HttpRequestStateUnsent)
-            {
-                HttpMethod realMethod = StringToHttpMethod(method);
-                if (realMethod == HttpMethodUnknown)
-                {
-                    XLI_THROW("HttpRequest->SetMethodFromString(): Not a valid method type");
-                } else {
-                    this->method = realMethod;
-                }
-            } else {
-                XLI_THROW("HttpRequest->SetMethodFromString(): Not in a valid state to set the method");
-            }
-        }
-        virtual HttpMethod GetMethod() const
-        {
-            return this->method;
-        }
-
-        virtual void SetUrl(String url)
-        {
-            if (this->status == HttpRequestStateUnsent)
-            {
-                this->url = url;
-            } else {
-                XLI_THROW("HttpRequest->SetUrl(): Not in a valid state to set the url");
-            }
-        }
-        virtual String GetUrl() const
-        {
-            return this->url;
-        }
-
-        virtual void SetHeader(String key, String value)
-        {
-            if (this->status == HttpRequestStateUnsent)
-            {
-                this->headers.Add(key,value);
-            } else {
-                XLI_THROW("HttpRequest->SetHeader(): Not in a valid state to set a header");
-            }
-        }
-        virtual void RemoveHeader(String key)
-        {
-            if (this->status == HttpRequestStateUnsent)
-            {
-                this->headers.Remove(key);
-            } else {
-                XLI_THROW("HttpRequest->SetHeader(): Not in a valid state to set a header");
-            }
-        }
-        virtual int HeadersBegin() const
-        {
-            return this->headers.Begin();
-        }
-        virtual int HeadersEnd() const
-        {
-            return this->headers.End();
-        }
-        virtual int HeadersNext(int n) const
-        {
-            return this->headers.Next(n);
-        }
-        virtual String GetHeaderKeyN(int n) const
-        {
-            return this->headers.GetKey(n);
-        }
-        virtual String GetHeaderValueN(int n) const
-        {
-            return this->headers.GetValue(n);
-        }
-        virtual String GetHeadersAsString() const
-        {
-            int i = this->HeadersBegin();
-            String result = "";
-            while (i != this->HeadersEnd())
-            {
-                result.Append(this->GetHeaderKeyN(i));
-                result.Append(":");
-                result.Append(this->GetHeaderValueN(i));
-                result.Append("\n");
-                i = this->HeadersNext(i);
-            }
-            return result;
-        }
-
+        virtual String GetMethod() const { return method; }
+        virtual String GetUrl() const { return url; }
+        virtual HttpRequestState GetState() const { return state; }
+        virtual int GetTimeout() const { return timeout; }
         virtual void SetTimeout(int timeout)
         {
-            if (this->status == HttpRequestStateUnsent)
+            if (state == HttpRequestStateUnsent)
             {
                 this->timeout = timeout;
             } else {
                 XLI_THROW("HttpRequest->SetTimeout(): Not in a valid state to set the timeout");
             }
         }
-        virtual int GetTimeout() const
-        {
-            return this->timeout;
-        }
 
-        virtual int GetResponseStatus() const
+        virtual void SetHeader(const String& key, const String& value)
         {
-            if (this->status == HttpRequestStateHeadersReceived)
+            if (state == HttpRequestStateUnsent)
             {
-                return this->responseStatus;
+                headers.Add(key,value);
             } else {
-                XLI_THROW("HttpRequest->GetResponseStatus(): Not in a valid state to get the response status");
+                XLI_THROW("HttpRequest->SetHeader(): Not in a valid state to set a header");
             }
         }
-
-        virtual String GetReasonPhrase() const
+        virtual void RemoveHeader(const String& key)
         {
-            if (this->status == HttpRequestStateHeadersReceived)
+            if (state == HttpRequestStateUnsent)
             {
-                return this->reasonPhrase;
+                headers.Remove(key);
             } else {
-                XLI_THROW("HttpRequest->GetReasonPhrase(): Not in a valid state to get the reason phrase");
+                XLI_THROW("HttpRequest->SetHeader(): Not in a valid state to set a header");
             }
         }
+        virtual int HeadersBegin() const { return headers.Begin(); }
+        virtual int HeadersEnd() const { return headers.End(); }
+        virtual int HeadersNext(int n) const { return headers.Next(n); }
+        virtual String GetHeaderKey(int n) const { return headers.GetKey(n); }
+        virtual String GetHeaderValue(int n) const { return headers.GetValue(n); }
 
         virtual int GetResponseHeaderCount() const
         {
-            if (this->status == HttpRequestStateHeadersReceived)
+            if (state == HttpRequestStateHeadersReceived)
             {
-                return this->responseHeaders.Count();
+                return responseHeaders.Count();
             } else {
                 XLI_THROW("HttpRequest->GetResponseHeaderCount(): Not in a valid state to get the response header count");
             }
         }
         virtual int ResponseHeadersBegin() const
         {
-            if (this->status == HttpRequestStateHeadersReceived)
+            if (state == HttpRequestStateHeadersReceived)
             {
-                return this->responseHeaders.Begin();
+                return responseHeaders.Begin();
             } else {
                 XLI_THROW("HttpRequest->ResponseHeaderBegin(): Not in a valid state to get the response header iterator");
             }
         }
         virtual int ResponseHeadersNext(int n) const
         {
-            if (this->status == HttpRequestStateHeadersReceived)
+            if (state == HttpRequestStateHeadersReceived)
             {
-                return this->responseHeaders.Next(n);
+                return responseHeaders.Next(n);
             } else {
                 XLI_THROW("HttpRequest->ResponseHeaderNext(): Not in a valid state to get the next response header");
             }
         }
         virtual int ResponseHeadersEnd() const
         {
-            if (this->status == HttpRequestStateHeadersReceived)
+            if (state == HttpRequestStateHeadersReceived)
             {
-                return this->responseHeaders.End();
+                return responseHeaders.End();
             } else {
                 XLI_THROW("HttpRequest->ResponseHeaderEnd(): Not in a valid state to get the response header");
             }
         }
-        virtual String GetResponseHeaderValueN(int n) const
+        virtual String GetResponseHeaderKey(int n) const
         {
-            if (this->status == HttpRequestStateHeadersReceived)
+            if (state == HttpRequestStateHeadersReceived)
             {
-                return this->responseHeaders.GetValue(n);
+                return responseHeaders.GetKey(n);
             } else {
                 XLI_THROW("HttpRequest->GetResponseHeaderN(): Not in a valid state to get the response header");
             }
         }
-        virtual String GetResponseHeaderKeyN(int n) const
+        virtual String GetResponseHeaderValue(int n) const
         {
-            if (this->status == HttpRequestStateHeadersReceived)
+            if (state == HttpRequestStateHeadersReceived)
             {
-                return this->responseHeaders.GetKey(n);
+                return responseHeaders.GetValue(n);
             } else {
                 XLI_THROW("HttpRequest->GetResponseHeaderN(): Not in a valid state to get the response header");
             }
         }
-        virtual String GetResponseHeader(String key)
+
+        virtual int GetResponseStatus() const
         {
-            if (this->status == HttpRequestStateHeadersReceived)
+            if (state == HttpRequestStateHeadersReceived) // {TODO} is this the correct state?
             {
-                return this->responseHeaders[key];
+                return responseStatus;
+            } else {
+                XLI_THROW("HttpRequest->GetResponseStatus(): Not in a valid state to get the response status");
+            }
+        }
+
+        virtual bool TryGetResponseHeader(const String& key, String& result) const
+        {
+            if (state == HttpRequestStateHeadersReceived)
+            {
+                return responseHeaders.TryGetValue(key, result);
             } else {
                 XLI_THROW("HttpRequest->GetResponseHeader(): Not in a valid state to get the response header");
             }
         }
 
-        virtual void SetStateChangedCallback(HttpStateChangedHandler* callback)
+
+        virtual DataAccessor* GetResponseBody() const
         {
-            if (this->status == HttpRequestStateUnsent)
-            {
-                this->stateChangedCallback = callback;
-            } else {
-                XLI_THROW("HttpRequest->SetStateChangedCallback(): Not in a valid state to set the callback");
-            }
-        }
-        virtual void SetProgressCallback(HttpProgressHandler* callback)
-        {
-            if (this->status == HttpRequestStateUnsent)
-            {
-                this->progressCallback = callback;
-            } else {
-                XLI_THROW("HttpRequest->SetProgressCallback(): Not in a valid state to set the callback");
-            }
-        }
-        virtual void SetTimeoutCallback(HttpTimeoutHandler* callback)
-        {
-            if (this->status == HttpRequestStateUnsent)
-            {
-                this->timeoutCallback = callback;
-            } else {
-                XLI_THROW("HttpRequest->SetProgressCallback(): Not in a valid state to set the callback");
-            }
-        }
-        virtual void SetErrorCallback(HttpErrorHandler* callback)
-        {
-            if (this->status == HttpRequestStateUnsent)
-            {
-                this->errorCallback = callback;
-            } else {
-                XLI_THROW("HttpRequest->SetErrorCallback(): Not in a valid state to set the callback");
-            }
+            &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&;
+            // if (state == HttpRequestStateDone)
+            // {
+            //     return (DataAccessor*)responseBody;
+            // } else {
+            //     XLI_THROW("HttpRequest->GetResponseBody(): Not in a valid state to get the response body");
+            // }
         }
 
-        virtual void SetStringPulledCallback(HttpStringPulledHandler* callback)
-        {
-            if (this->status == HttpRequestStateUnsent)
-            {
-                this->stringPulledCallback = callback;
-            } else {
-                XLI_THROW("HttpRequest->SetStringPulledCallback(): Not in a valid state to set the callback");
-            }
-        }
-
-        virtual void SetArrayPulledCallback(HttpArrayPulledHandler* callback)
-        {
-            if (this->status == HttpRequestStateUnsent)
-            {
-                this->arrayPulledCallback = callback;
-            } else {
-                XLI_THROW("HttpRequest->SetArrayPulledCallback(): Not in a valid state to set the virtual");
-            }
-        }
 
         virtual void SendASync(void* content, long byteLength)
         {
-            if (this->status != HttpRequestStateUnsent)
-                XLI_THROW("HttpRequest->SetArrayPulledCallback(): Not in a valid state to set the virtual");
+            if (this->state != HttpRequestStateUnsent)
+                XLI_THROW("HttpRequest->SetArrayPulledCallback(): Not in a valid state to send");
 
-            //{TODO} Clarify when we copy data.
             this->uploadByteLength = byteLength;
-            this->uploadData = malloc((size_t)byteLength);
+            this->uploadData = content;
             this->uploadPosition = 0;
-            memcpy(content, this->uploadData, (size_t)byteLength);
 
             CURL* session = curl_easy_init();
             if (!session)
@@ -374,14 +212,9 @@ namespace Xli
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_HEADERDATA, (void*)this);
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_WRITEFUNCTION, onDataRecieved);
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_WRITEDATA, (void*)this);
-
-            //progress callback
-            if (this->progressCallback!=0)
-            {
-                if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_NOPROGRESS, 0);
-                if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_PROGRESSDATA, (void*)this);
-                if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_PROGRESSFUNCTION, onProgress);
-            }
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_NOPROGRESS, 0);
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_PROGRESSDATA, (void*)this);
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_PROGRESSFUNCTION, onProgress);
 
             //Method specific options
             switch(method)
@@ -426,38 +259,8 @@ namespace Xli
 
             if (result == CURLE_OK)
             {
-                this->curlSession = session;
-                pthread_attr_t attr;
-                int rc;
-
-                //{TODO} what attrs do we need set?
-                //{TODO} when can we destroy the attrs?
-                rc = pthread_attr_init(&attr);
-
-                if (rc) {
-                    this->client->EnqueueAction(new CurlHttpErrorAction(this, (int)CURLE_OK, "Xli: Http: Could not create request"));
-                } else {
-                    int threadError = pthread_create(&threadID, &attr, perform, (void*)this);
-                    // {TODO} has some issues with compiling using the enums so am
-                    //        using the int vars. Seems to be a clang issue.
-                    switch (threadError)
-                    {
-                    case 35: //EAGAIN
-                        this->client->EnqueueAction(new CurlHttpErrorAction(this, 0, "XliHttp: Not enough resources to crate thread"));
-                        break;
-                    case 22: //EINVAL
-                        this->client->EnqueueAction(new CurlHttpErrorAction(this, 0, "XliHttp: Invalid settings in thread attributes."));
-                        break;
-                    case 1: //EPERM:
-                        this->client->EnqueueAction(new CurlHttpErrorAction(this, 0, "XliHttp: Permission issue creating thread"));
-                        break;
-                    default:
-                        if (threadError>0)
-                            this->client->EnqueueAction(new CurlHttpErrorAction(this, 0, "XliHttp: Thread Error")); //{TODO} add error code here
-                        break;
-                    }
-                    
-                }
+                //Add to the client's multi-session
+                client->AddSession(session);
             } else {
                 curl_easy_cleanup(session);
                 this->client->EnqueueAction(new CurlHttpErrorAction(this, (int)result, "Xli: Http: Could not create request"));
@@ -474,62 +277,27 @@ namespace Xli
 
         virtual void Abort()
         {
-            if (this->status > 1 && this->status < 5 )
-            {
-                MutexLock lock(this->communicationMutex);
-                this->abort = true;
-            }
-        }
-        virtual void PullContentString()
-        {
-            if (this->status==HttpRequestStateHeadersReceived)
-            {
-                this->contentAsString = true;
-                MutexLock lock(this->communicationMutex);
-                this->unpause = true;
-            } else {
-                this->client->EnqueueAction(new CurlHttpErrorAction(this, 0, "XliHttp: Can't pull content string, invalid state'"));
-            }
-        }
-        virtual void PullContentArray()
-        {
-            if (this->status==HttpRequestStateHeadersReceived)
-            {
-                this->contentAsString = false;
-                MutexLock lock(this->communicationMutex);
-                this->unpause = true;
-            } else {
-                this->client->EnqueueAction(new CurlHttpErrorAction(this, 0, "XliHttp: Can't pull content array, invalid state'"));
-            }
+            // {TODO} what are we aborting? needs to work for upload and download
+            abort = true;
         }
 
     private:
-        static void* perform(void* requestVoid)
+        static size_t onDataUpload( void *ptr, size_t size, size_t nmemb, void *userdata)
         {
-            //signal state changed
-            CurlHttpRequest* request = (CurlHttpRequest*)requestVoid;
-            request->client->EnqueueAction(new CurlHttpStateAction(request, HttpRequestStateSent));
-
-            //start the curl request. curl_easy_perform will block
-            CURLcode error = curl_easy_perform(request->curlSession);            
-            
-            if (error != 0)
+            CurlHttpRequest* request = (CurlHttpRequest*)userdata;
+            size_t maxCopyLength = (size * nmemb);
+            size_t copyLength = 0;
+            if (maxCopyLength > 0)
             {
-                switch(error)
+                copyLength = (request->uploadByteLength - request->uploadPosition);
+                if (copyLength > maxCopyLength) copyLength = maxCopyLength;
+                if (copyLength>0)
                 {
-                case CURLE_OPERATION_TIMEDOUT : onTimeout(request); break;
-                default:
-                    String finalMessage = Xli::String("XliHttp: UNHANDLED CURL ERROR: ");
-                    finalMessage += CurlErrorToString(error);
-                    //{TODO} vv- this needs to use the httperroraction
-                    //request->client->EnqueueAction(new CTError(finalMessage));
-                    break;
-                };
+                    memcpy(request->uploadData, ptr, copyLength);
+                    request->uploadPosition += copyLength;
+                }
             }
-
-            //{TODO} cleanup this thread only and then call back to main thread to clean up there
-            //       -how?
-            return 0;
+            return copyLength;
         }
 
         static size_t onHeaderRecieved(void *ptr, size_t size, size_t nmemb, void *userdata)
@@ -549,23 +317,6 @@ namespace Xli
             }
             return bytesPulled;
         }
-        static size_t onDataUpload( void *ptr, size_t size, size_t nmemb, void *userdata)
-        {
-            CurlHttpRequest* request = (CurlHttpRequest*)userdata;
-            size_t maxCopyLength = (size * nmemb);
-            size_t copyLength = 0;
-            if (maxCopyLength > 0)
-            {
-                copyLength = (request->uploadByteLength - request->uploadPosition);
-                if (copyLength > maxCopyLength) copyLength = maxCopyLength;
-                if (copyLength>0)
-                {
-                    memcpy(request->uploadData, ptr, copyLength);
-                    request->uploadPosition += copyLength;
-                }
-            }
-            return copyLength;
-        }
 
         static size_t onDataRecieved(char* ptr, size_t size, size_t nmemb, void* userdata)
         {
@@ -574,27 +325,13 @@ namespace Xli
 
             // {TODO} saying we have the headers at this point. Check the validity
 
-            if (request->reading == true)
-            {
-                request->dataReady = true;
-                if (request->contentAsString) {
-                    actualBytesRead = onStringDataRecieved(request, ptr, (size * nmemb));
-                } else {
-                    actualBytesRead = onByteDataRecieved(request, ptr, (size * nmemb));
-                }
-            } else {
-                request->dataReady = true;
-                actualBytesRead = CURL_WRITEFUNC_PAUSE;
-                if ((int)request->status < (int)HttpRequestStateHeadersReceived)
-                    request->client->EnqueueAction(new CurlHttpStateAction(request, HttpRequestStateHeadersReceived));
-            }
+            HttpEventHandler* eh = client->GetEventHandler();
+            if (eh!=0) eh->OnRequestStateChanged(request);
+
+            actualBytesRead = onByteDataRecieved(request, ptr, (size * nmemb));
+
             //{TODO} Is this correct? check the specific methods
             return actualBytesRead;
-        }
-        static size_t onStringDataRecieved(CurlHttpRequest* request, char* ptr, size_t bytesRecieved)
-        {
-            request->recievedString.Append((char*)ptr, bytesRecieved);
-            return bytesRecieved;
         }
         static size_t onByteDataRecieved(CurlHttpRequest* request, char* ptr, size_t bytesRecieved)
         {
@@ -608,24 +345,20 @@ namespace Xli
             {
                 return CURLE_ABORTED_BY_CALLBACK;
             }
-            if (request->reading)
-            {
-                if (dlnow)
-                    request->client->EnqueueAction(new CurlHttpProgressAction(request, (long)dlnow, (long)dltotal, (dltotal > 0)));
-            } else {
-                MutexLock lock(request->communicationMutex);
-                if (request->unpause)
-                {
-                    request->reading=true;
-                    request->client->EnqueueAction(new CurlHttpStateAction(request, HttpRequestStateLoading));
-                    curl_easy_pause(request->curlSession, CURLPAUSE_CONT);
-                }
+            if (dlnow){
+                HttpEventHandler* eh = client->GetEventHandler();
+                if (eh!=0) eh->OnRequestProgress(request, dlnow, dltotal, (dltotal > 0), HttpTransferDirection_DOWNLOAD);
+            }
+            if (ulnow){
+                HttpEventHandler* eh = client->GetEventHandler();
+                if (eh!=0) eh->OnRequestProgress(request, ulnow, ultotal, (ultotal > 0), HttpTransferDirection_UPLOAD);
             }
             return 0;
         }
         static void onTimeout(CurlHttpRequest* request)
         {
-            request->client->EnqueueAction(new CurlHttpTimeoutAction(request));
+            HttpEventHandler* eh = client->GetEventHandler();
+            if (eh!=0) eh->OnRequestTimeout(request);
         }
         static void onStringPulled()
         {
@@ -638,94 +371,41 @@ namespace Xli
 
     //------------------------------------------------------------
 
-    CurlHttpStateAction::CurlHttpStateAction(CurlHttpRequest* request, HttpRequestState status)
+    CurlHttpClient::CurlHttpClient()
     {
-        this->Request = request;
-        this->Status = status;
-    }
-    void CurlHttpStateAction::Execute()
-    {
-        if (this->Status>0) {
-            this->Request->status = this->Status;
-            if (this->Request->stateChangedCallback!=0)
-                this->Request->stateChangedCallback->OnResponse(this->Request, this->Status);
-            if (this->Status == HttpRequestStateDone)
-            {
-                if (!this->Request->contentAsString)
-                {
-                    if (this->Request->recievedData.Length() && this->Request->arrayPulledCallback)
-                    {
-                        this->Request->arrayPulledCallback->OnResponse(this->Request, this->Request->recievedData.DataPtr(), this->Request->recievedData.Length());
-                    }
-                } else if (this->Request->stringPulledCallback) {
-                    this->Request->stringPulledCallback->OnResponse(this->Request, this->Request->recievedString);
-                }
-            }
-        }
+        multiSession = curl_multi_init();
     }
 
-    CurlHttpTimeoutAction::CurlHttpTimeoutAction(CurlHttpRequest* request)
+    CurlHttpClient::~CurlHttpClient()
     {
-        this->Request = request;
-    }
-    void CurlHttpTimeoutAction::Execute()
-    {
-        if (this->Request->timeoutCallback!=0)
-            this->Request->timeoutCallback->OnResponse(this->Request);
+        // {TODO} cleanup multisession here
+        // CURLMcode curl_multi_cleanup( CURLM *multi_handle );
     }
 
-    CurlHttpProgressAction::CurlHttpProgressAction(CurlHttpRequest* request, long position, long totalLength, bool lengthKnown)
+    CurlHttpRequest* CurlHttpClient::CreateRequest(const String& method, const String& url)
     {
-        this->Request = request;
-        this->Position = position;
-        this->TotalLength = totalLength;
-        this->LengthKnown = lengthKnown;
-    }
-    void CurlHttpProgressAction::Execute()
-    {
-        if (this->Request->progressCallback!=0)
-            this->Request->progressCallback->OnResponse(this->Request, this->Position, this->TotalLength, this->LengthKnown);
+        return new CurlHttpRequest(this, url, method);
     }
 
-    CurlHttpErrorAction::CurlHttpErrorAction(CurlHttpRequest* request, int errorCode, String errorMessage)
+    void CurlHttpClient::SetEventHandler(HttpEventHandler* eventHandler) 
     {
-        this->Request = request;
-        this->ErrorCode = errorCode;
-        this->ErrorMessage = errorMessage;
-    }
-    void CurlHttpErrorAction::Execute()
-    {
-        if (this->Request->errorCallback!=0)
-            this->Request->errorCallback->OnResponse(this->Request, this->ErrorCode, this->ErrorMessage);
+        this->eventHandler = eventHandler;
     }
 
-    //------------------------------------------------------------
-
-    class CurlHttpClient : public HttpClient
+    HttpEventHandler* CurlHttpClient::GetEventHandler() 
     {
-    private:
-        MutexQueue<HttpAction*> actionQueue;
-    public:
-        virtual CurlHttpRequest* CreateRequest()
-        {
-            return new CurlHttpRequest(this);
-        }
+        return eventHandler;
+    }
 
-        virtual void Update()
-        {
-            while ((actionQueue.Count() > 0))
-            {
-                HttpAction* action = actionQueue.Dequeue();
-                action->Execute();
-                delete action;
-            }
-        }
+    void CurlHttpClient::AddSession(CURL* session)
+    {
+        CURLMcode result = curl_multi_add_handle(multiSession, session);        
+    }
 
-        virtual void EnqueueAction(HttpAction* action)
-        {
-            actionQueue.Enqueue(action);
-        }
-    };
+    void CurlHttpClient::Update()
+    {
+        
+    }
 
     HttpClient* HttpClient::Create()
     {

@@ -326,8 +326,8 @@ namespace Xli
 
         virtual void Abort()
         {
-            if (this->state > 1 && this->state < 5 )
-            this->state = HttpRequestStateDone; //{TODO} how does statechanged know if it was successful?
+            // if (this->state > 1 && this->state < 5 )
+                //this->state = HttpRequestStateDone; //{TODO} how does statechanged know if it was successful?
             
             if (cachedReadStream!=0)
             {
@@ -343,8 +343,8 @@ namespace Xli
             if (cachedUploadData!=0)
                 CFRelease(this->cachedUploadData);
             
-            HttpEventHandler* eh = client->GetEventHandler();
-            if (eh!=0) eh->OnRequestStateChanged(this);
+            // HttpEventHandler* eh = client->GetEventHandler();
+            // if (eh!=0) eh->OnRequestStateChanged(this);
         }
 
         virtual void StartDownload()

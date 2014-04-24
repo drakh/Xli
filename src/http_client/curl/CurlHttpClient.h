@@ -5,46 +5,18 @@
 
 namespace Xli
 {
-    class CurlHttpRequest;
-    
-    class CurlHttpStateAction : public WindowAction
+
+    class CurlHttpClient : public HttpClient
     {
+    private:
+        Managed<HttpEventHandler> eventHandler;
+        CURLM* multiSession;
     public:
-        CurlHttpRequest* Request;
-        HttpRequestState Status;    
-        CurlHttpStateAction(CurlHttpRequest* request, HttpRequestState status);
-        virtual void Execute();    
-    };
-
-    class CurlHttpTimeoutAction : public WindowAction
-    {
-    public:
-        CurlHttpRequest* Request;
-        CurlHttpTimeoutAction(CurlHttpRequest* request);
-        virtual void Execute();
-    };
-
-    class CurlHttpProgressAction : public WindowAction
-    {
-    public:
-        CurlHttpRequest* Request;
-        long Position;
-        long TotalLength;
-        bool LengthKnown;
-
-        CurlHttpProgressAction(CurlHttpRequest* request, long position, long totalLength, bool lengthKnown);
-        virtual void Execute();
-    };
-
-    class CurlHttpErrorAction : public WindowAction
-    {
-    public:
-        CurlHttpRequest* Request;
-        int ErrorCode;
-        String ErrorMessage;
-
-        CurlHttpErrorAction(CurlHttpRequest* request, int errorCode, String errorMessage);
-        virtual void Execute();
+        virtual CurlHttpRequest* CreateRequest(const String& method, const String& url);
+        virtual void SetEventHandler(HttpEventHandler* eventHandler);
+        virtual void AddSession(CURL* session);
+        virtual HttpEventHandler* GetEventHandler();
+        virtual void Update();
     };
 
     inline CURLoption methodToCurlOption(HttpMethod method)
