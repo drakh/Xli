@@ -23,6 +23,7 @@ namespace Xli
 
     AHttpRequest::~AHttpRequest()
     {
+        // abort if running
         CleanHandles();
     }
 
@@ -39,7 +40,6 @@ namespace Xli
     String AHttpRequest::GetUrl() const { return url; }
     HttpRequestState AHttpRequest::GetState() const { return state; }
     int AHttpRequest::GetTimeout() const { return timeout; }
-
     void AHttpRequest::SetTimeout(int timeout)
     {
         if (state == HttpRequestStateUnsent)
@@ -269,12 +269,12 @@ namespace Xli
                             cval = env->GetStringUTFChars(jval, NULL);
                         }
 
-                        request->responseHeaders.Add(ckey,cval);
+                        if (!request->responseHeaders.ContainsKey(ckey)) 
+                            request->responseHeaders.Add(ckey,cval);
                         request->responseStatus = (int)responseCode;
                         if (responseMessage!=0)
                         {
                             char const* rmess = env->GetStringUTFChars(responseMessage, NULL);
-                            request->reasonPhrase = rmess;
                             env->ReleaseStringUTFChars(responseMessage, rmess);
                         }
 
@@ -394,11 +394,11 @@ namespace Xli
         }
     }
 
-    void AHttpClient::SetEventHandler(HttpEventHandler* eventHandler) 
+    void AHttpClient::SetEventHandler(HttpEventHandler* eventHandler)
     {
         this->eventHandler = eventHandler;
     }
-    HttpEventHandler* AHttpClient::GetEventHandler() 
+    HttpEventHandler* AHttpClient::GetEventHandler()
     {
         return eventHandler;
     }

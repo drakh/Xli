@@ -24,7 +24,6 @@ namespace Xli
 
         bool completedSuccessfully;
         int responseStatus;
-        String reasonPhrase;
         Buffer* responseBody;
 
         HashMap<String,String> responseHeaders;
