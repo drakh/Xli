@@ -40,7 +40,10 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.ConditionVariable;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.Selection;
+import android.text.SpannableStringBuilder;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
@@ -72,7 +75,7 @@ public class XliJ extends android.app.NativeActivity {
     public static native void XliJ_HttpContentStringCallback(String content, long requestPointer);
     public static native void XliJ_HttpContentByteArrayCallback(byte[] result, long requestPointer);
     public static native void XliJ_HttpTimeoutCallback(long requestPointer);
-    public static native void XliJ_HttpProgressCallback(long requestPointer, long position, long totalLength, boolean lengthKnown);
+    public static native void XliJ_HttpProgressCallback(long requestPointer, long position, long totalLength, boolean lengthKnown, int direction);
     public static native void XliJ_HttpErrorCallback(long requestPointer, int errorCode, String errorMessage);
     public static native void XliJ_JavaThrowError(int code, String throwMessage);
 	
@@ -137,12 +140,20 @@ public class XliJ extends android.app.NativeActivity {
 
     //===========
 
+    static String DUMMY;
+    public static void PopulateDummyString()
+    {    	
+    	DUMMY = "";
+        for (int i = 0; i < 1000; i++)
+            DUMMY += "\0";
+    }
     public static void raiseKeyboard(final NativeActivity activity) {
         if (hidden_text == null)
         {
             Log.e("XliApp","Hidden View not available");
             return;
         }
+        PopulateDummyString();
         activity.runOnUiThread(new Runnable() { public void run() {
             try {
                 InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -157,29 +168,62 @@ public class XliJ extends android.app.NativeActivity {
     {
         return (int)KeyboardSize;
     }
-
-    public static class Hidden extends View {
+    public static class Hidden extends EditText implements View.OnKeyListener { //used to extend view
         InputConnection fic;
 
         public Hidden(Context context) {
             super(context);
+            init(context);
             setFocusableInTouchMode(true);
             setFocusable(true);
         }
 
+        private void init(Context context) {
+            //this.context = context;
+            this.setOnKeyListener(this);
+            PopulateDummyString();
+        }
+
         @Override
-        public boolean onKeyPreIme(int keyCode, KeyEvent event) {
+        public boolean onKeyPreIme(int keyCode, KeyEvent keyEvent) {
             if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE)
             {
-                if (event.getAction()==KeyEvent.ACTION_DOWN)
+                if (keyEvent.getAction()==KeyEvent.ACTION_DOWN)
                 {
+                    if (keyCode == KeyEvent.KEYCODE_DEL) { XliJ_OnKeyDown(KeyEvent.KEYCODE_DEL); }
                     XliJ_OnKeyDown(keyCode);
-                } else if (event.getAction()==KeyEvent.ACTION_UP) {
+                } else if (keyEvent.getAction()==KeyEvent.ACTION_UP) {
+                    if (keyCode == KeyEvent.KEYCODE_DEL) { XliJ_OnKeyUp(KeyEvent.KEYCODE_DEL); }
                     XliJ_OnKeyUp(keyCode);
                 }
                 return true;
             }
-            return super.onKeyPreIme(keyCode, event);
+            return super.onKeyPreIme(keyCode, keyEvent);
+        }
+        @Override
+        public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+            int action = keyEvent.getAction();
+            // Catch unicode characters (even character sequeneces)
+            // But make sure we aren't catching the dummy buffer.
+            if (action == KeyEvent.ACTION_MULTIPLE) {
+                String s = keyEvent.getCharacters();
+                if (!s.equals(DUMMY)) {
+                    //listener.onSend(s);
+                }
+            }
+            if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE)
+            {
+                if (keyEvent.getAction()==KeyEvent.ACTION_DOWN)
+                {
+                    if (keyCode == KeyEvent.KEYCODE_DEL) { XliJ_OnKeyDown(KeyEvent.KEYCODE_DEL); }
+                    XliJ_OnKeyDown(keyCode);
+                } else if (keyEvent.getAction()==KeyEvent.ACTION_UP) {
+                    if (keyCode == KeyEvent.KEYCODE_DEL) { XliJ_OnKeyUp(KeyEvent.KEYCODE_DEL); }
+                    XliJ_OnKeyUp(keyCode);
+                }
+                return true;
+            }
+            return super.onKeyPreIme(keyCode, keyEvent);
         }
 
         @Override
@@ -195,26 +239,62 @@ public class XliJ extends android.app.NativeActivity {
         public boolean onCheckIsTextEditor() { return true; }
     }
 
+    public static class MyEditable extends SpannableStringBuilder {
+        MyEditable(CharSequence source) {
+            super(source);
+        }
+        @Override
+        public SpannableStringBuilder replace(final int start, final int end, CharSequence tb, int tbstart, int tbend) {
+            if (tbend > tbstart) {
+                super.replace(0, length(), "", 0, 0);
+                return super.replace(0, 0, tb, tbstart, tbend);
+            }
+            else if (end > start) {
+                super.replace(0, length(), "", 0, 0);
+                return super.replace(0, 0, DUMMY, 0, DUMMY.length());
+            }
+            return super.replace(start, end, tb, tbstart, tbend);
+        }
+    }
+    static MyEditable mEditable;
     static class HiddenInputConnection extends BaseInputConnection {
-
+        
         public HiddenInputConnection(View targetView, boolean fullEditor) {
             super(targetView, fullEditor);
         }
 
         @Override
-        public String getTextBeforeCursor(int n, int flags) {
-            //http://code.google.com/p/android/issues/detail?id=62306
-            return "_";
+         public String getTextBeforeCursor(int n, int flags) {
+             //http://code.google.com/p/android/issues/detail?id=62306
+             return DUMMY;
+         }
+
+        @Override
+        public Editable getEditable() {
+            if (Build.VERSION.SDK_INT < 14)
+                return super.getEditable();
+            if (mEditable == null) {
+                mEditable = new MyEditable(DUMMY);
+                Selection.setSelection(mEditable, DUMMY.length());
+            }
+            else if (mEditable.length() == 0) {
+                mEditable.append(DUMMY);
+                Selection.setSelection(mEditable, DUMMY.length());
+            }
+            return mEditable;
         }
 
         @Override
         public boolean deleteSurroundingText (int beforeLength, int afterLength) {
-            if (beforeLength == 1 && afterLength == 0) {
-                XliJ_OnKeyDown(KeyEvent.KEYCODE_DEL);
-                XliJ_OnKeyUp(KeyEvent.KEYCODE_DEL);
-                return true;
-            }
-            return false;
+        	//if ((Build.VERSION.SDK_INT < 14) && beforeLength == 1 && afterLength == 0) {
+        		if (beforeLength == 1 && afterLength == 0)
+        		{
+        		XliJ_OnKeyDown(KeyEvent.KEYCODE_DEL);
+        		XliJ_OnKeyUp(KeyEvent.KEYCODE_DEL);
+        		return true;} 
+        		return false;
+        	//}
+            //return super.deleteSurroundingText(beforeLength, afterLength);
         }
 
         @Override
@@ -507,7 +587,7 @@ public class XliJ extends android.app.NativeActivity {
         }
         @Override
         protected void onProgressUpdate(Integer... progress) {
-        	XliJ_HttpProgressCallback(requestPointer, progress[0], progress[1], true);
+        	XliJ_HttpProgressCallback(requestPointer, progress[0], progress[1], true, 0);
         }
         @Override
         protected void onPostExecute(HttpWrappedResponse result)
@@ -567,7 +647,6 @@ public class XliJ extends android.app.NativeActivity {
         protected String doInBackground(Object... params) {
         	requestPointer = (long)((Long)params[1]);
             try {
-            	//XliJ_HttpProgressCallback(requestPointer, progress[0], progress[1], true);
 				return InputStreamToString((InputStream)params[0]);
 			} catch (UnsupportedEncodingException e) {
 				XliJ_HttpErrorCallback(requestPointer, -1, "UnsupportedEncodingException: "+e.getLocalizedMessage());
@@ -625,7 +704,7 @@ public class XliJ extends android.app.NativeActivity {
 		  if (runningTotal/progressThreshold > steps)
 		  {
 			  steps = runningTotal/progressThreshold;
-			  XliJ_HttpProgressCallback(requestPointer, runningTotal, 0, false);
+			  XliJ_HttpProgressCallback(requestPointer, runningTotal, 0, false, 1);
 		  }
 		}
 		buffer.flush();
