@@ -31,6 +31,20 @@ namespace Xli
         }
     }
 
+    class SessionMap
+    {
+    private:
+        HashMap<void*, bool> aliveTable;
+    public:
+        IsAborted(void* requestHandle)
+        {
+            bool aborted;
+            bool found = aliveTable.TryGetValue(requestHandle, &aborted);
+            
+            return (found && aborted);
+        }
+    }
+    
     class CurlHttpRequest : public HttpRequest
     {
     private:
@@ -47,7 +61,6 @@ namespace Xli
         CURL* curlSession;
         bool requestOwnsUploadData;
 
-        //these three could be a bufferarray with a bufferefpointer
         Managed<BufferStream> uploadBuffer;
 
         bool abort;
