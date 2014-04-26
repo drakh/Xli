@@ -283,8 +283,14 @@ namespace Xli
 
         virtual void Abort()
         {
+
+            // {TODO} Can we guarentee instant termination?
+            //        If so we dont need to worry about post destroy callbacks
+
             // if (this->state > 1 && this->state < 5 )
                 //this->state = HttpRequestStateDone; //{TODO} how does statechanged know if it was successful?
+
+            //{TODO} This doesnt seem to cancel running requests. What if we are in the upload stage?
 
             if (cachedReadStream!=0)
             {

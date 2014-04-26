@@ -17,6 +17,7 @@ namespace Xli
         this->url = url;
         this->method = method;
         this->timeout = 0;
+        this->aborted = false;
         this->javaAsyncHandle = 0;
         this->javaContentHandle = 0;
     }
@@ -116,15 +117,22 @@ namespace Xli
 
     void AHttpRequest::Abort()
     {
-        if ((int)state > (int)HttpRequestStateUnsent)
+        if (!aborted)
         {
-            //state = HttpRequestStateDone;
-            if (javaAsyncHandle != 0) PlatformSpecific::AShim::AbortAsyncConnection(javaAsyncHandle);
-            HttpEventHandler* eh = client->GetEventHandler();
-            if (eh!=0) eh->OnRequestAborted(this);
-            CleanHandles();
-        } else {
-            XLI_THROW("HttpRequest->SendAsync(): Request has not beem sent, cannot abort");
+            if ((int)state > (int)HttpRequestStateUnsent)
+            {
+                // if ashim::abortasyncconnection works then we need some kidn fo callback so we know to
+                // cleanup the SessionMap.
+                if (javaAsyncHandle!=0) 
+                    PlatformSpecific::AShim::AbortAsyncConnection(javaAsyncHandle);
+                CleanHandles();
+                aborted = true;
+                HttpEventHandler* eh = client->GetEventHandler();
+                if (eh!=0) eh->OnRequestAborted(this);
+
+            } else {
+                XLI_THROW("HttpRequest->SendAsync(): Request has not beem sent, cannot abort");
+            }
         }
     }
     void AHttpRequest::StartDownload()
@@ -236,6 +244,9 @@ namespace Xli
             if (requestPointer)
             {
                 Xli::AHttpRequest* request = ((Xli::AHttpRequest*)((void*)requestPointer));
+
+                if (SessionMap::IsAborted(request)) return;
+                
                 if (body)
                 {
                     request->javaContentHandle = reinterpret_cast<jobject>(env->NewGlobalRef(body));
@@ -297,6 +308,12 @@ namespace Xli
             {
                 Xli::AHttpRequest* request = ((Xli::AHttpRequest*)((void*)requestPointer));
 
+                if (SessionMap::IsAborted(request)) 
+                {
+                    SessionMap::RemoveSession(request);
+                    return;
+                }                  
+
                 if (content != 0) {
                     jsize len = env->GetArrayLength(content);
                     void* cachedContentArray = malloc((long)len);
@@ -316,6 +333,13 @@ namespace Xli
             if (requestPointer)
             {
                 Xli::AHttpRequest* request = ((Xli::AHttpRequest*)((void*)requestPointer));
+
+                if (SessionMap::IsAborted(request)) 
+                {
+                    SessionMap::RemoveSession(request);
+                    return;
+                }
+
                 request->client->EnqueueAction(new Xli::AHttpTimeoutAction(request));
             } else {
                 LOGE("CRITICAL HTTP ERROR: No callback pointer error");
@@ -327,6 +351,12 @@ namespace Xli
             if (requestPointer)
             {
                 Xli::AHttpRequest* request = ((Xli::AHttpRequest*)((void*)requestPointer));
+
+                if (SessionMap::IsAborted(request))
+                {
+                    SessionMap::RemoveSession(request);
+                    return;
+                }
 
                 char const* cerrorMessage = env->GetStringUTFChars(errorMessage, NULL);
                 Xli::AHttpErrorAction* err =  new Xli::AHttpErrorAction(request, (int)errorCode, Xli::String(cerrorMessage));
@@ -343,6 +373,9 @@ namespace Xli
             if (requestPointer)
             {
                 Xli::AHttpRequest* request = ((Xli::AHttpRequest*)((void*)requestPointer));
+
+                if (SessionMap::IsAborted(request)) return;
+
                 request->client->EnqueueAction(new Xli::AHttpProgressAction(request, position, totalLength, lengthKnown,
                                                                             (HttpTransferDirection)(int)direction));
             } else {

@@ -29,21 +29,7 @@ namespace Xli
             atexit(Xli::ShutdownCurlHttp);
             HttpInitialized = 1;
         }
-    }
-
-    class SessionMap
-    {
-    private:
-        HashMap<void*, bool> aliveTable;
-    public:
-        IsAborted(void* requestHandle)
-        {
-            bool aborted;
-            bool found = aliveTable.TryGetValue(requestHandle, &aborted);
-            
-            return (found && aborted);
-        }
-    }
+    }    
     
     class CurlHttpRequest : public HttpRequest
     {
@@ -61,9 +47,9 @@ namespace Xli
         CURL* curlSession;
         bool requestOwnsUploadData;
 
-        Managed<BufferStream> uploadBuffer;
+        bool aborted;
 
-        bool abort;
+        Managed<BufferStream> uploadBuffer;
 
         HashMap<String,String> responseHeaders;
         Managed< ArrayStream > responseBody;
@@ -79,16 +65,16 @@ namespace Xli
             this->url = url;
             this->method = method;
             this->timeout = 0;
-            this->abort = false;
             this->curlUploadHeaders=NULL;
             this->responseBody = new ArrayStream(1);
+            this->aborted = true;
         }
 
         virtual ~CurlHttpRequest()
         {
-            // abort if running
-            // cleanup session
-            // free upload headers
+            Abort();
+            curl_slist_free_all(curlUploadHeaders);
+            // {TODO} free upload headers
         }
 
         virtual String GetMethod() const { return method; }
@@ -197,13 +183,13 @@ namespace Xli
                 state = HttpRequestStateSent;
 
                 HttpEventHandler* eh = client->GetEventHandler();
-                if (eh!=0 && eh!=NULL) eh->OnRequestStateChanged(this);
+                if (eh!=0 && !aborted) eh->OnRequestStateChanged(this);
 
                 curlSession = session;
                 client->AddSession(session, this);
             } else {
                 HttpEventHandler* eh = client->GetEventHandler();
-                if (eh!=0) eh->OnRequestError(this);
+                if (eh!=0 && !aborted) eh->OnRequestError(this);
             }
         }
         virtual void SendAsync(const String& content)
@@ -220,8 +206,18 @@ namespace Xli
 
         virtual void Abort()
         {
-            // {TODO} what are we aborting? needs to work for upload and download
-            abort = true;
+            if (!aborted)
+            {
+                // {TODO} Can we guarentee instant termination?
+                //        If so we dont need to worry about post destroy callbacks
+                client->RemoveSession(curlSession);
+                SessionMap::MarkAborted(this, curlSession);
+                curlSession = 0;
+                aborted = true;
+
+                HttpEventHandler* eh = client->GetEventHandler();
+                if (eh!=0) eh->OnRequestAborted(this);
+            }
         }
 
         virtual int GetResponseHeaderCount() const
@@ -313,16 +309,28 @@ namespace Xli
         {
             state = HttpRequestStateDone;
 
+            if (aborted) //{TODO} spin this off?
+            {
+                CURL* session = SessionMap::PopSession(this);
+                curl_easy_cleanup(session);
+            }
+
             responseBodyRef = new BufferReference((void*)responseBody->GetDataPtr(), responseBody->GetLength(), (Object*)responseBody.Get());
 
             HttpEventHandler* eh = client->GetEventHandler();
-            if (eh!=0) eh->OnRequestStateChanged(this);
+            if (eh!=0 && !aborted) eh->OnRequestStateChanged(this);
         }
 
     private:
         static size_t onDataUpload( void *ptr, size_t size, size_t nmemb, void *userdata)
         {
             CurlHttpRequest* request = (CurlHttpRequest*)userdata;
+
+            // if the session is aborted then we want to skip this. We cant say
+            // we did the job though so we pass back 0 and accept this may indicate
+            // that this method caused the problem
+            if (SessionMap::IsAborted(request)) return 0;
+            
             size_t maxCopyLength = (size * nmemb);
             size_t copyLength = 0;
             if (maxCopyLength > 0 && !request->uploadBuffer->AtEnd())
@@ -335,6 +343,11 @@ namespace Xli
         static size_t onHeaderRecieved(void *ptr, size_t size, size_t nmemb, void *userdata)
         {
             CurlHttpRequest* request = (CurlHttpRequest*)userdata;
+
+            // if the session is aborted then we want to skip this but not 
+            // cause curl to think this method caused the problem.
+            if (SessionMap::IsAborted(request)) return (size * nmemb);
+
             size_t bytesPulled = (size * nmemb);
             if (bytesPulled > 0)
             {
@@ -357,10 +370,14 @@ namespace Xli
         static size_t onDataRecieved(char* ptr, size_t size, size_t nmemb, void* userdata)
         {
             CurlHttpRequest* request = (CurlHttpRequest*)userdata;
+
+            // if the session is aborted then we want to skip this but not 
+            // cause curl to think this method caused the problem.
+            if (SessionMap::IsAborted(request)) return (size * nmemb);
+
             size_t bytesRead = 0;
 
             // {TODO} saying we have the headers at this point. Check the validity
-
             request->state = HttpRequestStateHeadersReceived;
             HttpEventHandler* eh = request->client->GetEventHandler();
             if (eh!=0) eh->OnRequestStateChanged(request);
@@ -370,29 +387,37 @@ namespace Xli
 
             return bytesRead;
         }
+
         static int onProgress(void *clientp, curl_off_t dltotal, curl_off_t dlnow, curl_off_t ultotal, curl_off_t ulnow)
         {
             CurlHttpRequest* request = (CurlHttpRequest*)clientp;
-            if (request->abort)
-            {
-                //{TODO} where should the cleanup live?
+
+            if (SessionMap::IsAborted(request))
+            {                
+                // CURL* session = SessionMap::PopSession(request);{TODO} we need to know what gets called
+                // curl_easy_cleanup(session);
                 return CURLE_ABORTED_BY_CALLBACK;
             }
-            if (dlnow && (request->state == HttpRequestStateLoading)){
+            if (dlnow && (request->state == HttpRequestStateLoading))
+            {
                 HttpEventHandler* eh = request->client->GetEventHandler();
                 if (eh!=0) eh->OnRequestProgress(request, dlnow, dltotal, (dltotal > 0), HttpTransferDirection_DOWNLOAD);
             }
-            if (ulnow && (request->state == HttpRequestStateSent)){
+            if (ulnow && (request->state == HttpRequestStateSent))
+            {
                 HttpEventHandler* eh = request->client->GetEventHandler();
                 if (eh!=0) eh->OnRequestProgress(request, ulnow, ultotal, (ultotal > 0), HttpTransferDirection_UPLOAD);
             }
             return 0;
         }
-        static void onTimeout(CurlHttpRequest* request)
+        static void onTimeout(CurlHttpRequest* request) // {TODO} this is never used...the fuck?
         {
+
             HttpEventHandler* eh = request->client->GetEventHandler();
             if (eh!=0) eh->OnRequestTimeout(request);
         }
+
+        //{TODO} What happens if there is an error? Do we get a callback? We need this to clean up
     };
 
     //------------------------------------------------------------
@@ -405,11 +430,15 @@ namespace Xli
 
     CurlHttpClient::~CurlHttpClient()
     {
-        // {TODO} cleanup multisession here
-        // for each item in sessionTable;
-        // - abort request
-        // - close easy_session
-        // CURLMcode curl_multi_cleanup( CURLM *multi_handle );
+        int i = sessionTable.Begin();
+        while (i != sessionTable.End())
+        {
+            CurlHttpRequest* request = sessionTable.GetValue(i);
+            request->Abort(); // abort also calls RemoveSession in the client
+            i = sessionTable.Next(i);
+        }
+        //{TODO} find all curlcodes in this file and add checks for them
+        CURLMcode result = curl_multi_cleanup(multiSession); 
     }
 
     HttpRequest* CurlHttpClient::CreateRequest(const String& method, const String& url)
@@ -435,12 +464,10 @@ namespace Xli
 
     void CurlHttpClient::RemoveSession(CURL* session)
     {
-        CurlHttpRequest* request;
-        if (sessionTable.TryGetValue(session, request))
+        if (sessionTable.ContainsKey(session))
         {
             sessionTable.Remove(session);
-            curl_multi_remove_handle(multiSession, session);
-            curl_easy_cleanup(session);
+            curl_multi_remove_handle(multiSession, session);            
         } else {
             XLI_THROW("Could not remove HttpRequest session as none found in session table");
         }
