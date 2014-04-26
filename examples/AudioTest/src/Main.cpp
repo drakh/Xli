@@ -1,6 +1,6 @@
 #include <Xli.h>
 #include <XliGL.h>
-#include <XliAudio.h>
+#include <XliSoundPlayer.h>
 
 using namespace Xli;
 
@@ -33,35 +33,22 @@ public:
         
         dialogType = 0;
 
-		// Setup OpenGL
+        // Setup OpenGL
 
-		this->gl = GLContext::Create(wnd, 16);
+        GLContextAttributes glAttribs = GLContextAttributes::Default();
+        //glAttribs.Buffers = 1;
+        glAttribs.Samples = 16;
 
-		glClearColor(1,0,0,1);
+        gl = GLContext::Create(wnd, glAttribs);
+        gl->GetAttributes(glAttribs);
+        gl->SetSwapInterval(0);
+        
+        glClearColor(1, 0, 0, 1);
 
-
-		// Print platform info
-
-		PrintLine((String)"Time: " + DateTime::Now().ToString());
-		PrintLine((String)"Time (UTC): " + DateTime::NowUtc().ToString());
-
-		PrintLine((String)"Resolution: " + wnd->GetClientSize().ToString());
-
-		PrintLine((String)"OpenGL Vendor: " + (const char*)glGetString(GL_VENDOR));
-		PrintLine((String)"OpenGL Renderer: " + (const char*)glGetString(GL_RENDERER));
-		PrintLine((String)"OpenGL Version: " + (const char*)glGetString(GL_VERSION));
-		PrintLine((String)"OpenGL Multisamples: " + gl->GetMultiSamples());
-		PrintLine((String)"OpenGL Swap Interval: " + gl->GetSwapInterval());
-    
-		PrintLine((String)"FileSystem Working Dir: " + Disk->GetCurrentDirectory());
-		PrintLine((String)"FileSystem Documents: " + Disk->GetSystemDirectory(SystemDirectoryDocuments));
-		PrintLine((String)"FileSystem Local AppData: " + Disk->GetSystemDirectory(SystemDirectoryLocalAppData));
-		PrintLine((String)"FileSystem Roaming AppData: " + Disk->GetSystemDirectory(SystemDirectoryRoamingAppData));
-		PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
+        // assets
         
         mp3 = SimpleSound::Create("ChrisZabriskieCylinderOne.mp3",true);
         wav = SimpleSound::Create("WilhelmScream.wav",true);
-
         mp3->Play(false);
 	}
 
