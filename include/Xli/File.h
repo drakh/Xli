@@ -51,8 +51,7 @@ namespace Xli
         FileFlagsCanWrite = 1 << 1,
         FileFlagsCanSeek = 1 << 2,
         FileFlagsCanClose = 1 << 3,
-        
-        FileFlagsIgnoreReadWriteErrors = 1 << 4,
+        FileFlagsIgnoreWriteErrors = 1 << 4,
     };
 
     /**
