@@ -76,7 +76,7 @@ namespace Xli
         StreamWriterBase(Stream* stream);
         virtual ~StreamWriterBase();
 
-        void SwitchStream(Stream* stream);
+        void SetStream(Stream* stream);
         Stream* GetStream();
     };
 
@@ -92,7 +92,7 @@ namespace Xli
         StreamReaderBase(Stream* stream);
         virtual ~StreamReaderBase();
         
-        void SwitchStream(Stream* stream);
+        void SetStream(Stream* stream);
         Stream* GetStream();
     };
 }

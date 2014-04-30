@@ -90,7 +90,7 @@ namespace Xli
     StreamWriterBase::StreamWriterBase(Stream* stream)
     {
         _stream = 0;
-        SwitchStream(stream);
+        SetStream(stream);
     }
 
     StreamWriterBase::~StreamWriterBase()
@@ -98,7 +98,7 @@ namespace Xli
         _stream->Release();
     }
 
-    void StreamWriterBase::SwitchStream(Stream* stream)
+    void StreamWriterBase::SetStream(Stream* stream)
     {
         if (!stream)
             XLI_THROW_NULL_POINTER;
@@ -122,7 +122,7 @@ namespace Xli
     StreamReaderBase::StreamReaderBase(Stream* stream)
     {
         _stream = 0;
-        SwitchStream(stream);
+        SetStream(stream);
     }
 
     StreamReaderBase::~StreamReaderBase()
@@ -130,7 +130,7 @@ namespace Xli
         _stream->Release();
     }
 
-    void StreamReaderBase::SwitchStream(Stream* stream)
+    void StreamReaderBase::SetStream(Stream* stream)
     {
         if (!stream)
             XLI_THROW_NULL_POINTER;
