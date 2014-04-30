@@ -287,7 +287,7 @@ namespace Xli
                 return true;
             }
             
-            virtual int Write(const void* src, int elmSize, int elmCount)
+            virtual void Write(const void* src, int elmSize, int elmCount)
             {
                 for (int i = 0; i < elmCount; i++)
                 {
@@ -305,8 +305,6 @@ namespace Xli
 
                     buf.Add(c);
                 }
-
-                return elmCount;
             }
         };
 

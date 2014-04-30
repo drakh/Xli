@@ -10,7 +10,7 @@ namespace Xli
 
     void TextWriter::Write(const char* str, int len)
     {
-        _stream->WriteSafe(str, 1, len);
+        _stream->Write(str, 1, len);
     }
 
     void TextWriter::WriteFormat(const char* format, ...)
@@ -33,6 +33,6 @@ namespace Xli
     
     void TextWriter::WriteLine()
     {
-        _stream->WriteSafe("\n", 1, 1);
+        _stream->Write("\n", 1, 1);
     }
 }

@@ -28,8 +28,8 @@ namespace Xli
         virtual bool CanSeek() const;
 
         virtual int Read(void* dst, int elmSize, int elmCount);
-        virtual int Write(const void* dst, int elmSize, int elmCount);
-        virtual void Seek(SeekOrigin origin, int offset);
+        virtual void Write(const void* dst, int elmSize, int elmCount);
+        virtual void Seek(int offset, SeekOrigin origin);
 
         virtual int GetPosition() const;
         virtual int GetLength() const;

@@ -14,12 +14,12 @@ namespace Xli
 
     void BinaryWriter::Write(const void* data, int elmSize, int elmCount)
     {
-        _stream->WriteSafe(data, elmSize, elmCount);
+        _stream->Write(data, elmSize, elmCount);
     }
 
     void BinaryWriter::WriteCStr(const char* str)
     {
-        _stream->WriteSafe((const void*)str, 1, (int)strlen(str));
+        _stream->Write((const void*)str, 1, (int)strlen(str));
     }
 
     void BinaryWriter::Write7BitEncodedInt32(Int32 value)
@@ -36,6 +36,6 @@ namespace Xli
     void BinaryWriter::WriteString(const String& str)
     {
         Write7BitEncodedInt32(str.Length());
-        _stream->WriteSafe(str.DataPtr(), 1, str.Length());
+        _stream->Write(str.DataPtr(), 1, str.Length());
     }
 }

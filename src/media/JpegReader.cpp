@@ -50,7 +50,7 @@ namespace Xli
 
             if ((size_t)num_bytes > jsrc->bytes_in_buffer)
             {
-                cd->File->Seek(SeekOriginCurrent, (int)num_bytes - (int)jsrc->bytes_in_buffer);
+                cd->File->Seek((int)num_bytes - (int)jsrc->bytes_in_buffer, SeekOriginCurrent);
                 fillInputBuffer(cinfo);
             }
             else

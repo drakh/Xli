@@ -46,12 +46,12 @@ namespace Xli
         XLI_THROW_STREAM_CANT_READ; 
     }
     
-    int Stream::Write(const void* src, int elmSize, int elmCount) 
+    void Stream::Write(const void* src, int elmSize, int elmCount) 
     { 
         XLI_THROW_STREAM_CANT_WRITE;
     }
 
-    void Stream::Seek(SeekOrigin origin, int offset) 
+    void Stream::Seek(int offset, SeekOrigin origin) 
     { 
         XLI_THROW_STREAM_CANT_SEEK; 
     }
@@ -76,17 +76,6 @@ namespace Xli
                 XLI_THROW_END_OF_STREAM;
             
             XLI_THROW_STREAM_CANT_READ;
-        }
-    }
-
-    void Stream::WriteSafe(const void* src, int elmSize, int elmCount)
-    {
-        if (Write(src, elmSize, elmCount) != elmCount)
-        {
-            if (AtEnd()) 
-                XLI_THROW_END_OF_STREAM;
-            
-            XLI_THROW_STREAM_CANT_WRITE;
         }
     }
 

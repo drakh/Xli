@@ -30,7 +30,7 @@ namespace Xli
 
     Buffer* BinaryReader::ReadAll()
     {
-        _stream->Seek(SeekOriginBegin, 0);
+        _stream->Seek(0, SeekOriginBegin);
         int size = _stream->GetLength();
         Buffer* buf = Buffer::Create(size);
         _stream->ReadSafe(buf->DataPtr(), 1, size);

@@ -152,7 +152,7 @@ namespace Xli
         return (int)fread(data, elmSize, elmCount, fp);
     }
 
-    int File::Write(const void* data, int elmSize, int elmCount)
+    void File::Write(const void* data, int elmSize, int elmCount)
     {
         if (!fp) 
             XLI_THROW_STREAM_CLOSED;
@@ -162,13 +162,11 @@ namespace Xli
 
         int result = (int)fwrite(data, elmSize, elmCount, fp);
 
-        if (flags & FileFlagsIgnoreWriteErrors)
-            return elmSize * elmCount;
-
-        return result;
+        if (result != elmCount && !(flags & FileFlagsIgnoreWriteErrors))
+            XLI_THROW_STREAM_CANT_WRITE;
     }
 
-    void File::Seek(SeekOrigin origin, int offset)
+    void File::Seek(int offset, SeekOrigin origin)
     {
         if (!fp) 
             XLI_THROW_STREAM_CLOSED;

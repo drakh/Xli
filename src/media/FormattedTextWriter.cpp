@@ -14,7 +14,7 @@ namespace Xli
 
     void FormattedTextWriter::WriteRaw(const char* str, int len)
     {
-        _stream->WriteSafe(str, 1, len);
+        _stream->Write(str, 1, len);
     }
 
     void FormattedTextWriter::SkipLine()

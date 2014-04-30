@@ -17,7 +17,7 @@ namespace Xli
         ArrayStream(int initCapacity = 1024);
 
         virtual bool CanWrite() const;
-        virtual int Write(const void* src, int elmSize, int elmCount);
+        virtual void Write(const void* src, int elmSize, int elmCount);
 
         virtual int GetLength() const;
 

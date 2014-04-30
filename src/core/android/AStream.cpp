@@ -180,7 +180,7 @@ namespace Xli
         }
 
     //[TODO] memoverflow?
-        int AStream::Write(const void* data, int elmSize, int elmCount)
+        void AStream::Write(const void* data, int elmSize, int elmCount)
         {
             if (!CanWrite()) XLI_THROW_STREAM_CANT_WRITE;
             if (IsClosed()) XLI_THROW_STREAM_CLOSED;
@@ -199,8 +199,6 @@ namespace Xli
 
             jni->GetByteArrayRegion(arr, 0, pushBytes, (jbyte*)data);
             jni->DeleteLocalRef(arr);
-
-            return elmCount;
         }
 
         bool AStream::CacheMids()

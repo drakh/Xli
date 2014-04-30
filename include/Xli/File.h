@@ -81,8 +81,8 @@ namespace Xli
         virtual int GetLength() const;
 
         virtual int Read(void* data, int elmSize, int elmCount);
-        virtual int Write(const void* data, int elmSize, int elmCount);
-        virtual void Seek(SeekOrigin origin, int offset);
+        virtual void Write(const void* data, int elmSize, int elmCount);
+        virtual void Seek(int offset, SeekOrigin origin);
     };
 }
 
