@@ -126,7 +126,7 @@ namespace Xli
                 return result;
             }
 
-            virtual void ChangeDirectory(const String& dir)
+            virtual void SetCurrentDirectory(const String& dir)
             {
                 Utf16String dirW = Unicode::Utf8To16(dir);
                 ::SetCurrentDirectoryW(dirW.DataPtr());

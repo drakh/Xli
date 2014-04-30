@@ -8,6 +8,7 @@
 #undef MessageBox
 #undef GetSystemDirectory
 #undef GetCurrentDirectory
+#undef SetCurrentDirectory
 #undef CreateDirectory
 #undef ChangeDirectory
 #undef DeleteFile

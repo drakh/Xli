@@ -97,7 +97,7 @@ namespace Xli
                     result[i] = '/';
         }
 
-        Disk->ChangeDirectory(cd);
+        Disk->SetCurrentDirectory(cd);
         return ret;
     }
 

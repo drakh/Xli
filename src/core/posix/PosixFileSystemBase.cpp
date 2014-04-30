@@ -61,7 +61,7 @@ namespace Xli
             return buf;
         }
             
-        void PosixFileSystemBase::ChangeDirectory(const String& path)
+        void PosixFileSystemBase::SetCurrentDirectory(const String& path)
         {
             if (!path.Length()) 
                 return;
