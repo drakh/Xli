@@ -301,7 +301,7 @@ namespace Xli
                             int i = (ai & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
                             int id = AMotionEvent_getPointerId(event, i);
                             int x = AMotionEvent_getX(event, i);
-                            int y = AMotionEvent_getY(event, i);
+                            int y = AMotionEvent_getY(event, i) + 38;
 
                             //LOGD("TOUCH EVENT: %d  %d  %d  %d  %d", a, i, id, x, y);
 
@@ -328,7 +328,7 @@ namespace Xli
                             {
                                 int id = AMotionEvent_getPointerId(event, i);
                                 int x = AMotionEvent_getX(event, i);
-                                int y = AMotionEvent_getY(event, i);
+                                int y = AMotionEvent_getY(event, i) + 38;
                                 GlobalEventHandler->OnTouchMove(GlobalWindow, Xli::Vector2(x, y), id);
 
                                 //LOGD("TOUCH MOVE: %d  %d  %d  %d  %d", a, i, id, x, y);
@@ -344,7 +344,7 @@ namespace Xli
                             {
                                 int id = AMotionEvent_getPointerId(event, i);
                                 int x = AMotionEvent_getX(event, i);
-                                int y = AMotionEvent_getY(event, i);
+                                int y = AMotionEvent_getY(event, i) + 38;
                                 GlobalEventHandler->OnTouchUp(GlobalWindow, Xli::Vector2(x, y), id);
 
                                 //LOGD("TOUCH CANCEL: %d  %d  %d  %d  %d", a, i, id, x, y);
@@ -541,6 +541,10 @@ namespace Xli
             
             if (GlobalWindow)
                 GlobalWindow->ProcessCrossThreadEvents();
+
+
+
+
         }
     }
 
