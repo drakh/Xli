@@ -183,13 +183,13 @@ namespace Xli
 
     Bitmap* Png::Load(Stream* input)
     {
-        Managed<ImageReader> r = CreateReader(input);
-        return r->ReadBitmap();
+        PngReader r(input);
+        return r.ReadBitmap();
     }
     
     Bitmap* Png::Load(const String& filename)
     {
-        Managed<File> f = new File(filename, FileModeRead);
-        return Load(f);
+        File f(filename, FileModeRead);
+        return Load(&f);
     }
 }

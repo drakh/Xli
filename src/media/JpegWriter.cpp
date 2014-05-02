@@ -164,8 +164,8 @@ namespace Xli
 
     void Jpeg::Save(Stream* output, Bitmap* bmp, int quality)
     {
-        Managed<ImageWriter> w = CreateWriter(output, bmp->GetWidth(), bmp->GetHeight(), bmp->GetFormat(), quality);
-        w->WriteBitmap(bmp);
+        JpegWriter w(output, bmp->GetWidth(), bmp->GetHeight(), bmp->GetFormat(), quality);
+        w.WriteBitmap(bmp);
     }
 
     void Jpeg::Save(const String& filename, Bitmap* bmp, int quality)

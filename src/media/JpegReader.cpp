@@ -177,14 +177,13 @@ namespace Xli
 
     Bitmap* Jpeg::Load(Stream* input)
     {
-        Managed<ImageReader> r = CreateReader(input);
-        return r->ReadBitmap();
+        JpegReader r(input);
+        return r.ReadBitmap();
     }
 
     Bitmap* Jpeg::Load(const String& filename)
     {
-        Managed<File> f = new File(filename, FileModeRead);
-        return Load(f);
+        File f(filename, FileModeRead);
+        return Load(&f);
     }
 }
-

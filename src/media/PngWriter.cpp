@@ -135,8 +135,8 @@ namespace Xli
 
     void Png::Save(Stream* output, Bitmap* bmp)
     {
-        Managed<ImageWriter> w = CreateWriter(output, bmp->GetWidth(), bmp->GetHeight(), bmp->GetFormat());
-        w->WriteBitmap(bmp);
+        PngWriter w(output, bmp->GetWidth(), bmp->GetHeight(), bmp->GetFormat());
+        w.WriteBitmap(bmp);
     }
 
     void Png::Save(const String& filename, Bitmap* bmp)
