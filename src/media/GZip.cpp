@@ -68,13 +68,13 @@ namespace Xli
 
                 stream.next_out = buf;
                 stream.avail_out = Z_BUFSIZE;
-                dst->WriteSafe(buf, 1, Z_BUFSIZE);
+                dst->Write(buf, 1, Z_BUFSIZE);
             }
             
             if (deflateEnd(&stream) != Z_OK)
                 XLI_THROW("Failed to close GZip writer");
 
-            dst->WriteSafe(buf, 1, Z_BUFSIZE - stream.avail_out);
+            dst->Write(buf, 1, Z_BUFSIZE - stream.avail_out);
             dst = 0;
         }
 
@@ -93,7 +93,7 @@ namespace Xli
             return pos;
         }
 
-        virtual int Write(const void* data, int elmSize, int elmCount)
+        virtual void Write(const void* data, int elmSize, int elmCount)
         {
             if (!dst) 
                 XLI_THROW_STREAM_CLOSED;
@@ -114,12 +114,10 @@ namespace Xli
                 {
                     stream.next_out = buf;
                     stream.avail_out = Z_BUFSIZE;
-                    dst->WriteSafe(buf, 1, Z_BUFSIZE);
+                    dst->Write(buf, 1, Z_BUFSIZE);
                 }
             } 
             while (stream.avail_in > 0);
-            
-            return elmCount;
         }
     };
 /*
@@ -144,10 +142,10 @@ namespace Xli
         uLong expected_crc;
         int expected_len;
 
-        sourceStream->Seek(SeekOriginEnd, -8);
+        sourceStream->Seek(-8, SeekOriginEnd);
         sourceStream->ReadSafe(&expected_crc, 4, 1);
         sourceStream->ReadSafe(&expected_len, 4, 1);
-        sourceStream->Seek(SeekOriginBegin, sp);
+        sourceStream->Seek(sp, SeekOriginBegin);
 
         int input_size = sl - sp;
 

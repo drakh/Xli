@@ -46,12 +46,12 @@ namespace Xli
         XLI_THROW_STREAM_CANT_READ; 
     }
     
-    int Stream::Write(const void* src, int elmSize, int elmCount) 
+    void Stream::Write(const void* src, int elmSize, int elmCount) 
     { 
         XLI_THROW_STREAM_CANT_WRITE;
     }
 
-    void Stream::Seek(SeekOrigin origin, int offset) 
+    void Stream::Seek(int offset, SeekOrigin origin) 
     { 
         XLI_THROW_STREAM_CANT_SEEK; 
     }
@@ -79,17 +79,6 @@ namespace Xli
         }
     }
 
-    void Stream::WriteSafe(const void* src, int elmSize, int elmCount)
-    {
-        if (Write(src, elmSize, elmCount) != elmCount)
-        {
-            if (AtEnd()) 
-                XLI_THROW_END_OF_STREAM;
-            
-            XLI_THROW_STREAM_CANT_WRITE;
-        }
-    }
-
     void Stream::WriteStream(Stream* source)
     {
         // TODO: Use constant size buffer
@@ -101,7 +90,7 @@ namespace Xli
     StreamWriterBase::StreamWriterBase(Stream* stream)
     {
         _stream = 0;
-        SwitchStream(stream);
+        SetStream(stream);
     }
 
     StreamWriterBase::~StreamWriterBase()
@@ -109,7 +98,7 @@ namespace Xli
         _stream->Release();
     }
 
-    void StreamWriterBase::SwitchStream(Stream* stream)
+    void StreamWriterBase::SetStream(Stream* stream)
     {
         if (!stream)
             XLI_THROW_NULL_POINTER;
@@ -133,7 +122,7 @@ namespace Xli
     StreamReaderBase::StreamReaderBase(Stream* stream)
     {
         _stream = 0;
-        SwitchStream(stream);
+        SetStream(stream);
     }
 
     StreamReaderBase::~StreamReaderBase()
@@ -141,7 +130,7 @@ namespace Xli
         _stream->Release();
     }
 
-    void StreamReaderBase::SwitchStream(Stream* stream)
+    void StreamReaderBase::SetStream(Stream* stream)
     {
         if (!stream)
             XLI_THROW_NULL_POINTER;

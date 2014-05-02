@@ -52,7 +52,7 @@ namespace Xli
                 return AAsset_read(asset, data, elmSize * elmCount) / elmSize;
             }
 
-            void Seek(SeekOrigin origin, int offset)
+            void Seek(int offset, SeekOrigin origin)
             {
                 switch (origin)
                 {

@@ -45,11 +45,10 @@ namespace Xli
         virtual int GetLength() const;
 
         virtual int Read(void* dst, int elmSize, int elmCount);
-        virtual int Write(const void* src, int elmSize, int elmCount);
-        virtual void Seek(SeekOrigin origin, int offset);
+        virtual void Write(const void* src, int elmSize, int elmCount);
+        virtual void Seek(int offset, SeekOrigin origin);
 
         void ReadSafe(void* dst, int elmSize, int elmCount);
-        void WriteSafe(const void* src, int elmSize, int elmCount);
 
         /**
             Write the entire contents of another stream into this stream.
@@ -77,7 +76,7 @@ namespace Xli
         StreamWriterBase(Stream* stream);
         virtual ~StreamWriterBase();
 
-        void SwitchStream(Stream* stream);
+        void SetStream(Stream* stream);
         Stream* GetStream();
     };
 
@@ -93,7 +92,7 @@ namespace Xli
         StreamReaderBase(Stream* stream);
         virtual ~StreamReaderBase();
         
-        void SwitchStream(Stream* stream);
+        void SetStream(Stream* stream);
         Stream* GetStream();
     };
 }

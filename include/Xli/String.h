@@ -62,7 +62,7 @@ namespace Xli
         int LastIndexOf(char c) const;
 
         String Substring(int start, int len) const;
-        String Substring(int start) const ;
+        String Substring(int start) const;
 
         String Trim() const;
         String Trim(char c) const;

@@ -7,8 +7,8 @@ namespace Xli
     static bool IsRooted(const String& path)
     {
         return 
-            path.Length() > 1 && path[0] == '/' || 
-            path.Length() > 2 && path[1] == ':';
+            (path.Length() > 0 && (path[0] == '/' || path[0] == '\\')) ||
+            (path.Length() > 1 && path[1] == ':');
     }
 
     String Path::Combine(const String& path1, const String& path2)
@@ -24,32 +24,39 @@ namespace Xli
     String Path::GetFilename(const String& path)
     {
         for (int i = path.Length() - 1; i >= 0; i--)
-            if (path[i] == '/' || path[i] == '\\')
-                return path.Substring(i + 1, path.Length() - i - 1);
+            switch (path[i])
+            {
+                case '/':
+                case '\\':
+                    return path.Substring(i + 1);
+            }
 
         return path;
     }
 
     String Path::GetFilenameWithoutExtension(const String& path)
     {
-        int extIndex = path.Length();
+        String filename = GetFilename(path);
 
-        for (int i = path.Length() - 1; i >= 0; i--)
-            if (path[i] == '.')
-                extIndex = i;
-            else if (path[i] == '/' || path[i] == '\\')
-                return path.Substring(i + 1, extIndex - i - 1);
+        for (int i = filename.Length() - 1; i >= 0; i--)
+            if (filename[i] == '.')
+                return filename.Substring(0, i);
 
-        return path.Substring(0, extIndex);
+        return filename;
     }
 
     String Path::GetExtension(const String& path)
     {
         for (int i = path.Length() - 1; i >= 0; i--)
-            if (path[i] == '.')
-                return path.Substring(i, path.Length() - i);
-            else if (path[i] == '/' || path[i] == '\\')
-                break;
+            switch (path[i])
+            {
+            case '.':
+                return path.Substring(i);
+
+            case '/':
+            case '\\':
+                return "";
+            }
 
         return "";
     }
@@ -57,9 +64,13 @@ namespace Xli
     String Path::GetDirectoryName(const String& path)
     {
         for (int i = path.Length() - 1; i >= 0; i--)
-            if (path[i] == '/' || path[i] == '\\')
-                return path.Substring(0, i > 0 ? i : 1);
+            switch (path[i])
+            {
+            case '/':
+            case '\\':
+                return path.Substring(0, i);
+            }
 
-        return ".";
+        return "";
     }
 }

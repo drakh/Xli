@@ -26,6 +26,35 @@ namespace Xli
         virtual void Update();
     };
 
+
+    class SessionMap
+    {
+    private:
+        static HashMap<HttpRequest*, CURL*> abortedTable;
+    public:
+        static bool IsAborted(HttpRequest* requestHandle)
+        {            
+            return abortedTable.ContainsKey(requestHandle);
+        }
+        static CURL* PopSession(HttpRequest* requestHandle)
+        {
+            CURL* session;
+            bool found = abortedTable.TryGetValue(requestHandle, session);
+            if (found)
+            {
+                abortedTable.Remove(requestHandle);
+                return session;
+            } else {
+                XLI_THROW("XLIHTTP: PopSession - request not found in abortedTable");
+            }
+        }
+        static void MarkAborted(HttpRequest* requestHandle, CURL* session)
+        {
+            if (!abortedTable.ContainsKey(requestHandle))
+                abortedTable.Add(requestHandle, session);
+        }
+    };
+
     inline CURLoption methodToCurlOption(String method)
     {
         if (method == "GET") return CURLOPT_HTTPGET;
@@ -125,5 +154,4 @@ namespace Xli
         default: return String("-INVALID CURL ERROR CODE-");
         }
     }
-
-}
+};

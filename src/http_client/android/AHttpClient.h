@@ -19,12 +19,12 @@ namespace Xli
         int timeout;
         HashMap<String,String> headers;
 
+        bool aborted;
         jobject javaAsyncHandle;
         jobject javaContentHandle;
 
         bool completedSuccessfully;
         int responseStatus;
-        String reasonPhrase;
         Buffer* responseBody;
 
         HashMap<String,String> responseHeaders;
@@ -89,6 +89,35 @@ namespace Xli
         virtual void EnqueueAction(HttpAction* action);
 
         virtual void Update();
+    };
+
+
+    //-------- Session Handling -------//
+    class SessionMap
+    {
+    private:
+        static HashMap<HttpRequest*, short> abortedTable;
+    public:
+        static bool IsAborted(HttpRequest* requestHandle)
+        {            
+            return abortedTable.ContainsKey(requestHandle);
+        }
+        static void RemoveSession(HttpRequest* requestHandle)
+        {
+            short ignore;
+            bool found = abortedTable.TryGetValue(requestHandle, ignore);
+            if (found)
+            {
+                abortedTable.Remove(requestHandle);
+            } else {
+                XLI_THROW("XLIHTTP: RemoveSession - request not found in abortedTable");
+            }
+        }
+        static void MarkAborted(HttpRequest* requestHandle)
+        {
+            if (!abortedTable.ContainsKey(requestHandle))
+                abortedTable.Add(requestHandle, 0);
+        }
     };
 
     //------ Actions -------//

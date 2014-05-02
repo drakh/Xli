@@ -86,7 +86,7 @@ namespace Xli
             return source->Read(dst, elmSize, elmCount);
         }
 
-        virtual void Seek(SeekOrigin origin, int offset)
+        virtual void Seek(int offset, SeekOrigin origin)
         {
             int currentPos = GetPosition();
             int blockAlignedOffset = offset - (offset % (DataTypeInfo::SizeOf(type) * channels));
@@ -102,7 +102,7 @@ namespace Xli
             }
             if (newPos < 0) newPos = 0;
             if (newPos > dataChunkLength) newPos = dataChunkLength;
-            source->Seek(SeekOriginBegin, dataChunkPos + newPos);
+            source->Seek(dataChunkPos + newPos, SeekOriginBegin);
         }
         virtual int GetPosition() const { return source->GetPosition() - dataChunkPos; }
         virtual int GetLength() const { return dataChunkLength; }

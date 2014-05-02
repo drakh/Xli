@@ -14,49 +14,33 @@ namespace Xli
     {
     private:
         HttpClient* client;
-        HashMap<String,String> headers;
-        HashMap<String,String> responseHeaders;
+
         HttpRequestState state;
-        String method;
-        int responseStatus;
-        String reasonPhrase;
+
         String url;
+        String method;
         int timeout;
 
         CFHTTPMessageRef cachedRequestMessage;
         CFReadStreamRef cachedReadStream;
-        CFDataRef cachedUploadData;
+
+        CFDataRef uploadData;
+        bool requestOwnsUploadData;
+        HashMap<String,String> headers;
+
         bool errored;
-        
+
+        HashMap<String,String> responseHeaders;
         bool dataReady;
         bool reading;
         int readPosition;
-
+        int responseStatus;
         CFWriteStreamRef cachedContentStream;
         Buffer* responseBody;
 
-        virtual void getContentArray() 
-        {            
-            if (state == HttpRequestStateDone && !errored)
-            {
-                CFStringRef prop = CFSTR("kCFStreamPropertyDataWritten");
-                CFDataRef streamDataHandle = (CFDataRef)CFWriteStreamCopyProperty(cachedContentStream, prop);
-                long len = CFDataGetLength(streamDataHandle);
-                readPosition = len;
-                
-                responseBody = Buffer::Create((int)len);
-                CFDataGetBytes(streamDataHandle, CFRangeMake(0,len), (UInt8*)responseBody->GetDataPtr());
-
-                CFWriteStreamClose(cachedContentStream);
-                CFRelease(cachedContentStream);
-                CFRelease(streamDataHandle);//{TODO} test this
-                cachedContentStream = 0;
-            }
-            NSLog(@"Cant get content array"); // {TODO} error needed here
-        }
     public:
 
-        CHttpRequest(HttpClient* client, String url, String method) 
+        CHttpRequest(HttpClient* client, String url, String method)
         {
             this->client = client;
             this->state = HttpRequestStateUnsent;
@@ -72,10 +56,12 @@ namespace Xli
 
         virtual ~CHttpRequest()
         {
+            // abort if running
+
             state = HttpRequestStateDone;
-            
-            if (cachedRequestMessage != 0)
-                CFRelease(cachedRequestMessage);
+
+            // spin this off into function
+            if (cachedRequestMessage != 0) CFRelease(cachedRequestMessage);
             if (cachedReadStream!=0)
             {
                 CFReadStreamClose(cachedReadStream);
@@ -85,8 +71,8 @@ namespace Xli
                 CFRelease(cachedReadStream);
             if (cachedContentStream!=0)
                 CFRelease(cachedContentStream);
-            if (cachedUploadData!=0)
-                CFRelease(cachedUploadData);
+            if (uploadData!=0)
+                CFRelease(uploadData);
         }
 
         virtual String GetMethod() const { return method; }
@@ -126,6 +112,69 @@ namespace Xli
         virtual int HeadersNext(int n) const { return headers.Next(n); }
         virtual String GetHeaderKey(int n) const { return headers.GetKey(n); }
         virtual String GetHeaderValue(int n) const { return headers.GetValue(n); }
+
+        virtual void SendAsync(const void* content, int byteLength)
+        {
+            if (this->state != HttpRequestStateUnsent) return;
+
+            CFStringRef nUrlStr = CFStringCreateWithCString(kCFAllocatorDefault, this->url.DataPtr(), kCFStringEncodingUTF8);
+            CFURLRef nUrl = CFURLCreateWithString(kCFAllocatorDefault, nUrlStr, NULL);
+            CFStringRef nMethod = CFStringCreateWithCString(kCFAllocatorDefault, this->method.DataPtr(), kCFStringEncodingUTF8);
+            CFHTTPMessageRef nHttpReq = CFHTTPMessageCreateRequest(kCFAllocatorDefault, nMethod, nUrl, kCFHTTPVersion1_1);
+
+            if (byteLength>0)
+            {
+                CFAllocatorRef alRef;
+                if (requestOwnsUploadData)
+                {
+                    alRef = kCFAllocatorDefault;
+                } else {
+                    alRef = kCFAllocatorNull; // This means CFReleasing uploadData WILL NOT free the data, only the CFDataRef object
+                }
+                uploadData = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, (const UInt8*)content, (CFIndex)byteLength, alRef);
+                CFHTTPMessageSetBody(nHttpReq, uploadData);
+            } else {
+                uploadData = 0;
+            }
+
+            SetCFHeaders(nHttpReq);
+
+            cachedReadStream = CFReadStreamCreateForHTTPRequest(kCFAllocatorDefault, nHttpReq);
+            CFNumberRef nTimeout = CFNumberCreate(kCFAllocatorDefault, kCFNumberDoubleType, &this->timeout);
+            CFReadStreamSetProperty(this->cachedReadStream, CFSTR("_kCFStreamPropertyReadTimeout"), nTimeout); //{TODO} doco is flakey on this, does it work?
+            CFReadStreamSetProperty(this->cachedReadStream, kCFStreamPropertyHTTPShouldAutoredirect, kCFBooleanTrue);
+
+            this->cachedRequestMessage = nHttpReq;
+
+            CFOptionFlags optEvents = kCFStreamEventOpenCompleted|kCFStreamEventHasBytesAvailable|kCFStreamEventErrorOccurred|kCFStreamEventEndEncountered;
+
+            CFStreamClientContext context = {0, this, NULL, NULL, NULL };
+
+            CFReadStreamSetClient(cachedReadStream, optEvents, AsyncCallback, &context);
+            CFReadStreamScheduleWithRunLoop( cachedReadStream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes );
+            CFReadStreamOpen( cachedReadStream );
+
+            this->state = HttpRequestStateSent;
+            HttpEventHandler* eh = client->GetEventHandler();
+            if (eh!=0) eh->OnRequestStateChanged(this);
+
+            CFRelease(nUrlStr);
+            CFRelease(nMethod);
+            CFRelease(nUrl);
+        }
+
+        virtual void SendAsync(const String& content)
+        {
+            requestOwnsUploadData = true;
+            void* raw = malloc(content.Length());
+            memcpy(raw, content.DataPtr(), content.Length());
+            SendAsync(raw, content.Length());
+        }
+
+        virtual void SendAsync()
+        {
+            SendAsync((void*)0, -1);
+        }
 
         virtual int GetResponseHeaderCount() const
         {
@@ -213,98 +262,6 @@ namespace Xli
             }
         }
 
-        virtual void SendAsync(const void* content, int byteLength)
-        {
-            if (this->state != HttpRequestStateUnsent) return;
-            
-            CFStringRef nUrlStr = CFStringCreateWithCString(kCFAllocatorDefault, this->url.DataPtr(), kCFStringEncodingUTF8);
-            CFURLRef nUrl = CFURLCreateWithString(kCFAllocatorDefault, nUrlStr, NULL);
-            CFStringRef nMethod = CFStringCreateWithCString(kCFAllocatorDefault, this->method.DataPtr(), kCFStringEncodingUTF8);
-            CFHTTPMessageRef nHttpReq = CFHTTPMessageCreateRequest(kCFAllocatorDefault, nMethod, nUrl, kCFHTTPVersion1_1);
-            
-            if (byteLength>0)
-            {
-                CFDataRef bodyData = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, (const UInt8*)content, (CFIndex)byteLength, kCFAllocatorDefault);
-                CFHTTPMessageSetBody(nHttpReq, bodyData);
-                this->cachedUploadData = bodyData;
-            } else {
-                cachedUploadData = 0;
-            }
-            
-            SetCFHeaders(nHttpReq);
-            
-            cachedReadStream = CFReadStreamCreateForHTTPRequest(kCFAllocatorDefault, nHttpReq);
-            CFNumberRef nTimeout = CFNumberCreate(kCFAllocatorDefault, kCFNumberDoubleType, &this->timeout);
-            CFReadStreamSetProperty(this->cachedReadStream, CFSTR("_kCFStreamPropertyReadTimeout"), nTimeout); //{TODO} doco is flakey on this, does it work?
-            CFReadStreamSetProperty(this->cachedReadStream, kCFStreamPropertyHTTPShouldAutoredirect, kCFBooleanTrue);
-            
-            this->cachedRequestMessage = nHttpReq;
-            
-            CFOptionFlags optEvents = kCFStreamEventOpenCompleted|kCFStreamEventHasBytesAvailable|kCFStreamEventErrorOccurred|kCFStreamEventEndEncountered;
-            
-            CFStreamClientContext context = {0, this, NULL, NULL, NULL };
-            
-            CFReadStreamSetClient(cachedReadStream, optEvents, AsyncCallback, &context);
-            CFReadStreamScheduleWithRunLoop( cachedReadStream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes );
-            CFReadStreamOpen( cachedReadStream );
-            
-            this->state = HttpRequestStateSent;
-            HttpEventHandler* eh = client->GetEventHandler();
-            if (eh!=0) eh->OnRequestStateChanged(this);
-            
-            CFRelease(nUrlStr);
-            CFRelease(nMethod);
-            CFRelease(nUrl);
-        }
-
-        virtual void SendAsync(const String& content)
-        {
-            if (this->state != HttpRequestStateUnsent) return;
-            
-            CFStringRef nUrlStr = CFStringCreateWithCString(kCFAllocatorDefault, this->url.DataPtr(), kCFStringEncodingUTF8);
-            CFURLRef nUrl = CFURLCreateWithString(kCFAllocatorDefault, nUrlStr, NULL);
-            CFStringRef nMethod = CFStringCreateWithCString(kCFAllocatorDefault, this->method.DataPtr(), kCFStringEncodingUTF8);
-            CFHTTPMessageRef nHttpReq = CFHTTPMessageCreateRequest(kCFAllocatorDefault, nMethod, nUrl, kCFHTTPVersion1_1);
-            
-            if (content.Length()>0)
-            {
-                CFStringRef data = CFStringCreateWithCString(kCFAllocatorDefault, content.DataPtr(), kCFStringEncodingUTF8);
-                CFDataRef bodyData = CFStringCreateExternalRepresentation(kCFAllocatorDefault, data, kCFStringEncodingUTF8, 0);
-                CFHTTPMessageSetBody(nHttpReq, bodyData);
-                this->cachedUploadData = bodyData;
-            } else {
-                this->cachedUploadData = 0;
-            }
-            
-            SetCFHeaders(nHttpReq);
-            
-            this->cachedReadStream = CFReadStreamCreateForHTTPRequest(kCFAllocatorDefault, nHttpReq);
-            CFReadStreamSetProperty(this->cachedReadStream, kCFStreamPropertyHTTPShouldAutoredirect, kCFBooleanTrue);
-            
-            this->cachedRequestMessage = nHttpReq;
-            
-            CFOptionFlags optEvents = kCFStreamEventOpenCompleted|kCFStreamEventHasBytesAvailable|kCFStreamEventErrorOccurred|kCFStreamEventEndEncountered;
-            
-            CFStreamClientContext context = {0, this, NULL, NULL, NULL };
-            
-            CFReadStreamSetClient(cachedReadStream, optEvents, AsyncCallback, &context);
-            CFReadStreamScheduleWithRunLoop( cachedReadStream, CFRunLoopGetCurrent(), kCFRunLoopCommonModes );
-            CFReadStreamOpen( cachedReadStream );
-            
-            this->state = HttpRequestStateSent;
-            HttpEventHandler* eh = client->GetEventHandler();
-            if (eh!=0) eh->OnRequestStateChanged(this);
-            
-            CFRelease(nUrlStr);
-            CFRelease(nMethod);
-            CFRelease(nUrl);
-        }
-
-        virtual void SendAsync()
-        {
-            this->SendAsync("");
-        }
-
         virtual void SetCFHeaders(CFHTTPMessageRef message)
         {
             if (this->state == HttpRequestStateUnsent)
@@ -326,9 +283,15 @@ namespace Xli
 
         virtual void Abort()
         {
+
+            // {TODO} Can we guarentee instant termination?
+            //        If so we dont need to worry about post destroy callbacks
+
             // if (this->state > 1 && this->state < 5 )
                 //this->state = HttpRequestStateDone; //{TODO} how does statechanged know if it was successful?
-            
+
+            //{TODO} This doesnt seem to cancel running requests. What if we are in the upload stage?
+
             if (cachedReadStream!=0)
             {
                 CFReadStreamClose(this->cachedReadStream);
@@ -340,15 +303,16 @@ namespace Xli
                 CFRelease(this->cachedReadStream);
             if (cachedContentStream!=0)
                 CFRelease(this->cachedContentStream);
-            if (cachedUploadData!=0)
-                CFRelease(this->cachedUploadData);
-            
+            if (uploadData!=0)
+                CFRelease(this->uploadData);
+
             // HttpEventHandler* eh = client->GetEventHandler();
             // if (eh!=0) eh->OnRequestStateChanged(this);
         }
 
+        //{TODO} we will always download imediately so clean this up and possibly fold into other function
         virtual void StartDownload()
-        {    
+        {
             if ((this->state==HttpRequestStateHeadersReceived) && (this->cachedContentStream == 0))
             {
                 this->state = HttpRequestStateLoading;
@@ -356,7 +320,7 @@ namespace Xli
 
                 HttpEventHandler* eh = client->GetEventHandler();
                 if (eh!=0) eh->OnRequestStateChanged(this);
-          
+
                 this->cachedContentStream = CFWriteStreamCreateWithAllocatedBuffers(kCFAllocatorDefault, kCFAllocatorDefault);
                 CFWriteStreamOpen(this->cachedContentStream);
                 if (dataReady) OnByteDataRecieved(this, cachedReadStream, NULL);
@@ -372,7 +336,8 @@ namespace Xli
         static void NHeaderToHeader(const void* key, const void* value, void* ptr)
         {
             CHttpRequest* request = (CHttpRequest*)ptr;
-            request->responseHeaders.Add((char*)key, (char*)value);
+            if (!request->responseHeaders.ContainsKey((char*)key)) 
+                request->responseHeaders.Add((char*)key, (char*)value);
         }
 
         static void OnStateChanged(CHttpRequest* request, HttpRequestState status, CFReadStreamRef stream, CFStreamEventType event)
@@ -380,7 +345,7 @@ namespace Xli
             if (request->state>0) {
                 request->state = status;
                 HttpEventHandler* eh = request->client->GetEventHandler();
-                if (eh!=0) eh->OnRequestStateChanged(request);                
+                if (eh!=0) eh->OnRequestStateChanged(request);
             }
         }
 
@@ -393,15 +358,7 @@ namespace Xli
             //responseStatus
             CFIndex code = CFHTTPMessageGetResponseStatusCode(request->cachedRequestMessage);
             request->responseStatus = (int)code;
-            //responsePhrase
-            CFStringRef phrase = CFHTTPMessageCopyResponseStatusLine(request->cachedRequestMessage);
-            if (phrase!=0)
-            {
-                request->reasonPhrase = CFStringGetCStringPtr(phrase, kCFStringEncodingUTF8);
-                CFRelease(phrase);
-            } else {
-                request->reasonPhrase = CHttpRequest::HttpCodeToPhrase((int)code);
-            }
+
             //CFRelease(nHeaders); //{TODO} this crashes...why?
         }
 
@@ -409,7 +366,7 @@ namespace Xli
         {
             UInt8 buff[1024];
             CFIndex nBytesRead = CFReadStreamRead(stream, buff, 1024);
-            
+
             if(nBytesRead>0)
             {
                 CFWriteStreamWrite(request->cachedContentStream, (UInt8*)(&buff), (CFIndex)nBytesRead);
@@ -452,7 +409,7 @@ namespace Xli
                     break;
                 case kCFStreamErrorHTTPBadURL:
                     message = "CFStreamError: HTTP Bad Url";
-                            
+
                     break;
                 default:
                     message = "Unknown Http Error: ";
@@ -496,103 +453,35 @@ namespace Xli
                 request->getContentArray();
                 CHttpRequest::OnStateChanged(request, HttpRequestStateDone, stream, event);
 
-                if (request->cachedUploadData!=0) CFRelease(request->cachedUploadData);
+                if (request->uploadData!=0) CFRelease(request->uploadData);
                 if (request->cachedRequestMessage!=0) CFRelease(request->cachedRequestMessage);
                 if (request->cachedReadStream!=0)
                 {
                     CFReadStreamClose(request->cachedReadStream);
                     CFRelease(request->cachedReadStream);
-                }                
+                }
                 break;
             }
         }
-        
-        static String HttpCodeToPhrase(int code)
+
+        virtual void getContentArray()
         {
-            switch (code)
+            if (state == HttpRequestStateDone && !errored)
             {
-                case 100:
-                    return "Continue";
-                case 101:
-                    return "Switching Protocols";
-                case 200:
-                    return "OK";
-                case 201:
-                    return "Created";
-                case 202:
-                    return "Accepted";
-                case 203:
-                    return "Non-Authoritative Information";
-                case 204:
-                    return "No Content";
-                case 205:
-                    return "Reset Content";
-                case 206:
-                    return "Partial Content";
-                case 300:
-                    return "Multiple Choices";
-                case 301:
-                    return "Moved Permanently";
-                case 302:
-                    return "Found";
-                case 303:
-                    return "See Other";
-                case 304:
-                    return "Not Modified";
-                case 305:
-                    return "Use Proxy";
-                case 307:
-                    return "Temporary Redirect";
-                case 400:
-                    return "Bad Request";
-                case 401:
-                    return "Unauthorized";
-                case 402:
-                    return "Payment Required";
-                case 403:
-                    return "Forbidden";
-                case 404:
-                    return "Not Found";
-                case 405:
-                    return "Method Not Allowed";
-                case 406:
-                    return "Not Acceptable";
-                case 407:
-                    return "Proxy Authentication Required";
-                case 408:
-                    return "Request Time-out";
-                case 409:
-                    return "Conflict";
-                case 410:
-                    return "Gone";
-                case 411:
-                    return "Length Required";
-                case 412:
-                    return "Precondition Failed";
-                case 413:
-                    return "Request Entity Too Large";
-                case 414:
-                    return "Request-URI Too Large";
-                case 415:
-                    return "Unsupported Media Type";
-                case 416:
-                    return "Requested range not satisfiable";
-                case 417:
-                    return "Expectation Failed";
-                case 500:
-                    return "Internal Server Error";
-                case 501:
-                    return "Not Implemented";
-                case 502:
-                    return "Bad Gateway";
-                case 503:
-                    return "Service Unavailable";
-                case 504:
-                    return "Gateway Time-out";
-                case 505:
-                    return "HTTP Version not supported";
-                default:
-                    return "INVALID";
+                CFStringRef prop = CFSTR("kCFStreamPropertyDataWritten");
+                CFDataRef streamDataHandle = (CFDataRef)CFWriteStreamCopyProperty(cachedContentStream, prop);
+                long len = CFDataGetLength(streamDataHandle);
+                readPosition = len;
+
+                responseBody = Buffer::Create((int)len);
+                CFDataGetBytes(streamDataHandle, CFRangeMake(0,len), (UInt8*)responseBody->GetDataPtr());
+
+                CFWriteStreamClose(cachedContentStream);
+                CFRelease(cachedContentStream);
+                CFRelease(streamDataHandle);
+                cachedContentStream = 0;
+            } else {
+                NSLog(@"Cant get content array"); // {TODO} error needed here
             }
         }
     };
@@ -613,7 +502,7 @@ namespace Xli
             this->eventHandler = eventHandler;
         }
 
-        virtual HttpEventHandler* GetEventHandler() 
+        virtual HttpEventHandler* GetEventHandler()
         {
             return eventHandler;
         }

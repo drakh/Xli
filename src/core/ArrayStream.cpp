@@ -13,13 +13,12 @@ namespace Xli
         return true;
     }
 
-    int ArrayStream::Write(const void* src, int elmSize, int elmCount)
+    void ArrayStream::Write(const void* src, int elmSize, int elmCount)
     {
         buf.Expand();
         int loc = buf.Length();
         buf.Resize(loc + elmSize * elmCount);
         memcpy(buf.DataPtr() + loc, src, elmSize * elmCount);
-        return elmCount;
     }
 
     int ArrayStream::GetLength() const

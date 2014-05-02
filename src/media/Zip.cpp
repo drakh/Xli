@@ -24,7 +24,7 @@ namespace Xli
 
         static uLong ZCALLBACK write_file_func(voidpf opaque, voidpf stream, const void* buf, uLong size)
         {
-            return (uLong)((Stream*)stream)->Write((void*)buf, size, 1);
+            return ((Stream*)stream)->Write((void*)buf, size, 1), size;
         }
 
         static long ZCALLBACK tell_file_func(voidpf opaque, voidpf stream)
@@ -37,15 +37,15 @@ namespace Xli
             switch (origin)
             {
             case ZLIB_FILEFUNC_SEEK_CUR: 
-                ((Stream*)stream)->Seek(SeekOriginCurrent, (int)offset); 
+                ((Stream*)stream)->Seek((int)offset, SeekOriginCurrent);
                 return 0L;
                 
             case ZLIB_FILEFUNC_SEEK_END: 
-                ((Stream*)stream)->Seek(SeekOriginEnd, (int)offset); 
+                ((Stream*)stream)->Seek((int)offset, SeekOriginEnd);
                 return 0L;
 
             case ZLIB_FILEFUNC_SEEK_SET: 
-                ((Stream*)stream)->Seek(SeekOriginBegin, (int)offset); 
+                ((Stream*)stream)->Seek((int)offset, SeekOriginBegin);
                 return 0L;
 
             default: 
@@ -81,7 +81,7 @@ namespace Xli
 
             if (!handle)
             {
-                file->Seek(SeekOriginBegin, fpos);
+                file->Seek(fpos, SeekOriginBegin);
                 XLI_THROW("Could not open Zip-archive");
             }
 
@@ -103,16 +103,22 @@ namespace Xli
         {
             if (fileMode != FileModeRead) XLI_THROW("Invalid FileMode; Zip is Read-Only");
 
-            if (unzLocateFile((unzFile)handle, filename.DataPtr(), 2) != UNZ_OK) XLI_THROW(String("Couldn't locate file in zip-archive: ") + filename);
-            if (unzOpenCurrentFile((unzFile)handle) != UNZ_OK) XLI_THROW(String("Couldn't open file in zip-archive: ") + filename);
+            if (unzLocateFile((unzFile)handle, filename.DataPtr(), 2) != UNZ_OK) 
+                XLI_THROW(String("Couldn't locate file in zip-archive: ") + filename);
+
+            if (unzOpenCurrentFile((unzFile)handle) != UNZ_OK) 
+                XLI_THROW(String("Couldn't open file in zip-archive: ") + filename);
 
             unz_file_info unzFileInfo;
             unzGetCurrentFileInfo((unzFile)handle, &unzFileInfo, 0, 0, 0, 0, 0, 0);
 
             Managed<Buffer> buf = Buffer::Create(unzFileInfo.uncompressed_size);
 
-            if (unzReadCurrentFile((unzFile)handle, buf->DataPtr(), buf->Size()) != buf->Size()) XLI_THROW(String("Couldn't read in from zip-archive: ") + filename);
-            if (unzCloseCurrentFile((unzFile)handle) != UNZ_OK ) XLI_THROW(String("Couldn't close file in zip-archive: ") + filename);
+            if (unzReadCurrentFile((unzFile)handle, buf->DataPtr(), buf->Size()) != buf->Size()) 
+                XLI_THROW(String("Couldn't read in from zip-archive: ") + filename);
+            
+            if (unzCloseCurrentFile((unzFile)handle) != UNZ_OK ) 
+                XLI_THROW(String("Couldn't close file in zip-archive: ") + filename);
 
             return new BufferStream(buf, true, false);
         }

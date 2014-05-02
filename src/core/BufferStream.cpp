@@ -99,7 +99,7 @@ namespace Xli
         return elementCount;
     }
 
-    int BufferStream::Write(const void* data, int elementSize, int elementCount)
+    void BufferStream::Write(const void* data, int elementSize, int elementCount)
     {
         if (!write) 
             XLI_THROW_STREAM_CANT_READ;
@@ -124,11 +124,9 @@ namespace Xli
         
         memcpy(const_cast<UInt8*>(buf->GetDataPtr()) + pos, data, bytes);
         pos += bytes;
-
-        return elementCount;
     }
 
-    void BufferStream::Seek(SeekOrigin origin, int offset)
+    void BufferStream::Seek(int offset, SeekOrigin origin)
     {
         if (closed) 
             XLI_THROW_STREAM_CLOSED;

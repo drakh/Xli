@@ -14,7 +14,7 @@ namespace Xli
             virtual String CreateTempFilename();
 
             virtual String GetCurrentDirectory();
-            virtual void ChangeDirectory(const String& path);
+            virtual void SetCurrentDirectory(const String& path);
 
             virtual void CreateDirectory(const String& path);
 

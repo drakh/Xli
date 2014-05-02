@@ -51,7 +51,7 @@ namespace Xli
         /**
             Sets the working directory
         */
-        virtual void ChangeDirectory(const String& dir) = 0;
+        virtual void SetCurrentDirectory(const String& dir) = 0;
 
         static void Init();
         static void Done();

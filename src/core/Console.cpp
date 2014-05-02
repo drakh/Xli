@@ -14,8 +14,8 @@ namespace Xli
     {
         if (!InitCount)
         {
-            OutWriter = new TextWriter(ManagePtr(new File(stdout, FileFlagsCanWrite | FileFlagsIgnoreReadWriteErrors)));
-            ErrWriter = new TextWriter(ManagePtr(new File(stderr, FileFlagsCanWrite | FileFlagsIgnoreReadWriteErrors)));
+            OutWriter = new TextWriter(ManagePtr(new File(stdout, FileFlagsCanWrite | FileFlagsIgnoreWriteErrors)));
+            ErrWriter = new TextWriter(ManagePtr(new File(stderr, FileFlagsCanWrite | FileFlagsIgnoreWriteErrors)));
             InReader = new TextReader(ManagePtr(new File(stdin, FileFlagsCanRead)));
         }
 

@@ -149,15 +149,10 @@ namespace Xli
         if (!(flags & FileFlagsCanRead)) 
             XLI_THROW_STREAM_CANT_READ;
         
-        int result = (int)fread(data, elmSize, elmCount, fp);
-        
-        if ((result != elmSize * elmCount) && (flags & FileFlagsIgnoreReadWriteErrors))
-            return elmSize * elmCount;
-        
-        return result;
+        return (int)fread(data, elmSize, elmCount, fp);
     }
 
-    int File::Write(const void* data, int elmSize, int elmCount)
+    void File::Write(const void* data, int elmSize, int elmCount)
     {
         if (!fp) 
             XLI_THROW_STREAM_CLOSED;
@@ -167,13 +162,11 @@ namespace Xli
 
         int result = (int)fwrite(data, elmSize, elmCount, fp);
 
-        if ((result != elmSize * elmCount) && (flags & FileFlagsIgnoreReadWriteErrors))
-            return elmSize * elmCount;
-
-        return result;
+        if (result != elmCount && !(flags & FileFlagsIgnoreWriteErrors))
+            XLI_THROW_STREAM_CANT_WRITE;
     }
 
-    void File::Seek(SeekOrigin origin, int offset)
+    void File::Seek(int offset, SeekOrigin origin)
     {
         if (!fp) 
             XLI_THROW_STREAM_CLOSED;
@@ -184,15 +177,21 @@ namespace Xli
         switch (origin)
         {
         case SeekOriginBegin:
-            if (fseek(fp, offset, SEEK_SET) == 0) return;
+            if (fseek(fp, offset, SEEK_SET) == 0) 
+                return;
+
             break;
 
         case SeekOriginCurrent:
-            if (fseek(fp, offset, SEEK_CUR) == 0) return;
+            if (fseek(fp, offset, SEEK_CUR) == 0) 
+                return;
+
             break;
 
         case SeekOriginEnd:
-            if (fseek(fp, offset, SEEK_END) == 0) return;
+            if (fseek(fp, offset, SEEK_END) == 0) 
+                return;
+
             break;
         }
 

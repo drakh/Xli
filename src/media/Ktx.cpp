@@ -84,16 +84,16 @@ namespace Xli
         header.numberOfMipmapLevels = tex->Faces[0].MipLevels.Length();
         header.bytesOfKeyValueData = 0;
 
-        output->WriteSafe(&header, sizeof(KTX_header), 1);
+        output->Write(&header, sizeof(KTX_header), 1);
 
         for (int i = 0; i < tex->Faces[0].MipLevels.Length(); i++)
         {
             int imageSize = tex->Faces[0].MipLevels[i]->GetSizeInBytes();
-            output->WriteSafe(&imageSize, sizeof(int), 1);
+            output->Write(&imageSize, sizeof(int), 1);
 
             for (int j = 0; j < tex->Faces.Length(); j++)
             {
-                output->WriteSafe(tex->Faces[j].MipLevels[i]->GetDataPtr(), sizeof(unsigned int), tex->Faces[j].MipLevels[i]->GetSizeInBytes() / 4);
+                output->Write(tex->Faces[j].MipLevels[i]->GetDataPtr(), sizeof(unsigned int), tex->Faces[j].MipLevels[i]->GetSizeInBytes() / 4);
             }
         }
     }

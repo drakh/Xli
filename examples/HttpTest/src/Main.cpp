@@ -44,7 +44,7 @@ class EHandler : public HttpEventHandler
     }
     virtual void OnRequestError(HttpRequest* request) 
     {
-        Err->WriteLine("Had an error:");
+        Err->WriteLine("error callback called...ugh:");
         Err->WriteLine("-------------------------------------");
     }
 };
@@ -152,10 +152,10 @@ public:
         
         
         Err->WriteLine("Bang");
-        HttpRequest* req = httpClient->CreateRequest("GET","http://httpbin.org/get");
+        HttpRequest* req = httpClient->CreateRequest("PUT","http://httpbin.org/put");
         req->SetHeader("Accept", "*/*");
         req->SetHeader("ohhai","canhazdata");
-        req->SendAsync();
+        req->SendAsync("jam jam jam");
         
 		return false;
 	}
@@ -233,9 +233,24 @@ public:
 
 	virtual bool OnTouchUp(Window* wnd, Vector2 pos, int id)
 	{
-		Err->WriteLine("OnTouchUp: " + pos.ToString() + ", " + id);
-      
-		return false;
+        double currentTime = GetSeconds();
+
+        if (currentTime - touchDownTime < 0.15)
+        {
+            if (currentTime - tapTime < 0.3)
+            {
+                Err->WriteLine("Bang");
+                Err->WriteLine("Bang");
+                HttpRequest* req = httpClient->CreateRequest("PUT","http://httpbin.org/put");
+                req->SetHeader("Accept", "*/*");
+                req->SetHeader("ohhai","canhazdata");
+                req->SendAsync("jam jam jam");
+            }
+
+            tapTime = currentTime;
+        }
+        
+        return false;
 	}
 
 	virtual void OnSizeChanged(Window* wnd, Vector2i clientSize)
