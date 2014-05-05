@@ -36,6 +36,7 @@ public:
         
         dialogType = 0;
 
+<<<<<<< HEAD
 		// Setup OpenGL
         GLContextAttributes glAttribs = GLContextAttributes::Default();
         glAttribs.Samples = 16;
@@ -60,6 +61,25 @@ public:
         wav = soundPlayer->CreateSoundFromAsset("WilhelmScream.wav");
 
         soundPlayer->PlaySound(mp3.Get(), false);
+=======
+        // Setup OpenGL
+
+        GLContextAttributes glAttribs = GLContextAttributes::Default();
+        //glAttribs.Buffers = 1;
+        glAttribs.Samples = 16;
+
+        gl = GLContext::Create(wnd, glAttribs);
+        gl->GetAttributes(glAttribs);
+        gl->SetSwapInterval(0);
+        
+        glClearColor(1, 0, 0, 1);
+
+        // assets
+        
+        mp3 = SimpleSound::Create("ChrisZabriskieCylinderOne.mp3",true);
+        wav = SimpleSound::Create("WilhelmScream.wav",true);
+        mp3->Play(false);
+>>>>>>> origin/stalker-keyboard
 	}
 
 	virtual void OnLoad(Window* wnd)
