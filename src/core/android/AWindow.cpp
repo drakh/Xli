@@ -358,7 +358,7 @@ namespace Xli
                             {
                                 int id = AMotionEvent_getPointerId(event, i);
                                 int x = AMotionEvent_getX(event, i);
-                                int y = AMotionEvent_getY(event, i) + 38;
+                                int y = AMotionEvent_getY(event, i) - 38;
                                 GlobalEventHandler->OnTouchMove(GlobalWindow, Xli::Vector2(x, y), id);
 
                                 //LOGD("TOUCH MOVE: %d  %d  %d  %d  %d", a, i, id, x, y);
@@ -374,7 +374,7 @@ namespace Xli
                             {
                                 int id = AMotionEvent_getPointerId(event, i);
                                 int x = AMotionEvent_getX(event, i);
-                                int y = AMotionEvent_getY(event, i) + 38;
+                                int y = AMotionEvent_getY(event, i) - 38;
                                 GlobalEventHandler->OnTouchUp(GlobalWindow, Xli::Vector2(x, y), id);
 
                                 //LOGD("TOUCH CANCEL: %d  %d  %d  %d  %d", a, i, id, x, y);
