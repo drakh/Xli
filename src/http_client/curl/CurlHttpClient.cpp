@@ -30,6 +30,34 @@ namespace Xli
             HttpInitialized = 1;
         }
     }    
+
+    class SessionMap
+    {
+    public:
+        static HashMap<HttpRequest*, CURL*> abortedTable;
+        static bool IsAborted(HttpRequest* requestHandle)
+        {
+            return abortedTable.ContainsKey(requestHandle);
+        }
+        static CURL* PopSession(HttpRequest* requestHandle)
+        {
+            CURL* session;
+            bool found = abortedTable.TryGetValue(requestHandle, session);
+            if (found)
+            {
+                abortedTable.Remove(requestHandle);
+                return session;
+            } else {
+                XLI_THROW("XLIHTTP: PopSession - request not found in abortedTable");
+            }
+        }
+        static void MarkAborted(HttpRequest* requestHandle, CURL* session)
+        {
+            if (!abortedTable.ContainsKey(requestHandle))
+                abortedTable.Add(requestHandle, session);
+        }
+    };
+    HashMap<HttpRequest*, CURL*> SessionMap::abortedTable;
     
     class CurlHttpRequest : public HttpRequest
     {
@@ -67,7 +95,7 @@ namespace Xli
             this->timeout = 0;
             this->curlUploadHeaders=NULL;
             this->responseBody = new ArrayStream(1);
-            this->aborted = true;
+            this->aborted = false;
         }
 
         virtual ~CurlHttpRequest()

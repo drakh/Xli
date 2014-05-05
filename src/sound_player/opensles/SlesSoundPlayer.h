@@ -15,8 +15,6 @@ namespace Xli
             SLObjectItf EngineObject;
             SLEngineItf EngineEngine;
             SLObjectItf OutputMixObject;
-            SLObjectItf LedObject;
-            SLLEDArrayItf LedArray;
         };
     }
 };
