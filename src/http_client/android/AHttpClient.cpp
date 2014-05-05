@@ -8,6 +8,9 @@ extern Xli::Window* GlobalWindow;
 
 namespace Xli
 {
+
+    HashMap<HttpRequest*, short> SessionMap::abortedTable;
+
     //---- AHttpRequest ----//
 
     AHttpRequest::AHttpRequest(AHttpClient* client, String url, String method)
@@ -376,8 +379,7 @@ namespace Xli
 
                 if (SessionMap::IsAborted(request)) return;
 
-                request->client->EnqueueAction(new Xli::AHttpProgressAction(request, position, totalLength, lengthKnown,
-                                                                            (HttpTransferDirection)(int)direction));
+                request->client->EnqueueAction(new Xli::AHttpProgressAction(request, position, totalLength, lengthKnown));
             } else {
                 LOGE("CRITICAL HTTP ERROR: No callback pointer error");
             }

@@ -373,7 +373,7 @@ namespace Xli
                 request->readPosition += nBytesRead;
             }
             HttpEventHandler* eh = request->client->GetEventHandler();
-            if (eh!=0) eh->OnRequestProgress(request, request->readPosition, 0, false, HttpTransferDirection_DOWNLOAD);
+            if (eh!=0) eh->OnRequestProgress(request, request->readPosition, 0, false);
         }
 
         static void OnTimeout(CHttpRequest* request, CFReadStreamRef stream, CFStreamEventType event)

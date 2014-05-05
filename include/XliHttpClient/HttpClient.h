@@ -16,12 +16,6 @@ namespace Xli
         HttpRequestStateDone,
     }; // {TODO} this needs an aborted state ,no, do whatever javascript does
 
-    enum HttpTransferDirection
-    {
-        HttpTransferDirection_UPLOAD = 0,
-        HttpTransferDirection_DOWNLOAD = 1,
-    };
-
     class HttpRequest: public Object
     {
     public:
@@ -64,7 +58,7 @@ namespace Xli
     {
     public:
         virtual void OnRequestStateChanged(HttpRequest* request) { } // call this on abort? for now, no (see above)
-        virtual void OnRequestProgress(HttpRequest* request,int position, int total, bool totalKnown, HttpTransferDirection direction) { }
+        virtual void OnRequestProgress(HttpRequest* request,int position, int total, bool totalKnown) { }
         virtual void OnRequestAborted(HttpRequest* request) { }
         virtual void OnRequestTimeout(HttpRequest* request) { }
         virtual void OnRequestError(HttpRequest* request) { }

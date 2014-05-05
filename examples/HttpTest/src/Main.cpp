@@ -22,8 +22,7 @@ class EHandler : public HttpEventHandler
         }
         Err->WriteLine("-------------------------------------");
     }
-    virtual void OnRequestProgress(HttpRequest* request,int position, int total, bool totalKnown,
-                                   HttpTransferDirection direction) 
+    virtual void OnRequestProgress(HttpRequest* request,int position, int total, bool totalKnown) 
     {
         if (totalKnown) {
             Err->WriteFormat("progress (percentage): %i\n", (int)(100*((1.0*position)/total)));
@@ -31,7 +30,6 @@ class EHandler : public HttpEventHandler
             Err->WriteFormat("progress: %lu, %lu\n", position, total);
             Err->WriteLine("Total length not known");
         }
-        Err->WriteLine("Direction is: "+String((int)direction));
         Err->WriteLine("-------------------------------------");
     }
     virtual void OnRequestAborted(HttpRequest* request) 

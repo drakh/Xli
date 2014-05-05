@@ -429,12 +429,12 @@ namespace Xli
             if (dlnow && (request->state == HttpRequestStateLoading))
             {
                 HttpEventHandler* eh = request->client->GetEventHandler();
-                if (eh!=0) eh->OnRequestProgress(request, dlnow, dltotal, (dltotal > 0), HttpTransferDirection_DOWNLOAD);
+                if (eh!=0) eh->OnRequestProgress(request, dlnow, dltotal, (dltotal > 0));
             }
             if (ulnow && (request->state == HttpRequestStateSent))
             {
                 HttpEventHandler* eh = request->client->GetEventHandler();
-                if (eh!=0) eh->OnRequestProgress(request, ulnow, ultotal, (ultotal > 0), HttpTransferDirection_UPLOAD);
+                if (eh!=0) eh->OnRequestProgress(request, ulnow, ultotal, (ultotal > 0));
             }
             return 0;
         }

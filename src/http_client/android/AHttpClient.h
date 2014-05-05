@@ -139,22 +139,19 @@ namespace Xli
         AHttpRequest* Request;
         long Position, TotalLength;
         bool LengthKnown;
-        HttpTransferDirection Direction;
-        AHttpProgressAction(AHttpRequest* request, long position, long totalLength, bool lengthKnown,
-                            HttpTransferDirection direction)
+        AHttpProgressAction(AHttpRequest* request, long position, long totalLength, bool lengthKnown)
         {
             Request = request;
             Position = position;
             TotalLength = totalLength;
             LengthKnown = lengthKnown;
-            Direction = direction;
         }
 
         virtual void Execute()
         {
             HttpEventHandler* eh = Request->client->GetEventHandler();
             if (eh!=0) eh->OnRequestProgress(Request, Position, TotalLength,
-                                             LengthKnown, Direction);
+                                             LengthKnown);
         }
     };
 
