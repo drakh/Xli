@@ -194,7 +194,7 @@ namespace Xli
             jni->CallObjectMethod(javaStream, writeBufferDetailedMid, arr, 0, pushBytes);
             if (jni->ExceptionCheck()) {
                 LOGE("Index out of bounds for data");
-                return 0;
+                XLI_THROW_STREAM_CANT_WRITE;
             }
 
             jni->GetByteArrayRegion(arr, 0, pushBytes, (jbyte*)data);

@@ -482,8 +482,8 @@ namespace Xli
 
             AJniHelper::Init();
 
-            Out->SwitchStream(ManagePtr(new ALogStream(ANDROID_LOG_INFO)));
-            Err->SwitchStream(ManagePtr(new ALogStream(ANDROID_LOG_WARN)));
+            Out->SetStream(ManagePtr(new ALogStream(ANDROID_LOG_INFO)));
+            Err->SetStream(ManagePtr(new ALogStream(ANDROID_LOG_WARN)));
 
             while (!inited)
             {

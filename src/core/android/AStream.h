@@ -42,7 +42,7 @@ namespace Xli
             virtual bool CanWrite() const;
             virtual bool AtEnd() const;
             virtual int Read(void* dst, int elmSize, int elmCount);
-            virtual int Write(const void* dst, int elmSize, int elmCount);
+            virtual void Write(const void* dst, int elmSize, int elmCount);
 
         private:
             jobject javaStream;
