@@ -57,8 +57,8 @@ namespace Xli
         {
 #ifndef TARGET_IPHONE_SIMULATOR
             Managed<Stream> log = new NSLogStream();
-            Out->SwitchStream(log);
-            Err->SwitchStream(log);
+            Out->SetStream(log);
+            Err->SetStream(log);
 #endif
         }
     }
