@@ -1,3 +1,4 @@
+return()
 
 set(SRC)
 set(LIBS Xli)
