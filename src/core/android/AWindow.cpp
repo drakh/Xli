@@ -331,7 +331,7 @@ namespace Xli
                             int i = (ai & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
                             int id = AMotionEvent_getPointerId(event, i);
                             int x = AMotionEvent_getX(event, i);
-                            int y = AMotionEvent_getY(event, i) + 38;
+                            int y = AMotionEvent_getY(event, i);
 
                             //LOGD("TOUCH EVENT: %d  %d  %d  %d  %d", a, i, id, x, y);
 
@@ -358,7 +358,7 @@ namespace Xli
                             {
                                 int id = AMotionEvent_getPointerId(event, i);
                                 int x = AMotionEvent_getX(event, i);
-                                int y = AMotionEvent_getY(event, i) - 38;
+                                int y = AMotionEvent_getY(event, i);
                                 GlobalEventHandler->OnTouchMove(GlobalWindow, Xli::Vector2(x, y), id);
 
                                 //LOGD("TOUCH MOVE: %d  %d  %d  %d  %d", a, i, id, x, y);
@@ -374,7 +374,7 @@ namespace Xli
                             {
                                 int id = AMotionEvent_getPointerId(event, i);
                                 int x = AMotionEvent_getX(event, i);
-                                int y = AMotionEvent_getY(event, i) - 38;
+                                int y = AMotionEvent_getY(event, i);
                                 GlobalEventHandler->OnTouchUp(GlobalWindow, Xli::Vector2(x, y), id);
 
                                 //LOGD("TOUCH CANCEL: %d  %d  %d  %d  %d", a, i, id, x, y);
@@ -557,9 +557,6 @@ namespace Xli
             int w = ANativeWindow_getWidth(GlobalAndroidApp->window);
             int h = ANativeWindow_getHeight(GlobalAndroidApp->window);
 
-            // Adjust for non-fullscreen (FIXME: Need proper solution)
-            h -= 38;
-
             if (w != GlobalWidth || h != GlobalHeight)
             {
                 GlobalWidth = w;
@@ -571,10 +568,6 @@ namespace Xli
             
             if (GlobalWindow)
                 GlobalWindow->ProcessCrossThreadEvents();
-
-
-
-
         }
     }
 
