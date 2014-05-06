@@ -143,22 +143,20 @@ namespace Xli
         virtual String GetHeaderKey(int n) const { return headers.GetKey(n); }
         virtual String GetHeaderValue(int n) const { return headers.GetValue(n); }
 
-        // bytelength -1 means no body
-        virtual void SendAsync(const void* content, int byteLength)
+        virtual CURLcode SetCurlRequestOptions(CURL* session, const void* content, int byteLength)
         {
-            if (state != HttpRequestStateUnsent)
-                XLI_THROW("HttpRequest->SetArrayPulledCallback(): Not in a valid state to send");
-
-            if (content!=0 && byteLength>0)
-                // const_cast is safe here are bufferstream is set readonly
-                uploadBuffer = new BufferStream(new BufferPointer(const_cast<void*>(content), byteLength, requestOwnsUploadData), true, false);
-
-            CURL* session = curl_easy_init();
-            if (!session)
-                XLI_THROW("CURL ERROR: Failed to create handle");
-
             CURLcode result = CURLE_OK;
-            if (result == CURLE_OK) result = curl_easy_setopt(session, methodToCurlOption(method), 1);
+            // set method option
+            if (method == "GET") 
+            {
+                result = curl_easy_setopt(session, CURLOPT_HTTPGET, 1);
+            } else if (method == "POST") {
+                result = curl_easy_setopt(session, CURLOPT_POST, 1);
+            } else if (method == "PUT") {
+                result = curl_easy_setopt(session, CURLOPT_UPLOAD, 1);
+            } else if (method == "OPTIONS" || method == "HEAD" || method == "TRACE" || method == "DELETE") {
+                curl_easy_setopt(session, CURLOPT_CUSTOMREQUEST, method.DataPtr()); 
+            }
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_URL, url.DataPtr());
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_CONNECTTIMEOUT, timeout);
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_AUTOREFERER, 1);
@@ -172,7 +170,7 @@ namespace Xli
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_PROGRESSFUNCTION, onProgress);
 
             //Method specific options
-            if (method ==  "GET")
+            if (method ==  "GET" || method =="HEAD")
             {
                 if (content!=0) result = CURLE_FAILED_INIT;
             } else if (method == "POST") {
@@ -188,9 +186,28 @@ namespace Xli
                 if (content==0 || byteLength < 0) result = CURLE_FAILED_INIT;
                 if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_READFUNCTION, onDataUpload);
                 if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_READDATA, (void*)this);
-            } else {
-                if (content==0) result = CURLE_FAILED_INIT;
             };
+
+            return result;
+        }
+        
+        // bytelength -1 means no body
+        virtual void SendAsync(const void* content, int byteLength)
+        {
+            if (state != HttpRequestStateUnsent)
+                XLI_THROW("HttpRequest->SetArrayPulledCallback(): Not in a valid state to send");
+
+            if (content!=0 && byteLength>0)
+                // const_cast is safe here are bufferstream is set readonly
+                uploadBuffer = new BufferStream(new BufferPointer(const_cast<void*>(content), byteLength, requestOwnsUploadData), true, false);
+
+            //Create session
+            CURL* session = curl_easy_init();
+            if (!session)
+                XLI_THROW("CURL ERROR: Failed to create handle");
+
+            // Set curl options
+            CURLcode result = SetCurlRequestOptions(session, content, byteLength);
 
             //Add headers
             int i = HeadersBegin();

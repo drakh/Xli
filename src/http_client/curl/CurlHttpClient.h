@@ -25,16 +25,4 @@ namespace Xli
         virtual HttpEventHandler* GetEventHandler();
         virtual void Update();
     };
-
-    inline CURLoption methodToCurlOption(String method)
-    {
-        if (method == "GET") return CURLOPT_HTTPGET;
-        if (method == "POST") return CURLOPT_POST;
-        if (method == "OPTIONS") XLI_THROW("MethodToCurlCode: Unimplemented Method Code");
-        if (method == "HEAD") XLI_THROW("MethodToCurlCode: Unimplemented Method Code");
-        if (method == "PUT") return CURLOPT_UPLOAD;
-        if (method == "DELETE") XLI_THROW("MethodToCurlCode: Unimplemented Method Code");
-        if (method == "TRACE") XLI_THROW("MethodToCurlCode: Unimplemented Method Code");
-        XLI_THROW("MethodToCurlCode: Invalid Method Code");
-    }
 };
