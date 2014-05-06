@@ -50,7 +50,7 @@ namespace Xli
             } else {
                 XLI_THROW("XLIHTTP: PopSession - request not found in abortedTable");
             }
-        }
+        }        
         static void MarkAborted(HttpRequest* requestHandle, CURL* session)
         {
             if (!abortedTable.ContainsKey(requestHandle))
@@ -101,7 +101,7 @@ namespace Xli
         virtual ~CurlHttpRequest()
         {
             Abort();
-            curl_slist_free_all(curlUploadHeaders);
+            curl_slist_free_all(curlUploadHeaders);            
             // {TODO} free upload headers
         }
 
@@ -156,6 +156,8 @@ namespace Xli
                 result = curl_easy_setopt(session, CURLOPT_UPLOAD, 1);
             } else if (method == "OPTIONS" || method == "HEAD" || method == "TRACE" || method == "DELETE") {
                 curl_easy_setopt(session, CURLOPT_CUSTOMREQUEST, method.DataPtr()); 
+            } else {
+                XLI_THROW("XliHttp: Invalid Method Specified");
             }
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_URL, url.DataPtr());
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_CONNECTTIMEOUT, timeout);
@@ -170,9 +172,12 @@ namespace Xli
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_PROGRESSFUNCTION, onProgress);
 
             //Method specific options
-            if (method ==  "GET" || method =="HEAD")
+            if (method ==  "GET")
             {
                 if (content!=0) result = CURLE_FAILED_INIT;
+            } else if (method == "HEAD") {
+                if (content!=0) result = CURLE_FAILED_INIT;
+                if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_NOBODY, 1);
             } else if (method == "POST") {
                 if (content==0) result = CURLE_FAILED_INIT;
                 if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_POSTFIELDS, (void*)content);
@@ -222,7 +227,7 @@ namespace Xli
                 i = HeadersNext(i);
             }
             curl_easy_setopt(session, CURLOPT_HTTPHEADER, curlUploadHeaders);
-            //{TODO} Add following to cleanup: curl_slist_free_all(curlUploadHeaders);
+
             if (result == CURLE_OK)
             {
                 state = HttpRequestStateSent;
@@ -536,9 +541,11 @@ namespace Xli
             messageType = msg->msg;
             if (messageType == CURLMSG_DONE)
             {
+                // we need to find errors here
                 request->onDone();
             } else {
-                XLI_THROW("Unknown curl message type");
+                HttpEventHandler* eh = this->GetEventHandler();
+                if (eh!=0) eh->OnRequestError(request);
             }
         }
     }
