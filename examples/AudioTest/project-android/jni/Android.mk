@@ -27,6 +27,7 @@ LOCAL_MODULE := XliMedia
 LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXliMedia.so
 include $(PREBUILT_SHARED_LIBRARY)	
 
+<<<<<<< HEAD
 
 # libXliMedia.so
 
@@ -35,6 +36,22 @@ LOCAL_MODULE := XliSoundPlayer
 
 LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXliSoundPlayer.so
 include $(PREBUILT_SHARED_LIBRARY)	
+=======
+# libXliSoundPlayer.so
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := XliSoundPlayer
+
+LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXliSoundPlayer.so
+include $(PREBUILT_SHARED_LIBRARY)	
+
+# libXliGL.so
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := XliGL
+LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXliGL.so
+include $(PREBUILT_SHARED_LIBRARY)
+>>>>>>> origin/stalker-keyboard
 
 
 # libXliGL.so
