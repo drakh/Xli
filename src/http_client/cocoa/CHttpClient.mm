@@ -305,9 +305,9 @@ namespace Xli
                 CFRelease(this->cachedContentStream);
             if (uploadData!=0)
                 CFRelease(this->uploadData);
-
-            // HttpEventHandler* eh = client->GetEventHandler();
-            // if (eh!=0) eh->OnRequestStateChanged(this);
+            
+            HttpEventHandler* eh = client->GetEventHandler();
+            if (eh!=0) eh->OnRequestAborted(this);
         }
 
         //{TODO} we will always download imediately so clean this up and possibly fold into other function

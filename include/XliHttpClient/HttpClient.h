@@ -14,7 +14,7 @@ namespace Xli
         HttpRequestStateHeadersReceived,
         HttpRequestStateLoading,
         HttpRequestStateDone,
-    }; // {TODO} this needs an aborted state ,no, do whatever javascript does
+    };
 
     class HttpRequest: public Object
     {
@@ -57,7 +57,7 @@ namespace Xli
     class HttpEventHandler: public Object
     {
     public:
-        virtual void OnRequestStateChanged(HttpRequest* request) { } // call this on abort? for now, no (see above)
+        virtual void OnRequestStateChanged(HttpRequest* request) { }
         virtual void OnRequestProgress(HttpRequest* request,int position, int total, bool totalKnown) { }
         virtual void OnRequestAborted(HttpRequest* request) { }
         virtual void OnRequestTimeout(HttpRequest* request) { }
