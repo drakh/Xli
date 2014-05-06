@@ -545,7 +545,6 @@ public class XliJ extends android.app.NativeActivity {
         		//set content payload
         		if (hasUploadContent)
         		{
-        			Log.d("XliApp","uploading content");
         			if (body!=null)
         			{
         				int progressThreshold = Math.max((body.length / 100), 2048);
