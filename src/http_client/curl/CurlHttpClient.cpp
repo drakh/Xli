@@ -174,21 +174,20 @@ namespace Xli
             //Method specific options
             if (method ==  "GET")
             {
-                if (content!=0) result = CURLE_FAILED_INIT;
+                if (content!=0 && byteLength>0) result = CURLE_FAILED_INIT;
             } else if (method == "HEAD") {
-                if (content!=0) result = CURLE_FAILED_INIT;
+                if (content!=0 && byteLength>0) result = CURLE_FAILED_INIT;
                 if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_NOBODY, 1);
-            } else if (method == "POST") {
-                if (content==0) result = CURLE_FAILED_INIT;
-                if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_POSTFIELDS, (void*)content);
-                if (byteLength == -1)
+            } else if (method == "POST") {                
+                if (byteLength <= 0)
                 {
                     if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_POSTFIELDSIZE, -1);
                 } else {
+                    if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_POSTFIELDS, (void*)content);
                     if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_POSTFIELDSIZE_LARGE, byteLength);
                 }
             } else if (method == "PUT") {
-                if (content==0 || byteLength < 0) result = CURLE_FAILED_INIT;
+                if (content==0 || byteLength <= 0) result = CURLE_FAILED_INIT;
                 if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_READFUNCTION, onDataUpload);
                 if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_READDATA, (void*)this);
             };
@@ -196,7 +195,6 @@ namespace Xli
             return result;
         }
         
-        // bytelength -1 means no body
         virtual void SendAsync(const void* content, int byteLength)
         {
             if (state != HttpRequestStateUnsent)
@@ -272,7 +270,7 @@ namespace Xli
 
         virtual int GetResponseHeaderCount() const
         {
-            if (state == HttpRequestStateHeadersReceived)
+            if (state >= HttpRequestStateHeadersReceived)
             {
                 return responseHeaders.Count();
             } else {
@@ -281,7 +279,7 @@ namespace Xli
         }
         virtual int ResponseHeadersBegin() const
         {
-            if (state == HttpRequestStateHeadersReceived)
+            if (state >= HttpRequestStateHeadersReceived)
             {
                 return responseHeaders.Begin();
             } else {
@@ -290,7 +288,7 @@ namespace Xli
         }
         virtual int ResponseHeadersNext(int n) const
         {
-            if (state == HttpRequestStateHeadersReceived)
+            if (state >= HttpRequestStateHeadersReceived)
             {
                 return responseHeaders.Next(n);
             } else {
@@ -299,7 +297,7 @@ namespace Xli
         }
         virtual int ResponseHeadersEnd() const
         {
-            if (state == HttpRequestStateHeadersReceived)
+            if (state >= HttpRequestStateHeadersReceived)
             {
                 return responseHeaders.End();
             } else {
@@ -308,7 +306,7 @@ namespace Xli
         }
         virtual String GetResponseHeaderKey(int n) const
         {
-            if (state == HttpRequestStateHeadersReceived)
+            if (state >= HttpRequestStateHeadersReceived)
             {
                 return responseHeaders.GetKey(n);
             } else {
@@ -317,7 +315,7 @@ namespace Xli
         }
         virtual String GetResponseHeaderValue(int n) const
         {
-            if (state == HttpRequestStateHeadersReceived)
+            if (state >= HttpRequestStateHeadersReceived)
             {
                 return responseHeaders.GetValue(n);
             } else {
@@ -327,7 +325,7 @@ namespace Xli
 
         virtual int GetResponseStatus() const
         {
-            if (state == HttpRequestStateHeadersReceived) // {TODO} is this the correct state?
+            if (state >= HttpRequestStateHeadersReceived) // {TODO} is this the correct state?
             {
                 return responseStatus;
             } else {
@@ -337,7 +335,7 @@ namespace Xli
 
         virtual bool TryGetResponseHeader(const String& key, String& result) const
         {
-            if (state == HttpRequestStateHeadersReceived)
+            if (state >= HttpRequestStateHeadersReceived)
             {
                 return responseHeaders.TryGetValue(key, result);
             } else {
