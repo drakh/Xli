@@ -94,7 +94,7 @@ public class XliJ extends android.app.NativeActivity {
             activity.runOnUiThread(new Runnable() { public void run() {
                 try {
                     activity.setContentView(hidden_layout);
-                    hidden_text = new Hidden(activity);
+                    hidden_text = new Hidden(activity, activity);
                     hidden_layout.addView(hidden_text);
                     hidden_text.setVisibility(View.VISIBLE);
                     hidden_text.requestFocus();
@@ -145,7 +145,7 @@ public class XliJ extends android.app.NativeActivity {
     public static void PopulateDummyString()
     {    	
     	DUMMY = "";
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < Math.max(0, (500 - DUMMY.length())); i++)
             DUMMY += "\0";
     }
     public static void raiseKeyboard(final NativeActivity activity) {
@@ -172,9 +172,11 @@ public class XliJ extends android.app.NativeActivity {
     }
     public static class Hidden extends View implements View.OnKeyListener { //used to extend view
         InputConnection fic;
+        NativeActivity activity;
 
-        public Hidden(Context context) {
+        public Hidden(Context context, NativeActivity activity) {        	
             super(context);
+            this.activity = activity;
             init(context);
             setFocusableInTouchMode(true);
             setFocusable(true);
@@ -192,10 +194,9 @@ public class XliJ extends android.app.NativeActivity {
             {
                 if (keyEvent.getAction()==KeyEvent.ACTION_DOWN)
                 {
-                    if (keyCode == KeyEvent.KEYCODE_DEL) { XliJ_OnKeyDown(KeyEvent.KEYCODE_DEL); }
+                	if (keyCode == KeyEvent.KEYCODE_BACK) hideKeyboard(activity);
                     XliJ_OnKeyDown(keyCode);
                 } else if (keyEvent.getAction()==KeyEvent.ACTION_UP) {
-                    if (keyCode == KeyEvent.KEYCODE_DEL) { XliJ_OnKeyUp(KeyEvent.KEYCODE_DEL); }
                     XliJ_OnKeyUp(keyCode);
                 }
                 return true;
