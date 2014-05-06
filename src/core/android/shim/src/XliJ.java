@@ -140,13 +140,20 @@ public class XliJ extends android.app.NativeActivity {
 
     //===========
 
+    static String DUMMY;
+    public static void PopulateDummyString()
+    {    	
+    	DUMMY = "";
+        for (int i = 0; i < 1000; i++)
+            DUMMY += "\0";
+    }
     public static void raiseKeyboard(final NativeActivity activity) {
-        Log.d("XliApp","Raise keyboard");
         if (hidden_text == null)
         {
             Log.e("XliApp","Hidden View not available");
             return;
         }
+        PopulateDummyString();
         activity.runOnUiThread(new Runnable() { public void run() {
             try {
                 InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -161,31 +168,64 @@ public class XliJ extends android.app.NativeActivity {
     {
         return (int)KeyboardSize;
     }
-    public static class Hidden extends View implements View.OnKeyListener 
-    {
+    public static class Hidden extends View implements View.OnKeyListener { //used to extend view
         InputConnection fic;
 
         public Hidden(Context context) {
             super(context);
+            init(context);
             setFocusableInTouchMode(true);
             setFocusable(true);
         }
-     
+
+        private void init(Context context) {
+            //this.context = context;
+            this.setOnKeyListener(this);
+            PopulateDummyString();
+        }
+
         @Override
-        public boolean onKeyPreIme(int keyCode, KeyEvent event) {
+        public boolean onKeyPreIme(int keyCode, KeyEvent keyEvent) {
             if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE)
             {
-                if (event.getAction()==KeyEvent.ACTION_DOWN)
+                if (keyEvent.getAction()==KeyEvent.ACTION_DOWN)
                 {
+                    if (keyCode == KeyEvent.KEYCODE_DEL) { XliJ_OnKeyDown(KeyEvent.KEYCODE_DEL); }
                     XliJ_OnKeyDown(keyCode);
-                } else if (event.getAction()==KeyEvent.ACTION_UP) {
+                } else if (keyEvent.getAction()==KeyEvent.ACTION_UP) {
+                    if (keyCode == KeyEvent.KEYCODE_DEL) { XliJ_OnKeyUp(KeyEvent.KEYCODE_DEL); }
                     XliJ_OnKeyUp(keyCode);
                 }
                 return true;
             }
-            return super.onKeyPreIme(keyCode, event);
+            return super.onKeyPreIme(keyCode, keyEvent);
         }
-        
+        @Override
+        public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+            int action = keyEvent.getAction();
+            // Catch unicode characters (even character sequeneces)
+            // But make sure we aren't catching the dummy buffer.
+            if (action == KeyEvent.ACTION_MULTIPLE) {
+                String s = keyEvent.getCharacters();
+                if (!s.equals(DUMMY)) {
+                    //listener.onSend(s);
+                }
+            }
+            if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE)
+            {
+                if (keyEvent.getAction()==KeyEvent.ACTION_DOWN)
+                {
+                    if (keyCode == KeyEvent.KEYCODE_DEL) { XliJ_OnKeyDown(KeyEvent.KEYCODE_DEL); }
+                    XliJ_OnKeyDown(keyCode);
+                } else if (keyEvent.getAction()==KeyEvent.ACTION_UP) {
+                    if (keyCode == KeyEvent.KEYCODE_DEL) { XliJ_OnKeyUp(KeyEvent.KEYCODE_DEL); }
+                    XliJ_OnKeyUp(keyCode);
+                }
+                return true;
+            }
+            return super.onKeyPreIme(keyCode, keyEvent);
+        }
+
         @Override
         public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
             fic = new HiddenInputConnection(this, false);
@@ -199,26 +239,62 @@ public class XliJ extends android.app.NativeActivity {
         public boolean onCheckIsTextEditor() { return true; }
     }
 
+    public static class MyEditable extends SpannableStringBuilder {
+        MyEditable(CharSequence source) {
+            super(source);
+        }
+        @Override
+        public SpannableStringBuilder replace(final int start, final int end, CharSequence tb, int tbstart, int tbend) {
+            if (tbend > tbstart) {
+                super.replace(0, length(), "", 0, 0);
+                return super.replace(0, 0, tb, tbstart, tbend);
+            }
+            else if (end > start) {
+                super.replace(0, length(), "", 0, 0);
+                return super.replace(0, 0, DUMMY, 0, DUMMY.length());
+            }
+            return super.replace(start, end, tb, tbstart, tbend);
+        }
+    }
+    static MyEditable mEditable;
     static class HiddenInputConnection extends BaseInputConnection {
-
+        
         public HiddenInputConnection(View targetView, boolean fullEditor) {
             super(targetView, fullEditor);
         }
 
         @Override
-        public String getTextBeforeCursor(int n, int flags) {
-            //http://code.google.com/p/android/issues/detail?id=62306
-            return "_____________________________________________________________";
+         public String getTextBeforeCursor(int n, int flags) {
+             //http://code.google.com/p/android/issues/detail?id=62306
+             return DUMMY;
+         }
+
+        @Override
+        public Editable getEditable() {
+            if (Build.VERSION.SDK_INT < 14)
+                return super.getEditable();
+            if (mEditable == null) {
+                mEditable = new MyEditable(DUMMY);
+                Selection.setSelection(mEditable, DUMMY.length());
+            }
+            else if (mEditable.length() == 0) {
+                mEditable.append(DUMMY);
+                Selection.setSelection(mEditable, DUMMY.length());
+            }
+            return mEditable;
         }
 
         @Override
         public boolean deleteSurroundingText (int beforeLength, int afterLength) {
-            if (beforeLength == 1 && afterLength == 0) {
-                XliJ_OnKeyDown(KeyEvent.KEYCODE_DEL);
-                XliJ_OnKeyUp(KeyEvent.KEYCODE_DEL);
-                return true;
-            }
-            return false;
+        	//if ((Build.VERSION.SDK_INT < 14) && beforeLength == 1 && afterLength == 0) {
+        		if (beforeLength == 1 && afterLength == 0)
+        		{
+        		XliJ_OnKeyDown(KeyEvent.KEYCODE_DEL);
+        		XliJ_OnKeyUp(KeyEvent.KEYCODE_DEL);
+        		return true;} 
+        		return false;
+        	//}
+            //return super.deleteSurroundingText(beforeLength, afterLength);
         }
 
         @Override
