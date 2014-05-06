@@ -191,7 +191,7 @@ elseif (XLI_PLATFORM_IOS)
         ${SDL2_DIR}/src/video/uikit/SDL_uikitview.m
         ${SDL2_DIR}/src/video/uikit/SDL_uikitviewcontroller.m
         ${SDL2_DIR}/src/video/uikit/SDL_uikitwindow.m
-        sdl2/SDL2Display.mm
+        sdl2/SDL2Display_iOS.mm
         sdl2/SDL2Window_iOS.mm)
 
 elseif (XLI_PLATFORM_OSX)
@@ -236,7 +236,8 @@ elseif (XLI_PLATFORM_OSX)
         ${SDL2_DIR}/src/video/x11/SDL_x11touch.c
         ${SDL2_DIR}/src/video/x11/SDL_x11video.c
         ${SDL2_DIR}/src/video/x11/SDL_x11window.c
-        ${SDL2_DIR}/src/video/x11/SDL_x11xinput2.c)
+        ${SDL2_DIR}/src/video/x11/SDL_x11xinput2.c
+        sdl2/SDL2Display_iOS.mm)
 
 endif()
 
