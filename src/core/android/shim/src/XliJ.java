@@ -161,7 +161,8 @@ public class XliJ extends android.app.NativeActivity {
     {
         return (int)KeyboardSize;
     }
-    public static class Hidden extends View {
+    public static class Hidden extends View implements View.OnKeyListener 
+    {
         InputConnection fic;
 
         public Hidden(Context context) {
@@ -468,7 +469,6 @@ public class XliJ extends android.app.NativeActivity {
         		//set content payload
         		if (hasUploadContent)
         		{
-        			Log.d("XliApp","uploading content");
         			if (body!=null)
         			{
         				int progressThreshold = Math.max((body.length / 100), 2048);

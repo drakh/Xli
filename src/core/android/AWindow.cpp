@@ -10,7 +10,6 @@
 #include "AShim.h"
 #include <Xli/MutexQueue.h>
 #include <Xli/Console.h>
-#include <Xli/Display.h>
 #include <Xli/Window.h>
 
 Xli::WindowEventHandler* GlobalEventHandler = 0;
@@ -572,40 +571,5 @@ namespace Xli
             if (GlobalWindow)
                 GlobalWindow->ProcessCrossThreadEvents();
         }
-    }
-
-    int Display::GetCount()
-    {
-        return 1;
-    }
-
-    Recti Display::GetRect(int index)
-    {
-        int w = ANativeWindow_getWidth(GlobalAndroidApp->window);
-        int h = ANativeWindow_getHeight(GlobalAndroidApp->window);
-        return Recti(0, 0, w, h);
-    }
-
-    bool Display::GetCurrentSettings(int index, DisplaySettings& settings)
-    {
-        return false;
-    }
-
-    void Display::GetSupportedSettings(int index, Array<DisplaySettings>& settings)
-    {
-    }
-
-    bool Display::ChangeSettings(int index, const DisplaySettings& settings)
-    {
-        return false;
-    }
-
-    float Display::GetDensity(int displayIndex)
-    {
-        return PlatformSpecific::AShim::GetDensity();
-    }
-    Vector2 Display::GetDpi(int displayIndex)
-    {
-        return PlatformSpecific::AShim::GetDpi();
     }
 }
