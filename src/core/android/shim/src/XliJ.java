@@ -168,7 +168,7 @@ public class XliJ extends android.app.NativeActivity {
     {
         return (int)KeyboardSize;
     }
-    public static class Hidden extends EditText implements View.OnKeyListener { //used to extend view
+    public static class Hidden extends View implements View.OnKeyListener { //used to extend view
         InputConnection fic;
 
         public Hidden(Context context) {
