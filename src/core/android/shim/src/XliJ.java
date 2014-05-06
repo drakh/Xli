@@ -98,6 +98,7 @@ public class XliJ extends android.app.NativeActivity {
                     hidden_layout.addView(hidden_text);
                     hidden_text.setVisibility(View.VISIBLE);
                     hidden_text.requestFocus();
+                    hideKeyboard(activity);
                     Log.i("XliApp","Successfully created input capture View.");
                 } catch (Exception e) {
                     Log.e("XliApp","Unable to create Layout or View for input capture.");
@@ -117,9 +118,9 @@ public class XliJ extends android.app.NativeActivity {
                 } catch (Exception e) {
                     Log.e("XliApp","Unable to attach keyboard height monitor.");
                     result[0] = 0;
-                }
+                }                
             }});
-        }
+        }        
         return result[0];
     }
     
@@ -156,6 +157,7 @@ public class XliJ extends android.app.NativeActivity {
         PopulateDummyString();
         activity.runOnUiThread(new Runnable() { public void run() {
             try {
+            	hidden_text.setFocusable(true);
                 InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(hidden_text, 0);
             } catch (Exception e) {
@@ -183,7 +185,7 @@ public class XliJ extends android.app.NativeActivity {
             this.setOnKeyListener(this);
             PopulateDummyString();
         }
-
+        
         @Override
         public boolean onKeyPreIme(int keyCode, KeyEvent keyEvent) {
             if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE)
@@ -328,6 +330,7 @@ public class XliJ extends android.app.NativeActivity {
         activity.runOnUiThread(new Runnable() { public void run() {
             InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
+            hidden_text.setFocusable(false);
         }});
     }
 
@@ -531,9 +534,20 @@ public class XliJ extends android.app.NativeActivity {
             requestPointer = (Long)params[5];
             String[] responseHeaders;
             boolean hasUploadContent = (body != null);
-            HttpURLConnection connection = NewHttpConnection(url,method,hasUploadContent,timeout,requestPointer);
-            if (connection==null) {
-            	return new HttpWrappedResponse(null, new String[0], -1, "JavaError (NewHttpConnection): Could not make connection", requestPointer);
+            HttpURLConnection connection = null;
+            try {
+            	connection = NewHttpConnection(url,method,hasUploadContent,timeout,requestPointer);
+            	if (connection==null) {
+            		return new HttpWrappedResponse(null, new String[0], -1, "JavaError (NewHttpConnection): Could not make connection", requestPointer);
+            	}
+            } catch (Exception e) {
+            	XliJ_JavaThrowError(-1, "JavaError (NewHttpConnection): Could not make connection. Check Android permissions");
+				return null;
+            }
+            if (connection == null)
+            {
+            	XliJ_JavaThrowError(-1, "JavaError (NewHttpConnection): Could not make connection. Check Android permissions");            	
+				return null;
             }
         	try {        		
         		//set headers
