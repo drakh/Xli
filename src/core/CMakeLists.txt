@@ -135,6 +135,7 @@ if (XLI_PLATFORM_ANDROID)
         android/AShim.cpp
         android/AStream.cpp
         android/AWindow.cpp
+        android/ADisplay.cpp
         generic/GenericDialogs.cpp
         posix/PosixCond.cpp
         posix/PosixFileSystemBase.cpp
