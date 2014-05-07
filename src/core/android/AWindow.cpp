@@ -10,7 +10,6 @@
 #include "AShim.h"
 #include <Xli/MutexQueue.h>
 #include <Xli/Console.h>
-#include <Xli/Display.h>
 #include <Xli/Window.h>
 
 Xli::WindowEventHandler* GlobalEventHandler = 0;
@@ -26,11 +25,11 @@ static volatile int visible = 1;
 namespace Xli
 {
     namespace PlatformSpecific
-    {                      
+    {
         class AWindow: public Window
         {
             MutexQueue<WindowAction*> ctActionQueue;
-        
+
         public:
             AWindow()
             {
@@ -70,10 +69,10 @@ namespace Xli
                 if (GlobalEventHandler != 0)
                 {
                     bool cancel = false;
-                    
-                    if (GlobalEventHandler->OnClosing(this, cancel) && cancel) 
+
+                    if (GlobalEventHandler->OnClosing(this, cancel) && cancel)
                         return;
-                    
+
                     GlobalEventHandler->OnClosed(this);
                 }
 
@@ -105,24 +104,24 @@ namespace Xli
                 return true;
             }
 
-            virtual bool IsStatusBarVisible() 
+            virtual bool IsStatusBarVisible()
             {
                 return true;
-            }            
+            }
 
-            virtual Vector2i GetStatusBarPosition() 
-            { 
+            virtual Vector2i GetStatusBarPosition()
+            {
                 return Vector2i(0, 0);
-            }            
+            }
 
             virtual Vector2i GetStatusBarSize()
             {
                 if (!IsStatusBarVisible())
-                { 
+                {
                     return Vector2i(GlobalWidth, 0);
                 } else {
                     return Vector2i(GlobalWidth, AShim::GetStatusBarHeight());
-                }                
+                }
             }
 
             virtual int GetDisplayIndex()
@@ -135,7 +134,7 @@ namespace Xli
                 return "";
             }
 
-            virtual Vector2i GetPosition() 
+            virtual Vector2i GetPosition()
             {
                 return Vector2i(0, 0);
             }
@@ -154,7 +153,7 @@ namespace Xli
             {
             }
 
-            virtual void SetFullscreen(bool fullscreen)               
+            virtual void SetFullscreen(bool fullscreen)
             {
             }
 
@@ -171,7 +170,7 @@ namespace Xli
             }
 
             virtual void Maximize()
-            {                
+            {
             }
 
             virtual void Restore()
@@ -207,14 +206,14 @@ namespace Xli
                 return AShim::KeyboardVisible();
             }
 
-            virtual Vector2i GetOnscreenKeyboardPosition() 
-            { 
-                return Vector2i(0, GlobalHeight - AShim::GetKeyboardSize()); 
+            virtual Vector2i GetOnscreenKeyboardPosition()
+            {
+                return Vector2i(0, GlobalHeight - AShim::GetKeyboardSize());
             }
 
-            virtual Vector2i GetOnscreenKeyboardSize() 
-            { 
-                return Vector2i(GlobalWidth, AShim::GetKeyboardSize()); 
+            virtual Vector2i GetOnscreenKeyboardSize()
+            {
+                return Vector2i(GlobalWidth, AShim::GetKeyboardSize());
             }
 
             virtual bool GetKeyState(Key key)
@@ -231,7 +230,7 @@ namespace Xli
             {
                 return Vector2i(0, 0);
             }
-            
+
             virtual void SetMousePosition(Vector2i position)
             {
             }
@@ -240,11 +239,11 @@ namespace Xli
             {
                 return SystemCursorNone;
             }
-            
+
             virtual void SetSystemCursor(SystemCursor cursor)
             {
             }
-            
+
             virtual void EnqueueCrossThreadEvent(WindowAction* action)
             {
                 ctActionQueue.Enqueue(action);
@@ -286,7 +285,7 @@ namespace Xli
             {
                 return true;
             }
-            
+
             virtual void Write(const void* src, int elmSize, int elmCount)
             {
                 for (int i = 0; i < elmCount; i++)
@@ -310,7 +309,7 @@ namespace Xli
 
         static int32_t handle_input(struct android_app* app, AInputEvent* event)
         {
-            // NDK - The NDK exposes only incomplete key data so all of that has 
+            // NDK - The NDK exposes only incomplete key data so all of that has
             //       to come from the shim callbacks.
             int32_t kcode=0;
             switch (AInputEvent_getType(event))
@@ -430,7 +429,7 @@ namespace Xli
                 case APP_CMD_PAUSE:
                     if (GlobalEventHandler)
                         GlobalEventHandler->OnAppWillEnterBackground(GlobalWindow);
-                
+
                     visible = 0;
 
                     if (GlobalEventHandler)
@@ -452,7 +451,7 @@ namespace Xli
                 case APP_CMD_LOW_MEMORY:
                     if (GlobalEventHandler)
                         GlobalEventHandler->OnAppLowMemory(GlobalWindow);
-                
+
                     break;
 
                 case APP_CMD_STOP:
@@ -488,7 +487,7 @@ namespace Xli
             while (!inited)
             {
                 Window::ProcessMessages();
-                
+
                 if (app->destroyRequested)
                 {
                     LOGF("Unable to initialize window");
@@ -532,7 +531,7 @@ namespace Xli
         GlobalWidth = width;
         GlobalHeight = height;
         GlobalWindow = new PlatformSpecific::AWindow();
-    
+
         return GlobalWindow;
     }
 
@@ -547,9 +546,9 @@ namespace Xli
         int events;
         struct android_poll_source* source;
 
-        while ((ident = ALooper_pollAll(0, NULL, &events, (void**)&source)) >= 0) 
+        while ((ident = ALooper_pollAll(0, NULL, &events, (void**)&source)) >= 0)
             if (source != NULL)
-                source->process(GlobalAndroidApp, source);        
+                source->process(GlobalAndroidApp, source);
 
         if (inited && !GlobalAndroidApp->destroyRequested)
         {
@@ -565,44 +564,9 @@ namespace Xli
                 if (GlobalEventHandler)
                     GlobalEventHandler->OnSizeChanged(GlobalWindow, Vector2i(w, h));
             }
-            
+
             if (GlobalWindow)
                 GlobalWindow->ProcessCrossThreadEvents();
         }
-    }
-
-    int Display::GetCount()
-    {
-        return 1;
-    }
-
-    Recti Display::GetRect(int index)
-    {
-        int w = ANativeWindow_getWidth(GlobalAndroidApp->window);
-        int h = ANativeWindow_getHeight(GlobalAndroidApp->window);
-        return Recti(0, 0, w, h);
-    }
-
-    bool Display::GetCurrentSettings(int index, DisplaySettings& settings)
-    {
-        return false;
-    }
-
-    void Display::GetSupportedSettings(int index, Array<DisplaySettings>& settings)
-    {
-    }
-
-    bool Display::ChangeSettings(int index, const DisplaySettings& settings)
-    {
-        return false;
-    }
-
-    float Display::GetDensity(int displayIndex)
-    {
-        return PlatformSpecific::AShim::GetDensity();
-    }
-    Vector2 Display::GetDpi(int displayIndex)
-    {
-        return PlatformSpecific::AShim::GetDpi();
     }
 }

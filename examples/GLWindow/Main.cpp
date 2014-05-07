@@ -75,6 +75,8 @@ public:
         PrintLine((String)"FileSystem Pictures Dir: " + Disk->GetSystemDirectory(SystemDirectoryPictures));
         PrintLine((String)"FileSystem Videos Dir: " + Disk->GetSystemDirectory(SystemDirectoryVideos));
         PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
+        
+        PrintLine((String)"DPI: " + Display::GetDpi(0).ToString());
     }
 
     virtual void OnLoad(Window* wnd)

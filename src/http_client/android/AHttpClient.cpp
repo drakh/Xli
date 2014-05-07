@@ -153,7 +153,7 @@ namespace Xli
 
     int AHttpRequest::GetResponseHeaderCount() const
     {
-        if (state == HttpRequestStateHeadersReceived)
+        if (state >= HttpRequestStateHeadersReceived)
         {
             return responseHeaders.Count();
         } else {
@@ -162,7 +162,7 @@ namespace Xli
     }
     int AHttpRequest::ResponseHeadersBegin() const
     {
-        if (state == HttpRequestStateHeadersReceived)
+        if (state >= HttpRequestStateHeadersReceived)
         {
             return responseHeaders.Begin();
         } else {
@@ -171,7 +171,7 @@ namespace Xli
     }
     int AHttpRequest::ResponseHeadersNext(int n) const
     {
-        if (state == HttpRequestStateHeadersReceived)
+        if (state >= HttpRequestStateHeadersReceived)
         {
             return responseHeaders.Next(n);
         } else {
@@ -180,7 +180,7 @@ namespace Xli
     }
     int AHttpRequest::ResponseHeadersEnd() const
     {
-        if (state == HttpRequestStateHeadersReceived)
+        if (state >= HttpRequestStateHeadersReceived)
         {
             return responseHeaders.End();
         } else {
@@ -189,7 +189,7 @@ namespace Xli
     }
     String AHttpRequest::GetResponseHeaderValue(int n) const
     {
-        if (state == HttpRequestStateHeadersReceived)
+        if (state >= HttpRequestStateHeadersReceived)
         {
             return responseHeaders.GetValue(n);
         } else {
@@ -198,7 +198,7 @@ namespace Xli
     }
     String AHttpRequest::GetResponseHeaderKey(int n) const
     {
-        if (state == HttpRequestStateHeadersReceived)
+        if (state >= HttpRequestStateHeadersReceived)
         {
             return responseHeaders.GetKey(n);
         } else {
@@ -208,7 +208,7 @@ namespace Xli
 
     bool AHttpRequest::TryGetResponseHeader(const String& key, String& result) const
     {
-        if (state == HttpRequestStateHeadersReceived)
+        if (state >= HttpRequestStateHeadersReceived)
         {
             return responseHeaders.TryGetValue(key, result);
         } else {
@@ -218,7 +218,7 @@ namespace Xli
 
     int AHttpRequest::GetResponseStatus() const
     {
-        if (state == HttpRequestStateHeadersReceived)
+        if (state >= HttpRequestStateHeadersReceived)
         {
             return responseStatus;
         } else {

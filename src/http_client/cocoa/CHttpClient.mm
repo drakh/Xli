@@ -178,7 +178,7 @@ namespace Xli
 
         virtual int GetResponseHeaderCount() const
         {
-            if (state == HttpRequestStateHeadersReceived)
+            if (state >= HttpRequestStateHeadersReceived)
             {
                 return responseHeaders.Count();
             } else {
@@ -187,7 +187,7 @@ namespace Xli
         }
         virtual int ResponseHeadersBegin() const
         {
-            if (state == HttpRequestStateHeadersReceived)
+            if (state >= HttpRequestStateHeadersReceived)
             {
                 return responseHeaders.Begin();
             } else {
@@ -196,7 +196,7 @@ namespace Xli
         }
         virtual int ResponseHeadersNext(int n) const
         {
-            if (state == HttpRequestStateHeadersReceived)
+            if (state >= HttpRequestStateHeadersReceived)
             {
                 return responseHeaders.Next(n);
             } else {
@@ -205,7 +205,7 @@ namespace Xli
         }
         virtual int ResponseHeadersEnd() const
         {
-            if (state == HttpRequestStateHeadersReceived)
+            if (state >= HttpRequestStateHeadersReceived)
             {
                 return responseHeaders.End();
             } else {
@@ -214,7 +214,7 @@ namespace Xli
         }
         virtual String GetResponseHeaderKey(int n) const
         {
-            if (state == HttpRequestStateHeadersReceived)
+            if (state >= HttpRequestStateHeadersReceived)
             {
                 return responseHeaders.GetKey(n);
             } else {
@@ -223,7 +223,7 @@ namespace Xli
         }
         virtual String GetResponseHeaderValue(int n) const
         {
-            if (state == HttpRequestStateHeadersReceived)
+            if (state >= HttpRequestStateHeadersReceived)
             {
                 return responseHeaders.GetValue(n);
             } else {
@@ -233,7 +233,7 @@ namespace Xli
 
         virtual int GetResponseStatus() const
         {
-            if (state == HttpRequestStateHeadersReceived) // {TODO} is this the correct state?
+            if (state >= HttpRequestStateHeadersReceived) // {TODO} is this the correct state?
             {
                 return responseStatus;
             } else {
@@ -243,7 +243,7 @@ namespace Xli
 
         virtual bool TryGetResponseHeader(const String& key, String& result) const
         {
-            if (state == HttpRequestStateHeadersReceived)
+            if (state >= HttpRequestStateHeadersReceived)
             {
                 return responseHeaders.TryGetValue(key, result);
             } else {
@@ -305,9 +305,9 @@ namespace Xli
                 CFRelease(this->cachedContentStream);
             if (uploadData!=0)
                 CFRelease(this->uploadData);
-
-            // HttpEventHandler* eh = client->GetEventHandler();
-            // if (eh!=0) eh->OnRequestStateChanged(this);
+            
+            HttpEventHandler* eh = client->GetEventHandler();
+            if (eh!=0) eh->OnRequestAborted(this);
         }
 
         //{TODO} we will always download imediately so clean this up and possibly fold into other function

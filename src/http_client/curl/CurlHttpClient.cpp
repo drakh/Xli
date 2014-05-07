@@ -50,7 +50,7 @@ namespace Xli
             } else {
                 XLI_THROW("XLIHTTP: PopSession - request not found in abortedTable");
             }
-        }
+        }        
         static void MarkAborted(HttpRequest* requestHandle, CURL* session)
         {
             if (!abortedTable.ContainsKey(requestHandle))
@@ -101,7 +101,7 @@ namespace Xli
         virtual ~CurlHttpRequest()
         {
             Abort();
-            curl_slist_free_all(curlUploadHeaders);
+            curl_slist_free_all(curlUploadHeaders);            
             // {TODO} free upload headers
         }
 
@@ -143,22 +143,22 @@ namespace Xli
         virtual String GetHeaderKey(int n) const { return headers.GetKey(n); }
         virtual String GetHeaderValue(int n) const { return headers.GetValue(n); }
 
-        // bytelength -1 means no body
-        virtual void SendAsync(const void* content, int byteLength)
+        virtual CURLcode SetCurlRequestOptions(CURL* session, const void* content, int byteLength)
         {
-            if (state != HttpRequestStateUnsent)
-                XLI_THROW("HttpRequest->SetArrayPulledCallback(): Not in a valid state to send");
-
-            if (content!=0 && byteLength>0)
-                // const_cast is safe here are bufferstream is set readonly
-                uploadBuffer = new BufferStream(new BufferPointer(const_cast<void*>(content), byteLength, requestOwnsUploadData), true, false);
-
-            CURL* session = curl_easy_init();
-            if (!session)
-                XLI_THROW("CURL ERROR: Failed to create handle");
-
             CURLcode result = CURLE_OK;
-            if (result == CURLE_OK) result = curl_easy_setopt(session, methodToCurlOption(method), 1);
+            // set method option
+            if (method == "GET") 
+            {
+                result = curl_easy_setopt(session, CURLOPT_HTTPGET, 1);
+            } else if (method == "POST") {
+                result = curl_easy_setopt(session, CURLOPT_POST, 1);
+            } else if (method == "PUT") {
+                result = curl_easy_setopt(session, CURLOPT_UPLOAD, 1);
+            } else if (method == "OPTIONS" || method == "HEAD" || method == "TRACE" || method == "DELETE") {
+                curl_easy_setopt(session, CURLOPT_CUSTOMREQUEST, method.DataPtr()); 
+            } else {
+                XLI_THROW("XliHttp: Invalid Method Specified");
+            }
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_URL, url.DataPtr());
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_CONNECTTIMEOUT, timeout);
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_AUTOREFERER, 1);
@@ -174,23 +174,43 @@ namespace Xli
             //Method specific options
             if (method ==  "GET")
             {
-                if (content!=0) result = CURLE_FAILED_INIT;
-            } else if (method == "POST") {
-                if (content==0) result = CURLE_FAILED_INIT;
-                if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_POSTFIELDS, (void*)content);
-                if (byteLength == -1)
+                if (content!=0 && byteLength>0) result = CURLE_FAILED_INIT;
+            } else if (method == "HEAD") {
+                if (content!=0 && byteLength>0) result = CURLE_FAILED_INIT;
+                if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_NOBODY, 1);
+            } else if (method == "POST") {                
+                if (byteLength <= 0)
                 {
                     if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_POSTFIELDSIZE, -1);
                 } else {
+                    if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_POSTFIELDS, (void*)content);
                     if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_POSTFIELDSIZE_LARGE, byteLength);
                 }
             } else if (method == "PUT") {
-                if (content==0 || byteLength < 0) result = CURLE_FAILED_INIT;
+                if (content==0 || byteLength <= 0) result = CURLE_FAILED_INIT;
                 if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_READFUNCTION, onDataUpload);
                 if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_READDATA, (void*)this);
-            } else {
-                if (content==0) result = CURLE_FAILED_INIT;
             };
+
+            return result;
+        }
+        
+        virtual void SendAsync(const void* content, int byteLength)
+        {
+            if (state != HttpRequestStateUnsent)
+                XLI_THROW("HttpRequest->SetArrayPulledCallback(): Not in a valid state to send");
+
+            if (content!=0 && byteLength>0)
+                // const_cast is safe here are bufferstream is set readonly
+                uploadBuffer = new BufferStream(new BufferPointer(const_cast<void*>(content), byteLength, requestOwnsUploadData), true, false);
+
+            //Create session
+            CURL* session = curl_easy_init();
+            if (!session)
+                XLI_THROW("CURL ERROR: Failed to create handle");
+
+            // Set curl options
+            CURLcode result = SetCurlRequestOptions(session, content, byteLength);
 
             //Add headers
             int i = HeadersBegin();
@@ -205,7 +225,7 @@ namespace Xli
                 i = HeadersNext(i);
             }
             curl_easy_setopt(session, CURLOPT_HTTPHEADER, curlUploadHeaders);
-            //{TODO} Add following to cleanup: curl_slist_free_all(curlUploadHeaders);
+
             if (result == CURLE_OK)
             {
                 state = HttpRequestStateSent;
@@ -250,7 +270,7 @@ namespace Xli
 
         virtual int GetResponseHeaderCount() const
         {
-            if (state == HttpRequestStateHeadersReceived)
+            if (state >= HttpRequestStateHeadersReceived)
             {
                 return responseHeaders.Count();
             } else {
@@ -259,7 +279,7 @@ namespace Xli
         }
         virtual int ResponseHeadersBegin() const
         {
-            if (state == HttpRequestStateHeadersReceived)
+            if (state >= HttpRequestStateHeadersReceived)
             {
                 return responseHeaders.Begin();
             } else {
@@ -268,7 +288,7 @@ namespace Xli
         }
         virtual int ResponseHeadersNext(int n) const
         {
-            if (state == HttpRequestStateHeadersReceived)
+            if (state >= HttpRequestStateHeadersReceived)
             {
                 return responseHeaders.Next(n);
             } else {
@@ -277,7 +297,7 @@ namespace Xli
         }
         virtual int ResponseHeadersEnd() const
         {
-            if (state == HttpRequestStateHeadersReceived)
+            if (state >= HttpRequestStateHeadersReceived)
             {
                 return responseHeaders.End();
             } else {
@@ -286,7 +306,7 @@ namespace Xli
         }
         virtual String GetResponseHeaderKey(int n) const
         {
-            if (state == HttpRequestStateHeadersReceived)
+            if (state >= HttpRequestStateHeadersReceived)
             {
                 return responseHeaders.GetKey(n);
             } else {
@@ -295,7 +315,7 @@ namespace Xli
         }
         virtual String GetResponseHeaderValue(int n) const
         {
-            if (state == HttpRequestStateHeadersReceived)
+            if (state >= HttpRequestStateHeadersReceived)
             {
                 return responseHeaders.GetValue(n);
             } else {
@@ -305,7 +325,7 @@ namespace Xli
 
         virtual int GetResponseStatus() const
         {
-            if (state == HttpRequestStateHeadersReceived) // {TODO} is this the correct state?
+            if (state >= HttpRequestStateHeadersReceived) // {TODO} is this the correct state?
             {
                 return responseStatus;
             } else {
@@ -315,7 +335,7 @@ namespace Xli
 
         virtual bool TryGetResponseHeader(const String& key, String& result) const
         {
-            if (state == HttpRequestStateHeadersReceived)
+            if (state >= HttpRequestStateHeadersReceived)
             {
                 return responseHeaders.TryGetValue(key, result);
             } else {
@@ -519,9 +539,11 @@ namespace Xli
             messageType = msg->msg;
             if (messageType == CURLMSG_DONE)
             {
+                // we need to find errors here
                 request->onDone();
             } else {
-                XLI_THROW("Unknown curl message type");
+                HttpEventHandler* eh = this->GetEventHandler();
+                if (eh!=0) eh->OnRequestError(request);
             }
         }
     }
