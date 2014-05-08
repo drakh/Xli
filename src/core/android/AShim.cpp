@@ -30,7 +30,7 @@ namespace Xli
 
         void AShim::CacheMids(JNIEnv *env, jclass shimClass)
         {
-            LOGE("Caching Mids");
+            LOGD("Caching Mids");
             makeNoise = env->GetStaticMethodID(shimClass, "makeNoise", "()V");
             raiseKeyboard = env->GetStaticMethodID(shimClass, "raiseKeyboard", "(Landroid/app/NativeActivity;)V");
             hideKeyboard = env->GetStaticMethodID(shimClass, "hideKeyboard", "(Landroid/app/NativeActivity;)V");
@@ -86,7 +86,7 @@ namespace Xli
             {
                 XLI_THROW("Cannot cache mids for shim. Exiting.");
             }
-            LOGE("Mids Cached");
+            LOGD("Mids Cached");
         }
 
         void AShim::MakeNoise()
