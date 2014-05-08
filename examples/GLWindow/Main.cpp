@@ -77,6 +77,7 @@ public:
         PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
         
         PrintLine((String)"DPI: " + Display::GetDpi(0).ToString());
+        PrintLine((String)"statusbar size: " + wnd->GetStatusBarSize().ToString());
     }
 
     virtual void OnLoad(Window* wnd)

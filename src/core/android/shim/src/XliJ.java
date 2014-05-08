@@ -206,14 +206,6 @@ public class XliJ extends android.app.NativeActivity {
         @Override
         public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
             int action = keyEvent.getAction();
-            // Catch unicode characters (even character sequeneces)
-            // But make sure we aren't catching the dummy buffer.
-            if (action == KeyEvent.ACTION_MULTIPLE) {
-                String s = keyEvent.getCharacters();
-                if (!s.equals(DUMMY)) {
-                    //listener.onSend(s);
-                }
-            }
             if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE)
             {
                 if (keyEvent.getAction()==KeyEvent.ACTION_DOWN)
@@ -301,7 +293,7 @@ public class XliJ extends android.app.NativeActivity {
         }
 
         @Override
-        public boolean sendKeyEvent(KeyEvent event) {
+        public boolean sendKeyEvent(KeyEvent event) {        
             int keyCode = event.getKeyCode();
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
                 XliJ_OnKeyDown(keyCode);
