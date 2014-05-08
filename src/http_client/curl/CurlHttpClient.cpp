@@ -157,7 +157,7 @@ namespace Xli
             } else if (method == "OPTIONS" || method == "HEAD" || method == "TRACE" || method == "DELETE") {
                 curl_easy_setopt(session, CURLOPT_CUSTOMREQUEST, method.DataPtr()); 
             } else {
-                XLI_THROW("XliHttp: Invalid Method Specified");
+                return CURLE_FAILED_INIT;
             }
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_URL, url.DataPtr());
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_CONNECTTIMEOUT, timeout);
@@ -198,16 +198,27 @@ namespace Xli
         virtual void SendAsync(const void* content, int byteLength)
         {
             if (state != HttpRequestStateUnsent)
-                XLI_THROW("HttpRequest->SetArrayPulledCallback(): Not in a valid state to send");
+            {
+                //XLI_THROW("HttpRequest->SetArrayPulledCallback(): Not in a valid state to send");
+                HttpEventHandler* eh = client->GetEventHandler();
+                if (eh!=0 && !aborted) eh->OnRequestError(this);
+                return;
+            }
 
             if (content!=0 && byteLength>0)
+            {
                 // const_cast is safe here are bufferstream is set readonly
                 uploadBuffer = new BufferStream(new BufferPointer(const_cast<void*>(content), byteLength, requestOwnsUploadData), true, false);
+            }
 
             //Create session
             CURL* session = curl_easy_init();
             if (!session)
-                XLI_THROW("CURL ERROR: Failed to create handle");
+            {
+                HttpEventHandler* eh = client->GetEventHandler();
+                if (eh!=0 && !aborted) eh->OnRequestError(this);
+                return;
+            } 
 
             // Set curl options
             CURLcode result = SetCurlRequestOptions(session, content, byteLength);

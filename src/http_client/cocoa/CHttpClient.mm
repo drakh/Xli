@@ -325,7 +325,7 @@ namespace Xli
                 CFWriteStreamOpen(this->cachedContentStream);
                 if (dataReady) OnByteDataRecieved(this, cachedReadStream, NULL);
             } else {
-                NSLog(@"Cant pull content array"); //{TODO} proper error here
+                XLI_THROW("Not in correct state to start download");
             }
         }
 

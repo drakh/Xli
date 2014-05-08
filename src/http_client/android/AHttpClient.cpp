@@ -114,7 +114,11 @@ namespace Xli
             if (eh!=0) eh->OnRequestStateChanged(this);
             javaAsyncHandle = PlatformSpecific::AShim::SendHttpAsync(this);
         } else {
-            XLI_THROW("HttpRequest->SendAsync(): Not in a valid state to send");
+            HttpEventHandler* eh = client->GetEventHandler();
+            if (eh!=0) 
+                eh->OnRequestError(const_cast<AHttpRequest*>(this));
+            else
+                XLI_THROW("XliHttp: Cannot find Http EventHandler");
         }
     }
 
@@ -124,7 +128,7 @@ namespace Xli
         {
             if ((int)state > (int)HttpRequestStateUnsent)
             {
-                // if ashim::abortasyncconnection works then we need some kidn fo callback so we know to
+                // {TODO} if ashim::abortasyncconnection works then we need some kind of callback so we know to
                 // cleanup the SessionMap.
                 if (javaAsyncHandle!=0) 
                     PlatformSpecific::AShim::AbortAsyncConnection(javaAsyncHandle);
@@ -134,7 +138,11 @@ namespace Xli
                 if (eh!=0) eh->OnRequestAborted(this);
 
             } else {
-                XLI_THROW("HttpRequest->SendAsync(): Request has not beem sent, cannot abort");
+                HttpEventHandler* eh = client->GetEventHandler();
+                if (eh!=0) 
+                    eh->OnRequestError(const_cast<AHttpRequest*>(this));
+                else
+                    XLI_THROW("XliHttp: Cannot find Http EventHandler");
             }
         }
     }
@@ -235,7 +243,6 @@ namespace Xli
             XLI_THROW("HttpRequest->GetResponseBody(): Not in a valid state to get the response body");
         }
     }
-
 
     //---- Entry points fors calls from java to c++ ----//
     extern "C"
