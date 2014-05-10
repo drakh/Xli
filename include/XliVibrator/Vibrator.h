@@ -3,7 +3,7 @@
 
 namespace Xli
 {   
-    class Vibrator: public Object
+    class Vibrator
     { 
     public:
         static bool CanVibrate();

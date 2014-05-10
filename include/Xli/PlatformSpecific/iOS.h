@@ -108,6 +108,37 @@ namespace Xli
             return IDeviceType_UNKNOWN;
         }
 
+        static bool IsIPhone()
+        {
+            IDeviceType type = GetIDeviceType();
+            if (type==IDeviceType_IPHONE_1G || type==IDeviceType_IPHONE_3G || type==IDeviceType_IPHONE_3GS || type==IDeviceType_IPHONE_4 || 
+                type==IDeviceType_VERIZON_IPHONE_4 || type==IDeviceType_IPHONE_4S || type==IDeviceType_IPHONE_5_GSM || 
+                type==IDeviceType_IPHONE_5_GSM_CDMA || type==IDeviceType_IPHONE_5C_GSM || type==IDeviceType_IPHONE_5C_GSM_CDMA || 
+                type==IDeviceType_IPHONE_5S_GSM || type==IDeviceType_IPHONE_5S_GSM_CDMA)
+                return true;
+            return false;
+        }
+        static bool IsIPod()
+        {
+            IDeviceType type = GetIDeviceType();
+            if (type==IDeviceType_IPOD_TOUCH_1G || type==IDeviceType_IPOD_TOUCH_2G || type==IDeviceType_IPOD_TOUCH_3G || 
+                type==IDeviceType_IPOD_TOUCH_4G || type==IDeviceType_IPOD_TOUCH_5G)
+                return true;
+            return false;
+        }
+        static bool IsIPad()
+        {
+            IDeviceType type = GetIDeviceType();
+            if (type==IDeviceType_IPAD || type==IDeviceType_IPAD_2_WIFI || type==IDeviceType_IPAD_2_GSM || 
+                type==IDeviceType_IPAD_2_CDMA || type==IDeviceType_IPAD_2_WIFI || type==IDeviceType_IPAD_MINI_WIFI || 
+                type==IDeviceType_IPAD_MINI_GSM || type==IDeviceType_IPAD_MINI_GSM_CDMA || type==IDeviceType_IPAD_3_WIFI || 
+                type==IDeviceType_IPAD_3_GSM_CDMA || type==IDeviceType_IPAD_3_GSM || type==IDeviceType_IPAD_4_WIFI || 
+                type==IDeviceType_IPAD_4_GSM || type==IDeviceType_IPAD_4_GSM_CDMA || type==IDeviceType_IPAD_AIR_WIFI || 
+                type==IDeviceType_IPAD_AIR_CELLULAR || type==IDeviceType_IPAD_MINI_2G_WIFI || type==IDeviceType_IPAD_MINI_2G_CELLULAR)
+                return true;
+            return false;
+        }
+
         static float GetIDeviceDpi(IDeviceType type)
         {
             switch (type)
