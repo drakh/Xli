@@ -1,7 +1,3 @@
-if (NOT IOS AND NOT ANDROID)
-    return()
-endif()
-
 set(SRC)
 set(LIBS Xli)
 
@@ -12,6 +8,10 @@ if (XLI_PLATFORM_IOS)
 elseif (XLI_PLATFORM_ANDROID)
 
     set(SRC ${SRC} android/Vibrator.cpp)
+
+elseif (NOT IOS AND NOT ANDROID) 
+
+    set(SRC ${SRC} noVibrator/Vibrator.cpp)
 
 endif()
 
