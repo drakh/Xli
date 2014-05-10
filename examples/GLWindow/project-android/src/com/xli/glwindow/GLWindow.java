@@ -7,6 +7,7 @@ public class GLWindow extends android.app.NativeActivity
         System.loadLibrary("Xli");
         System.loadLibrary("XliGL");
         System.loadLibrary("XliMedia");
+        System.loadLibrary("XliVibrator");
         System.loadLibrary("GLWindow");
     }
 }

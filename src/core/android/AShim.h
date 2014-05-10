@@ -28,6 +28,8 @@ namespace Xli
             static jmethodID showStatusBar;
             static jmethodID getStatusBarHeight;
             static jmethodID getDisplayMetrics;
+            static jmethodID hasVibrator;
+            static jmethodID vibrateForMilliseconds;
             
         public:
             static int kbVisible;
@@ -41,7 +43,10 @@ namespace Xli
             static void ShowStatusBar();
             static void HideStatusBar();
             static float GetStatusBarHeight();
-            static int ShowMessageBox(const String& message, const String& caption, int buttons, int hints);            
+            static int ShowMessageBox(const String& message, const String& caption, int buttons, int hints);
+            static bool HasVibrator();
+            static void VibrateForMilliseconds(int milliseconds);
+            
             static bool ConnectedToNetwork();
             static jobject XliToJavaHeaders(const HttpRequest* req);
             static jobject SendHttpAsync(const HttpRequest* req, const void* content, long byteLength);

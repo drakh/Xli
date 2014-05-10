@@ -40,6 +40,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.ConditionVariable;
+import android.os.Vibrator;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.Selection;
@@ -135,6 +136,24 @@ public class XliJ extends android.app.NativeActivity {
     	win.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
+    @SuppressLint("NewApi")
+	public static boolean HasVibrator(final NativeActivity activity)
+    {
+    	Vibrator vibrator = (Vibrator)activity.getSystemService(Context.VIBRATOR_SERVICE);
+    	if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB)
+    	{
+    		return vibrator.hasVibrator();
+    	} else {
+    		return true;
+    	}
+    }
+    
+    public static void VibrateForMilliseconds(final NativeActivity activity, int milliseconds)
+    {
+    	Vibrator vibrator = (Vibrator)activity.getSystemService(Context.VIBRATOR_SERVICE);
+    	vibrator.vibrate(milliseconds);
+    }
+    
     //===========
 
     public static void makeNoise() { Log.e("XliApp", "************ Noise! ************"); }

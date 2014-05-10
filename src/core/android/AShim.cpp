@@ -27,6 +27,8 @@ namespace Xli
         jmethodID AShim::showStatusBar;
         jmethodID AShim::getStatusBarHeight;
         jmethodID AShim::getDisplayMetrics;
+        jmethodID AShim::hasVibrator;
+        jmethodID AShim::vibrateForMilliseconds;
 
         void AShim::CacheMids(JNIEnv *env, jclass shimClass)
         {
@@ -44,48 +46,23 @@ namespace Xli
             getStatusBarHeight = env->GetStaticMethodID(shimClass, "GetStatusBarHeight", "(Landroid/app/NativeActivity;)F");
             getDisplayMetrics = env->GetStaticMethodID(shimClass, "GetDisplayMetrics", "(Landroid/app/NativeActivity;)Landroid/util/DisplayMetrics;");
 
-            if (!makeNoise) {
-                XLI_THROW("Cannot cache mid for makeNoise.");
-            }
-            if (!raiseKeyboard) {
-                XLI_THROW("Cannot cache mid for raiseKeyboard.");
-            }
-            if (!hideKeyboard) {
-                XLI_THROW("Cannot cache mid for hideKeyboard.");
-            }
-            if (!getKeyboardSize) {
-                XLI_THROW("Cannot cache mid for getKeyboardSize.");
-            }
-            if (!showMessageBox) {
-                XLI_THROW("Cannot cache mid for showMessageBox.");
-            }
-            if (!connectedToNetwork) {
-                XLI_THROW("Cannot cache mid for connectedToNetwork.");
-            }
-            if (!initDefaultCookieManager) {
-                XLI_THROW("Cannot cache mid for initDefaultCookieManager.");
-            }
-            if (!getAssetManager) {
-                XLI_THROW("Cannot cache mid for getAssetManager.");
-            }
-            if (!hideStatusBar) {
-                XLI_THROW("Cannot cache mid for hideStatusBar.");
-            }
-            if (!showStatusBar) {
-                XLI_THROW("Cannot cache mid for showStatusBar.");
-            }
-            if (!getStatusBarHeight) {
-                XLI_THROW("Cannot cache mid for getStatusBarHeight.");
-            }
-            if (!getDisplayMetrics) {
-                XLI_THROW("Cannot cache mid for getDisplayMetrics.");
-            }
-            if ((!makeNoise) || (!raiseKeyboard) || (!hideKeyboard) || (!showMessageBox) || (!connectedToNetwork) || 
-                (!initDefaultCookieManager) || (!getAssetManager) || (!getKeyboardSize) || (!showStatusBar) ||
-                (!hideStatusBar)  || (!getDisplayMetrics) || (!getStatusBarHeight))
-            {
-                XLI_THROW("Cannot cache mids for shim. Exiting.");
-            }
+            hasVibrator = env->GetStaticMethodID(shimClass, "HasVibrator", "(Landroid/app/NativeActivity;)Z");
+            vibrateForMilliseconds = env->GetStaticMethodID(shimClass, "VibrateForMilliseconds", "(Landroid/app/NativeActivity;I)V");
+
+            if (!makeNoise) XLI_THROW("Cannot cache mid for makeNoise.");
+            if (!raiseKeyboard) XLI_THROW("Cannot cache mid for raiseKeyboard.");
+            if (!hideKeyboard) XLI_THROW("Cannot cache mid for hideKeyboard.");
+            if (!getKeyboardSize) XLI_THROW("Cannot cache mid for getKeyboardSize.");
+            if (!showMessageBox) XLI_THROW("Cannot cache mid for showMessageBox.");
+            if (!connectedToNetwork) XLI_THROW("Cannot cache mid for connectedToNetwork.");
+            if (!initDefaultCookieManager) XLI_THROW("Cannot cache mid for initDefaultCookieManager.");
+            if (!getAssetManager) XLI_THROW("Cannot cache mid for getAssetManager.");
+            if (!hideStatusBar) XLI_THROW("Cannot cache mid for hideStatusBar.");
+            if (!showStatusBar) XLI_THROW("Cannot cache mid for showStatusBar.");
+            if (!getStatusBarHeight) XLI_THROW("Cannot cache mid for getStatusBarHeight.");
+            if (!getDisplayMetrics) XLI_THROW("Cannot cache mid for getDisplayMetrics.");
+            if (!hasVibrator) XLI_THROW("Cannot cache mid for hasVibrator.");
+            if (!vibrateForMilliseconds) XLI_THROW("Cannot cache mid for vibrateForMilliseconds.");            
             LOGD("Mids Cached");
         }
 
@@ -178,6 +155,27 @@ namespace Xli
         bool AShim::KeyboardVisible()
         {
             return kbVisible;
+        }
+
+        bool AShim::HasVibrator()
+        {
+            AJniHelper jni;
+            jclass shimClass = jni.GetShim();
+            jobject activity = jni.GetInstance();
+            jobject jresult = jni->CallObjectMethod(shimClass, hasVibrator, activity);
+            bool result = (bool)jresult;
+            jni->DeleteLocalRef(jresult);
+            jni->DeleteLocalRef(activity);
+            return (bool)result;
+        }
+
+        void AShim::VibrateForMilliseconds(int milliseconds)
+        {
+            AJniHelper jni;
+            jclass shimClass = jni.GetShim();
+            jobject activity = jni.GetInstance();
+            jni->CallObjectMethod(shimClass, vibrateForMilliseconds, activity, 
+                                  (jint)milliseconds);
         }
 
         int AShim::ShowMessageBox(const String& message, const String& caption, int buttons, int hints)

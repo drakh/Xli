@@ -35,6 +35,13 @@ LOCAL_MODULE := XliGL
 LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXliGL.so
 include $(PREBUILT_SHARED_LIBRARY)
 
+# libXliVibrator.so
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := XliVibrator
+LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXliVibrator.so
+include $(PREBUILT_SHARED_LIBRARY)
+
 
 # libGLWindow.so
 
@@ -50,6 +57,6 @@ LOCAL_CFLAGS   := -fexceptions
 LOCAL_LDLIBS   := -lm -lGLESv2 -landroid -llog
 
 LOCAL_WHOLE_STATIC_LIBRARIES := XliMain
-LOCAL_SHARED_LIBRARIES := Xli XliGL XliMedia
+LOCAL_SHARED_LIBRARIES := Xli XliGL XliMedia XliVibrator
 
 include $(BUILD_SHARED_LIBRARY)
