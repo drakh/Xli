@@ -14,7 +14,6 @@ namespace Xli
     {
         int AShim::kbVisible = 0;
 
-        jmethodID AShim::makeNoise;
         jmethodID AShim::raiseKeyboard;
         jmethodID AShim::hideKeyboard;
         jmethodID AShim::getKeyboardSize;
@@ -33,7 +32,6 @@ namespace Xli
         void AShim::CacheMids(JNIEnv *env, jclass shimClass)
         {
             LOGD("Caching Mids");
-            makeNoise = env->GetStaticMethodID(shimClass, "makeNoise", "()V");
             raiseKeyboard = env->GetStaticMethodID(shimClass, "raiseKeyboard", "(Landroid/app/NativeActivity;)V");
             hideKeyboard = env->GetStaticMethodID(shimClass, "hideKeyboard", "(Landroid/app/NativeActivity;)V");
             getKeyboardSize = env->GetStaticMethodID(shimClass, "GetKeyboardSize", "()I");
@@ -49,7 +47,6 @@ namespace Xli
             hasVibrator = env->GetStaticMethodID(shimClass, "HasVibrator", "(Landroid/app/NativeActivity;)Z");
             vibrateForMilliseconds = env->GetStaticMethodID(shimClass, "VibrateForMilliseconds", "(Landroid/app/NativeActivity;I)V");
 
-            if (!makeNoise) XLI_THROW("Cannot cache mid for makeNoise.");
             if (!raiseKeyboard) XLI_THROW("Cannot cache mid for raiseKeyboard.");
             if (!hideKeyboard) XLI_THROW("Cannot cache mid for hideKeyboard.");
             if (!getKeyboardSize) XLI_THROW("Cannot cache mid for getKeyboardSize.");
@@ -64,13 +61,6 @@ namespace Xli
             if (!hasVibrator) XLI_THROW("Cannot cache mid for hasVibrator.");
             if (!vibrateForMilliseconds) XLI_THROW("Cannot cache mid for vibrateForMilliseconds.");            
             LOGD("Mids Cached");
-        }
-
-        void AShim::MakeNoise()
-        {
-            AJniHelper jni;
-            jclass shimClass = jni.GetShim();
-            jni->CallObjectMethod(shimClass, makeNoise);
         }
 
         void AShim::RaiseSoftKeyboard()

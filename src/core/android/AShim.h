@@ -12,7 +12,6 @@ namespace Xli
         class AShim
         {
         private:
-            static jmethodID makeNoise;
             static jmethodID raiseKeyboard;
             static jmethodID hideKeyboard;
             static jmethodID getKeyboardSize;
@@ -35,7 +34,6 @@ namespace Xli
             static int kbVisible;
 
             static void CacheMids(JNIEnv *env, jclass shim_class);
-            static void MakeNoise();
             static void RaiseSoftKeyboard();
             static void HideSoftKeyboard();
             static bool KeyboardVisible();
