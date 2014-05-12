@@ -1,7 +1,6 @@
 #include <Xli.h>
 #include <XliGL.h>
 #include <Xli/Display.h>
-#include <XliVibrator.h>
 
 using namespace Xli;
 
@@ -219,7 +218,6 @@ public:
             if (currentTime - tapTime < 0.3)
             {
                 Err->WriteLine("Bang");
-                Vibrator::Vibrate();
                 wnd->BeginTextInput((Xli::TextInputHint)0);
             }
             else if (wnd->IsTextInputActive())
