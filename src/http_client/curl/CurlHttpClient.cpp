@@ -89,13 +89,15 @@ namespace Xli
         CurlHttpRequest(CurlHttpClient* client, String url, String method)
         {
             this->client = client;
-            this->state = HttpRequestStateUnsent;
+            this->state = HttpRequestStateOpened;
             this->url = url;
             this->method = method;
             this->timeout = 0;
             this->curlUploadHeaders=NULL;
             this->responseBody = new ArrayStream(1);
             this->aborted = false;
+            HttpEventHandler* eh = client->GetEventHandler();
+            if (eh!=0) eh->OnRequestStateChanged(this);
         }
 
         virtual ~CurlHttpRequest()
@@ -111,7 +113,7 @@ namespace Xli
         virtual int GetTimeout() const { return timeout; }
         virtual void SetTimeout(int timeout)
         {
-            if (state == HttpRequestStateUnsent)
+            if (state <= HttpRequestStateOpened)
             {
                 this->timeout = timeout;
             } else {
@@ -121,7 +123,7 @@ namespace Xli
 
         virtual void SetHeader(const String& key, const String& value)
         {
-            if (state == HttpRequestStateUnsent)
+            if (state == HttpRequestStateOpened)
             {
                 headers.Add(key,value);
             } else {
@@ -130,7 +132,7 @@ namespace Xli
         }
         virtual void RemoveHeader(const String& key)
         {
-            if (state == HttpRequestStateUnsent)
+            if (state == HttpRequestStateOpened)
             {
                 headers.Remove(key);
             } else {
@@ -197,7 +199,7 @@ namespace Xli
         
         virtual void SendAsync(const void* content, int byteLength)
         {
-            if (state != HttpRequestStateUnsent)
+            if (state != HttpRequestStateOpened)
             {
                 //XLI_THROW("HttpRequest->SetArrayPulledCallback(): Not in a valid state to send");
                 HttpEventHandler* eh = client->GetEventHandler();

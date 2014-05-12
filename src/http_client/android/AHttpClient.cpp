@@ -16,13 +16,15 @@ namespace Xli
     AHttpRequest::AHttpRequest(AHttpClient* client, String url, String method)
     {
         this->client = client;
-        this->state = HttpRequestStateUnsent;
+        this->state = HttpRequestStateOpened;
         this->url = url;
         this->method = method;
         this->timeout = 0;
         this->aborted = false;
         this->javaAsyncHandle = 0;
         this->javaContentHandle = 0;
+        HttpEventHandler* eh = client->GetEventHandler();
+        if (eh!=0) eh->OnRequestStateChanged(this);
     }
 
     AHttpRequest::~AHttpRequest()
@@ -46,7 +48,7 @@ namespace Xli
     int AHttpRequest::GetTimeout() const { return timeout; }
     void AHttpRequest::SetTimeout(int timeout)
     {
-        if (state == HttpRequestStateUnsent)
+        if (state <= HttpRequestStateOpened)
         {
             this->timeout = timeout;
         } else {
@@ -56,7 +58,7 @@ namespace Xli
 
     void AHttpRequest::SetHeader(const String& key, const String& value)
     {
-        if (state == HttpRequestStateUnsent)
+        if (state == HttpRequestStateOpened)
         {
             headers.Add(key,value);
         } else {
@@ -65,7 +67,7 @@ namespace Xli
     }
     void AHttpRequest::RemoveHeader(const String& key)
     {
-        if (state == HttpRequestStateUnsent)
+        if (state == HttpRequestStateOpened)
         {
             headers.Remove(key);
         } else {
@@ -81,7 +83,7 @@ namespace Xli
 
     void AHttpRequest::SendAsync(const void* content, int byteLength)
     {
-        if (state == HttpRequestStateUnsent)
+        if (state == HttpRequestStateOpened)
         {
             state = HttpRequestStateSent;
             HttpEventHandler* eh = client->GetEventHandler();
@@ -94,7 +96,7 @@ namespace Xli
 
     void AHttpRequest::SendAsync(const String& content)
     {
-        if (state == HttpRequestStateUnsent)
+        if (state == HttpRequestStateOpened)
         {
             state = HttpRequestStateSent;
             HttpEventHandler* eh = client->GetEventHandler();
@@ -107,7 +109,7 @@ namespace Xli
 
     void AHttpRequest::SendAsync()
     {
-        if (state == HttpRequestStateUnsent)
+        if (state == HttpRequestStateOpened)
         {
             state = HttpRequestStateSent;
             HttpEventHandler* eh = client->GetEventHandler();
@@ -126,7 +128,7 @@ namespace Xli
     {
         if (!aborted)
         {
-            if ((int)state > (int)HttpRequestStateUnsent)
+            if ((int)state > (int)HttpRequestStateOpened)
             {
                 // {TODO} if ashim::abortasyncconnection works then we need some kind of callback so we know to
                 // cleanup the SessionMap.

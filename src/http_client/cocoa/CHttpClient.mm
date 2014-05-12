@@ -43,7 +43,7 @@ namespace Xli
         CHttpRequest(HttpClient* client, String url, String method)
         {
             this->client = client;
-            this->state = HttpRequestStateUnsent;
+            this->state = HttpRequestStateOpened;
             this->url = url;
             this->method = method;
             this->timeout = 0;
@@ -52,6 +52,7 @@ namespace Xli
             this->cachedContentStream = 0;
             this->cachedReadStream = 0;
             this->cachedRequestMessage = 0;
+            OnStateChanged(this, HttpRequestStateOpened, 0, 0);
         }
 
         virtual ~CHttpRequest()
@@ -81,7 +82,7 @@ namespace Xli
         virtual int GetTimeout() const { return timeout; }
         virtual void SetTimeout(int timeout)
         {
-            if (state == HttpRequestStateUnsent)
+            if (state <= HttpRequestStateOpened)
             {
                 this->timeout = timeout;
             } else {
@@ -91,7 +92,7 @@ namespace Xli
 
         virtual void SetHeader(const String& key, const String& value)
         {
-            if (state == HttpRequestStateUnsent)
+            if (state == HttpRequestStateOpened)
             {
                 headers.Add(key,value);
             } else {
@@ -100,7 +101,7 @@ namespace Xli
         }
         virtual void RemoveHeader(const String& key)
         {
-            if (state == HttpRequestStateUnsent)
+            if (state == HttpRequestStateOpened)
             {
                 headers.Remove(key);
             } else {
@@ -115,7 +116,7 @@ namespace Xli
 
         virtual void SendAsync(const void* content, int byteLength)
         {
-            if (this->state != HttpRequestStateUnsent) return;
+            if (this->state != HttpRequestStateOpened) return;
 
             CFStringRef nUrlStr = CFStringCreateWithCString(kCFAllocatorDefault, this->url.DataPtr(), kCFStringEncodingUTF8);
             CFURLRef nUrl = CFURLCreateWithString(kCFAllocatorDefault, nUrlStr, NULL);
@@ -264,7 +265,7 @@ namespace Xli
 
         virtual void SetCFHeaders(CFHTTPMessageRef message)
         {
-            if (this->state == HttpRequestStateUnsent)
+            if (this->state <= HttpRequestStateOpened)
             {
                 int i = this->headers.Begin();
                 while (i != this->headers.End())
