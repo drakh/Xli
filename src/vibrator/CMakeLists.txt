@@ -9,7 +9,7 @@ elseif (XLI_PLATFORM_ANDROID)
 
     set(SRC ${SRC} android/Vibrator.cpp)
 
-else
+elseif (NOT IOS AND NOT ANDROID) 
 
     set(SRC ${SRC} noVibrator/Vibrator.cpp)
 
