@@ -9,10 +9,10 @@ elseif (XLI_PLATFORM_ANDROID)
 
     set(SRC ${SRC} android/Vibrator.cpp)
 
-elseif (NOT IOS AND NOT ANDROID) 
+endif()
 
+if (NOT IOS AND NOT ANDROID)
     set(SRC ${SRC} noVibrator/Vibrator.cpp)
-
 endif()
 
 add_library(XliVibrator ${SRC})
