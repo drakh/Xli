@@ -28,7 +28,7 @@ namespace Xli
         bool requestOwnsUploadData;
         HashMap<String,String> headers;
 
-        bool errored;
+
 
         HashMap<String,String> responseHeaders;
         bool dataReady;
@@ -37,11 +37,12 @@ namespace Xli
         int responseStatus;
         CFWriteStreamRef cachedContentStream;
         Buffer* responseBody;
+        bool errored;
 
     public:
-
         CHttpRequest(HttpClient* client, String url, String method)
         {
+            this->errored = false;
             this->client = client;
             this->state = HttpRequestStateOpened;
             this->url = url;
@@ -451,15 +452,18 @@ namespace Xli
                 break;
             case kCFStreamEventEndEncountered:
                 request->state = HttpRequestStateDone;
-                request->getContentArray();
-                CHttpRequest::OnStateChanged(request, HttpRequestStateDone, stream, event);
-
-                if (request->uploadData!=0) CFRelease(request->uploadData);
-                if (request->cachedRequestMessage!=0) CFRelease(request->cachedRequestMessage);
-                if (request->cachedReadStream!=0)
+                if (!request->errored) 
                 {
-                    CFReadStreamClose(request->cachedReadStream);
-                    CFRelease(request->cachedReadStream);
+                    request->getContentArray();
+                    CHttpRequest::OnStateChanged(request, HttpRequestStateDone, stream, event);
+
+                    if (request->uploadData!=0) CFRelease(request->uploadData);
+                    if (request->cachedRequestMessage!=0) CFRelease(request->cachedRequestMessage);
+                    if (request->cachedReadStream!=0)
+                    {
+                        CFReadStreamClose(request->cachedReadStream);
+                        CFRelease(request->cachedReadStream);
+                    }
                 }
                 break;
             }
@@ -482,7 +486,7 @@ namespace Xli
                 CFRelease(streamDataHandle);
                 cachedContentStream = 0;
             } else {
-                NSLog(@"Cant get content array"); // {TODO} error needed here
+                XLI_THROW("Not in correct state to get content array"); // {TODO} error needed here
             }
         }
     };

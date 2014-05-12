@@ -8,12 +8,12 @@ namespace Xli
 {   
     enum HttpRequestState
     {
-        HttpRequestStateUnsent,
-        HttpRequestStateOpened,
-        HttpRequestStateSent,
-        HttpRequestStateHeadersReceived,
-        HttpRequestStateLoading,
-        HttpRequestStateDone,
+        HttpRequestStateUnsent=0,
+        HttpRequestStateOpened=1,
+        HttpRequestStateSent=2,
+        HttpRequestStateHeadersReceived=3,
+        HttpRequestStateLoading=4,
+        HttpRequestStateDone=5,
     };
 
     class HttpRequest: public Object
