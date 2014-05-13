@@ -14,8 +14,13 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.DisplayMetrics;
 
-
 public class XliJ extends android.app.NativeActivity {
+	
+	//--------------------------------------------
+	// Cached Activity
+	static NativeActivity nActivity;
+    public static void CacheActivity(final NativeActivity activity) { nActivity = activity; }
+	
 	//--------------------------------------------
 	// Callbacks to C++ code
     public static native void XliJ_OnKeyUp(int keyCode);
@@ -31,67 +36,67 @@ public class XliJ extends android.app.NativeActivity {
 	
     //--------------------------------------------
     // System
-    public static void hideStatusBar(final NativeActivity activity) {
-    	SystemHelper.hideStatusBar(activity);
+    public static void hideStatusBar() {
+    	SystemHelper.hideStatusBar(nActivity);
     }
-    public static void showStatusBar(final NativeActivity activity) {
-    	SystemHelper.showStatusBar(activity);
+    public static void showStatusBar() {
+    	SystemHelper.showStatusBar(nActivity);
     }
-	public static DisplayMetrics GetDisplayMetrics(final NativeActivity activity) 
+	public static DisplayMetrics GetDisplayMetrics() 
 	{
-		return SystemHelper.GetDisplayMetrics(activity);
+		return SystemHelper.GetDisplayMetrics(nActivity);
     }
-	public static float GetStatusBarHeight(NativeActivity activity)
+	public static float GetStatusBarHeight()
 	{
-		return SystemHelper.GetStatusBarHeight(activity);
+		return SystemHelper.GetStatusBarHeight(nActivity);
 	}
-    public static AssetManager GetAssetManager(NativeActivity activity)
+    public static AssetManager GetAssetManager()
     {
-        return activity.getAssets();
+        return nActivity.getAssets();
     }
 
     //--------------------------------------------
     // Vibration
     @SuppressLint("NewApi")
-	public static boolean HasVibrator(final NativeActivity activity)
+	public static boolean HasVibrator()
     {
-    	return VibratorHelper.HasVibrator(activity);
+    	return VibratorHelper.HasVibrator(nActivity);
     }
-    public static void VibrateForMilliseconds(final NativeActivity activity, int milliseconds)
+    public static void VibrateForMilliseconds(int milliseconds)
     {
-    	VibratorHelper.VibrateForMilliseconds(activity, milliseconds);
+    	VibratorHelper.VibrateForMilliseconds(nActivity, milliseconds);
     }
     
     
     //--------------------------------------------
     // Keyboard   
-    public static void raiseKeyboard(final NativeActivity activity) {
-        KeyboardHelper.RaiseKeyboard(activity);
+    public static void raiseKeyboard() {
+        KeyboardHelper.RaiseKeyboard(nActivity);
     }
     public static int GetKeyboardSize()
     {
         return KeyboardHelper.GetKeyboardSize();
     }
-    public static void hideKeyboard(final NativeActivity activity) {
-        KeyboardHelper.hideKeyboard(activity);
+    public static void hideKeyboard() {
+        KeyboardHelper.hideKeyboard(nActivity);
     }
-    public static int AttachHiddenView(final NativeActivity activity)
+    public static int AttachHiddenView()
     {    	
-    	return KeyboardHelper.AttachHiddenView(activity);     
+    	return KeyboardHelper.AttachHiddenView(nActivity);     
     }
 
     //--------------------------------------------
     // MessageBox
-    public static int ShowMessageBox(NativeActivity activity, CharSequence caption, CharSequence message, int buttons, int hints)
+    public static int ShowMessageBox(CharSequence caption, CharSequence message, int buttons, int hints)
     {
-        return MessageBoxHelper.ShowMessageBox(activity, caption, message, buttons, hints);
+        return MessageBoxHelper.ShowMessageBox(nActivity, caption, message, buttons, hints);
     }
 
     //--------------------------------------------
     // Network    
-    public static boolean ConnectedToNetwork(NativeActivity activity)
+    public static boolean ConnectedToNetwork()
     {
-        ConnectivityManager connMgr = (ConnectivityManager)activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connMgr = (ConnectivityManager)nActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if(networkInfo == null) { return false; }
         return networkInfo.isConnected();
@@ -100,16 +105,16 @@ public class XliJ extends android.app.NativeActivity {
     //--------------------------------------------
     // Http    
     @SuppressWarnings({ "rawtypes" })
-	public static AsyncTask SendHttpAsync(NativeActivity activity, String url, String method,
+	public static AsyncTask SendHttpAsync(String url, String method,
     								 	HashMap<String,String> headers, ByteBuffer body,
     								 	int timeout, long requestPointer) {
-    	return HttpHelper.SendHttpAsync(activity, url, method, headers, body, timeout, requestPointer);
+    	return HttpHelper.SendHttpAsync(nActivity, url, method, headers, body, timeout, requestPointer);
     }
     @SuppressWarnings({ "rawtypes" })
-	public static AsyncTask SendHttpStringAsync(NativeActivity activity, String url, String method,
+	public static AsyncTask SendHttpStringAsync(String url, String method,
     								 			HashMap<String,String> headers, String body,
     								 			int timeout, long requestPointer) {
-    	return HttpHelper.SendHttpStringAsync(activity, url, method, headers, body, timeout, requestPointer);
+    	return HttpHelper.SendHttpStringAsync(nActivity, url, method, headers, body, timeout, requestPointer);
     }
     public static byte[] ReadAllBytesFromHttpInputStream(InputStream stream, long requestPointer) throws IOException
     {    	

@@ -105,9 +105,15 @@ namespace Xli
             }
         }
 
+        static void CacheNativeActivity(jclass* shim_class, JNIEnv* env, jobject activity) 
+        {
+            jmethodID mid = env->GetStaticMethodID(*shim_class, "CacheActivity", "(Landroid/app/NativeActivity;)V");
+            (jint)env->CallObjectMethod(*shim_class, mid, activity);
+        }
+
         static void AttachHiddenView(jclass* shim_class, JNIEnv* env, jobject activity) 
         {
-            jmethodID mid = env->GetStaticMethodID(*shim_class, "AttachHiddenView", "(Landroid/app/NativeActivity;)I");
+            jmethodID mid = env->GetStaticMethodID(*shim_class, "AttachHiddenView", "()I");
             jint result = (jint)env->CallObjectMethod(*shim_class, mid, activity);
             if (!result) LOGE("Could not AttachHidden View (c++ side)");
         }
@@ -141,6 +147,7 @@ namespace Xli
                 pthread_setspecific(JniThreadKey, (void*)env);
                 pthread_setspecific(JniShimKey, (void*)shim_class);
                 AShim::CacheMids(env, *shim_class);
+                CacheNativeActivity(shim_class, env, AndroidActivity->clazz);
                 AttachNativeCallbacks(shim_class, env);
                 AttachHiddenView(shim_class, env, AndroidActivity->clazz);
             }

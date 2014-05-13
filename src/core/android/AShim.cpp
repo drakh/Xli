@@ -32,20 +32,20 @@ namespace Xli
         void AShim::CacheMids(JNIEnv *env, jclass shimClass)
         {
             LOGD("Caching Mids");
-            raiseKeyboard = env->GetStaticMethodID(shimClass, "raiseKeyboard", "(Landroid/app/NativeActivity;)V");
-            hideKeyboard = env->GetStaticMethodID(shimClass, "hideKeyboard", "(Landroid/app/NativeActivity;)V");
+            raiseKeyboard = env->GetStaticMethodID(shimClass, "raiseKeyboard", "()V");
+            hideKeyboard = env->GetStaticMethodID(shimClass, "hideKeyboard", "()V");
             getKeyboardSize = env->GetStaticMethodID(shimClass, "GetKeyboardSize", "()I");
-            showMessageBox = env->GetStaticMethodID(shimClass, "ShowMessageBox", "(Landroid/app/NativeActivity;Ljava/lang/CharSequence;Ljava/lang/CharSequence;II)I");
-            connectedToNetwork = env->GetStaticMethodID(shimClass, "ConnectedToNetwork", "(Landroid/app/NativeActivity;)Z");
+            showMessageBox = env->GetStaticMethodID(shimClass, "ShowMessageBox", "(Ljava/lang/CharSequence;Ljava/lang/CharSequence;II)I");
+            connectedToNetwork = env->GetStaticMethodID(shimClass, "ConnectedToNetwork", "()Z");
             initDefaultCookieManager = env->GetStaticMethodID(shimClass, "InitDefaultCookieManager", "()V");
-            getAssetManager = env->GetStaticMethodID(shimClass, "GetAssetManager", "(Landroid/app/NativeActivity;)Landroid/content/res/AssetManager;");
-            hideStatusBar = env->GetStaticMethodID(shimClass, "hideStatusBar", "(Landroid/app/NativeActivity;)V");
-            showStatusBar = env->GetStaticMethodID(shimClass, "showStatusBar", "(Landroid/app/NativeActivity;)V");
-            getStatusBarHeight = env->GetStaticMethodID(shimClass, "GetStatusBarHeight", "(Landroid/app/NativeActivity;)F");
-            getDisplayMetrics = env->GetStaticMethodID(shimClass, "GetDisplayMetrics", "(Landroid/app/NativeActivity;)Landroid/util/DisplayMetrics;");
+            getAssetManager = env->GetStaticMethodID(shimClass, "GetAssetManager", "()Landroid/content/res/AssetManager;");
+            hideStatusBar = env->GetStaticMethodID(shimClass, "hideStatusBar", "()V");
+            showStatusBar = env->GetStaticMethodID(shimClass, "showStatusBar", "()V");
+            getStatusBarHeight = env->GetStaticMethodID(shimClass, "GetStatusBarHeight", "()F");
+            getDisplayMetrics = env->GetStaticMethodID(shimClass, "GetDisplayMetrics", "()Landroid/util/DisplayMetrics;");
 
-            hasVibrator = env->GetStaticMethodID(shimClass, "HasVibrator", "(Landroid/app/NativeActivity;)Z");
-            vibrateForMilliseconds = env->GetStaticMethodID(shimClass, "VibrateForMilliseconds", "(Landroid/app/NativeActivity;I)V");
+            hasVibrator = env->GetStaticMethodID(shimClass, "HasVibrator", "()Z");
+            vibrateForMilliseconds = env->GetStaticMethodID(shimClass, "VibrateForMilliseconds", "(I)V");
 
             if (!raiseKeyboard) XLI_THROW("Cannot cache mid for raiseKeyboard.");
             if (!hideKeyboard) XLI_THROW("Cannot cache mid for hideKeyboard.");
@@ -67,8 +67,7 @@ namespace Xli
         {
             AJniHelper jni;
             jclass shimClass = jni.GetShim();
-            jobject activity = jni.GetInstance();
-            jni->CallObjectMethod(shimClass, raiseKeyboard, activity);
+            jni->CallObjectMethod(shimClass, raiseKeyboard);
             kbVisible = 1;
         }
 
@@ -76,8 +75,7 @@ namespace Xli
         {
             AJniHelper jni;
             jclass shimClass = jni.GetShim();
-            jobject activity = jni.GetInstance();
-            jni->CallObjectMethod(shimClass, hideKeyboard, activity);
+            jni->CallObjectMethod(shimClass, hideKeyboard);
             kbVisible = 0;
         }
 
@@ -93,8 +91,7 @@ namespace Xli
         {
             AJniHelper jni;
             jclass shimClass = jni.GetShim();
-            jobject activity = jni.GetInstance();
-            jni->CallObjectMethod(shimClass, hideStatusBar, activity);
+            jni->CallObjectMethod(shimClass, hideStatusBar);
             //{TODO} When this is working, go fix AWindow statusbar methods
         }
 
@@ -102,8 +99,7 @@ namespace Xli
         {
             AJniHelper jni;
             jclass shimClass = jni.GetShim();
-            jobject activity = jni.GetInstance();
-            jni->CallObjectMethod(shimClass, showStatusBar, activity);
+            jni->CallObjectMethod(shimClass, showStatusBar);
             //{TODO} When this is working, go fix AWindow statusbar methods
         }
 
@@ -111,8 +107,7 @@ namespace Xli
         {
             AJniHelper jni;
             jclass shimClass = jni.GetShim();
-            jobject activity = jni.GetInstance();
-            jfloat height = jni->CallStaticFloatMethod(shimClass, getStatusBarHeight, activity);
+            jfloat height = jni->CallStaticFloatMethod(shimClass, getStatusBarHeight);
             return (float)height;            
         }
 
@@ -120,10 +115,9 @@ namespace Xli
         {
             AJniHelper jni;
             jclass shimClass = jni.GetShim();
-            jobject activity = jni.GetInstance();
             jclass metricsClass = jni->FindClass("android/util/DisplayMetrics");
             jfieldID jd = jni->GetFieldID( metricsClass, "density", "F" );
-            jobject result = jni->CallStaticObjectMethod(shimClass, getDisplayMetrics, activity);
+            jobject result = jni->CallStaticObjectMethod(shimClass, getDisplayMetrics);
             jfloat d = (jfloat)jni->GetFloatField(result, jd);
             return (float)d;
         }
@@ -132,11 +126,10 @@ namespace Xli
         {
             AJniHelper jni;
             jclass shimClass = jni.GetShim();
-            jobject activity = jni.GetInstance();
             jclass metricsClass = jni->FindClass("android/util/DisplayMetrics");
             jfieldID xDpi = jni->GetFieldID( metricsClass, "xdpi", "F" );
             jfieldID yDpi = jni->GetFieldID( metricsClass, "ydpi", "F" );
-            jobject result = jni->CallStaticObjectMethod(shimClass, getDisplayMetrics, activity);
+            jobject result = jni->CallStaticObjectMethod(shimClass, getDisplayMetrics);
             jfloat jx = (jfloat)jni->GetFloatField(result, xDpi);
             jfloat jy = (jfloat)jni->GetFloatField(result, yDpi);
             return Vector2((float)jx, (float)jy);
@@ -151,11 +144,9 @@ namespace Xli
         {
             AJniHelper jni;
             jclass shimClass = jni.GetShim();
-            jobject activity = jni.GetInstance();
-            jobject jresult = jni->CallObjectMethod(shimClass, hasVibrator, activity);
+            jobject jresult = jni->CallObjectMethod(shimClass, hasVibrator);
             bool result = (bool)jresult;
             jni->DeleteLocalRef(jresult);
-            jni->DeleteLocalRef(activity);
             return (bool)result;
         }
 
@@ -163,9 +154,7 @@ namespace Xli
         {
             AJniHelper jni;
             jclass shimClass = jni.GetShim();
-            jobject activity = jni.GetInstance();
-            jni->CallObjectMethod(shimClass, vibrateForMilliseconds, activity, 
-                                  (jint)milliseconds);
+            jni->CallObjectMethod(shimClass, vibrateForMilliseconds, (jint)milliseconds);
         }
 
         int AShim::ShowMessageBox(const String& message, const String& caption, int buttons, int hints)
@@ -175,12 +164,11 @@ namespace Xli
             jclass shimClass = jni.GetShim();
 
             //vars for call
-            jobject activity = jni.GetInstance();
             jstring jcaption = jni->NewStringUTF(caption.DataPtr());
             jstring jmessage = jni->NewStringUTF(message.DataPtr());
 
             //call
-            int result = (int)jni->CallObjectMethod(shimClass, showMessageBox, activity, jcaption, jmessage, (jint)buttons, (jint)hints);
+            int result = (int)jni->CallObjectMethod(shimClass, showMessageBox, jcaption, jmessage, (jint)buttons, (jint)hints);
             return result;
         }
 
@@ -189,11 +177,9 @@ namespace Xli
             //setup for call
             AJniHelper jni;
             jclass shimClass = jni.GetShim();
-            jobject activity = jni.GetInstance();
-            jobject jresult = jni->CallObjectMethod(shimClass, connectedToNetwork, activity);
+            jobject jresult = jni->CallObjectMethod(shimClass, connectedToNetwork);
             bool result = (bool)jresult;
             jni->DeleteLocalRef(jresult);
-            jni->DeleteLocalRef(activity);
             return (bool)result;
         }
 
@@ -201,14 +187,12 @@ namespace Xli
         {
             AJniHelper jni;
             jclass shimClass = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shimClass, "SendHttpAsync", "(Landroid/app/NativeActivity;Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/nio/ByteBuffer;IJ)Landroid/os/AsyncTask;");
+            jmethodID mid = jni->GetStaticMethodID(shimClass, "SendHttpAsync", "(Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/nio/ByteBuffer;IJ)Landroid/os/AsyncTask;");
             if (mid)
             {
                 String url = req->GetUrl();
                 String method = req->GetMethod();
 
-                jobject activity = jni.GetInstance();
-                
                 jstring jurl = jni->NewStringUTF(url.DataPtr());
                 jstring jmethod = jni->NewStringUTF(method.DataPtr());
                 jint jtimeout = (jint)req->GetTimeout();
@@ -221,8 +205,7 @@ namespace Xli
                     arrayHandle = jni->NewDirectByteBuffer(const_cast<void*>(content), byteLength);
                 }
 
-                jobject jresult = jni->CallObjectMethod(shimClass, mid, activity,
-                                                        jurl, jmethod, headers, arrayHandle,
+                jobject jresult = jni->CallObjectMethod(shimClass, mid, jurl, jmethod, headers, arrayHandle,
                                                         jtimeout, (jlong)req);
                 jni->DeleteLocalRef(jurl);
                 jni->DeleteLocalRef(jmethod);
@@ -238,13 +221,11 @@ namespace Xli
         {
             AJniHelper jni;
             jclass shimClass = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shimClass, "SendHttpStringAsync", "(Landroid/app/NativeActivity;Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/lang/String;IJ)Landroid/os/AsyncTask;");
+            jmethodID mid = jni->GetStaticMethodID(shimClass, "SendHttpStringAsync", "(Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/lang/String;IJ)Landroid/os/AsyncTask;");
             if (mid)
             {
                 String url = req->GetUrl();
                 String method = req->GetMethod();
-
-                jobject activity = jni.GetInstance();
 
                 jstring jurl = jni->NewStringUTF(url.DataPtr());
                 jstring jmethod = jni->NewStringUTF(method.DataPtr());
@@ -257,8 +238,7 @@ namespace Xli
                     body = jni->NewStringUTF(content.DataPtr());
                 }
 
-                jobject jresult = jni->CallObjectMethod(shimClass, mid, activity,
-                                                        jurl, jmethod, headers, body,
+                jobject jresult = jni->CallObjectMethod(shimClass, mid, jurl, jmethod, headers, body,
                                                         jtimeout, (jlong)req);
                 jni->DeleteLocalRef(jurl);
                 jni->DeleteLocalRef(jmethod);
@@ -276,13 +256,11 @@ namespace Xli
             AJniHelper jni;
             jclass shimClass = jni.GetShim();
 
-            jmethodID mid = jni->GetStaticMethodID(shimClass, "SendHttpAsync", "(Landroid/app/NativeActivity;Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/nio/ByteBuffer;IJ)Landroid/os/AsyncTask;");
+            jmethodID mid = jni->GetStaticMethodID(shimClass, "SendHttpAsync", "(Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/nio/ByteBuffer;IJ)Landroid/os/AsyncTask;");
             if (mid)
             {
                 String url = req->GetUrl();
                 String method = req->GetMethod();
-
-                jobject activity = jni.GetInstance();
 
                 jstring jurl = jni->NewStringUTF(url.DataPtr());
                 jstring jmethod = jni->NewStringUTF(method.DataPtr());
@@ -290,8 +268,7 @@ namespace Xli
                 jobject headers = XliToJavaHeaders(req);
                 jobject arrayHandle = 0;
 
-                jobject jresult = jni->CallObjectMethod(shimClass, mid, activity,
-                                                        jurl, jmethod, headers, arrayHandle,
+                jobject jresult = jni->CallObjectMethod(shimClass, mid, jurl, jmethod, headers, arrayHandle,
                                                         jtimeout, (jlong)req);
                 jni->DeleteLocalRef(jurl);
                 jni->DeleteLocalRef(jmethod);
@@ -411,8 +388,7 @@ namespace Xli
         {
             AJniHelper jni;
             jclass shimClass = jni.GetShim();
-            jobject activity = jni.GetInstance();
-            jobject assetManager = jni->CallObjectMethod(shimClass, getAssetManager, activity);
+            jobject assetManager = jni->CallObjectMethod(shimClass, getAssetManager);
             jni->NewGlobalRef(assetManager);
             AAssetManager* result = AAssetManager_fromJava(jni.GetEnv(), assetManager);
             return result;
