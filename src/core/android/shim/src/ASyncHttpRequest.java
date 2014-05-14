@@ -36,11 +36,6 @@ public class ASyncHttpRequest extends AsyncTask<Object, Integer, HttpWrappedResp
 			XliJ.XliJ_JavaThrowError(-1, "JavaError (NewHttpConnection): Could not make connection. Check Android permissions");
 			return null;
 		}
-		if (connection == null)
-		{
-			XliJ.XliJ_JavaThrowError(-1, "JavaError (NewHttpConnection): Could not make connection. Check Android permissions");            	
-			return null;
-		}
 		try {        		
 			//set headers
 			Iterator<Map.Entry<String, String>> it = headers.entrySet().iterator();
@@ -61,7 +56,6 @@ public class ASyncHttpRequest extends AsyncTask<Object, Integer, HttpWrappedResp
 						connection.setFixedLengthStreamingMode(body.length);
 						BufferedOutputStream out = new BufferedOutputStream(connection.getOutputStream());
 
-						byte[] data = new byte[bufferSize];
 						while (runningTotal<body.length) {
 							out.write(body, (int)runningTotal, (int)Math.min(bufferSize, (body.length-runningTotal)));
 							if ((runningTotal / progressThreshold) > steps) {

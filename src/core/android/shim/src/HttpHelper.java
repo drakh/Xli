@@ -1,4 +1,3 @@
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,23 +6,26 @@ import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
-
-import android.app.NativeActivity;
 import android.os.AsyncTask;
 
 
 public class HttpHelper {
+	//[TODO] this task array hack is terrible
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	public static AsyncTask SendHttpAsync(NativeActivity activity, String url, String method,
-    								 	HashMap<String,String> headers, ByteBuffer body,
-    								 	int timeout, long requestPointer) {
+	public static AsyncTask SendHttpAsync(final String url, final String method,
+    								 	final HashMap<String,String> headers, final ByteBuffer body,
+    								 	final int timeout, final long requestPointer) {
     	try
     	{
-    		AsyncTask task = new ASyncHttpRequest();
-    		byte[] data = null;
-    		if (body!=null) data = body.array();
-    		((AsyncTask<Object, Void, HttpWrappedResponse>)(task)).execute(url, method, headers, (Integer)timeout, data, (Long)requestPointer);
-    		return task;
+    		final AsyncTask[] task = new AsyncTask[1];
+    		task[0]=null;
+            XliJ.nActivity.runOnUiThread(new Runnable() { public void run() {
+         		task[0] = new ASyncHttpRequest();
+         		byte[] data = null;
+         		if (body!=null) if (body!=null) data = body.array();
+ 				((AsyncTask<Object, Void, HttpWrappedResponse>)(task[0])).execute(url, method, headers, (Integer)timeout, data, (Long)requestPointer);         	
+             }});
+    		return task[0];
     	} catch (Exception e) {
     		XliJ.XliJ_HttpErrorCallback(requestPointer, -1, "Unable to build Async Http Request: "+e.getLocalizedMessage());
     		return null;
@@ -31,16 +33,20 @@ public class HttpHelper {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	public static AsyncTask SendHttpStringAsync(NativeActivity activity, String url, String method,
-    								 			HashMap<String,String> headers, String body,
-    								 			int timeout, long requestPointer) {
+	public static AsyncTask SendHttpStringAsync(final String url, final String method,
+    								 			final HashMap<String,String> headers, final String body,
+    								 			final int timeout, final long requestPointer) {
     	try
     	{
-    		AsyncTask task = new ASyncHttpRequest();
-    		byte[] data = null;
-    		if (body!=null) data = body.getBytes();
-    		((AsyncTask<Object, Void, HttpWrappedResponse>)(task)).execute(url, method, headers, (Integer)timeout, data, (Long)requestPointer);
-    		return task;
+    		final AsyncTask[] task = new AsyncTask[1];
+    		task[0]=null;
+            XliJ.nActivity.runOnUiThread(new Runnable() { public void run() {
+         		task[0] = new ASyncHttpRequest();
+         		byte[] data = null;
+         		if (body!=null) data = body.getBytes();
+ 				((AsyncTask<Object, Void, HttpWrappedResponse>)(task[0])).execute(url, method, headers, (Integer)timeout, data, (Long)requestPointer);         	
+             }});
+    		return task[0];
     	} catch (Exception e) {
     		XliJ.XliJ_HttpErrorCallback(requestPointer, -1, "Unable to build Async Http Request: "+e.getLocalizedMessage());
     		return null;

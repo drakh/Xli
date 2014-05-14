@@ -80,7 +80,8 @@ public class KeyboardHelper {
                     result[0] = 0;
                 }                
             }});
-        }        
+        }
+        //WOW...this is awful, just use error callback from ui thread
         return result[0];
     }
 }

@@ -18,7 +18,7 @@ public class XliJ extends android.app.NativeActivity {
 	
 	//--------------------------------------------
 	// Cached Activity
-	static NativeActivity nActivity;
+	public static NativeActivity nActivity;
     public static void CacheActivity(final NativeActivity activity) { nActivity = activity; }
 	
 	//--------------------------------------------
@@ -106,15 +106,15 @@ public class XliJ extends android.app.NativeActivity {
     // Http    
     @SuppressWarnings({ "rawtypes" })
 	public static AsyncTask SendHttpAsync(String url, String method,
-    								 	HashMap<String,String> headers, ByteBuffer body,
-    								 	int timeout, long requestPointer) {
-    	return HttpHelper.SendHttpAsync(nActivity, url, method, headers, body, timeout, requestPointer);
+                                          HashMap<String,String> headers, ByteBuffer body,
+                                          int timeout, long requestPointer) {
+    	return HttpHelper.SendHttpAsync(url, method, headers, body, timeout, requestPointer);
     }
     @SuppressWarnings({ "rawtypes" })
 	public static AsyncTask SendHttpStringAsync(String url, String method,
     								 			HashMap<String,String> headers, String body,
     								 			int timeout, long requestPointer) {
-    	return HttpHelper.SendHttpStringAsync(nActivity, url, method, headers, body, timeout, requestPointer);
+    	return HttpHelper.SendHttpStringAsync(url, method, headers, body, timeout, requestPointer);
     }
     public static byte[] ReadAllBytesFromHttpInputStream(InputStream stream, long requestPointer) throws IOException
     {    	
