@@ -93,7 +93,6 @@ namespace Xli
 
         Day = (int)(timestamp / PerDay);
         timestamp -= Day * PerDay;
-        Day++;
 
         Hour = (int)(timestamp / PerHour);
         timestamp -= Hour * PerHour;
