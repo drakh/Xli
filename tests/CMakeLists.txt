@@ -6,5 +6,5 @@ include(${PROJECT_SOURCE_DIR}/../Xli.cmake)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_executable(XliTest core/test.cpp core/Unicode_test.cpp main.cpp)
+add_executable(XliTest core/test.cpp core/Unicode_test.cpp core/DateTime_test.cpp main.cpp)
 target_link_libraries(XliTest Xli)
