@@ -68,18 +68,12 @@ public class KeyboardHelper {
                 try {
                 	keyboardSize = 0;
                 	hiddenLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener(){
-                            public void onGlobalLayout(){                                
-                                // int heightDiff = hiddenLayout.getRootView().getHeight()- hiddenLayout.getHeight();
-                                // if (heightDiff < 150) heightDiff = 0;
-                                // keyboardSize = heightDiff;
-
+                            public void onGlobalLayout() {
                                 int rootViewHeight = hiddenLayout.getRootView().getHeight();
                                 int location[] = new int[2];
                                 hiddenLayout.getLocationOnScreen(location);
-                                int height = (int)(location[1] + hiddenLayout.getMeasuredHeight());
-                                int deff = rootViewHeight - height;
-                                Log.i("XliApp","Got new Keyboard size: "+deff );
-                                keyboardSize = deff;	
+                                int hiddenHeight = (int)(location[1] + hiddenLayout.getMeasuredHeight());
+                                keyboardSize = rootViewHeight - hiddenHeight;
                             }
                         });
                     Log.i("XliApp","Successfully attached View Tree Observer.");
