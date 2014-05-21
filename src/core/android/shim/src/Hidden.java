@@ -62,7 +62,7 @@ public class Hidden extends View implements View.OnKeyListener { //used to exten
     public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
         fic = new HiddenInputConnection(this, false);
         outAttrs.actionLabel = null;
-        outAttrs.inputType = InputType.TYPE_NULL;
+        //outAttrs.inputType = InputType.TYPE_NULL;
         outAttrs.imeOptions = EditorInfo.IME_ACTION_NEXT;
         return fic;
     }
