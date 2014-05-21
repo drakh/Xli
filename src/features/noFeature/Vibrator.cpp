@@ -1,4 +1,4 @@
-#include <XliVibrator.h>
+#include <XliFeatures.h>
 
 namespace Xli
 {

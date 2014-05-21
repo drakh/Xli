@@ -1,6 +1,6 @@
 #include <Xli/PlatformSpecific/Android.h>
 #include "../../core/android/AJniHelper.h"
-#include <XliVibrator.h>
+#include <XliFeatures.h>
 
 namespace Xli
 {

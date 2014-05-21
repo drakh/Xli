@@ -12,8 +12,8 @@ elseif (XLI_PLATFORM_ANDROID)
 endif()
 
 if (NOT IOS AND NOT ANDROID)
-    set(SRC ${SRC} noVibrator/Vibrator.cpp)
+    set(SRC ${SRC} noFeature/Vibrator.cpp)
 endif()
 
-add_library(XliVibrator ${SRC})
-target_link_libraries(XliVibrator ${LIBS})
+add_library(XliFeatures ${SRC})
+target_link_libraries(XliFeatures ${LIBS})

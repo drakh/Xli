@@ -1,6 +1,6 @@
 #include <Xli/PlatformSpecific/iOS.h>
 #import <AudioToolbox/AudioServices.h>
-#include <XliVibrator.h>
+#include <XliFeatures.h>
 
 namespace Xli
 {

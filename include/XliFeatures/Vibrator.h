@@ -1,5 +1,5 @@
-#ifndef __XLI_VIBRATOR_VIBRATOR_H__
-#define __XLI_VIBRATOR_VIBRATOR_H__
+#ifndef __XLI_FEATURES_VIBRATOR_H__
+#define __XLI_FEATURES_VIBRATOR_H__
 
 namespace Xli
 {   

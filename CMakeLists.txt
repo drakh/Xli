@@ -34,6 +34,6 @@ if (NOT XLI_NO_SOUND_PLAYER)
     add_subdirectory(src/sound_player)
 endif()
 
-if (NOT XLI_NO_VIBRATOR)
-    add_subdirectory(src/vibrator)
+if (NOT XLI_NO_FEATURES)
+    add_subdirectory(src/features)
 endif()
