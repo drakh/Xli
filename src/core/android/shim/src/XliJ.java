@@ -13,6 +13,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.DisplayMetrics;
+import android.util.SparseArray;
 
 public class XliJ extends android.app.NativeActivity {
 	
@@ -26,7 +27,7 @@ public class XliJ extends android.app.NativeActivity {
     public static native void XliJ_OnKeyUp(int keyCode);
     public static native void XliJ_OnKeyDown(int keyCode);
     public static native void XliJ_OnTextInput(String keyCode);
-    public static native void XliJ_HttpCallback(Object body, String[] headers, int responseCode, String responseMessage, long requestPointer);
+    public static native void XliJ_HttpCallback(int body, String[] headers, int responseCode, String responseMessage, long requestPointer);
     public static native void XliJ_HttpContentStringCallback(String content, long requestPointer);
     public static native void XliJ_HttpContentByteArrayCallback(byte[] result, long requestPointer);
     public static native void XliJ_HttpTimeoutCallback(long requestPointer);
@@ -104,17 +105,15 @@ public class XliJ extends android.app.NativeActivity {
 
     //--------------------------------------------
     // Http    
-    @SuppressWarnings({ "rawtypes" })
-	public static AsyncTask SendHttpAsync(String url, String method,
+	public static int SendHttpAsync(String url, String method,
                                           HashMap<String,String> headers, ByteBuffer body,
                                           int timeout, long requestPointer) {
-    	return HttpHelper.SendHttpAsync(url, method, headers, body, timeout, requestPointer);
+    	return HoldObject(HttpHelper.SendHttpAsync(url, method, headers, body, timeout, requestPointer));
     }
-    @SuppressWarnings({ "rawtypes" })
-	public static AsyncTask SendHttpStringAsync(String url, String method,
+	public static int SendHttpStringAsync(String url, String method,
     								 			HashMap<String,String> headers, String body,
     								 			int timeout, long requestPointer) {
-    	return HttpHelper.SendHttpStringAsync(url, method, headers, body, timeout, requestPointer);
+    	return HoldObject(HttpHelper.SendHttpStringAsync(url, method, headers, body, timeout, requestPointer));
     }
     public static byte[] ReadAllBytesFromHttpInputStream(InputStream stream, long requestPointer) throws IOException
     {    	
@@ -131,15 +130,13 @@ public class XliJ extends android.app.NativeActivity {
     {
 		return StreamHelper.InputStreamToString(stream);
     }
-    @SuppressWarnings("rawtypes")
-	public static AsyncTask AsyncInputStreamToString(InputStream stream, long requestPointer) throws IOException, UnsupportedEncodingException
+	public static int AsyncInputStreamToString(int stream, long requestPointer) throws IOException, UnsupportedEncodingException
     {
-        return StreamHelper.AsyncInputStreamToString(stream, requestPointer);
+        return HoldObject(StreamHelper.AsyncInputStreamToString((InputStream)GetObject(stream), requestPointer));
     }
-    @SuppressWarnings("rawtypes")
-	public static AsyncTask AsyncInputStreamToByteArray(InputStream stream, long requestPointer)
+	public static int AsyncInputStreamToByteArray(int stream, long requestPointer)
     {
-        return StreamHelper.AsyncInputStreamToByteArray(stream, requestPointer);
+        return HoldObject(StreamHelper.AsyncInputStreamToByteArray((InputStream)GetObject(stream), requestPointer));
     }
     public static byte[] ReadAllBytesFromInputStream(InputStream stream) throws IOException
     {    	
@@ -153,8 +150,39 @@ public class XliJ extends android.app.NativeActivity {
     //--------------------------------------------
     // Async
     @SuppressWarnings("rawtypes")
-	public static void AbortAsyncTask(AsyncTask task)
+	public static void AbortAsyncTask(int taskId)
     {
-    	task.cancel(true);
+    	AsyncTask atask = (AsyncTask)GetObject(taskId);
+    	if (atask==null) return;
+    	atask.cancel(true);
+    }
+    
+    //--------------------------------------------
+    // Object Store
+    public static SparseArray<Object> _objStore = new SparseArray<Object>();
+    public static int _objKey=0; //This must not be -1 as otherwise the first held object has the key 0 and 0 is null in cpp.
+    public static int HoldObject(Object obj)
+    {
+    	if (obj==null) return -1;
+    	_objKey+=1;
+    	_objStore.put(_objKey, obj);
+    	return _objKey;
+    }
+    public static Object GetObject(int key)
+    {
+    	if (key==-1) return null;
+    	return _objStore.get(key);    			
+    }
+    public static boolean TryReleaseObject(int key)
+    {
+    	if (_objStore.get(key)==null) return false;
+    	_objStore.remove(key);
+    	return true;
     }
 }
+
+
+
+
+
+

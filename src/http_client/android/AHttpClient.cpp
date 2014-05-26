@@ -36,8 +36,8 @@ namespace Xli
     void AHttpRequest::CleanHandles()
     {
         PlatformSpecific::AJniHelper jni;
-        if (javaAsyncHandle!=0) jni->DeleteGlobalRef(javaAsyncHandle);
-        if (javaContentHandle!=0) jni->DeleteGlobalRef(javaContentHandle);
+        if (javaAsyncHandle!=0) PlatformSpecific::AShim::TryReleaseObject(javaAsyncHandle);
+        if (javaContentHandle!=0) PlatformSpecific::AShim::TryReleaseObject(javaContentHandle);
         javaAsyncHandle = 0;
         javaContentHandle = 0;
     }
@@ -130,10 +130,10 @@ namespace Xli
         {
             if ((int)state > (int)HttpRequestStateOpened)
             {
-                // {TODO} if ashim::abortasyncconnection works then we need some kind of callback so we know to
+                // {TODO} if ashim::abortasynctask works then we need some kind of callback so we know to
                 // cleanup the SessionMap.
                 if (javaAsyncHandle!=0) 
-                    PlatformSpecific::AShim::AbortAsyncConnection(javaAsyncHandle);
+                    PlatformSpecific::AShim::AbortAsyncTask(javaAsyncHandle);
                 CleanHandles();
                 aborted = true;
                 HttpEventHandler* eh = client->GetEventHandler();
@@ -249,7 +249,7 @@ namespace Xli
     //---- Entry points fors calls from java to c++ ----//
     extern "C"
     {
-        void JNICALL XliJ_HttpCallback (JNIEnv *env , jobject obj, jobject body,
+        void JNICALL XliJ_HttpCallback (JNIEnv *env , jobject obj, jint body,
                                         jobjectArray headers, jint responseCode,
                                         jstring responseMessage, jlong requestPointer)
         {
@@ -259,9 +259,9 @@ namespace Xli
 
                 if (SessionMap::IsAborted(request)) return;
                 
-                if (body)
+                if (body!=-1)
                 {
-                    request->javaContentHandle = reinterpret_cast<jobject>(env->NewGlobalRef(body));
+                    request->javaContentHandle = (JObjRef)body;
                 } else {
                     //{TODO} check
                     request->javaContentHandle = 0;
@@ -402,7 +402,7 @@ namespace Xli
         {
             PlatformSpecific::AShim::InitDefaultCookieManager();
             static JNINativeMethod nativeFuncs[] = {
-                {(char* const)"XliJ_HttpCallback", (char* const)"(Ljava/lang/Object;[Ljava/lang/String;ILjava/lang/String;J)V",
+                {(char* const)"XliJ_HttpCallback", (char* const)"(I[Ljava/lang/String;ILjava/lang/String;J)V",
                  (void *)&XliJ_HttpCallback},
                 {(char* const)"XliJ_HttpContentByteArrayCallback", (char* const)"([BJ)V",
                  (void *)&XliJ_HttpContentByteArrayCallback},

@@ -20,8 +20,8 @@ namespace Xli
         HashMap<String,String> headers;
 
         bool aborted;
-        jobject javaAsyncHandle;
-        jobject javaContentHandle;
+        JObjRef javaAsyncHandle;
+        JObjRef javaContentHandle;
 
         bool completedSuccessfully;
         int responseStatus;

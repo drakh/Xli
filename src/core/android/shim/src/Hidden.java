@@ -1,7 +1,6 @@
 import android.annotation.SuppressLint;
 import android.app.NativeActivity;
 import android.content.Context;
-import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;

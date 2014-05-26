@@ -92,7 +92,7 @@ public class ASyncHttpRequest extends AsyncTask<Object, Integer, HttpWrappedResp
 	protected void onPostExecute(HttpWrappedResponse result)
 	{
 		if (result!=null)
-			XliJ.XliJ_HttpCallback(result.body, result.headers, result.responseCode, result.responseMessage, result.functionPointer);
+			XliJ.XliJ_HttpCallback(XliJ.HoldObject(result.body), result.headers, result.responseCode, result.responseMessage, result.functionPointer);
 	}
 	
     //[TODO] Could optimize by changing chunk mode if length known

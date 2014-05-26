@@ -29,6 +29,12 @@ namespace Xli
             static jmethodID getDisplayMetrics;
             static jmethodID hasVibrator;
             static jmethodID vibrateForMilliseconds;
+            static jmethodID abortAsyncTask;
+            static jmethodID holdObject;
+            static jmethodID getObject;
+            static jmethodID tryReleaseObject;
+            static jmethodID asyncInputStreamToString;
+            static jmethodID asyncInputStreamToByteArray;
             
         public:
             static int kbVisible;
@@ -47,22 +53,25 @@ namespace Xli
             
             static bool ConnectedToNetwork();
             static jobject XliToJavaHeaders(const HttpRequest* req);
-            static jobject SendHttpAsync(const HttpRequest* req, const void* content, long byteLength);
-            static jobject SendHttpAsync(const HttpRequest* req, String content);
-            static jobject SendHttpAsync(const HttpRequest* req);
-            static void AbortAsyncConnection(jobject connection);
-            static jobject HttpNewConnection(const String& uri, const String& method, bool hasPayload);
+            static JObjRef SendHttpAsync(const HttpRequest* req, const void* content, long byteLength);
+            static JObjRef SendHttpAsync(const HttpRequest* req, String content);
+            static JObjRef SendHttpAsync(const HttpRequest* req);
+            static void AbortAsyncTask(JObjRef task);
             static String InputStreamToString(jobject bufferedInputStream);
-            static jobject AsyncInputStreamToString(jobject bufferedInputStream, HttpRequest* request);
-            static jobject AsyncInputStreamToByteArray(jobject bufferedInputStream, HttpRequest* request);
+            static JObjRef AsyncInputStreamToString(JObjRef bufferedInputStream, HttpRequest* request);
+            static JObjRef AsyncInputStreamToByteArray(JObjRef bufferedInputStream, HttpRequest* request);
             static int ReadBytesFromInputStream(jobject bufferedInputStream, int bytesToRead, void* dst);
             static AAssetManager* GetAssetManager();
             static bool RegisterNativeFunctions(JNINativeMethod native_funcs[], int funcCount);
             static void InitDefaultCookieManager();
             static float GetDensity();
             static Vector2 GetDpi();
+            static JObjRef HoldObject(jobject obj);
+            static jobject GetObject(JObjRef objKey);
+            static bool TryReleaseObject(JObjRef objKey);
         };
     };
 };
 
 #endif
+//SendHttpAsync, SendHttpStringAsync, AsyncInputStreamToString, AsyncInputStreamToByteArray

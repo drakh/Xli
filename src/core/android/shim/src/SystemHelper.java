@@ -1,7 +1,5 @@
-
 import android.annotation.SuppressLint;
 import android.app.NativeActivity;
-import android.content.res.AssetManager;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.DisplayMetrics;

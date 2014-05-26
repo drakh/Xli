@@ -18,9 +18,10 @@ struct android_app;
 
 namespace Xli
 {
+    typedef int JObjRef;
+
     namespace PlatformSpecific
     {
-
         extern ANativeActivity* AndroidActivity;
 
         XLI_INLINE const char* AGetAppName()
