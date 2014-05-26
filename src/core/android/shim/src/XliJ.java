@@ -104,16 +104,22 @@ public class XliJ extends android.app.NativeActivity {
     }
 
     //--------------------------------------------
-    // Http    
+    // Http
+    public static Object GetHeaderMap()
+    {
+    	return (Object)new HashMap<String,String>();
+    }
 	public static int SendHttpAsync(String url, String method,
                                           HashMap<String,String> headers, ByteBuffer body,
                                           int timeout, long requestPointer) {
+		if (headers==null) headers = new HashMap<String,String>();
     	return HoldObject(HttpHelper.SendHttpAsync(url, method, headers, body, timeout, requestPointer));
     }
 	public static int SendHttpStringAsync(String url, String method,
     								 			HashMap<String,String> headers, String body,
     								 			int timeout, long requestPointer) {
-    	return HoldObject(HttpHelper.SendHttpStringAsync(url, method, headers, body, timeout, requestPointer));
+		if (headers==null) headers = new HashMap<String,String>();
+    	return HoldObject(HttpHelper.SendHttpStringAsync(url, method, headers, body, timeout, requestPointer));    	
     }
     public static byte[] ReadAllBytesFromHttpInputStream(InputStream stream, long requestPointer) throws IOException
     {    	

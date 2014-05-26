@@ -242,7 +242,7 @@ namespace Xli
         jobject AJniHelper::GetInstance() 
         {
             return AndroidActivity->clazz;
-        }
+        }        
 
         jobject AJniHelper::GetInstance(const char* class_name, const char* constructor_sig, ...)
         {

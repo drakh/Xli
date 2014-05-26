@@ -308,6 +308,7 @@ namespace Xli
                     headers = 0;
                 }
                 env->DeleteLocalRef(headers);
+                env->DeleteLocalRef(responseMessage);
                 request->javaAsyncHandle = 0;
                 request->client->EnqueueAction(new Xli::AHttpStateAction(request, Xli::HttpRequestStateHeadersReceived));
             } else {

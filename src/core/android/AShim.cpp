@@ -34,6 +34,7 @@ namespace Xli
         jmethodID AShim::tryReleaseObject;
         jmethodID AShim::asyncInputStreamToString;
         jmethodID AShim::asyncInputStreamToByteArray;
+        jmethodID AShim::getHeaderMap;
 
         void AShim::CacheMids(JNIEnv *env, jclass shimClass)
         {
@@ -58,6 +59,7 @@ namespace Xli
             vibrateForMilliseconds = env->GetStaticMethodID(shimClass, "VibrateForMilliseconds", "(I)V");
             asyncInputStreamToString = env->GetStaticMethodID(shimClass, "AsyncInputStreamToString", "(IJ)I");
             asyncInputStreamToByteArray = env->GetStaticMethodID(shimClass, "AsyncInputStreamToByteArray", "(IJ)I");
+            getHeaderMap = env->GetStaticMethodID(shimClass, "GetHeaderMap","()Ljava/lang/Object;");
 
             if (!raiseKeyboard) XLI_THROW("Cannot cache mid for raiseKeyboard.");
             if (!hideKeyboard) XLI_THROW("Cannot cache mid for hideKeyboard.");
@@ -76,6 +78,9 @@ namespace Xli
             if (!holdObject) XLI_THROW("Cannot cache mid for holdObject.");
             if (!getObject) XLI_THROW("Cannot cache mid for getObject.");
             if (!tryReleaseObject) XLI_THROW("Cannot cache mid for tryReleaseObject.");
+            if (!asyncInputStreamToString) XLI_THROW("Cannot cache mid for asyncInputStreamToString.");
+            if (!asyncInputStreamToByteArray) XLI_THROW("Cannot cache mid for asyncInputStreamToByteArray.");
+            if (!getHeaderMap) XLI_THROW("Cannot cache mid for getHeaderMap.");
             LOGD("Mids Cached");
             //LOGD("out_0");
         }
@@ -240,7 +245,9 @@ namespace Xli
                 jstring jurl = jni->NewStringUTF(url.DataPtr());
                 jstring jmethod = jni->NewStringUTF(method.DataPtr());
                 jint jtimeout = (jint)req->GetTimeout();
-                jobject headers = XliToJavaHeaders(req);
+                
+                jobject headers = GetHeaderMap();
+                XliToJavaHeaders(req, headers);
 
                 jobject arrayHandle = 0;
                 if ((content!=0) && (byteLength>0))
@@ -254,6 +261,7 @@ namespace Xli
                 jni->DeleteLocalRef(jurl);
                 jni->DeleteLocalRef(jmethod);
                 jni->DeleteLocalRef(headers);
+
                 if (jresult==-1)
                 {
                     LOGE("AShim [SendHttpAsync - string]: Could not create async http request");
@@ -285,7 +293,10 @@ namespace Xli
                 jstring jurl = jni->NewStringUTF(url.DataPtr());
                 jstring jmethod = jni->NewStringUTF(method.DataPtr());
                 jint jtimeout = (jint)req->GetTimeout();
-                jobject headers = XliToJavaHeaders(req);
+
+                jobject headers = GetHeaderMap();
+                XliToJavaHeaders(req, headers);
+
                 jobject body = 0;
 
                 if ((content.Length()>0))
@@ -298,6 +309,7 @@ namespace Xli
                 jni->DeleteLocalRef(jurl);
                 jni->DeleteLocalRef(jmethod);
                 jni->DeleteLocalRef(headers);
+
                 if (body!=0) jni->DeleteLocalRef(body);
 
                 if (jresult==-1)
@@ -319,7 +331,7 @@ namespace Xli
 
         JObjRef AShim::SendHttpAsync(const HttpRequest* req)
         {
-            //LOGD("in_17");
+            LOGD("in_17");
             AJniHelper jni;
             jclass shimClass = jni.GetShim();
 
@@ -332,8 +344,10 @@ namespace Xli
                 jstring jurl = jni->NewStringUTF(url.DataPtr());
                 jstring jmethod = jni->NewStringUTF(method.DataPtr());
                 jint jtimeout = (jint)req->GetTimeout();
-                jobject headers = XliToJavaHeaders(req);
                 jobject arrayHandle = 0;
+
+                jobject headers = GetHeaderMap();
+                XliToJavaHeaders(req, headers);
 
                 jint jresult = jni->CallStaticIntMethod(shimClass, mid, jurl, jmethod, headers, arrayHandle,
                                                         jtimeout, (jlong)req);
@@ -343,18 +357,18 @@ namespace Xli
                 if (jresult==0)
                 {
                     LOGE("AShim [SendHttpAsync - string]: Could not create async http request");
-                    //LOGD("out_17");
+                    LOGD("out_17");
                     return 0;
                 } else {
-                    //LOGD("out_17");
+                    LOGD("out_17");
                     return (JObjRef)jresult;
                 }
             } else {
                 LOGE("Couldn't find SendHttpAsync");
-                //LOGD("out_17");
+                LOGD("out_17");
                 return 0;
             }
-            //LOGD("out_17");
+            LOGD("out_17_impossible");
         }
 
         void AShim::AbortAsyncTask(JObjRef task)
@@ -365,11 +379,10 @@ namespace Xli
             //LOGD("out_18");
         }
 
-        jobject AShim::XliToJavaHeaders(const HttpRequest* req)
+    void AShim::XliToJavaHeaders(const HttpRequest* req, jobject hashmap)
         {
             //LOGD("in_19");
             AJniHelper jni;
-            jobject hashmap = jni.GetInstance("java/util/HashMap","()V");
             jmethodID put = jni.GetInstanceMethod(hashmap, "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
 
             int i = req->HeadersBegin();
@@ -384,9 +397,7 @@ namespace Xli
                 jni->DeleteLocalRef(jval);
                 i = req->HeadersNext(i);
             }
-
             //LOGD("out_19");
-            return hashmap;
         }
 
         String AShim::InputStreamToString(jobject bufferedInputStream)
@@ -510,6 +521,15 @@ namespace Xli
             //LOGD("in_28");
             AJniHelper jni;
             bool result = (bool)jni->CallStaticBooleanMethod(jni.GetShim(), tryReleaseObject, (jint)objKey);
+            //LOGD("out_28");
+            return result;
+        }
+
+        jobject AShim::GetHeaderMap()
+        {
+            //LOGD("in_28");
+            AJniHelper jni;
+            jobject result = jni->CallStaticObjectMethod(jni.GetShim(), getHeaderMap);
             //LOGD("out_28");
             return result;
         }

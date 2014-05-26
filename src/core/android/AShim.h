@@ -35,6 +35,7 @@ namespace Xli
             static jmethodID tryReleaseObject;
             static jmethodID asyncInputStreamToString;
             static jmethodID asyncInputStreamToByteArray;
+            static jmethodID getHeaderMap;
             
         public:
             static int kbVisible;
@@ -52,7 +53,7 @@ namespace Xli
             static void VibrateForMilliseconds(int milliseconds);
             
             static bool ConnectedToNetwork();
-            static jobject XliToJavaHeaders(const HttpRequest* req);
+            static void XliToJavaHeaders(const HttpRequest* req, jobject hashmap);
             static JObjRef SendHttpAsync(const HttpRequest* req, const void* content, long byteLength);
             static JObjRef SendHttpAsync(const HttpRequest* req, String content);
             static JObjRef SendHttpAsync(const HttpRequest* req);
@@ -69,6 +70,7 @@ namespace Xli
             static JObjRef HoldObject(jobject obj);
             static jobject GetObject(JObjRef objKey);
             static bool TryReleaseObject(JObjRef objKey);
+            static jobject GetHeaderMap();
         };
     };
 };
