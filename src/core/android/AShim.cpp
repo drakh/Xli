@@ -331,7 +331,7 @@ namespace Xli
 
         JObjRef AShim::SendHttpAsync(const HttpRequest* req)
         {
-            LOGD("in_17");
+            // LOGD("in_17");
             AJniHelper jni;
             jclass shimClass = jni.GetShim();
 
@@ -357,18 +357,18 @@ namespace Xli
                 if (jresult==0)
                 {
                     LOGE("AShim [SendHttpAsync - string]: Could not create async http request");
-                    LOGD("out_17");
+                    // LOGD("out_17");
                     return 0;
                 } else {
-                    LOGD("out_17");
+                    // LOGD("out_17");
                     return (JObjRef)jresult;
                 }
             } else {
                 LOGE("Couldn't find SendHttpAsync");
-                LOGD("out_17");
+                // LOGD("out_17");
                 return 0;
             }
-            LOGD("out_17_impossible");
+            // LOGD("out_17_impossible");
         }
 
         void AShim::AbortAsyncTask(JObjRef task)
