@@ -264,7 +264,7 @@ namespace Xli
 
                 if (jresult==-1)
                 {
-                    LOGE("AShim [SendHttpAsync - string]: Could not create async http request");
+                    LOGE("AShim [SendHttpAsync]: Could not create async http request");
                     //LOGD("out_15");
                     return 0;
                 } else {
@@ -314,7 +314,7 @@ namespace Xli
 
                 if (jresult==-1)
                 {
-                    LOGE("AShim [SendHttpAsync - string]: Could not create async http request");
+                    LOGE("AShim [SendHttpAsync]: Could not create async http request");
                     //LOGD("out_16");
                     return 0;
                 } else {
@@ -356,7 +356,7 @@ namespace Xli
                 jni->DeleteLocalRef(headers);
                 if (jresult==0)
                 {
-                    LOGE("AShim [SendHttpAsync - string]: Could not create async http request");
+                    LOGE("AShim [SendHttpAsync]: Could not create async http request");
                     // LOGD("out_17");
                     return 0;
                 } else {

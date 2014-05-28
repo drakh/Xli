@@ -1,4 +1,4 @@
-if (NOT IOS AND NOT ANDROID)
+if (XLI_PLATFORM_WIN32 OR XLI_PLATFORM_OSX)
     return()
 endif()
 

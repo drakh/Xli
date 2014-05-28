@@ -82,6 +82,9 @@ namespace Xli
         SLPlayItf playerPlayItf;
         SLSeekItf playerSeekItf;
         SLVolumeItf playerVolumeItf;
+        SLBufferQueueItf bufferQueueItf;
+        bool userPaused;
+        bool atStart;
         bool Closed;
         mutable double cachedDuration;
         
@@ -92,6 +95,10 @@ namespace Xli
             playerPlayItf = NULL;
             playerSeekItf = NULL;
             playerVolumeItf = NULL;
+            bufferQueueItf = NULL;
+            userPaused = false;
+            atStart = true;
+            
             cachedDuration = -1.0;
             Closed = !PrepareSlesPlayer(sound->GetPath(), sound->IsAsset());
         }    
@@ -101,18 +108,27 @@ namespace Xli
             playerPlayItf = NULL;
             playerSeekItf = NULL;
             playerVolumeItf = NULL;
+            bufferQueueItf = NULL;
             (*playerObject)->Destroy(playerObject);
             Closed=true;
         }
 
 		virtual void Pause()
         {
-            (*playerPlayItf)->SetPlayState(playerPlayItf, SL_PLAYSTATE_PAUSED);
+            if (!IsFinished())
+            {
+                userPaused = true;
+                (*playerPlayItf)->SetPlayState(playerPlayItf, SL_PLAYSTATE_PAUSED);
+            }
         }
         virtual void UnPause()
         {
-            if (this->IsPaused())
+            if (this->IsPaused() && userPaused)
+            {
+                userPaused = false;
+                atStart = false;
                 (*playerPlayItf)->SetPlayState(playerPlayItf, SL_PLAYSTATE_PLAYING);
+            }
         }
 
         virtual double GetPosition() const
@@ -124,6 +140,7 @@ namespace Xli
         }
         virtual void SetPosition(double position)
         {
+            atStart = (position == 0);
             int pos = (int)(position * 1000);
             SLresult result = (*playerSeekItf)->SetPosition(playerSeekItf, pos, SL_SEEKMODE_FAST);
             assert(SL_RESULT_SUCCESS == result);
@@ -161,7 +178,9 @@ namespace Xli
 
 		virtual bool IsFinished()
         {
-            return ((!IsPlaying()) && AtEnd());
+            SLuint32 pState;
+            SLresult result = (*playerPlayItf)->GetPlayState(playerPlayItf, &pState);
+            return (!atStart && (pState == SL_PLAYSTATE_STOPPED) || ((pState == SL_PLAYSTATE_PAUSED) && !userPaused));
         }
 
         virtual double GetDuration() const
@@ -179,6 +198,7 @@ namespace Xli
  
         virtual void Play()
         {
+            atStart = false;
             (*playerPlayItf)->SetPlayState(playerPlayItf, SL_PLAYSTATE_PLAYING);
         }
 		virtual void Stop()
@@ -231,6 +251,7 @@ namespace Xli
 
 		virtual bool IsPaused()
         {
+            if (!userPaused) return false;
             SLuint32 pState;
             SLresult result = (*playerPlayItf)->GetPlayState(playerPlayItf, &pState);
             assert(SL_RESULT_SUCCESS == result);
@@ -271,8 +292,7 @@ namespace Xli
                 SLDataLocator_AndroidFD locatorIn = {SL_DATALOCATOR_ANDROIDFD, fd, start, length};
                 SLDataFormat_MIME dataFormat = {SL_DATAFORMAT_MIME, NULL, SL_CONTAINERTYPE_UNSPECIFIED};
                 SLDataSource audioSrc = {&locatorIn, &dataFormat};
-                SLDataLocator_OutputMix loc_outmix = {SL_DATALOCATOR_OUTPUTMIX, 
-                                                      GlobalAAudioEngine->OutputMixObject};
+                SLDataLocator_OutputMix loc_outmix = {SL_DATALOCATOR_OUTPUTMIX, GlobalAAudioEngine->OutputMixObject};
                 SLDataSink audioSnk = {&loc_outmix, NULL};
 
                 result = (*GlobalAAudioEngine->EngineEngine)->CreateAudioPlayer(GlobalAAudioEngine->EngineEngine, &playerObject, &audioSrc, &audioSnk, 2, ids, req);
@@ -280,11 +300,9 @@ namespace Xli
             } else {
 
                 SLDataLocator_URI locatorIn = {SL_DATALOCATOR_URI, (SLchar *)path.DataPtr()};
-                SLDataFormat_MIME dataFormat = {SL_DATAFORMAT_MIME, NULL, 
-                                                SL_CONTAINERTYPE_UNSPECIFIED};
+                SLDataFormat_MIME dataFormat = {SL_DATAFORMAT_MIME, NULL, SL_CONTAINERTYPE_UNSPECIFIED};
                 SLDataSource audioSrc = {&locatorIn, &dataFormat};
-                SLDataLocator_OutputMix loc_outmix = {SL_DATALOCATOR_OUTPUTMIX, 
-                                                      GlobalAAudioEngine->OutputMixObject};
+                SLDataLocator_OutputMix loc_outmix = {SL_DATALOCATOR_OUTPUTMIX, GlobalAAudioEngine->OutputMixObject};
                 SLDataSink audioSnk = {&loc_outmix, NULL};
 
                 result = (*GlobalAAudioEngine->EngineEngine)->CreateAudioPlayer(GlobalAAudioEngine->EngineEngine, &playerObject, &audioSrc, &audioSnk, 2, ids, req);
@@ -301,9 +319,10 @@ namespace Xli
             //       http://www.srombauts.fr/android-ndk-r5b/docs/opensles/
             //       read the prefetch section
             // get the play interface
-            result = (*playerObject)->GetInterface(playerObject, SL_IID_PLAY, &playerPlayItf);
+            result = (*playerObject)->GetInterface(playerObject, SL_IID_PLAY, &playerPlayItf);            
             assert(SL_RESULT_SUCCESS == result);
             (void)result;
+
             // get the seek interface
             result = (*playerObject)->GetInterface(playerObject, SL_IID_SEEK,
                                                    &playerSeekItf);

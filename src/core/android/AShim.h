@@ -76,4 +76,3 @@ namespace Xli
 };
 
 #endif
-//SendHttpAsync, SendHttpStringAsync, AsyncInputStreamToString, AsyncInputStreamToByteArray
