@@ -12,7 +12,7 @@ namespace Xli
         wnd->SetEventHandler(app);
         app->OnLoad(wnd);
 
-#if defined(XLI_PLATFORM_IOS)
+#if defined(XLI_PLATFORM_IOS) || defined(XLI_PLATFORM_OSX)
         app->OnAppDidEnterForeground(wnd);
 #endif
 
@@ -21,6 +21,10 @@ namespace Xli
             app->OnDraw(wnd);
             Window::ProcessMessages();
         }
+
+#if defined(XLI_PLATFORM_OSX)
+        app->OnAppTerminating(wnd);
+#endif
 
         Window::Done();
     }
