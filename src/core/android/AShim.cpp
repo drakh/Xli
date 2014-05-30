@@ -14,6 +14,8 @@ namespace Xli
     {
         int AShim::kbVisible = 0;
 
+        jmethodID AShim::onPause;
+        jmethodID AShim::onResume;
         jmethodID AShim::raiseKeyboard;
         jmethodID AShim::hideKeyboard;
         jmethodID AShim::getKeyboardSize;
@@ -40,6 +42,8 @@ namespace Xli
         {
             //LOGD("in_0");
             LOGD("Caching Mids");
+            onPause = env->GetStaticMethodID(shimClass, "OnPause", "()V");
+            onResume = env->GetStaticMethodID(shimClass, "OnResume", "()V");
             raiseKeyboard = env->GetStaticMethodID(shimClass, "raiseKeyboard", "()V");
             hideKeyboard = env->GetStaticMethodID(shimClass, "hideKeyboard", "()V");
             getKeyboardSize = env->GetStaticMethodID(shimClass, "GetKeyboardSize", "()I");
@@ -61,6 +65,8 @@ namespace Xli
             asyncInputStreamToByteArray = env->GetStaticMethodID(shimClass, "AsyncInputStreamToByteArray", "(IJ)I");
             getHeaderMap = env->GetStaticMethodID(shimClass, "GetHeaderMap","()Ljava/lang/Object;");
 
+            if (!onPause) XLI_THROW("Cannot cache mid for onPause.");
+            if (!onResume) XLI_THROW("Cannot cache mid for onResume.");
             if (!raiseKeyboard) XLI_THROW("Cannot cache mid for raiseKeyboard.");
             if (!hideKeyboard) XLI_THROW("Cannot cache mid for hideKeyboard.");
             if (!getKeyboardSize) XLI_THROW("Cannot cache mid for getKeyboardSize.");
@@ -85,14 +91,29 @@ namespace Xli
             //LOGD("out_0");
         }
 
+        void AShim::OnPause()
+        {
+            // LOGD("in_1");
+            AJniHelper jni;
+            jni->CallObjectMethod(jni.GetShim(), onPause);
+            // LOGD("out_1");
+        }
+
+        void AShim::OnResume()
+        {
+            // LOGD("in_2");
+            AJniHelper jni;
+            jni->CallObjectMethod(jni.GetShim(), onResume);
+            // LOGD("out_2");
+        }
+
         void AShim::RaiseSoftKeyboard()
         {
-            //LOGD("in_1");
+            //LOGD("in_29");
             AJniHelper jni;
-            jclass shimClass = jni.GetShim();
-            jni->CallObjectMethod(shimClass, raiseKeyboard);
+            jni->CallObjectMethod(jni.GetShim(), raiseKeyboard);
             kbVisible = 1;
-            //LOGD("out_2");
+            //LOGD("out_29");
         }
 
         void AShim::HideSoftKeyboard()

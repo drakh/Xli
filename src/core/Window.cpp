@@ -68,6 +68,26 @@ namespace Xli
     {
     }
 
+    void WindowEventHandler::OnAppStart(Window* wnd)
+    {
+    }
+
+    void WindowEventHandler::OnAppResume(Window* wnd)
+    {
+    }
+
+    void WindowEventHandler::OnAppPause(Window* wnd)
+    {
+    }
+
+    void WindowEventHandler::OnAppGainedFocus(Window* wnd)
+    {
+    }
+
+    void WindowEventHandler::OnAppLostFocus(Window* wnd)
+    {
+    }
+
     void WindowEventHandler::OnAppLowMemory(Window* wnd)
     {
     }

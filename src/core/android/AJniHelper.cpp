@@ -113,9 +113,8 @@ namespace Xli
 
         static void AttachHiddenView(jclass* shim_class, JNIEnv* env, jobject activity) 
         {
-            jmethodID mid = env->GetStaticMethodID(*shim_class, "AttachHiddenView", "()I");
-            jint result = (jint)env->CallObjectMethod(*shim_class, mid, activity);
-            if (!result) LOGE("Could not AttachHidden View (c++ side)");
+            jmethodID mid = env->GetStaticMethodID(*shim_class, "AttachHiddenView", "()V");
+            env->CallObjectMethod(*shim_class, mid, activity);
         }
 
         void AJniHelper::Init()

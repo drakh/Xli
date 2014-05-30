@@ -47,7 +47,7 @@ class HiddenInputConnection extends BaseInputConnection {
     }
 
     @Override
-    public boolean sendKeyEvent(KeyEvent event) {        
+    public boolean sendKeyEvent(KeyEvent event) {
         int keyCode = event.getKeyCode();
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
         	XliJ.XliJ_OnKeyDown(keyCode);

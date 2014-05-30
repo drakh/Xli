@@ -12,6 +12,10 @@ namespace Xli
         wnd->SetEventHandler(app);
         app->OnLoad(wnd);
 
+#if defined(XLI_PLATFORM_IOS)
+        app->OnAppDidEnterForeground(wnd);
+#endif
+
         while (!wnd->IsClosed())
         {
             app->OnDraw(wnd);
