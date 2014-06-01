@@ -38,6 +38,8 @@ namespace Xli
             static jmethodID tryReleaseObject;
             static jmethodID asyncInputStreamToString;
             static jmethodID asyncInputStreamToByteArray;
+            static jmethodID sendHttpAsyncA;
+            static jmethodID sendHttpAsyncB;
             static jmethodID getHeaderMap;
             
         public:
@@ -58,7 +60,7 @@ namespace Xli
             static void VibrateForMilliseconds(int milliseconds);
             
             static bool ConnectedToNetwork();
-            static void XliToJavaHeaders(const HttpRequest* req, jobject hashmap);
+            static String HeadersToString(const HttpRequest* req);
             static JObjRef SendHttpAsync(const HttpRequest* req, const void* content, long byteLength);
             static JObjRef SendHttpAsync(const HttpRequest* req, String content);
             static JObjRef SendHttpAsync(const HttpRequest* req);

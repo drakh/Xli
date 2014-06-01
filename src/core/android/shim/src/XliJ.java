@@ -13,6 +13,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.SparseArray;
 
 public class XliJ extends android.app.NativeActivity {
@@ -117,23 +118,44 @@ public class XliJ extends android.app.NativeActivity {
     {
     	return (Object)new HashMap<String,String>();
     }
-	public static int SendHttpAsync(String url, String method,
-                                          HashMap<String,String> headers, ByteBuffer body,
+    
+    public static HashMap<String,String> StringToHeadersMap(String headers)
+    {
+    	//{TODO} Add validation/sanity-checks for headers
+    	HashMap<String,String> h = new HashMap<String,String>();    	    	
+    	if (headers.trim().length()==0) return h;
+    	
+    	for (String pair : headers.split("\n"))
+    	{
+    		String[] kv = pair.split(":",2);
+    		if (kv.length>1)
+    		{
+    			h.put(kv[0], kv[1]);
+    			Log.e("XliApp", kv[0]+":"+kv[1]);
+    		} else if (kv.length == 1) {
+    			h.put(kv[0], "");
+    			Log.e("XliApp", kv[0]+":*null*");        			
+    		}    		
+    	}
+    	return h;
+    }
+    
+    public static int SendHttpAsync(String url, String method, String headers, ByteBuffer body,
                                           int timeout, long requestPointer) {
-		if (headers==null) headers = new HashMap<String,String>();
-    	return HoldObject(HttpHelper.SendHttpAsync(url, method, headers, body, timeout, requestPointer));
+    	return HoldObject(HttpHelper.SendHttpAsync(url, method, StringToHeadersMap(headers), body, timeout, requestPointer));
     }
-	public static int SendHttpStringAsync(String url, String method,
-    								 			HashMap<String,String> headers, String body,
-    								 			int timeout, long requestPointer) {
-		if (headers==null) headers = new HashMap<String,String>();
-    	return HoldObject(HttpHelper.SendHttpStringAsync(url, method, headers, body, timeout, requestPointer));    	
+	
+	public static int SendHttpStringAsync(String url, String method, String headers, String body,
+    								 			int timeout, long requestPointer) {				
+    	return HoldObject(HttpHelper.SendHttpStringAsync(url, method, StringToHeadersMap(headers), body, timeout, requestPointer));    	
     }
-    public static byte[] ReadAllBytesFromHttpInputStream(InputStream stream, long requestPointer) throws IOException
+    
+	public static byte[] ReadAllBytesFromHttpInputStream(InputStream stream, long requestPointer) throws IOException
     {    	
 		return HttpHelper.ReadAllBytesFromHttpInputStream(stream, requestPointer);
     }
-    public static void InitDefaultCookieManager()
+    
+	public static void InitDefaultCookieManager()
     {
         HttpHelper.InitDefaultCookieManager();
     }

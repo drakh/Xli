@@ -37,6 +37,8 @@ namespace Xli
         jmethodID AShim::asyncInputStreamToString;
         jmethodID AShim::asyncInputStreamToByteArray;
         jmethodID AShim::getHeaderMap;
+        jmethodID AShim::sendHttpAsyncA;
+        jmethodID AShim::sendHttpAsyncB;
 
         void AShim::CacheMids(JNIEnv *env, jclass shimClass)
         {
@@ -64,6 +66,8 @@ namespace Xli
             asyncInputStreamToString = env->GetStaticMethodID(shimClass, "AsyncInputStreamToString", "(IJ)I");
             asyncInputStreamToByteArray = env->GetStaticMethodID(shimClass, "AsyncInputStreamToByteArray", "(IJ)I");
             getHeaderMap = env->GetStaticMethodID(shimClass, "GetHeaderMap","()Ljava/lang/Object;");
+            sendHttpAsyncA = env->GetStaticMethodID(shimClass, "SendHttpAsync", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/nio/ByteBuffer;IJ)I");
+            sendHttpAsyncB = env->GetStaticMethodID(shimClass, "SendHttpStringAsync", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IJ)I");
 
             if (!onPause) XLI_THROW("Cannot cache mid for onPause.");
             if (!onResume) XLI_THROW("Cannot cache mid for onResume.");
@@ -87,6 +91,8 @@ namespace Xli
             if (!asyncInputStreamToString) XLI_THROW("Cannot cache mid for asyncInputStreamToString.");
             if (!asyncInputStreamToByteArray) XLI_THROW("Cannot cache mid for asyncInputStreamToByteArray.");
             if (!getHeaderMap) XLI_THROW("Cannot cache mid for getHeaderMap.");
+            if (!sendHttpAsyncA) XLI_THROW("Cannot cache mid for sendHttpAsyncA.");
+            if (!sendHttpAsyncB) XLI_THROW("Cannot cache mid for sendHttpAsyncB.");
             LOGD("Mids Cached");
             //LOGD("out_0");
         }
@@ -256,140 +262,111 @@ namespace Xli
         {
             //LOGD("in_15");
             AJniHelper jni;
-            jclass shimClass = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shimClass, "SendHttpAsync", "(Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/nio/ByteBuffer;IJ)I");
-            if (mid)
-            {
-                String url = req->GetUrl();
-                String method = req->GetMethod();
 
-                jstring jurl = jni->NewStringUTF(url.DataPtr());
-                jstring jmethod = jni->NewStringUTF(method.DataPtr());
-                jint jtimeout = (jint)req->GetTimeout();
+            String url = req->GetUrl();
+            String method = req->GetMethod();
+
+            jstring jurl = jni->NewStringUTF(url.DataPtr());
+            jstring jmethod = jni->NewStringUTF(method.DataPtr());
+            jint jtimeout = (jint)req->GetTimeout();
                 
-                jobject headers = GetHeaderMap();
-                XliToJavaHeaders(req, headers);
+            String headers = HeadersToString(req);
+            jstring jheaders = jni->NewStringUTF(headers.DataPtr());
 
-                jobject arrayHandle = 0;
-                if ((content!=0) && (byteLength>0))
-                {
-                    // no way around the const_cast here, we dont modify the data in java so should be safe.
-                    arrayHandle = jni->NewDirectByteBuffer(const_cast<void*>(content), byteLength);
-                }
+            jobject arrayHandle = 0;
+            if ((content!=0) && (byteLength>0))
+            {
+                // no way around the const_cast here, we dont modify the data in java so should be safe.
+                arrayHandle = jni->NewDirectByteBuffer(const_cast<void*>(content), byteLength);
+            }
 
-                jint jresult = jni->CallStaticIntMethod(shimClass, mid, jurl, jmethod, headers, arrayHandle,
-                                                        jtimeout, (jlong)req);
-                jni->DeleteLocalRef(jurl);
-                jni->DeleteLocalRef(jmethod);
-                jni->DeleteLocalRef(headers);
+            jint jresult = jni->CallStaticIntMethod(jni.GetShim(), sendHttpAsyncA, jurl, jmethod, jheaders, arrayHandle,
+                                                    jtimeout, (jlong)req);
 
-                if (jresult==-1)
-                {
-                    LOGE("AShim [SendHttpAsync]: Could not create async http request");
-                    //LOGD("out_15");
-                    return 0;
-                } else {
-                    //LOGD("out_15");
-                    return (JObjRef)jresult;
-                }
-            } else {
-                LOGE("Couldn't find SendHttpAsync");
+            jni->DeleteLocalRef(jurl);
+            jni->DeleteLocalRef(jmethod);
+            jni->DeleteLocalRef(jheaders);
+
+            if (jresult==-1)
+            {
+                LOGE("AShim [SendHttpAsync]: Could not create async http request");
                 //LOGD("out_15");
                 return 0;
             }
             //LOGD("out_15");
+            return (JObjRef)jresult;
         }
 
         JObjRef AShim::SendHttpAsync(const HttpRequest* req, String content)
         {
             //LOGD("in_16");
             AJniHelper jni;
-            jclass shimClass = jni.GetShim();
-            jmethodID mid = jni->GetStaticMethodID(shimClass, "SendHttpStringAsync", "(Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/lang/String;IJ)I");
-            if (mid)
+
+            String url = req->GetUrl();
+            String method = req->GetMethod();
+
+            jstring jurl = jni->NewStringUTF(url.DataPtr());
+            jstring jmethod = jni->NewStringUTF(method.DataPtr());
+            jint jtimeout = (jint)req->GetTimeout();
+
+            String headers = HeadersToString(req);
+            jstring jheaders = jni->NewStringUTF(headers.DataPtr());
+
+            jobject body = 0;
+
+            if ((content.Length()>0))
             {
-                String url = req->GetUrl();
-                String method = req->GetMethod();
+                body = jni->NewStringUTF(content.DataPtr());
+            }
 
-                jstring jurl = jni->NewStringUTF(url.DataPtr());
-                jstring jmethod = jni->NewStringUTF(method.DataPtr());
-                jint jtimeout = (jint)req->GetTimeout();
+            jint jresult = jni->CallStaticIntMethod(jni.GetShim(), sendHttpAsyncB, jurl, jmethod, jheaders, body,
+                                                    jtimeout, (jlong)req);
 
-                jobject headers = GetHeaderMap();
-                XliToJavaHeaders(req, headers);
+            jni->DeleteLocalRef(jurl);
+            jni->DeleteLocalRef(jmethod);
+            jni->DeleteLocalRef(jheaders);
 
-                jobject body = 0;
+            if (body!=0) jni->DeleteLocalRef(body);
 
-                if ((content.Length()>0))
-                {
-                    body = jni->NewStringUTF(content.DataPtr());
-                }
-
-                jint jresult = jni->CallStaticIntMethod(shimClass, mid, jurl, jmethod, headers, body,
-                                                        jtimeout, (jlong)req);
-                jni->DeleteLocalRef(jurl);
-                jni->DeleteLocalRef(jmethod);
-                jni->DeleteLocalRef(headers);
-
-                if (body!=0) jni->DeleteLocalRef(body);
-
-                if (jresult==-1)
-                {
-                    LOGE("AShim [SendHttpAsync]: Could not create async http request");
-                    //LOGD("out_16");
-                    return 0;
-                } else {
-                    //LOGD("out_16");
-                    return (JObjRef)jresult;
-                }
-            } else {
-                LOGE("Couldn't find SendHttpAsync");
+            if (jresult==-1)
+            {
+                LOGE("AShim [SendHttpAsync]: Could not create async http request");
                 //LOGD("out_16");
                 return 0;
             }
             //LOGD("out_16");
+            return (JObjRef)jresult;
         }
 
         JObjRef AShim::SendHttpAsync(const HttpRequest* req)
         {
             // LOGD("in_17");
             AJniHelper jni;
-            jclass shimClass = jni.GetShim();
 
-            jmethodID mid = jni->GetStaticMethodID(shimClass, "SendHttpAsync", "(Ljava/lang/String;Ljava/lang/String;Ljava/util/HashMap;Ljava/nio/ByteBuffer;IJ)I");
-            if (mid)
+            String url = req->GetUrl();
+            String method = req->GetMethod();
+
+            jstring jurl = jni->NewStringUTF(url.DataPtr());
+            jstring jmethod = jni->NewStringUTF(method.DataPtr());
+            jint jtimeout = (jint)req->GetTimeout();
+            jobject arrayHandle = 0;
+
+            String headers = HeadersToString(req);
+            jstring jheaders = jni->NewStringUTF(headers.DataPtr());
+
+            jint jresult = jni->CallStaticIntMethod(jni.GetShim(), sendHttpAsyncA, jurl, jmethod, jheaders, arrayHandle,
+                                                    jtimeout, (jlong)req);
+            jni->DeleteLocalRef(jurl);
+            jni->DeleteLocalRef(jmethod);
+            jni->DeleteLocalRef(jheaders);
+            if (jresult==0)
             {
-                String url = req->GetUrl();
-                String method = req->GetMethod();
-
-                jstring jurl = jni->NewStringUTF(url.DataPtr());
-                jstring jmethod = jni->NewStringUTF(method.DataPtr());
-                jint jtimeout = (jint)req->GetTimeout();
-                jobject arrayHandle = 0;
-
-                jobject headers = GetHeaderMap();
-                XliToJavaHeaders(req, headers);
-
-                jint jresult = jni->CallStaticIntMethod(shimClass, mid, jurl, jmethod, headers, arrayHandle,
-                                                        jtimeout, (jlong)req);
-                jni->DeleteLocalRef(jurl);
-                jni->DeleteLocalRef(jmethod);
-                jni->DeleteLocalRef(headers);
-                if (jresult==0)
-                {
-                    LOGE("AShim [SendHttpAsync]: Could not create async http request");
-                    // LOGD("out_17");
-                    return 0;
-                } else {
-                    // LOGD("out_17");
-                    return (JObjRef)jresult;
-                }
-            } else {
-                LOGE("Couldn't find SendHttpAsync");
+                LOGE("AShim [SendHttpAsync]: Could not create async http request");
                 // LOGD("out_17");
                 return 0;
             }
-            // LOGD("out_17_impossible");
+            // LOGD("out_17");
+            return (JObjRef)jresult;
         }
 
         void AShim::AbortAsyncTask(JObjRef task)
@@ -400,25 +377,19 @@ namespace Xli
             //LOGD("out_18");
         }
 
-    void AShim::XliToJavaHeaders(const HttpRequest* req, jobject hashmap)
+        String AShim::HeadersToString(const HttpRequest* req)
         {
             //LOGD("in_19");
+            String result = "";
             AJniHelper jni;
-            jmethodID put = jni.GetInstanceMethod(hashmap, "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
-
             int i = req->HeadersBegin();
             while (i != req->HeadersEnd())
             {
-                jstring jkey = jni->NewStringUTF(req->GetHeaderKey(i).DataPtr());
-                jstring jval = jni->NewStringUTF(req->GetHeaderValue(i).DataPtr());
-
-                jni->CallObjectMethod(hashmap, put, jkey, jval);
-
-                jni->DeleteLocalRef(jkey);
-                jni->DeleteLocalRef(jval);
+                result += req->GetHeaderKey(i) + ":" + req->GetHeaderValue(i) + "\n";
                 i = req->HeadersNext(i);
             }
             //LOGD("out_19");
+            return result;
         }
 
         String AShim::InputStreamToString(jobject bufferedInputStream)
