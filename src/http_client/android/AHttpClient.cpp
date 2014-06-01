@@ -29,7 +29,9 @@ namespace Xli
 
     AHttpRequest::~AHttpRequest()
     {
-        // abort if running
+        if (((int)state>(int)HttpRequestStateUnsent) &&
+            ((int)state<(int)HttpRequestStateDone) && !aborted) 
+            Abort();
         CleanHandles();
     }
 
@@ -128,12 +130,14 @@ namespace Xli
     {
         if (!aborted)
         {
-            if ((int)state > (int)HttpRequestStateOpened)
+            if ((int)state >= (int)HttpRequestStateOpened)
             {
                 // {TODO} if ashim::abortasynctask works then we need some kind of callback so we know to
                 // cleanup the SessionMap.
+                SessionMap::MarkAborted(this);
                 if (javaAsyncHandle!=0) 
                     PlatformSpecific::AShim::AbortAsyncTask(javaAsyncHandle);
+                
                 CleanHandles();
                 aborted = true;
                 HttpEventHandler* eh = client->GetEventHandler();
@@ -394,6 +398,18 @@ namespace Xli
                 LOGE("CRITICAL HTTP ERROR: No callback pointer error");
             }
         }
+
+        void JNICALL XliJ_HttpAbortedCallback (JNIEnv *env , jclass clazz, jlong requestPointer)
+        {
+            LOGD("XliHttpRequest: Abort callback");
+            if (requestPointer)
+            {                
+                Xli::AHttpRequest* request = ((Xli::AHttpRequest*)((void*)requestPointer));
+                SessionMap::RemoveSession(request);
+            } else {
+                LOGE("CRITICAL HTTP ERROR: No callback pointer error");
+            }
+        }
     }
 
     static int HttpInitialized = 0;
@@ -411,8 +427,9 @@ namespace Xli
                 {(char* const)"XliJ_HttpErrorCallback", (char* const)"(JILjava/lang/String;)V",
                  (void *)&XliJ_HttpErrorCallback},
                 {(char* const)"XliJ_HttpProgressCallback", (char* const)"(JJJZI)V", (void *)&XliJ_HttpProgressCallback},
+                {(char* const)"XliJ_HttpAbortedCallback", (char* const)"(J)V", (void *)&XliJ_HttpAbortedCallback},
             };
-            bool result = PlatformSpecific::AShim::RegisterNativeFunctions(nativeFuncs, 5);
+            bool result = PlatformSpecific::AShim::RegisterNativeFunctions(nativeFuncs, 6);
             if (result)
             {
                 LOGD("XliHttp: Registered the java->c++ callbacks");

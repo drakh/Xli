@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 
 public class ASyncHttpRequest extends AsyncTask<Object, Integer, HttpWrappedResponse> {
 	long requestPointer;
+	
 	@Override
 	protected HttpWrappedResponse doInBackground(Object... params) {
 		String url = (String)params[0];
@@ -27,6 +28,7 @@ public class ASyncHttpRequest extends AsyncTask<Object, Integer, HttpWrappedResp
 		String[] responseHeaders;
 		boolean hasUploadContent = (body != null);
 		HttpURLConnection connection = null;
+		if (this.isCancelled()) { XliJ.XliJ_HttpAbortedCallback(requestPointer); return null; }
 		try {
 			connection = NewHttpConnection(url,method,hasUploadContent,timeout,requestPointer);
 			if (connection==null) {
@@ -43,6 +45,7 @@ public class ASyncHttpRequest extends AsyncTask<Object, Integer, HttpWrappedResp
 				Map.Entry<String, String>pair = (Map.Entry<String, String>)it.next();
 				connection.addRequestProperty(pair.getKey(), pair.getValue());
 			}
+			if (this.isCancelled()) { XliJ.XliJ_HttpAbortedCallback(requestPointer); return null; }
 			//set content payload
 			if (hasUploadContent)
 			{
@@ -57,6 +60,7 @@ public class ASyncHttpRequest extends AsyncTask<Object, Integer, HttpWrappedResp
 						BufferedOutputStream out = new BufferedOutputStream(connection.getOutputStream());
 
 						while (runningTotal<body.length) {
+							if (this.isCancelled()) { XliJ.XliJ_HttpAbortedCallback(requestPointer); return null; }
 							out.write(body, (int)runningTotal, (int)Math.min(bufferSize, (body.length-runningTotal)));
 							if ((runningTotal / progressThreshold) > steps) {
 								steps = (runningTotal / progressThreshold);

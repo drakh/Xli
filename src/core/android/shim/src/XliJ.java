@@ -34,6 +34,7 @@ public class XliJ extends android.app.NativeActivity {
     public static native void XliJ_HttpTimeoutCallback(long requestPointer);
     public static native void XliJ_HttpProgressCallback(long requestPointer, long position, long totalLength, boolean lengthKnown, int direction);
     public static native void XliJ_HttpErrorCallback(long requestPointer, int errorCode, String errorMessage);
+    public static native void XliJ_HttpAbortedCallback(long requestPointer);
     public static native void XliJ_JavaThrowError(int code, String throwMessage);
 	
     //--------------------------------------------
@@ -74,7 +75,7 @@ public class XliJ extends android.app.NativeActivity {
     }
     public static void VibrateForMilliseconds(int milliseconds)
     {
-    	VibratorHelper.VibrateForMilliseconds(nActivity, milliseconds);
+    	VibratorHelper.VibrateForMilliseconds(milliseconds);    	
     }
     
     

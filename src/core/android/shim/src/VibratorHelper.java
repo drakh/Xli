@@ -18,9 +18,15 @@ public class VibratorHelper {
     	}
     }
     
-    public static void VibrateForMilliseconds(final NativeActivity activity, int milliseconds)
+    public static void VibrateUsingPattern(long[] pattern, int repeat)
     {
-    	Vibrator vibrator = (Vibrator)activity.getSystemService(Context.VIBRATOR_SERVICE);
+    	Vibrator vibrator = (Vibrator)XliJ.nActivity.getSystemService(Context.VIBRATOR_SERVICE);
+    	vibrator.vibrate(pattern, repeat);
+    }
+    
+    public static void VibrateForMilliseconds(int milliseconds)
+    {
+    	Vibrator vibrator = (Vibrator)XliJ.nActivity.getSystemService(Context.VIBRATOR_SERVICE);
     	vibrator.vibrate(milliseconds);
     }
 }
