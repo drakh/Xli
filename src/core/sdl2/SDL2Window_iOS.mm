@@ -73,7 +73,6 @@ namespace Xli
             
             NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
             NSOperationQueue *queue = [NSOperationQueue mainQueue];
-            Err->WriteLine("Got here");
             [center addObserverForName:UIKeyboardDidChangeFrameNotification
              object:nil
              queue:queue
@@ -85,8 +84,6 @@ namespace Xli
                     // but you get 0 if you dock and then split the keyboard again. This is really annoying but there
                     // is no good way to get the split status of the keyboard. This may be fixed after changing the 
                     // above UIKeyboardFrameBeginUserInfoKey to UIKeyboardFrameEndUserInfoKey
-                    Err->WriteLine("w:%d"+String(kbdSize.width));
-                    Err->WriteLine("h:%d"+String(kbdSize.width));
                     if ((float)kbdSize.width>0 && (float)kbdSize.height>0)
                     {
                         if (orien == UIInterfaceOrientationPortrait || orien == UIInterfaceOrientationPortraitUpsideDown)
