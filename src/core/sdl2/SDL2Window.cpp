@@ -171,9 +171,11 @@ namespace Xli
             SDL_DestroyWindow(window);
         }
 
+#ifndef XLI_PLATFORM_IOS
         void SDL2Window::SDL2WindowInit() 
         {
         }
+#endif
 
         WindowImplementation SDL2Window::GetImplementation()
         {

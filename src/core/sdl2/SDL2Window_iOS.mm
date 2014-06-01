@@ -21,6 +21,7 @@ namespace Xli
         Vector2i SDL2Window::GetOnscreenKeyboardSize() 
         { 
             int scale = [[UIScreen mainScreen] scale];
+
             if (IsOnscreenKeyboardVisible())
             {
                 return this->keyboardSize * scale;
@@ -72,24 +73,27 @@ namespace Xli
             
             NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
             NSOperationQueue *queue = [NSOperationQueue mainQueue];
+            Err->WriteLine("Got here");
             [center addObserverForName:UIKeyboardDidChangeFrameNotification
              object:nil
              queue:queue
              usingBlock:^(NSNotification *notification) {
                     UIInterfaceOrientation orien = [UIApplication sharedApplication].statusBarOrientation;
-                    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+                    CGSize kbdSize = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
                     // This is to hack around the fact that when the keyboard is split you only sometimes
                     // get size events. You get them when the split keyboard is visible and you change orientation,
                     // but you get 0 if you dock and then split the keyboard again. This is really annoying but there
                     // is no good way to get the split status of the keyboard. This may be fixed after changing the 
                     // above UIKeyboardFrameBeginUserInfoKey to UIKeyboardFrameEndUserInfoKey
-                    if ((float)keyboardSize.width>0 && (float)keyboardSize.height>0)
+                    Err->WriteLine("w:%d"+String(kbdSize.width));
+                    Err->WriteLine("h:%d"+String(kbdSize.width));
+                    if ((float)kbdSize.width>0 && (float)kbdSize.height>0)
                     {
                         if (orien == UIInterfaceOrientationPortrait || orien == UIInterfaceOrientationPortraitUpsideDown)
                         {
-                            this->keyboardSize = Vector2i((float)keyboardSize.width, (float)keyboardSize.height);
+                            this->keyboardSize = Vector2i((float)kbdSize.width, (float)kbdSize.height);
                         } else {
-                            this->keyboardSize = Vector2i((float)keyboardSize.height, (float)keyboardSize.width);
+                            this->keyboardSize = Vector2i((float)kbdSize.height, (float)kbdSize.width);
                         }
                     }
                 }
