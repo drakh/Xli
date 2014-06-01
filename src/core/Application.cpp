@@ -13,7 +13,7 @@ namespace Xli
         app->OnLoad(wnd);
 
 #if defined(XLI_PLATFORM_IOS) || defined(XLI_PLATFORM_OSX)
-        app->OnAppDidEnterForeground(wnd);
+        app->OnAppDidEnterForeground();
 #endif
 
         while (!wnd->IsClosed())
@@ -23,7 +23,7 @@ namespace Xli
         }
 
 #if defined(XLI_PLATFORM_OSX)
-        app->OnAppTerminating(wnd);
+        app->OnAppTerminating();
 #endif
 
         Window::Done();

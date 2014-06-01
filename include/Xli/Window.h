@@ -178,17 +178,17 @@ namespace Xli
         virtual bool OnClosing(Window* wnd, bool& cancel);
         virtual void OnClosed(Window* wnd);
 
-        virtual void OnAppLowMemory(Window* wnd);
-        virtual void OnAppStart(Window* wnd);
-        virtual void OnAppPause(Window* wnd);
-        virtual void OnAppResume(Window* wnd);
-        virtual void OnAppGainedFocus(Window* wnd);
-        virtual void OnAppLostFocus(Window* wnd);
-        virtual void OnAppTerminating(Window* wnd);
-        virtual void OnAppWillEnterForeground(Window* wnd);
-        virtual void OnAppDidEnterForeground(Window* wnd);
-        virtual void OnAppWillEnterBackground(Window* wnd);
-        virtual void OnAppDidEnterBackground(Window* wnd);
+        virtual void OnAppLowMemory();
+        virtual void OnAppStart();
+        virtual void OnAppPause();
+        virtual void OnAppResume();
+        virtual void OnAppGainedFocus();
+        virtual void OnAppLostFocus();
+        virtual void OnAppTerminating();
+        virtual void OnAppWillEnterForeground();
+        virtual void OnAppDidEnterForeground();
+        virtual void OnAppWillEnterBackground();
+        virtual void OnAppDidEnterBackground();
     };
 
     /**

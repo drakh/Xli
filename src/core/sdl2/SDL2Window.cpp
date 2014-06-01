@@ -23,8 +23,7 @@ namespace Xli
             case SDL_APP_TERMINATING:
                 if (GlobalWindow && GlobalWindow->GetEventHandler())
                 {
-                    //Err->WriteLine("XliAppEvent: SDL_APP_TERMINATING");
-                    GlobalWindow->GetEventHandler()->OnAppTerminating(GlobalWindow);
+                    GlobalWindow->GetEventHandler()->OnAppTerminating();
                 }
                 
                 return 0;
@@ -32,8 +31,7 @@ namespace Xli
             case SDL_APP_LOWMEMORY:
                 if (GlobalWindow && GlobalWindow->GetEventHandler())
                 {
-                    //Err->WriteLine("XliAppEvent: SDL_APP_LOWMEMORY");
-                    GlobalWindow->GetEventHandler()->OnAppLowMemory(GlobalWindow);
+                    GlobalWindow->GetEventHandler()->OnAppLowMemory();
                 }
                 
                 return 0;
@@ -41,8 +39,7 @@ namespace Xli
             case SDL_APP_WILLENTERBACKGROUND:
                 if (GlobalWindow && GlobalWindow->GetEventHandler())
                 {
-                    //Err->WriteLine("XliAppEvent: SDL_APP_WILLENTERBACKGROUND");
-                    GlobalWindow->GetEventHandler()->OnAppWillEnterBackground(GlobalWindow);
+                    GlobalWindow->GetEventHandler()->OnAppWillEnterBackground();
                 }
                 
                 return 0;
@@ -50,8 +47,7 @@ namespace Xli
             case SDL_APP_DIDENTERBACKGROUND:
                 if (GlobalWindow && GlobalWindow->GetEventHandler())
                 {
-                    //Err->WriteLine("XliAppEvent: SDL_APP_DIDENTERBACKGROUND");
-                    GlobalWindow->GetEventHandler()->OnAppDidEnterBackground(GlobalWindow);
+                    GlobalWindow->GetEventHandler()->OnAppDidEnterBackground();
                 }
                 
                 return 0;
@@ -59,8 +55,7 @@ namespace Xli
             case SDL_APP_WILLENTERFOREGROUND:
                 if (GlobalWindow && GlobalWindow->GetEventHandler())
                 {
-                    //Err->WriteLine("XliAppEvent: SDL_APP_WILLENTERFOREGROUND");
-                    GlobalWindow->GetEventHandler()->OnAppWillEnterForeground(GlobalWindow);
+                    GlobalWindow->GetEventHandler()->OnAppWillEnterForeground();
                 }
                 
                 return 0;
@@ -68,8 +63,7 @@ namespace Xli
             case SDL_APP_DIDENTERFOREGROUND:
                 if (GlobalWindow && GlobalWindow->GetEventHandler())
                 {
-                    //Err->WriteLine("XliAppEvent: SDL_APP_DIDENTERFOREGROUND");
-                    GlobalWindow->GetEventHandler()->OnAppDidEnterForeground(GlobalWindow);
+                    GlobalWindow->GetEventHandler()->OnAppDidEnterForeground();
                 }
                 
                 return 0;

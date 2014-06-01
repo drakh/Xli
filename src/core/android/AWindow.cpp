@@ -428,36 +428,36 @@ namespace Xli
 
                 case APP_CMD_START:
                     if (GlobalEventHandler)
-                        GlobalEventHandler->OnAppStart(GlobalWindow);
+                        GlobalEventHandler->OnAppStart();
                     break;
 
                 case APP_CMD_RESUME:
                     AShim::OnResume();
                     if (GlobalEventHandler)
-                        GlobalEventHandler->OnAppResume(GlobalWindow);
+                        GlobalEventHandler->OnAppResume();
                     visible = 1;
                     break;
                     
                 case APP_CMD_GAINED_FOCUS:
                     if (GlobalEventHandler)
-                        GlobalEventHandler->OnAppGainedFocus(GlobalWindow);
+                        GlobalEventHandler->OnAppGainedFocus();
                     break;
 
                 case APP_CMD_LOST_FOCUS:
                     if (GlobalEventHandler)
-                        GlobalEventHandler->OnAppLostFocus(GlobalWindow);
+                        GlobalEventHandler->OnAppLostFocus();
                     break;
 
                 case APP_CMD_PAUSE:
                     AShim::OnPause();
                     if (GlobalEventHandler)
-                        GlobalEventHandler->OnAppPause(GlobalWindow);
+                        GlobalEventHandler->OnAppPause();
                     visible = 0;
                     break;
 
                 case APP_CMD_STOP:
                     if (GlobalEventHandler)
-                        GlobalEventHandler->OnAppDidEnterBackground(GlobalWindow);
+                        GlobalEventHandler->OnAppDidEnterBackground();
                     break;
 
                 case APP_CMD_TERM_WINDOW:
@@ -466,13 +466,13 @@ namespace Xli
                         app->destroyRequested = 1;
 
                         if (GlobalEventHandler)
-                            GlobalEventHandler->OnAppTerminating(GlobalWindow);
+                            GlobalEventHandler->OnAppTerminating();
                     }
                     break;
 
                 case APP_CMD_LOW_MEMORY:
                     if (GlobalEventHandler)
-                        GlobalEventHandler->OnAppLowMemory(GlobalWindow);
+                        GlobalEventHandler->OnAppLowMemory();
                     break;
             }
         }
