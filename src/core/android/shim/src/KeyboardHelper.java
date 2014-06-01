@@ -13,6 +13,7 @@ public class KeyboardHelper {
     static ViewGroup hiddenLayout;
 	
     public static void ShowKeyboard(final NativeActivity activity) {
+    	//Log.d("XliJ","Show Keyboard");
         if (hiddenText == null)
         {
             Log.e("XliApp","ShowKeyboard:Hidden View not available");
@@ -35,15 +36,16 @@ public class KeyboardHelper {
         return (int)keyboardSize;
     }
 
-    public static void HideKeyboard(final NativeActivity activity) {
+    public static void HideKeyboard() {
+    	//Log.d("XliJ","Hide Keyboard");
         if (hiddenText == null)
         {
             Log.e("XliApp","HideKeyboard: Hidden View not available");
             return;
         }
-        activity.runOnUiThread(new Runnable() { public void run() {
-            InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
+        XliJ.nActivity.runOnUiThread(new Runnable() { public void run() {
+            InputMethodManager imm = (InputMethodManager)XliJ.nActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(XliJ.nActivity.getWindow().getDecorView().getWindowToken(), 0);
             hiddenText.setFocusable(false);
         }});
     }
@@ -62,7 +64,7 @@ public class KeyboardHelper {
                     hiddenText.setVisibility(View.VISIBLE);
                     hiddenText.requestFocus();
                     Log.i("XliApp","Successfully created input capture View.");
-                    HideKeyboard(activity);
+                    HideKeyboard();
                 } catch (Exception e) {
                     Log.e("XliApp","Unable to create Layout or View for input capture.");
                     XliJ.XliJ_JavaThrowError(-1, "Unable to create Layout or View for input capture.");
@@ -116,6 +118,7 @@ public class KeyboardHelper {
     public static void KHOnPause()
     {
     	//DetachHiddenView();
+    	HideKeyboard();
     }
     public static void KHOnResume()
     {

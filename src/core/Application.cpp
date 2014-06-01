@@ -16,6 +16,11 @@ namespace Xli
         app->OnAppDidEnterForeground();
 #endif
 
+#if defined(XLI_PLATFORM_ANDROID)       
+        wnd->BeginTextInput(TextInputHintDefault);
+        wnd->EndTextInput();
+#endif
+
         while (!wnd->IsClosed())
         {
             app->OnDraw(wnd);

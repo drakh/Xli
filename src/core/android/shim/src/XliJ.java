@@ -40,21 +40,15 @@ public class XliJ extends android.app.NativeActivity {
     
     // These will be called by the native activity on the respective events.
     // All systems in the shim that may trigger accidental wakeups should register here.
-    public static void OnPause()
-    {
-    	KeyboardHelper.KHOnPause();
-    }
-    public static void OnResume()
-    {
-    	KeyboardHelper.KHOnResume();
-    }
+    public static void OnPause() { KeyboardHelper.KHOnPause(); }
+    public static void OnResume() {	KeyboardHelper.KHOnResume(); }
     
     //--------------------------------------------
     // System
-    public static void hideStatusBar() {
+    public static void HideStatusBar() {
     	SystemHelper.hideStatusBar(nActivity);
     }
-    public static void showStatusBar() {
+    public static void ShowStatusBar() {
     	SystemHelper.showStatusBar(nActivity);
     }
 	public static DisplayMetrics GetDisplayMetrics() 
@@ -85,15 +79,15 @@ public class XliJ extends android.app.NativeActivity {
     
     //--------------------------------------------
     // Keyboard   
-    public static void raiseKeyboard() {
+    public static void RaiseKeyboard() {
         KeyboardHelper.ShowKeyboard(nActivity);
     }
     public static int GetKeyboardSize()
     {
         return KeyboardHelper.GetKeyboardSize();
     }
-    public static void hideKeyboard() {
-        KeyboardHelper.HideKeyboard(nActivity);
+    public static void HideKeyboard() {
+        KeyboardHelper.HideKeyboard();
     }
     public static void AttachHiddenView()
     {

@@ -37,7 +37,7 @@ public class Hidden extends View implements View.OnKeyListener { //used to exten
         {
             if (keyEvent.getAction()==KeyEvent.ACTION_DOWN)
             {
-            	if (keyCode == KeyEvent.KEYCODE_BACK) XliJ.hideKeyboard();
+            	if (keyCode == KeyEvent.KEYCODE_BACK) XliJ.HideKeyboard();
             	XliJ.XliJ_OnKeyDown(keyCode);
             } else if (keyEvent.getAction()==KeyEvent.ACTION_UP) {
             	XliJ.XliJ_OnKeyUp(keyCode);
