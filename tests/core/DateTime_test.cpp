@@ -4,20 +4,54 @@
 
 using namespace Xli;
 
-TEST_CASE("ConvertsToAndFromTimestamp")
+DateTime CreateDateTime(int year, int month, int day)
 {
-    DateTime now = DateTime::Now();
-    DateTime same = DateTime(now.ToTimestamp());
-
-    Err->WriteFormat("Month:%d v %d\n ",now.Month, same.Month);
-    Err->WriteFormat("Day:%d v %d\n ",now.Day, same.Day);
-
-    REQUIRE(now.Year == same.Year);
-    REQUIRE(now.Month == same.Month);
-    REQUIRE(now.Day == same.Day);
-    REQUIRE(now.Hour == same.Hour);
-    REQUIRE(now.Minute == same.Minute);
-    REQUIRE(now.Second == same.Second);
-    REQUIRE(now.Millisecond == same.Millisecond);
+    DateTime now;
+    now.Year = year;
+    now.Month = month;
+    now.Day = day;
+    return now;
 }
 
+void Check(const DateTime& expected, const DateTime& actual)
+{
+    CHECK(expected.Year == actual.Year);
+    CHECK(expected.Month == actual.Month);
+    CHECK(expected.Day == actual.Day);
+    CHECK(expected.Hour == actual.Hour);
+    CHECK(expected.Minute == actual.Minute);
+    CHECK(expected.Second == actual.Second);
+    CHECK(expected.Millisecond == actual.Millisecond);
+}
+
+TEST_CASE("January")
+{
+    DateTime now = CreateDateTime(2014, 1, 1);
+    DateTime same = DateTime(now.ToTimestamp());
+
+    Check(now, same);
+}
+
+TEST_CASE("February")
+{
+    DateTime now = CreateDateTime(2014, 2, 10);
+    DateTime same = DateTime(now.ToTimestamp());
+
+    Check(now, same);
+}
+
+TEST_CASE("March")
+{
+    DateTime now = CreateDateTime(2014, 3, 20);
+    DateTime same = DateTime(now.ToTimestamp());
+
+    Check(now, same);
+}
+
+TEST_CASE("April")
+{
+    DateTime now = CreateDateTime(2014, 4, 30);
+    DateTime same = DateTime(now.ToTimestamp());
+
+    Check(now, same);
+}
