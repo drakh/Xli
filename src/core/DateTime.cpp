@@ -146,7 +146,7 @@ namespace Xli
 
     DateTime DateTime::Now()
     {
-        return GetDatetime();
+        return DateTime(GetTimestamp());
     }
 
     DateTime DateTime::NowUtc()
