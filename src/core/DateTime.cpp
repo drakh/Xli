@@ -93,6 +93,7 @@ namespace Xli
 
         Day = (int)(timestamp / PerDay);
         timestamp -= Day * PerDay;
+        // Day++;
 
         Hour = (int)(timestamp / PerHour);
         timestamp -= Hour * PerHour;
@@ -146,7 +147,7 @@ namespace Xli
 
     DateTime DateTime::Now()
     {
-        return DateTime(GetTimestamp());
+        return GetDatetime();
     }
 
     DateTime DateTime::NowUtc()
