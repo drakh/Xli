@@ -12,28 +12,17 @@ namespace Xli
         wnd->SetEventHandler(app);
         app->OnLoad(wnd);
 
-#if defined(XLI_PLATFORM_IOS) || defined(XLI_PLATFORM_OSX)
-        app->OnAppDidEnterForeground();
-#endif
-
-#if defined(XLI_PLATFORM_ANDROID)       
-        wnd->BeginTextInput(TextInputHintDefault);
-        wnd->EndTextInput();
-#endif
-
+        Application::PreMainLoop(app, wnd);
         while (!wnd->IsClosed())
         {
             app->OnDraw(wnd);
             Window::ProcessMessages();
         }
-
-#if defined(XLI_PLATFORM_OSX)
-        app->OnAppTerminating();
-#endif
+        Application::PostMainLoop(app, wnd);
 
         Window::Done();
     }
-
+    
     void Application::OnInit(Window* wnd)
     {
     }
@@ -65,6 +54,25 @@ namespace Xli
 #if defined(XLI_PLATFORM_WIN32) || defined(XLI_PLATFORM_OSX)
         if (wnd->GetMouseButtonState(MouseButtonLeft))
             OnDraw(wnd);
+#endif
+    }
+
+    void Application::PreMainLoop(Application* app,Window* wnd)
+    {
+#if defined(XLI_PLATFORM_IOS) || defined(XLI_PLATFORM_OSX)
+        app->OnAppDidEnterForeground();
+#endif
+
+#if defined(XLI_PLATFORM_ANDROID)       
+        wnd->BeginTextInput(TextInputHintDefault);
+        wnd->EndTextInput();
+#endif
+    }
+
+    void Application::PostMainLoop(Application* app,Window* wnd)
+    {
+#if defined(XLI_PLATFORM_OSX)
+        app->OnAppTerminating();
 #endif
     }
 }
