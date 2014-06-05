@@ -19,6 +19,7 @@ namespace Xli
         virtual void OnLoad(Window* wnd);
         virtual void OnDraw(Window* wnd);
 
+        virtual bool GetIsRunning(Window* wnd);
         virtual String GetInitTitle();
         virtual Vector2i GetInitSize();
 
