@@ -2,7 +2,6 @@
 #define __XLI_PLATFORM_TIME_H__
 
 #include <Xli/IntTypes.h>
-#include <Xli/DateTime.h>
 
 namespace Xli
 {
@@ -15,7 +14,6 @@ namespace Xli
 
     Timestamp GetTimestamp();
     Timestamp GetTimestampUtc();
-    DateTime GetDatetime();
 
     /** @} */
 }

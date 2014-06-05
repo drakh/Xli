@@ -93,7 +93,6 @@ namespace Xli
 
         Day = (int)(timestamp / PerDay);
         timestamp -= Day * PerDay;
-        // Day++;
 
         Hour = (int)(timestamp / PerHour);
         timestamp -= Hour * PerHour;
@@ -118,8 +117,8 @@ namespace Xli
             year--;
         }
 
-        int month = Month;
-        while (month > 1)
+        int month = Month-1;
+        while (month >= 1)
         {
             timestamp += GetDaysInMonth(month, year) * PerDay;
             month--;
@@ -147,7 +146,7 @@ namespace Xli
 
     DateTime DateTime::Now()
     {
-        return GetDatetime();
+        return DateTime(GetTimestamp());
     }
 
     DateTime DateTime::NowUtc()
