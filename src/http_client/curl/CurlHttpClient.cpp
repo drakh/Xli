@@ -69,6 +69,7 @@ namespace Xli
         String url;
         String method;
         int timeout;
+        bool verifyHost;
 
         HashMap<String,String> headers;
         struct curl_slist* curlUploadHeaders;
@@ -120,7 +121,16 @@ namespace Xli
                 XLI_THROW("HttpRequest->SetTimeout(): Not in a valid state to set the timeout");
             }
         }
-
+        virtual bool GetVerifyHost() const { return verifyHost; }
+        virtual void SetVerifyHost(bool verify)
+        {
+            if (state <= HttpRequestStateOpened)
+            {
+                verifyHost = verify;
+            } else {
+                XLI_THROW("HttpRequest->SetTimeout(): Not in a valid state to set the verify host flag");
+            }
+        }
         virtual void SetHeader(const String& key, const String& value)
         {
             if (state == HttpRequestStateOpened)

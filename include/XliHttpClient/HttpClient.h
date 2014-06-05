@@ -30,6 +30,9 @@ namespace Xli
         virtual void SetHeader(const String& key, const String& value) = 0;
         virtual void RemoveHeader(const String& key) = 0;
 
+        virtual void SetVerifyHost(bool verify) = 0;
+        virtual bool GetVerifyHost() const = 0;
+
         virtual int HeadersBegin() const = 0;
         virtual int HeadersEnd() const = 0;
         virtual int HeadersNext(int iterator) const = 0;

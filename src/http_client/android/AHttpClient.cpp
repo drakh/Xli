@@ -20,6 +20,7 @@ namespace Xli
         this->url = url;
         this->method = method;
         this->timeout = 0;
+        this->verifyHost = true;
         this->aborted = false;
         this->javaAsyncHandle = 0;
         this->javaContentHandle = 0;
@@ -55,6 +56,16 @@ namespace Xli
             this->timeout = timeout;
         } else {
             XLI_THROW("HttpRequest->SetTimeout(): Not in a valid state to set the timeout");
+        }
+    }
+    bool AHttpRequest::GetVerifyHost() const { return verifyHost; }
+    void AHttpRequest::SetVerifyHost(bool verify)
+    {
+        if (state <= HttpRequestStateOpened)
+        {
+            verifyHost = verify;
+        } else {
+            XLI_THROW("HttpRequest->SetTimeout(): Not in a valid state to set the verify host flag");
         }
     }
 

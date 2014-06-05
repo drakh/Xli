@@ -17,6 +17,7 @@ namespace Xli
         String url;
         String method;
         int timeout;
+        bool verifyHost;
         HashMap<String,String> headers;
 
         bool aborted;
@@ -43,6 +44,9 @@ namespace Xli
 
         virtual void SetTimeout(int timeout);
         virtual int GetTimeout() const;
+
+        virtual void SetVerifyHost(bool verify);
+        virtual bool GetVerifyHost() const;
 
         virtual void SetHeader(const String& key, const String& value);
         virtual void RemoveHeader(const String& key);

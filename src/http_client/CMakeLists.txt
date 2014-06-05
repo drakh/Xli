@@ -3,7 +3,7 @@ set(LIBS Xli)
 
 if (XLI_PLATFORM_IOS)
 
-	set(SRC ${SRC} cocoa/CHttpClient.mm)
+	set(SRC ${SRC} ios/CHttpClient.mm)
 
 elseif (XLI_PLATFORM_ANDROID)
 

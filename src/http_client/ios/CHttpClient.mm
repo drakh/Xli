@@ -20,6 +20,7 @@ namespace Xli
         String url;
         String method;
         int timeout;
+        bool verifyHost;
 
         CFHTTPMessageRef cachedRequestMessage;
         CFReadStreamRef cachedReadStream;
@@ -48,7 +49,8 @@ namespace Xli
             this->url = url;
             this->method = method;
             this->timeout = 0;
-            this->readPosition = 0;
+            this->verifyHost = true;
+            this->readPosition = 0;            
             this->reading = false;
             this->cachedContentStream = 0;
             this->cachedReadStream = 0;
@@ -78,7 +80,7 @@ namespace Xli
         }
 
         virtual String GetMethod() const { return method; }
-        virtual String GetUrl() const { return url; }
+        virtual String GetUrl() const { return url; }        
         virtual HttpRequestState GetState() const { return state; }
         virtual int GetTimeout() const { return timeout; }
         virtual void SetTimeout(int timeout)
@@ -88,6 +90,16 @@ namespace Xli
                 this->timeout = timeout;
             } else {
                 XLI_THROW("HttpRequest->SetTimeout(): Not in a valid state to set the timeout");
+            }
+        }
+        virtual bool GetVerifyHost() const { return verifyHost; }
+        virtual void SetVerifyHost(bool verify)
+        {
+            if (state <= HttpRequestStateOpened)
+            {
+                verifyHost = verify;
+            } else {
+                XLI_THROW("HttpRequest->SetTimeout(): Not in a valid state to set the verify host flag");
             }
         }
 
@@ -143,8 +155,15 @@ namespace Xli
 
             cachedReadStream = CFReadStreamCreateForHTTPRequest(kCFAllocatorDefault, nHttpReq);
             CFNumberRef nTimeout = CFNumberCreate(kCFAllocatorDefault, kCFNumberDoubleType, &this->timeout);
-            CFReadStreamSetProperty(this->cachedReadStream, CFSTR("_kCFStreamPropertyReadTimeout"), nTimeout); //{TODO} doco is flakey on this, does it work?
-            CFReadStreamSetProperty(this->cachedReadStream, kCFStreamPropertyHTTPShouldAutoredirect, kCFBooleanTrue);
+            CFReadStreamSetProperty(cachedReadStream, CFSTR("_kCFStreamPropertyReadTimeout"), nTimeout); //{TODO} doco is flakey on this, does it work?
+            CFReadStreamSetProperty(cachedReadStream, kCFStreamPropertyHTTPShouldAutoredirect, kCFBooleanTrue);
+            if (!verifyHost)
+            {
+                CFMutableDictionaryRef myDict = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, 
+                                                                          &kCFTypeDictionaryValueCallBacks);
+                CFDictionarySetValue(myDict, kCFStreamSSLValidatesCertificateChain, kCFBooleanFalse);
+                CFReadStreamSetProperty(cachedReadStream, kCFStreamPropertySSLSettings, myDict);
+            }
 
             this->cachedRequestMessage = nHttpReq;
 
@@ -184,7 +203,7 @@ namespace Xli
             {
                 return responseHeaders.Count();
             } else {
-                XLI_THROW("HttpRequest->GetResponseHeaderCount(): Not in a valid state to get the response header count");
+                XLI_THROW("HttpRequest->GetResponseHeaderCount(): -Not in a valid state to get the response header count");
             }
         }
         virtual int ResponseHeadersBegin() const
@@ -290,7 +309,7 @@ namespace Xli
             //        If so we dont need to worry about post destroy callbacks
 
             // if (this->state > 1 && this->state < 5 )
-                //this->state = HttpRequestStateDone; //{TODO} how does statechanged know if it was successful?
+            //this->state = HttpRequestStateDone; //{TODO} how does statechanged know if it was successful?
 
             //{TODO} This doesnt seem to cancel running requests. What if we are in the upload stage?
 
