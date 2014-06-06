@@ -9,12 +9,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+
 import android.os.AsyncTask;
+import android.util.Log;
 
 public class ASyncHttpRequest extends AsyncTask<Object, Integer, HttpWrappedResponse> {
 	long requestPointer;
+	boolean verifyHost;
 	
 	@Override
 	protected HttpWrappedResponse doInBackground(Object... params) {
@@ -25,12 +31,13 @@ public class ASyncHttpRequest extends AsyncTask<Object, Integer, HttpWrappedResp
 		int timeout = (Integer)params[3];
 		byte[] body = (byte[])params[4];
 		requestPointer = (Long)params[5];
+		verifyHost = (Boolean)params[6];
 		String[] responseHeaders;
 		boolean hasUploadContent = (body != null);
 		HttpURLConnection connection = null;
 		if (this.isCancelled()) { XliJ.XliJ_HttpAbortedCallback(requestPointer); return null; }
 		try {
-			connection = NewHttpConnection(url,method,hasUploadContent,timeout,requestPointer);
+			connection = NewHttpConnection(url,method,hasUploadContent,timeout,requestPointer, verifyHost);
 			if (connection==null) {
 				return new HttpWrappedResponse(null, new String[0], -1, "JavaError (NewHttpConnection): Could not make connection", requestPointer);
 			}
@@ -100,7 +107,7 @@ public class ASyncHttpRequest extends AsyncTask<Object, Integer, HttpWrappedResp
 	}
 	
     //[TODO] Could optimize by changing chunk mode if length known
-    public static HttpURLConnection NewHttpConnection(String url, String method, boolean hasPayload, int timeout, long requestPointer)
+	public static HttpURLConnection NewHttpConnection(String url, String method, boolean hasPayload, int timeout, long requestPointer, boolean verifyHost)
     {
         URL j_url = null;
         try {
@@ -112,7 +119,24 @@ public class ASyncHttpRequest extends AsyncTask<Object, Integer, HttpWrappedResp
         HttpURLConnection urlConnection = null;
 
         try {
-            urlConnection = (HttpURLConnection)j_url.openConnection();
+        	if (j_url.getProtocol().toLowerCase(Locale.ENGLISH).equals("https") && !verifyHost) {		
+    			Log.d("XliApp","Non-verified Connection");
+    			HttpsURLConnection uc = (HttpsURLConnection)j_url.openConnection();            		
+    	       	// Install the all-trusting trust manager
+    	    	try {
+    	    		SSLContext sc = SSLContext.getInstance("TLS");
+    	    		sc.init(null, HttpHelper.trustAllCerts, new java.security.SecureRandom());
+    	    		uc.setSSLSocketFactory(sc.getSocketFactory());
+    	    		uc.setHostnameVerifier(HttpHelper.DO_NOT_VERIFY);
+    	    	} catch (Exception e) {
+    	    		e.printStackTrace();
+    	    	}
+    	    	urlConnection = uc;          
+        	} else {
+        		Log.d("XliApp","Default Connection");
+        		urlConnection = (HttpURLConnection)j_url.openConnection();
+        	}
+        	  	
             urlConnection.setConnectTimeout(timeout);
             urlConnection.setDoOutput(hasPayload);
             urlConnection.setRequestMethod(method);

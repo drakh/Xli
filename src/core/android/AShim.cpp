@@ -66,8 +66,8 @@ namespace Xli
             asyncInputStreamToString = env->GetStaticMethodID(shimClass, "AsyncInputStreamToString", "(IJ)I");
             asyncInputStreamToByteArray = env->GetStaticMethodID(shimClass, "AsyncInputStreamToByteArray", "(IJ)I");
             getHeaderMap = env->GetStaticMethodID(shimClass, "GetHeaderMap","()Ljava/lang/Object;");
-            sendHttpAsyncA = env->GetStaticMethodID(shimClass, "SendHttpAsync", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/nio/ByteBuffer;IJ)I");
-            sendHttpAsyncB = env->GetStaticMethodID(shimClass, "SendHttpStringAsync", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IJ)I");
+            sendHttpAsyncA = env->GetStaticMethodID(shimClass, "SendHttpAsync", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/nio/ByteBuffer;IJZ)I");
+            sendHttpAsyncB = env->GetStaticMethodID(shimClass, "SendHttpStringAsync", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IJZ)I");
 
             if (!onPause) XLI_THROW("Cannot cache mid for onPause.");
             if (!onResume) XLI_THROW("Cannot cache mid for onResume.");
@@ -281,7 +281,7 @@ namespace Xli
             }
 
             jint jresult = jni->CallStaticIntMethod(jni.GetShim(), sendHttpAsyncA, jurl, jmethod, jheaders, arrayHandle,
-                                                    jtimeout, (jlong)req);
+                                                    jtimeout, (jlong)req, req->GetVerifyHost());
 
             jni->DeleteLocalRef(jurl);
             jni->DeleteLocalRef(jmethod);
@@ -320,7 +320,7 @@ namespace Xli
             }
 
             jint jresult = jni->CallStaticIntMethod(jni.GetShim(), sendHttpAsyncB, jurl, jmethod, jheaders, body,
-                                                    jtimeout, (jlong)req);
+                                                    jtimeout, (jlong)req, req->GetVerifyHost());
 
             jni->DeleteLocalRef(jurl);
             jni->DeleteLocalRef(jmethod);
@@ -355,7 +355,7 @@ namespace Xli
             jstring jheaders = jni->NewStringUTF(headers.DataPtr());
 
             jint jresult = jni->CallStaticIntMethod(jni.GetShim(), sendHttpAsyncA, jurl, jmethod, jheaders, arrayHandle,
-                                                    jtimeout, (jlong)req);
+                                                    jtimeout, (jlong)req, req->GetVerifyHost());
             jni->DeleteLocalRef(jurl);
             jni->DeleteLocalRef(jmethod);
             jni->DeleteLocalRef(jheaders);

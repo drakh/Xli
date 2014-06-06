@@ -94,6 +94,7 @@ namespace Xli
             this->url = url;
             this->method = method;
             this->timeout = 0;
+            this->verifyHost = true;
             this->curlUploadHeaders=NULL;
             this->responseBody = new ArrayStream(1);
             this->aborted = false;
@@ -182,6 +183,12 @@ namespace Xli
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_NOPROGRESS, 0);
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_PROGRESSDATA, (void*)this);
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_PROGRESSFUNCTION, onProgress);
+
+            if (!verifyHost)
+            {
+                if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_SSL_VERIFYPEER, 0);
+                if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_SSL_VERIFYHOST, 0);
+            }
 
             //Method specific options
             if (method ==  "GET")
