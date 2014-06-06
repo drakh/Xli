@@ -17,19 +17,21 @@ public class Hidden extends View implements View.OnKeyListener { //used to exten
         init(context);
         setFocusableInTouchMode(true);
         setFocusable(true);
+        setVisibility(View.VISIBLE);
+        requestFocus();
     }
 
     private void init(Context context) {
     	this.setOnKeyListener(this);
-        MyEditable.PopulateDummyString();
+        DummyEditable.PopulateDummyString();
     }
     
-//    public void Disable(Context context, NativeActivity activity)
-//    {
-//    	this.setOnKeyListener(null);
-//        setFocusableInTouchMode(false);
-//        setFocusable(false);
-//    }
+    public void Disable(Context context, NativeActivity activity)
+    {
+    	this.setOnKeyListener(null);
+        setFocusableInTouchMode(false);
+        setFocusable(false);
+    }
     
     @Override
     public boolean onKeyPreIme(int keyCode, KeyEvent keyEvent) {

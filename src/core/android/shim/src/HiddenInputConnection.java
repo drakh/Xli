@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.inputmethod.BaseInputConnection;
 
 class HiddenInputConnection extends BaseInputConnection {
-    static MyEditable mEditable;
+    static DummyEditable mEditable;
     
     public HiddenInputConnection(View targetView, boolean fullEditor) {
         super(targetView, fullEditor);
@@ -15,7 +15,7 @@ class HiddenInputConnection extends BaseInputConnection {
     @Override
      public String getTextBeforeCursor(int n, int flags) {
          //http://code.google.com/p/android/issues/detail?id=62306
-         return MyEditable.DUMMY;
+         return DummyEditable.DUMMY;
      }
 
     @Override
@@ -23,12 +23,12 @@ class HiddenInputConnection extends BaseInputConnection {
         if (Build.VERSION.SDK_INT < 14)
             return super.getEditable();
         if (mEditable == null) {
-        	mEditable = new MyEditable(MyEditable.DUMMY);
-            Selection.setSelection(mEditable, MyEditable.DUMMY.length());
+        	mEditable = new DummyEditable(DummyEditable.DUMMY);
+            Selection.setSelection(mEditable, DummyEditable.DUMMY.length());
         }
         else if (mEditable.length() == 0) {
-        	mEditable.append(MyEditable.DUMMY);
-            Selection.setSelection(mEditable, MyEditable.DUMMY.length());
+        	mEditable.append(DummyEditable.DUMMY);
+            Selection.setSelection(mEditable, DummyEditable.DUMMY.length());
         }
         return mEditable;
     }
@@ -40,6 +40,7 @@ class HiddenInputConnection extends BaseInputConnection {
     		{
     			XliJ.XliJ_OnKeyDown(KeyEvent.KEYCODE_DEL);
     			XliJ.XliJ_OnKeyUp(KeyEvent.KEYCODE_DEL);
+    			mEditable.PopulateDummyString();
     		return true;} 
     		return false;
     	//}

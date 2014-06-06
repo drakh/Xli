@@ -184,6 +184,7 @@ namespace Xli
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_PROGRESSDATA, (void*)this);
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_PROGRESSFUNCTION, onProgress);
 
+           //{TODO} Add and test CURLOPT_USE_SSL
             if (!verifyHost)
             {
                 if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_SSL_VERIFYPEER, 0);

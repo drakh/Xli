@@ -1,8 +1,8 @@
 import android.text.SpannableStringBuilder;
 
-public class MyEditable extends SpannableStringBuilder {
+public class DummyEditable extends SpannableStringBuilder {
 	public static String DUMMY;
-    MyEditable(CharSequence source) {
+    DummyEditable(CharSequence source) {
         super(source);
     }
     @Override
@@ -19,8 +19,8 @@ public class MyEditable extends SpannableStringBuilder {
     }
     public static void PopulateDummyString()
     {    	
-    	MyEditable.DUMMY = "";
-        for (int i = 0; i < Math.max(0, (500 - MyEditable.DUMMY.length())); i++)
-            MyEditable.DUMMY += "\0";
+    	DummyEditable.DUMMY = "";
+        for (int i = 0; i < Math.max(0, (500 - DummyEditable.DUMMY.length())); i++)
+            DummyEditable.DUMMY += "\0";
     }
 }
