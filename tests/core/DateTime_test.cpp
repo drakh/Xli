@@ -4,13 +4,17 @@
 
 using namespace Xli;
 
-DateTime CreateDateTime(int year, int month, int day)
+DateTime CreateDateTime(int year, int month, int day, int hour=0, int minute=0, int second=0, int millisecond=0)
 {
-    DateTime now;
-    now.Year = year;
-    now.Month = month;
-    now.Day = day;
-    return now;
+    DateTime dt;
+    dt.Year = year;
+    dt.Month = month;
+    dt.Day = day;
+    dt.Hour = hour;
+    dt.Minute = minute;
+    dt.Second = second;
+    dt.Millisecond = millisecond;
+    return dt;
 }
 
 void Check(const DateTime& expected, const DateTime& actual)
@@ -24,34 +28,62 @@ void Check(const DateTime& expected, const DateTime& actual)
     CHECK(expected.Millisecond == actual.Millisecond);
 }
 
-TEST_CASE("January")
+TEST_CASE("ToTimestamp1")
 {
-    DateTime now = CreateDateTime(2014, 1, 1);
-    DateTime same = DateTime(now.ToTimestamp());
-
-    Check(now, same);
+    DateTime dt = CreateDateTime(1601, 1, 1);
+    Check(dt, DateTime(dt.ToTimestamp()));
 }
 
-TEST_CASE("February")
+TEST_CASE("ToTimestamp2")
 {
-    DateTime now = CreateDateTime(2014, 2, 10);
-    DateTime same = DateTime(now.ToTimestamp());
-
-    Check(now, same);
+    DateTime dt = CreateDateTime(1601, 1, 1, 23, 59, 59);
+    Check(dt, DateTime(dt.ToTimestamp()));
 }
 
-TEST_CASE("March")
+TEST_CASE("ToTimestamp3")
 {
-    DateTime now = CreateDateTime(2014, 3, 20);
-    DateTime same = DateTime(now.ToTimestamp());
-
-    Check(now, same);
+    DateTime dt = CreateDateTime(1601, 1, 31, 23, 59, 59);
+    Check(dt, DateTime(dt.ToTimestamp()));
 }
 
-TEST_CASE("April")
+TEST_CASE("ToTimestamp4")
 {
-    DateTime now = CreateDateTime(2014, 4, 30);
-    DateTime same = DateTime(now.ToTimestamp());
+    DateTime dt = CreateDateTime(1601, 2, 1);
+    Check(dt, DateTime(dt.ToTimestamp()));
+}
 
-    Check(now, same);
+TEST_CASE("ToTimestamp5")
+{
+    DateTime dt = CreateDateTime(1601, 2, 28, 23, 59, 59);
+    Check(dt, DateTime(dt.ToTimestamp()));
+}
+
+TEST_CASE("ToTimestamp6")
+{
+    DateTime dt = CreateDateTime(1601, 12, 31, 23, 59, 59);
+    Check(dt, DateTime(dt.ToTimestamp()));
+}
+
+TEST_CASE("ToTimestamp7")
+{
+    DateTime dt = CreateDateTime(1602, 1, 1);
+    Check(dt, DateTime(dt.ToTimestamp()));
+}
+
+TEST_CASE("ToTimestamp8")
+{
+    DateTime dt = CreateDateTime(2014, 1, 1);
+    Check(dt, DateTime(dt.ToTimestamp()));
+}
+
+TEST_CASE("ToTimestamp9")
+{
+    DateTime dt = CreateDateTime(2014, 4, 30);
+    Check(dt, DateTime(dt.ToTimestamp()));
+}
+
+TEST_CASE("ToTimestamp10")
+{
+    DateTime dt = CreateDateTime(1604, 1, 1);
+    Check(dt, DateTime(dt.ToTimestamp()));
 }

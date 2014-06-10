@@ -62,7 +62,7 @@ namespace Xli
         {
             UInt64 YearLength = GetDaysInYear(Year) * PerDay;
 
-            if (timestamp > YearLength)
+            if (timestamp >= YearLength)
             {
                 timestamp  -= YearLength;
                 Year++;
@@ -80,7 +80,7 @@ namespace Xli
         {
             UInt64 MonthLength = GetDaysInMonth(Month, Year) * PerDay;
 
-            if (timestamp > MonthLength)
+            if (timestamp >= MonthLength)
             {
                 timestamp -= MonthLength;
                 Month++;
@@ -93,6 +93,7 @@ namespace Xli
 
         Day = (int)(timestamp / PerDay);
         timestamp -= Day * PerDay;
+        Day++;
 
         Hour = (int)(timestamp / PerHour);
         timestamp -= Hour * PerHour;
@@ -113,18 +114,18 @@ namespace Xli
         int year = Year;
         while (year > 1601)
         {
-            timestamp += GetDaysInYear(year) * PerDay;
+            timestamp += GetDaysInYear(year-1) * PerDay;
             year--;
         }
 
-        int month = Month-1;
-        while (month >= 1)
+        int month = Month;
+        while (month > 1)
         {
-            timestamp += GetDaysInMonth(month, year) * PerDay;
+            timestamp += GetDaysInMonth(month-1, year) * PerDay;
             month--;
         }
 
-        timestamp += Day * PerDay;
+        timestamp += (Day-1) * PerDay;
         timestamp += Hour * PerHour;
         timestamp += Minute * PerMinute;
         timestamp += Second * PerSecond;
