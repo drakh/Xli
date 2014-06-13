@@ -428,19 +428,14 @@ namespace Xli
                 case APP_CMD_INIT_WINDOW:
                     inited = 1;
                     break;
+/*
+                Why do we need these?
 
                 case APP_CMD_START:
                     if (GlobalEventHandler)
                         GlobalEventHandler->OnAppStart(GlobalWindow);
                     break;
 
-                case APP_CMD_RESUME:
-                    AShim::OnResume();
-                    if (GlobalEventHandler)
-                        GlobalEventHandler->OnAppResume(GlobalWindow);
-                    visible = 1;
-                    break;
-                    
                 case APP_CMD_GAINED_FOCUS:
                     if (GlobalEventHandler)
                         GlobalEventHandler->OnAppGainedFocus(GlobalWindow);
@@ -450,19 +445,34 @@ namespace Xli
                     if (GlobalEventHandler)
                         GlobalEventHandler->OnAppLostFocus(GlobalWindow);
                     break;
-
+*/
                 case APP_CMD_PAUSE:
                     AShim::OnPause();
+                    
                     if (GlobalEventHandler)
-                        GlobalEventHandler->OnAppPause(GlobalWindow);
+                        GlobalEventHandler->OnAppWillEnterBackground(GlobalWindow);
+
                     visible = 0;
+
+                    if (GlobalEventHandler)
+                        GlobalEventHandler->OnAppDidEnterBackground(GlobalWindow);
+
+                    break;
+
+                case APP_CMD_RESUME:
+                    AShim::OnResume();
+
+                    if (GlobalEventHandler)
+                        GlobalEventHandler->OnAppWillEnterForeground(GlobalWindow);
+
+                    visible = 1;
+
+                    if (GlobalEventHandler)
+                        GlobalEventHandler->OnAppDidEnterForeground(GlobalWindow);
+
                     break;
 
                 case APP_CMD_STOP:
-                    if (GlobalEventHandler)
-                        GlobalEventHandler->OnAppDidEnterBackground(GlobalWindow);
-                    break;
-
                 case APP_CMD_TERM_WINDOW:
                     if (!app->destroyRequested)
                     {
@@ -476,6 +486,7 @@ namespace Xli
                 case APP_CMD_LOW_MEMORY:
                     if (GlobalEventHandler)
                         GlobalEventHandler->OnAppLowMemory(GlobalWindow);
+
                     break;
             }
         }

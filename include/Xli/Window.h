@@ -179,11 +179,6 @@ namespace Xli
         virtual void OnClosed(Window* wnd);
 
         virtual void OnAppLowMemory(Window* wnd);
-        virtual void OnAppStart(Window* wnd);
-        virtual void OnAppPause(Window* wnd);
-        virtual void OnAppResume(Window* wnd);
-        virtual void OnAppGainedFocus(Window* wnd);
-        virtual void OnAppLostFocus(Window* wnd);
         virtual void OnAppTerminating(Window* wnd);
         virtual void OnAppWillEnterForeground(Window* wnd);
         virtual void OnAppDidEnterForeground(Window* wnd);
