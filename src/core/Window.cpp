@@ -68,47 +68,47 @@ namespace Xli
     {
     }
 
-    void WindowEventHandler::OnAppStart()
+    void WindowEventHandler::OnAppStart(Window* wnd)
     {
     }
 
-    void WindowEventHandler::OnAppResume()
+    void WindowEventHandler::OnAppResume(Window* wnd)
     {
     }
 
-    void WindowEventHandler::OnAppPause()
+    void WindowEventHandler::OnAppPause(Window* wnd)
     {
     }
 
-    void WindowEventHandler::OnAppGainedFocus()
+    void WindowEventHandler::OnAppGainedFocus(Window* wnd)
     {
     }
 
-    void WindowEventHandler::OnAppLostFocus()
+    void WindowEventHandler::OnAppLostFocus(Window* wnd)
     {
     }
 
-    void WindowEventHandler::OnAppLowMemory()
+    void WindowEventHandler::OnAppLowMemory(Window* wnd)
     {
     }
 
-    void WindowEventHandler::OnAppTerminating()
+    void WindowEventHandler::OnAppTerminating(Window* wnd)
     {
     }
 
-    void WindowEventHandler::OnAppWillEnterForeground()
+    void WindowEventHandler::OnAppWillEnterForeground(Window* wnd)
     {
     }
 
-    void WindowEventHandler::OnAppDidEnterForeground()
+    void WindowEventHandler::OnAppDidEnterForeground(Window* wnd)
     {
     }
 
-    void WindowEventHandler::OnAppWillEnterBackground()
+    void WindowEventHandler::OnAppWillEnterBackground(Window* wnd)
     {
     }
 
-    void WindowEventHandler::OnAppDidEnterBackground()
+    void WindowEventHandler::OnAppDidEnterBackground(Window* wnd)
     {
     }
 }

@@ -23,7 +23,7 @@ namespace Xli
             case SDL_APP_TERMINATING:
                 if (GlobalWindow && GlobalWindow->GetEventHandler())
                 {
-                    GlobalWindow->GetEventHandler()->OnAppTerminating();
+                    GlobalWindow->GetEventHandler()->OnAppTerminating(GlobalWindow);
                 }
                 
                 return 0;
@@ -31,7 +31,7 @@ namespace Xli
             case SDL_APP_LOWMEMORY:
                 if (GlobalWindow && GlobalWindow->GetEventHandler())
                 {
-                    GlobalWindow->GetEventHandler()->OnAppLowMemory();
+                    GlobalWindow->GetEventHandler()->OnAppLowMemory(GlobalWindow);
                 }
                 
                 return 0;
@@ -39,7 +39,7 @@ namespace Xli
             case SDL_APP_WILLENTERBACKGROUND:
                 if (GlobalWindow && GlobalWindow->GetEventHandler())
                 {
-                    GlobalWindow->GetEventHandler()->OnAppWillEnterBackground();
+                    GlobalWindow->GetEventHandler()->OnAppWillEnterBackground(GlobalWindow);
                 }
                 
                 return 0;
@@ -47,7 +47,7 @@ namespace Xli
             case SDL_APP_DIDENTERBACKGROUND:
                 if (GlobalWindow && GlobalWindow->GetEventHandler())
                 {
-                    GlobalWindow->GetEventHandler()->OnAppDidEnterBackground();
+                    GlobalWindow->GetEventHandler()->OnAppDidEnterBackground(GlobalWindow);
                 }
                 
                 return 0;
@@ -55,7 +55,7 @@ namespace Xli
             case SDL_APP_WILLENTERFOREGROUND:
                 if (GlobalWindow && GlobalWindow->GetEventHandler())
                 {
-                    GlobalWindow->GetEventHandler()->OnAppWillEnterForeground();
+                    GlobalWindow->GetEventHandler()->OnAppWillEnterForeground(GlobalWindow);
                 }
                 
                 return 0;
@@ -63,7 +63,7 @@ namespace Xli
             case SDL_APP_DIDENTERFOREGROUND:
                 if (GlobalWindow && GlobalWindow->GetEventHandler())
                 {
-                    GlobalWindow->GetEventHandler()->OnAppDidEnterForeground();
+                    GlobalWindow->GetEventHandler()->OnAppDidEnterForeground(GlobalWindow);
                 }
                 
                 return 0;
