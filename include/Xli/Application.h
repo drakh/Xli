@@ -12,8 +12,6 @@ namespace Xli
     {
     public:
         static void Run(Application* app, int flags = WindowFlagsResizeable);
-        static void PreMainLoop(Application* app, Window* wnd);
-        static void PostMainLoop(Application* app, Window* wnd);
 
         virtual void OnInit(Window* wnd);
         virtual void OnLoad(Window* wnd);
