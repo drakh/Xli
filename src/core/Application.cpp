@@ -12,10 +12,6 @@ namespace Xli
         wnd->SetEventHandler(app);
         app->OnLoad(wnd);
 
-#if defined(XLI_PLATFORM_IOS) || defined(XLI_PLATFORM_OSX)
-        app->OnAppDidEnterForeground();
-#endif
-
 #if defined(XLI_PLATFORM_ANDROID)       
         wnd->BeginTextInput(TextInputHintDefault);
         wnd->EndTextInput();
@@ -26,10 +22,6 @@ namespace Xli
             app->OnDraw(wnd);
             Window::ProcessMessages();
         }
-
-#if defined(XLI_PLATFORM_OSX)
-        app->OnAppTerminating();
-#endif
 
         Window::Done();
     }
