@@ -13,7 +13,7 @@ namespace Xli
         app->OnLoad(wnd);
 
         Application::PreMainLoop(app, wnd);
-        while (app->GetIsRunning(wnd))
+        while (!wnd->IsClosed())
         {
             app->OnDraw(wnd);
             Window::ProcessMessages();
@@ -33,10 +33,6 @@ namespace Xli
 
     void Application::OnDraw(Window* wnd)
     {
-    }
-    bool Application::GetIsRunning(Window* wnd)
-    {
-        return !wnd->IsClosed();
     }
 
     String Application::GetInitTitle()
