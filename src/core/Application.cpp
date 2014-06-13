@@ -12,11 +12,6 @@ namespace Xli
         wnd->SetEventHandler(app);
         app->OnLoad(wnd);
 
-#if defined(XLI_PLATFORM_ANDROID)       
-        wnd->BeginTextInput(TextInputHintDefault);
-        wnd->EndTextInput();
-#endif
-
         while (!wnd->IsClosed())
         {
             app->OnDraw(wnd);

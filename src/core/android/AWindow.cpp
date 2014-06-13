@@ -35,6 +35,9 @@ namespace Xli
             {
                 if (GlobalEventHandler != 0)
                     GlobalEventHandler->AddRef();
+
+                BeginTextInput(TextInputHintDefault);
+                EndTextInput();
             }
 
             virtual ~AWindow()
