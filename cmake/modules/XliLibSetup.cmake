@@ -10,6 +10,10 @@ endif()
 
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
+if (CMAKE_BUILD_TYPE MATCHES "Release")
+    add_definitions(-DNDEBUG)
+endif()
+
 if (XLI_PLATFORM_IOS)
 
     set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/iOS)
