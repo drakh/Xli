@@ -20,7 +20,6 @@ static int GlobalWidth = 0;
 static int GlobalHeight = 0;
 
 static volatile int inited = 0;
-static volatile int visible = 1;
 
 namespace Xli
 {
@@ -89,7 +88,7 @@ namespace Xli
 
             virtual bool IsVisible()
             {
-                return visible == 1;
+                return true;
             }
 
             virtual bool IsFullscreen()
@@ -452,10 +451,18 @@ namespace Xli
                     if (GlobalEventHandler)
                         GlobalEventHandler->OnAppWillEnterBackground(GlobalWindow);
 
-                    visible = 0;
+                    // TODO: At this point rendering should have stopped and app state is suspended. If app fails to do this, it must be closed.
+
+                    //if (GlobalEventHandler)
+                        //GlobalEventHandler->OnAppDidEnterBackground(GlobalWindow);
 
                     if (GlobalEventHandler)
-                        GlobalEventHandler->OnAppDidEnterBackground(GlobalWindow);
+                        GlobalEventHandler->OnAppTerminating(GlobalWindow);
+
+                    GlobalAndroidApp->destroyRequested = 1;
+
+                    if (GlobalEventHandler != 0)
+                        GlobalEventHandler->OnClosed(GlobalWindow);
 
                     break;
 
@@ -464,8 +471,6 @@ namespace Xli
 
                     if (GlobalEventHandler)
                         GlobalEventHandler->OnAppWillEnterForeground(GlobalWindow);
-
-                    visible = 1;
 
                     if (GlobalEventHandler)
                         GlobalEventHandler->OnAppDidEnterForeground(GlobalWindow);
@@ -476,10 +481,13 @@ namespace Xli
                 case APP_CMD_TERM_WINDOW:
                     if (!app->destroyRequested)
                     {
+                        if (GlobalEventHandler)
+                            GlobalEventHandler->OnAppTerminating(GlobalWindow);
+
                         app->destroyRequested = 1;
 
                         if (GlobalEventHandler)
-                            GlobalEventHandler->OnAppTerminating(GlobalWindow);
+                            GlobalEventHandler->OnClosed(GlobalWindow);
                     }
                     break;
 
