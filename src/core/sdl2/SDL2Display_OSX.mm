@@ -10,6 +10,7 @@ namespace Xli
         // the scale factor is to bring it in line with android.
         return dpi / 160.0f;
     }
+    
     Vector2 Display::GetDpi(int displayIndex)
     {
         NSArray* screens = [NSScreen screens];
@@ -17,7 +18,7 @@ namespace Xli
         NSDictionary *description = [screen deviceDescription];
         NSSize displayPixelSize = [[description objectForKey:NSDeviceSize] sizeValue];
         CGSize displayPhysicalSize = CGDisplayScreenSize([[description objectForKey:@"NSScreenNumber"] unsignedIntValue]);
-        int dpi = ((displayPixelSize.width / displayPhysicalSize.width) * 25.4f); // there being 25.4 mm in an inch
+        float dpi = ((displayPixelSize.width / displayPhysicalSize.width) * 25.4f); // there being 25.4 mm in an inch
         return Vector2(dpi, dpi);
     }
 }

@@ -104,12 +104,12 @@ namespace Xli
             
 #ifdef XLI_PLATFORM_OSX
       
-              // Enable support for Retina display
+            // Enable support for Retina display
             sdlFlags |= SDL_WINDOW_ALLOW_HIGHDPI;
 
             // Enable OS X Lion native fullscreen feature
             //SDL_SetHint(SDL_HINT_VIDEO_FULLSCREEN_SPACES, "1");
-            
+
 #endif
 
 #ifdef XLI_PLATFORM_IOS
@@ -490,6 +490,8 @@ namespace Xli
             return SDL_IsScreenKeyboardShown(window);
         }
 
+#ifndef XLI_PLATFORM_IOS
+
         Vector2i SDL2Window::GetStatusBarSize()
         {
             return Vector2i(0,0);
@@ -518,6 +520,8 @@ namespace Xli
         { 
             return Vector2i(0,0);
         }
+
+#endif
     }
 
     static bool Inited = false;

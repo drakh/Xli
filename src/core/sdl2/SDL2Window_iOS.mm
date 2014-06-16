@@ -7,7 +7,6 @@ namespace Xli
 {
     namespace PlatformSpecific
     {
-
         void SDL2Window::SetOnscreenKeyboardPosition(Vector2i position) 
         { 
         }

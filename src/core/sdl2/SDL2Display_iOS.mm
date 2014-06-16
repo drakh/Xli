@@ -12,6 +12,7 @@ namespace Xli
         // the scale factor is to bring it in line with android.
         return dpi / 160.0f;
     }
+    
     Vector2 Display::GetDpi(int displayIndex)
     {
         PlatformSpecific::IDeviceType dType = PlatformSpecific::GetIDeviceType();
