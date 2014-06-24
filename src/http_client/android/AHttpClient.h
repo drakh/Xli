@@ -1,3 +1,6 @@
+#include <Xli/ArrayStream.h>
+#include <Xli/BufferStream.h>
+#include <Xli/Buffer.h>
 #include <Xli/HashMap.h>
 #include <Xli/MutexQueue.h>
 #include <XliHttpClient/HttpClient.h>
@@ -26,7 +29,8 @@ namespace Xli
 
         bool completedSuccessfully;
         int responseStatus;
-        Buffer* responseBody;
+        Managed< ArrayStream > responseBody;
+        Managed< BufferReference > responseBodyRef;
 
         HashMap<String,String> responseHeaders;
 

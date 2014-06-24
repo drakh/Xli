@@ -24,6 +24,7 @@ namespace Xli
         this->aborted = false;
         this->javaAsyncHandle = 0;
         this->javaContentHandle = 0;
+        this->responseBody = new ArrayStream(1);
         HttpEventHandler* eh = client->GetEventHandler();
         if (eh!=0) eh->OnRequestStateChanged(this);
     }
@@ -255,7 +256,7 @@ namespace Xli
     {
         if (state == HttpRequestStateDone)
         {
-            return (DataAccessor*)responseBody;
+            return (DataAccessor*)responseBodyRef.Get();            
         } else {
             XLI_THROW("HttpRequest->GetResponseBody(): Not in a valid state to get the response body");
         }
@@ -330,7 +331,8 @@ namespace Xli
                 LOGE("CRITICAL HTTP ERROR: No callback pointer error");
             }
         }
-        void JNICALL XliJ_HttpContentByteArrayCallback (JNIEnv *env , jclass clazz, jbyteArray content, jlong requestPointer)
+
+        void JNICALL XliJ_HttpBytesDownloadedCallback (JNIEnv *env , jclass clazz, jbyteArray content, jint byteLength, jlong requestPointer)
         {
             if (requestPointer)
             {
@@ -342,15 +344,16 @@ namespace Xli
                     return;
                 }                  
 
-                if (content != 0) {
-                    jsize len = env->GetArrayLength(content);
-                    void* cachedContentArray = malloc((long)len);
-                    env->GetByteArrayRegion(content, 0, len, (jbyte*)cachedContentArray);
-                    request->responseBody = Buffer::CopyFrom(cachedContentArray, (int)len);
-
-                    env->DeleteLocalRef(content);
+                if (content != 0 && byteLength!=-1) {
+                    jbyte* jbyteArrayPtr = env->GetByteArrayElements(content, NULL);
+                    request->responseBody->Write((UInt8*)jbyteArrayPtr, 1, (int)byteLength);
+                    env->ReleaseByteArrayElements(content, jbyteArrayPtr, 0);
                 }
-                request->client->EnqueueAction(new Xli::AHttpStateAction(request, Xli::HttpRequestStateDone, true));
+                if (byteLength == -1)
+                {
+                    request->responseBodyRef = new BufferReference((void*)request->responseBody->GetDataPtr(), request->responseBody->GetLength(), (Object*)request->responseBody.Get());
+                    request->client->EnqueueAction(new Xli::AHttpStateAction(request, Xli::HttpRequestStateDone, true));
+                }
             } else {
                 LOGE("CRITICAL HTTP ERROR: No callback pointer error");
             }
@@ -432,13 +435,12 @@ namespace Xli
             static JNINativeMethod nativeFuncs[] = {
                 {(char* const)"XliJ_HttpCallback", (char* const)"(I[Ljava/lang/String;ILjava/lang/String;J)V",
                  (void *)&XliJ_HttpCallback},
-                {(char* const)"XliJ_HttpContentByteArrayCallback", (char* const)"([BJ)V",
-                 (void *)&XliJ_HttpContentByteArrayCallback},
                 {(char* const)"XliJ_HttpTimeoutCallback", (char* const)"(J)V", (void *)&XliJ_HttpTimeoutCallback},
                 {(char* const)"XliJ_HttpErrorCallback", (char* const)"(JILjava/lang/String;)V",
                  (void *)&XliJ_HttpErrorCallback},
                 {(char* const)"XliJ_HttpProgressCallback", (char* const)"(JJJZI)V", (void *)&XliJ_HttpProgressCallback},
                 {(char* const)"XliJ_HttpAbortedCallback", (char* const)"(J)V", (void *)&XliJ_HttpAbortedCallback},
+                {(char* const)"XliJ_HttpBytesDownloadedCallback", (char* const)"([BIJ)V", (void *)&XliJ_HttpBytesDownloadedCallback},
             };
             bool result = PlatformSpecific::AShim::RegisterNativeFunctions(nativeFuncs, 6);
             if (result)
@@ -450,7 +452,6 @@ namespace Xli
             HttpInitialized = 1;
         }
     }
-
 
     AHttpRequest* AHttpClient::CreateRequest(const String& method, const String& url)
     {

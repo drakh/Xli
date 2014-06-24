@@ -18,7 +18,7 @@ import javax.net.ssl.SSLContext;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class ASyncHttpRequest extends AsyncTask<Object, Integer, HttpWrappedResponse> {
+public class AsyncHttpRequest extends AsyncTask<Object, Integer, HttpWrappedResponse> {
 	long requestPointer;
 	boolean verifyHost;
 	

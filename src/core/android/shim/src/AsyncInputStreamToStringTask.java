@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 
 import android.os.AsyncTask;
 
-public class ASyncInputStreamToStringTask extends AsyncTask<Object, Void, String> {
+public class AsyncInputStreamToStringTask extends AsyncTask<Object, Void, String> {
 	public long requestPointer;
     @Override
     protected String doInBackground(Object... params) {

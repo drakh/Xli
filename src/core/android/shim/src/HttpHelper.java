@@ -27,7 +27,7 @@ public class HttpHelper {
     		final AsyncTask[] task = new AsyncTask[1];
     		task[0]=null;
             XliJ.nActivity.runOnUiThread(new Runnable() { public void run() {
-         		task[0] = new ASyncHttpRequest();
+         		task[0] = new AsyncHttpRequest();
          		byte[] data = null;
          		if (body!=null) if (body!=null) data = body.array();
  				((AsyncTask<Object, Void, HttpWrappedResponse>)(task[0])).execute(url, method, headers, (Integer)timeout, data, (Long)requestPointer, (Boolean)verifyHost);         	
@@ -45,10 +45,10 @@ public class HttpHelper {
     								 			final int timeout, final long requestPointer, final boolean verifyHost) {
     	try
     	{
-    		final AsyncTask[] task = new AsyncTask[1];
-    		task[0]=null;
+    		final AsyncTask[] task = new AsyncTask[1]; 		
+    		task[0] = null;
             XliJ.nActivity.runOnUiThread(new Runnable() { public void run() {
-         		task[0] = new ASyncHttpRequest();
+         		task[0] = new AsyncHttpRequest();
          		byte[] data = null;
          		if (body!=null) data = body.getBytes();
  				((AsyncTask<Object, Void, HttpWrappedResponse>)(task[0])).execute(url, method, headers, (Integer)timeout, data, (Long)requestPointer, (Boolean)verifyHost);         	

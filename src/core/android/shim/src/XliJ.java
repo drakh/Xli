@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.annotation.SuppressLint;
@@ -30,7 +31,7 @@ public class XliJ extends android.app.NativeActivity {
     public static native void XliJ_OnTextInput(String keyCode);
     public static native void XliJ_HttpCallback(int body, String[] headers, int responseCode, String responseMessage, long requestPointer);
     public static native void XliJ_HttpContentStringCallback(String content, long requestPointer);
-    public static native void XliJ_HttpContentByteArrayCallback(byte[] result, long requestPointer);
+    public static native void XliJ_HttpBytesDownloadedCallback(byte[] chunk, int chunkLength, long requestPointer);
     public static native void XliJ_HttpTimeoutCallback(long requestPointer);
     public static native void XliJ_HttpProgressCallback(long requestPointer, long position, long totalLength, boolean lengthKnown, int direction);
     public static native void XliJ_HttpErrorCallback(long requestPointer, int errorCode, String errorMessage);
@@ -169,11 +170,11 @@ public class XliJ extends android.app.NativeActivity {
     }
 	public static int AsyncInputStreamToString(int stream, long requestPointer) throws IOException, UnsupportedEncodingException
     {
-        return HoldObject(StreamHelper.AsyncInputStreamToString((InputStream)GetObject(stream), requestPointer));
+        return StreamHelper.AsyncInputStreamToString((InputStream)GetObject(stream), requestPointer);
     }
 	public static int AsyncInputStreamToByteArray(int stream, long requestPointer)
     {
-        return HoldObject(StreamHelper.AsyncInputStreamToByteArray((InputStream)GetObject(stream), requestPointer));
+		return StreamHelper.AsyncProgressiveInputStreamToByteArray((InputStream)GetObject(stream), requestPointer);
     }
     public static byte[] ReadAllBytesFromInputStream(InputStream stream) throws IOException
     {    	
@@ -197,6 +198,7 @@ public class XliJ extends android.app.NativeActivity {
     //--------------------------------------------
     // Object Store
     public static SparseArray<Object> _objStore = new SparseArray<Object>();
+    public static ArrayList<Integer> _objReservedList = new ArrayList<Integer>();
     public static int _objKey=0; //This must not be -1 as otherwise the first held object has the key 0 and 0 is null in cpp.
     public static int HoldObject(Object obj)
     {
@@ -205,10 +207,33 @@ public class XliJ extends android.app.NativeActivity {
     	_objStore.put(_objKey, obj);
     	return _objKey;
     }
+    public static int ReserveObject()
+    {
+    	_objKey+=1;
+    	_objReservedList.add(_objKey);
+    	return _objKey;
+    }
+    public static void PopulateReservedObject(int key, Object obj)
+    {
+    	if (key <= _objKey && _objStore.get(key)==null && _objReservedList.contains(key))
+    	{
+    		_objReservedList.remove(_objReservedList.indexOf(key));
+    		_objStore.put(key, obj);
+    	} else {
+    		XliJ_JavaThrowError(-1, "Tried to populate invalid reserved object");
+    	}
+    }
     public static Object GetObject(int key)
     {
     	if (key==-1) return null;
-    	return _objStore.get(key);    			
+    	Object result = _objStore.get(key);
+    	if (result!=null)
+    	{
+    		return result;
+    	} else {
+    		XliJ_JavaThrowError(-1, "Tried to access invalid object from java object store");
+    		return null;
+    	}    	
     }
     public static boolean TryReleaseObject(int key)
     {

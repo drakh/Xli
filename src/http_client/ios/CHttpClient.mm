@@ -29,8 +29,6 @@ namespace Xli
         bool requestOwnsUploadData;
         HashMap<String,String> headers;
 
-
-
         HashMap<String,String> responseHeaders;
         bool dataReady;
         bool reading;

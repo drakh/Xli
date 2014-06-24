@@ -105,7 +105,7 @@ namespace Xli
         virtual ~CurlHttpRequest()
         {
             Abort();
-            curl_slist_free_all(curlUploadHeaders);            
+            curl_slist_free_all(curlUploadHeaders);
             // {TODO} free upload headers
         }
 

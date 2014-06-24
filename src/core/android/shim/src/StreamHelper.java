@@ -1,4 +1,3 @@
-
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -6,7 +5,9 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
 
 
@@ -18,20 +19,36 @@ public class StreamHelper {
         return s.hasNext() ? s.next() : "";
     }
 
-    @SuppressWarnings("rawtypes")
-	public static AsyncTask AsyncInputStreamToString(InputStream stream, long requestPointer) throws IOException, UnsupportedEncodingException
+	public static int AsyncInputStreamToString(final InputStream stream, final long requestPointer) throws IOException, UnsupportedEncodingException
     {
-        AsyncTask<Object, Void, String> a = new ASyncInputStreamToStringTask();
-        a.execute(stream, requestPointer);
-        return a;
+    	final int taskKey = XliJ.ReserveObject();
+    	XliJ.nActivity.runOnUiThread(new Runnable() { @SuppressLint("NewApi")
+		public void run() {
+    		AsyncTask<Object, Void, String> task = new AsyncInputStreamToStringTask();
+    		XliJ.PopulateReservedObject(taskKey, task);
+    	    if (Build.VERSION.SDK_INT > 10) {    	    	
+    	    	task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, stream, requestPointer);
+    	    } else {
+    	    	task.execute(stream, requestPointer);
+    	    }
+    	}});
+        return taskKey;
     }
-
-    @SuppressWarnings("rawtypes")
-	public static AsyncTask AsyncInputStreamToByteArray(InputStream stream, long requestPointer)
+	
+	public static int AsyncProgressiveInputStreamToByteArray(final InputStream stream, final long requestPointer)
     {
-        AsyncTask<Object, Void, byte[]> a = new ASyncInputStreamToBytesTask();
-        a.execute(stream, requestPointer);
-        return a;
+    	final int taskKey = XliJ.ReserveObject();
+    	XliJ.nActivity.runOnUiThread(new Runnable() { @SuppressLint("NewApi")
+		public void run() {
+    		AsyncTask<Object, Void, Void> task = new AsyncInputStreamToBytesTask();
+    		XliJ.PopulateReservedObject(taskKey, task);
+    	    if (Build.VERSION.SDK_INT > 10) {    	    	
+    	    	task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, stream, requestPointer);
+    	    } else {
+    	    	task.execute(stream, requestPointer);
+    	    }
+    	}});
+        return taskKey;
     }
 
     public static byte[] ReadAllBytesFromInputStream(InputStream stream) throws IOException
