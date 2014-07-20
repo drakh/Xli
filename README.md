@@ -1,31 +1,26 @@
-Xli Library
-===========
+Xli
+===
 
-Xli is a modular and cross platform app development framework for C++.
+Xli is a modular and cross-platform app development framework for C++. It is being used to implement the Uno C++ runtime and core library among some other things.
 
+Header documentation can be generated using `doxygen`. 
+
+Please see the <a href="modules.html">Modules</a> page for an overview of the functionality.
+
+Questions and other feedback can be posted in the beta zone forum.
 
 ### Table of Contents
 
-- [Documentation](#documentation)
-- [Building](#building)
-    - [Android](#android)
-    - [iOS](#ios)
-    - [Linux](#linux)
-    - [OS X](#os-x)
-    - [Raspberry PI](#raspberry-pi)
-    - [Windows](#windows)
-- [License](#license)
-    - [3rdparty dependencies](#3rdparty-dependencies)
+1. [Build instructions](#build-instructions)
+    1. [Android](#android)
+    2. [iOS](#ios)
+    3. [Linux](#linux)
+    4. [OS X](#os-x)
+    5. [Raspberry PI](#raspberry-pi)
+    6. [Windows](#windows)
 
 
-
-# Documentation
-
-Library documentation can be generated using `doxygen`.
-
-
-
-# Building
+# Build instructions
 
 ## Android
 
@@ -57,7 +52,7 @@ Uno users can use the *Uno Native Build environment* provided by Outracks, conta
 
 ### Prerequisites
 
-- CMake
+- CMake (~>2.8) - NB: 3.0 not supported
 - Xcode with most recent iOS SDK
 - Xcode command line tools
 - OS X (>= 10.7)
@@ -74,8 +69,8 @@ Uno users can use the *Uno Native Build environment* provided by Outracks, conta
      - `lib/iOS/Release-iphoneos/`
      - `lib/iOS/Release-iphonesimulator/`
    * Generated Xcode projects located here:
-     - `build/iOS/OS/XliLibrary.xcodeproj`
-     - `build/iOS/SIMULATOR/XliLibrary.xcodeproj`
+     - `build/iOS/OS/Xli.xcodeproj`
+     - `build/iOS/SIMULATOR/Xli.xcodeproj`
 
 
 ## Linux
@@ -146,7 +141,7 @@ List of available options can be shown using `./build.sh --help`.
      - `lib/OSX/x86/Debug/`
      - `lib/OSX/x86/Release/`
    * Generated Xcode project located here:
-     - `build/Xcode/XliLibrary.xcodeproj`
+     - `build/Xcode/Xli.xcodeproj`
 
 
 ## Raspberry PI
@@ -201,41 +196,3 @@ List of available options can be shown using `./build.sh --help`.
      - `lib\vs2013\x86\Release\`
      - `lib\vs2013\x64\Debug\`
      - `lib\vs2013\x64\Release\`
-
-
-# License
-
-The Xli Library source code is released under a MIT-style license:
-
-> Copyright (C) 2010-2014 Outracks Technologies AS
->
-> Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
->
-> The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
->
-> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-**Note:** When linkning against Xli components you must also accept the licenses for the libraries Xli uses internally on your platform(s). See the section below for details.
-
-
-## 3rdparty dependencies
-
-The table below shows the list of libraries Xli uses under the hood, their licenses and how they are linked on the different target platforms.
-
-Library       | License   | Component | Android | iOS     | OS X    | *nix    | Win32 
---------------|:---------:|:---------:|:-------:|:-------:|:-------:|:-------:|:-------:
-glew          | BSD-style | Core      | -       | -       | static  | dynamic | static
-[SDL2]        | MIT-style | Core      | -       | static  | static  | dynamic | -
-ConvertUTF    | ?         | Core      | static  | static  | static  | static  | static
-freetype      | BSD       | Media     | static  | static  | static  | dynamic | static
-[libjpeg]     | ?         | Media     | static  | -       | static  | dynamic | static
-json_parser   | ?         | Media     | static  | static  | static  | static  | static
-pnglib        | zlib      | Media     | static  | -       | static  | dynamic | static
-tinyxml       | ?         | Media     | static  | static  | static  | static  | static
-unzip         | ?         | Media     | static  | static  | static  | static  | static
-zlib          | zlib      | Media     | dynamic | static  | dynamic | dynamic | static
-portaudio     | ?         | Audio     | -       | -       | dynamic | dynamic | static
-curl          | ?         | Http      | -       | -       | dynamic | dynamic | static
-
-[SDL2]: http://libsdl.org/
-[libjpeg]: http://www.ijg.org/
