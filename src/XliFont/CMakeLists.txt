@@ -1,5 +1,5 @@
 set(SRC FontFace.cpp)
-set(LIBS Xli XliMedia)
+set(LIBS Xli XliImage)
 
 set(FREETYPE_INC 
     3rdparty/freetype/include)
