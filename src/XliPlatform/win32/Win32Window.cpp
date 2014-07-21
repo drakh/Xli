@@ -1,6 +1,7 @@
 #include <XliPlatform/PlatformSpecific/Win32Window.h>
 #include <XliPlatform/PlatformSpecific/Win32Helpers.h>
 #include <XliPlatform/Display.h>
+#include <Xli/Console.h>
 #include <Xli/HashMap.h>
 #include <Xli/Unicode.h>
 #include <cstdlib>

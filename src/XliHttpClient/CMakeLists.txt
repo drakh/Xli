@@ -1,21 +1,25 @@
+if (WIN32)
+    return()
+endif()
+
 file(GLOB SRC
-	../../include/XliHttpClient/*.h
+    ../../include/XliHttpClient/*.h
     ../../include/XliHttpClient.h)
 
 set(LIBS Xli XliPlatform)
 
 if (XLI_PLATFORM_IOS)
 
-	set(SRC ${SRC} ios/CHttpClient.mm)
+    set(SRC ${SRC} ios/CHttpClient.mm)
 
 elseif (XLI_PLATFORM_ANDROID)
 
-	set(SRC ${SRC} android/AHttpClient.cpp)
+    set(SRC ${SRC} android/AHttpClient.cpp)
 
 else()
 
-	set(SRC ${SRC} curl/CurlHttpClient.cpp)
-	set(LIBS ${LIBS} curl)
+    set(SRC ${SRC} curl/CurlHttpClient.cpp)
+    set(LIBS ${LIBS} curl)
 
 endif()
 

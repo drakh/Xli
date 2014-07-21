@@ -54,7 +54,7 @@ extern "C" int main(int argc, char** argv)
 }
 
 #if defined(XLI_PLATFORM_WIN32)
-#include <Xli/PlatformSpecific/Win32Header.h>
+#include <XliPlatform/PlatformSpecific/Win32Header.h>
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {

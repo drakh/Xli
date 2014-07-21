@@ -1,9 +1,10 @@
-#include <XliPlatform/Dialogs.h>
+#include <XliPlatform/CommonDialogs.h>
 #include <XliPlatform/Disk.h>
 #include <Xli/StringBuilder.h>
 #include <Xli/Path.h>
 #include <XliPlatform/MessageBox.h>
 #include <XliPlatform/PlatformSpecific/Win32Header.h>
+#include <XliPlatform/Window.h>
 #include <Xli/Unicode.h>
 #include <CommDlg.h>
 
@@ -14,7 +15,7 @@ namespace Xli
         return str.Trim('.').Trim('*');
     }
 
-    static void InitOptions(Window* parent, const Dialogs::FileDialogOptions& options, bool mustExist, OPENFILENAMEW& ofn, WCHAR fnbufW[4096], Utf16String& filterW, Utf16String& defW, Utf16String& dirW, Utf16String& captionW)
+    static void InitOptions(Window* parent, const FileDialogOptions& options, bool mustExist, OPENFILENAMEW& ofn, WCHAR fnbufW[4096], Utf16String& filterW, Utf16String& defW, Utf16String& dirW, Utf16String& captionW)
     {
         fnbufW[0] = '\0';
 

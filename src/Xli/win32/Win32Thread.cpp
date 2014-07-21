@@ -1,5 +1,6 @@
 #include <Xli/Thread.h>
-#include <Xli/PlatformSpecific/Win32Header.h>
+#include <Xli/Console.h>
+#include <XliPlatform/PlatformSpecific/Win32Header.h>
 #include <process.h>
 
 namespace Xli

@@ -1,6 +1,7 @@
 #include <XliGL.h>
 #include <XliPlatform/PlatformSpecific/Win32Window.h>
 #include <XliPlatform/PlatformSpecific/Win32Helpers.h>
+#include <Xli/Console.h>
 #include <Xli/Shared.h>
 #include "../3rdparty/glew/include/GL/wglew.h"
 

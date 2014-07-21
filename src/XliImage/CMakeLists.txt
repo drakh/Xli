@@ -96,7 +96,7 @@ if (XLI_PLATFORM_ANDROID)
 
 elseif (XLI_PLATFORM_WIN32)
 
-    include_directories(${JPEG_INC} ${PNG_INC})
+    include_directories(${JPEG_INC} ${PNG_INC} ../XliZip/3rdparty/zlib)
     set(SRC ${SRC} ${JPEG_SRC} ${PNG_SRC})
     set(LIBS ${LIBS} XliZip)
 

@@ -1,5 +1,5 @@
 #include <Xli/ConditionVariable.h>
-#include <Xli/PlatformSpecific/Win32Header.h>
+#include <XliPlatform/PlatformSpecific/Win32Header.h>
 
 namespace Xli
 {
