@@ -9,7 +9,7 @@
 namespace Xli
 {
     /**
-        \ingroup XliCoreIO
+        \ingroup XliIO
     */
     class TextWriter: public StreamWriterBase
     {

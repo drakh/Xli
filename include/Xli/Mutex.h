@@ -9,7 +9,7 @@ namespace Xli
     struct __MutexImpl;
 
     /**
-        \addtogroup XliCoreThreading
+        \addtogroup XliThreading
         @{
     */
     typedef __MutexImpl* MutexHandle;
@@ -23,7 +23,7 @@ namespace Xli
     /** @} */
 
     /**
-        \ingroup XliCoreThreading
+        \ingroup XliThreading
     */
     class Mutex
     {
@@ -60,7 +60,7 @@ namespace Xli
     };
 
     /**
-        \ingroup XliCoreThreading
+        \ingroup XliThreading
     */
     class MutexLock
     {

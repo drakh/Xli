@@ -4,6 +4,7 @@
 /**
     \defgroup XliSoundPlayer
     \brief A simple sound player interface
+    \ingroup XliPlatformLibs
 */
 
 #include <XliSoundPlayer/SoundPlayer.h>

@@ -7,7 +7,7 @@
 namespace Xli
 {
     /**
-        \ingroup XliCoreContainers
+        \ingroup XliContainers
     */
     template <typename T> class Managed
     {
@@ -114,7 +114,7 @@ namespace Xli
     };
 
     /**
-        \ingroup XliCoreContainers
+        \ingroup XliContainers
     */
     template <typename T> 
     Managed<T> ManagePtr(T* object)

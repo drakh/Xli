@@ -7,7 +7,7 @@
 namespace Xli
 {
     /**
-        \ingroup XliCoreIO
+        \ingroup XliIO
     */
     class BinaryReader : public StreamReaderBase
     {

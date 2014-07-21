@@ -7,7 +7,7 @@
 namespace Xli
 {
     /**
-    \ingroup XliCoreIO
+    \ingroup XliIO
     */
     enum FileMode
     {
@@ -33,7 +33,7 @@ namespace Xli
     };
 
     /**
-        \ingroup XliCoreIO
+        \ingroup XliIO
     */
     class FileModeInfo
     {
@@ -43,7 +43,7 @@ namespace Xli
     };
     
     /**
-        \ingroup XliCoreIO
+        \ingroup XliIO
     */
     enum FileFlags
     {
@@ -55,7 +55,7 @@ namespace Xli
     };
 
     /**
-        \ingroup XliCoreIO
+        \ingroup XliIO
     */
     class File: public Stream
     {

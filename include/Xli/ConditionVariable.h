@@ -9,7 +9,7 @@ namespace Xli
     struct __CondImpl;
 
     /**
-        \addtogroup XliCoreThreading
+        \addtogroup XliThreading
         @{
     */
 
@@ -25,7 +25,7 @@ namespace Xli
     /** @} */
 
     /**
-        \ingroup XliCoreThreading
+        \ingroup XliThreading
     */
     class ConditionVariable
     {

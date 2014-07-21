@@ -6,7 +6,7 @@
 namespace Xli
 {
     /**
-        \ingroup XliCoreIO
+        \ingroup XliIO
     */
     class BufferStream: public Stream
     {

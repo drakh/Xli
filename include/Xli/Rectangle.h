@@ -7,7 +7,7 @@
 namespace Xli
 {
     /**
-        \ingroup Xli
+        \ingroup XliTypes
 
         Represents the coordinates of a rectangle.
         The rectangle is represented in a Left, Top, Right, Bottom-notation, where the X-axis increases
@@ -246,7 +246,7 @@ namespace Xli
     };
 
     /**
-        \addtogroup Xli
+        \addtogroup XliTypes
         @{
     */
 

@@ -1,10 +1,13 @@
 #ifndef __XLI_GL_GL_CONTEXT_H__
 #define __XLI_GL_GL_CONTEXT_H__
 
-#include <Xli/Window.h>
+#include <Xli/Object.h>
+#include <Xli/Vector4.h>
 
 namespace Xli
 {
+    class Window;
+
     /**
         \ingroup XliGL
      */

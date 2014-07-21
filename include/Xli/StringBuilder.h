@@ -7,7 +7,7 @@
 namespace Xli
 {
     /**
-        \ingroup XliCoreText
+        \ingroup XliText
     */
     class StringBuilder
     {

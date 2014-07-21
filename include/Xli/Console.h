@@ -7,7 +7,7 @@
 namespace Xli
 {
     /**
-        \ingroup XliCoreIO
+        \ingroup XliDiagnostics
     */
     class Console
     {
@@ -17,7 +17,7 @@ namespace Xli
     };
 
     /**
-        \ingroup XliCoreIO
+        \ingroup XliDiagnostics
     */
     class StdOutAccessor
     {
@@ -27,7 +27,7 @@ namespace Xli
     };
 
     /**
-        \ingroup XliCoreIO
+        \ingroup XliDiagnostics
     */
     class StdErrAccessor
     {
@@ -37,7 +37,7 @@ namespace Xli
     };
 
     /**
-        \ingroup XliCoreIO
+        \ingroup XliDiagnostics
     */
     class StdInAccessor
     {
@@ -47,7 +47,7 @@ namespace Xli
     };
 
     /**
-        \addtogroup XliCoreIO
+        \addtogroup XliDiagnostics
         @{
     */
 

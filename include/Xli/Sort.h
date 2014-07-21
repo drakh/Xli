@@ -4,7 +4,7 @@
 namespace Xli
 {
     /**
-        \ingroup XliCoreUtils
+        \ingroup XliUtils
     */
     template <typename T> struct ComparatorLessThan
     {
@@ -15,7 +15,7 @@ namespace Xli
     };
 
     /**
-        \ingroup XliCoreUtils
+        \ingroup XliUtils
     */
     template <typename T> struct ComparatorGreaterThan
     {
@@ -26,7 +26,7 @@ namespace Xli
     };
 
     /**
-        \ingroup XliCoreUtils
+        \ingroup XliUtils
     */
     template <typename T> struct ComparatorPointerLessThan
     {
@@ -37,7 +37,7 @@ namespace Xli
     };
 
     /**
-        \ingroup XliCoreUtils
+        \ingroup XliUtils
     */
     template <typename T> struct ComparatorPointerGreaterThan
     {
@@ -48,7 +48,7 @@ namespace Xli
     };
 
     /**
-        \addtogroup XliCoreUtils
+        \addtogroup XliUtils
         @{
     */
 

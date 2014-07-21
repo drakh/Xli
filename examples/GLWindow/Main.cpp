@@ -1,6 +1,6 @@
 #include <Xli.h>
 #include <XliGL.h>
-#include <Xli/Display.h>
+#include <XliPlatform.h>
 
 using namespace Xli;
 

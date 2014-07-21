@@ -12,28 +12,44 @@ if (APPLE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-switch-enum -Wno-logical-op-parentheses -Wno-parentheses-equality")
 endif()
 
-add_subdirectory(src/core)
+add_subdirectory(src/Xli)
 
-if (NOT XLI_NO_MAIN)
-    add_subdirectory(src/main)
+if (NOT XLI_NO_PLATFORM)
+    add_subdirectory(src/XliPlatform)
 endif()
 
-if (NOT XLI_NO_MEDIA)
-    add_subdirectory(src/media)
+if (NOT XLI_NO_MAIN)
+    add_subdirectory(src/XliMain)
 endif()
 
 if (NOT XLI_NO_GL)
-    add_subdirectory(src/gl)
+    add_subdirectory(src/XliGL)
+endif()
+
+if (NOT XLI_NO_IMAGE)
+    add_subdirectory(src/XliImage)
+endif()
+
+if (NOT XLI_NO_FONT)
+    add_subdirectory(src/XliFont)
+endif()
+
+if (NOT XLI_NO_JSON)
+    add_subdirectory(src/XliJson)
+endif()
+
+if (NOT XLI_NO_ZIP)
+    add_subdirectory(src/XliZip)
 endif()
 
 if (NOT XLI_NO_HTTP_CLIENT)
-    add_subdirectory(src/http_client)
+    add_subdirectory(src/XliHttpClient)
 endif()
 
 if (NOT XLI_NO_SOUND_PLAYER)
-    add_subdirectory(src/sound_player)
+    add_subdirectory(src/XliSoundPlayer)
 endif()
 
 if (NOT XLI_NO_FEATURES)
-    add_subdirectory(src/features)
+    add_subdirectory(src/XliFeatures)
 endif()

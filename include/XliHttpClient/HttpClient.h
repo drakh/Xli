@@ -6,6 +6,9 @@
 
 namespace Xli
 {   
+    /**
+        \ingroup XliHttpClient
+    */
     enum HttpRequestState
     {
         HttpRequestStateUnsent=0,
@@ -16,6 +19,9 @@ namespace Xli
         HttpRequestStateDone=5,
     };
 
+    /**
+        \ingroup XliHttpClient
+    */
     class HttpRequest: public Object
     {
     public:
@@ -57,6 +63,9 @@ namespace Xli
         virtual DataAccessor* GetResponseBody() const = 0;
     };
 
+    /**
+        \ingroup XliHttpClient
+    */
     class HttpEventHandler: public Object
     {
     public:
@@ -67,12 +76,18 @@ namespace Xli
         virtual void OnRequestError(HttpRequest* request) { }
     };
 
+    /**
+        \ingroup XliHttpClient
+    */
     class HttpAction : public Object
     {
     public:
         virtual void Execute() = 0;
     };
 
+    /**
+        \ingroup XliHttpClient
+    */
     class HttpClient: public Object
     { 
     public:

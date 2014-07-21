@@ -6,7 +6,7 @@
 namespace Xli
 {
     /**
-        \ingroup XliCoreIO
+        \ingroup XliIO
     */
     enum FileFlag
     {
@@ -15,7 +15,7 @@ namespace Xli
     };
 
     /**
-        \ingroup XliCoreIO
+        \ingroup XliIO
     */
     struct FileInfo
     {
@@ -28,7 +28,7 @@ namespace Xli
     };
 
     /**
-        \ingroup XliCoreIO
+        \ingroup XliIO
     */
     class FileSystem: public Object
     {

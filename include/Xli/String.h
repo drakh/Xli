@@ -12,7 +12,7 @@
 namespace Xli
 {
     /**
-        \ingroup XliCoreText
+        \ingroup XliText
     */
     class String
     {
@@ -139,7 +139,7 @@ namespace Xli
 }
 
 /**
-    \addtogroup XliCoreText
+    \addtogroup XliText
     @{
 */
 

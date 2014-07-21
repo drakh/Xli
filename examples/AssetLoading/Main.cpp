@@ -1,5 +1,6 @@
 #include <Xli.h>
-#include <XliMedia.h>
+#include <XliFont.h>
+#include <XliPlatform.h>
 
 using namespace Xli;
 

@@ -7,7 +7,7 @@
 namespace Xli
 {
     /**
-        \ingroup XliCoreText
+        \ingroup XliText
     */
     enum UnicodeFlags
     {
@@ -16,7 +16,7 @@ namespace Xli
     };
 
     /**
-        \ingroup XliCoreText
+        \ingroup XliText
     */
     class Unicode
     {

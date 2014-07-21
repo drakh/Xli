@@ -1,7 +1,7 @@
 #ifndef __XLI_THREAD_H__
 #define __XLI_THREAD_H__
 
-#include <Xli/Window.h>
+#include <Xli/Object.h>
 #include <Xli/Shared.h>
 
 namespace Xli
@@ -9,7 +9,7 @@ namespace Xli
     struct __ThreadImpl;
 
     /**
-        \addtogroup XliCoreThreading
+        \addtogroup XliThreading
         @{
     */
     typedef __ThreadImpl* ThreadHandle;
@@ -24,7 +24,7 @@ namespace Xli
     /** @} */
 
     /**
-        \ingroup XliCoreThreading
+        \ingroup XliThreading
     */
     class Task: public Object
     {
@@ -43,7 +43,7 @@ namespace Xli
     };
 
     /**
-        \ingroup XliCoreThreading
+        \ingroup XliThreading
     */
     class Thread
     {

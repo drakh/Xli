@@ -4,6 +4,7 @@
 /**
     \defgroup XliGL
     \brief OpenGL integration
+    \ingroup XliPlatformLibs
 */
 
 #include <XliGL/GL.h>

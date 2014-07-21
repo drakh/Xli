@@ -5,6 +5,9 @@
 
 namespace Xli
 {
+    /**
+        \ingroup XliSoundPlayer
+    */
 	class SoundChannel : public Object
 	{
 	public:
@@ -25,6 +28,9 @@ namespace Xli
 		virtual bool IsPaused() = 0;
 	};
 
+    /**
+        \ingroup XliSoundPlayer
+    */
     class Sound : public Object
     {
     public:
@@ -33,6 +39,9 @@ namespace Xli
         virtual bool IsAsset() const = 0;
     };
 
+    /**
+        \ingroup XliSoundPlayer
+    */
     class SoundPlayer: public Object
     {
     public:

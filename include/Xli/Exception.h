@@ -8,7 +8,7 @@
 namespace Xli
 {
     /**
-        \ingroup Xli
+        \ingroup XliExceptions
     */
     class Exception : public std::exception
     {
@@ -32,7 +32,7 @@ namespace Xli
     };
 
     /**
-        \addtogroup Xli
+        \addtogroup XliExceptions
         @{
     */
 
@@ -53,40 +53,40 @@ namespace Xli
 
     /** @} */
 
-    /** \ingroup Xli */
+    /** \ingroup XliExceptions */
     XLI_DECLARE_EXCEPTION(IndexOutOfBoundsException, "Index out of bounds");
-    /** \ingroup Xli */
+    /** \ingroup XliExceptions */
     XLI_DECLARE_EXCEPTION(NullPointerException, "Null pointer access attempt");
-    /** \ingroup Xli */
+    /** \ingroup XliExceptions */
     XLI_DECLARE_EXCEPTION(BadDeleteException, "Attemt to delete object with refcount != 1");
-    /** \ingroup Xli */
+    /** \ingroup XliExceptions */
     XLI_DECLARE_EXCEPTION(FormatException, "Invalid format");
-    /** \ingroup Xli */
+    /** \ingroup XliExceptions */
     XLI_DECLARE_EXCEPTION(ArgumentException, "Illegal argument");
-    /** \ingroup Xli */
+    /** \ingroup XliExceptions */
     XLI_DECLARE_EXCEPTION(NotSupportedException, "Not supported");
 
-    /** \ingroup XliCoreIO */
+    /** \ingroup XliIO */
     class IOException: public Exception {};
 
-    /** \ingroup XliCoreIO */
+    /** \ingroup XliIO */
     XLI_DECLARE_EXCEPTION_SUB(IOException, StreamClosedException, "Stream has closed");
-    /** \ingroup XliCoreIO */
+    /** \ingroup XliIO */
     XLI_DECLARE_EXCEPTION_SUB(IOException, StreamCantReadException, "Stream not readable");
-    /** \ingroup XliCoreIO */
+    /** \ingroup XliIO */
     XLI_DECLARE_EXCEPTION_SUB(IOException, StreamCantWriteException, "Stream not writeable");
-    /** \ingroup XliCoreIO */
+    /** \ingroup XliIO */
     XLI_DECLARE_EXCEPTION_SUB(IOException, StreamCantSeekException, "Stream not seekable");
-    /** \ingroup XliCoreIO */
+    /** \ingroup XliIO */
     XLI_DECLARE_EXCEPTION_SUB(IOException, EndOfStreamException, "End of Stream reached");
-    /** \ingroup XliCoreIO */
+    /** \ingroup XliIO */
     XLI_DECLARE_EXCEPTION_SUB(IOException, FileCantOpenException, "Couldn't open file");
-    /** \ingroup XliCoreIO */
+    /** \ingroup XliIO */
     XLI_DECLARE_EXCEPTION_SUB(IOException, FileNotFoundException, "File not found");
 }
 
 /**
-    \addtogroup Xli
+    \addtogroup XliExceptions
     @{
 */
 

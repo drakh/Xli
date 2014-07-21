@@ -6,7 +6,7 @@
 namespace Xli
 {
     /**
-        \addtogroup Xli
+        \addtogroup XliTypes
         @{
     */
 
@@ -20,15 +20,6 @@ namespace Xli
     typedef unsigned int UInt32;
     typedef unsigned long long UInt64;
 
-#ifdef WIN32
-    typedef wchar_t Utf16;
-#else
-    typedef UInt16 Utf16;
-#endif
-
-    typedef UInt32 Utf32;
-    typedef UInt64 Timestamp;
-
     static const Int8 Int8Max = 0x7f;
     static const UInt8 UInt8Max = 0xff;
     static const Int16 Int16Max = 0x7fff;
@@ -40,8 +31,21 @@ namespace Xli
 
     /** @} */
 
+    /** \ingroup XliText */
+#ifdef WIN32
+    typedef wchar_t Utf16;
+#else
+    typedef UInt16 Utf16;
+#endif
+
+    /** \ingroup XliText */
+    typedef UInt32 Utf32;
+    
+    /** \ingroup XliTime */
+    typedef UInt64 Timestamp;
+
     /**
-        \addtogroup XliCoreContainers
+        \addtogroup XliContainers
         @{
     */
 

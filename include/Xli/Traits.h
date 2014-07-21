@@ -7,7 +7,7 @@
 namespace Xli
 {
     /**
-        \ingroup XliCoreTraits
+        \ingroup XliTraits
     */
     struct DefaultTraits
     {
@@ -75,7 +75,7 @@ namespace Xli
     };
 
     /**
-        \ingroup XliCoreTraits
+        \ingroup XliTraits
     */
     template <typename T> struct Traits
     {

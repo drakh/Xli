@@ -7,7 +7,7 @@
 namespace Xli
 {
     /**
-        \ingroup XliCoreContainers
+        \ingroup XliContainers
     */
     template <typename TKey, typename TValue> class HashMap
     {

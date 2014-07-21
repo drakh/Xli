@@ -6,7 +6,7 @@
 namespace Xli
 {
     /**
-        \addtogroup XliCoreTime
+        \addtogroup XliTime
         @{
     */
 

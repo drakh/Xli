@@ -1,6 +1,7 @@
 #include <Xli.h>
 #include <XliHttpClient.h>
 #include <XliGL.h>
+#include <XliPlatform.h>
 
 using namespace Xli;
 

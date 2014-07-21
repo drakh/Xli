@@ -4,6 +4,7 @@
 /**
     \defgroup XliFeatures
     \brief Interface to vibration unit in devices
+    \ingroup XliPlatformLibs
 */
 
 #include <XliFeatures/Vibrator.h>

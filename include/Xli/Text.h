@@ -6,6 +6,9 @@
 
 namespace Xli
 {
+    /**
+        \ingroup XliIO
+    */
     class Text
     {
     public:

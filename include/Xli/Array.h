@@ -9,7 +9,7 @@
 namespace Xli
 {
     /**
-        \ingroup XliCoreContainers
+        \ingroup XliContainers
     */
     template <typename T> class Array
     {

@@ -52,7 +52,7 @@ Uno users can use the *Uno Native Build environment* provided by Outracks, conta
 
 ### Prerequisites
 
-- CMake (~>2.8) - NB: 3.0 not supported
+- CMake (~> 2.8) - Note: 3.0 not supported
 - Xcode with most recent iOS SDK
 - Xcode command line tools
 - OS X (>= 10.7)

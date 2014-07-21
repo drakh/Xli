@@ -7,7 +7,7 @@
 namespace Xli
 {
     /**
-        \ingroup XliCoreTime
+        \ingroup XliTime
     */
     class DateTime
     {
