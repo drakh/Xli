@@ -62,10 +62,9 @@ namespace Xli
                 eglGetConfigAttrib(display, configs[i], EGL_DEPTH_SIZE, &depth);
                 eglGetConfigAttrib(display, configs[i], EGL_STENCIL_SIZE, &stencil);
                 eglGetConfigAttrib(display, configs[i], EGL_SAMPLES, &samples);
-                eglGetConfigAttrib(display, configs[i], EGL_RENDER_BUFFER, &render);
 
 #ifdef XLI_DEBUG
-                ErrorPrintLine(String::Format("DEBUG: EGLConfig[%d]:  M %d  D %d  S %d  B %d  R %d  G %d  B %d  A %d  Single %d", i, samples, depth, stencil, buffer, r, g, b, a, render == EGL_SINGLE_BUFFER));
+                ErrorPrintLine(String::Format("DEBUG: EGLConfig[%d]:  M %d  D %d  S %d  B %d  R %d  G %d  B %d  A %d", i, samples, depth, stencil, buffer, r, g, b, a));
 #endif
 
                 if (samples >= cs && depth >= cd && buffer >= cb && 
