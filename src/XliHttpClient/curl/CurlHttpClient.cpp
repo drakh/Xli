@@ -82,7 +82,7 @@ namespace Xli
 
         HashMap<String,String> responseHeaders;
         Managed< ArrayStream > responseBody;
-        Managed< BufferReference > responseBodyRef;
+        Managed< BufferRef > responseBodyRef;
         int responseStatus;
 
     public:
@@ -228,7 +228,7 @@ namespace Xli
             if (content!=0 && byteLength>0)
             {
                 // const_cast is safe here are bufferstream is set readonly
-                uploadBuffer = new BufferStream(new BufferPointer(const_cast<void*>(content), byteLength, requestOwnsUploadData), true, false);
+                uploadBuffer = new BufferStream(new BufferPtr(const_cast<void*>(content), byteLength, requestOwnsUploadData), true, false);
             }
 
             //Create session
@@ -394,7 +394,7 @@ namespace Xli
                 curl_easy_cleanup(session);
             }
 
-            responseBodyRef = new BufferReference((void*)responseBody->GetDataPtr(), responseBody->GetLength(), (Object*)responseBody.Get());
+            responseBodyRef = new BufferRef((void*)responseBody->GetDataPtr(), responseBody->GetLength(), (Object*)responseBody.Get());
 
             HttpEventHandler* eh = client->GetEventHandler();
             if (eh!=0 && !aborted) eh->OnRequestStateChanged(this);

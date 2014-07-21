@@ -30,7 +30,7 @@ namespace Xli
         bool completedSuccessfully;
         int responseStatus;
         Managed< ArrayStream > responseBody;
-        Managed< BufferReference > responseBodyRef;
+        Managed< BufferRef > responseBodyRef;
 
         HashMap<String,String> responseHeaders;
 

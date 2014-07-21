@@ -361,6 +361,9 @@ namespace Xli
         }
     };
 
+    /**
+        \ingroup XliContainers
+    */
     template <typename T> class ArrayRef: public Object
     {
     public:

@@ -61,15 +61,15 @@ namespace Xli
     /**
         \ingroup XliBuffer
     */
-    class BufferPointer: public DataAccessor
+    class BufferPtr: public DataAccessor
     {
         UInt8* data;
         int size;
         bool ownsData;
 
     public:
-        BufferPointer(void* data, int size, bool ownsData);
-        virtual ~BufferPointer();
+        BufferPtr(void* data, int size, bool ownsData);
+        virtual ~BufferPtr();
 
         int Size() const;
 
@@ -83,15 +83,15 @@ namespace Xli
     /**
         \ingroup XliBuffer
     */
-    class BufferReference: public DataAccessor
+    class BufferRef: public DataAccessor
     {
         UInt8* data;
         int size;
         Object* owner;
 
     public:
-        BufferReference(void* data, int size, Object* owner);
-        virtual ~BufferReference();
+        BufferRef(void* data, int size, Object* owner);
+        virtual ~BufferRef();
 
         virtual const UInt8* GetDataPtr() const;
         virtual int GetSizeInBytes() const;

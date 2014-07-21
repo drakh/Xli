@@ -351,7 +351,7 @@ namespace Xli
                 }
                 if (byteLength == -1)
                 {
-                    request->responseBodyRef = new BufferReference((void*)request->responseBody->GetDataPtr(), request->responseBody->GetLength(), (Object*)request->responseBody.Get());
+                    request->responseBodyRef = new BufferRef((void*)request->responseBody->GetDataPtr(), request->responseBody->GetLength(), (Object*)request->responseBody.Get());
                     request->client->EnqueueAction(new Xli::AHttpStateAction(request, Xli::HttpRequestStateDone, true));
                 }
             } else {

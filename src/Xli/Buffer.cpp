@@ -68,58 +68,58 @@ namespace Xli
         return size;
     }
 
-    BufferPointer::BufferPointer(void* data, int size, bool ownsData)
+    BufferPtr::BufferPtr(void* data, int size, bool ownsData)
         : data((UInt8*)data), size(size), ownsData(ownsData) 
     {
     }
 
-    BufferPointer::~BufferPointer() 
+    BufferPtr::~BufferPtr() 
     { 
         if (ownsData) delete [] (UInt8*)data; 
     }
 
-    int BufferPointer::Size() const
+    int BufferPtr::Size() const
     {
         return size;
     }
 
-    UInt8* BufferPointer::DataPtr()
+    UInt8* BufferPtr::DataPtr()
     {
         return data;
     }
 
-    const UInt8* BufferPointer::DataPtr() const
+    const UInt8* BufferPtr::DataPtr() const
     {
         return data;
     }
 
-    const UInt8* BufferPointer::GetDataPtr() const
+    const UInt8* BufferPtr::GetDataPtr() const
     {
         return data;
     }
 
-    int BufferPointer::GetSizeInBytes() const
+    int BufferPtr::GetSizeInBytes() const
     {
         return size;
     }
 
-    BufferReference::BufferReference(void* data, int size, Object* owner)
+    BufferRef::BufferRef(void* data, int size, Object* owner)
         : data((UInt8*)data), size(size), owner(owner)
     {
         if (owner != 0) owner->AddRef();
     }
 
-    BufferReference::~BufferReference()
+    BufferRef::~BufferRef()
     {
         if (owner != 0) owner->Release();
     }
 
-    const UInt8* BufferReference::GetDataPtr() const
+    const UInt8* BufferRef::GetDataPtr() const
     {
         return data;
     }
 
-    int BufferReference::GetSizeInBytes() const
+    int BufferRef::GetSizeInBytes() const
     {
         return size;
     }
