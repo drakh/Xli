@@ -1,4 +1,4 @@
-#include "3rdparty/android_native_app_glue.h"
+#include "../3rdparty/android_native_app_glue.h"
 
 #include <android/window.h>
 #include <cstdlib>
