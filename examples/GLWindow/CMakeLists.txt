@@ -5,7 +5,7 @@ if (APPLE)
 endif()
 
 add_executable(GLWindow Main.cpp)
-target_link_libraries(GLWindow Xli XliGL XliMain XliPlatform)
+target_link_libraries(GLWindow Xli XliGL XliPlatform XliMain)
 
 if (XLI_PLATFORM_LINUX AND NOT XLI_ARCH_ARM)
     target_link_libraries(GLWindow GL GLEW)

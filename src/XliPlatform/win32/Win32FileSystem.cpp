@@ -1,7 +1,8 @@
-#include <XliPlatform/Disk.h>
+#include <Xli/Console.h>
 #include <Xli/Path.h>
 #include <Xli/Random.h>
 #include <Xli/Unicode.h>
+#include <XliPlatform/Disk.h>
 #include <XliPlatform/PlatformSpecific/Win32Header.h>
 #include <XliPlatform/PlatformSpecific/Win32Helpers.h>
 #include <ShlObj.h>
@@ -99,6 +100,10 @@ namespace Xli
             {
                 switch (dir)
                 {
+                default:
+                    ErrorPrintLine("WARNING: Unknown system directory: " + (String)(int)dir);
+                    return GetKnownDirectory(FOLDERID_Documents);
+
                 case SystemDirectoryDocuments:
                     return GetKnownDirectory(FOLDERID_Documents);
 
@@ -108,8 +113,6 @@ namespace Xli
                 case SystemDirectoryData:
                     return GetKnownDirectory(FOLDERID_LocalAppData);
                 }
-
-                XLI_THROW("Unknown system directory: " + (String)dir);
             }
 
             virtual String GetCurrentDirectory()

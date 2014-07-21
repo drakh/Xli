@@ -41,7 +41,7 @@ elseif (XLI_PLATFORM_WIN32)
     set(SRC ${SRC} wgl/WGLContext.cpp 3rdparty/glew/src/glew.c)
 
     if (MSVC)
-        set(LIBS ${LIBS} opengl32.lib)
+        set(CMAKE_STATIC_LINKER_FLAGS opengl32.lib)
     endif()
 
 endif()

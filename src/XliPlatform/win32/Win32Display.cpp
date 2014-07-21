@@ -135,4 +135,16 @@ namespace Xli
 
         return ChangeDisplaySettingsEx(info.szDevice, &mode, NULL, CDS_FULLSCREEN, NULL) == DISP_CHANGE_SUCCESSFUL;
     }
+
+    float Display::GetDensity(int displayIndex)
+    {
+        // TODO
+        return 1.0f;
+    }
+
+    Vector2 Display::GetDpi(int displayIndex)
+    {
+        // TODO
+        return Vector2(72, 72);
+    }
 }
