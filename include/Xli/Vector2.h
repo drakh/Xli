@@ -8,7 +8,7 @@
 namespace Xli
 {
     /**
-        \ingroup XliTypes
+        \ingroup XliDataTypes
     */
     template <typename T> class Vector2t
     {
@@ -205,7 +205,7 @@ namespace Xli
     };
 
     /**
-        \addtogroup XliTypes
+        \addtogroup XliDataTypes
         @{
     */
 

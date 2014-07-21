@@ -6,7 +6,7 @@
 namespace Xli
 {
     /**
-        \ingroup XliTypes
+        \ingroup XliDataTypes
     */
     template <typename T> class Vector3t
     {
@@ -236,7 +236,7 @@ namespace Xli
     };
 
     /**
-        \addtogroup XliTypes
+        \addtogroup XliDataTypes
         @{
     */
 

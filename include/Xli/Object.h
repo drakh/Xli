@@ -7,6 +7,9 @@ namespace Xli
 {
     class String;
 
+    /**
+        \ingroup XliObject
+    */
     class Object
     {
         int refCount;

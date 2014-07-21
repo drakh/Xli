@@ -23,7 +23,7 @@
     \brief Container templates
     \ingroup Xli
 
-    \defgroup XliTypes Data types
+    \defgroup XliDataTypes Data types
     \brief Vectors, rectangles, integers and constants
     \ingroup Xli
 
@@ -37,6 +37,10 @@
 
     \defgroup XliIO I/O
     \brief File, Stream, serialization, virtual file systems
+    \ingroup Xli
+
+    \defgroup XliObject Object
+    \brief Object base class and pointer templates
     \ingroup Xli
 
     \defgroup XliText Text
