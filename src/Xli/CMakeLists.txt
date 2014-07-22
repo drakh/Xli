@@ -13,5 +13,9 @@ else()
     set(SRC ${SRC} ${MORE_SRC})
 endif()
 
+if (XLI_PLATFORM_LINUX)
+	set(LIBS ${LIBS} pthread)
+endif()
+
 add_library(Xli ${SRC})
 target_link_libraries(Xli ${LIBS})

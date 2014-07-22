@@ -1,7 +1,3 @@
-if (XLI_PLATFORM_WIN32 OR XLI_PLATFORM_OSX)
-    return()
-endif()
-
 file(GLOB SRC
     ../../include/XliSoundPlayer/*.h
     ../../include/XliSoundPlayer.h)
@@ -16,6 +12,10 @@ elseif (XLI_PLATFORM_ANDROID)
 
     set(SRC ${SRC} opensles/SlesSoundPlayer.cpp)
     set(LIBS ${LIBS} OpenSLES)
+
+else()
+
+	return()
 
 endif()
 
