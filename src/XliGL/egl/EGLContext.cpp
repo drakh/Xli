@@ -194,10 +194,12 @@ namespace Xli
             eglGetConfigAttrib(display, config, EGL_DEPTH_SIZE, &result.DepthBits);
             eglGetConfigAttrib(display, config, EGL_STENCIL_SIZE, &result.StencilBits);
             eglGetConfigAttrib(display, config, EGL_SAMPLES, &result.Samples);
-
+/*
             EGLint renderBuffer;
             eglGetConfigAttrib(display, config, EGL_RENDER_BUFFER, &renderBuffer);
             result.Buffers = renderBuffer == EGL_SINGLE_BUFFER ? 1 : 2;
+*/
+            result.Buffers = 2;
         }
     };
 
