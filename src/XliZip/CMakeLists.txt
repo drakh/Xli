@@ -30,25 +30,12 @@ set(ZLIB_SRC
 include_directories(${UNZIP_INC})
 set(SRC ${SRC} ${UNZIP_SRC})
 
-if (XLI_PLATFORM_ANDROID)
-
-    set(LIBS ${LIBS} z)
-
-elseif (XLI_PLATFORM_WIN32)
+if (XLI_PLATFORM_WIN32 OR XLI_PLATFORM_IOS)
 
     include_directories(${ZLIB_INC})
     set(SRC ${SRC} ${ZLIB_SRC})
 
-elseif (XLI_PLATFORM_IOS)
- 
-    include_directories(${ZLIB_INC})
-    set(SRC ${SRC} ${ZLIB_SRC})
-
-elseif (XLI_PLATFORM_OSX)
-
-    set(LIBS ${LIBS} z)
-
-elseif (XLI_PLATFORM_LINUX)
+else()
 
     set(LIBS ${LIBS} z)
 
