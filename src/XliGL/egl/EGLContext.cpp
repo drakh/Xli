@@ -2,6 +2,7 @@
 #include <Xli/Shared.h>
 #include <XliPlatform/Window.h>
 #include <EGL/egl.h>
+#include <Xli/Console.h>
 #include <stdlib.h>
 
 #ifdef XLI_PLATFORM_ANDROID
