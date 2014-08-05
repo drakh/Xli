@@ -45,14 +45,14 @@ List of available options can be shown using `./build-android.sh --help`.
 
 Windows users need a way to execute unix shell scripts. This can be done using i.e. [MSYS](http://www.mingw.org/wiki/MSYS).
 
-Uno users can use the *Uno Native Build environment* provided by Outracks, containing both CMake, MSYS and the Android NDK. Open `start.bat`, type `bash -li` to get a bash shell, then follow the instructions given above.
+Uno users can use the *Uno Native Build environment* provided by Outracks, containing both CMake, MSYS and the Android NDK. Open `start.bat`, type `bash -li` to get a unix shell, then follow the instructions given above.
 
 
 ## iOS
 
 ### Prerequisites
 
-- CMake (~> 2.8) - Note: 3.0 not supported
+- CMake
 - Xcode with most recent iOS SDK
 - Xcode command line tools
 - OS X (>= 10.7)
