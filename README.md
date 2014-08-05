@@ -20,25 +20,23 @@ Questions and other feedback can be posted in the beta zone forum.
     6. [Windows](#windows)
 
 
-# Build instructions
+# <a name="build-instructions"></a>Build instructions
 
-Xli uses CMake as its build system. If you are familiar with CMake you can use the provided `CMakeLists.txt` and do your thing, or follow the more detailed instructions presented for the supported platforms below. Note: Some platforms requires additional dependencies to be installed on system.
+Xli uses [CMake] as its underlying build system for all platforms. If you are familiar with [CMake] you can use the provided `CMakeLists.txt` and do your thing, or follow the instructions presented here for the supported platforms. **Note:** Some platforms (i.e. Linux) may require additional libraries to be installed on the system.
 
 ### Clean build
 
-To clean the source three, delete the folders `build` and `lib`:
+To clean up any old builds from the source tree, delete the folders `build` and `lib`.
 
-`rm -rf build lib`
-
-## Android
+## <a name="android"></a>Android
 
 ### Prerequisites
 
-- CMake
+- [CMake]
 - Android NDK (`ndk-build` must be available in *PATH*)
-- Unix Shell (Windows only)
+- Unix Shell
 
-### Instructions - OS X, Linux, MSYS
+### Instructions - OS X, Linux, [MSYS]
 
 1. Open terminal and `cd` to Xli directory
 2. Execute `./build-android.sh`
@@ -47,25 +45,27 @@ To clean the source three, delete the folders `build` and `lib`:
 
 Debug binaries can be produced by replacing command in step 2 with `./build-android.sh --debug`. 
 
+Specific architectures can be built by providing the `--archs=` option in step 2 (*armeabi-v7a*).
+
 List of available options can be shown using `./build-android.sh --help`.
 
 ### Instructions - Windows
 
-Windows users need a way to execute unix shell scripts. This can be done using i.e. [MSYS](http://www.mingw.org/wiki/MSYS).
+Windows users need a way to execute unix shell scripts. This can be done using [MSYS].
 
-Uno users can use the *Uno Native Build environment* provided by Outracks, containing both CMake, MSYS and the Android NDK. Open `start.bat`, type `bash -li` to get a unix shell, then follow the instructions given above.
+Uno users can use the *Uno Native Build environment* provided by Outracks, containing both [CMake], [MSYS] and the Android SDK + NDK. Open `start.bat`, type `bash -li` to get an [MSYS] shell, then follow the instructions given above.
 
 
-## iOS
+## <a name="ios"></a>iOS
 
 ### Prerequisites
 
-- CMake
+- [CMake]
 - Xcode with most recent iOS SDK
 - Xcode command line tools
 - OS X (>= 10.7)
 
-**MacPorts** users can execute `sudo port install cmake` to install CMake.
+**MacPorts** users can execute `sudo port install cmake` to install [CMake].
 
 ### Instructions
 
@@ -80,22 +80,23 @@ Uno users can use the *Uno Native Build environment* provided by Outracks, conta
      - `build/iOS/OS/Xli.xcodeproj`
      - `build/iOS/SIMULATOR/Xli.xcodeproj`
 
+Specific architectures can be built by providing the `--archs=` option in step 2 (*OS*, *SIMULATOR*).
 
-## Linux
+
+## <a name="linux"></a>Linux
 
 ### Prerequisites
 
-- CMake
+- [CMake]
 - GNU make, C++ compiler, etc
-- curl (with OpenSSL support)
-- freetype
-- GLEW
-- [libjpeg]
-- png
-- portaudio
-- [SDL2]
+- libcurl (with OpenSSL support)
+- libfreetype
+- libglew
+- libjpeg
+- libpng
+- libsdl2
 
-**APT** users can execute `sudo apt-get install -y libpng12-dev libjpeg-dev libfreetype6-dev libglew-dev portaudio19-dev libcurl4-openssl-dev cmake g++`
+**APT** users can execute `sudo apt-get install -y libpng12-dev libjpeg-dev libfreetype6-dev libglew-dev libcurl4-openssl-dev cmake g++`
 
 [SDL2] can be built and installed from source. To install from Mercurial, do this:
 
@@ -118,16 +119,16 @@ Debug binaries can be produced by replacing command in step 2 with `./build.sh -
 List of available options can be shown using `./build.sh --help`.
 
 
-## OS X
+## <a name="os-x"></a>OS X
 
 ### Prerequisites
 
-- CMake
+- [CMake]
 - Xcode
 - Xcode command line tools
 - OS X (>= 10.7)
 
-**MacPorts** users can execute `sudo port install cmake` to install CMake.
+**MacPorts** users can execute `sudo port install cmake` to install [CMake].
 
 ### Instructions
 
@@ -152,20 +153,19 @@ List of available options can be shown using `./build.sh --help`.
      - `build/Xcode/Xli.xcodeproj`
 
 
-## Raspberry PI
+## <a name="raspberry-pi"></a>Raspberry PI
 
 ### Prerequisites
 
-- CMake
+- [CMake]
 - GNU make, C++ compiler, etc
-- curl (with OpenSSL support)
-- freetype
-- [libjpeg]
-- png
-- portaudio
-- [SDL2]
+- libcurl (with OpenSSL support)
+- libfreetype
+- libjpeg
+- libpng
+- libsdl2
 
-**APT** users can execute `sudo apt-get install -y libpng12-dev libjpeg-dev libfreetype6-dev portaudio19-dev libcurl4-openssl-dev cmake g++`
+**APT** users can execute `sudo apt-get install -y libpng12-dev libjpeg-dev libfreetype6-dev libcurl4-openssl-dev cmake g++`
 
 [SDL2] can be built and installed from source. To install from Mercurial, do this:
 
@@ -188,15 +188,15 @@ Debug binaries can be produced by replacing command in step 2 with `./build.sh -
 List of available options can be shown using `./build.sh --help`.
 
 
-## Windows
+## <a name="windows"></a>Windows
 
 ### Prerequisites
 
-- CMake (must be in *PATH*)
-- Visual Studio 2013
+- [CMake] \(must be in *PATH*)
+- Visual Studio 2013 (or any version down to 2010)
 - Windows (>= Vista)
 
-### Instructions
+### Instructions - VS2013
 
 1. Execute `build-vs2013.bat`
    * This should produce static libraries located here:
@@ -204,8 +204,26 @@ List of available options can be shown using `./build.sh --help`.
      - `lib\vs2013\x86\Release\`
      - `lib\vs2013\x64\Debug\`
      - `lib\vs2013\x64\Release\`
+   * Generated Visual Studio 2013 solutions located here:
+     - `build\vs2013\x64\Xli.sln`
+     - `build\vs2013\x86\Xli.sln`
 
-### Debugger integration
+### Instructions - Other versions
 
-Use a text editor and copy contents of `vsconfig\autoexp_xli.dat` and paste at the end of `<Visual Studio Folder>\Common7\Packages\Debugger\autoexp.dat`. Now visual studio should be able to easily inspect `Xli::String`s, `Xli::Array`s and `Xli::HashMap`s. This should work for all versions of Visual Studio >= 2005.
+1. Open *CMake GUI*
+2. Browse to Xli directory
+3. Configure using one of the Visual Studio generators
+4. Open the generated solution in Visual Studio
+5. Build
 
+### VS Debugger integration
+
+Use a text editor and copy the contents of `vsconfig\autoexp_xli.dat` and paste at the end of your `<VisualStudioFolder>\Common7\Packages\Debugger\autoexp.dat`. Now Visual Studio should be able to more easily inspect instances of Xli types.
+
+
+
+
+
+[CMake]: http://www.cmake.org/
+[MSYS]: http://www.mingw.org/wiki/MSYS
+[SDL2]: http://libsdl.org/

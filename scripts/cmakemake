@@ -201,8 +201,10 @@ if [ -n "$PLATFORM" ]; then
         ;;
     android)
         if [ -z "$ARCHS" ]; then
-            ARCHS="armeabi-v7a" #"armeabi-v7a x86 mips"
+            ARCHS="armeabi-v7a" #"armeabi-v7a mips x86"
         fi
+
+        ARGS="$@"
 
         for arch in $ARCHS; do
             BUILD_DIR="build/android/$BUILD_TYPE-$arch"
@@ -213,6 +215,8 @@ if [ -n "$PLATFORM" ]; then
             NDK_FILENAME=`which ndk-build`
             NDK_DIR=`dirname "$NDK_FILENAME"`
             TOOLCHAIN_FILE="$XLI_DIR/cmake/toolchain/android.toolchain.cmake"
+
+            set -- $ARGS
 
             if [ "$OSTYPE" = "msys" ]; then
                 if [ -d "$NDK_DIR/prebuilt/windows-x86_64/bin" ]; then
