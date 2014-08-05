@@ -12,5 +12,4 @@ shim)
     ;;
 esac
 
-PATH="utils:$PATH"
-cmakemake "$@" --platform=android .
+scripts/cmakemake "$@" --platform=android .

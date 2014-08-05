@@ -22,6 +22,14 @@ Questions and other feedback can be posted in the beta zone forum.
 
 # Build instructions
 
+Xli uses CMake as its build system. If you are familiar with CMake you can use the provided `CMakeLists.txt` and do your thing, or follow the more detailed instructions presented for the supported platforms below. Note: Some platforms requires additional dependencies to be installed on system.
+
+### Clean build
+
+To clean the source three, delete the folders `build` and `lib`:
+
+`rm -rf build lib`
+
 ## Android
 
 ### Prerequisites
@@ -184,15 +192,20 @@ List of available options can be shown using `./build.sh --help`.
 
 ### Prerequisites
 
-- Windows (>= Vista)
+- CMake (must be in *PATH*)
 - Visual Studio 2013
+- Windows (>= Vista)
 
 ### Instructions
 
-1. Open solution file located at `Xli\projects\vs2013\Xli Library.sln`.
-2. Do a batch build. (From menu bar: **BUILD->Batch Build...**, **Select All**, **Build**)
+1. Execute `build-vs2013.bat`
    * This should produce static libraries located here:
      - `lib\vs2013\x86\Debug\`
      - `lib\vs2013\x86\Release\`
      - `lib\vs2013\x64\Debug\`
      - `lib\vs2013\x64\Release\`
+
+### Debugger integration
+
+Use a text editor and copy contents of `vsconfig\autoexp_xli.dat` and paste at the end of `<Visual Studio Folder>\Common7\Packages\Debugger\autoexp.dat`. Now visual studio should be able to easily inspect `Xli::String`s, `Xli::Array`s and `Xli::HashMap`s. This should work for all versions of Visual Studio >= 2005.
+

@@ -18,20 +18,18 @@ The Xli source code is released under a MIT-style license:
 
 The table below shows the list of libraries Xli uses under the hood, their licenses and how they are linked on the different target platforms.
 
-Library       | License   | Component | Android | iOS     | OS X    | *nix    | Win32 
---------------|:---------:|:---------:|:-------:|:-------:|:-------:|:-------:|:-------:
-glew          | BSD-style | Core      | -       | -       | static  | dynamic | static
-[SDL2]        | MIT-style | Core      | -       | static  | static  | dynamic | -
-ConvertUTF    | ?         | Core      | static  | static  | static  | static  | static
-freetype      | BSD       | Media     | static  | static  | static  | dynamic | static
-[libjpeg]     | ?         | Media     | static  | -       | static  | dynamic | static
-json_parser   | ?         | Media     | static  | static  | static  | static  | static
-pnglib        | zlib      | Media     | static  | -       | static  | dynamic | static
-tinyxml       | ?         | Media     | static  | static  | static  | static  | static
-unzip         | ?         | Media     | static  | static  | static  | static  | static
-zlib          | zlib      | Media     | dynamic | static  | dynamic | dynamic | static
-portaudio     | ?         | Audio     | -       | -       | dynamic | dynamic | static
-curl          | ?         | Http      | -       | -       | dynamic | dynamic | static
+Library       | License   | Component  | Android | iOS     | OS X    | *nix    | Win32 
+--------------|:---------:|:----------:|:-------:|:-------:|:-------:|:-------:|:-------:
+ConvertUTF    | ?         | Core       | static  | static  | static  | static  | static
+freetype      | BSD       | Font       | static  | static  | static  | dynamic | static
+glew          | BSD-style | GL         | -       | -       | static  | dynamic | static
+curl          | ?         | HttpClient | -       | -       | dynamic | dynamic | static
+[libjpeg]     | ?         | Image      | static  | -       | static  | dynamic | static
+pnglib        | zlib      | Image      | static  | -       | static  | dynamic | static
+json_parser   | ?         | Json       | static  | static  | static  | static  | static
+[SDL2]        | MIT-style | Platform   | -       | static  | static  | dynamic | -
+unzip         | ?         | Zip        | static  | static  | static  | static  | static
+zlib          | zlib      | Zip        | dynamic | static  | dynamic | dynamic | static
 
 [SDL2]: http://libsdl.org/
 [libjpeg]: http://www.ijg.org/
