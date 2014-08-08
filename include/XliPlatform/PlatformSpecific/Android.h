@@ -35,9 +35,10 @@ namespace Xli
         public:
             static void Init(struct android_app* app);
 
-            static void SetLogName(const char* name);
+            static void SetLogTag(const char* tag);
 
-            static jobject GetJniActivity();
+            static JavaVM* GetJavaVM();
+            static jobject GetActivity();
         };
     }
 }

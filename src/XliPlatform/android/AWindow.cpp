@@ -538,12 +538,17 @@ namespace Xli
             }
         }
 
-        void Android::SetLogName(const char* name)
+        void Android::SetLogTag(const char* tag)
         {
-            setenv("XLI_APP_NAME", name, 1);
+            setenv("XLI_APP_NAME", tag, 1);
         }
 
-        jobject Android::GetJniActivity()
+        JavaVM* Android::GetJavaVM()
+        {
+            return AndroidActivity->vm;
+        }
+
+        jobject Android::GetActivity()
         {
             return AndroidActivity->clazz;
         }
