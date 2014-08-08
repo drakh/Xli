@@ -1,7 +1,7 @@
 #include <XliZip/Zip.h>
 #include <Xli/BufferStream.h>
 #include <Xli/Shared.h>
-#include "3rdparty/unzip/unzip.h"
+#include "../../3rdparty/unzip/unzip.h"
 
 namespace Xli
 {

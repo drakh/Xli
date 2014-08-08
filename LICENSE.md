@@ -1,35 +1,42 @@
-License
-=======
+The Xli source code is released under The MIT License.
 
-The Xli source code is released under a MIT-style license:
+The source code is located in the `include` and `src` directories.
 
-    Copyright (C) 2010-2014 Outracks Technologies AS
+> Copyright (C) 2010-2014 Outracks Technologies AS
+>
+> Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
+> associated documentation files (the "Software"), to deal in the Software without restriction, 
+> including without limitation the rights to use, copy, modify, merge, publish, distribute, 
+> sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is 
+> furnished to do so, subject to the following conditions:
+>
+> The above copyright notice and this permission notice shall be included in all copies or 
+> substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT 
+> NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+> NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, 
+> DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT 
+> OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+Third-party dependencies
+------------------------
 
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+The table below shows the libraries Xli uses internally and how they are linked on the different target platforms.
 
-**Note:** When linkning against Xli components you must also accept the licenses for the libraries Xli uses internally on your platform(s). See the section below for details.
+License details are found in the source code located in the `3rdparty` directory.
 
-
-## 3rdparty dependencies
-
-The table below shows the list of libraries Xli uses under the hood, their licenses and how they are linked on the different target platforms.
-
-Library       | License   | Component  | Android | iOS     | OS X    | *nix    | Win32 
---------------|:---------:|:----------:|:-------:|:-------:|:-------:|:-------:|:-------:
-ConvertUTF    | ?         | Core       | static  | static  | static  | static  | static
-freetype      | BSD       | Font       | static  | static  | static  | dynamic | static
-glew          | BSD-style | GL         | -       | -       | static  | dynamic | static
-curl          | ?         | HttpClient | -       | -       | dynamic | dynamic | static
-[libjpeg]     | ?         | Image      | static  | -       | static  | dynamic | static
-pnglib        | zlib      | Image      | static  | -       | static  | dynamic | static
-json_parser   | ?         | Json       | static  | static  | static  | static  | static
-[SDL2]        | MIT-style | Platform   | -       | static  | static  | dynamic | -
-unzip         | ?         | Zip        | static  | static  | static  | static  | static
-zlib          | zlib      | Zip        | dynamic | static  | dynamic | dynamic | static
-
-[SDL2]: http://libsdl.org/
-[libjpeg]: http://www.ijg.org/
+Library                 | Component  | Android | iOS     | OS X    | *nix    | Win32  |
+------------------------|:----------:|:-------:|:-------:|:-------:|:-------:|:-------:
+android_native_app_glue | Main       | static  | -       | -       | -       | -      |
+ConvertUTF              | Core       | static  | static  | static  | static  | static |
+curl                    | HttpClient | -       | -       | dynamic | dynamic | static |
+freetype                | Font       | static  | static  | static  | dynamic | static |
+glew                    | GL         | -       | -       | static  | dynamic | static |
+jpeg                    | Image      | static  | -       | static  | dynamic | static |
+JSON_parser             | Json       | static  | static  | static  | static  | static |
+png                     | Image      | static  | -       | static  | dynamic | static |
+SDL2                    | Platform   | -       | static  | static  | dynamic | -      |
+unzip                   | Zip        | static  | static  | static  | static  | static |
+zlib                    | Zip        | dynamic | static  | dynamic | dynamic | static |

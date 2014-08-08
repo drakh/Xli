@@ -10,9 +10,9 @@
 *.user
 .DS_Store
 /examples/*
-/src/XliPlatform/3rdparty/SDL2/*
-!/src/XliPlatform/3rdparty/SDL2/include
-!/src/XliPlatform/3rdparty/SDL2/src
+/3rdparty/SDL2/*
+!/3rdparty/SDL2/include
+!/3rdparty/SDL2/src
 bin/
 build/
 cmake_install.cmake

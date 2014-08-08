@@ -1,8 +1,8 @@
 file(GLOB SRC
     ../../include/XliJson/*.h
     ../../include/XliJson.h
-    3rdparty/*.h
-    3rdparty/*.c
+    ../../3rdparty/JSON_parser/*.h
+    ../../3rdparty/JSON_parser/*.c
     *.cpp)
 
 set(LIBS Xli)

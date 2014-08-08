@@ -1,6 +1,6 @@
 file(GLOB SRC
-    3rdparty/ConvertUTF.h
-    3rdparty/ConvertUTF.c
+    ../../3rdparty/ConvertUTF/ConvertUTF.h
+    ../../3rdparty/ConvertUTF/ConvertUTF.c
     ../../include/Xli/*.h
     ../../include/Xli.h
     *.cpp)

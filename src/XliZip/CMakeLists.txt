@@ -6,26 +6,26 @@ file(GLOB SRC
 
 set(LIBS Xli)
 
-set(UNZIP_INC 3rdparty/unzip)
+set(UNZIP_INC ../../3rdparty/unzip)
 
 set(UNZIP_SRC
-    3rdparty/unzip/ioapi.c
-    3rdparty/unzip/unzip.c)
+    ../../3rdparty/unzip/ioapi.c
+    ../../3rdparty/unzip/unzip.c)
 
-set(ZLIB_INC 3rdparty/zlib)
+set(ZLIB_INC ../../3rdparty/zlib)
 
 set(ZLIB_SRC
-    3rdparty/zlib/adler32.c
-    3rdparty/zlib/compress.c
-    3rdparty/zlib/crc32.c
-    3rdparty/zlib/deflate.c
-    3rdparty/zlib/infback.c
-    3rdparty/zlib/inffast.c
-    3rdparty/zlib/inflate.c
-    3rdparty/zlib/inftrees.c
-    3rdparty/zlib/trees.c
-    3rdparty/zlib/uncompr.c
-    3rdparty/zlib/zutil.c)
+    ../../3rdparty/zlib/adler32.c
+    ../../3rdparty/zlib/compress.c
+    ../../3rdparty/zlib/crc32.c
+    ../../3rdparty/zlib/deflate.c
+    ../../3rdparty/zlib/infback.c
+    ../../3rdparty/zlib/inffast.c
+    ../../3rdparty/zlib/inflate.c
+    ../../3rdparty/zlib/inftrees.c
+    ../../3rdparty/zlib/trees.c
+    ../../3rdparty/zlib/uncompr.c
+    ../../3rdparty/zlib/zutil.c)
 
 include_directories(${UNZIP_INC})
 set(SRC ${SRC} ${UNZIP_SRC})

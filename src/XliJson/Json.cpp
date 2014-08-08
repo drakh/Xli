@@ -3,7 +3,7 @@
 #include <Xli/TextStream.h>
 #include <XliJson/Json.h>
 #include <XliJson/FormattedTextWriter.h>
-#include "3rdparty/JSON_parser.h"
+#include "../../3rdparty/JSON_parser/JSON_parser.h"
 
 namespace Xli
 {

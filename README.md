@@ -1,6 +1,3 @@
-Xli
-===
-
 Xli is a modular and cross-platform app development framework for C++. It is being used to implement the Uno C++ runtime and core library among some other things.
 
 Header documentation can be generated using `doxygen`. 
@@ -26,7 +23,7 @@ Xli uses [CMake] as its underlying build system for all platforms. If you are fa
 
 ### Clean build
 
-To clean up any old builds from the source tree, delete the folders `build` and `lib`.
+To clean up any old builds from the source tree, delete the directories `build` and `lib`.
 
 ## <a name="android"></a>Android
 
@@ -36,7 +33,7 @@ To clean up any old builds from the source tree, delete the folders `build` and 
 - Android NDK (`ndk-build` must be available in *PATH*)
 - Unix Shell
 
-### Instructions - OS X, Linux, [MSYS]
+### Instructions - OS X, Linux, MSYS
 
 1. Open terminal and `cd` to Xli directory
 2. Execute `./build-android.sh`
@@ -45,7 +42,7 @@ To clean up any old builds from the source tree, delete the folders `build` and 
 
 Debug binaries can be produced by replacing command in step 2 with `./build-android.sh --debug`. 
 
-Specific architectures can be built by providing the `--archs=` option in step 2 (*armeabi-v7a*).
+Specific architectures can be built by providing the `--archs=` option in step 2 (`armeabi-v7a`).
 
 List of available options can be shown using `./build-android.sh --help`.
 
@@ -80,7 +77,7 @@ Uno users can use the *Uno Native Build environment* provided by Outracks, conta
      - `build/iOS/OS/Xli.xcodeproj`
      - `build/iOS/SIMULATOR/Xli.xcodeproj`
 
-Specific architectures can be built by providing the `--archs=` option in step 2 (*OS*, *SIMULATOR*).
+Specific architectures can be built by providing the `--archs=` option in step 2 (`OS`, `SIMULATOR`).
 
 
 ## <a name="linux"></a>Linux
@@ -210,17 +207,15 @@ List of available options can be shown using `./build.sh --help`.
 
 ### Instructions - Other versions
 
-1. Open *CMake GUI*
+1. Open CMake GUI
 2. Browse to Xli directory
 3. Configure using one of the Visual Studio generators
 4. Open the generated solution in Visual Studio
 5. Build
 
-### VS Debugger integration
+### VS debugger integration
 
-Use a text editor and copy the contents of `vsconfig\autoexp_xli.dat` and paste at the end of your `<VisualStudioFolder>\Common7\Packages\Debugger\autoexp.dat`. Now Visual Studio should be able to more easily inspect instances of Xli types.
-
-
+Use a text editor and copy the contents of `vsconfig\autoexp.dat` and paste at the end of your `<VisualStudioFolder>\Common7\Packages\Debugger\autoexp.dat`. Now Visual Studio should be able to more easily inspect instances of Xli types.
 
 
 

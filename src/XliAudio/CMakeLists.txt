@@ -6,7 +6,7 @@ file(GLOB SRC
 
 if (WIN32)
     
-    include_directories(3rdparty/portaudio/include)
+    include_directories(../../3rdparty/portaudio/include)
 
 elseif (APPLE)
 

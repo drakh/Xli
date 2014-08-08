@@ -5,7 +5,7 @@
 
 #if defined(XLI_PLATFORM_ANDROID)
 
-#include "../XliPlatform/3rdparty/android_native_app_glue.h"
+#include "../../3rdparty/android_native_app_glue/android_native_app_glue.h"
 namespace Xli { namespace PlatformSpecific { void AInit(struct android_app* app); } }
 
 #elif defined(XLI_PLATFORM_IOS)

@@ -5,7 +5,7 @@ file(GLOB SRC
 
 set(LIBS Xli)
 
-set(SDL2_DIR 3rdparty/SDL2)
+set(SDL2_DIR ../../3rdparty/SDL2)
 
 set(SDL2_SRC
     generic/GenericBundle.cpp

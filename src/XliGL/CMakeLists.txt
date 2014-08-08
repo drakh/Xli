@@ -12,16 +12,16 @@ if (XLI_PLATFORM_ANDROID)
 
 elseif (XLI_PLATFORM_IOS)
 
-    include_directories(../XliPlatform/3rdparty/SDL2/include)
+    include_directories(../../3rdparty/SDL2/include)
     set(SRC ${SRC} sdl2/SDL2GLContext.cpp)
 
 elseif (XLI_PLATFORM_OSX)
 
     add_definitions(-DXLI_HAS_GLEW -DGLEW_STATIC)
-    include_directories(../XliPlatform/3rdparty/SDL2/include)
-    include_directories(3rdparty/glew/include)
+    include_directories(../../3rdparty/SDL2/include)
+    include_directories(../../3rdparty/glew/include)
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-framework,OpenGL")
-    set(SRC ${SRC} 3rdparty/glew/src/glew.c sdl2/SDL2GLContext.cpp)
+    set(SRC ${SRC} ../../3rdparty/glew/src/glew.c sdl2/SDL2GLContext.cpp)
 
 elseif (XLI_PLATFORM_LINUX)
 
@@ -37,8 +37,8 @@ elseif (XLI_PLATFORM_LINUX)
 elseif (XLI_PLATFORM_WIN32)
 
     add_definitions(-DXLI_HAS_GLEW -DGLEW_STATIC)
-    include_directories(3rdparty/glew/include)
-    set(SRC ${SRC} wgl/WGLContext.cpp 3rdparty/glew/src/glew.c)
+    include_directories(../../3rdparty/glew/include)
+    set(SRC ${SRC} wgl/WGLContext.cpp ../../3rdparty/glew/src/glew.c)
 
     if (MSVC)
         set(CMAKE_STATIC_LINKER_FLAGS opengl32.lib)
