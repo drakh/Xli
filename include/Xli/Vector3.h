@@ -36,16 +36,6 @@ namespace Xli
             T Data[3];
         };
 
-        operator T* ()
-        {
-            return Data;
-        }
-
-        operator const T* () const
-        {
-            return Data;
-        }
-
         String ToString() const
         {
             return String(X) + ", " + Y + ", " + Z;

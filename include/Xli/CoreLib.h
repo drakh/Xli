@@ -16,22 +16,27 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __XLI_PLATFORM_H__
-#define __XLI_PLATFORM_H__
+#ifndef __XLI_CORE_LIB_H__
+#define __XLI_CORE_LIB_H__
 
-/**
-    \defgroup XliPlatform
-    \brief Application interface, windows and input devices
-    \ingroup XliPlatformLibs
-*/
+#include <Xli/Exception.h>
 
-#include <XliPlatform/Application.h>
-#include <XliPlatform/Bundle.h>
-#include <XliPlatform/CommonDialogs.h>
-#include <XliPlatform/Disk.h>
-#include <XliPlatform/Display.h>
-#include <XliPlatform/MessageBox.h>
-#include <XliPlatform/PlatformLib.h>
-#include <XliPlatform/Window.h>
+namespace Xli
+{
+    /**
+        \ingroup Xli
+    */
+    class CoreLib
+    {
+    public:
+        static void Init();
+
+        static void SetUnhandledExceptionCallback(void(*callback)(const Exception&, const String&));
+        static void OnUnhandledException(const Exception& exception, const String& where);
+
+        static bool TryEnterCritical(bool* flag);
+        static void ExitCritical();
+    };
+}
 
 #endif

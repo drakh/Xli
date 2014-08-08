@@ -73,7 +73,7 @@ namespace Xli
             virtual void Execute()
             {
                 String finalMessage = "XLiError (" + String(errorCode)+ ") - " + message;
-                XLI_THROW(finalMessage.DataPtr());
+                XLI_THROW(finalMessage.Ptr());
             }
         };
     };

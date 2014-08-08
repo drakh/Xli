@@ -18,14 +18,14 @@
 //
 
 #include <XliPlatform/Application.h>
+#include <XliPlatform/PlatformLib.h>
 #include <Xli/Managed.h>
 
 namespace Xli
 {
     void Application::Run(Application* app, int flags)
     {
-        Window::Init();
-
+        PlatformLib::Init();
         Managed<Window> wnd = Window::Create(app->GetInitSize(), app->GetInitTitle(), flags);
 
         app->OnInit(wnd);
@@ -37,8 +37,6 @@ namespace Xli
             app->OnDraw(wnd);
             Window::ProcessMessages();
         }
-
-        Window::Done();
     }
     
     void Application::OnInit(Window* wnd)

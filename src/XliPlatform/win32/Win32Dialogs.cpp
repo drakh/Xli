@@ -85,23 +85,23 @@ namespace Xli
         if (options.DefaultFile.Length())
         {
             Utf16String defaultFileW = Unicode::Utf8To16(options.DefaultFile);
-            memcpy(fnbufW, defaultFileW.DataPtr(), defaultFileW.Length() * 2 + 2);
+            memcpy(fnbufW, defaultFileW.Ptr(), defaultFileW.Length() * 2 + 2);
         }
         
         ofn.hwndOwner = Win32::GetWindowHandle(parent);
         ofn.hInstance = GetModuleHandle(NULL);
-        ofn.lpstrFilter = filterW.DataPtr();
+        ofn.lpstrFilter = filterW.Ptr();
         ofn.lpstrFile = fnbufW;
         ofn.nMaxFile = 4096;
-        ofn.lpstrInitialDir = dirW.DataPtr();
-        ofn.lpstrTitle = captionW.DataPtr();
+        ofn.lpstrInitialDir = dirW.Ptr();
+        ofn.lpstrTitle = captionW.Ptr();
 
         if (mustExist)
             ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_ENABLESIZING;
         else
             ofn.Flags = OFN_OVERWRITEPROMPT | OFN_ENABLESIZING;
 
-        ofn.lpstrDefExt = defW.DataPtr();
+        ofn.lpstrDefExt = defW.Ptr();
     }
 
     static bool EndFileDialog(bool ret, WCHAR* fnbufW, const String& cd, String& result)

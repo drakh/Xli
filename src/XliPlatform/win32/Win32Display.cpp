@@ -18,6 +18,7 @@
 //
 
 #include <XliPlatform/Display.h>
+#include <XliPlatform/PlatformLib.h>
 #include <XliPlatform/PlatformSpecific/Win32.h>
 #include <Xli/Array.h>
 #include <cstdlib>
@@ -25,7 +26,6 @@
 namespace Xli
 {
     static Array<HMONITOR>* Monitors = 0;
-    static int InitCount = 0;
 
     static BOOL CALLBACK MonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData)
     {
@@ -33,50 +33,26 @@ namespace Xli
         return TRUE;
     }
 
-    void DisplayInit()
+    void InitDisplay()
     {
-        if (!InitCount)
-        {
-            Monitors = new Array<HMONITOR>();
-            EnumDisplayMonitors(NULL, NULL, MonitorEnumProc, (LPARAM)Monitors);
-        }
-
-        InitCount++;
+        Monitors = new Array<HMONITOR>();
+        EnumDisplayMonitors(NULL, NULL, MonitorEnumProc, (LPARAM)Monitors);
     }
 
     void DisplayDone()
     {
-        InitCount--;
-
-        if (InitCount == 0)
-        {
-            delete Monitors;
-            Monitors = 0;
-        }
-        else if (InitCount < 0)
-        {
-            XLI_THROW_BAD_DELETE;
-        }
-    }
-
-    static void AssertInit()
-    {
-        if (!InitCount)
-        {
-            DisplayInit();
-            atexit(DisplayDone);
-        }
+        delete Monitors;
     }
 
     int Display::GetCount()
     {
-        AssertInit();
+        PlatformLib::Init();
         return Monitors->Length();
     }
 
     Recti Display::GetRect(int index)
     {
-        AssertInit();
+        PlatformLib::Init();
         HMONITOR hMonitor = Monitors->Get(index);
 
         MONITORINFO info;
@@ -88,7 +64,7 @@ namespace Xli
 
     bool Display::GetCurrentSettings(int index, DisplaySettings& settings)
     {
-        AssertInit();
+        PlatformLib::Init();
         HMONITOR hMonitor = Monitors->Get(index);
 
         MONITORINFOEX info;
@@ -113,7 +89,7 @@ namespace Xli
 
     void Display::GetSupportedSettings(int index, Array<DisplaySettings>& settings)
     {
-        AssertInit();
+        PlatformLib::Init();
         HMONITOR hMonitor = Monitors->Get(index);
 
         MONITORINFOEX info;
@@ -136,7 +112,7 @@ namespace Xli
     
     bool Display::ChangeSettings(int index, const DisplaySettings& settings)
     {
-        AssertInit();
+        PlatformLib::Init();
         HMONITOR hMonitor = Monitors->Get(index);
 
         MONITORINFOEX info;

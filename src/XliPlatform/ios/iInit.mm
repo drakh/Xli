@@ -25,7 +25,7 @@ namespace Xli
                     if (c == '\n')
                     {
                         buf.Add('\0');
-                        NSLog(@"%@", [NSString stringWithUTF8String:buf.DataPtr()]);
+                        NSLog(@"%@", [NSString stringWithUTF8String:buf.Ptr()]);
                         buf.Clear();
                         continue;
                     }
@@ -48,7 +48,7 @@ namespace Xli
                 if (buf.Length() > 0)
                 {
                     buf.Add('\0');
-                    NSLog(@"%@", [NSString stringWithUTF8String:buf.DataPtr()]);
+                    NSLog(@"%@", [NSString stringWithUTF8String:buf.Ptr()]);
                     buf.Clear();
                 }
             }

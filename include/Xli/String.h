@@ -46,7 +46,6 @@ namespace Xli
         void init(int i);
         void init(float f);
         void init(double d);
-        void init(bool b);
         void deinit();
 
     public:
@@ -54,16 +53,15 @@ namespace Xli
         String(const String& copy);
         String(const char* str);
         String(const char* str, int len);
-        String(char c);
         String(int i);
         String(float f);
         String(double d);
         ~String();
 
-        char* DataCopy();
+        char* Copy();
 
-        char* DataPtr();
-        const char* DataPtr() const;
+        char* Ptr();
+        const char* Ptr() const;
 
         int Length() const;
 
@@ -95,8 +93,9 @@ namespace Xli
         bool EndsWith(const String& str) const;
 
         static String Create(int length);
-        static String HexFromInt(int h);
-        static String FromBool(bool b);
+        static String HexFromInt(int value);
+        static String FromBool(bool value);
+        static String FromChar(char value);
         
         static String Format(const char* format, va_list argList);
         static String Format(const char* format, ...);
@@ -149,10 +148,9 @@ namespace Xli
         
         String& operator = (const String& str);
         String& operator = (const char* str);
-        String& operator = (char c);
-        String& operator = (int i);
-        String& operator = (float f);
-        String& operator = (double d);
+        String& operator = (int value);
+        String& operator = (float value);
+        String& operator = (double value);
     };
 }
 

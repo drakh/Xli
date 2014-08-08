@@ -35,7 +35,7 @@ namespace Xli
                 if (mode != FileModeRead && mode != FileModeReadRandom) 
                     XLI_THROW("Unsupported asset file mode: " + FileModeInfo::ToString(mode));
                 
-                asset = AAssetManager_open(AndroidActivity->assetManager, filename.DataPtr(), ((mode & FileModeRandom) != 0) ? AASSET_MODE_RANDOM : AASSET_MODE_STREAMING);
+                asset = AAssetManager_open(AndroidActivity->assetManager, filename.Ptr(), ((mode & FileModeRandom) != 0) ? AASSET_MODE_RANDOM : AASSET_MODE_STREAMING);
                 
                 if (asset == 0)
                     XLI_THROW_CANT_OPEN_FILE(filename);
@@ -99,7 +99,7 @@ namespace Xli
         public:
             AAssetBuffer(String filename)
             {
-                asset = AAssetManager_open(AndroidActivity->assetManager, filename.DataPtr(), AASSET_MODE_BUFFER);
+                asset = AAssetManager_open(AndroidActivity->assetManager, filename.Ptr(), AASSET_MODE_BUFFER);
                 
                 if (asset == 0) 
                     XLI_THROW_CANT_OPEN_FILE(filename);
@@ -110,7 +110,7 @@ namespace Xli
                 AAsset_close(asset);
             }
 
-            virtual const UInt8* GetDataPtr() const
+            virtual const UInt8* GetPtr() const
             {
                 return (const UInt8*)AAsset_getBuffer(asset);
             }

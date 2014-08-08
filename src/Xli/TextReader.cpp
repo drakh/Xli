@@ -30,7 +30,7 @@ namespace Xli
     String TextReader::Read(int len)
     {
         String s = String::Create(len);
-        _stream->ReadSafe(s.DataPtr(), 1, len);
+        _stream->ReadSafe(s.Ptr(), 1, len);
         return s;
     }
 
@@ -47,7 +47,7 @@ namespace Xli
         while ((len = _stream->Read(buf, 1, 1024)))
             str.AddRange(buf, len);
         
-        return String(str.DataPtr(), str.Length());
+        return String(str.Ptr(), str.Length());
     }
 
     char TextReader::ReadChar()
@@ -70,7 +70,7 @@ namespace Xli
                 break;
         }
 
-        return String(s.DataPtr(), s.Length());
+        return String(s.Ptr(), s.Length());
     }
 
     String TextReader::ReadLine()

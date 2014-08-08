@@ -58,7 +58,7 @@ namespace Xli
     Buffer* Buffer::CopyFrom(const void* data, int size)
     {
         Buffer* b = Buffer::Create(size);
-        memcpy(b->DataPtr(), data, size);
+        memcpy(b->Ptr(), data, size);
         return b;
     }
 
@@ -67,17 +67,17 @@ namespace Xli
         return size;
     }
 
-    UInt8* Buffer::DataPtr()
+    UInt8* Buffer::Ptr()
     {
         return data;
     }
 
-    const UInt8* Buffer::DataPtr() const
+    const UInt8* Buffer::Ptr() const
     {
         return data;
     }
 
-    const UInt8* Buffer::GetDataPtr() const
+    const UInt8* Buffer::GetPtr() const
     {
         return data;
     }
@@ -102,17 +102,17 @@ namespace Xli
         return size;
     }
 
-    UInt8* BufferPtr::DataPtr()
+    UInt8* BufferPtr::Ptr()
     {
         return data;
     }
 
-    const UInt8* BufferPtr::DataPtr() const
+    const UInt8* BufferPtr::Ptr() const
     {
         return data;
     }
 
-    const UInt8* BufferPtr::GetDataPtr() const
+    const UInt8* BufferPtr::GetPtr() const
     {
         return data;
     }
@@ -133,7 +133,7 @@ namespace Xli
         if (owner != 0) owner->Release();
     }
 
-    const UInt8* BufferRef::GetDataPtr() const
+    const UInt8* BufferRef::GetPtr() const
     {
         return data;
     }

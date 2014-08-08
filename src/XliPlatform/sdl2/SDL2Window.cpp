@@ -21,6 +21,7 @@
 #include <Xli/Unicode.h>
 #include <Xli/Console.h>
 
+#include <XliPlatform/PlatformLib.h>
 #include <XliPlatform/PlatformSpecific/SDL2.h>
 #include "SDL2Window.h"
 
@@ -142,7 +143,7 @@ namespace Xli
 #ifdef XLI_PLATFORM_IOS
             
             if (flags & WindowFlagsDisablePowerSaver && !SDL_SetHint(SDL_HINT_IDLE_TIMER_DISABLED, "1"))
-                ErrorPrintLine("SDL WARNING: Failed to disable idle timer");
+                Err->WriteLine("SDL WARNING: Failed to disable idle timer");
 
             if (fullscreen)
                 sdlFlags |= SDL_WINDOW_BORDERLESS;
@@ -159,7 +160,7 @@ namespace Xli
 
 #endif
             
-            window = SDL_CreateWindow(title.DataPtr(), x, y, width, height, sdlFlags);
+            window = SDL_CreateWindow(title.Ptr(), x, y, width, height, sdlFlags);
 
             SDL_SetWindowData(window, "SDL2Window", this);
             
@@ -299,7 +300,7 @@ namespace Xli
 
         void SDL2Window::SetTitle(const String& title)
         {
-            SDL_SetWindowTitle(window, title.DataPtr());
+            SDL_SetWindowTitle(window, title.Ptr());
         }
 
         void SDL2Window::SetFullscreen(bool fullscreen)
@@ -551,38 +552,25 @@ namespace Xli
 #endif
     }
 
-    static bool Inited = false;
-
-    void Window::Init()
+    void InitWindow()
     {
         SDL_VideoInit(0);
-        Inited = true;
     }
 
-    void Window::Done()
+    void TerminateWindow()
     {
         SDL_VideoQuit();
-        Inited = false;
-    }
-
-    static void AssertInit()
-    {
-        if (!Inited)
-        {
-            Window::Init();
-            atexit(Window::Done);
-        }
     }
 
     Window* Window::Create(int width, int height, const String& title, int flags)
     {
-        AssertInit();
+        PlatformLib::Init();
         return new PlatformSpecific::SDL2Window(width, height, title, flags);
     }
 
     Window* Window::CreateFrom(void* nativeWindowHandle)
     {
-        AssertInit();
+        PlatformLib::Init();
         return new PlatformSpecific::SDL2Window(nativeWindowHandle);
     }
 
@@ -695,7 +683,7 @@ namespace Xli
         case SDLK_MENU: return KeyMenu;
         }
         
-        //Xli::ErrorPrintLine("SDL WARNING: Unknown key: " + CharString::HexFromInt((int)key.sym));
+        //Err->WriteLine("SDL WARNING: Unknown key: " + CharString::HexFromInt((int)key.sym));
         return KeyUnknown;
     }
 
@@ -706,7 +694,7 @@ namespace Xli
         SDL_Event e;
         while (SDL_PollEvent(&e))
         {
-            //ErrorPrintLine("SDL EVENT (" + String::HexFromInt((int)e.type) + ")");
+            //Err->WriteLine("SDL EVENT (" + String::HexFromInt((int)e.type) + ")");
             
             switch (e.type)
             {
@@ -723,7 +711,7 @@ namespace Xli
                         float y = e.tfinger.y * h;
                         int id = (int)e.tfinger.fingerId;
                         
-                        //Xli::ErrorPrintLine(String::HexFromInt((int)e.type) + " " + (String)x + " " + y + " " + (String)(int)e.tfinger.fingerId);
+                        //Err->WriteLine(String::HexFromInt((int)e.type) + " " + (String)x + " " + y + " " + (String)(int)e.tfinger.fingerId);
                         
                         switch (e.type)
                         {
@@ -766,7 +754,7 @@ namespace Xli
             
             if (wnd == 0)
             {
-                //ErrorPrintLine("SDL WARNING: wnd pointer was NULL in Window::ProcessMessages (" + String::HexFromInt((int)e.type) + ")");
+                //Err->WriteLine("SDL WARNING: wnd pointer was NULL in Window::ProcessMessages (" + String::HexFromInt((int)e.type) + ")");
                 continue;
             }
             

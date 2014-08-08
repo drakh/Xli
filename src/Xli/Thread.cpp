@@ -19,7 +19,7 @@
 
 #include <Xli/Thread.h>
 #include <Xli/TextWriter.h>
-#include <Xli/Console.h>
+#include <Xli/CoreLib.h>
 
 namespace Xli
 {
@@ -36,11 +36,7 @@ namespace Xli
         }
         catch (const Exception& e)
         {
-            // TODO: Needs exception handler interface
-            ErrorPrintLine("Thread: " + task->ToString());
-            ErrorPrintLine(e.ToString());
-
-            //MessageBox::HandleException(e, "Thread: " + task->ToString());
+            CoreLib::OnUnhandledException(e, task->ToString());
         }
 
         task->stopped = true;

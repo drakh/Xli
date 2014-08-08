@@ -29,7 +29,7 @@ public:
 
     virtual void OnInit(Window* wnd)
     {
-        Err->WriteLine("OnInit");
+        PrintLine("OnInit");
         
         // Setup OpenGL
 
@@ -42,6 +42,11 @@ public:
         gl->SetSwapInterval(0);
         
         glClearColor(1, 0, 0, 1);
+    }
+
+    virtual void OnLoad(Window* wnd)
+    {
+        PrintLine("OnLoad");
 
         // Print platform info
 
@@ -80,13 +85,6 @@ public:
         PrintLine((String)"statusbar size: " + wnd->GetStatusBarSize().ToString());
     }
 
-    virtual void OnLoad(Window* wnd)
-    {
-        Err->WriteLine("OnLoad");
-
-        // TODO: Load something
-    }
-
     virtual void OnDraw(Window* wnd)
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -104,7 +102,7 @@ public:
 
     virtual bool OnKeyDown(Window* wnd, Key key)
     {
-        Err->WriteLine("OnKeyDown: " + (String)(int)key);
+        PrintLine("OnKeyDown: " + (String)(int)key);
 
         if (key == KeyF11 || (key == KeyEnter && wnd->GetKeyState(KeyCtrl)))
         {
@@ -122,31 +120,31 @@ public:
 
     virtual bool OnKeyUp(Window* wnd, Key key)
     {
-        Err->WriteLine("OnKeyUp: " + (String)(int)key);
+        PrintLine("OnKeyUp: " + (String)(int)key);
         return false;
     }
 
     virtual bool OnTextInput(Window* wnd, const String& text)
     {
-        Err->WriteLine("OnTextInput: " + text);
+        PrintLine("OnTextInput: " + text);
         return false;
     }
 
     virtual bool OnMouseDown(Window* wnd, Vector2i pos, MouseButton button)
     {
-        Err->WriteLine("OnMouseDown: " + pos.ToString() + ", " + (String)(int)button);
+        PrintLine("OnMouseDown: " + pos.ToString() + ", " + (String)(int)button);
         return false;
     }
 
     virtual bool OnMouseUp(Window* wnd, Vector2i pos, MouseButton button)
     {
-        Err->WriteLine("OnMouseUp: " + pos.ToString() + ", " + (String)(int)button);
+        PrintLine("OnMouseUp: " + pos.ToString() + ", " + (String)(int)button);
         return false;
     }
 
     virtual bool OnMouseMove(Window* wnd, Vector2i pos)
     {
-        Err->WriteLine("OnMouseMove: " + pos.ToString());
+        PrintLine("OnMouseMove: " + pos.ToString());
 
         if (wnd->GetMouseButtonState(MouseButtonLeft))
         {
@@ -184,26 +182,26 @@ public:
 
     virtual bool OnMouseLeave(Window* wnd, Vector2i pos)
     {
-        Err->WriteLine("OnMouseLeave: " + pos.ToString());
+        PrintLine("OnMouseLeave: " + pos.ToString());
         return false;
     }
 
     virtual bool OnMouseWheel(Window* wnd, Vector2i delta)
     {
-        Err->WriteLine("OnMouseWheel: " + delta.ToString());
+        PrintLine("OnMouseWheel: " + delta.ToString());
         return false;
     }
 
     virtual bool OnTouchDown(Window* wnd, Vector2 pos, int id)
     {
-        Err->WriteLine("OnTouchDown: " + pos.ToString() + ", " + id);
+        PrintLine("OnTouchDown: " + pos.ToString() + ", " + id);
         touchDownTime = GetSeconds();
         return false;
     }
 
     virtual bool OnTouchMove(Window* wnd, Vector2 pos, int id)
     {
-        Err->WriteLine("OnTouchMove: " + pos.ToString() + ", " + id);
+        PrintLine("OnTouchMove: " + pos.ToString() + ", " + id);
         Vector2i size = wnd->GetClientSize();
         glClearColor(pos.X / size.X, pos.Y / size.Y, 0, 1);
         return false;
@@ -211,13 +209,14 @@ public:
 
     virtual bool OnTouchUp(Window* wnd, Vector2 pos, int id)
     {
+        PrintLine("OnTouchUp: " + pos.ToString() + ", " + id);
         double currentTime = GetSeconds();
 
         if (currentTime - touchDownTime < 0.15)
         {
             if (currentTime - tapTime < 0.3)
             {
-                Err->WriteLine("Bang");
+                PrintLine("Bang");
                 wnd->BeginTextInput((Xli::TextInputHint)0);
             }
             else if (wnd->IsTextInputActive())
@@ -233,51 +232,51 @@ public:
 
     virtual void OnSizeChanged(Window* wnd, Vector2i clientSize)
     {
-        Err->WriteLine("OnSizeChanged: " + clientSize.ToString());
+        PrintLine("OnSizeChanged: " + clientSize.ToString());
         glViewport(0, 0, clientSize.X, clientSize.Y);
         Application::OnSizeChanged(wnd, clientSize);
     }
 
     virtual bool OnClosing(Window* wnd, bool& cancel)
     {
-        Err->WriteLine("OnClosing");
+        PrintLine("OnClosing");
         cancel = MessageBox::Show(wnd, "Close?", "Close?", DialogButtonsYesNo, DialogHintQuestion | DialogHintButton2Default) == DialogResultNo;
         return true;
     }
 
     virtual void OnClosed(Window* wnd)
     {
-        Err->WriteLine("OnClosed");
+        PrintLine("OnClosed");
     }
 
     virtual void OnAppLowMemory(Window* wnd)
     {
-        Err->WriteLine("OnAppLowMemory");
+        PrintLine("OnAppLowMemory");
     }
 
     virtual void OnAppTerminating(Window* wnd)
     {
-        Err->WriteLine("OnAppTerminating");
+        PrintLine("OnAppTerminating");
     }
 
     virtual void OnAppWillEnterForeground(Window* wnd)
     {
-        Err->WriteLine("OnAppWillEnterForeground");
+        PrintLine("OnAppWillEnterForeground");
     }
 
     virtual void OnAppDidEnterForeground(Window* wnd)
     {
-        Err->WriteLine("OnAppDidEnterForeground");
+        PrintLine("OnAppDidEnterForeground");
     }
 
     virtual void OnAppWillEnterBackground(Window* wnd)
     {
-        Err->WriteLine("OnAppWillEnterBackground");
+        PrintLine("OnAppWillEnterBackground");
     }
 
     virtual void OnAppDidEnterBackground(Window* wnd)
     {
-        Err->WriteLine("OnAppDidEnterBackground");
+        PrintLine("OnAppDidEnterBackground");
     }
 };
 

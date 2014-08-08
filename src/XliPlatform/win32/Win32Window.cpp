@@ -19,6 +19,7 @@
 
 #include "Win32Window.h"
 #include <XliPlatform/Display.h>
+#include <XliPlatform/PlatformLib.h>
 #include <Xli/Console.h>
 #include <Xli/HashMap.h>
 #include <Xli/Unicode.h>
@@ -39,7 +40,6 @@
 
 namespace Xli
 {
-    static int InitCount = 0;
     static HINSTANCE HInstance = 0;
     static LPCWSTR WindowClassName = L"XliWindow";
     static PlatformSpecific::Win32Window* MainWindow = 0;
@@ -83,7 +83,7 @@ namespace Xli
             AdjustWindowRect(&rect, dwStyle, 0);
 
             Utf16String titleW = Unicode::Utf8To16(title);
-            hWnd = CreateWindowW(WindowClassName, titleW.DataPtr(), dwStyle, CW_USEDEFAULT, CW_USEDEFAULT, rect.right - rect.left, rect.bottom - rect.top, 0, 0, HInstance, 0);
+            hWnd = CreateWindowW(WindowClassName, titleW.Ptr(), dwStyle, CW_USEDEFAULT, CW_USEDEFAULT, rect.right - rect.left, rect.bottom - rect.top, 0, 0, HInstance, 0);
 
             if (!hWnd)
                 XLI_THROW("Failed to create window: " + Win32::GetLastErrorString());
@@ -208,7 +208,7 @@ namespace Xli
         void Win32Window::SetTitle(const String& title)
         {
             Utf16String titleW = Unicode::Utf8To16(title);
-            SetWindowTextW(hWnd, titleW.DataPtr());
+            SetWindowTextW(hWnd, titleW.Ptr());
         }
 
         String Win32Window::GetTitle()
@@ -217,7 +217,7 @@ namespace Xli
             if (l == 0) return String();
 
             Utf16String titleW = Utf16String::Create(l);
-            l = GetWindowText(hWnd, titleW.DataPtr(), l);
+            l = GetWindowText(hWnd, titleW.Ptr(), l);
 
             return Unicode::Utf16To8(titleW);
         }
@@ -566,7 +566,7 @@ namespace Xli
                         }
                         else
                         {
-                            ErrorPrintLine("WARNING: Error reading touchpoint info.");
+                            Err->WriteLine("WARNING: Error reading touchpoint info.");
                         }
 
                         return 0;
@@ -646,71 +646,48 @@ namespace Xli
         }
     }
 
-    void DisplayInit();
-    void DisplayDone();
+    void InitDisplay();
+    void TerminateDisplay();
 
-    void Window::Init()
+    void InitWindow()
     {
-        if (!InitCount) 
-        {
-            HInstance = GetModuleHandle(0);
+        HInstance = GetModuleHandle(0);
 
-            WNDCLASSEX wcex;
-            wcex.cbSize = sizeof(WNDCLASSEX);
-            wcex.style          = CS_HREDRAW | CS_VREDRAW;
-            wcex.lpfnWndProc    = PlatformSpecific::Win32Window::WndProc;
-            wcex.cbClsExtra     = 0;
-            wcex.cbWndExtra     = 0;
-            wcex.hInstance      = HInstance;
-            wcex.hCursor        = LoadCursor(NULL, IDC_ARROW);
-            wcex.hIcon          = LoadIcon(HInstance, IDI_APPLICATION);
-            wcex.hIconSm        = LoadIcon(HInstance, IDI_APPLICATION);
-            wcex.hbrBackground  = NULL;
-            wcex.lpszMenuName   = NULL;
-            wcex.lpszClassName  = WindowClassName;
+        WNDCLASSEX wcex;
+        wcex.cbSize = sizeof(WNDCLASSEX);
+        wcex.style          = CS_HREDRAW | CS_VREDRAW;
+        wcex.lpfnWndProc    = PlatformSpecific::Win32Window::WndProc;
+        wcex.cbClsExtra     = 0;
+        wcex.cbWndExtra     = 0;
+        wcex.hInstance      = HInstance;
+        wcex.hCursor        = LoadCursor(NULL, IDC_ARROW);
+        wcex.hIcon          = LoadIcon(HInstance, IDI_APPLICATION);
+        wcex.hIconSm        = LoadIcon(HInstance, IDI_APPLICATION);
+        wcex.hbrBackground  = NULL;
+        wcex.lpszMenuName   = NULL;
+        wcex.lpszClassName  = WindowClassName;
 
-            if (!RegisterClassEx(&wcex)) 
-                XLI_THROW("Failed to register window class");
+        if (!RegisterClassEx(&wcex)) 
+            XLI_THROW("Failed to register window class");
 
-            DisplayInit();
-        }
-
-        InitCount++;
+        InitDisplay();
     }
 
-    void Window::Done()
+    void TerminateWindow()
     {
-        InitCount--;
-
-        if (!InitCount)
-        {
-            DisplayDone();
-            UnregisterClass(WindowClassName, HInstance);
-        }
-        else if (InitCount < 0)
-        {
-            XLI_THROW_BAD_DELETE;
-        }
-    }
-
-    static void AssertInit()
-    {
-        if (!InitCount)
-        {
-            Window::Init();
-            atexit(Window::Done);
-        }
+        TerminateDisplay();
+        UnregisterClass(WindowClassName, HInstance);
     }
 
     Window* Window::Create(int width, int height, const Xli::String& title, int flags)
     {
-        AssertInit();
+        PlatformLib::Init();
         return new PlatformSpecific::Win32Window(width, height, title, flags);
     }
 
     Window* Window::CreateFrom(void* nativeWindowHandle)
     {
-        AssertInit();
+        PlatformLib::Init();
         return new PlatformSpecific::Win32Window((HWND)nativeWindowHandle);
     }
 }

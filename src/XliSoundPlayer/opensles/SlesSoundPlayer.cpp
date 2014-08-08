@@ -299,7 +299,7 @@ namespace Xli
                 Xli::PlatformSpecific::AJniHelper jni;
                 AAssetManager* mgr = Xli::PlatformSpecific::AShim::GetAssetManager();
                 assert(NULL != mgr);
-                AAsset* assetp = AAssetManager_open(mgr, path.DataPtr(), AASSET_MODE_UNKNOWN);
+                AAsset* assetp = AAssetManager_open(mgr, path.Ptr(), AASSET_MODE_UNKNOWN);
                 if (NULL == assetp) {
                     XLI_THROW("****Cant find asset****");
                     return false;
@@ -318,7 +318,7 @@ namespace Xli
                 assert(SL_RESULT_SUCCESS == result);
             } else {
 
-                SLDataLocator_URI locatorIn = {SL_DATALOCATOR_URI, (SLchar *)path.DataPtr()};
+                SLDataLocator_URI locatorIn = {SL_DATALOCATOR_URI, (SLchar *)path.Ptr()};
                 SLDataFormat_MIME dataFormat = {SL_DATAFORMAT_MIME, NULL, SL_CONTAINERTYPE_UNSPECIFIED};
                 SLDataSource audioSrc = {&locatorIn, &dataFormat};
                 SLDataLocator_OutputMix loc_outmix = {SL_DATALOCATOR_OUTPUTMIX, GlobalAAudioEngine->OutputMixObject};

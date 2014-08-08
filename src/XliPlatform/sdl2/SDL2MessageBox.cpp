@@ -29,8 +29,8 @@ namespace Xli
 
         data.flags = 0;
         data.window = PlatformSpecific::SDL2::GetWindowHandle(wnd);
-        data.title = caption.DataPtr();
-        data.message = message.DataPtr();
+        data.title = caption.Ptr();
+        data.message = message.Ptr();
         data.numbuttons = 0;
         data.buttons = buttondata;
         data.colorScheme = 0;

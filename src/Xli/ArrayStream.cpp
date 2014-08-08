@@ -37,7 +37,7 @@ namespace Xli
         buf.Expand();
         int loc = buf.Length();
         buf.Resize(loc + elmSize * elmCount);
-        memcpy(buf.DataPtr() + loc, src, elmSize * elmCount);
+        memcpy(buf.Ptr() + loc, src, elmSize * elmCount);
     }
 
     int ArrayStream::GetLength() const
@@ -45,14 +45,14 @@ namespace Xli
         return buf.Length();
     }
 
-    const UInt8* ArrayStream::GetDataPtr() const
+    const UInt8* ArrayStream::GetPtr() const
     {
-        return buf.DataPtr();
+        return buf.Ptr();
     }
 
-    Buffer* ArrayStream::CopyData() const
+    Buffer* ArrayStream::CopyBuffer() const
     {
-        return Buffer::CopyFrom(buf.DataPtr(), buf.Length());
+        return Buffer::CopyFrom(buf.Ptr(), buf.Length());
     }
 
     void ArrayStream::Clear()

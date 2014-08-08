@@ -102,8 +102,8 @@ namespace Xli
     {
         // TODO: Use constant size buffer
         Managed<Buffer> buf = Buffer::Create(source->GetLength());
-        source->Read(buf->DataPtr(), 1, buf->Size());
-        Write(buf->DataPtr(), 1, buf->Size());
+        source->Read(buf->Ptr(), 1, buf->Size());
+        Write(buf->Ptr(), 1, buf->Size());
     }
 
     StreamWriterBase::StreamWriterBase(Stream* stream)

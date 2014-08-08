@@ -24,19 +24,6 @@
 
 namespace Xli
 {
-    /**
-        \ingroup XliDiagnostics
-    */
-    class Console
-    {
-    public:
-        static void Init();
-        static void Done();
-    };
-
-    /**
-        \ingroup XliDiagnostics
-    */
     class StdOutAccessor
     {
     public:
@@ -44,9 +31,6 @@ namespace Xli
         operator TextWriter*();
     };
 
-    /**
-        \ingroup XliDiagnostics
-    */
     class StdErrAccessor
     {
     public:
@@ -54,9 +38,6 @@ namespace Xli
         operator TextWriter*();
     };
 
-    /**
-        \ingroup XliDiagnostics
-    */
     class StdInAccessor
     {
     public:
@@ -65,7 +46,7 @@ namespace Xli
     };
 
     /**
-        \addtogroup XliDiagnostics
+        \addtogroup XliConsole
         @{
     */
 
@@ -88,23 +69,6 @@ namespace Xli
     XLI_INLINE void PrintLine()
     {
         Out->Write('\n');
-    }
-
-    template <typename T> 
-    void ErrorPrint(const T& t)
-    {
-        Err->Write(t);
-    }
-
-    template <typename T> 
-    void ErrorPrintLine(const T& t)
-    {
-        Err->WriteLine(t);
-    }
-
-    XLI_INLINE void ErrorPrintLine()
-    {
-        Err->Write('\n');
     }
 
     /** @} */

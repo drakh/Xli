@@ -119,7 +119,7 @@ namespace Xli
                 switch (dir)
                 {
                 default:
-                    ErrorPrintLine("WARNING: Unknown system directory: " + (String)(int)dir);
+                    Err->WriteLine("WARNING: Unknown system directory: " + (String)(int)dir);
                     return GetKnownDirectory(FOLDERID_Documents);
 
                 case SystemDirectoryDocuments:
@@ -150,7 +150,7 @@ namespace Xli
             virtual void SetCurrentDirectory(const String& dir)
             {
                 Utf16String dirW = Unicode::Utf8To16(dir);
-                ::SetCurrentDirectoryW(dirW.DataPtr());
+                ::SetCurrentDirectoryW(dirW.Ptr());
             }
 
             virtual void CreateDirectory(const String& path)
@@ -161,7 +161,7 @@ namespace Xli
 
                 Utf16String pathW = Unicode::Utf8To16(path);
 
-                if (!CreateDirectoryW(pathW.DataPtr(), 0))
+                if (!CreateDirectoryW(pathW.Ptr(), 0))
                 {
                     DWORD err = GetLastError();
                     switch (err)
@@ -180,7 +180,7 @@ namespace Xli
             {
                 Utf16String nameW = Unicode::Utf8To16(name);
 
-                if (!RemoveDirectoryW(nameW.DataPtr()))
+                if (!RemoveDirectoryW(nameW.Ptr()))
                 {
                     XLI_THROW("Unable to delete directory '" + name + "': " + Win32::GetLastErrorString());
                 }
@@ -190,7 +190,7 @@ namespace Xli
             {
                 Utf16String nameW = Unicode::Utf8To16(name);
 
-                if (!DeleteFileW(nameW.DataPtr()))
+                if (!DeleteFileW(nameW.Ptr()))
                     XLI_THROW("Unable to delete file '" + name + "': " + Win32::GetLastErrorString());
             }
 
@@ -199,7 +199,7 @@ namespace Xli
                 Utf16String oldNameW = Unicode::Utf8To16(oldName);
                 Utf16String newNameW = Unicode::Utf8To16(newName);
 
-                if (!MoveFileW(oldNameW.DataPtr(), newNameW.DataPtr()))
+                if (!MoveFileW(oldNameW.Ptr(), newNameW.Ptr()))
                     XLI_THROW("Unable to move directory '" + oldName + "' to '" + newName + "': " + Win32::GetLastErrorString());
             }
 
@@ -208,7 +208,7 @@ namespace Xli
                 Utf16String oldNameW = Unicode::Utf8To16(oldName);
                 Utf16String newNameW = Unicode::Utf8To16(newName);
 
-                if (!MoveFileW(oldNameW.DataPtr(), newNameW.DataPtr()))
+                if (!MoveFileW(oldNameW.Ptr(), newNameW.Ptr()))
                     XLI_THROW("Unable to move file '" + oldName + "' to '" + newName + "': " + Win32::GetLastErrorString());
             }
 
@@ -218,7 +218,7 @@ namespace Xli
 
                 WIN32_FILE_ATTRIBUTE_DATA data;
 
-                if (GetFileAttributesEx(pathW.DataPtr(), GetFileExInfoStandard, &data))
+                if (GetFileAttributesEx(pathW.Ptr(), GetFileExInfoStandard, &data))
                 {
                     info.Name = path;
                     info.Flags = 0;
@@ -248,7 +248,7 @@ namespace Xli
                 Utf16String filterW = Unicode::Utf8To16(filter);
 
                 WIN32_FIND_DATA findData;
-                HANDLE h = FindFirstFile((LPCWSTR)filterW.DataPtr(), &findData);
+                HANDLE h = FindFirstFile((LPCWSTR)filterW.Ptr(), &findData);
 
                 if (h != INVALID_HANDLE_VALUE)
                 {

@@ -55,6 +55,6 @@ namespace Xli
     void BinaryWriter::WriteString(const String& str)
     {
         Write7BitEncodedInt32(str.Length());
-        _stream->Write(str.DataPtr(), 1, str.Length());
+        _stream->Write(str.Ptr(), 1, str.Length());
     }
 }

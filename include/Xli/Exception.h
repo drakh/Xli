@@ -38,15 +38,13 @@ namespace Xli
         Exception();
         Exception(const String& message);
         Exception(const String& message, const char* func, int line);
+        
         virtual ~Exception() XLI_NOEXCEPT;
-
         virtual const char* what() const XLI_NOEXCEPT;
 
-        const String& GetMessage() const;
-        const char* GetFunction() const;
-        int GetLine() const;
-
-        const String& ToString() const;
+        const String& GetMessage() const XLI_NOEXCEPT;
+        const char* GetFunction() const XLI_NOEXCEPT;
+        int GetLine() const XLI_NOEXCEPT;
     };
 
     /**
@@ -60,11 +58,9 @@ namespace Xli
     public: \
         ClassName(const Xli::String& msg) { _message = ::Xli::String(Message) + ": " + msg; } \
         ClassName() { _message = Message; } \
-        virtual ~ClassName() XLI_NOEXCEPT { } \
     }
 
 #define XLI_DECLARE_EXCEPTION(ClassName, Message)   XLI_DECLARE_EXCEPTION_SUB(Xli::Exception, ClassName, Message)
-
 #define XLI_THROW_EX(ClassName, Message)            do { ClassName e(Message); e._func = XLI_FUNCTION; e._line = XLI_LINE; throw e; } while(0)
 #define XLI_THROW_E(ClassName)                      do { ClassName e; e._func = XLI_FUNCTION; e._line = XLI_LINE; throw e; } while(0)
 #define XLI_THROW(Message)                          XLI_THROW_EX(::Xli::Exception, Message)
@@ -86,7 +82,6 @@ namespace Xli
 
     /** \ingroup XliIO */
     class IOException: public Exception {};
-
     /** \ingroup XliIO */
     XLI_DECLARE_EXCEPTION_SUB(IOException, StreamClosedException, "Stream has closed");
     /** \ingroup XliIO */

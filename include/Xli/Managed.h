@@ -100,16 +100,6 @@ namespace Xli
             return object;
         }
 
-        T* Pointer()
-        {
-            return object;
-        }
-
-        const T* Pointer() const
-        {
-            return object;
-        }
-
         operator T*()
         {
             return object;

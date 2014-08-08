@@ -171,14 +171,14 @@ namespace Xli
         Managed<Buffer> src = Buffer::Create(input_size);
         Managed<Buffer> dst = Buffer::Create(expected_len);
 
-        sourceStream->ReadSafe(src->DataPtr(), 1, src->Size());
+        sourceStream->ReadSafe(src->Ptr(), 1, src->Size());
 
         z_stream stream;
         memset(&stream, 0, sizeof(z_stream));
 
-        stream.next_in = src->DataPtr();
+        stream.next_in = src->Ptr();
         stream.avail_in = src->Size();
-        stream.next_out = dst->DataPtr();
+        stream.next_out = dst->Ptr();
         stream.avail_out = dst->Size();
 
         int err = inflateInit2(&stream, 16 + MAX_WBITS);
@@ -201,7 +201,7 @@ namespace Xli
         }
 
         if (stream.avail_out != 0 || stream.avail_in != 0)
-            ErrorPrintLine("GZIP WARNING: Buffer sizes inconsistent");
+            Err->WriteLine("GZIP WARNING: Buffer sizes inconsistent");
 
         return new BufferStream(dst, true, false);
     }

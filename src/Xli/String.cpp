@@ -73,14 +73,6 @@ namespace Xli
         init(buf, GetFloatLength(buf));
     }
 
-    void String::init(bool b)
-    {
-        if (b)
-            init("True", 4);
-        else
-            init("False", 5);
-    }
-
     void String::deinit()
     {
         if (length && data != buf) 
@@ -109,11 +101,6 @@ namespace Xli
         init(str, len);
     }
 
-    String::String(char c)
-    {
-        init(&c, 1);
-    }
-
     String::String(int i)
     {
         init(i);
@@ -134,7 +121,7 @@ namespace Xli
         deinit();
     }
 
-    char* String::DataCopy()
+    char* String::Copy()
     {
         char* buf = new char[length + 1];
         buf[length] = 0;
@@ -142,12 +129,12 @@ namespace Xli
         return buf;
     }
 
-    char* String::DataPtr()
+    char* String::Ptr()
     {
         return data;
     }
 
-    const char* String::DataPtr() const
+    const char* String::Ptr() const
     {
         return data;
     }
@@ -328,7 +315,7 @@ namespace Xli
 
         for (int i = 0; i < list.Length(); i++)
         {
-            memcpy(r.data + p, list[i].DataPtr(), list[i].Length());
+            memcpy(r.data + p, list[i].Ptr(), list[i].Length());
             p += list[i].Length();
             r.data[p++] = c;
         }
@@ -377,9 +364,15 @@ namespace Xli
 
     String String::FromBool(bool b)
     {
-        String r;
-        r.init(b);
-        return r;
+        if (b)
+            return String("True", 4);
+        else
+            return String("False", 5);
+    }
+
+    String String::FromChar(char c)
+    {
+        return String(&c, 1);
     }
 
     String String::Format(const char* format, va_list argList)
@@ -661,13 +654,6 @@ namespace Xli
         return *this;
     }
 
-    String& String::operator = (char c)
-    {
-        deinit();
-        init(c);
-        return *this;
-    }
-
     String& String::operator = (int i)
     {
         deinit();
@@ -694,7 +680,7 @@ Xli::String operator + (const char* a, const Xli::String& b)
 {
     int len = !a ? 0 : (int)strlen(a);
     Xli::String r = Xli::String::Create(len + b.Length());
-    memcpy(r.DataPtr(), a, len);
-    memcpy(r.DataPtr() + len, b.DataPtr(), b.Length());
+    memcpy(r.Ptr(), a, len);
+    memcpy(r.Ptr() + len, b.Ptr(), b.Length());
     return r;
 }

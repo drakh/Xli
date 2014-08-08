@@ -77,7 +77,7 @@ namespace Xli
         virtual DataAccessor* CreateDataAccessor()
         {
             Buffer* buf = Buffer::Create(GetLength());
-            ReadSafe(buf->DataPtr(), 1, buf->Size());
+            ReadSafe(buf->Ptr(), 1, buf->Size());
             return buf;
         }
     };

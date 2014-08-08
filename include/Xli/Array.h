@@ -317,12 +317,12 @@ namespace Xli
             return Get(index);
         }
 
-        T* DataPtr()
+        T* Ptr()
         {
             return data;
         }
 
-        const T* DataPtr() const
+        const T* Ptr() const
         {
             return data;
         }
@@ -353,7 +353,8 @@ namespace Xli
                 Swap(data[a], data[b]);
         }
 
-        template <typename TComparator> void Sort()
+        template <typename TComparator> 
+        void Sort()
         {
             Xli::Sort<T, TComparator>(data, 0, used);
         }
@@ -366,16 +367,6 @@ namespace Xli
         void SortReversed()
         {
             Sort<ComparatorGreaterThan<T> >();
-        }
-
-        void SortPointers()
-        {
-            Sort<ComparatorPointerLessThan<T> >();
-        }
-
-        void SortPointersReversed()
-        {
-            Sort<ComparatorPointerGreaterThan<T> >();
         }
     };
 

@@ -59,7 +59,7 @@ namespace Xli
     void FormattedTextWriter::WriteIndent()
     {
         for (int i = 0; i < indent; i++)
-            WriteRaw(indentValue.DataPtr(), indentValue.Length());
+            WriteRaw(indentValue.Ptr(), indentValue.Length());
     }
 
     void FormattedTextWriter::Write(const String& str)
@@ -70,14 +70,14 @@ namespace Xli
         {
             if (str[i] == '\n')
             {
-                WriteRaw(str.DataPtr() + start, 1 + i - start);
+                WriteRaw(str.Ptr() + start, 1 + i - start);
                 start = i + 1;
                 lineCount++; 
                 WriteIndent();
             }
         }
 
-        WriteRaw(str.DataPtr() + start, str.Length() - start);
+        WriteRaw(str.Ptr() + start, str.Length() - start);
     }
 
     void FormattedTextWriter::EndLine()

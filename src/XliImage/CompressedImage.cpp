@@ -60,8 +60,8 @@ namespace Xli
         return data->GetSizeInBytes();
     }
 
-    const UInt8* CompressedImage::GetDataPtr() const
+    const UInt8* CompressedImage::GetPtr() const
     {
-        return data->GetDataPtr();
+        return data->GetPtr();
     }
 }

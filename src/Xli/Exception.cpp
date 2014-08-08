@@ -46,24 +46,19 @@ namespace Xli
         // empty
     }
 
-    const String& Exception::GetMessage() const
+    const String& Exception::GetMessage() const XLI_NOEXCEPT
     {
         return _message;
     }
 
-    const char* Exception::GetFunction() const
+    const char* Exception::GetFunction() const XLI_NOEXCEPT
     {
         return _func;
     }
 
-    int Exception::GetLine() const
+    int Exception::GetLine() const XLI_NOEXCEPT
     {
         return _line;
-    }
-
-    const String& Exception::ToString() const
-    {
-        return _message;
     }
 
     const char* Exception::what() const XLI_NOEXCEPT

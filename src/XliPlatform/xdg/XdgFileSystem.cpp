@@ -128,7 +128,7 @@ namespace Xli
                     }
 
                 default:
-                    ErrorPrintLine("XLI WARNING: Unknown system directory: " + (String)(int)dir);
+                    Err->WriteLine("XLI WARNING: Unknown system directory: " + (String)(int)dir);
                     return homedir;
                 }
             }

@@ -283,7 +283,7 @@ namespace Xli
                 if (buf.Length())
                 {
                     buf.Add(0);
-                    __android_log_write(prio, AGetAppName(), buf.DataPtr());
+                    __android_log_write(prio, AGetAppName(), buf.Ptr());
                     buf.Clear();
                 }
             }
@@ -302,7 +302,7 @@ namespace Xli
                     if (c == '\n')
                     {
                         buf.Add(0);
-                        __android_log_write(prio, AGetAppName(), buf.DataPtr());
+                        __android_log_write(prio, AGetAppName(), buf.Ptr());
                         buf.Clear();
                         continue;
                     }
@@ -569,11 +569,11 @@ namespace Xli
         }
     }
 
-    void Window::Init()
+    void InitWindow()
     {
     }
 
-    void Window::Done()
+    void TerminateWindow()
     {
     }
 

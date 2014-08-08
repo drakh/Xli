@@ -60,7 +60,7 @@ namespace Xli
         DWORD res = ::WaitForSingleObject((HANDLE)handle, INFINITE);
 
         if (res != WAIT_OBJECT_0)
-            ErrorPrintLine("XLI ERROR: WaitForSingleObject failed");
+            Err->WriteLine("XLI ERROR: WaitForSingleObject failed");
         else
             ::CloseHandle((HANDLE)handle);
     }

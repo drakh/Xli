@@ -44,7 +44,7 @@ namespace Xli
         virtual Bitmap* ToBitmap();
 
         virtual int GetSizeInBytes() const;
-        virtual const UInt8* GetDataPtr() const;
+        virtual const UInt8* GetPtr() const;
     };
 }
 

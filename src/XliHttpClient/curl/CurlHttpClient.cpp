@@ -187,11 +187,11 @@ namespace Xli
             } else if (method == "PUT") {
                 result = curl_easy_setopt(session, CURLOPT_UPLOAD, 1);
             } else if (method == "OPTIONS" || method == "HEAD" || method == "TRACE" || method == "DELETE") {
-                curl_easy_setopt(session, CURLOPT_CUSTOMREQUEST, method.DataPtr()); 
+                curl_easy_setopt(session, CURLOPT_CUSTOMREQUEST, method.Ptr()); 
             } else {
                 return CURLE_FAILED_INIT;
             }
-            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_URL, url.DataPtr());
+            if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_URL, url.Ptr());
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_CONNECTTIMEOUT, timeout);
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_AUTOREFERER, 1);
             if (result == CURLE_OK) result = curl_easy_setopt(session, CURLOPT_USERAGENT, "libcurl-agent/1.0");
@@ -271,7 +271,7 @@ namespace Xli
                 header.Append(GetHeaderKey(i));
                 header.Append(":");
                 header.Append(GetHeaderValue(i));
-                curlUploadHeaders = curl_slist_append(curlUploadHeaders, header.DataPtr());
+                curlUploadHeaders = curl_slist_append(curlUploadHeaders, header.Ptr());
                 i = HeadersNext(i);
             }
             curl_easy_setopt(session, CURLOPT_HTTPHEADER, curlUploadHeaders);
@@ -294,7 +294,7 @@ namespace Xli
         {
             requestOwnsUploadData = true;
             void* raw = malloc(content.Length());
-            memcpy(raw, content.DataPtr(), content.Length());                
+            memcpy(raw, content.Ptr(), content.Length());                
             SendAsync(raw, content.Length());
         }
         virtual void SendAsync()
@@ -413,7 +413,7 @@ namespace Xli
                 curl_easy_cleanup(session);
             }
 
-            responseBodyRef = new BufferRef((void*)responseBody->GetDataPtr(), responseBody->GetLength(), (Object*)responseBody.Get());
+            responseBodyRef = new BufferRef((void*)responseBody->GetPtr(), responseBody->GetLength(), (Object*)responseBody.Get());
 
             HttpEventHandler* eh = client->GetEventHandler();
             if (eh!=0 && !aborted) eh->OnRequestStateChanged(this);

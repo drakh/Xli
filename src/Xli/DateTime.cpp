@@ -160,7 +160,7 @@ namespace Xli
     DateTime DateTime::FromString(const String& str)
     {
         DateTime dt;
-        sscanf_s(str.DataPtr(), "%04d-%02d-%02d %02d:%02d:%02d.%03d", &dt.Year, &dt.Month, &dt.Day, &dt.Hour, &dt.Minute, &dt.Second, &dt.Millisecond);
+        sscanf_s(str.Ptr(), "%04d-%02d-%02d %02d:%02d:%02d.%03d", &dt.Year, &dt.Month, &dt.Day, &dt.Hour, &dt.Minute, &dt.Second, &dt.Millisecond);
         return dt;
     }
 

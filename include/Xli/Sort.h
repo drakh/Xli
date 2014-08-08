@@ -44,28 +44,6 @@ namespace Xli
     };
 
     /**
-        \ingroup XliUtils
-    */
-    template <typename T> struct ComparatorPointerLessThan
-    {
-        static bool Compare(const T& a, const T& b)
-        {
-            return *a < *b;
-        }
-    };
-
-    /**
-        \ingroup XliUtils
-    */
-    template <typename T> struct ComparatorPointerGreaterThan
-    {
-        static bool Compare(const T& a, const T& b)
-        {
-            return *a > *b;
-        }
-    };
-
-    /**
         \addtogroup XliUtils
         @{
     */

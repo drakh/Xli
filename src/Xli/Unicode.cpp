@@ -56,7 +56,7 @@ namespace Xli
                         }
                     }
 
-                    str = utf8.DataPtr();
+                    str = utf8.Ptr();
                     len = utf8.Length();
                     break;
                 }
@@ -71,7 +71,7 @@ namespace Xli
 
     bool Unicode::IsLegalUtf8(const String& str, int flags)
     {
-        return IsLegalUtf8(str.DataPtr(), str.Length(), flags);
+        return IsLegalUtf8(str.Ptr(), str.Length(), flags);
     }
 
     Utf16String Unicode::Utf8To16(const char* str, int len, int flags)
@@ -104,7 +104,7 @@ namespace Xli
                         }
                     }
 
-                    str = utf8.DataPtr();
+                    str = utf8.Ptr();
                     len = utf8.Length();
                     break;
                 }
@@ -132,7 +132,7 @@ namespace Xli
 
     Utf16String Unicode::Utf8To16(const String& str, int flags)
     {
-        return Utf8To16(str.DataPtr(), str.Length(), flags);
+        return Utf8To16(str.Ptr(), str.Length(), flags);
     }
 
     String Unicode::Utf16To8(const Utf16* str, int len, int flags)
@@ -179,7 +179,7 @@ namespace Xli
                         }
                     }
 
-                    return String(mutf8.DataPtr(), mutf8.Length());
+                    return String(mutf8.Ptr(), mutf8.Length());
                 }
             }
         }
@@ -189,7 +189,7 @@ namespace Xli
 
     String Unicode::Utf16To8(const Utf16String& str, int flags)
     {
-        return Utf16To8(str.DataPtr(), str.Length(), flags);
+        return Utf16To8(str.Ptr(), str.Length(), flags);
     }
 
     #include "UnicodeUpperLower.inc"

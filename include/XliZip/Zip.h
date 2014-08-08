@@ -40,7 +40,7 @@ namespace Xli
         
         static XLI_INLINE FileSystem* Open(Stream* file, const String& password) 
         { 
-            return Open(file, password.DataPtr()); 
+            return Open(file, password.Ptr()); 
         }
         
         static XLI_INLINE FileSystem* Open(const String& filename) 
@@ -52,7 +52,7 @@ namespace Xli
         static XLI_INLINE FileSystem* Open(const String& filename, const String& password) 
         { 
             Managed<File> f = new File(filename, FileModeRead); 
-            return Open(f, password.DataPtr()); 
+            return Open(f, password.Ptr()); 
         }
     };
 }

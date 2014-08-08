@@ -70,7 +70,7 @@ namespace Xli
 
         Shared& operator = (const Managed<T>& managed)
         {
-            T* ptr = const_cast<T*>(managed.Pointer());
+            T* ptr = const_cast<T*>((const T*)managed);
             
             if (ptr) 
                 ptr->AddRef();

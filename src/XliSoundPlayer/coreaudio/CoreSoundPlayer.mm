@@ -26,8 +26,8 @@ namespace Xli
             BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:pathString];
             if (!fileExists) {
                 const char* wrongPath = [pathString UTF8String];
-                Xli::ErrorPrintLine("SoundPlayer: Audio file not found at:");
-                Xli::ErrorPrintLine(wrongPath);
+                Err->WriteLine("SoundPlayer: Audio file not found at:");
+                Err->WriteLine(wrongPath);
                 player = nil;
                 return;
             }
@@ -38,7 +38,7 @@ namespace Xli
             
             if (player == nil)
             {
-                Xli::ErrorPrintLine("ERROR: Failed to create AVAudioPlayer: " + (String)([[error description] UTF8String]));
+                Err->WriteLine("ERROR: Failed to create AVAudioPlayer: " + (String)([[error description] UTF8String]));
                 return;
             }
                 
@@ -148,7 +148,7 @@ namespace Xli
             this->path = path;
             this->isasset = asset;
             
-            CoreSoundChannel* c = new CoreSoundChannel(path.DataPtr(), false, false);
+            CoreSoundChannel* c = new CoreSoundChannel(path.Ptr(), false, false);
             this->duration = c->GetDuration();
             delete c;
             this->duration = 0.0;
@@ -175,7 +175,7 @@ namespace Xli
         }
         virtual SoundChannel* PlaySound(Sound* sound, bool loop)
         {
-            CoreSoundChannel* result = new CoreSoundChannel(sound->GetPath().DataPtr(), loop, true);
+            CoreSoundChannel* result = new CoreSoundChannel(sound->GetPath().Ptr(), loop, true);
             return result;
         }        
     };

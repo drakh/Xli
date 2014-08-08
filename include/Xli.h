@@ -41,12 +41,12 @@
     \brief Container templates
     \ingroup Xli
 
-    \defgroup XliDataTypes Data types
-    \brief Vectors, rectangles, integers and constants
+    \defgroup XliConsole Console
+    \brief Standard input, output and error abstraction
     \ingroup Xli
 
-    \defgroup XliDiagnostics Diagnostics
-    \brief Standard input, output and error abstraction
+    \defgroup XliDataTypes Data types
+    \brief Vectors, rectangles, integers and constants
     \ingroup Xli
 
     \defgroup XliExceptions Exceptions
@@ -92,6 +92,7 @@
 #include <Xli/ConditionVariable.h>
 #include <Xli/Config.h>
 #include <Xli/Console.h>
+#include <Xli/CoreLib.h>
 #include <Xli/DataType.h>
 #include <Xli/DateTime.h>
 #include <Xli/Exception.h>

@@ -104,7 +104,7 @@ namespace Xli
 
     UInt32 DefaultTraits::Hash(const String& str)
     {
-        return Hash((const UInt8*)str.DataPtr(), str.Length());
+        return Hash((const UInt8*)str.Ptr(), str.Length());
     }
 
     String DefaultTraits::ToString(void* p)
@@ -180,7 +180,7 @@ namespace Xli
 
     String DefaultTraits::ToString(char c)
     {
-        return c;
+        return String::FromChar(c);
     }
 
     String DefaultTraits::ToString(unsigned char c)

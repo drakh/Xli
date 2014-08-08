@@ -255,8 +255,8 @@ namespace Xli
             jclass shimClass = jni.GetShim();
 
             //vars for call
-            jstring jcaption = jni->NewStringUTF(caption.DataPtr());
-            jstring jmessage = jni->NewStringUTF(message.DataPtr());
+            jstring jcaption = jni->NewStringUTF(caption.Ptr());
+            jstring jmessage = jni->NewStringUTF(message.Ptr());
 
             //call
             int result = (int)jni->CallObjectMethod(shimClass, showMessageBox, jcaption, jmessage, (jint)buttons, (jint)hints);
@@ -285,12 +285,12 @@ namespace Xli
             String url = req->GetUrl();
             String method = req->GetMethod();
 
-            jstring jurl = jni->NewStringUTF(url.DataPtr());
-            jstring jmethod = jni->NewStringUTF(method.DataPtr());
+            jstring jurl = jni->NewStringUTF(url.Ptr());
+            jstring jmethod = jni->NewStringUTF(method.Ptr());
             jint jtimeout = (jint)req->GetTimeout();
                 
             String headers = HeadersToString(req);
-            jstring jheaders = jni->NewStringUTF(headers.DataPtr());
+            jstring jheaders = jni->NewStringUTF(headers.Ptr());
 
             jobject arrayHandle = 0;
             if ((content!=0) && (byteLength>0))
@@ -324,18 +324,18 @@ namespace Xli
             String url = req->GetUrl();
             String method = req->GetMethod();
 
-            jstring jurl = jni->NewStringUTF(url.DataPtr());
-            jstring jmethod = jni->NewStringUTF(method.DataPtr());
+            jstring jurl = jni->NewStringUTF(url.Ptr());
+            jstring jmethod = jni->NewStringUTF(method.Ptr());
             jint jtimeout = (jint)req->GetTimeout();
 
             String headers = HeadersToString(req);
-            jstring jheaders = jni->NewStringUTF(headers.DataPtr());
+            jstring jheaders = jni->NewStringUTF(headers.Ptr());
 
             jobject body = 0;
 
             if ((content.Length()>0))
             {
-                body = jni->NewStringUTF(content.DataPtr());
+                body = jni->NewStringUTF(content.Ptr());
             }
 
             jint jresult = jni->CallStaticIntMethod(jni.GetShim(), sendHttpAsyncB, jurl, jmethod, jheaders, body,
@@ -365,13 +365,13 @@ namespace Xli
             String url = req->GetUrl();
             String method = req->GetMethod();
 
-            jstring jurl = jni->NewStringUTF(url.DataPtr());
-            jstring jmethod = jni->NewStringUTF(method.DataPtr());
+            jstring jurl = jni->NewStringUTF(url.Ptr());
+            jstring jmethod = jni->NewStringUTF(method.Ptr());
             jint jtimeout = (jint)req->GetTimeout();
             jobject arrayHandle = 0;
 
             String headers = HeadersToString(req);
-            jstring jheaders = jni->NewStringUTF(headers.DataPtr());
+            jstring jheaders = jni->NewStringUTF(headers.Ptr());
 
             jint jresult = jni->CallStaticIntMethod(jni.GetShim(), sendHttpAsyncA, jurl, jmethod, jheaders, arrayHandle,
                                                     jtimeout, (jlong)req, req->GetVerifyHost());

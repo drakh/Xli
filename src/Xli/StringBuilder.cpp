@@ -57,7 +57,7 @@ namespace Xli
 
     void StringBuilder::Append(const String& text)
     {
-        buffer.AddRange(text.DataPtr(), text.Length());
+        buffer.AddRange(text.Ptr(), text.Length());
     }
 
     void StringBuilder::Append(char c)
@@ -97,11 +97,11 @@ namespace Xli
 
     String StringBuilder::GetString() const
     {
-        return String(buffer.DataPtr(), buffer.Length());
+        return String(buffer.Ptr(), buffer.Length());
     }
 
     StringBuilder::operator String() const
     {
-        return String(buffer.DataPtr(), buffer.Length());
+        return String(buffer.Ptr(), buffer.Length());
     }
 }

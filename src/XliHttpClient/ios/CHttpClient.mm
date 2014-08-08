@@ -130,9 +130,9 @@ namespace Xli
         {
             if (this->state != HttpRequestStateOpened) return;
 
-            CFStringRef nUrlStr = CFStringCreateWithCString(kCFAllocatorDefault, this->url.DataPtr(), kCFStringEncodingUTF8);
+            CFStringRef nUrlStr = CFStringCreateWithCString(kCFAllocatorDefault, this->url.Ptr(), kCFStringEncodingUTF8);
             CFURLRef nUrl = CFURLCreateWithString(kCFAllocatorDefault, nUrlStr, NULL);
-            CFStringRef nMethod = CFStringCreateWithCString(kCFAllocatorDefault, this->method.DataPtr(), kCFStringEncodingUTF8);
+            CFStringRef nMethod = CFStringCreateWithCString(kCFAllocatorDefault, this->method.Ptr(), kCFStringEncodingUTF8);
             CFHTTPMessageRef nHttpReq = CFHTTPMessageCreateRequest(kCFAllocatorDefault, nMethod, nUrl, kCFHTTPVersion1_1);
 
             if (byteLength>0)
@@ -187,7 +187,7 @@ namespace Xli
         {
             requestOwnsUploadData = true;
             void* raw = malloc(content.Length());
-            memcpy(raw, content.DataPtr(), content.Length());
+            memcpy(raw, content.Ptr(), content.Length());
             SendAsync(raw, content.Length());
         }
 
@@ -289,8 +289,8 @@ namespace Xli
                 int i = this->headers.Begin();
                 while (i != this->headers.End())
                 {
-                    CFStringRef nKey = CFStringCreateWithCString(kCFAllocatorDefault, this->headers.GetKey(i).DataPtr(), kCFStringEncodingUTF8);
-                    CFStringRef nVal = CFStringCreateWithCString(kCFAllocatorDefault, this->headers.GetValue(i).DataPtr(), kCFStringEncodingUTF8);
+                    CFStringRef nKey = CFStringCreateWithCString(kCFAllocatorDefault, this->headers.GetKey(i).Ptr(), kCFStringEncodingUTF8);
+                    CFStringRef nVal = CFStringCreateWithCString(kCFAllocatorDefault, this->headers.GetValue(i).Ptr(), kCFStringEncodingUTF8);
 
                     CFHTTPMessageSetHeaderFieldValue(message, nKey, nVal);
 
@@ -497,7 +497,7 @@ namespace Xli
                 readPosition = len;
 
                 responseBody = Buffer::Create((int)len);
-                CFDataGetBytes(streamDataHandle, CFRangeMake(0,len), (UInt8*)responseBody->GetDataPtr());
+                CFDataGetBytes(streamDataHandle, CFRangeMake(0,len), (UInt8*)responseBody->GetPtr());
 
                 CFWriteStreamClose(cachedContentStream);
                 CFRelease(cachedContentStream);

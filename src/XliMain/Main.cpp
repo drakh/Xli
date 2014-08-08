@@ -17,9 +17,8 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#include <Xli/Console.h>
-#include <XliPlatform/Disk.h>
-#include <XliPlatform/MessageBox.h>
+#include <Xli/Array.h>
+#include <Xli/CoreLib.h>
 #include <cstdlib>
 
 #if defined(XLI_PLATFORM_ANDROID)
@@ -38,32 +37,28 @@ extern "C" int main(int argc, char** argv)
 
     try
     {
+        Xli::CoreLib::Init();
+
 #if defined(XLI_PLATFORM_ANDROID)
         Xli::PlatformSpecific::Android::Init((struct android_app*)*argv);
 #elif defined(XLI_PLATFORM_IOS)
         Xli::PlatformSpecific::iOS::Init();
 #endif
 
-        Xli::Console::Init();
-        Xli::NativeFileSystem::Init();
-
         Xli::Array<Xli::String> args(argc);
         for (int i = 0; i < argc; i++) 
             args[i] = argv[i];
 
         result = Main(args);
-
-        Xli::NativeFileSystem::Done();
-        Xli::Console::Done();
     }
     catch (const Xli::Exception& e)
     {
-        Xli::MessageBox::HandleException(e, "XliMain");
+        Xli::CoreLib::OnUnhandledException(e, "main");
     }
     catch (...)
     {
-        Xli::Exception e("Unhandled exception (Unknown C++ exception)");
-        Xli::MessageBox::HandleException(e, "XliMain");
+        Xli::Exception e("An unknown C++ exception was thrown");
+        Xli::CoreLib::OnUnhandledException(e, "main");
     }
 
     return result;

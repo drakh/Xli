@@ -18,6 +18,7 @@
 //
 
 #include <XliGL.h>
+#include <Xli/Console.h>
 #include <Xli/Shared.h>
 #include <XliPlatform/Window.h>
 #include <EGL/egl.h>
@@ -83,7 +84,7 @@ namespace Xli
                 eglGetConfigAttrib(display, configs[i], EGL_SAMPLES, &samples);
 
 #ifdef XLI_DEBUG
-                ErrorPrintLine(String::Format("DEBUG: EGLConfig[%d]:  M %d  D %d  S %d  B %d  R %d  G %d  B %d  A %d", i, samples, depth, stencil, buffer, r, g, b, a));
+                Err->WriteLine(String::Format("DEBUG: EGLConfig[%d]:  M %d  D %d  S %d  B %d  R %d  G %d  B %d  A %d", i, samples, depth, stencil, buffer, r, g, b, a));
 #endif
 
                 if (samples >= cs && depth >= cd && buffer >= cb && 
@@ -97,7 +98,7 @@ namespace Xli
             }
 
 #ifdef XLI_DEBUG
-            ErrorPrintLine((String)"DEBUG: Selected EGLConfig[" + (int)cc + "]");
+            Err->WriteLine((String)"DEBUG: Selected EGLConfig[" + (int)cc + "]");
 #endif
 
             config = configs[cc];

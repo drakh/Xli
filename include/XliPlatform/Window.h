@@ -416,18 +416,6 @@ namespace Xli
         virtual Vector2i GetStatusBarSize() { return Vector2i(0, 0); }
 
         /**
-            Initializes the Window implementation.
-            Is called automatically if XliMain is used.
-        */
-        static void Init();
-
-        /**
-            Shuts down the Window implementation.
-            Is called automatically if XliMain is used.
-        */
-        static void Done();
-
-        /**
             Sets the window that should be used as main window
         */
         static void SetMainWindow(Window* wnd);

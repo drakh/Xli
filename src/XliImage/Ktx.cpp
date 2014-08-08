@@ -93,7 +93,7 @@ namespace Xli
 
             for (int j = 0; j < tex->Faces.Length(); j++)
             {
-                output->Write(tex->Faces[j].MipLevels[i]->GetDataPtr(), sizeof(unsigned int), tex->Faces[j].MipLevels[i]->GetSizeInBytes() / 4);
+                output->Write(tex->Faces[j].MipLevels[i]->GetPtr(), sizeof(unsigned int), tex->Faces[j].MipLevels[i]->GetSizeInBytes() / 4);
             }
         }
     }
@@ -152,7 +152,7 @@ namespace Xli
             for (UInt32 j = 0; j < header.numberOfFaces; j++)
             {
                 Managed<Buffer> buf = Buffer::Create(sizeInBytes);
-                input->ReadSafe(buf->DataPtr(), 1, buf->Size());
+                input->ReadSafe(buf->Ptr(), 1, buf->Size());
 
                 switch (header.glInternalFormat)
                 {

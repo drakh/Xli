@@ -39,9 +39,9 @@ namespace Xli
             _stream->ReadSafe((void*)&elm, sizeof(T), 1);
         }
 
-        template <typename T> void Read(Vector2t<T>& vec) { _stream->ReadSafe(vec.DataPtr(), sizeof(T), 2); }
-        template <typename T> void Read(Vector3t<T>& vec) { _stream->ReadSafe(vec.DataPtr(), sizeof(T), 3); }
-        template <typename T> void Read(Vector4t<T>& vec) { _stream->ReadSafe(vec.DataPtr(), sizeof(T), 4); }
+        template <typename T> void Read(Vector2t<T>& vec) { _stream->ReadSafe(vec.Ptr(), sizeof(T), 2); }
+        template <typename T> void Read(Vector3t<T>& vec) { _stream->ReadSafe(vec.Ptr(), sizeof(T), 3); }
+        template <typename T> void Read(Vector4t<T>& vec) { _stream->ReadSafe(vec.Ptr(), sizeof(T), 4); }
 
         template <typename T> T Read()
         {

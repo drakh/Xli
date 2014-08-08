@@ -47,7 +47,7 @@ namespace Xli
 
     void TextWriter::Write(const String& str)
     {
-        Write(str.DataPtr(), str.Length());
+        Write(str.Ptr(), str.Length());
     }
     
     void TextWriter::WriteLine()
