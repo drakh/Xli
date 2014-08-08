@@ -4,14 +4,11 @@
 #include <cstdlib>
 
 #if defined(XLI_PLATFORM_ANDROID)
-
-#include "../../3rdparty/android_native_app_glue/android_native_app_glue.h"
-namespace Xli { namespace PlatformSpecific { void AInit(struct android_app* app); } }
-
+# include "../../3rdparty/android_native_app_glue/android_native_app_glue.h"
+# include <XliPlatform/PlatformSpecific/Android.h>
 #elif defined(XLI_PLATFORM_IOS)
-
-#include <SDL_main.h>
-namespace Xli { namespace PlatformSpecific { void iInit(); } }
+# include <XliPlatform/PlatformSpecific/iOS.h>
+# include <SDL_main.h>
 #endif
 
 extern int Main(const Xli::Array<Xli::String>& args);
@@ -23,9 +20,9 @@ extern "C" int main(int argc, char** argv)
     try
     {
 #if defined(XLI_PLATFORM_ANDROID)
-        Xli::PlatformSpecific::AInit((struct android_app*)*argv);
+        Xli::PlatformSpecific::Android::Init((struct android_app*)*argv);
 #elif defined(XLI_PLATFORM_IOS)
-        Xli::PlatformSpecific::iInit();
+        Xli::PlatformSpecific::iOS::Init();
 #endif
 
         Xli::Console::Init();

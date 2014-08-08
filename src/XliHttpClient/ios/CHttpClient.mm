@@ -3,6 +3,7 @@
 #include <XliPlatform/PlatformSpecific/iOS.h>
 #include <XliHttpClient/HttpClient.h>
 #include <Xli/HashMap.h>
+#include <Xli/Managed.h>
 #include <CFNetwork/CFNetwork.h>
 #include <CFNetwork/CFHTTPStream.h>
 #include <iostream>

@@ -6,16 +6,7 @@
 
 namespace Xli
 {
-    /**
-        \ingroup XliPlatform
-    */
     class Window;
-
-    class WindowAction : public Object
-    {
-    public:
-        virtual void Execute() = 0;
-    };
 
     /**
         \ingroup XliPlatform
@@ -229,6 +220,9 @@ namespace Xli
         /// the default behaviour when in fullscreen mode, but on mobile it must be explicitly 
         /// enabled for apps that needs it because it can potentially drain the battery.
         WindowFlagsDisablePowerSaver = 1 << 3,
+
+        /// Support running as background process on mobile platforms.
+        WindowFlagsSupportBackground = 1 << 4,
     };
     
     /**
@@ -402,10 +396,6 @@ namespace Xli
         virtual bool IsStatusBarVisible() { return false; }
         virtual Vector2i GetStatusBarPosition() { return Vector2i(0, 0); }
         virtual Vector2i GetStatusBarSize() { return Vector2i(0, 0); }
-
-        // TODO: Remove these methods
-        virtual void EnqueueCrossThreadEvent(WindowAction* action) {};
-        virtual void ProcessCrossThreadEvents() {};
 
         /**
             Initializes the Window implementation.

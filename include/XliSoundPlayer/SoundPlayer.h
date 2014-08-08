@@ -8,25 +8,25 @@ namespace Xli
     /**
         \ingroup XliSoundPlayer
     */
-	class SoundChannel : public Object
-	{
-	public:
-		virtual void Pause() = 0;
+    class SoundChannel : public Object
+    {
+    public:
+        virtual void Pause() = 0;
         virtual void UnPause() = 0;
         virtual double GetPosition() const = 0;
         virtual void SetPosition(double position) = 0;
-		virtual float GetVolume() const = 0;
-		virtual void SetVolume(float volume) const = 0;
-		virtual bool IsPlaying() = 0;
-		virtual bool IsFinished() = 0;
+        virtual float GetVolume() const = 0;
+        virtual void SetVolume(float volume) const = 0;
+        virtual bool IsPlaying() = 0;
+        virtual bool IsFinished() = 0;
 
         virtual double GetDuration() const = 0;
-		virtual float GetPan() const = 0;
-		virtual void SetPan(float pan) const = 0;
-		virtual void Play() = 0;
-		virtual void Stop() = 0;
-		virtual bool IsPaused() = 0;
-	};
+        virtual float GetPan() const = 0;
+        virtual void SetPan(float pan) const = 0;
+        virtual void Play() = 0;
+        virtual void Stop() = 0;
+        virtual bool IsPaused() = 0;
+    };
 
     /**
         \ingroup XliSoundPlayer

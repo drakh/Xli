@@ -9,7 +9,7 @@ if (WIN32)
     file(GLOB MORE_SRC win32/*.cpp)
     set(SRC ${SRC} ${MORE_SRC})
 else()
-    file(GLOB MORE_SRC posix/*.cpp)
+    file(GLOB MORE_SRC pthread/*.cpp unix/*.cpp)
     set(SRC ${SRC} ${MORE_SRC})
 endif()
 

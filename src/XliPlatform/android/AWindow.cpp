@@ -18,6 +18,7 @@ Xli::Window* GlobalWindow = 0;
 static struct android_app* GlobalAndroidApp = 0;
 static int GlobalWidth = 0;
 static int GlobalHeight = 0;
+static int GlobalFlags = 0;
 
 static volatile int inited = 0;
 
@@ -27,9 +28,9 @@ namespace Xli
     {
         class AWindow: public Window
         {
+        public:
             MutexQueue<WindowAction*> ctActionQueue;
 
-        public:
             AWindow()
             {
                 if (GlobalEventHandler != 0)
@@ -245,21 +246,6 @@ namespace Xli
             virtual void SetSystemCursor(SystemCursor cursor)
             {
             }
-
-            virtual void EnqueueCrossThreadEvent(WindowAction* action)
-            {
-                ctActionQueue.Enqueue(action);
-            }
-
-            virtual void ProcessCrossThreadEvents()
-            {
-                while ((ctActionQueue.Count() > 0))
-                {
-                    WindowAction* action = ctActionQueue.Dequeue();
-                    action->Execute();
-                    delete action;
-                }
-            }
         };
 
         class ALogStream: public Stream
@@ -447,22 +433,28 @@ namespace Xli
 */
                 case APP_CMD_PAUSE:
                     AShim::OnPause();
-                    
+
                     if (GlobalEventHandler)
                         GlobalEventHandler->OnAppWillEnterBackground(GlobalWindow);
+                    
+                    if ((GlobalFlags & WindowFlagsSupportBackground) != 0)
+                    {
+                        // Note: At this point rendering should have stopped and app state is suspended. 
+                        // If app fails to do this, it must be closed.
 
-                    // TODO: At this point rendering should have stopped and app state is suspended. If app fails to do this, it must be closed.
+                        if (GlobalEventHandler)
+                            GlobalEventHandler->OnAppDidEnterBackground(GlobalWindow);
+                    }
+                    else
+                    {
+                        if (GlobalEventHandler)
+                            GlobalEventHandler->OnAppTerminating(GlobalWindow);
 
-                    //if (GlobalEventHandler)
-                        //GlobalEventHandler->OnAppDidEnterBackground(GlobalWindow);
+                        GlobalAndroidApp->destroyRequested = 1;
 
-                    if (GlobalEventHandler)
-                        GlobalEventHandler->OnAppTerminating(GlobalWindow);
-
-                    GlobalAndroidApp->destroyRequested = 1;
-
-                    if (GlobalEventHandler != 0)
-                        GlobalEventHandler->OnClosed(GlobalWindow);
+                        if (GlobalEventHandler != 0)
+                            GlobalEventHandler->OnClosed(GlobalWindow);
+                    }
 
                     break;
 
@@ -499,7 +491,7 @@ namespace Xli
             }
         }
 
-        void AInit(struct android_app* app)
+        void Android::Init(struct android_app* app)
         {
             app->userData = 0;
             app->onAppCmd = handle_cmd;
@@ -507,8 +499,6 @@ namespace Xli
 
             GlobalAndroidApp = app;
             AndroidActivity = app->activity;
-
-            //ANativeActivity_setWindowFlags(app->activity, AWINDOW_FLAG_FULLSCREEN | AWINDOW_FLAG_KEEP_SCREEN_ON | AWINDOW_FLAG_TURN_SCREEN_ON, 0);
 
             AJniHelper::Init();
 
@@ -526,6 +516,31 @@ namespace Xli
                 }
 
                 usleep(10000);
+            }
+        }
+
+        void Android::SetLogName(const char* name)
+        {
+            setenv("XLI_APP_NAME", name, 1);
+        }
+
+        jobject Android::GetJniActivity()
+        {
+            return AndroidActivity->clazz;
+        }
+
+        void EnqueueCrossThreadEvent(Window* wnd, WindowAction* action)
+        {
+            ((AWindow*)wnd)->ctActionQueue.Enqueue(action);
+        }
+
+        void ProcessCrossThreadEvents(Window* wnd)
+        {
+            while ((((AWindow*)wnd)->ctActionQueue.Count() > 0))
+            {
+                WindowAction* action = ((AWindow*)wnd)->ctActionQueue.Dequeue();
+                action->Execute();
+                delete action;
             }
         }
     }
@@ -561,7 +576,18 @@ namespace Xli
 
         GlobalWidth = width;
         GlobalHeight = height;
+        GlobalFlags = flags;
         GlobalWindow = new PlatformSpecific::AWindow();
+
+        int nativeFlags = 0;
+
+        if (flags & WindowFlagsFullscreen)
+            nativeFlags |= AWINDOW_FLAG_FULLSCREEN;
+
+        if (flags & WindowFlagsDisablePowerSaver)
+            nativeFlags |= AWINDOW_FLAG_KEEP_SCREEN_ON | AWINDOW_FLAG_TURN_SCREEN_ON;
+
+        ANativeActivity_setWindowFlags(GlobalAndroidApp->activity, flags, 0);
 
         return GlobalWindow;
     }
@@ -597,7 +623,7 @@ namespace Xli
             }
 
             if (GlobalWindow)
-                GlobalWindow->ProcessCrossThreadEvents();
+                PlatformSpecific::ProcessCrossThreadEvents(GlobalWindow);
         }
     }
 }

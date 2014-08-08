@@ -1,6 +1,8 @@
 #ifndef __XLI_KEYEVENT_ANDROID_H__
 #define __XLI_KEYEVENT_ANDROID_H__
 
+#include <XliPlatform/Window.h>
+
 namespace Xli
 {
     namespace PlatformSpecific

@@ -1,12 +1,11 @@
-#include <XliPlatform/PlatformSpecific/Win32Helpers.h>
-#include <XliPlatform/PlatformSpecific/Win32Header.h>
+#include <XliPlatform/PlatformSpecific/Win32.h>
 #include <Xli/Unicode.h>
 
 namespace Xli
 {
     namespace PlatformSpecific
     {
-        String Win32Helpers::GetLastErrorString()
+        String Win32::GetLastErrorString()
         {
             LPWSTR lpMsgBuf;
             DWORD dw = GetLastError();
@@ -25,6 +24,25 @@ namespace Xli
             LocalFree(lpMsgBuf);
 
             return msg;
+        }
+
+        HWND Win32::GetWindowHandle(Window* wnd)
+        {
+            if (!wnd || wnd->GetImplementation() != WindowImplementationWin32)
+                return NULL;
+
+            return (HWND)wnd->GetNativeHandle();
+        }
+
+        void Win32::RegisterTouchWindow(Window* wnd)
+        {
+            ::RegisterTouchWindow(GetWindowHandle(wnd), 0);
+        }
+
+        void Win32::SetWindowIconByID(Window* wnd, int id)
+        {
+            SendMessage(GetWindowHandle(wnd), WM_SETICON, ICON_SMALL, (LPARAM)LoadIcon(GetModuleHandle(0), MAKEINTRESOURCE(id)));
+            SendMessage(GetWindowHandle(wnd), WM_SETICON, ICON_BIG, (LPARAM)LoadIcon(GetModuleHandle(0), MAKEINTRESOURCE(id)));
         }
     }
 }

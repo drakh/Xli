@@ -7,6 +7,12 @@ namespace Xli
 {
     namespace PlatformSpecific
     {
+        class WindowAction : public Object
+        {
+        public:
+            virtual void Execute() = 0;
+        };
+
         class CTKeyAction : public WindowAction
         {
         public:
@@ -19,6 +25,7 @@ namespace Xli
             }
             virtual void Execute();
         };
+
         class CTTextAction : public WindowAction
         {
         public:
@@ -26,6 +33,9 @@ namespace Xli
             CTTextAction(String text) { this->Text = text; }
             virtual void Execute();
         };
+
+        void EnqueueCrossThreadEvent(Window* wnd, WindowAction* action);
+        void ProcessCrossThreadEvents(Window* wnd);
     };
 };
 

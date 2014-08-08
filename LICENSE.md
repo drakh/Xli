@@ -27,7 +27,7 @@ The table below shows the libraries Xli uses internally and how they are linked 
 
 License details are found in the source code located in the `3rdparty` directory.
 
-Library                 | Component  | Android | iOS     | OS X    | *nix    | Win32  |
+Library                 | Module     | Android | iOS     | OS X    | *nix    | Win32  |
 ------------------------|:----------:|:-------:|:-------:|:-------:|:-------:|:-------:
 android_native_app_glue | Main       | static  | -       | -       | -       | -      |
 ConvertUTF              | Core       | static  | static  | static  | static  | static |

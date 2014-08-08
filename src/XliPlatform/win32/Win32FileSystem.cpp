@@ -3,8 +3,7 @@
 #include <Xli/Random.h>
 #include <Xli/Unicode.h>
 #include <XliPlatform/Disk.h>
-#include <XliPlatform/PlatformSpecific/Win32Header.h>
-#include <XliPlatform/PlatformSpecific/Win32Helpers.h>
+#include <XliPlatform/PlatformSpecific/Win32.h>
 #include <ShlObj.h>
 
 namespace Xli
@@ -164,7 +163,7 @@ namespace Xli
 
                 if (!RemoveDirectoryW(nameW.DataPtr()))
                 {
-                    XLI_THROW("Unable to delete directory '" + name + "': " + Win32Helpers::GetLastErrorString());
+                    XLI_THROW("Unable to delete directory '" + name + "': " + Win32::GetLastErrorString());
                 }
             }
 
@@ -173,7 +172,7 @@ namespace Xli
                 Utf16String nameW = Unicode::Utf8To16(name);
 
                 if (!DeleteFileW(nameW.DataPtr()))
-                    XLI_THROW("Unable to delete file '" + name + "': " + Win32Helpers::GetLastErrorString());
+                    XLI_THROW("Unable to delete file '" + name + "': " + Win32::GetLastErrorString());
             }
 
             virtual void MoveDirectory(const String& oldName, const String& newName)
@@ -182,7 +181,7 @@ namespace Xli
                 Utf16String newNameW = Unicode::Utf8To16(newName);
 
                 if (!MoveFileW(oldNameW.DataPtr(), newNameW.DataPtr()))
-                    XLI_THROW("Unable to move directory '" + oldName + "' to '" + newName + "': " + Win32Helpers::GetLastErrorString());
+                    XLI_THROW("Unable to move directory '" + oldName + "' to '" + newName + "': " + Win32::GetLastErrorString());
             }
 
             virtual void MoveFile(const String& oldName, const String& newName)
@@ -191,7 +190,7 @@ namespace Xli
                 Utf16String newNameW = Unicode::Utf8To16(newName);
 
                 if (!MoveFileW(oldNameW.DataPtr(), newNameW.DataPtr()))
-                    XLI_THROW("Unable to move file '" + oldName + "' to '" + newName + "': " + Win32Helpers::GetLastErrorString());
+                    XLI_THROW("Unable to move file '" + oldName + "' to '" + newName + "': " + Win32::GetLastErrorString());
             }
 
             virtual bool GetFileInfo(const String& path, FileInfo& info)

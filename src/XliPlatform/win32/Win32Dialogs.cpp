@@ -3,7 +3,7 @@
 #include <Xli/StringBuilder.h>
 #include <Xli/Path.h>
 #include <XliPlatform/MessageBox.h>
-#include <XliPlatform/PlatformSpecific/Win32Header.h>
+#include <XliPlatform/PlatformSpecific/Win32.h>
 #include <XliPlatform/Window.h>
 #include <Xli/Unicode.h>
 #include <CommDlg.h>
@@ -69,9 +69,7 @@ namespace Xli
             memcpy(fnbufW, defaultFileW.DataPtr(), defaultFileW.Length() * 2 + 2);
         }
         
-        if (parent)
-            ofn.hwndOwner = (HWND)parent->GetNativeHandle();
-
+        ofn.hwndOwner = Win32::GetWindowHandle(parent);
         ofn.hInstance = GetModuleHandle(NULL);
         ofn.lpstrFilter = filterW.DataPtr();
         ofn.lpstrFile = fnbufW;

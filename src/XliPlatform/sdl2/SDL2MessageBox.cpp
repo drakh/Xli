@@ -1,5 +1,5 @@
 #include <XliPlatform/MessageBox.h>
-#include <XliPlatform/PlatformSpecific/SDL2Window.h>
+#include <XliPlatform/PlatformSpecific/SDL2.h>
 
 namespace Xli
 {
@@ -9,7 +9,7 @@ namespace Xli
         SDL_MessageBoxButtonData buttondata[3];
 
         data.flags = 0;
-        data.window = wnd != 0 && wnd->GetImplementation() == WindowImplementationSDL2 ? ((PlatformSpecific::SDL2Window*)wnd)->GetSDL_Window() : NULL;
+        data.window = PlatformSpecific::SDL2::GetWindowHandle(wnd);
         data.title = caption.DataPtr();
         data.message = message.DataPtr();
         data.numbuttons = 0;

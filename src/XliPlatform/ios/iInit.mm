@@ -1,4 +1,5 @@
 #include <Xli/Console.h>
+#include <XliPlatform/PlatformSpecific/iOS.h>
 #import <Foundation/NSObjCRuntime.h>
 
 namespace Xli
@@ -53,7 +54,7 @@ namespace Xli
             }
         };
 
-        void iInit()
+        void iOS::Init()
         {
 #ifndef TARGET_IPHONE_SIMULATOR
             Managed<Stream> log = new NSLogStream();

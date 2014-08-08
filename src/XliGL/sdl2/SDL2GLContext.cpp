@@ -1,5 +1,6 @@
 #include <XliGL.h>
-#include <XliPlatform/PlatformSpecific/SDL2Window.h>
+#include <XliPlatform/PlatformSpecific/SDL2.h>
+#include <Xli/Shared.h>
 
 namespace Xli
 {
@@ -7,12 +8,14 @@ namespace Xli
     {
         class SDL2GLContext: public GLContext
         {
-            Shared<SDL2Window> window;
+            Shared<Window> window;
             SDL_GLContext context;
 
         public:
-            SDL2GLContext(SDL2Window* window, const GLContextAttributes& attribs)
+            SDL2GLContext(Window* wnd, const GLContextAttributes& attribs)
             {
+                window = wnd;
+
                 SDL_GL_SetAttribute(SDL_GL_RED_SIZE, attribs.ColorBits.R);
                 SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, attribs.ColorBits.G);
                 SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, attribs.ColorBits.B);
@@ -35,13 +38,12 @@ namespace Xli
                 SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
 #endif
 
-                this->window = window;
-                context = SDL_GL_CreateContext(window->GetSDL_Window());
+                context = SDL_GL_CreateContext(SDL2::GetWindowHandle(window));
 
                 if (!context)
                     XLI_THROW("Failed to create OpenGL context");
 
-                Vector2i vp = window->GetClientSize();
+                Vector2i vp = wnd->GetClientSize();
                 glViewport(0, 0, vp.X, vp.Y);
 
 #ifdef XLI_GL_DESKTOP
@@ -71,7 +73,7 @@ namespace Xli
 
             virtual void MakeCurrent(bool current)
             {
-                SDL_GL_MakeCurrent(window->GetSDL_Window(), current ? context : 0);
+                SDL_GL_MakeCurrent(SDL2::GetWindowHandle(window), current ? context : 0);
             }
 
             virtual bool IsCurrent()
@@ -81,7 +83,7 @@ namespace Xli
 
             virtual void SwapBuffers()
             {
-                SDL_GL_SwapWindow(window->GetSDL_Window());
+                SDL_GL_SwapWindow(SDL2::GetWindowHandle(window));
             }
 
             virtual void SetSwapInterval(int value)
@@ -98,9 +100,9 @@ namespace Xli
             {
                 Vector2i size;
 #ifdef XLI_PLATFORM_LINUX
-                SDL_GetWindowSize(window->GetSDL_Window(), &size.X, &size.Y);
+                SDL_GetWindowSize(SDL2::GetWindowHandle(window), &size.X, &size.Y);
 #else
-                SDL_GL_GetDrawableSize(window->GetSDL_Window(), &size.X, &size.Y);
+                SDL_GL_GetDrawableSize(SDL2::GetWindowHandle(window), &size.X, &size.Y);
 #endif
                 return size;
             }
@@ -130,11 +132,8 @@ namespace Xli
         };
     }
 
-    GLContext* GLContext::Create(Window* window, const GLContextAttributes& attribs)
+    GLContext* GLContext::Create(Window* wnd, const GLContextAttributes& attribs)
     {
-        if (window->GetImplementation() != WindowImplementationSDL2) 
-            XLI_THROW("Unsupported window implementation");
-
-        return new PlatformSpecific::SDL2GLContext((PlatformSpecific::SDL2Window*)window, attribs);
+        return new PlatformSpecific::SDL2GLContext(wnd, attribs);
     }
 }

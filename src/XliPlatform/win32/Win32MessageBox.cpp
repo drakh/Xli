@@ -1,20 +1,13 @@
 #include <XliPlatform/MessageBox.h>
 #include <XliPlatform/Window.h>
-#include <XliPlatform/PlatformSpecific/Win32Helpers.h>
-#include <XliPlatform/PlatformSpecific/Win32Header.h>
+#include <XliPlatform/PlatformSpecific/Win32.h>
 #include <Xli/Unicode.h>
 
 namespace Xli
 {
     DialogResult MessageBox::Show(Window* wnd, const String& message, const String& caption, DialogButtons buttons, int hints)
     {
-        HWND hWnd = 0;
         UINT type = 0;
-
-        if (wnd && wnd->GetImplementation() == WindowImplementationWin32)
-        {
-            hWnd = (HWND)wnd->GetNativeHandle();
-        }
 
         switch (buttons)
         {
@@ -38,7 +31,7 @@ namespace Xli
 
         Utf16String messageW = Unicode::Utf8To16(message);
         Utf16String captionW = Unicode::Utf8To16(caption);
-        int result = MessageBoxW(hWnd, messageW.DataPtr(), captionW.DataPtr(), type);
+        int result = MessageBoxW(Win32::GetWindowHandle(wnd), messageW.DataPtr(), captionW.DataPtr(), type);
 
         switch (result)
         {
@@ -50,7 +43,7 @@ namespace Xli
         case IDTRYAGAIN: return DialogResultTryAgain;
         case IDYES: return DialogResultYes;
         default:
-            XLI_THROW("MessageDialog failed: " + PlatformSpecific::Win32Helpers::GetLastErrorString());
+            XLI_THROW("MessageDialog failed: " + PlatformSpecific::Win32::GetLastErrorString());
         }
     }
 }

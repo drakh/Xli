@@ -4,7 +4,7 @@
 #include <Xli/HashMap.h>
 #include <Xli/MutexQueue.h>
 #include <XliHttpClient/HttpClient.h>
-#include <XliPlatform/PlatformSpecific/Android.h>
+#include "../../XliPlatform/android/AInternal.h"
 
 namespace Xli
 {

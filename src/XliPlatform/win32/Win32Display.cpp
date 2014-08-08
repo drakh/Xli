@@ -1,5 +1,5 @@
 #include <XliPlatform/Display.h>
-#include <XliPlatform/PlatformSpecific/Win32Header.h>
+#include <XliPlatform/PlatformSpecific/Win32.h>
 #include <Xli/Array.h>
 #include <cstdlib>
 

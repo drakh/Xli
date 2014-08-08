@@ -6,7 +6,7 @@ namespace Xli
 {
     bool Vibrator::CanVibrate()
     {
-        return PlatformSpecific::IsIPhone();
+        return PlatformSpecific::iOS::IsIPhone();
     }
 
     bool Vibrator::CanTimedVibrate()

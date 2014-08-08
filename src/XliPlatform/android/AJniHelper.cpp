@@ -32,18 +32,18 @@ namespace Xli
         {
             void JNICALL XliJ_OnKeyUp (JNIEnv *env , jobject obj, jint keyCode) 
             {
-                GlobalWindow->EnqueueCrossThreadEvent(new CTKeyAction((AKeyEvent)keyCode, false));
+                EnqueueCrossThreadEvent(GlobalWindow, new CTKeyAction((AKeyEvent)keyCode, false));
             }
 
             void JNICALL XliJ_OnKeyDown (JNIEnv *env , jobject obj, jint keyCode) 
             {
-                GlobalWindow->EnqueueCrossThreadEvent(new CTKeyAction((AKeyEvent)keyCode, true));
+                EnqueueCrossThreadEvent(GlobalWindow, new CTKeyAction((AKeyEvent)keyCode, true));
             }
 
             void JNICALL XliJ_OnTextInput (JNIEnv *env , jobject obj, jstring keyChars) 
             {
                 const char* jChars = env->GetStringUTFChars((jstring)keyChars, NULL);        
-                GlobalWindow->EnqueueCrossThreadEvent(new CTTextAction(String(jChars)));
+                EnqueueCrossThreadEvent(GlobalWindow, new CTTextAction(String(jChars)));
                 env->ReleaseStringUTFChars((jstring)keyChars, jChars);
             }
 
@@ -51,7 +51,7 @@ namespace Xli
             {
                 char const* cerrorMessage = env->GetStringUTFChars(errorMessage, NULL);
                 String finalMessage = String("JavaThrown:")+String(cerrorMessage); 
-                GlobalWindow->EnqueueCrossThreadEvent(new CTError(finalMessage, errorCode));
+                EnqueueCrossThreadEvent(GlobalWindow, new CTError(finalMessage, errorCode));
                 env->ReleaseStringUTFChars(errorMessage, cerrorMessage);
             }
         }

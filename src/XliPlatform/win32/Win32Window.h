@@ -1,9 +1,9 @@
 #ifndef __XLI_PLATFORM_SPECIFIC_WIN32_WINDOW_H__
 #define __XLI_PLATFORM_SPECIFIC_WIN32_WINDOW_H__
 
-#include <XliPlatform/PlatformSpecific/Win32Header.h>
-#include <Xli/Shared.h>
+#include <XliPlatform/PlatformSpecific/Win32.h>
 #include <XliPlatform/Window.h>
+#include <Xli/Shared.h>
 
 namespace Xli
 {
@@ -24,6 +24,8 @@ namespace Xli
             bool fullscreen;
 
             friend class Xli::Window;
+            friend class Xli::PlatformSpecific::Win32;
+
             static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
         public:
@@ -67,10 +69,6 @@ namespace Xli
 
             virtual SystemCursor GetSystemCursor();
             virtual void SetSystemCursor(SystemCursor cursor);
-
-            void RegisterTouchEvents();
-            HWND GetHWND() { return hWnd; }
-            void SetIconByID(int id);
         };
     }
 }

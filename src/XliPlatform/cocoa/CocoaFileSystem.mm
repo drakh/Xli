@@ -1,12 +1,12 @@
 #import <Foundation/Foundation.h>
 #include <Xli/Path.h>
-#include "../posix/PosixFileSystemBase.h"
+#include "../unix/UnixFileSystemBase.h"
 
 namespace Xli
 {
     namespace PlatformSpecific
     {
-        class CocoaFileSystem: public PosixFileSystemBase
+        class CocoaFileSystem: public UnixFileSystemBase
         {
         public:
             virtual Stream* Open(const String& filename, FileMode mode)

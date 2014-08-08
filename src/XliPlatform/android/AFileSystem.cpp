@@ -1,5 +1,5 @@
 #include <XliPlatform/PlatformSpecific/Android.h>
-#include "../posix/PosixFileSystemBase.h"
+#include "../unix/UnixFileSystemBase.h"
 #include "AJniHelper.h"
 
 namespace Xli
@@ -116,7 +116,7 @@ namespace Xli
             }
         };
 
-        class AFileSystem: public PlatformSpecific::PosixFileSystemBase
+        class AFileSystem: public UnixFileSystemBase
         {
             jmethodID Context_getCacheDir;
             jmethodID File_getAbsolutePath;

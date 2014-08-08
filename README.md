@@ -1,4 +1,6 @@
-Xli is a modular and cross-platform app development framework for C++. It is being used to implement the Uno C++ runtime and core library among some other things.
+Xli is a modular and cross-platform app development framework for C++. It is being used to implement the Uno C++ runtime and core library among some other things. 
+
+Xli is officially supported on **Android**, **iOS**, **OS X** and **Windows**. The build system also implements support for **Linux** and **Raspberry PI**, but these are not regularly tested. Additionally we're using [SDL2] as fallback, so any other platforms supported by [SDL2] could be added with some tweaks here and there.
 
 Header documentation can be generated using `doxygen`. 
 

@@ -1,6 +1,6 @@
 #include <XliGL.h>
-#include <XliPlatform/PlatformSpecific/Win32Window.h>
-#include <XliPlatform/PlatformSpecific/Win32Helpers.h>
+#include <XliPlatform/PlatformSpecific/Win32.h>
+#include <XliPlatform/Window.h>
 #include <Xli/Console.h>
 #include <Xli/Shared.h>
 #include "../../../3rdparty/glew/include/GL/wglew.h"
@@ -15,7 +15,7 @@ namespace Xli
         {
             HDC hDC;
             HGLRC hGLRC;
-            Shared<Win32Window> window;
+            Shared<Window> window;
             PIXELFORMATDESCRIPTOR pfd;
             int pf;
 
@@ -42,7 +42,7 @@ namespace Xli
                         0, 0, 0, 0
                     };
 
-                    HWND tmpWnd = CreateWindowEx(0, L"STATIC", L"", 0, 0, 0, 16, 16, window->GetHWND(), 0, GetModuleHandle(0), 0);
+                    HWND tmpWnd = CreateWindowEx(0, L"STATIC", L"", 0, 0, 0, 16, 16, Win32::GetWindowHandle(window), 0, GetModuleHandle(0), 0);
                     HDC tmpDC = GetDC(tmpWnd);
                     int fmt = ChoosePixelFormat(tmpDC, &tmpPfd);
                     SetPixelFormat(tmpDC, fmt, &pfd);
@@ -111,7 +111,7 @@ namespace Xli
 
                 if (!SetPixelFormat(hDC, configs[0], &pfd))
                 {
-                    ErrorPrintLine("WGL ERROR: Unable to set multisampled OpenGL format: " + Win32Helpers::GetLastErrorString());
+                    ErrorPrintLine("WGL ERROR: Unable to set multisampled OpenGL format: " + Win32::GetLastErrorString());
                     return -1;
                 }
 
@@ -119,10 +119,10 @@ namespace Xli
             }
 
         public:
-            WGLContext(Win32Window* wnd, const GLContextAttributes& attribs)
+            WGLContext(Window* wnd, const GLContextAttributes& attribs)
             {
                 this->window = wnd;
-                hDC = GetDC(wnd->GetHWND());
+                hDC = GetDC(Win32::GetWindowHandle(wnd));
 
                 ZeroMemory(&pfd, sizeof(PIXELFORMATDESCRIPTOR));
                 pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
@@ -148,12 +148,12 @@ namespace Xli
                 pf = TryEnableMultisample(attribs);
 
                 if (pf == -1 && !SetPixelFormat(hDC, ChoosePixelFormat(hDC, &pfd), &pfd))
-                    XLI_THROW("Failed to create OpenGL context: " + Win32Helpers::GetLastErrorString());
+                    XLI_THROW("Failed to create OpenGL context: " + Win32::GetLastErrorString());
 
                 hGLRC = wglCreateContext(hDC);
                 
                 if (!hGLRC)
-                    XLI_THROW("Failed to create OpenGL context: " + Win32Helpers::GetLastErrorString());
+                    XLI_THROW("Failed to create OpenGL context: " + Win32::GetLastErrorString());
 
                 MakeCurrent(true);
 
@@ -172,13 +172,13 @@ namespace Xli
                 hGLRC = wglCreateContext(hDC);
 
                 if (!hGLRC)
-                    XLI_THROW("Unable to create shared OpenGL context: " + Win32Helpers::GetLastErrorString());
+                    XLI_THROW("Unable to create shared OpenGL context: " + Win32::GetLastErrorString());
 
                 if (!wglMakeCurrent(hDC, 0))
-                    XLI_THROW("Unable to make OpenGL context no longer current: " + Win32Helpers::GetLastErrorString());
+                    XLI_THROW("Unable to make OpenGL context no longer current: " + Win32::GetLastErrorString());
 
                 if (!wglShareLists(srcCtx->hGLRC, hGLRC))
-                    XLI_THROW("Unable to share OpenGL contexts: " + Win32Helpers::GetLastErrorString());
+                    XLI_THROW("Unable to share OpenGL contexts: " + Win32::GetLastErrorString());
 
                 srcCtx->MakeCurrent(true);
             }
@@ -198,16 +198,13 @@ namespace Xli
                 return window;
             }
 
-            virtual void SetWindow(Window* window)
+            virtual void SetWindow(Window* wnd)
             {
-                if (window->GetImplementation() != WindowImplementationWin32) 
-                    XLI_THROW("Unsupported window");
-                
-                if (window->GetNativeHandle() == window->GetNativeHandle())
+                if (this->window->GetNativeHandle() == wnd->GetNativeHandle())
                     return;
 
-                this->window = (Win32Window*)window;
-                this->hDC = GetDC(this->window->GetHWND());
+                this->window = wnd;
+                this->hDC = GetDC(Win32::GetWindowHandle(wnd));
 
                 if (pf != -1)
                     SetPixelFormat(hDC, pf, &pfd);
@@ -273,10 +270,7 @@ namespace Xli
     }
 
     GLContext* GLContext::Create(Window* window, const GLContextAttributes& attribs)
-    {
-        if (window->GetImplementation() != WindowImplementationWin32) 
-            XLI_THROW("Unsupported window implementation");
-        
-        return new PlatformSpecific::WGLContext((PlatformSpecific::Win32Window*)window, attribs);
+    {     
+        return new PlatformSpecific::WGLContext(window, attribs);
     }
 }

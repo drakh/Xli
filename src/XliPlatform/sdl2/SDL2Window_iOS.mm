@@ -1,4 +1,4 @@
-#include <XliPlatform/PlatformSpecific/SDL2Window.h>
+#include "SDL2Window.h"
 #include <UIKit/UIKit.h>
 #include <SDL.h>
 #include <SDL_syswm.h>

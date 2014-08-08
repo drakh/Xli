@@ -2,6 +2,9 @@
 #include <XliPlatform/Display.h>
 #include <SDL.h>
 
+#import <Foundation/Foundation.h>
+#import <AppKit/NSScreen.h>
+
 namespace Xli
 {
     float Display::GetDensity(int displayIndex)

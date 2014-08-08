@@ -4,6 +4,7 @@
 #include <jni.h>
 #include <Xli/String.h>
 #include <XliHttpClient.h>
+#include "AInternal.h"
 
 namespace Xli
 {

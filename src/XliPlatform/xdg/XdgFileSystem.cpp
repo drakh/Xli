@@ -1,4 +1,4 @@
-#include "../posix/PosixFileSystemBase.h"
+#include "../unix/UnixFileSystemBase.h"
 #include <Xli/Console.h>
 #include <Xli/Path.h>
 #include <sys/types.h>
@@ -12,7 +12,7 @@ namespace Xli
 {
     namespace PlatformSpecific
     {
-        class XdgFileSystem: public PosixFileSystemBase
+        class XdgFileSystem: public UnixFileSystemBase
         {
         public:
             virtual String GetBaseDirectory()

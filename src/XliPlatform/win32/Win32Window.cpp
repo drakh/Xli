@@ -1,5 +1,4 @@
-#include <XliPlatform/PlatformSpecific/Win32Window.h>
-#include <XliPlatform/PlatformSpecific/Win32Helpers.h>
+#include "Win32Window.h"
 #include <XliPlatform/Display.h>
 #include <Xli/Console.h>
 #include <Xli/HashMap.h>
@@ -68,7 +67,7 @@ namespace Xli
             hWnd = CreateWindowW(WindowClassName, titleW.DataPtr(), dwStyle, CW_USEDEFAULT, CW_USEDEFAULT, rect.right - rect.left, rect.bottom - rect.top, 0, 0, HInstance, 0);
 
             if (!hWnd)
-                XLI_THROW("Failed to create window: " + Win32Helpers::GetLastErrorString());
+                XLI_THROW("Failed to create window: " + Win32::GetLastErrorString());
 
             if (!MainWindow)
                 MainWindow = this;
@@ -130,11 +129,6 @@ namespace Xli
                 CloseWindow(hWnd);
                 closed = true;
             }
-        }
-
-        void Win32Window::RegisterTouchEvents()
-        {
-            RegisterTouchWindow(hWnd, 0);
         }
 
         bool Win32Window::IsClosed()
@@ -413,12 +407,6 @@ namespace Xli
             p.y = position.Y;
             ::ClientToScreen(hWnd, &p);
             ::SetCursorPos(p.x, p.y);
-        }
-
-        void Win32Window::SetIconByID(int id)
-        {
-            SendMessage(hWnd, WM_SETICON, ICON_SMALL, (LPARAM)LoadIcon(GetModuleHandle(0), MAKEINTRESOURCE(id)));
-            SendMessage(hWnd, WM_SETICON, ICON_BIG, (LPARAM)LoadIcon(GetModuleHandle(0), MAKEINTRESOURCE(id)));
         }
 
         LRESULT CALLBACK Win32Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

@@ -1,7 +1,9 @@
 #include <XliGL.h>
-#include <XliPlatform/PlatformSpecific/SDL2Window.h>
 #include <Xli/Unicode.h>
 #include <Xli/Console.h>
+
+#include <XliPlatform/PlatformSpecific/SDL2.h>
+#include "SDL2Window.h"
 
 #include <SDL.h>
 #include <SDL_syswm.h>
@@ -15,6 +17,11 @@ namespace Xli
 
     namespace PlatformSpecific
     {
+        SDL_Window* SDL2::GetWindowHandle(Window* wnd)
+        {
+            return wnd != 0 && wnd->GetImplementation() == WindowImplementationSDL2 ? ((PlatformSpecific::SDL2Window*)wnd)->GetSDL_Window() : NULL;
+        }
+
 #ifdef XLI_PLATFORM_IOS
 
         static int HandleAppEvents(void *userdata, SDL_Event *event)

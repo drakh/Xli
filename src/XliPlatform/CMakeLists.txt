@@ -10,7 +10,7 @@ set(SDL2_DIR ../../3rdparty/SDL2)
 set(SDL2_SRC
     generic/GenericBundle.cpp
     generic/GenericDialogs.cpp
-    posix/PosixFileSystemBase.cpp
+    unix/UnixFileSystemBase.cpp
     sdl2/SDL2Window.cpp
     sdl2/SDL2Display.cpp
     sdl2/SDL2MessageBox.cpp)
@@ -107,7 +107,7 @@ if (XLI_PLATFORM_ANDROID)
         android/AWindow.cpp
         android/ADisplay.cpp
         generic/GenericDialogs.cpp
-        posix/PosixFileSystemBase.cpp)
+        unix/UnixFileSystemBase.cpp)
 
     set(LIBS ${LIBS} log android)
 
@@ -117,11 +117,10 @@ elseif (XLI_PLATFORM_WIN32)
         generic/GenericBundle.cpp
         win32/Win32Dialogs.cpp
         win32/Win32FileSystem.cpp
-        win32/Win32Helpers.cpp
         win32/Win32MessageBox.cpp
         win32/Win32Window.cpp
         win32/Win32Display.cpp
-        win32/Win32Helpers.cpp)
+        win32/Win32.cpp)
 
 elseif (XLI_PLATFORM_LINUX)
 
@@ -199,7 +198,7 @@ elseif (XLI_PLATFORM_OSX)
         ${SDL2_DIR}/src/video/x11/SDL_x11video.c
         ${SDL2_DIR}/src/video/x11/SDL_x11window.c
         ${SDL2_DIR}/src/video/x11/SDL_x11xinput2.c
-        sdl2/SDL2Display_iOS.mm)
+        sdl2/SDL2Display_OSX.mm)
 
 endif()
 
