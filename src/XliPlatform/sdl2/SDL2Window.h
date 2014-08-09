@@ -32,16 +32,12 @@ namespace Xli
         */
         class SDL2Window: public Window
         {
-            friend class Window;
-            
+        public:            
             Shared<WindowEventHandler> eventHandler;
             SDL_Window* window;
             bool closed, fullscreen;
             int x, y, w, h, buttons;
             Vector2i keyboardSize;
-
-        public:
-            SDL_Window* GetSDL_Window() { return window; }
 
             SDL2Window(int width, int height, const Xli::String& title, int flags);
             SDL2Window(const void* nativeHandle);

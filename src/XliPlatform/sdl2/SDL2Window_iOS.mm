@@ -67,7 +67,7 @@ namespace Xli
         void SDL2Window::SDL2WindowInit() 
         {
             int width, height;
-            SDL_GetWindowSize(((SDL2Window*)GetMainWindow())->GetSDL_Window(), &width, &height);
+            SDL_GetWindowSize(((SDL2Window*)GetMainWindow())->window, &width, &height);
             this->keyboardSize = Vector2i(width,0);            
             
             NSNotificationCenter *center = [NSNotificationCenter defaultCenter];

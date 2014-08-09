@@ -39,7 +39,7 @@ namespace Xli
     {
         SDL_Window* SDL2::GetWindowHandle(Window* wnd)
         {
-            return wnd != 0 && wnd->GetImplementation() == WindowImplementationSDL2 ? ((PlatformSpecific::SDL2Window*)wnd)->GetSDL_Window() : NULL;
+            return wnd != 0 && wnd->GetImplementation() == WindowImplementationSDL2 ? ((PlatformSpecific::SDL2Window*)wnd)->window : NULL;
         }
 
 #ifdef XLI_PLATFORM_IOS
@@ -52,6 +52,9 @@ namespace Xli
                 if (GlobalWindow && GlobalWindow->GetEventHandler())
                 {
                     GlobalWindow->GetEventHandler()->OnAppTerminating(GlobalWindow);
+                    
+                    GlobalWindow->closed = true;
+                    GlobalWindow->GetEventHandler()->OnClosed(GlobalWindow);
                 }
                 
                 return 0;
@@ -702,7 +705,7 @@ namespace Xli
                     if (GlobalWindow != 0 && GlobalWindow->GetEventHandler() != 0)
                     {
                         int w, h;
-                        SDL_GetWindowSize(GlobalWindow->GetSDL_Window(), &w, &h);
+                        SDL_GetWindowSize(GlobalWindow->window, &w, &h);
                         
                         float x = e.tfinger.x * w;
                         float y = e.tfinger.y * h;
