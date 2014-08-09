@@ -7,6 +7,7 @@ using namespace Xli;
 class GLApp: public Application
 {
     Managed<GLContext> gl;
+    bool _background;
 
     int dialogType;
     double touchDownTime;
@@ -20,6 +21,8 @@ public:
         dialogType = 0;
         touchDownTime = 0;
         tapTime = 0;
+
+        _background = false;
     }
 
     virtual ~GLApp()
@@ -34,7 +37,6 @@ public:
         // Setup OpenGL
 
         GLContextAttributes glAttribs = GLContextAttributes::Default();
-        //glAttribs.Buffers = 1;
         glAttribs.Samples = 16;
 
         gl = GLContext::Create(wnd, glAttribs);
@@ -42,51 +44,58 @@ public:
         gl->SetSwapInterval(0);
         
         glClearColor(1, 0, 0, 1);
+
+        // Print platform info
+
+		PrintLine((String)"Time: " + DateTime::Now().ToString());
+		PrintLine((String)"Time (UTC): " + DateTime::NowUtc().ToString());
+
+		PrintLine((String)"Window Client Size: " + wnd->GetClientSize().ToString());
+
+		PrintLine((String)"OpenGL Vendor: " + (const char*)glGetString(GL_VENDOR));
+		PrintLine((String)"OpenGL Renderer: " + (const char*)glGetString(GL_RENDERER));
+		PrintLine((String)"OpenGL Version: " + (const char*)glGetString(GL_VERSION));
+		PrintLine((String)"OpenGL Drawable Size: " + gl->GetDrawableSize().ToString());
+		PrintLine((String)"OpenGL Swap Interval: " + gl->GetSwapInterval());
+		PrintLine((String)"OpenGL Color Bits: " + glAttribs.ColorBits.ToString());
+		PrintLine((String)"OpenGL Depth Bits: " + glAttribs.DepthBits);
+		PrintLine((String)"OpenGL Stencil Bits: " + glAttribs.StencilBits);
+		PrintLine((String)"OpenGL Accum Bits: " + glAttribs.AccumBits.ToString());
+		PrintLine((String)"OpenGL Buffers: " + glAttribs.Buffers);
+		PrintLine((String)"OpenGL Stereo: " + String::FromBool(glAttribs.Stereo));
+
+		PrintLine((String)"FileSystem Base Dir: " + Disk->GetBaseDirectory());
+		PrintLine((String)"FileSystem Working Dir: " + Disk->GetCurrentDirectory());
+		PrintLine((String)"FileSystem Config Dir: " + Disk->GetSystemDirectory(SystemDirectoryConfig));
+		PrintLine((String)"FileSystem Data Dir: " + Disk->GetSystemDirectory(SystemDirectoryData));
+		PrintLine((String)"FileSystem Desktop Dir: " + Disk->GetSystemDirectory(SystemDirectoryDesktop));
+		PrintLine((String)"FileSystem Downloads Dir: " + Disk->GetSystemDirectory(SystemDirectoryDownloads));
+		PrintLine((String)"FileSystem Templates Dir: " + Disk->GetSystemDirectory(SystemDirectoryTemplates));
+		PrintLine((String)"FileSystem Public Dir: " + Disk->GetSystemDirectory(SystemDirectoryPublic));
+		PrintLine((String)"FileSystem Documents Dir: " + Disk->GetSystemDirectory(SystemDirectoryDocuments));
+		PrintLine((String)"FileSystem Music Dir: " + Disk->GetSystemDirectory(SystemDirectoryMusic));
+		PrintLine((String)"FileSystem Pictures Dir: " + Disk->GetSystemDirectory(SystemDirectoryPictures));
+		PrintLine((String)"FileSystem Videos Dir: " + Disk->GetSystemDirectory(SystemDirectoryVideos));
+		PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
+
+		PrintLine((String)"DPI: " + Display::GetDpi(0).ToString());
+		PrintLine((String)"statusbar size: " + wnd->GetStatusBarSize().ToString());
     }
 
     virtual void OnLoad(Window* wnd)
     {
         PrintLine("OnLoad");
-
-        // Print platform info
-
-        PrintLine((String)"Time: " + DateTime::Now().ToString());
-        PrintLine((String)"Time (UTC): " + DateTime::NowUtc().ToString());
-
-        PrintLine((String)"Window Client Size: " + wnd->GetClientSize().ToString());
-
-        PrintLine((String)"OpenGL Vendor: " + (const char*)glGetString(GL_VENDOR));
-        PrintLine((String)"OpenGL Renderer: " + (const char*)glGetString(GL_RENDERER));
-        PrintLine((String)"OpenGL Version: " + (const char*)glGetString(GL_VERSION));
-        PrintLine((String)"OpenGL Drawable Size: " + gl->GetDrawableSize().ToString());
-        PrintLine((String)"OpenGL Swap Interval: " + gl->GetSwapInterval());
-        PrintLine((String)"OpenGL Color Bits: " + glAttribs.ColorBits.ToString());
-        PrintLine((String)"OpenGL Depth Bits: " + glAttribs.DepthBits);
-        PrintLine((String)"OpenGL Stencil Bits: " + glAttribs.StencilBits);
-        PrintLine((String)"OpenGL Accum Bits: " + glAttribs.AccumBits.ToString());
-        PrintLine((String)"OpenGL Buffers: " + glAttribs.Buffers);
-        PrintLine((String)"OpenGL Stereo: " + String::FromBool(glAttribs.Stereo));
-
-        PrintLine((String)"FileSystem Base Dir: " + Disk->GetBaseDirectory());
-        PrintLine((String)"FileSystem Working Dir: " + Disk->GetCurrentDirectory());
-        PrintLine((String)"FileSystem Config Dir: " + Disk->GetSystemDirectory(SystemDirectoryConfig));
-        PrintLine((String)"FileSystem Data Dir: " + Disk->GetSystemDirectory(SystemDirectoryData));
-        PrintLine((String)"FileSystem Desktop Dir: " + Disk->GetSystemDirectory(SystemDirectoryDesktop));
-        PrintLine((String)"FileSystem Downloads Dir: " + Disk->GetSystemDirectory(SystemDirectoryDownloads));
-        PrintLine((String)"FileSystem Templates Dir: " + Disk->GetSystemDirectory(SystemDirectoryTemplates));
-        PrintLine((String)"FileSystem Public Dir: " + Disk->GetSystemDirectory(SystemDirectoryPublic));
-        PrintLine((String)"FileSystem Documents Dir: " + Disk->GetSystemDirectory(SystemDirectoryDocuments));
-        PrintLine((String)"FileSystem Music Dir: " + Disk->GetSystemDirectory(SystemDirectoryMusic));
-        PrintLine((String)"FileSystem Pictures Dir: " + Disk->GetSystemDirectory(SystemDirectoryPictures));
-        PrintLine((String)"FileSystem Videos Dir: " + Disk->GetSystemDirectory(SystemDirectoryVideos));
-        PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
-        
-        PrintLine((String)"DPI: " + Display::GetDpi(0).ToString());
-        PrintLine((String)"statusbar size: " + wnd->GetStatusBarSize().ToString());
     }
 
     virtual void OnDraw(Window* wnd)
     {
+    	if (_background)
+    	{
+    		PrintLine("In background");
+    		Xli::Sleep(100);
+    		return;
+    	}
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
         // TODO: Draw something
@@ -230,18 +239,24 @@ public:
         return false;
     }
 
-    virtual void OnSizeChanged(Window* wnd, Vector2i clientSize)
+    virtual void OnNativeHandleChanged(Window* wnd)
     {
-        PrintLine("OnSizeChanged: " + clientSize.ToString());
-        glViewport(0, 0, clientSize.X, clientSize.Y);
-        Application::OnSizeChanged(wnd, clientSize);
+        PrintLine("OnNativeHandleChanged");
+        gl->SetWindow(wnd);
     }
 
-    virtual bool OnClosing(Window* wnd, bool& cancel)
+    virtual void OnSizeChanged(Window* wnd)
+    {
+        Vector2i clientSize = wnd->GetClientSize();
+        PrintLine("OnSizeChanged: " + clientSize.ToString());
+        glViewport(0, 0, clientSize.X, clientSize.Y);
+        Application::OnSizeChanged(wnd);
+    }
+
+    virtual bool OnClosing(Window* wnd)
     {
         PrintLine("OnClosing");
-        cancel = MessageBox::Show(wnd, "Close?", "Close?", DialogButtonsYesNo, DialogHintQuestion | DialogHintButton2Default) == DialogResultNo;
-        return true;
+        return MessageBox::Show(wnd, "Close?", "Close?", DialogButtonsYesNo, DialogHintQuestion | DialogHintButton2Default) == DialogResultNo;
     }
 
     virtual void OnClosed(Window* wnd)
@@ -267,6 +282,7 @@ public:
     virtual void OnAppDidEnterForeground(Window* wnd)
     {
         PrintLine("OnAppDidEnterForeground");
+        _background = false;
     }
 
     virtual void OnAppWillEnterBackground(Window* wnd)
@@ -277,6 +293,7 @@ public:
     virtual void OnAppDidEnterBackground(Window* wnd)
     {
         PrintLine("OnAppDidEnterBackground");
+        _background = true;
     }
 };
 

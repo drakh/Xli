@@ -74,11 +74,15 @@ namespace Xli
         return false;
     }
     
-    void WindowEventHandler::OnSizeChanged(Window* wnd, Vector2i clientSize)
+    void WindowEventHandler::OnNativeHandleChanged(Window* wnd)
     {
     }
 
-    bool WindowEventHandler::OnClosing(Window* wnd, bool& cancel)
+    void WindowEventHandler::OnSizeChanged(Window* wnd)
+    {
+    }
+
+    bool WindowEventHandler::OnClosing(Window* wnd)
     {
         return false;
     }

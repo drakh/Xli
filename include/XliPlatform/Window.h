@@ -177,9 +177,10 @@ namespace Xli
         virtual bool OnTouchMove(Window* wnd, Vector2 pos, int id);
         virtual bool OnTouchUp(Window* wnd, Vector2 pos, int id);
         
-        virtual void OnSizeChanged(Window* wnd, Vector2i clientSize);
-        
-        virtual bool OnClosing(Window* wnd, bool& cancel);
+        virtual void OnSizeChanged(Window* wnd);
+        virtual void OnNativeHandleChanged(Window* wnd);
+
+        virtual bool OnClosing(Window* wnd);
         virtual void OnClosed(Window* wnd);
 
         virtual void OnAppLowMemory(Window* wnd);
@@ -238,9 +239,6 @@ namespace Xli
         /// the default behaviour when in fullscreen mode, but on mobile it must be explicitly 
         /// enabled for apps that needs it because it can potentially drain the battery.
         WindowFlagsDisablePowerSaver = 1 << 3,
-
-        /// Support running as background process on mobile platforms.
-        WindowFlagsSupportBackground = 1 << 4,
     };
     
     /**

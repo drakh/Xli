@@ -57,6 +57,16 @@ namespace Xli
 
                 BeginTextInput(TextInputHintDefault);
                 EndTextInput();
+
+                int nativeFlags = 0;
+
+                if (GlobalFlags & WindowFlagsFullscreen)
+                    nativeFlags |= AWINDOW_FLAG_FULLSCREEN;
+
+                if (GlobalFlags & WindowFlagsDisablePowerSaver)
+                    nativeFlags |= AWINDOW_FLAG_KEEP_SCREEN_ON | AWINDOW_FLAG_TURN_SCREEN_ON;
+
+                //ANativeActivity_setWindowFlags(GlobalAndroidApp->activity, nativeFlags, 0);
             }
 
             virtual ~AWindow()
@@ -88,17 +98,14 @@ namespace Xli
 
             virtual void Close()
             {
-                if (GlobalEventHandler != 0)
-                {
-                    bool cancel = false;
-
-                    if (GlobalEventHandler->OnClosing(this, cancel) && cancel)
-                        return;
-
-                    GlobalEventHandler->OnClosed(this);
-                }
+                if (GlobalEventHandler != 0 && 
+                    GlobalEventHandler->OnClosing(this))
+                    return;
 
                 GlobalAndroidApp->destroyRequested = 1;
+
+                if (GlobalEventHandler != 0)
+                    GlobalEventHandler->OnClosed(this);
             }
 
             virtual bool IsClosed()
@@ -108,7 +115,7 @@ namespace Xli
 
             virtual bool IsVisible()
             {
-                return true;
+                return inited != 0;
             }
 
             virtual bool IsFullscreen()
@@ -118,7 +125,7 @@ namespace Xli
 
             virtual bool IsMinimized()
             {
-                return false;
+                return inited == 0;
             }
 
             virtual bool IsMaximized()
@@ -425,88 +432,70 @@ namespace Xli
 
         static void handle_cmd(struct android_app* app, int32_t cmd)
         {
-            //LOGD("INCOMING CMD: %s", get_cmd_string(cmd));
+#ifdef XLI_DEBUG
+            LOGD(get_cmd_string(cmd));
+#endif
 
             switch (cmd)
             {
-                case APP_CMD_INIT_WINDOW:
-                    inited = 1;
-                    break;
-/*
-                Why do we need these?
+            case APP_CMD_INIT_WINDOW:
+                inited = 1;
 
-                case APP_CMD_START:
+                if (GlobalEventHandler && GlobalWindow)
+                    GlobalEventHandler->OnNativeHandleChanged(GlobalWindow);
+
+                break;
+
+            case APP_CMD_TERM_WINDOW:
+                inited = 0;
+                break;
+
+            case APP_CMD_GAINED_FOCUS:
+                if (GlobalEventHandler)
+                    GlobalEventHandler->OnAppDidEnterForeground(GlobalWindow);
+
+                break;
+
+            case APP_CMD_LOST_FOCUS:
+                if (GlobalEventHandler)
+                    GlobalEventHandler->OnAppDidEnterBackground(GlobalWindow);
+                
+                break;
+
+            case APP_CMD_PAUSE:
+                AShim::OnPause();
+
+                if (GlobalEventHandler)
+                    GlobalEventHandler->OnAppWillEnterBackground(GlobalWindow);
+                
+                break;
+
+            case APP_CMD_RESUME:
+                AShim::OnResume();
+
+                if (GlobalEventHandler)
+                    GlobalEventHandler->OnAppWillEnterForeground(GlobalWindow);
+
+                break;
+
+            case APP_CMD_DESTROY:
+                if (!app->destroyRequested)
+                {
                     if (GlobalEventHandler)
-                        GlobalEventHandler->OnAppStart(GlobalWindow);
-                    break;
+                        GlobalEventHandler->OnAppTerminating(GlobalWindow);
 
-                case APP_CMD_GAINED_FOCUS:
-                    if (GlobalEventHandler)
-                        GlobalEventHandler->OnAppGainedFocus(GlobalWindow);
-                    break;
-
-                case APP_CMD_LOST_FOCUS:
-                    if (GlobalEventHandler)
-                        GlobalEventHandler->OnAppLostFocus(GlobalWindow);
-                    break;
-*/
-                case APP_CMD_PAUSE:
-                    AShim::OnPause();
-
-                    if (GlobalEventHandler)
-                        GlobalEventHandler->OnAppWillEnterBackground(GlobalWindow);
-                    
-                    if ((GlobalFlags & WindowFlagsSupportBackground) != 0)
-                    {
-                        // Note: At this point rendering should have stopped and app state is suspended. 
-                        // If app fails to do this, it must be closed.
-
-                        if (GlobalEventHandler)
-                            GlobalEventHandler->OnAppDidEnterBackground(GlobalWindow);
-                    }
-                    else
-                    {
-                        if (GlobalEventHandler)
-                            GlobalEventHandler->OnAppTerminating(GlobalWindow);
-
-                        GlobalAndroidApp->destroyRequested = 1;
-
-                        if (GlobalEventHandler != 0)
-                            GlobalEventHandler->OnClosed(GlobalWindow);
-                    }
-
-                    break;
-
-                case APP_CMD_RESUME:
-                    AShim::OnResume();
+                    app->destroyRequested = 1;
 
                     if (GlobalEventHandler)
-                        GlobalEventHandler->OnAppWillEnterForeground(GlobalWindow);
+                        GlobalEventHandler->OnClosed(GlobalWindow);
+                }
+                break;
 
-                    if (GlobalEventHandler)
-                        GlobalEventHandler->OnAppDidEnterForeground(GlobalWindow);
+            case APP_CMD_LOW_MEMORY:
+                if (GlobalEventHandler)
+                    GlobalEventHandler->OnAppLowMemory(GlobalWindow);
 
-                    break;
-
-                case APP_CMD_STOP:
-                case APP_CMD_TERM_WINDOW:
-                    if (!app->destroyRequested)
-                    {
-                        if (GlobalEventHandler)
-                            GlobalEventHandler->OnAppTerminating(GlobalWindow);
-
-                        app->destroyRequested = 1;
-
-                        if (GlobalEventHandler)
-                            GlobalEventHandler->OnClosed(GlobalWindow);
-                    }
-                    break;
-
-                case APP_CMD_LOW_MEMORY:
-                    if (GlobalEventHandler)
-                        GlobalEventHandler->OnAppLowMemory(GlobalWindow);
-
-                    break;
+                break;
             }
         }
 
@@ -603,16 +592,6 @@ namespace Xli
         GlobalFlags = flags;
         GlobalWindow = new PlatformSpecific::AWindow();
 
-        int nativeFlags = 0;
-
-        if (flags & WindowFlagsFullscreen)
-            nativeFlags |= AWINDOW_FLAG_FULLSCREEN;
-
-        if (flags & WindowFlagsDisablePowerSaver)
-            nativeFlags |= AWINDOW_FLAG_KEEP_SCREEN_ON | AWINDOW_FLAG_TURN_SCREEN_ON;
-
-        ANativeActivity_setWindowFlags(GlobalAndroidApp->activity, flags, 0);
-
         return GlobalWindow;
     }
 
@@ -643,7 +622,7 @@ namespace Xli
                 GlobalHeight = h;
 
                 if (GlobalEventHandler)
-                    GlobalEventHandler->OnSizeChanged(GlobalWindow, Vector2i(w, h));
+                    GlobalEventHandler->OnSizeChanged(GlobalWindow);
             }
 
             if (GlobalWindow)

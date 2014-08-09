@@ -19,12 +19,12 @@ LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXliMain.a
 include $(PREBUILT_STATIC_LIBRARY)	
 
 
-# libXliMedia.so
+# libXliPlatform.so
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := XliMedia
+LOCAL_MODULE := XliPlatform
 
-LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXliMedia.so
+LOCAL_SRC_FILES := $(XLI_LIB_PATH)/libXliPlatform.so
 include $(PREBUILT_SHARED_LIBRARY)	
 
 
@@ -50,6 +50,6 @@ LOCAL_CFLAGS   := -fexceptions
 LOCAL_LDLIBS   := -lm -lGLESv2 -landroid -llog
 
 LOCAL_WHOLE_STATIC_LIBRARIES := XliMain
-LOCAL_SHARED_LIBRARIES := Xli XliGL XliMedia
+LOCAL_SHARED_LIBRARIES := Xli XliGL XliPlatform
 
 include $(BUILD_SHARED_LIBRARY)

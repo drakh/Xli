@@ -34,6 +34,7 @@ elseif (XLI_PLATFORM_OSX)
 elseif (XLI_PLATFORM_ANDROID)
 
     set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/android/${ANDROID_ABI})
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -frtti")
 
 elseif (XLI_PLATFORM_LINUX)
 

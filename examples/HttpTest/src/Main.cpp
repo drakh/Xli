@@ -15,7 +15,7 @@ class EHandler : public HttpEventHandler
             Err->WriteFormat("statusCode: %i\n", state);
         } else if (state == HttpRequestStateDone) {
             Err->WriteFormat("state changed: %i\n", state);            
-            String body = String((char*)(request->GetResponseBody()->GetDataPtr()),
+            String body = String((char*)(request->GetResponseBody()->GetPtr()),
                           (request->GetResponseBody()->GetSizeInBytes()));
             Err->WriteLine(body);
         } else {
@@ -252,11 +252,12 @@ public:
         return false;
 	}
 
-	virtual void OnSizeChanged(Window* wnd, Vector2i clientSize)
+	virtual void OnSizeChanged(Window* wnd)
 	{
+		Vector2i clientSize = wnd->GetClientSize();
 		Err->WriteLine("OnSizeChanged: " + clientSize.ToString());
 		glViewport(0, 0, clientSize.X, clientSize.Y);
-		Application::OnSizeChanged(wnd, clientSize);
+		Application::OnSizeChanged(wnd);
 	}
 
     //[TODO] cant show message box when closing as shim is gone

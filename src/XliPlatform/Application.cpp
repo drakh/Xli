@@ -65,7 +65,7 @@ namespace Xli
 #endif
     }
 
-    void Application::OnSizeChanged(Window* wnd, Vector2i size)
+    void Application::OnSizeChanged(Window* wnd)
     {
 #if defined(XLI_PLATFORM_WIN32) || defined(XLI_PLATFORM_OSX)
         if (wnd->GetMouseButtonState(MouseButtonLeft))

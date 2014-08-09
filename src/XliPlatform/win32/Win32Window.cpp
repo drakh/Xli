@@ -577,7 +577,7 @@ namespace Xli
             case WM_SIZE:
                 if (wnd->eventHandler)
                 {
-                    wnd->eventHandler->OnSizeChanged(wnd, Vector2i(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)));
+                    wnd->eventHandler->OnSizeChanged(wnd);
                     return 0;
                 }
 
@@ -586,8 +586,7 @@ namespace Xli
             case WM_CLOSE:
                 if (wnd->eventHandler)
                 {
-                    bool cancel = false;
-                    if (wnd->eventHandler->OnClosing(wnd, cancel) && cancel)
+                    if (wnd->eventHandler->OnClosing(wnd))
                         return 0;
                 }
 

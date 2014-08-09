@@ -38,7 +38,7 @@ namespace Xli
         virtual String GetInitTitle();
         virtual Vector2i GetInitSize();
 
-        virtual void OnSizeChanged(Window* wnd, Vector2i size);
+        virtual void OnSizeChanged(Window* wnd);
     };
 }
 

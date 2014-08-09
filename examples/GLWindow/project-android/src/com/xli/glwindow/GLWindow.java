@@ -5,8 +5,8 @@ public class GLWindow extends android.app.NativeActivity
     static 
     {
         System.loadLibrary("Xli");
+        System.loadLibrary("XliPlatform");
         System.loadLibrary("XliGL");
-        System.loadLibrary("XliMedia");
         System.loadLibrary("GLWindow");
     }
 }
