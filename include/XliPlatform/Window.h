@@ -239,6 +239,9 @@ namespace Xli
         /// the default behaviour when in fullscreen mode, but on mobile it must be explicitly 
         /// enabled for apps that needs it because it can potentially drain the battery.
         WindowFlagsDisablePowerSaver = 1 << 3,
+
+        /// Disables running as background process on applicable platforms (i.e. Android)
+        WindowFlagsDisableBackgroundProcess = 1 << 4,
     };
     
     /**

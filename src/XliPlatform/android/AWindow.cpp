@@ -465,7 +465,9 @@ namespace Xli
             case APP_CMD_PAUSE:
                 AShim::OnPause();
 
-                if (GlobalEventHandler)
+                if (GlobalFlags & WindowFlagsDisableBackgroundProcess)
+                    handle_cmd(app, APP_CMD_DESTROY);
+                else if (GlobalEventHandler)
                     GlobalEventHandler->OnAppWillEnterBackground(GlobalWindow);
                 
                 break;
