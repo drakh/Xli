@@ -25,6 +25,10 @@
 
 namespace Xli
 {
+    StdOutAccessor Out;
+    StdErrAccessor Error;
+    StdInAccessor In;
+    
     static void(*ExceptionCallback)(const Exception&, const String&);
     static TextWriter* OutWriter;
     static TextWriter* ErrWriter;
@@ -66,22 +70,18 @@ namespace Xli
 
     void CoreLib::OnUnhandledException(const Exception& exception, const String& where)
     {
+        Error->WriteLine((String)"UNHANDLED EXCEPTION (" + where + "):");
+        Error->WriteLine();
+        Error->WriteLine(exception.GetMessage());
+        Error->WriteLine();
+        Error->WriteLine((String)"Function: " + exception.GetFunction());
+        Error->WriteLine((String)"Line: " + exception.GetLine());
+
         if (ExceptionCallback)
-        {
             ExceptionCallback(exception, where);
-        }
-        else
-        {
-            Error->WriteLine((String)"UNHANDLED EXCEPTION (" + where + "):");
-            Error->WriteLine();
-            Error->WriteLine(exception.GetMessage());
-            Error->WriteLine();
-            Error->WriteLine((String)"Function: " + exception.GetFunction());
-            Error->WriteLine((String)"Line: " + exception.GetLine());
-        }
     }
 
-    bool CoreLib::TryEnterCritical(bool* flag)
+    bool CoreLib::EnterCriticalIfFalse(bool* flag)
     {
         if (*flag)
             return false;
@@ -96,6 +96,11 @@ namespace Xli
         }
 
         return *flag = true;
+    }
+
+    void CoreLib::EnterCritical()
+    {
+        LockMutex(LibMutex);
     }
 
     void CoreLib::ExitCritical()
@@ -138,8 +143,4 @@ namespace Xli
         CoreLib::Init();
         return InReader;
     }
-
-    StdOutAccessor Out;
-    StdErrAccessor Error;
-    StdInAccessor In;
 }

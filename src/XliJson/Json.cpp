@@ -176,7 +176,7 @@ namespace Xli
         }
 
         w.Append('"');
-        return w.GetString();
+        return w.ToString();
     }
 
     class JsonWriter: public FormattedTextWriter

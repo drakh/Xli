@@ -95,12 +95,7 @@ namespace Xli
         buffer.Clear();
     }
 
-    String StringBuilder::GetString() const
-    {
-        return String(buffer.Ptr(), buffer.Length());
-    }
-
-    StringBuilder::operator String() const
+    String StringBuilder::ToString() const
     {
         return String(buffer.Ptr(), buffer.Length());
     }

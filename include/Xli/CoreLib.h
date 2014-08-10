@@ -34,7 +34,8 @@ namespace Xli
         static void SetUnhandledExceptionCallback(void(*callback)(const Exception&, const String&));
         static void OnUnhandledException(const Exception& exception, const String& where);
 
-        static bool TryEnterCritical(bool* flag);
+        static bool EnterCriticalIfFalse(bool* flag);
+        static void EnterCritical();
         static void ExitCritical();
     };
 }

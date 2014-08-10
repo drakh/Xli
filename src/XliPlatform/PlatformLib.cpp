@@ -29,11 +29,18 @@
 
 namespace Xli
 {
+    BundleAccessor Bundle;
+    DiskAccessor Disk;
+
     void InitWindow();
     void TerminateWindow();
     
     FileSystem* CreateBundleFileSystem();
     NativeFileSystem* CreateNativeFileSystem();
+
+    static FileSystem* as;
+    static NativeFileSystem* fs;
+    static bool LibInited;
 
     static void ExceptionCallback(const Exception& e, const String& where)
     {
@@ -47,12 +54,8 @@ namespace Xli
         if (where.Length() > 0)
             sb.Append("\n\n(from: " + where + ")");
 
-        MessageBox::Show(Window::GetMainWindow(), sb, "Unhandled Exception", Xli::DialogButtonsOK, Xli::DialogHintError);
+        MessageBox::Show(Window::GetMainWindow(), sb.ToString(), "Unhandled Exception", DialogButtonsOK, DialogHintError);
     }
-
-    static FileSystem* as;
-    static NativeFileSystem* fs;
-    static bool LibInited;
 
     static void Terminate()
     {
@@ -66,10 +69,8 @@ namespace Xli
 
     void PlatformLib::Init()
     {
-        if (CoreLib::TryEnterCritical(&LibInited))
+        if (CoreLib::EnterCriticalIfFalse(&LibInited))
         {
-            atexit(Terminate);
-
             CoreLib::SetUnhandledExceptionCallback(ExceptionCallback);
 
             fs = CreateNativeFileSystem();
@@ -78,22 +79,9 @@ namespace Xli
             InitWindow();
 
             CoreLib::ExitCritical();
+            atexit(Terminate);
         }
     }
-
-    NativeFileSystem* DiskAccessor::operator ->()
-    {
-        PlatformLib::Init();
-        return fs;
-    }
-
-    DiskAccessor::operator FileSystem*()
-    {
-        PlatformLib::Init();
-        return fs;
-    }
-
-    DiskAccessor Disk;
 
     void BundleAccessor::SetFilesystem(FileSystem* fs)
     {
@@ -115,5 +103,15 @@ namespace Xli
         return as;
     }
 
-    BundleAccessor Bundle;
+    NativeFileSystem* DiskAccessor::operator ->()
+    {
+        PlatformLib::Init();
+        return fs;
+    }
+
+    DiskAccessor::operator FileSystem*()
+    {
+        PlatformLib::Init();
+        return fs;
+    }
 }

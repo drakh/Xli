@@ -38,7 +38,7 @@ namespace Xli
 
         while (!wnd->IsClosed())
         {
-            double startTime = Xli::GetSeconds();
+            double startTime = GetSeconds();
 
             Window::ProcessMessages();
             app->OnUpdate(wnd);

@@ -51,9 +51,8 @@ namespace Xli
         void AppendFormat(const char* format, ...);
 
         void Clear();
-
-        String GetString() const;
-        operator String() const;
+        
+        String ToString() const;
     };
 }
 
