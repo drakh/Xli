@@ -31,6 +31,9 @@ namespace Xli
         Vector2i Resolution;
         int RefreshRate;
         int BitsPerPixel;
+        void* DriverData;
+
+        DisplaySettings(): DriverData(0) {}
     };
 
     /**
