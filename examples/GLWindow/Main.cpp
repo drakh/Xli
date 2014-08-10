@@ -6,21 +6,29 @@ using namespace Xli;
 
 class GLApp: public Application
 {
-    Managed<GLContext> gl;
+    Managed<GLContext> _gl;
     bool _background;
+    
+    int _fpsCount;
+    double _fpsTime;
+    double _lastTime;
 
-    int dialogType;
-    double touchDownTime;
-    double tapTime;
+    int _dialogType;
+    double _touchDownTime;
+    double _tapTime;
 
 public:
     GLApp()
     {
         PrintLine("Constructor");
 
-        dialogType = 0;
-        touchDownTime = 0;
-        tapTime = 0;
+        _dialogType = 0;
+        _touchDownTime = 0;
+        _tapTime = 0;
+
+        _fpsCount = 0;
+        _fpsTime = 0;
+        _lastTime = 0;
 
         _background = false;
     }
@@ -39,9 +47,9 @@ public:
         GLContextAttributes glAttribs = GLContextAttributes::Default();
         glAttribs.Samples = 16;
 
-        gl = GLContext::Create(wnd, glAttribs);
-        gl->GetAttributes(glAttribs);
-        gl->SetSwapInterval(0);
+        _gl = GLContext::Create(wnd, glAttribs);
+        _gl->GetAttributes(glAttribs);
+        _gl->SetSwapInterval(0);
         
         glClearColor(1, 0, 0, 1);
 
@@ -55,8 +63,8 @@ public:
 		PrintLine((String)"OpenGL Vendor: " + (const char*)glGetString(GL_VENDOR));
 		PrintLine((String)"OpenGL Renderer: " + (const char*)glGetString(GL_RENDERER));
 		PrintLine((String)"OpenGL Version: " + (const char*)glGetString(GL_VERSION));
-		PrintLine((String)"OpenGL Drawable Size: " + gl->GetDrawableSize().ToString());
-		PrintLine((String)"OpenGL Swap Interval: " + gl->GetSwapInterval());
+		PrintLine((String)"OpenGL Drawable Size: " + _gl->GetDrawableSize().ToString());
+		PrintLine((String)"OpenGL Swap Interval: " + _gl->GetSwapInterval());
 		PrintLine((String)"OpenGL Color Bits: " + glAttribs.ColorBits.ToString());
 		PrintLine((String)"OpenGL Depth Bits: " + glAttribs.DepthBits);
 		PrintLine((String)"OpenGL Stencil Bits: " + glAttribs.StencilBits);
@@ -85,14 +93,27 @@ public:
     virtual void OnLoad(Window* wnd)
     {
         PrintLine("OnLoad");
+
+        _lastTime = GetSeconds();
     }
 
     virtual void OnDraw(Window* wnd)
     {
+        double t = GetSeconds();
+        _fpsTime += (t - _lastTime);
+        _lastTime = t;
+        _fpsCount++;
+
+        if (_fpsTime >= 1.0)
+        {
+            PrintLine("OnDraw, FPS: " + String::Format("%.2f", (double)_fpsCount / _fpsTime) + ", Background: " + String::FromBool(_background));
+            _fpsCount = 0;
+            _fpsTime = 0;
+        }
+
     	if (_background)
     	{
-    		PrintLine("In background");
-    		Xli::Sleep(100);
+    		Sleep(100);
     		return;
     	}
 
@@ -100,7 +121,7 @@ public:
 
         // TODO: Draw something
         
-        gl->SwapBuffers();
+        _gl->SwapBuffers();
 
         if (wnd->GetKeyState(KeySpace))
         {
@@ -189,12 +210,6 @@ public:
         return false;
     }
 
-    virtual bool OnMouseLeave(Window* wnd, Vector2i pos)
-    {
-        PrintLine("OnMouseLeave: " + pos.ToString());
-        return false;
-    }
-
     virtual bool OnMouseWheel(Window* wnd, Vector2i delta)
     {
         PrintLine("OnMouseWheel: " + delta.ToString());
@@ -204,7 +219,7 @@ public:
     virtual bool OnTouchDown(Window* wnd, Vector2 pos, int id)
     {
         PrintLine("OnTouchDown: " + pos.ToString() + ", " + id);
-        touchDownTime = GetSeconds();
+        _touchDownTime = GetSeconds();
         return false;
     }
 
@@ -221,9 +236,9 @@ public:
         PrintLine("OnTouchUp: " + pos.ToString() + ", " + id);
         double currentTime = GetSeconds();
 
-        if (currentTime - touchDownTime < 0.15)
+        if (currentTime - _touchDownTime < 0.15)
         {
-            if (currentTime - tapTime < 0.3)
+            if (currentTime - _tapTime < 0.3)
             {
                 PrintLine("Bang");
                 wnd->BeginTextInput((Xli::TextInputHint)0);
@@ -233,7 +248,7 @@ public:
                 wnd->EndTextInput();
             }
 
-            tapTime = currentTime;
+            _tapTime = currentTime;
         }
         
         return false;
@@ -242,7 +257,7 @@ public:
     virtual void OnNativeHandleChanged(Window* wnd)
     {
         PrintLine("OnNativeHandleChanged");
-        gl->SetWindow(wnd);
+        _gl->SetWindow(wnd);
     }
 
     virtual void OnSizeChanged(Window* wnd)
