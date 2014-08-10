@@ -43,6 +43,8 @@ namespace Xli
 
         virtual void OnInit(Window* wnd);
         virtual void OnLoad(Window* wnd);
+
+        virtual void OnUpdate(Window* wnd);
         virtual void OnDraw(Window* wnd);
 
         virtual void OnSizeChanged(Window* wnd);

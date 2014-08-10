@@ -41,7 +41,10 @@ namespace Xli
             double startTime = Xli::GetSeconds();
 
             Window::ProcessMessages();
-            app->OnDraw(wnd);
+            app->OnUpdate(wnd);
+
+            if (wnd->IsVisible())
+                app->OnDraw(wnd);
 
             if (app->_maxFps > 0)
             {
@@ -93,6 +96,10 @@ namespace Xli
     }
     
     void Application::OnLoad(Window* wnd)
+    {
+    }
+
+    void Application::OnUpdate(Window* wnd)
     {
     }
 

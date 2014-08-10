@@ -7,7 +7,6 @@ using namespace Xli;
 class GLApp: public Application
 {
     Managed<GLContext> _gl;
-    bool _background;
     
     int _fpsCount;
     double _fpsTime;
@@ -22,15 +21,13 @@ public:
     {
         PrintLine("Constructor");
 
-        _dialogType = 0;
-        _touchDownTime = 0;
-        _tapTime = 0;
-
         _fpsCount = 0;
         _fpsTime = 0;
         _lastTime = 0;
 
-        _background = false;
+        _dialogType = 0;
+        _touchDownTime = 0;
+        _tapTime = 0;
     }
 
     virtual ~GLApp()
@@ -59,6 +56,23 @@ public:
 		PrintLine((String)"Time (UTC): " + DateTime::NowUtc().ToString());
 
 		PrintLine((String)"Window Client Size: " + wnd->GetClientSize().ToString());
+        PrintLine((String)"Window Statusbar Size: " + wnd->GetStatusBarSize().ToString());
+        PrintLine((String)"Window Display Index: " + wnd->GetDisplayIndex());
+
+        for (int i = 0; i < Display::GetCount(); i++)
+        {
+            DisplaySettings settings;
+            if (Display::GetCurrentSettings(i, settings))
+            {
+                PrintLine((String)"Display[" + i + "] Resolution: " + settings.Resolution.ToString());
+                PrintLine((String)"Display[" + i + "] RefreshRate: " + settings.RefreshRate);
+                PrintLine((String)"Display[" + i + "] BPP: " + settings.BitsPerPixel);
+            }
+
+            PrintLine((String)"Display[" + i + "] Rect: " + Display::GetRect(i).ToString());
+            PrintLine((String)"Display[" + i + "] DPI: " + Display::GetDpi(i).ToString());
+            PrintLine((String)"Display[" + i + "] Density: " + Display::GetDensity(i));
+        }
 
 		PrintLine((String)"OpenGL Vendor: " + (const char*)glGetString(GL_VENDOR));
 		PrintLine((String)"OpenGL Renderer: " + (const char*)glGetString(GL_RENDERER));
@@ -85,9 +99,6 @@ public:
 		PrintLine((String)"FileSystem Pictures Dir: " + Disk->GetSystemDirectory(SystemDirectoryPictures));
 		PrintLine((String)"FileSystem Videos Dir: " + Disk->GetSystemDirectory(SystemDirectoryVideos));
 		PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
-
-		PrintLine((String)"DPI: " + Display::GetDpi(0).ToString());
-		PrintLine((String)"statusbar size: " + wnd->GetStatusBarSize().ToString());
     }
 
     virtual void OnLoad(Window* wnd)
@@ -97,7 +108,7 @@ public:
         _lastTime = GetSeconds();
     }
 
-    virtual void OnDraw(Window* wnd)
+    virtual void OnUpdate(Window* wnd)
     {
         double t = GetSeconds();
         _fpsTime += (t - _lastTime);
@@ -106,28 +117,23 @@ public:
 
         if (_fpsTime >= 1.0)
         {
-            PrintLine("OnDraw, FPS: " + String::Format("%.2f", (double)_fpsCount / _fpsTime) + ", Background: " + String::FromBool(_background));
+            PrintLine("OnUpdate, FPS: " + String::Format("%.2f", (double)_fpsCount / _fpsTime) + ", Visible: " + String::FromBool(wnd->IsVisible()));
             _fpsCount = 0;
             _fpsTime = 0;
         }
-
-    	if (_background)
-    	{
-    		Sleep(100);
-    		return;
-    	}
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-        // TODO: Draw something
-        
-        _gl->SwapBuffers();
 
         if (wnd->GetKeyState(KeySpace))
         {
             Vector2i mousePos = wnd->GetMousePosition();
             wnd->SetTitle(String::Format("%.2lf %d %d", GetSeconds(), mousePos.X, mousePos.Y));
         }
+    }
+
+    virtual void OnDraw(Window* wnd)
+    {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+        _gl->SwapBuffers();
     }
 
     virtual bool OnKeyDown(Window* wnd, Key key)
@@ -297,7 +303,6 @@ public:
     virtual void OnAppDidEnterForeground(Window* wnd)
     {
         PrintLine("OnAppDidEnterForeground");
-        _background = false;
     }
 
     virtual void OnAppWillEnterBackground(Window* wnd)
@@ -308,7 +313,6 @@ public:
     virtual void OnAppDidEnterBackground(Window* wnd)
     {
         PrintLine("OnAppDidEnterBackground");
-        _background = true;
     }
 };
 
