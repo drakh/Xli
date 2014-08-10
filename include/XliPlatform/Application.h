@@ -28,15 +28,22 @@ namespace Xli
     */
     class Application: public WindowEventHandler
     {
+        int _maxFps;
+
+    protected:
+        void SetMaxFps(int value);
+
     public:
         static void Run(Application* app, int flags = WindowFlagsResizeable);
+
+        Application();
+
+        virtual String GetInitTitle();
+        virtual Vector2i GetInitSize();
 
         virtual void OnInit(Window* wnd);
         virtual void OnLoad(Window* wnd);
         virtual void OnDraw(Window* wnd);
-
-        virtual String GetInitTitle();
-        virtual Vector2i GetInitSize();
 
         virtual void OnSizeChanged(Window* wnd);
     };

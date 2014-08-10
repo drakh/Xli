@@ -18,14 +18,16 @@
 //
 
 #include <XliPlatform/Application.h>
+#include <XliPlatform/Display.h>
 #include <XliPlatform/PlatformLib.h>
 #include <Xli/Managed.h>
+#include <Xli/Thread.h>
+#include <Xli/Time.h>
 
 namespace Xli
 {
     void Application::Run(Application* app, int flags)
     {
-        PlatformLib::Init();
         Managed<Window> wnd = Window::Create(app->GetInitSize(), app->GetInitTitle(), flags);
 
         app->OnInit(wnd);
@@ -36,21 +38,40 @@ namespace Xli
 
         while (!wnd->IsClosed())
         {
-            app->OnDraw(wnd);
+            double startTime = Xli::GetSeconds();
+
             Window::ProcessMessages();
+            app->OnDraw(wnd);
+
+            if (app->_maxFps > 0)
+            {
+                double targetTime = 1.0 / (double)app->_maxFps;
+                double renderTime = GetSeconds() - startTime;
+
+                int msTimeout = (int)((targetTime - renderTime) * 1000.0 + 0.5);
+
+                if (msTimeout > 0)
+                    Sleep(msTimeout);
+            }
         }
     }
-    
-    void Application::OnInit(Window* wnd)
-    {
-    }
-    
-    void Application::OnLoad(Window* wnd)
-    {
-    }
 
-    void Application::OnDraw(Window* wnd)
+    Application::Application()
     {
+        PlatformLib::Init();
+
+        DisplaySettings settings;
+        if (Display::GetCount() > 0 && 
+            Display::GetCurrentSettings(0, settings) && 
+            settings.RefreshRate > 0)
+            _maxFps = settings.RefreshRate;
+        else
+            _maxFps = 60;
+    }
+    
+    void Application::SetMaxFps(int value)
+    {
+        _maxFps = value;
     }
 
     String Application::GetInitTitle()
@@ -65,6 +86,18 @@ namespace Xli
 #else
         return Vector2i(1280, 720);
 #endif
+    }
+
+    void Application::OnInit(Window* wnd)
+    {
+    }
+    
+    void Application::OnLoad(Window* wnd)
+    {
+    }
+
+    void Application::OnDraw(Window* wnd)
+    {
     }
 
     void Application::OnSizeChanged(Window* wnd)
