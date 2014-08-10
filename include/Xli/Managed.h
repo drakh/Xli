@@ -62,6 +62,9 @@ namespace Xli
 
         Managed& operator = (T* ptr)
         {
+            if (ptr == object)
+                return *this;
+            
             if (object) 
                 object->Release();
 
@@ -71,6 +74,9 @@ namespace Xli
 
         Managed& operator = (const Managed& managed)
         {
+            if (managed.object == object)
+                return *this;
+
             if (object) 
                 object->Release();
 

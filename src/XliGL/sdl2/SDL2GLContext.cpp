@@ -27,14 +27,12 @@ namespace Xli
     {
         class SDL2GLContext: public GLContext
         {
-            Shared<Window> window;
+            SDL_Window* window;
             SDL_GLContext context;
 
         public:
             SDL2GLContext(Window* wnd, const GLContextAttributes& attribs)
             {
-                window = wnd;
-
                 SDL_GL_SetAttribute(SDL_GL_RED_SIZE, attribs.ColorBits.R);
                 SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, attribs.ColorBits.G);
                 SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, attribs.ColorBits.B);
@@ -57,7 +55,8 @@ namespace Xli
                 SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
 #endif
 
-                context = SDL_GL_CreateContext(SDL2::GetWindowHandle(window));
+                window = SDL2::GetWindowHandle(wnd);
+                context = SDL_GL_CreateContext(window);
 
                 if (!context)
                     XLI_THROW("Failed to create OpenGL context");
@@ -80,19 +79,12 @@ namespace Xli
                 XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
             }
 
-            virtual Window* GetWindow()
+            virtual void MakeCurrent(Window* wnd)
             {
-                return window;
-            }
+                if (wnd)
+                    window = SDL2::GetWindowHandle(wnd);
 
-            virtual void SetWindow(Window* window)
-            {
-                XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
-            }
-
-            virtual void MakeCurrent(bool current)
-            {
-                SDL_GL_MakeCurrent(SDL2::GetWindowHandle(window), current ? context : 0);
+                SDL_GL_MakeCurrent(wnd ? window : 0, wnd ? context : 0);
             }
 
             virtual bool IsCurrent()
@@ -102,7 +94,7 @@ namespace Xli
 
             virtual void SwapBuffers()
             {
-                SDL_GL_SwapWindow(SDL2::GetWindowHandle(window));
+                SDL_GL_SwapWindow(window);
             }
 
             virtual void SetSwapInterval(int value)
@@ -119,9 +111,9 @@ namespace Xli
             {
                 Vector2i size;
 #ifdef XLI_PLATFORM_LINUX
-                SDL_GetWindowSize(SDL2::GetWindowHandle(window), &size.X, &size.Y);
+                SDL_GetWindowSize(window, &size.X, &size.Y);
 #else
-                SDL_GL_GetDrawableSize(SDL2::GetWindowHandle(window), &size.X, &size.Y);
+                SDL_GL_GetDrawableSize(window, &size.X, &size.Y);
 #endif
                 return size;
             }

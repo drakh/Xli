@@ -30,6 +30,8 @@ namespace Xli
 
         app->OnInit(wnd);
         wnd->SetEventHandler(app);
+        Window::ProcessMessages();
+
         app->OnLoad(wnd);
 
         while (!wnd->IsClosed())

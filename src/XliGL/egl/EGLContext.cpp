@@ -34,6 +34,7 @@ namespace Xli
     class EglContext: public GLContext
     {
         Shared<Window> window;
+        NATIVE_HANDLE handle;
         EGLDisplay display;
         EGLSurface surface;
         EGLContext context;
@@ -43,6 +44,8 @@ namespace Xli
     public:
         EglContext(Window* wnd, const GLContextAttributes& attribs)
         {
+            swapInterval = -1;
+            handle = NULL;
             context = EGL_NO_CONTEXT;
             surface = EGL_NO_SURFACE;
 
@@ -97,15 +100,13 @@ namespace Xli
                 }
             }
 
+            config = configs[cc];
+
 #ifdef XLI_DEBUG
             Err->WriteLine((String)"DEBUG: Selected EGLConfig[" + (int)cc + "]");
 #endif
 
-            config = configs[cc];
-            swapInterval = -1;
-
-            SetWindow(wnd);
-            
+            MakeCurrent(wnd);
         }
 
         virtual ~EglContext()
@@ -124,57 +125,51 @@ namespace Xli
             }
         }
 
-        virtual void SetWindow(Window* window)
-        {
-            this->window = window;
-
-#ifdef XLI_PLATFORM_ANDROID
-            if (window->GetImplementation() == WindowImplementationAndroid)
-            {
-                EGLint format;
-                eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
-                ANativeWindow_setBuffersGeometry((ANativeWindow*)window->GetNativeHandle(), 0, 0, format);
-            }
-#endif
-
-            if (surface != EGL_NO_SURFACE) 
-                eglDestroySurface(display, surface);
-            
-            surface = eglCreateWindowSurface(display, config, (NATIVE_HANDLE)window->GetNativeHandle(), NULL);
-
-            if (surface == EGL_NO_SURFACE)
-                XLI_THROW("Unable to create EGL Surface");
-
-            if (context == EGL_NO_CONTEXT)
-            {
-                const EGLint context_attribs[] =
-                {
-                    EGL_CONTEXT_CLIENT_VERSION, 2,
-                    EGL_NONE
-                };
-
-                context = eglCreateContext(display, config, EGL_NO_CONTEXT, context_attribs);
-
-                if (context == EGL_NO_CONTEXT)
-                    XLI_THROW("Unable to create EGL Context");
-            }
-    
-            MakeCurrent(true);
-        }
-
-        virtual Window* GetWindow()
-        {
-            return window;
-        }
-
         virtual GLContext* CreateSharedContext()
         {
             XLI_THROW_NOT_SUPPORTED(XLI_FUNCTION);
         }
 
-        virtual void MakeCurrent(bool current)
+        virtual void MakeCurrent(Window* wnd)
         {
-            if (eglMakeCurrent(display, surface, surface, current ? context : 0) == EGL_FALSE)
+            if (wnd)
+                window = wnd;
+
+            if (wnd && (NATIVE_HANDLE)wnd->GetNativeHandle() != handle)
+            {
+#ifdef XLI_PLATFORM_ANDROID
+                if (wnd->GetImplementation() == WindowImplementationAndroid)
+                {
+                    EGLint format;
+                    eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
+                    ANativeWindow_setBuffersGeometry((ANativeWindow*)wnd->GetNativeHandle(), 0, 0, format);
+                }
+#endif
+
+                if (surface != EGL_NO_SURFACE) 
+                    eglDestroySurface(display, surface);
+                
+                surface = eglCreateWindowSurface(display, config, (NATIVE_HANDLE)wnd->GetNativeHandle(), NULL);
+
+                if (surface == EGL_NO_SURFACE)
+                    XLI_THROW("Unable to create EGL Surface");
+
+                if (context == EGL_NO_CONTEXT)
+                {
+                    const EGLint context_attribs[] =
+                    {
+                        EGL_CONTEXT_CLIENT_VERSION, 2,
+                        EGL_NONE
+                    };
+
+                    context = eglCreateContext(display, config, EGL_NO_CONTEXT, context_attribs);
+
+                    if (context == EGL_NO_CONTEXT)
+                        XLI_THROW("Unable to create EGL Context");
+                }                
+            }
+
+            if (eglMakeCurrent(display, surface, surface, wnd != 0 ? context : 0) == EGL_FALSE)
                 XLI_THROW("Unable to make EGL context current");
         }
 

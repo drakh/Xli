@@ -33,6 +33,7 @@ namespace Xli
         class WGLContext : public GLContext
         {
             HDC hDC;
+            HWND hWnd;
             HGLRC hGLRC;
             Shared<Window> window;
             PIXELFORMATDESCRIPTOR pfd;
@@ -61,7 +62,7 @@ namespace Xli
                         0, 0, 0, 0
                     };
 
-                    HWND tmpWnd = CreateWindowEx(0, L"STATIC", L"", 0, 0, 0, 16, 16, Win32::GetWindowHandle(window), 0, GetModuleHandle(0), 0);
+                    HWND tmpWnd = CreateWindowEx(0, L"STATIC", L"", 0, 0, 0, 16, 16, hWnd, 0, GetModuleHandle(0), 0);
                     HDC tmpDC = GetDC(tmpWnd);
                     int fmt = ChoosePixelFormat(tmpDC, &tmpPfd);
                     SetPixelFormat(tmpDC, fmt, &pfd);
@@ -140,8 +141,8 @@ namespace Xli
         public:
             WGLContext(Window* wnd, const GLContextAttributes& attribs)
             {
-                this->window = wnd;
-                hDC = GetDC(Win32::GetWindowHandle(wnd));
+                hWnd = Win32::GetWindowHandle(wnd);
+                hDC = GetDC(hWnd);
 
                 ZeroMemory(&pfd, sizeof(PIXELFORMATDESCRIPTOR));
                 pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
@@ -174,17 +175,15 @@ namespace Xli
                 if (!hGLRC)
                     XLI_THROW("Failed to create OpenGL context: " + Win32::GetLastErrorString());
 
-                MakeCurrent(true);
+                MakeCurrent(window);
 
                 glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
                 SwapBuffers();
-
-                if (pf != -1)
-                    glEnable(GL_MULTISAMPLE_ARB);
             }
 
             WGLContext(WGLContext* srcCtx)
             {
+                hWnd = srcCtx->hWnd;
                 hDC = srcCtx->hDC;
                 pf = srcCtx->pf;
 
@@ -199,7 +198,7 @@ namespace Xli
                 if (!wglShareLists(srcCtx->hGLRC, hGLRC))
                     XLI_THROW("Unable to share OpenGL contexts: " + Win32::GetLastErrorString());
 
-                srcCtx->MakeCurrent(true);
+                srcCtx->MakeCurrent(srcCtx->window);
             }
 
             virtual ~WGLContext()
@@ -212,34 +211,24 @@ namespace Xli
                 return new WGLContext(this);
             }
 
-            virtual Window* GetWindow()
+            virtual void MakeCurrent(Window* wnd)
             {
-                return window;
-            }
+                if (wnd && Win32::GetWindowHandle(wnd) != hWnd)
+                {
+                    hWnd = Win32::GetWindowHandle(wnd);
+                    hDC = GetDC(hWnd);
 
-            virtual void SetWindow(Window* wnd)
-            {
-                if (this->window->GetNativeHandle() == wnd->GetNativeHandle())
-                    return;
+                    if (pf != -1)
+                        SetPixelFormat(hDC, pf, &pfd);
+                    else
+                        SetPixelFormat(hDC, ChoosePixelFormat(hDC, &pfd), &pfd));
+                }
 
-                this->window = wnd;
-                this->hDC = GetDC(Win32::GetWindowHandle(wnd));
+                if (!wglMakeCurrent(hDC, wnd ? hGLRC : 0))
+                    XLI_THROW("Unable to make OpenGL context current: " + Win32::GetLastErrorString());
 
-                if (pf != -1)
-                    SetPixelFormat(hDC, pf, &pfd);
-                else
-                    SetPixelFormat(hDC, ChoosePixelFormat(hDC, &pfd), &pfd);
-
-                MakeCurrent(true);
-
-                if (pf != -1)
+                if (wnd && pf != -1)
                     glEnable(GL_MULTISAMPLE_ARB);
-            }
-
-            virtual void MakeCurrent(bool current)
-            {
-                if (!wglMakeCurrent(hDC, current ? hGLRC : 0))
-                    XLI_THROW("Unable to make OpenGL context current: " + Win32Helpers::GetLastErrorString());
             }
 
             virtual bool IsCurrent()
@@ -264,7 +253,9 @@ namespace Xli
 
             virtual Vector2i GetDrawableSize()
             {
-                return window->GetClientSize();
+                RECT rect;
+                GetClientRect(hWnd, &rect);
+                return Vector2i(rect.right, rect.bottom);
             }
 
             virtual void GetAttributes(GLContextAttributes& result)

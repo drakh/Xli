@@ -58,6 +58,9 @@ namespace Xli
 
         Shared& operator = (T* ptr)
         {
+            if (ptr == this->object)
+                return *this;
+
             if (ptr) 
                 ptr->AddRef();
             
@@ -72,6 +75,9 @@ namespace Xli
         {
             T* ptr = const_cast<T*>((const T*)managed);
             
+            if (ptr == this->object)
+                return *this;
+
             if (ptr) 
                 ptr->AddRef();
             
@@ -84,6 +90,9 @@ namespace Xli
 
         Shared& operator = (const Shared& shared)
         {
+            if (shared.object == this->object)
+                return *this;
+
             if (shared.object) 
                 shared.object->AddRef();
             

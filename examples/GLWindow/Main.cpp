@@ -257,7 +257,7 @@ public:
     virtual void OnNativeHandleChanged(Window* wnd)
     {
         PrintLine("OnNativeHandleChanged");
-        _gl->SetWindow(wnd);
+        _gl->MakeCurrent(wnd);
     }
 
     virtual void OnSizeChanged(Window* wnd)
