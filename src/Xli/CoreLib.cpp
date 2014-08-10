@@ -72,12 +72,12 @@ namespace Xli
         }
         else
         {
-            Err->WriteLine((String)"UNHANDLED EXCEPTION (" + where + "):");
-            Err->WriteLine();
-            Err->WriteLine(exception.GetMessage());
-            Err->WriteLine();
-            Err->WriteLine((String)"Function: " + exception.GetFunction());
-            Err->WriteLine((String)"Line: " + exception.GetLine());
+            Error->WriteLine((String)"UNHANDLED EXCEPTION (" + where + "):");
+            Error->WriteLine();
+            Error->WriteLine(exception.GetMessage());
+            Error->WriteLine();
+            Error->WriteLine((String)"Function: " + exception.GetFunction());
+            Error->WriteLine((String)"Line: " + exception.GetLine());
         }
     }
 
@@ -140,6 +140,6 @@ namespace Xli
     }
 
     StdOutAccessor Out;
-    StdErrAccessor Err;
+    StdErrAccessor Error;
     StdInAccessor In;
 }

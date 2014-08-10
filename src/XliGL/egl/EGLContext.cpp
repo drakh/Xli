@@ -87,7 +87,7 @@ namespace Xli
                 eglGetConfigAttrib(display, configs[i], EGL_SAMPLES, &samples);
 
 #ifdef XLI_DEBUG
-                Err->WriteLine(String::Format("DEBUG: EGLConfig[%d]:  M %d  D %d  S %d  B %d  R %d  G %d  B %d  A %d", i, samples, depth, stencil, buffer, r, g, b, a));
+                Error->WriteLine(String::Format("DEBUG: EGLConfig[%d]:  M %d  D %d  S %d  B %d  R %d  G %d  B %d  A %d", i, samples, depth, stencil, buffer, r, g, b, a));
 #endif
 
                 if (samples >= cs && depth >= cd && buffer >= cb && 
@@ -103,7 +103,7 @@ namespace Xli
             config = configs[cc];
 
 #ifdef XLI_DEBUG
-            Err->WriteLine((String)"DEBUG: Selected EGLConfig[" + (int)cc + "]");
+            Error->WriteLine((String)"DEBUG: Selected EGLConfig[" + (int)cc + "]");
 #endif
 
             MakeCurrent(wnd);

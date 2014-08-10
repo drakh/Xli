@@ -146,7 +146,7 @@ namespace Xli
 #ifdef XLI_PLATFORM_IOS
             
             if (flags & WindowFlagsDisablePowerSaver && !SDL_SetHint(SDL_HINT_IDLE_TIMER_DISABLED, "1"))
-                Err->WriteLine("SDL WARNING: Failed to disable idle timer");
+                Error->WriteLine("SDL WARNING: Failed to disable idle timer");
 
             if (fullscreen)
                 sdlFlags |= SDL_WINDOW_BORDERLESS;
@@ -683,7 +683,7 @@ namespace Xli
         case SDLK_MENU: return KeyMenu;
         }
         
-        //Err->WriteLine("SDL WARNING: Unknown key: " + CharString::HexFromInt((int)key.sym));
+        //Error->WriteLine("SDL WARNING: Unknown key: " + CharString::HexFromInt((int)key.sym));
         return KeyUnknown;
     }
 
@@ -694,7 +694,7 @@ namespace Xli
         SDL_Event e;
         while (SDL_PollEvent(&e))
         {
-            //Err->WriteLine("SDL EVENT (" + String::HexFromInt((int)e.type) + ")");
+            //Error->WriteLine("SDL EVENT (" + String::HexFromInt((int)e.type) + ")");
             
             switch (e.type)
             {
@@ -711,7 +711,7 @@ namespace Xli
                         float y = e.tfinger.y * h;
                         int id = (int)e.tfinger.fingerId;
                         
-                        //Err->WriteLine(String::HexFromInt((int)e.type) + " " + (String)x + " " + y + " " + (String)(int)e.tfinger.fingerId);
+                        //Error->WriteLine(String::HexFromInt((int)e.type) + " " + (String)x + " " + y + " " + (String)(int)e.tfinger.fingerId);
                         
                         switch (e.type)
                         {
@@ -754,7 +754,7 @@ namespace Xli
             
             if (wnd == 0)
             {
-                //Err->WriteLine("SDL WARNING: wnd pointer was NULL in Window::ProcessMessages (" + String::HexFromInt((int)e.type) + ")");
+                //Error->WriteLine("SDL WARNING: wnd pointer was NULL in Window::ProcessMessages (" + String::HexFromInt((int)e.type) + ")");
                 continue;
             }
             
@@ -810,7 +810,7 @@ namespace Xli
                         if (key) 
                             wnd->GetEventHandler()->OnKeyDown(wnd, key);
                         else 
-                            Err->WriteLine("SDL_KEYDOWN: " + (String)*(int*)&e.key.keysym);
+                            Error->WriteLine("SDL_KEYDOWN: " + (String)*(int*)&e.key.keysym);
                     }
                     break;
                 
@@ -822,7 +822,7 @@ namespace Xli
                         if (key) 
                             wnd->GetEventHandler()->OnKeyUp(wnd, key);
                         else 
-                            Err->WriteLine("SDL_KEYUP: " + (String)*(int*)&e.key.keysym);
+                            Error->WriteLine("SDL_KEYUP: " + (String)*(int*)&e.key.keysym);
                     }
                     break;
 
@@ -834,7 +834,7 @@ namespace Xli
                     
                 case SDL_TEXTEDITING:
                     if (wnd->GetEventHandler())
-                        Err->WriteLine("SDL_TEXTEDITING: " + (String)e.edit.text + " " + e.edit.start + " " + e.edit.length);
+                        Error->WriteLine("SDL_TEXTEDITING: " + (String)e.edit.text + " " + e.edit.start + " " + e.edit.length);
 
                     break;
                     

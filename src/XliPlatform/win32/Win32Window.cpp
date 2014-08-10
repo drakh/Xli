@@ -566,7 +566,7 @@ namespace Xli
                         }
                         else
                         {
-                            Err->WriteLine("WARNING: Error reading touchpoint info.");
+                            Error->WriteLine("WARNING: Error reading touchpoint info.");
                         }
 
                         return 0;

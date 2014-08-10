@@ -290,7 +290,7 @@ namespace Xli
                 break;
 
             default:
-                Err->WriteLine("JSON WARNING: Unsupported value type: " + (String)Value::TypeToString(value.GetType()));
+                Error->WriteLine("JSON WARNING: Unsupported value type: " + (String)Value::TypeToString(value.GetType()));
                 break;
             }
         }

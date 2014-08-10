@@ -201,7 +201,7 @@ namespace Xli
         }
 
         if (stream.avail_out != 0 || stream.avail_in != 0)
-            Err->WriteLine("GZIP WARNING: Buffer sizes inconsistent");
+            Error->WriteLine("GZIP WARNING: Buffer sizes inconsistent");
 
         return new BufferStream(dst, true, false);
     }

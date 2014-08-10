@@ -12,39 +12,39 @@ class EHandler : public HttpEventHandler
         HttpRequestState state = request->GetState();
         if (state == HttpRequestStateHeadersReceived)
         {
-            Err->WriteFormat("statusCode: %i\n", state);
+            Error->WriteFormat("statusCode: %i\n", state);
         } else if (state == HttpRequestStateDone) {
-            Err->WriteFormat("state changed: %i\n", state);            
+            Error->WriteFormat("state changed: %i\n", state);            
             String body = String((char*)(request->GetResponseBody()->GetPtr()),
                           (request->GetResponseBody()->GetSizeInBytes()));
-            Err->WriteLine(body);
+            Error->WriteLine(body);
         } else {
-            Err->WriteFormat("state changed: %i\n", state);
+            Error->WriteFormat("state changed: %i\n", state);
         }
-        Err->WriteLine("-------------------------------------");
+        Error->WriteLine("-------------------------------------");
     }
     virtual void OnRequestProgress(HttpRequest* request,int position, int total, bool totalKnown) 
     {
         if (totalKnown) {
-            Err->WriteFormat("progress (percentage): %i\n", (int)(100*((1.0*position)/total)));
+            Error->WriteFormat("progress (percentage): %i\n", (int)(100*((1.0*position)/total)));
         } else {
-            Err->WriteFormat("progress: %lu, %lu\n", position, total);
-            Err->WriteLine("Total length not known");
+            Error->WriteFormat("progress: %lu, %lu\n", position, total);
+            Error->WriteLine("Total length not known");
         }
-        Err->WriteLine("-------------------------------------");
+        Error->WriteLine("-------------------------------------");
     }
     virtual void OnRequestAborted(HttpRequest* request) 
     {
     }
     virtual void OnRequestTimeout(HttpRequest* request) 
     {
-        Err->WriteLine("timed out");
-        Err->WriteLine("-------------------------------------");
+        Error->WriteLine("timed out");
+        Error->WriteLine("-------------------------------------");
     }
     virtual void OnRequestError(HttpRequest* request) 
     {
-        Err->WriteLine("error callback called...ugh:");
-        Err->WriteLine("-------------------------------------");
+        Error->WriteLine("error callback called...ugh:");
+        Error->WriteLine("-------------------------------------");
     }
 };
 
@@ -72,7 +72,7 @@ public:
 
 	virtual void OnInit(Window* wnd)
 	{
-		Err->WriteLine("OnInit");
+		Error->WriteLine("OnInit");
         
         dialogType = 0;
 
@@ -89,12 +89,12 @@ public:
         eventHandler = new EHandler();
         httpClient->SetEventHandler(eventHandler.Get());
         
-        Err->WriteLine("-------------------------------------");
+        Error->WriteLine("-------------------------------------");
 	}
 
 	virtual void OnLoad(Window* wnd)
 	{
-		Err->WriteLine("OnLoad");
+		Error->WriteLine("OnLoad");
 	}
 
     
@@ -117,7 +117,7 @@ public:
 
 	virtual bool OnKeyDown(Window* wnd, Key key)
 	{
-		Err->WriteLine("OnKeyDown: " + (String)(int)key);
+		Error->WriteLine("OnKeyDown: " + (String)(int)key);
 
 		if (key == KeyF11 || (key == KeyEnter && wnd->GetKeyState(KeyCtrl)))
 		{
@@ -135,22 +135,22 @@ public:
 
 	virtual bool OnKeyUp(Window* wnd, Key key)
 	{
-		Err->WriteLine("OnKeyUp: " + (String)(int)key);
+		Error->WriteLine("OnKeyUp: " + (String)(int)key);
 		return false;
 	}
 
 	virtual bool OnTextInput(Window* wnd, const String& text)
 	{
-		Err->WriteLine("OnTextInput: " + text);
+		Error->WriteLine("OnTextInput: " + text);
 		return false;
 	}
 
 	virtual bool OnMouseDown(Window* wnd, Vector2i pos, MouseButton button)
 	{
-		Err->WriteLine("OnMouseDown: " + pos.ToString() + ", " + (String)(int)button);
+		Error->WriteLine("OnMouseDown: " + pos.ToString() + ", " + (String)(int)button);
         
         
-        Err->WriteLine("Bang");
+        Error->WriteLine("Bang");
         HttpRequest* req = httpClient->CreateRequest("PUT","http://httpbin.org/put");
         req->SetHeader("Accept", "*/*");
         req->SetHeader("ohhai","canhazdata");
@@ -161,13 +161,13 @@ public:
 
 	virtual bool OnMouseUp(Window* wnd, Vector2i pos, MouseButton button)
 	{
-		Err->WriteLine("OnMouseUp: " + pos.ToString() + ", " + (String)(int)button);
+		Error->WriteLine("OnMouseUp: " + pos.ToString() + ", " + (String)(int)button);
 		return false;
 	}
 
 	virtual bool OnMouseMove(Window* wnd, Vector2i pos)
 	{
-		Err->WriteLine("OnMouseMove: " + pos.ToString());
+		Error->WriteLine("OnMouseMove: " + pos.ToString());
 
 		if (wnd->GetMouseButtonState(MouseButtonLeft))
 		{
@@ -205,26 +205,26 @@ public:
 
 	virtual bool OnMouseLeave(Window* wnd, Vector2i pos)
 	{
-		Err->WriteLine("OnMouseLeave: " + pos.ToString());
+		Error->WriteLine("OnMouseLeave: " + pos.ToString());
 		return false;
 	}
 
 	virtual bool OnMouseWheel(Window* wnd, Vector2i delta)
 	{
-		Err->WriteLine("OnMouseWheel: " + delta.ToString());
+		Error->WriteLine("OnMouseWheel: " + delta.ToString());
 		return false;
 	}
 
 	virtual bool OnTouchDown(Window* wnd, Vector2 pos, int id)
 	{
-		Err->WriteLine("OnTouchDown: " + pos.ToString() + ", " + id);
+		Error->WriteLine("OnTouchDown: " + pos.ToString() + ", " + id);
         touchDownTime = GetSeconds();
 		return false;
 	}
 
 	virtual bool OnTouchMove(Window* wnd, Vector2 pos, int id)
 	{
-		Err->WriteLine("OnTouchMove: " + pos.ToString() + ", " + id);
+		Error->WriteLine("OnTouchMove: " + pos.ToString() + ", " + id);
         Vector2i size = wnd->GetClientSize();
         glClearColor(pos.X / size.X, pos.Y / size.Y, 0, 1);
 		return false;
@@ -238,8 +238,8 @@ public:
         {
             if (currentTime - tapTime < 0.3)
             {
-                Err->WriteLine("Bang");
-                Err->WriteLine("Bang");
+                Error->WriteLine("Bang");
+                Error->WriteLine("Bang");
                 HttpRequest* req = httpClient->CreateRequest("PUT","http://httpbin.org/put");
                 req->SetHeader("Accept", "*/*");
                 req->SetHeader("ohhai","canhazdata");
@@ -255,7 +255,7 @@ public:
 	virtual void OnSizeChanged(Window* wnd)
 	{
 		Vector2i clientSize = wnd->GetClientSize();
-		Err->WriteLine("OnSizeChanged: " + clientSize.ToString());
+		Error->WriteLine("OnSizeChanged: " + clientSize.ToString());
 		glViewport(0, 0, clientSize.X, clientSize.Y);
 		Application::OnSizeChanged(wnd);
 	}
@@ -263,44 +263,44 @@ public:
     //[TODO] cant show message box when closing as shim is gone
 	virtual bool OnClosing(Window* wnd, bool& cancel)
 	{
-		Err->WriteLine("OnClosing");
+		Error->WriteLine("OnClosing");
 		cancel = MessageBox::Show(wnd, "Close?", "Close?", DialogButtonsYesNo, DialogHintQuestion | DialogHintButton2Default) == DialogResultNo;
 		return true;
 	}
 
 	virtual void OnClosed(Window* wnd)
 	{
-		Err->WriteLine("OnClosed");
+		Error->WriteLine("OnClosed");
 	}
 
 	virtual void OnAppLowMemory(Window* wnd)
 	{
-		Err->WriteLine("OnAppLowMemory");
+		Error->WriteLine("OnAppLowMemory");
 	}
 
 	virtual void OnAppTerminating(Window* wnd)
 	{
-		Err->WriteLine("OnAppTerminating");
+		Error->WriteLine("OnAppTerminating");
 	}
 
 	virtual void OnAppWillEnterForeground(Window* wnd)
 	{
-		Err->WriteLine("OnAppWillEnterForeground");
+		Error->WriteLine("OnAppWillEnterForeground");
 	}
 
 	virtual void OnAppDidEnterForeground(Window* wnd)
 	{
-		Err->WriteLine("OnAppDidEnterForeground");
+		Error->WriteLine("OnAppDidEnterForeground");
 	}
 
 	virtual void OnAppWillEnterBackground(Window* wnd)
 	{
-		Err->WriteLine("OnAppWillEnterBackground");
+		Error->WriteLine("OnAppWillEnterBackground");
 	}
 
 	virtual void OnAppDidEnterBackground(Window* wnd)
 	{
-		Err->WriteLine("OnAppDidEnterBackground");
+		Error->WriteLine("OnAppDidEnterBackground");
 	}
 };
 

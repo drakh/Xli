@@ -26,8 +26,8 @@ namespace Xli
             BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:pathString];
             if (!fileExists) {
                 const char* wrongPath = [pathString UTF8String];
-                Err->WriteLine("SoundPlayer: Audio file not found at:");
-                Err->WriteLine(wrongPath);
+                Error->WriteLine("SoundPlayer: Audio file not found at:");
+                Error->WriteLine(wrongPath);
                 player = nil;
                 return;
             }
@@ -38,7 +38,7 @@ namespace Xli
             
             if (player == nil)
             {
-                Err->WriteLine("ERROR: Failed to create AVAudioPlayer: " + (String)([[error description] UTF8String]));
+                Error->WriteLine("ERROR: Failed to create AVAudioPlayer: " + (String)([[error description] UTF8String]));
                 return;
             }
                 

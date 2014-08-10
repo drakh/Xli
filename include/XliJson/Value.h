@@ -31,7 +31,7 @@
     @{
 */
 #define XLI_GET_X(label, x) do { try { x; } catch (const Xli::Exception& e) \
-    { Xli::Err->WriteLine((Xli::String)"WARNING: " + XLI_FUNCTION + ": Unable to read '" + label + "': " + e.ToString()); } } while (0)
+    { Xli::Error->WriteLine((Xli::String)"WARNING: " + XLI_FUNCTION + ": Unable to read '" + label + "': " + e.ToString()); } } while (0)
 
 #define XLI_GET_VALUE(value, result)    XLI_GET_X(#result, result = value[#result])
 #define XLI_GET_STRING(value, result)    XLI_GET_X(#result, Value __tmp = value[#result]; if (__tmp.IsUndefined()) XLI_THROW("Value is undefined"); else result = __tmp.ToString())

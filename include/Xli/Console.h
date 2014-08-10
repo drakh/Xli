@@ -51,7 +51,7 @@ namespace Xli
     */
 
     extern StdOutAccessor Out;
-    extern StdErrAccessor Err;
+    extern StdErrAccessor Error;
     extern StdInAccessor In;
 
     template <typename T> 

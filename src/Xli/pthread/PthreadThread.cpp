@@ -63,7 +63,7 @@ namespace Xli
         int result = pthread_join(thread, NULL);
         
         if (result) 
-            Err->WriteLine("XLI ERROR: pthread_join failed: " + String::HexFromInt(result));
+            Error->WriteLine("XLI ERROR: pthread_join failed: " + String::HexFromInt(result));
     }
 
     void* GetCurrentThread()
@@ -80,6 +80,6 @@ namespace Xli
         int result = nanosleep(&t, &r);
         
         if (result)
-            Err->WriteLine("XLI ERROR: nanosleep failed: " + String::HexFromInt(result));
+            Error->WriteLine("XLI ERROR: nanosleep failed: " + String::HexFromInt(result));
     }
 }

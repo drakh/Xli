@@ -119,7 +119,7 @@ namespace Xli
                 switch (dir)
                 {
                 default:
-                    Err->WriteLine("WARNING: Unknown system directory: " + (String)(int)dir);
+                    Error->WriteLine("WARNING: Unknown system directory: " + (String)(int)dir);
                     return GetKnownDirectory(FOLDERID_Documents);
 
                 case SystemDirectoryDocuments:

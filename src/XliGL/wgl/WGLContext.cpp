@@ -122,7 +122,7 @@ namespace Xli
                             continue;
                         }
 
-                        Err->WriteLine("WGL WARNING: Unable to find any multisampled OpenGL formats");
+                        Error->WriteLine("WGL WARNING: Unable to find any multisampled OpenGL formats");
                         return -1;
                     }
 
@@ -131,7 +131,7 @@ namespace Xli
 
                 if (!SetPixelFormat(hDC, configs[0], &pfd))
                 {
-                    Err->WriteLine("WGL ERROR: Unable to set multisampled OpenGL format: " + Win32::GetLastErrorString());
+                    Error->WriteLine("WGL ERROR: Unable to set multisampled OpenGL format: " + Win32::GetLastErrorString());
                     return -1;
                 }
 
