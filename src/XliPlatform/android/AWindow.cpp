@@ -35,11 +35,10 @@ Xli::WindowEventHandler* GlobalEventHandler = 0;
 Xli::Window* GlobalWindow = 0;
 
 static struct android_app* GlobalAndroidApp = 0;
+static volatile int GlobalInit = 0;
 static int GlobalWidth = 0;
 static int GlobalHeight = 0;
 static int GlobalFlags = 0;
-
-static volatile int inited = 0;
 
 namespace Xli
 {
@@ -52,9 +51,6 @@ namespace Xli
 
             AWindow()
             {
-                if (GlobalEventHandler != 0)
-                    GlobalEventHandler->AddRef();
-
                 BeginTextInput(TextInputHintDefault);
                 EndTextInput();
 
@@ -98,8 +94,9 @@ namespace Xli
 
             virtual void Close()
             {
-                if (GlobalEventHandler != 0 && 
-                    GlobalEventHandler->OnClosing(this))
+                if (GlobalAndroidApp->destroyRequested == 1 ||
+                    (GlobalEventHandler != 0 && 
+                     GlobalEventHandler->OnClosing(this)))
                     return;
 
                 GlobalAndroidApp->destroyRequested = 1;
@@ -115,7 +112,7 @@ namespace Xli
 
             virtual bool IsVisible()
             {
-                return inited != 0;
+                return GlobalInit != 0;
             }
 
             virtual bool IsFullscreen()
@@ -125,7 +122,7 @@ namespace Xli
 
             virtual bool IsMinimized()
             {
-                return inited == 0;
+                return GlobalInit == 0;
             }
 
             virtual bool IsMaximized()
@@ -302,19 +299,23 @@ namespace Xli
 
             virtual void Write(const void* src, int elmSize, int elmCount)
             {
-                for (int i = 0; i < elmCount; i++)
+                for (int i = 0; i < elmSize * elmCount; i++)
                 {
                     char c = ((const char*)src)[i];
 
-                    if (c == '\n')
+                    switch (c)
                     {
+                    case '\n':
                         buf.Add(0);
                         __android_log_write(prio, AGetAppName(), buf.Ptr());
                         buf.Clear();
                         continue;
-                    }
 
-                    // TODO: NULL characters? Test if java-style MUTF-8 can be used
+                    case 0:
+                        buf.Add((char)(unsigned char)0xC0);
+                        buf.Add((char)(unsigned char)0x80);
+                        continue;
+                    }
 
                     buf.Add(c);
                 }
@@ -352,12 +353,12 @@ namespace Xli
                             {
                             case AMOTION_EVENT_ACTION_DOWN:
                             case AMOTION_EVENT_ACTION_POINTER_DOWN:
-                                GlobalEventHandler->OnTouchDown(GlobalWindow, Xli::Vector2(x, y), id);
+                                GlobalEventHandler->OnTouchDown(GlobalWindow, Vector2(x, y), id);
                                 break;
 
                             case AMOTION_EVENT_ACTION_UP:
                             case AMOTION_EVENT_ACTION_POINTER_UP:
-                                GlobalEventHandler->OnTouchUp(GlobalWindow, Xli::Vector2(x, y), id);
+                                GlobalEventHandler->OnTouchUp(GlobalWindow, Vector2(x, y), id);
                                 break;
                             }
                         }
@@ -372,7 +373,7 @@ namespace Xli
                                 int id = AMotionEvent_getPointerId(event, i);
                                 int x = AMotionEvent_getX(event, i);
                                 int y = AMotionEvent_getY(event, i);
-                                GlobalEventHandler->OnTouchMove(GlobalWindow, Xli::Vector2(x, y), id);
+                                GlobalEventHandler->OnTouchMove(GlobalWindow, Vector2(x, y), id);
 
                                 //LOGD("TOUCH MOVE: %d  %d  %d  %d  %d", a, i, id, x, y);
                             }
@@ -388,7 +389,7 @@ namespace Xli
                                 int id = AMotionEvent_getPointerId(event, i);
                                 int x = AMotionEvent_getX(event, i);
                                 int y = AMotionEvent_getY(event, i);
-                                GlobalEventHandler->OnTouchUp(GlobalWindow, Xli::Vector2(x, y), id);
+                                GlobalEventHandler->OnTouchUp(GlobalWindow, Vector2(x, y), id);
 
                                 //LOGD("TOUCH CANCEL: %d  %d  %d  %d  %d", a, i, id, x, y);
                             }
@@ -435,49 +436,45 @@ namespace Xli
 #ifdef XLI_DEBUG
             LOGD(get_cmd_string(cmd));
 #endif
-
             switch (cmd)
             {
             case APP_CMD_INIT_WINDOW:
-                inited = 1;
-
-                if (GlobalEventHandler && GlobalWindow)
+                GlobalInit = 1;
+                if (GlobalEventHandler)
                     GlobalEventHandler->OnNativeHandleChanged(GlobalWindow);
 
                 break;
 
             case APP_CMD_TERM_WINDOW:
-                inited = 0;
+                GlobalInit = 0;
                 break;
 
-            case APP_CMD_GAINED_FOCUS:
+            case APP_CMD_START:
+                if (GlobalEventHandler)
+                    GlobalEventHandler->OnAppWillEnterForeground(GlobalWindow);
+
+                break;
+
+            case APP_CMD_RESUME:
+                AShim::OnResume();
                 if (GlobalEventHandler)
                     GlobalEventHandler->OnAppDidEnterForeground(GlobalWindow);
 
                 break;
 
-            case APP_CMD_LOST_FOCUS:
-                if (GlobalEventHandler)
-                    GlobalEventHandler->OnAppDidEnterBackground(GlobalWindow);
-                
-                break;
-
             case APP_CMD_PAUSE:
                 AShim::OnPause();
-
-                if (GlobalFlags & WindowFlagsDisableBackgroundProcess)
-                    handle_cmd(app, APP_CMD_DESTROY);
-                else if (GlobalEventHandler)
+                if (GlobalEventHandler)
                     GlobalEventHandler->OnAppWillEnterBackground(GlobalWindow);
                 
                 break;
 
-            case APP_CMD_RESUME:
-                AShim::OnResume();
-
-                if (GlobalEventHandler)
-                    GlobalEventHandler->OnAppWillEnterForeground(GlobalWindow);
-
+            case APP_CMD_STOP:
+                if (GlobalFlags & WindowFlagsDisableBackgroundProcess)
+                    handle_cmd(app, APP_CMD_DESTROY);
+                else if (GlobalEventHandler)
+                    GlobalEventHandler->OnAppDidEnterBackground(GlobalWindow);
+                
                 break;
 
             case APP_CMD_DESTROY:
@@ -514,19 +511,6 @@ namespace Xli
 
             Out->SetStream(ManagePtr(new ALogStream(ANDROID_LOG_INFO)));
             Error->SetStream(ManagePtr(new ALogStream(ANDROID_LOG_WARN)));
-
-            while (!inited)
-            {
-                Window::ProcessMessages();
-
-                if (app->destroyRequested)
-                {
-                    LOGF("Unable to initialize window");
-                    exit(EXIT_FAILURE);
-                }
-
-                usleep(10000);
-            }
         }
 
         void Android::SetLogTag(const char* tag)
@@ -589,6 +573,19 @@ namespace Xli
         if (GlobalWindow != 0)
             XLI_THROW("Only one window instance is allowed on the Android platform");
 
+        while (!GlobalInit)
+        {
+            Window::ProcessMessages();
+
+            if (GlobalAndroidApp->destroyRequested)
+            {
+                LOGF("Unable to initialize window");
+                exit(EXIT_FAILURE);
+            }
+
+            usleep(10000);
+        }
+
         GlobalWidth = width;
         GlobalHeight = height;
         GlobalFlags = flags;
@@ -612,7 +609,7 @@ namespace Xli
             if (source != NULL)
                 source->process(GlobalAndroidApp, source);
 
-        if (inited && !GlobalAndroidApp->destroyRequested)
+        if (GlobalInit && !GlobalAndroidApp->destroyRequested)
         {
             // Detect window resize / screen rotation
             int w = ANativeWindow_getWidth(GlobalAndroidApp->window);
@@ -626,9 +623,9 @@ namespace Xli
                 if (GlobalEventHandler)
                     GlobalEventHandler->OnSizeChanged(GlobalWindow);
             }
-
-            if (GlobalWindow)
-                PlatformSpecific::ProcessCrossThreadEvents(GlobalWindow);
         }
+
+        if (GlobalWindow)
+            PlatformSpecific::ProcessCrossThreadEvents(GlobalWindow);
     }
 }
