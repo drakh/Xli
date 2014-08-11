@@ -58,7 +58,8 @@ namespace Xli
         String(double d);
         ~String();
 
-        char* Copy();
+        char* CopyPtr();
+        char* SwapPtr();
 
         char* Ptr();
         const char* Ptr() const;

@@ -75,7 +75,7 @@ namespace Xli
 
     void String::deinit()
     {
-        if (length && data != buf) 
+        if (data != buf) 
             delete [] data;
     }
 
@@ -121,12 +121,21 @@ namespace Xli
         deinit();
     }
 
-    char* String::Copy()
+    char* String::CopyPtr()
     {
         char* buf = new char[length + 1];
         buf[length] = 0;
         memcpy(buf, data, length);
         return buf;
+    }
+
+    char* String::SwapPtr()
+    {
+        if (data == buf)
+            return CopyPtr();
+
+        *(char**)&buf = data;
+        return data;
     }
 
     char* String::Ptr()
