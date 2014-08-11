@@ -32,6 +32,7 @@ namespace Xli
         */
         class Win32Window : public Window
         {
+        public:
             HWND hWnd;
             bool closed, ownsHwnd;
 
@@ -41,12 +42,8 @@ namespace Xli
             RECT rect;
             bool fullscreen;
 
-            friend class Xli::Window;
-            friend class Xli::PlatformSpecific::Win32;
-
             static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-        public:
             Win32Window(int width, int height, const Xli::String& title, int flags);
             Win32Window(HWND hWnd);
             virtual ~Win32Window();

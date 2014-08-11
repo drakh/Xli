@@ -141,9 +141,7 @@ namespace Xli
 
         void Win32Window::Close()
         {
-            bool cancel = false;
-
-            if (!eventHandler || !eventHandler->OnClosing(this, cancel) || !cancel)
+            if (!eventHandler || !eventHandler->OnClosing(this))
             {
                 CloseWindow(hWnd);
                 closed = true;

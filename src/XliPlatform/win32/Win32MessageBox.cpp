@@ -50,7 +50,7 @@ namespace Xli
 
         Utf16String messageW = Unicode::Utf8To16(message);
         Utf16String captionW = Unicode::Utf8To16(caption);
-        int result = MessageBoxW(Win32::GetWindowHandle(wnd), messageW.Ptr(), captionW.Ptr(), type);
+        int result = MessageBoxW(PlatformSpecific::Win32::GetWindowHandle(wnd), messageW.Ptr(), captionW.Ptr(), type);
 
         switch (result)
         {

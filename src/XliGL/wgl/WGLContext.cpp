@@ -221,7 +221,7 @@ namespace Xli
                     if (pf != -1)
                         SetPixelFormat(hDC, pf, &pfd);
                     else
-                        SetPixelFormat(hDC, ChoosePixelFormat(hDC, &pfd), &pfd));
+                        SetPixelFormat(hDC, ChoosePixelFormat(hDC, &pfd), &pfd);
                 }
 
                 if (!wglMakeCurrent(hDC, wnd ? hGLRC : 0))

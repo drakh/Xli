@@ -17,8 +17,10 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
 #include <Xli/Time.h>
-#include <XliPlatform/PlatformSpecific/Win32Header.h>
 
 namespace Xli
 {

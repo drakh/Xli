@@ -18,6 +18,7 @@
 //
 
 #include <XliPlatform/PlatformSpecific/Win32.h>
+#include <XliPlatform/Window.h>
 #include <Xli/Unicode.h>
 
 namespace Xli

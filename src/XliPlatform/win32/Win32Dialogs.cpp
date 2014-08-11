@@ -74,7 +74,7 @@ namespace Xli
             }
 
             fb.Append('\0');
-            filterW = Unicode::Utf8To16(fb.GetString());
+            filterW = Unicode::Utf8To16(fb.ToString());
         }
         else
         {
@@ -88,7 +88,7 @@ namespace Xli
             memcpy(fnbufW, defaultFileW.Ptr(), defaultFileW.Length() * 2 + 2);
         }
         
-        ofn.hwndOwner = Win32::GetWindowHandle(parent);
+        ofn.hwndOwner = PlatformSpecific::Win32::GetWindowHandle(parent);
         ofn.hInstance = GetModuleHandle(NULL);
         ofn.lpstrFilter = filterW.Ptr();
         ofn.lpstrFile = fnbufW;
