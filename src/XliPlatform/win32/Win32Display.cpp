@@ -39,7 +39,7 @@ namespace Xli
         EnumDisplayMonitors(NULL, NULL, MonitorEnumProc, (LPARAM)Monitors);
     }
 
-    void DisplayDone()
+    void TerminateDisplay()
     {
         delete Monitors;
     }

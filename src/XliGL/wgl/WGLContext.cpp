@@ -35,7 +35,6 @@ namespace Xli
             HDC hDC;
             HWND hWnd;
             HGLRC hGLRC;
-            Shared<Window> window;
             PIXELFORMATDESCRIPTOR pfd;
             int pf;
 
@@ -175,7 +174,7 @@ namespace Xli
                 if (!hGLRC)
                     XLI_THROW("Failed to create OpenGL context: " + Win32::GetLastErrorString());
 
-                MakeCurrent(window);
+                MakeCurrent(wnd);
 
                 glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
                 SwapBuffers();
@@ -186,19 +185,21 @@ namespace Xli
                 hWnd = srcCtx->hWnd;
                 hDC = srcCtx->hDC;
                 pf = srcCtx->pf;
+                memcpy(&pfd, &srcCtx->pfd, sizeof(PIXELFORMATDESCRIPTOR));
 
                 hGLRC = wglCreateContext(hDC);
 
                 if (!hGLRC)
                     XLI_THROW("Unable to create shared OpenGL context: " + Win32::GetLastErrorString());
 
-                if (!wglMakeCurrent(hDC, 0))
+                if (!wglMakeCurrent(0, 0))
                     XLI_THROW("Unable to make OpenGL context no longer current: " + Win32::GetLastErrorString());
 
                 if (!wglShareLists(srcCtx->hGLRC, hGLRC))
                     XLI_THROW("Unable to share OpenGL contexts: " + Win32::GetLastErrorString());
 
-                srcCtx->MakeCurrent(srcCtx->window);
+                if (!wglMakeCurrent(srcCtx->hDC, srcCtx->hGLRC))
+                    XLI_THROW("Unable to make OpenGL context current: " + Win32::GetLastErrorString());
             }
 
             virtual ~WGLContext()

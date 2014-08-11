@@ -105,7 +105,7 @@ namespace Xli
             if (parts[i].Length() > 0 && parts[i] != "." && parts[i] != "..")
                 CreateDirectory(currentDir);
 
-            currentDir = currentDir + '/';
+            currentDir = currentDir + "/";
         }
     }
 
@@ -168,7 +168,7 @@ namespace Xli
         this->path = path;
         
         if (path.Length() > 0 && path.Last() != '/') 
-            this->path = this->path + '/';
+            this->path = this->path + "/";
     }
 
     Stream* SubFileSystem::OpenFile(const String& filename, FileMode mode)

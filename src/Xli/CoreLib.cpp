@@ -70,12 +70,14 @@ namespace Xli
 
     void CoreLib::OnUnhandledException(const Exception& exception, const String& where)
     {
+        Error->WriteLine();
         Error->WriteLine((String)"UNHANDLED EXCEPTION (" + where + "):");
         Error->WriteLine();
         Error->WriteLine(exception.GetMessage());
         Error->WriteLine();
         Error->WriteLine((String)"Function: " + exception.GetFunction());
         Error->WriteLine((String)"Line: " + exception.GetLine());
+        Error->GetStream()->Flush();
 
         if (ExceptionCallback)
             ExceptionCallback(exception, where);
