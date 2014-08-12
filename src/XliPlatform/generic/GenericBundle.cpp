@@ -34,7 +34,7 @@ namespace Xli
             "../../../data",
         };
 
-        for (int i = 0; i < sizeof(possibleDataSuffixes); i++)
+        for (int i = 0; i < 4; i++)
         {
         	String bundle = Path::Combine(base, possibleDataSuffixes[i]);
 

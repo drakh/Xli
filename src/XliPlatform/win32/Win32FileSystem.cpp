@@ -221,17 +221,17 @@ namespace Xli
                 if (GetFileAttributesEx(pathW.Ptr(), GetFileExInfoStandard, &data))
                 {
                     info.Name = path;
-                    info.Flags = 0;
+                    info.Attributes = 0;
                     info.LastAccessTime = ConvertToTimestamp(data.ftLastAccessTime);
                     info.LastWriteTime = ConvertToTimestamp(data.ftLastWriteTime);
                     info.CreationTime = ConvertToTimestamp(data.ftCreationTime);
                     info.Size = ConvertToUInt64(data.nFileSizeHigh, data.nFileSizeLow);
                     
                     if (data.dwFileAttributes & FILE_ATTRIBUTE_READONLY) 
-                        info.Flags |= FileFlagReadOnly;
+                        info.Attributes |= FileAttributesReadOnly;
                     
                     if (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) 
-                        info.Flags |= FileFlagDirectory;
+                        info.Attributes |= FileAttributesDirectory;
                     
                     return true;
                 }
@@ -268,17 +268,17 @@ namespace Xli
                                 info.Name = path + "/" + info.Name;
                         }
 
-                        info.Flags = 0;
+                        info.Attributes = 0;
                         info.LastAccessTime = ConvertToTimestamp(findData.ftLastAccessTime);
                         info.LastWriteTime = ConvertToTimestamp(findData.ftLastWriteTime);
                         info.CreationTime = ConvertToTimestamp(findData.ftCreationTime);
                         info.Size = ConvertToUInt64(findData.nFileSizeHigh, findData.nFileSizeLow);
                         
                         if (findData.dwFileAttributes & FILE_ATTRIBUTE_READONLY) 
-                            info.Flags |= FileFlagReadOnly;
+                            info.Attributes |= FileAttributesReadOnly;
                         
                         if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) 
-                            info.Flags |= FileFlagDirectory;
+                            info.Attributes |= FileAttributesDirectory;
 
                         list.Add(info);
 

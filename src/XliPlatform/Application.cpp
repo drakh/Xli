@@ -111,7 +111,10 @@ namespace Xli
     {
 #if defined(XLI_PLATFORM_WIN32) || defined(XLI_PLATFORM_OSX)
         if (wnd->GetMouseButtonState(MouseButtonLeft))
+        {
+            OnUpdate(wnd);
             OnDraw(wnd);
+        }
 #endif
     }
 }
