@@ -54,7 +54,7 @@ namespace Xli
         if (where.Length() > 0)
             sb.Append("\n\n(from: " + where + ")");
 
-        MessageBox::Show(Window::GetMainWindow(), sb.ToString(), "Unhandled Exception", DialogButtonsOK, DialogHintError);
+        MessageBox::Show(Window::GetMainWindow(), sb.ToString(), "Unhandled Exception", DialogButtonsOK, DialogHintsError);
     }
 
     static void Terminate()

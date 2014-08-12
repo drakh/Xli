@@ -259,49 +259,6 @@ public:
 		glViewport(0, 0, clientSize.X, clientSize.Y);
 		Application::OnSizeChanged(wnd);
 	}
-
-    //[TODO] cant show message box when closing as shim is gone
-	virtual bool OnClosing(Window* wnd, bool& cancel)
-	{
-		Error->WriteLine("OnClosing");
-		cancel = MessageBox::Show(wnd, "Close?", "Close?", DialogButtonsYesNo, DialogHintQuestion | DialogHintButton2Default) == DialogResultNo;
-		return true;
-	}
-
-	virtual void OnClosed(Window* wnd)
-	{
-		Error->WriteLine("OnClosed");
-	}
-
-	virtual void OnAppLowMemory(Window* wnd)
-	{
-		Error->WriteLine("OnAppLowMemory");
-	}
-
-	virtual void OnAppTerminating(Window* wnd)
-	{
-		Error->WriteLine("OnAppTerminating");
-	}
-
-	virtual void OnAppWillEnterForeground(Window* wnd)
-	{
-		Error->WriteLine("OnAppWillEnterForeground");
-	}
-
-	virtual void OnAppDidEnterForeground(Window* wnd)
-	{
-		Error->WriteLine("OnAppDidEnterForeground");
-	}
-
-	virtual void OnAppWillEnterBackground(Window* wnd)
-	{
-		Error->WriteLine("OnAppWillEnterBackground");
-	}
-
-	virtual void OnAppDidEnterBackground(Window* wnd)
-	{
-		Error->WriteLine("OnAppDidEnterBackground");
-	}
 };
 
 int Main(const Array<String>& args)

@@ -39,14 +39,14 @@ namespace Xli
             XLI_THROW("Invalid button combination for MessageDialog");
         }
 
-        if (hints & DialogHintError) type |= MB_ICONERROR;
-        else if (hints & DialogHintInformation) type |= MB_ICONINFORMATION;
-        else if (hints & DialogHintQuestion) type |= MB_ICONQUESTION;
-        else if (hints & DialogHintWarning) type |= MB_ICONWARNING;
+        if (hints & DialogHintsError) type |= MB_ICONERROR;
+        else if (hints & DialogHintsInformation) type |= MB_ICONINFORMATION;
+        else if (hints & DialogHintsQuestion) type |= MB_ICONQUESTION;
+        else if (hints & DialogHintsWarning) type |= MB_ICONWARNING;
         
-        if (hints & DialogHintButton1Default) type |= MB_DEFBUTTON1;
-        else if (hints & DialogHintButton2Default) type |= MB_DEFBUTTON2;
-        else if (hints & DialogHintButton3Default) type |= MB_DEFBUTTON3;
+        if (hints & DialogHintsButton1Default) type |= MB_DEFBUTTON1;
+        else if (hints & DialogHintsButton2Default) type |= MB_DEFBUTTON2;
+        else if (hints & DialogHintsButton3Default) type |= MB_DEFBUTTON3;
 
         Utf16String messageW = Unicode::Utf8To16(message);
         Utf16String captionW = Unicode::Utf8To16(caption);

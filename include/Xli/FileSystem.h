@@ -26,10 +26,10 @@ namespace Xli
     /**
         \ingroup XliIO
     */
-    enum FileFlag
+    enum FileAttributes
     {
-        FileFlagReadOnly = 1 << 0,
-        FileFlagDirectory = 1 << 1
+        FileAttributesReadOnly = 1 << 0,
+        FileAttributesDirectory = 1 << 1
     };
 
     /**
@@ -39,7 +39,7 @@ namespace Xli
     {
         String Name;
         UInt64 Size;
-        UInt32 Flags;
+        UInt32 Attributes;
         Timestamp CreationTime;
         Timestamp LastAccessTime;
         Timestamp LastWriteTime;

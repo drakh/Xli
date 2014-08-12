@@ -140,14 +140,14 @@ namespace Xli
 
             f.Name = path;
 
-            f.Flags = 0;
+            f.Attributes = 0;
             if (!(((attributes.st_mode & S_IWOTH) == S_IWOTH)
                 || (attributes.st_gid == getgid() && ((attributes.st_mode & S_IWGRP) == S_IWGRP))
                 || (attributes.st_uid == getuid() && ((attributes.st_mode & S_IWUSR) == S_IWUSR))))
-                f.Flags |= FileFlagReadOnly;
+                f.Attributes |= FileAttributesReadOnly;
 
             if (S_ISDIR(attributes.st_mode))
-                f.Flags |= FileFlagDirectory;
+                f.Attributes |= FileAttributesDirectory;
 
             f.CreationTime = ConvertToTimestamp(attributes.st_mtime);
             f.LastAccessTime = ConvertToTimestamp(attributes.st_atime);

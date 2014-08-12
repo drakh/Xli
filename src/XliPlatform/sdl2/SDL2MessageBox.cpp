@@ -94,13 +94,13 @@ namespace Xli
             XLI_THROW("Invalid button combination for MessageDialog");
         }
 
-        if (hints & DialogHintError) data.flags |= SDL_MESSAGEBOX_ERROR;
-        else if (hints & DialogHintInformation) data.flags |= SDL_MESSAGEBOX_INFORMATION;
-        else if (hints & DialogHintWarning) data.flags |= SDL_MESSAGEBOX_WARNING;
+        if (hints & DialogHintsError) data.flags |= SDL_MESSAGEBOX_ERROR;
+        else if (hints & DialogHintsInformation) data.flags |= SDL_MESSAGEBOX_INFORMATION;
+        else if (hints & DialogHintsWarning) data.flags |= SDL_MESSAGEBOX_WARNING;
         
-        if (hints & DialogHintButton1Default) buttondata[0].flags |= SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
-        else if (hints & DialogHintButton2Default) buttondata[1].flags |= SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
-        else if (hints & DialogHintButton3Default) buttondata[2].flags |= SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
+        if (hints & DialogHintsButton1Default) buttondata[0].flags |= SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
+        else if (hints & DialogHintsButton2Default) buttondata[1].flags |= SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
+        else if (hints & DialogHintsButton3Default) buttondata[2].flags |= SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT;
 
         int result = -1;
         if (SDL_ShowMessageBox(&data, &result) == 0)

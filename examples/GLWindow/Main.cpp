@@ -277,7 +277,7 @@ public:
     virtual bool OnClosing(Window* wnd)
     {
         PrintLine("OnClosing");
-        return MessageBox::Show(wnd, "Close?", "Close?", DialogButtonsYesNo, DialogHintQuestion | DialogHintButton2Default) == DialogResultNo;
+        return MessageBox::Show(wnd, "Close?", "Close?", DialogButtonsYesNo, DialogHintsQuestion | DialogHintsButton2Default) == DialogResultNo;
     }
 
     virtual void OnClosed(Window* wnd)

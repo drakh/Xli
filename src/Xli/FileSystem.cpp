@@ -83,13 +83,13 @@ namespace Xli
     bool FileSystem::IsFile(const String& path)
     {
         FileInfo result;
-        return GetFileInfo(path, result) && (result.Flags & FileFlagDirectory) == 0;
+        return GetFileInfo(path, result) && (result.Attributes & FileAttributesDirectory) == 0;
     }
 
     bool FileSystem::IsDirectory(const String& path)
     {
         FileInfo result;
-        return GetFileInfo(path, result) && (result.Flags & FileFlagDirectory) == FileFlagDirectory;
+        return GetFileInfo(path, result) && (result.Attributes & FileAttributesDirectory) == FileAttributesDirectory;
     }
 
     void FileSystem::CreateDirectories(const String& path)
@@ -115,7 +115,7 @@ namespace Xli
         GetFiles(path, files);
 
         for (int i = 0; i < files.Length(); i++)
-            if (files[i].Flags & FileFlagDirectory)
+            if (files[i].Attributes & FileAttributesDirectory)
                 DeleteDirectoryRecursive(files[i].Name);
             else
                 DeleteFile(files[i].Name);

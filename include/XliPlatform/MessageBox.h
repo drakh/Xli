@@ -102,42 +102,42 @@ namespace Xli
         Defines appearance hints for dialog boxes.
         The window manager chooses how to interpret these hints
     */
-    enum DialogHint
+    enum DialogHints
     {
         /**
             The dialog displays an error message.
         */
-        DialogHintError = (1<<0),
+        DialogHintsError = (1<<0),
 
         /**
             The dialog displays information.
         */
-        DialogHintInformation = (1<<1),
+        DialogHintsInformation = (1<<1),
 
         /**
             The dialog displays a warning message.
         */
-        DialogHintWarning = (1<<2),
+        DialogHintsWarning = (1<<2),
 
         /**
             The dialog displays a question.
         */
-        DialogHintQuestion = (1<<3),
+        DialogHintsQuestion = (1<<3),
 
         /**
             The first button is the default choice.
         */
-        DialogHintButton1Default = (1<<4),
+        DialogHintsButton1Default = (1<<4),
 
         /**
             The second button is the default choice.
         */
-        DialogHintButton2Default = (1<<5),
+        DialogHintsButton2Default = (1<<5),
 
         /**
             The third button is the default choice.
         */
-        DialogHintButton3Default = (1<<6)
+        DialogHintsButton3Default = (1<<6)
     };
 
     class Window;
