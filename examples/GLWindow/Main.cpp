@@ -7,6 +7,8 @@ using namespace Xli;
 class GLApp: public Application
 {
     Managed<GLContext> _gl;
+
+    Vector3 _clearColor;
     
     int _fpsCount;
     double _fpsTime;
@@ -20,6 +22,8 @@ public:
     GLApp()
     {
         PrintLine("Constructor");
+
+        _clearColor = Vector3(0, 0, 0);
 
         _fpsCount = 0;
         _fpsTime = 0;
@@ -48,8 +52,6 @@ public:
         _gl->GetAttributes(glAttribs);
         _gl->SetSwapInterval(0);
         
-        glClearColor(1, 0, 0, 1);
-
         // Print platform info
 
 		PrintLine((String)"Time: " + DateTime::Now().ToString());
@@ -101,6 +103,20 @@ public:
 		PrintLine((String)"FileSystem Temp Filename: " + Disk->CreateTempFilename());
     }
 
+    virtual void OnNativeHandleChanged(Window* wnd)
+    {
+        PrintLine("OnNativeHandleChanged");
+        _gl->MakeCurrent(wnd);
+    }
+
+    virtual void OnSizeChanged(Window* wnd)
+    {
+        Vector2i clientSize = wnd->GetClientSize();
+        PrintLine("OnSizeChanged: " + clientSize.ToString());
+        glViewport(0, 0, clientSize.X, clientSize.Y);
+        Application::OnSizeChanged(wnd);
+    }
+
     virtual void OnLoad(Window* wnd)
     {
         PrintLine("OnLoad");
@@ -111,13 +127,14 @@ public:
     virtual void OnUpdate(Window* wnd)
     {
         double t = GetSeconds();
-        _fpsTime += (t - _lastTime);
+        
+        _fpsTime += t - _lastTime;
         _lastTime = t;
         _fpsCount++;
 
         if (_fpsTime >= 1.0)
         {
-            PrintLine("OnUpdate, FPS: " + String::Format("%.2f", (double)_fpsCount / _fpsTime) + ", Visible: " + String::FromBool(wnd->IsVisible()));
+            PrintLine("OnUpdate, FPS: " + String::Format("%.1f", (double)_fpsCount / _fpsTime) + ", IsVisible: " + String::FromBool(wnd->IsVisible()));
             _fpsCount = 0;
             _fpsTime = 0;
         }
@@ -131,9 +148,11 @@ public:
 
     virtual void OnDraw(Window* wnd)
     {
+        glClearColor(_clearColor.X, _clearColor.Y, _clearColor.Z, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
         _gl->SwapBuffers();
+        _clearColor *= 0.99f;
     }
 
     virtual bool OnKeyDown(Window* wnd, Key key)
@@ -185,31 +204,23 @@ public:
         if (wnd->GetMouseButtonState(MouseButtonLeft))
         {
             Vector2i size = wnd->GetClientSize();
-
-            float x = (float)pos.X / size.X;
-            float y = (float)pos.Y / size.Y;
-
-            glClearColor(x, y, 0, 1);
+            _clearColor.X = (float)pos.X / size.X;
+            _clearColor.Y = (float)pos.Y / size.Y;
             return true;
         }
         else if (wnd->GetMouseButtonState(MouseButtonMiddle))
         {
             Vector2i size = wnd->GetClientSize();
-
-            float x = (float)pos.X / size.X;
-            float y = (float)pos.Y / size.Y;
-
-            glClearColor(x, y, x, 1);
+            _clearColor.X = (float)pos.X / size.X;
+            _clearColor.Y = (float)pos.Y / size.Y;
+            _clearColor.Z = (float)pos.X / size.X;
             return true;
         }
         else if (wnd->GetMouseButtonState(MouseButtonRight))
         {
             Vector2i size = wnd->GetClientSize();
-
-            float x = (float)pos.X / size.X;
-            float y = (float)pos.Y / size.Y;
-
-            glClearColor(y, 0, x, 1);
+            _clearColor.X = (float)pos.Y / size.Y;
+            _clearColor.Z = (float)pos.X / size.X;
             return true;
         }
 
@@ -233,7 +244,8 @@ public:
     {
         PrintLine("OnTouchMove: " + pos.ToString() + ", " + id);
         Vector2i size = wnd->GetClientSize();
-        glClearColor(pos.X / size.X, pos.Y / size.Y, 0, 1);
+        _clearColor.X = pos.X / size.X;
+        _clearColor.Y = pos.Y / size.Y;
         return false;
     }
 
@@ -258,20 +270,6 @@ public:
         }
         
         return false;
-    }
-
-    virtual void OnNativeHandleChanged(Window* wnd)
-    {
-        PrintLine("OnNativeHandleChanged");
-        _gl->MakeCurrent(wnd);
-    }
-
-    virtual void OnSizeChanged(Window* wnd)
-    {
-        Vector2i clientSize = wnd->GetClientSize();
-        PrintLine("OnSizeChanged: " + clientSize.ToString());
-        glViewport(0, 0, clientSize.X, clientSize.Y);
-        Application::OnSizeChanged(wnd);
     }
 
     virtual bool OnClosing(Window* wnd)
