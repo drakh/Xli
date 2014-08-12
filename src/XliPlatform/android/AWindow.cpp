@@ -456,14 +456,18 @@ namespace Xli
                 break;
 
             case APP_CMD_RESUME:
-                AShim::OnResume();
+                if (GlobalInit) // TODO: Should actually check that shim is inited, this is not robust
+                    AShim::OnResume();
+                
                 if (GlobalEventHandler)
                     GlobalEventHandler->OnAppDidEnterForeground(GlobalWindow);
 
                 break;
 
             case APP_CMD_PAUSE:
-                AShim::OnPause();
+                if (GlobalInit) // TODO: Should actually check that shim is inited, this is not robust
+                    AShim::OnPause();
+                
                 if (GlobalEventHandler)
                     GlobalEventHandler->OnAppWillEnterBackground(GlobalWindow);
                 
@@ -507,10 +511,25 @@ namespace Xli
             GlobalAndroidApp = app;
             AndroidActivity = app->activity;
 
-            AJniHelper::Init();
-
             Out->SetStream(ManagePtr(new ALogStream(ANDROID_LOG_INFO)));
             Error->SetStream(ManagePtr(new ALogStream(ANDROID_LOG_WARN)));
+
+            // Wait for the native window to be initialized from another thread here. Because something in the shim expects it to be.
+            // TODO: Clean up the shim and remove this for better maintainability and faster start up.
+            while (!GlobalInit)
+            {
+                Window::ProcessMessages();
+
+                if (GlobalAndroidApp->destroyRequested)
+                {
+                    LOGF("Unable to initialize window");
+                    exit(EXIT_FAILURE);
+                }
+
+                usleep(10000);
+            }
+
+            AJniHelper::Init();
         }
 
         void Android::SetLogTag(const char* tag)
@@ -572,19 +591,6 @@ namespace Xli
     {
         if (GlobalWindow != 0)
             XLI_THROW("Only one window instance is allowed on the Android platform");
-
-        while (!GlobalInit)
-        {
-            Window::ProcessMessages();
-
-            if (GlobalAndroidApp->destroyRequested)
-            {
-                LOGF("Unable to initialize window");
-                exit(EXIT_FAILURE);
-            }
-
-            usleep(10000);
-        }
 
         GlobalWidth = width;
         GlobalHeight = height;
