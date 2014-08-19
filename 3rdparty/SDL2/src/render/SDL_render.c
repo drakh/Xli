@@ -115,6 +115,12 @@ SDL_RendererEventWatch(void *userdata, SDL_Event *event)
             }
 
             if (event->window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+                /* Make sure we're operating on the default render target */
+                SDL_Texture *saved_target = SDL_GetRenderTarget(renderer);
+                if (saved_target) {
+                    SDL_SetRenderTarget(renderer, NULL);
+                }
+
                 if (renderer->logical_w) {
                     UpdateLogicalSize(renderer);
                 } else {
@@ -139,6 +145,10 @@ SDL_RendererEventWatch(void *userdata, SDL_Event *event)
                         renderer->viewport.h = h;
                         renderer->UpdateViewport(renderer);
                     }
+                }
+
+                if (saved_target) {
+                    SDL_SetRenderTarget(renderer, saved_target);
                 }
             } else if (event->window.event == SDL_WINDOWEVENT_HIDDEN) {
                 renderer->hidden = SDL_TRUE;
@@ -540,6 +550,10 @@ SDL_CreateTextureFromSurface(SDL_Renderer * renderer, SDL_Surface * surface)
 
         /* Set up a destination surface for the texture update */
         dst_fmt = SDL_AllocFormat(format);
+        if (!dst_fmt) {
+           SDL_DestroyTexture(texture);
+           return NULL;
+        }
         temp = SDL_ConvertSurface(surface, dst_fmt, 0);
         SDL_FreeFormat(dst_fmt);
         if (temp) {
@@ -912,12 +926,12 @@ int SDL_UpdateYUVTexture(SDL_Texture * texture, const SDL_Rect * rect,
         SDL_assert(!texture->native);
         renderer = texture->renderer;
         SDL_assert(renderer->UpdateTextureYUV);
-		if (renderer->UpdateTextureYUV) {
-			return renderer->UpdateTextureYUV(renderer, texture, rect, Yplane, Ypitch, Uplane, Upitch, Vplane, Vpitch);
-		} else {
-			return SDL_Unsupported();
-		}
-	}
+        if (renderer->UpdateTextureYUV) {
+            return renderer->UpdateTextureYUV(renderer, texture, rect, Yplane, Ypitch, Uplane, Upitch, Vplane, Vpitch);
+        } else {
+            return SDL_Unsupported();
+        }
+    }
 }
 
 static int
@@ -1071,6 +1085,7 @@ SDL_SetRenderTarget(SDL_Renderer *renderer, SDL_Texture *texture)
         /* Make a backup of the viewport */
         renderer->viewport_backup = renderer->viewport;
         renderer->clip_rect_backup = renderer->clip_rect;
+        renderer->clipping_enabled_backup = renderer->clipping_enabled;
         renderer->scale_backup = renderer->scale;
         renderer->logical_w_backup = renderer->logical_w;
         renderer->logical_h_backup = renderer->logical_h;
@@ -1093,6 +1108,7 @@ SDL_SetRenderTarget(SDL_Renderer *renderer, SDL_Texture *texture)
     } else {
         renderer->viewport = renderer->viewport_backup;
         renderer->clip_rect = renderer->clip_rect_backup;
+        renderer->clipping_enabled = renderer->clipping_enabled_backup;
         renderer->scale = renderer->scale_backup;
         renderer->logical_w = renderer->logical_w_backup;
         renderer->logical_h = renderer->logical_h_backup;
@@ -1233,11 +1249,13 @@ SDL_RenderSetClipRect(SDL_Renderer * renderer, const SDL_Rect * rect)
     CHECK_RENDERER_MAGIC(renderer, -1)
 
     if (rect) {
+        renderer->clipping_enabled = SDL_TRUE;
         renderer->clip_rect.x = (int)SDL_floor(rect->x * renderer->scale.x);
         renderer->clip_rect.y = (int)SDL_floor(rect->y * renderer->scale.y);
         renderer->clip_rect.w = (int)SDL_ceil(rect->w * renderer->scale.x);
         renderer->clip_rect.h = (int)SDL_ceil(rect->h * renderer->scale.y);
     } else {
+        renderer->clipping_enabled = SDL_FALSE;
         SDL_zero(renderer->clip_rect);
     }
     return renderer->UpdateClipRect(renderer);
@@ -1254,6 +1272,13 @@ SDL_RenderGetClipRect(SDL_Renderer * renderer, SDL_Rect * rect)
         rect->w = (int)(renderer->clip_rect.w / renderer->scale.x);
         rect->h = (int)(renderer->clip_rect.h / renderer->scale.y);
     }
+}
+
+SDL_bool
+SDL_RenderIsClipEnabled(SDL_Renderer * renderer)
+{
+    CHECK_RENDERER_MAGIC(renderer, SDL_FALSE)
+    return renderer->clipping_enabled;
 }
 
 int

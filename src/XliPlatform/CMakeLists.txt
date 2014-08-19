@@ -136,8 +136,8 @@ elseif (XLI_PLATFORM_IOS)
 
     set(SRC ${SRC} ${SDL2_SRC} ${SDL2_STATIC_SRC}
         ios/iInit.mm
+        ${SDL2_DIR}/src/haptic/dummy/SDL_syshaptic.c
         ${SDL2_DIR}/src/joystick/iphoneos/SDL_sysjoystick.m
-        ${SDL2_DIR}/src/joystick/iphoneos/SDLUIAccelerationDelegate.m
         ${SDL2_DIR}/src/power/uikit/SDL_syspower.m
         ${SDL2_DIR}/src/render/opengles/SDL_render_gles.c
         ${SDL2_DIR}/src/render/opengles2/SDL_render_gles2.c

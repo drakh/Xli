@@ -20,13 +20,14 @@
 */
 
 /**
- *  \file SDL_opengles.h
+ *  \file SDL_egl.h
  *
- *  This is a simple file to encapsulate the OpenGL ES 2.0 API headers.
+ *  This is a simple file to encapsulate the EGL API headers.
  */
 #ifndef _MSC_VER
 
 #include <EGL/egl.h>
+#include <EGL/eglext.h>
 
 #else /* _MSC_VER */
 
@@ -420,7 +421,7 @@ typedef struct gbm_device  *EGLNativeDisplayType;
 typedef struct gbm_bo      *EGLNativePixmapType;
 typedef void               *EGLNativeWindowType;
 
-#elif defined(ANDROID) /* Android */
+#elif defined(__ANDROID__) /* Android */
 
 struct ANativeWindow;
 struct egl_native_pixmap_t;

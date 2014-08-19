@@ -29,6 +29,7 @@
 #include "SDL_syswm.h"
 #include "../SDL_sysrender.h"
 #include "../SDL_d3dmath.h"
+/* #include "SDL_log.h" */
 
 #include <d3d11_1.h>
 
@@ -362,7 +363,7 @@ static const DWORD D3D11_PixelShader_Textures[] = {
 
     float4 main(PixelShaderInput input) : SV_TARGET
     {
-        const float3 offset = {-0.0625, -0.5, -0.5};
+        const float3 offset = {-0.0627451017, -0.501960814, -0.501960814};
         const float3 Rcoeff = {1.164,  0.000,  1.596};
         const float3 Gcoeff = {1.164, -0.391, -0.813};
         const float3 Bcoeff = {1.164,  2.018,  0.000};
@@ -386,12 +387,12 @@ static const DWORD D3D11_PixelShader_Textures[] = {
 */
 #if defined(D3D11_USE_SHADER_MODEL_4_0_level_9_1)
 static const DWORD D3D11_PixelShader_YUV[] = {
-    0x43425844, 0x04e69cba, 0x74ce6dd2, 0x7fcf84cb, 0x3003d677, 0x00000001,
+    0x43425844, 0x2321c6c6, 0xf14df2d1, 0xc79d068d, 0x8e672abf, 0x00000001,
     0x000005e8, 0x00000006, 0x00000038, 0x000001dc, 0x000003bc, 0x00000438,
     0x00000540, 0x000005b4, 0x396e6f41, 0x0000019c, 0x0000019c, 0xffff0200,
     0x0000016c, 0x00000030, 0x00300000, 0x00300000, 0x00300000, 0x00240003,
     0x00300000, 0x00000000, 0x00010001, 0x00020002, 0xffff0200, 0x05000051,
-    0xa00f0000, 0xbd800000, 0xbf000000, 0xbf000000, 0x3f800000, 0x05000051,
+    0xa00f0000, 0xbd808081, 0xbf008081, 0xbf008081, 0x3f800000, 0x05000051,
     0xa00f0001, 0x3f94fdf4, 0x3fcc49ba, 0x00000000, 0x00000000, 0x05000051,
     0xa00f0002, 0x3f94fdf4, 0xbec83127, 0xbf5020c5, 0x00000000, 0x05000051,
     0xa00f0003, 0x3f94fdf4, 0x400126e9, 0x00000000, 0x00000000, 0x0200001f,
@@ -418,7 +419,7 @@ static const DWORD D3D11_PixelShader_YUV[] = {
     0x00000001, 0x00101046, 0x00000001, 0x00107e46, 0x00000002, 0x00106000,
     0x00000000, 0x05000036, 0x00100042, 0x00000000, 0x0010000a, 0x00000001,
     0x0a000000, 0x00100072, 0x00000000, 0x00100246, 0x00000000, 0x00004002,
-    0xbd800000, 0xbf000000, 0xbf000000, 0x00000000, 0x0a00000f, 0x00100012,
+    0xbd808081, 0xbf008081, 0xbf008081, 0x00000000, 0x0a00000f, 0x00100012,
     0x00000001, 0x00100086, 0x00000000, 0x00004002, 0x3f94fdf4, 0x3fcc49ba,
     0x00000000, 0x00000000, 0x0a000010, 0x00100022, 0x00000001, 0x00100246,
     0x00000000, 0x00004002, 0x3f94fdf4, 0xbec83127, 0xbf5020c5, 0x00000000,
@@ -452,12 +453,12 @@ static const DWORD D3D11_PixelShader_YUV[] = {
 };
 #elif defined(D3D11_USE_SHADER_MODEL_4_0_level_9_3)
 static const DWORD D3D11_PixelShader_YUV[] = {
-    0x43425844, 0xe6d969fc, 0x63cac33c, 0xa4926502, 0x5d788135, 0x00000001,
+    0x43425844, 0x6ede7360, 0x45ff5f8a, 0x34ac92ba, 0xb865f5e0, 0x00000001,
     0x000005c0, 0x00000006, 0x00000038, 0x000001b4, 0x00000394, 0x00000410,
     0x00000518, 0x0000058c, 0x396e6f41, 0x00000174, 0x00000174, 0xffff0200,
     0x00000144, 0x00000030, 0x00300000, 0x00300000, 0x00300000, 0x00240003,
     0x00300000, 0x00000000, 0x00010001, 0x00020002, 0xffff0201, 0x05000051,
-    0xa00f0000, 0xbd800000, 0xbf000000, 0x3f800000, 0x00000000, 0x05000051,
+    0xa00f0000, 0xbd808081, 0xbf008081, 0x3f800000, 0x00000000, 0x05000051,
     0xa00f0001, 0x3f94fdf4, 0x3fcc49ba, 0x00000000, 0x400126e9, 0x05000051,
     0xa00f0002, 0x3f94fdf4, 0xbec83127, 0xbf5020c5, 0x00000000, 0x0200001f,
     0x80000000, 0xb0030000, 0x0200001f, 0x80000000, 0xb00f0001, 0x0200001f,
@@ -482,7 +483,7 @@ static const DWORD D3D11_PixelShader_YUV[] = {
     0x09000045, 0x001000f2, 0x00000001, 0x00101046, 0x00000001, 0x00107e46,
     0x00000002, 0x00106000, 0x00000000, 0x05000036, 0x00100042, 0x00000000,
     0x0010000a, 0x00000001, 0x0a000000, 0x00100072, 0x00000000, 0x00100246,
-    0x00000000, 0x00004002, 0xbd800000, 0xbf000000, 0xbf000000, 0x00000000,
+    0x00000000, 0x00004002, 0xbd808081, 0xbf008081, 0xbf008081, 0x00000000,
     0x0a00000f, 0x00100012, 0x00000001, 0x00100086, 0x00000000, 0x00004002,
     0x3f94fdf4, 0x3fcc49ba, 0x00000000, 0x00000000, 0x0a000010, 0x00100022,
     0x00000001, 0x00100246, 0x00000000, 0x00004002, 0x3f94fdf4, 0xbec83127,
@@ -1390,6 +1391,7 @@ D3D11_CreateSwapChain(SDL_Renderer * renderer, int w, int h)
 #if WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP
     swapChainDesc.Scaling = DXGI_SCALING_STRETCH; /* On phone, only stretch and aspect-ratio stretch scaling are allowed. */
     swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD; /* On phone, no swap effects are supported. */
+    /* TODO, WinRT: see if Win 8.x DXGI_SWAP_CHAIN_DESC1 settings are available on Windows Phone 8.1, and if there's any advantage to having them on */
 #else
     if (usingXAML) {
         swapChainDesc.Scaling = DXGI_SCALING_STRETCH;
@@ -1484,6 +1486,7 @@ D3D11_CreateWindowSizeDependentResources(SDL_Renderer * renderer)
      */
     SDL_GetWindowSize(renderer->window, &w, &h);
     data->rotation = D3D11_GetCurrentRotation();
+    /* SDL_Log("%s: windowSize={%d,%d}, orientation=%d\n", __FUNCTION__, w, h, (int)data->rotation); */
     if (D3D11_IsDisplayRotated90Degrees(data->rotation)) {
         int tmp = w;
         w = h;
@@ -1521,11 +1524,21 @@ D3D11_CreateWindowSizeDependentResources(SDL_Renderer * renderer)
     }
     
 #if WINAPI_FAMILY != WINAPI_FAMILY_PHONE_APP
-    /* Set the proper rotation for the swap chain, and generate the
-     * 3D matrix transformation for rendering to the rotated swap chain.
+    /* Set the proper rotation for the swap chain.
      *
      * To note, the call for this, IDXGISwapChain1::SetRotation, is not necessary
-     * on Windows Phone, nor is it supported there.  It's only needed in Windows 8/RT.
+     * on Windows Phone 8.0, nor is it supported there.
+     *
+     * IDXGISwapChain1::SetRotation does seem to be available on Windows Phone 8.1,
+     * however I've yet to find a way to make it work.  It might have something to
+     * do with IDXGISwapChain::ResizeBuffers appearing to not being available on
+     * Windows Phone 8.1 (it wasn't on Windows Phone 8.0), but I'm not 100% sure of this.
+     * The call doesn't appear to be entirely necessary though, and is a performance-related
+     * call, at least according to the following page on MSDN:
+     * http://code.msdn.microsoft.com/windowsapps/DXGI-swap-chain-rotation-21d13d71
+     *   -- David L.
+     *
+     * TODO, WinRT: reexamine the docs for IDXGISwapChain1::SetRotation, see if might be available, usable, and prudent-to-call on WinPhone 8.1
      */
     if (data->swapEffect == DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL) {
         result = IDXGISwapChain1_SetRotation(data->swapChain, data->rotation);
@@ -2144,6 +2157,7 @@ D3D11_UpdateViewport(SDL_Renderer * renderer)
          * SDL_CreateRenderer is calling it, and will call it again later
          * with a non-empty viewport.
          */
+        /* SDL_Log("%s, no viewport was set!\n", __FUNCTION__); */
         return 0;
     }
 
@@ -2223,6 +2237,7 @@ D3D11_UpdateViewport(SDL_Renderer * renderer)
     viewport.Height = orientationAlignedViewport.h;
     viewport.MinDepth = 0.0f;
     viewport.MaxDepth = 1.0f;
+    /* SDL_Log("%s: D3D viewport = {%f,%f,%f,%f}\n", __FUNCTION__, viewport.TopLeftX, viewport.TopLeftY, viewport.Width, viewport.Height); */
     ID3D11DeviceContext_RSSetViewports(data->d3dContext, 1, &viewport);
 
     return 0;
@@ -2232,13 +2247,12 @@ static int
 D3D11_UpdateClipRect(SDL_Renderer * renderer)
 {
     D3D11_RenderData *data = (D3D11_RenderData *) renderer->driverdata;
-    const SDL_Rect *rect = &renderer->clip_rect;
 
-    if (SDL_RectEmpty(rect)) {
+    if (!renderer->clipping_enabled) {
         ID3D11DeviceContext_RSSetScissorRects(data->d3dContext, 0, NULL);
     } else {
         D3D11_RECT scissorRect;
-        if (D3D11_GetViewportAlignedD3DRect(renderer, rect, &scissorRect) != 0) {
+        if (D3D11_GetViewportAlignedD3DRect(renderer, &renderer->clip_rect, &scissorRect) != 0) {
             /* D3D11_GetViewportAlignedD3DRect will have set the SDL error */
             return -1;
         }
@@ -2366,7 +2380,7 @@ D3D11_RenderStartDrawOp(SDL_Renderer * renderer)
         rendererData->currentRenderTargetView = renderTargetView;
     }
 
-    if (SDL_RectEmpty(&renderer->clip_rect)) {
+    if (!renderer->clipping_enabled) {
         rasterizerState = rendererData->mainRasterizer;
     } else {
         rasterizerState = rendererData->clippedRasterizer;
@@ -2900,6 +2914,8 @@ D3D11_RenderPresent(SDL_Renderer * renderer)
     HRESULT result;
     DXGI_PRESENT_PARAMETERS parameters;
 
+    SDL_zero(parameters);
+
 #if WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP
     syncInterval = 1;
     presentFlags = 0;
@@ -2917,7 +2933,6 @@ D3D11_RenderPresent(SDL_Renderer * renderer)
      * rects to improve efficiency in certain scenarios.
      * This option is not available on Windows Phone 8, to note.
      */
-    SDL_zero(parameters);
     result = IDXGISwapChain1_Present1(data->swapChain, syncInterval, presentFlags, &parameters);
 #endif
 
