@@ -8,6 +8,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR})
 
 file(GLOB SRC
     Xli/*.cpp 
+    XliHttpClient/*.cpp 
     *.cpp)
 
 add_executable(XliTest ${SRC})
