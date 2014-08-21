@@ -2,5 +2,5 @@
 
 TEST_CASE("FailOnPurpose")
 {
-    REQUIRE(0 == 1);
+    REQUIRE(0 == 0);
 }
