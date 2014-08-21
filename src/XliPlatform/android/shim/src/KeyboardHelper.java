@@ -36,18 +36,17 @@ public class KeyboardHelper {
     
     public static int GetKeyboardSize() { return (int)keyboardSize; }
 	
-    public static void ShowKeyboard(final NativeActivity activity) {
+    public static void ShowKeyboard() {
         if (hiddenText == null)
         {
-            Log.e("XliApp","ShowKeyboard:Hidden View not available");
-            return;
+        	AttachHiddenView();
         }
         DummyEditable.PopulateDummyString();
-        activity.runOnUiThread(new Runnable() { public void run() {
+        XliJ.nActivity.runOnUiThread(new Runnable() { public void run() {
             try {
                 hiddenText.setFocusableInTouchMode(true);
                 hiddenText.setFocusable(true);
-                InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager)XliJ.nActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(hiddenText, 0);
                 hiddenText.requestFocus();
             } catch (Exception e) {
@@ -70,16 +69,17 @@ public class KeyboardHelper {
         }});
     }
         
-    public static void AttachHiddenView(final NativeActivity activity)
+    public static void AttachHiddenView()
     {    	
         Log.d("XliApp","Attempting to attach hidden view");
         if (hiddenLayout == null)
         {
-            hiddenLayout = new FrameLayout(activity);
-            activity.runOnUiThread(new Runnable() { public void run() {
+        	
+            hiddenLayout = new FrameLayout(XliJ.nActivity);
+            XliJ.nActivity.runOnUiThread(new Runnable() { public void run() {
                 try {
-                    activity.setContentView(hiddenLayout);                    
-                    hiddenText = new Hidden(activity, activity);
+                	XliJ.nActivity.setContentView(hiddenLayout);                    
+                    hiddenText = new Hidden(XliJ.nActivity, XliJ.nActivity);
                     hiddenLayout.addView(hiddenText);                    
                     hiddenText.setVisibility(View.VISIBLE);
                     hiddenText.requestFocus();
@@ -111,38 +111,28 @@ public class KeyboardHelper {
         }
     }
     
-    @SuppressLint("NewApi")
-	@SuppressWarnings("deprecation")
-	public static void DetachHiddenView()
-    {
-    	if (hiddenLayout!=null)
-    	{
-    		if (layoutListener!=null)
-    		{
-	    	    if (Build.VERSION.SDK_INT < 16) {
-	    	    	hiddenLayout.getViewTreeObserver().removeGlobalOnLayoutListener(layoutListener);
-	    	    } else {
-	    	    	hiddenLayout.getViewTreeObserver().removeOnGlobalLayoutListener(layoutListener);
-	    	    }
-    		}
-    	    hiddenLayout.removeAllViews();
-	    	hiddenLayout = null;
-    	}
-    	if (hiddenText!=null)
-    	{
-	    	hiddenText.Disable(XliJ.nActivity, XliJ.nActivity);
-	    	hiddenText = null;
-    	}
-    	keyboardSize = 0;
-    }
-    
-    public static void KHOnPause()
-    {
-    	DetachHiddenView();
-    	//HideKeyboard();
-    }
-    public static void KHOnResume()
-    {
-    	AttachHiddenView(XliJ.nActivity);
-    }
+//	@SuppressWarnings("deprecation")
+//	@SuppressLint("NewApi")
+//	public static void DetachHiddenView()
+//    {
+//    	if (hiddenLayout!=null)
+//    	{
+//    		if (layoutListener!=null)
+//    		{
+//	    	    if (Build.VERSION.SDK_INT < 16) {
+//	    	    	hiddenLayout.getViewTreeObserver().removeGlobalOnLayoutListener(layoutListener);
+//	    	    } else {
+//	    	    	hiddenLayout.getViewTreeObserver().removeOnGlobalLayoutListener(layoutListener);
+//	    	    }
+//    		}
+//    	    hiddenLayout.removeAllViews();
+//	    	hiddenLayout = null;
+//    	}
+//    	if (hiddenText!=null)
+//    	{
+//	    	hiddenText.Disable(XliJ.nActivity, XliJ.nActivity);
+//	    	hiddenText = null;
+//    	}
+//    	keyboardSize = 0;
+//    }
 }

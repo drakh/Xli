@@ -33,8 +33,6 @@ namespace Xli
     {
         int AShim::kbVisible = 0;
 
-        jmethodID AShim::onPause;
-        jmethodID AShim::onResume;
         jmethodID AShim::raiseKeyboard;
         jmethodID AShim::hideKeyboard;
         jmethodID AShim::getKeyboardSize;
@@ -63,8 +61,6 @@ namespace Xli
         {
             //LOGD("in_0");
             LOGD("Caching Mids");
-            onPause = env->GetStaticMethodID(shimClass, "OnPause", "()V");
-            onResume = env->GetStaticMethodID(shimClass, "OnResume", "()V");
             raiseKeyboard = env->GetStaticMethodID(shimClass, "RaiseKeyboard", "()V");
             hideKeyboard = env->GetStaticMethodID(shimClass, "HideKeyboard", "()V");
             getKeyboardSize = env->GetStaticMethodID(shimClass, "GetKeyboardSize", "()I");
@@ -88,8 +84,6 @@ namespace Xli
             sendHttpAsyncA = env->GetStaticMethodID(shimClass, "SendHttpAsync", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/nio/ByteBuffer;IJZ)I");
             sendHttpAsyncB = env->GetStaticMethodID(shimClass, "SendHttpStringAsync", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IJZ)I");
 
-            if (!onPause) XLI_THROW("Cannot cache mid for onPause.");
-            if (!onResume) XLI_THROW("Cannot cache mid for onResume.");
             if (!raiseKeyboard) XLI_THROW("Cannot cache mid for raiseKeyboard.");
             if (!hideKeyboard) XLI_THROW("Cannot cache mid for hideKeyboard.");
             if (!getKeyboardSize) XLI_THROW("Cannot cache mid for getKeyboardSize.");
@@ -114,22 +108,6 @@ namespace Xli
             if (!sendHttpAsyncB) XLI_THROW("Cannot cache mid for sendHttpAsyncB.");
             LOGD("Mids Cached");
             //LOGD("out_0");
-        }
-
-        void AShim::OnPause()
-        {
-            // LOGD("in_1");
-            AJniHelper jni;
-            jni->CallObjectMethod(jni.GetShim(), onPause);
-            // LOGD("out_1");
-        }
-
-        void AShim::OnResume()
-        {
-            // LOGD("in_2");
-            AJniHelper jni;
-            jni->CallObjectMethod(jni.GetShim(), onResume);
-            // LOGD("out_2");
         }
 
         void AShim::RaiseSoftKeyboard()

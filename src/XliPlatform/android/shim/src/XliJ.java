@@ -56,14 +56,6 @@ public class XliJ extends android.app.NativeActivity {
     public static native void XliJ_HttpErrorCallback(long requestPointer, int errorCode, String errorMessage);
     public static native void XliJ_HttpAbortedCallback(long requestPointer);
     public static native void XliJ_JavaThrowError(int code, String throwMessage);
-	
-    //--------------------------------------------
-    // Lifecycle
-    
-    // These will be called by the native activity on the respective events.
-    // All systems in the shim that may trigger accidental wakeups should register here.
-    public static void OnPause() { KeyboardHelper.KHOnPause(); }
-    public static void OnResume() {	KeyboardHelper.KHOnResume(); }
     
     //--------------------------------------------
     // System
@@ -102,7 +94,7 @@ public class XliJ extends android.app.NativeActivity {
     //--------------------------------------------
     // Keyboard   
     public static void RaiseKeyboard() {
-        KeyboardHelper.ShowKeyboard(nActivity);
+        KeyboardHelper.ShowKeyboard();
     }
     public static int GetKeyboardSize()
     {
@@ -113,7 +105,7 @@ public class XliJ extends android.app.NativeActivity {
     }
     public static void AttachHiddenView()
     {
-    	KeyboardHelper.AttachHiddenView(nActivity);
+    	KeyboardHelper.AttachHiddenView();
     }
 
     //--------------------------------------------

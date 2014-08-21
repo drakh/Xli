@@ -59,7 +59,7 @@ class HiddenInputConnection extends BaseInputConnection {
     		{
     			XliJ.XliJ_OnKeyDown(KeyEvent.KEYCODE_DEL);
     			XliJ.XliJ_OnKeyUp(KeyEvent.KEYCODE_DEL);
-    			mEditable.PopulateDummyString();
+    			DummyEditable.PopulateDummyString();
     		return true;} 
     		return false;
     	//}

@@ -456,18 +456,12 @@ namespace Xli
                 break;
 
             case APP_CMD_RESUME:
-                if (GlobalInit) // TODO: Should actually check that shim is inited, this is not robust
-                    AShim::OnResume();
-                
                 if (GlobalEventHandler)
                     GlobalEventHandler->OnAppDidEnterForeground(GlobalWindow);
 
                 break;
 
             case APP_CMD_PAUSE:
-                if (GlobalInit) // TODO: Should actually check that shim is inited, this is not robust
-                    AShim::OnPause();
-                
                 if (GlobalEventHandler)
                     GlobalEventHandler->OnAppWillEnterBackground(GlobalWindow);
                 

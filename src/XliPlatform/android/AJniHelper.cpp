@@ -130,11 +130,6 @@ namespace Xli
             (jint)env->CallObjectMethod(*shim_class, mid, activity);
         }
 
-        static void AttachHiddenView(jclass* shim_class, JNIEnv* env, jobject activity) 
-        {
-            jmethodID mid = env->GetStaticMethodID(*shim_class, "AttachHiddenView", "()V");
-            env->CallObjectMethod(*shim_class, mid, activity);
-        }
 
         void AJniHelper::Init()
         {
@@ -167,7 +162,6 @@ namespace Xli
                 AShim::CacheMids(env, *shim_class);
                 CacheNativeActivity(shim_class, env, AndroidActivity->clazz);
                 AttachNativeCallbacks(shim_class, env);
-                AttachHiddenView(shim_class, env, AndroidActivity->clazz);
             }
 
             jclass* shim_p = reinterpret_cast<jclass*>(pthread_getspecific(JniShimKey));
