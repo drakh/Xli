@@ -36,7 +36,7 @@ namespace Xli
     {
         this->client = client;
         this->state = HttpRequestStateOpened;
-        this->url = url;
+        this->url = Uri::AutoEncodeUri(url);
         this->method = method;
         this->timeout = 0;
         this->verifyHost = true;

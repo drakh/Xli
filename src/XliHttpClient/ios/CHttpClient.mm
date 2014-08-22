@@ -2,6 +2,7 @@
 #import <Foundation/Foundation.h>
 #include <XliPlatform/PlatformSpecific/iOS.h>
 #include <XliHttpClient/HttpClient.h>
+#include <XliHttpClient/Uri.h>
 #include <Xli/HashMap.h>
 #include <Xli/Managed.h>
 #include <CFNetwork/CFNetwork.h>
@@ -45,7 +46,7 @@ namespace Xli
             this->errored = false;
             this->client = client;
             this->state = HttpRequestStateOpened;
-            this->url = url;
+            this->url = Uri::AutoEncodeUri(url);
             this->method = method;
             this->timeout = 0;
             this->verifyHost = true;
