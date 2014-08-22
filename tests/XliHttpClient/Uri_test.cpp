@@ -1,6 +1,31 @@
+#include <XliHttpClient/Uri.h>
+
 #include "../catch.hpp"
 
-TEST_CASE("FailOnPurpose")
+using Xli::Uri;
+using Xli::String;
+
+void EncodesTo(const char* raw, const char* expectedEncoded);
+
+TEST_CASE("DoesNotEncodeSimpleUri")
 {
-    REQUIRE(0 == 0);
+    EncodesTo("http://outracks.com/foo?bar=baz", "http://outracks.com/foo?bar=baz");
+}
+
+TEST_CASE("EncodesOtherCharactersInUri")
+{
+    EncodesTo("http://outracks.com/æ?å=™ €", "http://outracks.com/%C3%A6?%C3%A5=%E2%84%A2%20%E2%82%AC");
+}
+
+TEST_CASE("DoesNotEncodeAnyReservedOrUnreservedCharacters")
+{
+    //http://en.wikipedia.org/wiki/Percent-encoding#Types_of_URI_characters
+    const char* chars = "!*'();:@&=+$,/?#[]ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.~";
+    EncodesTo(chars, chars);
+}
+
+void EncodesTo(const char* raw, const char* expectedEncoded)
+{
+    //Convert to std::string before REQUIRE, to make default comparison and cout work better
+    REQUIRE(std::string(String(expectedEncoded).Ptr()) == std::string(Uri::Encode(String(raw)).Ptr()));
 }

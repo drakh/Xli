@@ -12,4 +12,4 @@ file(GLOB SRC
     *.cpp)
 
 add_executable(XliTest ${SRC})
-target_link_libraries(XliTest Xli)
+target_link_libraries(XliTest Xli XliHttpClient)

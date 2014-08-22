@@ -4,7 +4,8 @@ endif()
 
 file(GLOB SRC
     ../../include/XliHttpClient/*.h
-    ../../include/XliHttpClient.h)
+    ../../include/XliHttpClient.h
+    Uri.cpp)
 
 set(LIBS Xli XliPlatform)
 
