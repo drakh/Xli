@@ -6,6 +6,7 @@ using Xli::Uri;
 using Xli::String;
 
 void EncodesTo(const char* raw, const char* expectedEncoded);
+void AutoEncodesUriTo(const char* raw, const char* expectedEncoded);
 
 TEST_CASE("DoesNotEncodeSimpleUri")
 {
@@ -24,8 +25,24 @@ TEST_CASE("DoesNotEncodeAnyReservedOrUnreservedCharacters")
     EncodesTo(chars, chars);
 }
 
+TEST_CASE("EncodesParenthesis")
+{
+    EncodesTo("%", "%25");
+}
+
+TEST_CASE("DoesNotEncodeParenthesis")
+{
+    AutoEncodesUriTo("%", "%");
+}
+
 void EncodesTo(const char* raw, const char* expectedEncoded)
 {
     //Convert to std::string before REQUIRE, to make default comparison and cout work better
     REQUIRE(std::string(String(expectedEncoded).Ptr()) == std::string(Uri::Encode(String(raw)).Ptr()));
+}
+
+void AutoEncodesUriTo(const char* raw, const char* expectedEncoded)
+{
+    //Convert to std::string before REQUIRE, to make default comparison and cout work better
+    REQUIRE(std::string(String(expectedEncoded).Ptr()) == std::string(Uri::AutoEncodeUri(String(raw)).Ptr()));
 }

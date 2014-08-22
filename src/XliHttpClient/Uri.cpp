@@ -26,22 +26,22 @@
 namespace Xli
 {
     static const char* HexLits = "0123456789ABCDEF";
-    
     static const char* DoNotEncode = "!*'();:@&=+$,/?#[]-_.~";
 
-    bool ShouldEncode(int c)
-    {
-        if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
-            return false;
-
-        for (int i = 0; i < std::strlen(DoNotEncode); ++i)
-            if (c == (int)DoNotEncode[i])
-                return false;
-
-        return true;
-    }
+    bool ShouldEncode(int c, bool encodeParenthesis);
+    String EncodeInternal(const String& uri, bool encodeParenthesis);
 
     String Uri::Encode(const String& uri)
+    {
+        return EncodeInternal(uri, true);
+    }
+
+    String Uri::AutoEncodeUri(const String& uri)
+    {
+        return EncodeInternal(uri, false);
+    }
+
+    String EncodeInternal(const String& uri, bool encodeParenthesis)
     {
         StringBuilder sb;
 
@@ -49,7 +49,7 @@ namespace Xli
         {
             int c = (int)(unsigned char)uri[i];
 
-            if (ShouldEncode(c))
+            if (ShouldEncode(c, encodeParenthesis))
             {
                 sb.Append('%');
                 sb.Append(HexLits[(c >> 4) & 0xf]);
@@ -68,5 +68,20 @@ namespace Xli
     {
         // TODO
         return uri;
+    }
+
+    bool ShouldEncode(int c, bool encodeParenthesis)
+    {
+        if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
+            return false;
+
+        for (int i = 0; i < std::strlen(DoNotEncode); ++i)
+            if (c == (int)DoNotEncode[i])
+                return false;
+
+        if (!encodeParenthesis && c == '%')
+            return false;
+
+        return true;
     }
 }
