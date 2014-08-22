@@ -25,16 +25,16 @@
 
 namespace Xli
 {
-    struct PthreadData
+    struct ThreadData
     {
         void (*Entrypoint)(void*);
         void* Arg;
     };
 
-    void* PthreadFunc(void* data)
+    void* ThreadFunc(void* arg)
     {
-        PthreadData* pdata = (PthreadData*)data;
-        pdata->Entrypoint(pdata->Arg);
+        ThreadData* data = (ThreadData*)arg;
+        data->Entrypoint(data->Arg);
         free(data);
         return NULL;
     }
@@ -45,25 +45,33 @@ namespace Xli
         pthread_attr_init(&attr);
         pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
-        PthreadData* data = (PthreadData*)malloc(sizeof(PthreadData));
+        ThreadData* data = (ThreadData*)malloc(sizeof(ThreadData));
         data->Entrypoint = entrypoint;
         data->Arg = arg;
 
-        pthread_t result;
-        if (pthread_create(&result, &attr, PthreadFunc, data))    
+        pthread_t handle;
+        if (pthread_create(&handle, &attr, ThreadFunc, data))    
             XLI_THROW("Failed to create thread");
 
         pthread_attr_destroy(&attr);
-        return (ThreadHandle)result;
+        return (ThreadHandle)handle;
     }
 
-    void WaitForThread(ThreadHandle handle)
+    void JoinThread(ThreadHandle handle)
     {
-        pthread_t thread = (pthread_t)handle;
-        int result = pthread_join(thread, NULL);
+        int result = pthread_join((pthread_t)handle, NULL);
         
         if (result) 
             Error->WriteLine("XLI ERROR: pthread_join failed: " + String::HexFromInt(result));
+    }
+
+    void SetCurrentThreadName(const String& name)
+    {
+#ifdef __APPLE__
+        pthread_setname_np(name.Ptr());
+#else
+        pthread_setname_np(pthread_self(), name.Ptr());
+#endif
     }
 
     void* GetCurrentThread()
@@ -81,5 +89,29 @@ namespace Xli
         
         if (result)
             Error->WriteLine("XLI ERROR: nanosleep failed: " + String::HexFromInt(result));
+    }
+
+    TlsHandle CreateTls(void (*destructor)(void*))
+    {
+        pthread_key_t handle;
+        if (pthread_key_create(&handle, destructor))
+            XLI_THROW("Failed to create TLS");
+
+        return (TlsHandle)handle;
+    }
+
+    void DeleteTls(TlsHandle handle)
+    {
+        pthread_key_delete((pthread_key_t)handle);
+    }
+
+    void SetTlsValue(TlsHandle handle, void* data)
+    {
+        pthread_setspecific((pthread_key_t)handle, data);
+    }
+
+    void* GetTlsValue(TlsHandle handle)
+    {
+        return pthread_getspecific((pthread_key_t)handle);
     }
 }

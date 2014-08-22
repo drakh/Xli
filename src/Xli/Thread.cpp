@@ -26,9 +26,10 @@ namespace Xli
     void Thread::thread_func(void* arg)
     {
         Thread* thread = (Thread*)arg;
-        Task* task = thread->task;
+        ThreadTask* task = thread->_task;
         
-        task->stopped = false;
+        task->_stopRequested = false;
+        SetCurrentThreadName(task->ToString());
 
         try
         {
@@ -38,13 +39,19 @@ namespace Xli
         {
             CoreLib::OnUnhandledException(e, task->ToString());
         }
+        catch (...)
+        {
+            Xli::Exception e("An unsupported C++ exception was thrown");
+            CoreLib::OnUnhandledException(e, task->ToString());
+        }
 
-        task->stopped = true;
+        thread->_state = ThreadStateStopped;
     }
 
-    Thread::Thread(Managed<Task> task)
+    Thread::Thread(Managed<ThreadTask> task)
     {
-        this->handle = 0;
+        _handle = 0;
+        _state = ThreadStateUnstarted;
 
         if (!task.IsNull())
             Start(task);
@@ -52,55 +59,55 @@ namespace Xli
 
     Thread::~Thread()
     {
-        if (handle)
-            Wait();
+        Join();
     }
 
-    bool Thread::IsDone()
+    ThreadState Thread::GetState()
     {
-        return !handle || !task || task->stopped;
+        return _state;
     }
 
-    bool Thread::HasStarted()
-    {
-        return handle != 0;
-    }
-
-    void Thread::Start(Managed<Task> task)
+    void Thread::Start(Managed<ThreadTask> task)
     {
         if (task.IsNull())
             XLI_THROW_NULL_POINTER;
 
-        if (handle)
+        if (_handle)
             XLI_THROW("Thread is already started");
 
-        this->task = task;
-        this->handle = CreateThread(thread_func, (void*)this);
+        _task = task;
+        _state = ThreadStateRunning;
+        _handle = CreateThread(thread_func, (void*)this);
     }
 
-    void Thread::Wait()
+    void Thread::Join()
     {
-        if (!handle)
+        if (!_handle)
             return;
 
-        task->stopped = true;
-        WaitForThread(handle);
-        handle = 0;
-        task = 0;
+        if (_state == ThreadStateRunning)
+        {
+            _task->_stopRequested = true;
+            _state = ThreadStateStopRequested;
+        }
+        
+        JoinThread(_handle);
+        _handle = 0;
+        _task = 0;
     }
 
-    Task::Task()
+    ThreadTask::ThreadTask()
     {
-        stopped = true;
+        _stopRequested = false;
     }
 
-    bool Task::IsStopped()
+    bool ThreadTask::IsStopRequested()
     {
-        return stopped;
+        return _stopRequested;
     }
 
-    String Task::ToString() const
+    String ThreadTask::ToString() const
     {
-        return "<Task " + DefaultTraits::ToString((void*)this) + ">";
+        return "<ThreadTask " + DefaultTraits::ToString((void*)this) + ">";
     }
 }

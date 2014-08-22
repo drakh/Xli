@@ -25,35 +25,45 @@
 namespace Xli
 {
     struct __ThreadImpl;
+    struct __TlsImpl;
 
     /**
         \addtogroup XliThreading
         @{
     */
+    
     typedef __ThreadImpl* ThreadHandle;
+    typedef __TlsImpl* TlsHandle;
 
     ThreadHandle CreateThread(void (*entrypoint)(void*), void* arg);
-    void WaitForThread(ThreadHandle thread);
+    void JoinThread(ThreadHandle handle);
 
+    void SetCurrentThreadName(const String& name);
     void* GetCurrentThread();
 
     void Sleep(int ms);
+
+    TlsHandle CreateTls(void (*destructor)(void*));
+    void DeleteTls(TlsHandle handle);
+    
+    void SetTlsValue(TlsHandle handle, void* data);
+    void* GetTlsValue(TlsHandle handle);
 
     /** @} */
 
     /**
         \ingroup XliThreading
     */
-    class Task: public Object
+    class ThreadTask: public Object
     {
         friend class Thread;
-        volatile bool stopped;
+        volatile bool _stopRequested;
 
     public:
-        Task();
-        virtual ~Task() {}
+        ThreadTask();
+        virtual ~ThreadTask() {}
 
-        bool IsStopped();
+        bool IsStopRequested();
 
         virtual void Run() = 0;
 
@@ -63,10 +73,22 @@ namespace Xli
     /**
         \ingroup XliThreading
     */
+    enum ThreadState
+    {
+        ThreadStateUnstarted,
+        ThreadStateRunning,
+        ThreadStateStopRequested,
+        ThreadStateStopped,
+    };
+
+    /**
+        \ingroup XliThreading
+    */
     class Thread
     {
-        ThreadHandle handle;
-        Shared<Task> task;
+        ThreadHandle _handle;
+        Shared<ThreadTask> _task;
+        volatile ThreadState _state;
 
         static void thread_func(void* arg);
 
@@ -76,16 +98,15 @@ namespace Xli
     public:
         /**
             Creates a new Thread.
-            @param task Task to be executed by thread. If specified, the thread will start immediately without having to call Start() explicitly.
+            @param task Optional task to be executed by thread. If specified, the thread will start immediately.
         */
-        Thread(Managed<Task> task = 0);
+        Thread(Managed<ThreadTask> task = 0);
         ~Thread();
 
-        void Start(Managed<Task> task);
-        void Wait();
+        ThreadState GetState();
 
-        bool HasStarted();
-        bool IsDone();
+        void Start(Managed<ThreadTask> task);
+        void Join();
     };
 }
 
