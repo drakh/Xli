@@ -19,6 +19,7 @@
 
 #include <Xli/HashMap.h>
 #include <XliHttpClient/HttpClient.h>
+#include <XliHttpClient/Uri.h>
 #include <XliPlatform/PlatformSpecific/Android.h>
 #include "AHttpClient.h"
 #include "../../XliPlatform/android/AJniHelper.h"
