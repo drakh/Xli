@@ -110,29 +110,4 @@ public class KeyboardHelper {
             }});
         }
     }
-    
-//	@SuppressWarnings("deprecation")
-//	@SuppressLint("NewApi")
-//	public static void DetachHiddenView()
-//    {
-//    	if (hiddenLayout!=null)
-//    	{
-//    		if (layoutListener!=null)
-//    		{
-//	    	    if (Build.VERSION.SDK_INT < 16) {
-//	    	    	hiddenLayout.getViewTreeObserver().removeGlobalOnLayoutListener(layoutListener);
-//	    	    } else {
-//	    	    	hiddenLayout.getViewTreeObserver().removeOnGlobalLayoutListener(layoutListener);
-//	    	    }
-//    		}
-//    	    hiddenLayout.removeAllViews();
-//	    	hiddenLayout = null;
-//    	}
-//    	if (hiddenText!=null)
-//    	{
-//	    	hiddenText.Disable(XliJ.nActivity, XliJ.nActivity);
-//	    	hiddenText = null;
-//    	}
-//    	keyboardSize = 0;
-//    }
 }

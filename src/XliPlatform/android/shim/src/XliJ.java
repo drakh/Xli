@@ -103,10 +103,6 @@ public class XliJ extends android.app.NativeActivity {
     public static void HideKeyboard() {
         KeyboardHelper.HideKeyboard();
     }
-    public static void AttachHiddenView()
-    {
-    	KeyboardHelper.AttachHiddenView();
-    }
 
     //--------------------------------------------
     // MessageBox

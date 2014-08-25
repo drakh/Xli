@@ -112,21 +112,21 @@ namespace Xli
 
         void AShim::RaiseSoftKeyboard()
         {
-            //LOGD("in_29");
+            LOGD("in_RaiseSoftKeyboard");
             AJniHelper jni;
             jni->CallObjectMethod(jni.GetShim(), raiseKeyboard);
             kbVisible = 1;
-            //LOGD("out_29");
+            LOGD("out_RaiseSoftKeyboard");
         }
 
         void AShim::HideSoftKeyboard()
         {
-            //LOGD("in_3");
+            LOGD("in_HideSoftKeyboard");
             AJniHelper jni;
             jclass shimClass = jni.GetShim();
             jni->CallObjectMethod(shimClass, hideKeyboard);
             kbVisible = 0;
-            //LOGD("out_3");
+            LOGD("out_HideSoftKeyboard");
         }
 
         int AShim::GetKeyboardSize()
