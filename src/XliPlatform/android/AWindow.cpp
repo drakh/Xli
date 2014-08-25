@@ -51,9 +51,6 @@ namespace Xli
 
             AWindow()
             {
-                BeginTextInput(TextInputHintDefault);
-                EndTextInput();
-
                 int nativeFlags = 0;
 
                 if (GlobalFlags & WindowFlagsFullscreen)
