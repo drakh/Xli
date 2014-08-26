@@ -50,12 +50,18 @@ public class SystemHelper {
     }	
 	public static float GetStatusBarHeight(NativeActivity activity)
 	{
-		Rect rectangle= new Rect();
+		/*Rect rectangle= new Rect();
 		Window window= activity.getWindow();
 		window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
 		int statusBarHeight = rectangle.top;
 		//int contentViewTop = window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
 		//int titleBarHeight= contentViewTop - statusBarHeight; //dont need this yet but is useful code
-		return statusBarHeight;
+		return statusBarHeight;*/
+
+        int result = 0;
+        int resourceId = activity.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0)
+            result = activity.getResources().getDimensionPixelSize(resourceId);
+        return (float)result;
 	}
 }
